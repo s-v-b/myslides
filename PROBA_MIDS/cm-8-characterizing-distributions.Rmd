@@ -1,0 +1,1312 @@
+---
+title: "Characterizing Probability Distributions"
+subtitle: "⚔<br/>Probabilités Master I, MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/11/13 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: layout-general
+layout: true
+class: left, middle
+background-image: url('./img/Universite_Paris_logo_horizontal.jpg')
+background-size: 10%
+background-position: 97% 3%
+
+<style>
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: red;
+}
+</style>
+
+---
+class: middle, center, inverse
+
+# Characterizing Probability Distributions
+
+### `r Sys.Date()`
+
+#### Probabilités Master I MIDS
+
+[<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
+
+
+---
+name: roadmap
+class: inverse, middle
+
+
+##  [Characteristic fucntions](#characteristic-functions)
+
+## [Convolutions](#convolution)
+
+## [Gaussian functions](#gaussian-characteristic)
+
+## [Inversion Theorem](#inversion-theorem)
+
+## [Quantile functions](#quantile-functions)
+
+
+---
+class: inverse, center, middle
+
+## Motivation
+
+# `r fontawesome::fa("grin", fill = "white")`
+
+---
+
+### Why do we look for _characterizations_ of probability distributions?
+
+- Checking equality of distributions
+
+- Quantifiying difference between distributions
+
+- Characterizing limiting behaviour
+
+- ...
+
+???
+
+
+---
+
+## `r fontawesome::fa("grin", fill = "gifts")`
+
+
+- Cumulative distribution function (tail function)
+
+- Probability density (if any)
+
+- Probability generating function  (on $\mathbb{N}, \mathbb{Z}$)
+
+- Fourier transform/Characteristic function
+
+- Laplace transform ( $[0, \infty)$ -valued)
+
+---
+class: inverse, middle, center
+
+## `r fontawesome::fa("Syringe", fill="white")` Probability Generating Functions
+
+
+---
+name: characteristic-functions
+class: inverse, middle, center
+
+## Characteristic functions
+
+
+---
+
+.content-box-gray[
+
+### Definition: Characteristic functions
+
+- $X \sim P$, $\mathbb{R}$ valued
+
+- Cumulative distribution function $F$: $F(x) = P\{X \leq x \}$
+
+The _characteristic function_ $\widehat{F}$ of distribution $P$ is defined by
+
+\begin{align*}
+\widehat{F} \quad :  & \quad \mathbb{R}  \to \mathbb{C} \\
+\widehat{F}(t) & = \mathbb{E}\left[\mathrm{e}^{i t X}\right] \\
+  & = \int_{\mathbb{R}} \mathrm{e}^{i t x} \mathrm{d}F(x) \\
+  & =	\int_{\mathbb{R}} \cos(t x) \mathrm{d}F(x) + i \int_{\mathbb{R}} \sin(t x) \mathrm{d}F(x)
+\end{align*}
+
+]
+
+--
+
+- Defined for all probability distributions over $\mathbb{R}$
+
+- The definition can be extended to distributions on $\mathbb{R}^k, k\geq 1$
+
+---
+
+### Characteristic functions of Absolutely Continuous distributions
+
+
+
+---
+
+### Properties fo characteristic functions
+
+.content-box-gray[
+
+### Proposition
+
+Let $X \sim P$ with characteristic function $\widehat{F}$
+
+- $\widehat{F}$ is (uniformly) continuous over $\mathbb{R}$
+
+- $\widehat{F}(0)=1$
+
+- If $X$ is _symmetric_, $\widehat{F}$ is real-valued
+
+- The characteristic function of the distribution of $a X +b$ is $$\mathrm{e}^{it b} \widehat{F}(at)$$
+
+]
+
+---
+
+### Checking  the continuity property
+
+Calculus leads to
+
+\begin{align*}
+\Big| \mathrm{e}^{i(t+ \delta)x} - \mathrm{e}^{itx}\Big|
+  & = \Big| \mathrm{e}^{itx}\Big| \times \Big|\mathrm{e}^{i\delta x} - 1\Big|
+  & \leq \Big|\mathrm{e}^{i\delta x} - 1\Big| \\
+  & \leq 2 \Big( 1 \wedge \big| \delta x \big| \Big)
+\end{align*}
+
+for every $t\in \mathbb{R}, \delta \in \mathbb{R}, x \in \mathbb{R}$.
+
+--
+
+Integration with respect to $F$:
+
+\begin{align*}
+  \Big| \widehat{F}(t+\delta) - \widehat{F}(t)\Big|
+  & \leq \int 2 \Big( 1 \wedge \big| \delta x \big| \Big) \mathrm{d}F(x) \,.
+\end{align*}
+
+--
+
+By the dominated convergence theorem:
+
+$$\lim_{\delta \to 0} \Big| \widehat{F}(t+\delta) - \widehat{F}(t)\Big| = 0\qquad \text{uniformly in } t$$
+
+`r fontawesome::fa("square")`
+
+---
+
+### Characteristic functions of sums of independent random variables
+
+.content-box-gray[
+
+### Proposition
+
+Let
+
+- $X \perp\!\!\!\perp Y$
+
+- with cumulative distribution functions $F_X$ and $F_Y$
+
+Then
+
+$$\widehat{F}_{X+Y}(t) =  \widehat{F}_X(t) \times \widehat{F}_Y(t)\qquad \forall t \in \mathbb{R}$$
+
+]
+
+`r fontawesome::fa("smile")`
+
+
+
+---
+
+### Proof
+
+
+\begin{align*}
+\widehat{F}_{X+Y}(t)
+  & = \mathbb{E}\Big[\mathrm{e}^{it (X+Y)}\big] \\
+  & = \mathbb{E}\Big[\mathrm{e}^{it X} \mathrm{e}^{it Y}\big] \\
+  & = \mathbb{E}\Big[\mathrm{e}^{it X} \big] \times \mathbb{E}\big[\mathrm{e}^{it Y}\big] \qquad \text{independance}\\
+  & =  \widehat{F}_X(t) \times \widehat{F}_Y(t) \, .
+\end{align*}
+
+
+`r fontawesome::fa("square")`
+
+---
+
+### Looking for a converse ?
+
+--
+
+`r fontawesome::fa("bomb")` Use a counter-example to prove  that
+
+$$\Big(\forall t \in \mathbb{R}, \quad \widehat{F}_{X+Y}(t) =  \widehat{F}_X(t) \times \widehat{F}_Y(t) \Big) \not\Rightarrow X \perp\!\!\!\perp Y$$
+
+
+---
+class: inverse, middle, center
+
+## Characteristic function of a univariate Gaussian distribution
+
+---
+
+It is possible to compute characteristic functions by resorting to Complex Analysis.
+
+--
+
+We shall  refrain from this when computing the most important characteristic function:
+the characteristic function of the standard Gaussian distribution.
+
+
+---
+
+### Proposition
+
+Let $\widehat{\Phi}$ denote the characteristic function of the standard univariate Gaussian distribution $\mathcal{N}(0,1)$,
+
+The following holds
+
+$$\widehat{\Phi}(t) = \mathrm{e}^{-\frac{t^2}{2}}$$
+
+---
+
+### Proof
+
+As $\phi$ is even, $\widehat{\Phi}(t) =\mathbb{E} \cos(tX)$
+
+
+--
+
+\begin{align*}
+\widehat{\Phi}'(t)
+& = - \mathbb{E}\left[X \sin(t X) \right] \\
+& =  - \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} x \sin(tx) \mathrm{e}^{-\frac{x^2}{2}} \mathrm{d}x \\
+& = \frac{1}{\sqrt{2 \pi}} \Big[\sin(tx) \mathrm{e}^{-\frac{x^2}{2}} \Big]_{-\infty}^{\infty} - t \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}}  \cos(tx) \mathrm{e}^{-\frac{x^2}{2}} \mathrm{d}x \\
+& = - t \widehat{\Phi}(t) \,.
+\end{align*}
+
+--
+
+$\widehat{F}$ is a solution of the differential equation:
+
+$$g'(t) = -t g(t) \quad \text{ with } g(0)=1$$
+
+--
+
+The differential equation is readily solved, and the solution is
+
+$$g(t)= \mathrm{e}^{- \frac{t^2}{2}}$$
+
+`r fontawesome::fa("square")`
+
+
+---
+
+fontawesome::fa("puzzle-piece")
+
+- Why is $\widehat{\Phi}$ differentiable?
+
+- Why are we allowed to interchange expectation and derivation?
+
+---
+
+`r fontawesome::fa("exclamation")`
+
+A byproduct of Proposition is the following integral representation of the Gaussian density.
+
+$$\phi(x)  =  \frac{1}{\sqrt{2 \pi}} \int_{\mathbb{R}} \widehat{\Phi}(t) \mathrm{e}^{-itx} \mathrm{d}t$$
+
+It does not look interesting, but it is a milestone for the derivation of the _general inversion formula_
+
+---
+name: convolutions
+class: inverse, middle, center
+
+## Sums of independent random variables and convolutions
+
+---
+
+`r fontawesome::fa("syringe")` If $f$ and $g$ are two integrable functions, the _convolution_  of $f$ and $g$ is defined as
+
+$$f \star g (x)  = \int_{\mathbb{R}} f(x-y)g(y) \mathrm{d}y = \int_{\mathbb{R}} g(x-y)f(y) \mathrm{d}y$$
+
+- $f \star g$ is also integrable
+
+- if $f$ and $g$  are two probability densities then so is $f \star g$,
+
+- $f \star g$ is the density of the distribution of $X+Y$ where $X \sim f$ is independent from  $Y \sim g$.
+
+???
+
+The interplay between Characteristic functions/Fourier transforms and
+summation of independent random variables is
+one of the most attractive features of this transformation.
+
+In order to understand it, we shall need an operation stemming from analysis: _convolution_
+
+---
+name:convdensity
+
+### Proposition  (Regularization by convolution)
+
+Let $X \sim  P_X, Y \sim P_Y$, with $X \perp\!\!\!\perp Y$
+
+Assume that $P_X$ is absolutely continuous with density $p_X$.
+
+Then the distribution of $X+Y$ is absolutely continuous and has density
+
+$$p_x \star P_Y (z) = \int_{\mathbb{R}} p_X(z -y ) \mathrm{d}P_Y(y)$$
+
+
+---
+
+
+### Proof
+
+Let $B$ be Borel subset of $\mathbb{R}$  ( $B \in \mathcal{B}(\mathbb{R})$ )
+
+\begin{align*}
+P \Big\{ X+Y  \in B\Big\}
+  & = \int_{\mathbb{R}} \Big( \int_{\mathbb{R}} \mathbb{I}_B(x+y) p_X(x)\mathrm{d}x\Big) \mathrm{d}P_Y(y) \\
+  & = \int_{\mathbb{R}} \Big(\int_{\mathbb{R}} \mathbb{I}_B(z) p_X(z-y)\mathrm{d}z\Big) \mathrm{d}P_Y(y) \\
+  & = \int_{\mathbb{R}} \mathbb{I}_B(z) \Big(\int_{\mathbb{R}}  p_X(z-y) \mathrm{d}P_Y(y) \Big) \mathrm{d}z \\
+  & = \int_{\mathbb{R}} \mathbb{I}_B(z) p_x \star P_Y (z) \mathrm{d}z
+\end{align*}
+
+where
+
+- the first equality follows from the Tonelli-Fubini Theorem,
+- the second equality is obtained by change of variable $x \mapsto z = x+y$ for every $y$,
+- the third equality follows again from the Tonelli-Fubini Theorem.
+
+`r fontawesome::fa("square")`
+
+???
+
+Convolution is not tied to Probability theory.
+
+- In Analysis, convolution is known to be a regularizing
+(smoothing) operation. This also holds in Probability theory: if the distribution of either $X$ or $Y$ has a density and $X \perp\!\!\!\perp Y$, then the distribution of
+$X+Y$ has a density.
+
+- Convolution with smooth distributions plays an important role in non-parametric statsitics, it is at the root of kernel density estimation.
+
+- Convolution is an important tool in Signal Processing.
+
+---
+
+`r fontawesome::fa("puzzle=piece")`
+
+- Check that if $X$ and $Y$ are independent with densities $f_X$ and $f_Y$,
+$f_X \star f_Y$  is a density of the distribution of $X+Y$.
+
+- If $Y =0$ almost surely (its distribution is $\delta_0$), then  $p_X \star \delta_0 = p_X$.
+
+- What happens in previous proposition, if we consider the distributions of $\sigma X +Y$  and let $\sigma$ decrease to $0$?
+
+---
+
+Vanishing perturbations
+
+
+
+### Proposition
+
+Assume
+
+- $P_X \trianglelefteq \text{Lebesgue}$ with density $p_X$
+
+- $P_X(-\infty, 0] = \alpha \in (0,1)$.
+
+Then
+
+$$\lim_{\sigma \downarrow 0} \mathbb{P}\big\{ Y + \sigma X \leq a \Big\} = P_Y(-\infty, a) + \alpha P_Y\{a\}$$
+
+
+
+
+`r fontawesome::fa("triangle-exclamation")` If $P_Y \trianglelefteq \text{Lebesgue}$ the limit is the CDF of $P_Y$
+
+
+---
+
+### Proof
+
+\begin{align*}
+\mathbb{P}\big\{ Y + \sigma X \leq a \Big\}
+    & = \int_{\mathbb{R}} \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-y}{\sigma}} p_X(x) \mathrm{d}x \mathrm{d}P_Y(y) \\
+    & = \int_{(-\infty,a)} \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-y}{\sigma}} p_X(x) \mathrm{d}x \mathrm{d}P_Y(y) \\
+    & + \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-a}{\sigma}} p_X(x) \mathrm{d}x P_Y\{a\} \\
+    & + \int_{(a, \infty)} \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-y}{\sigma}} p_X(x) \mathrm{d}x \mathrm{d}P_Y(y)
+\end{align*}
+
+By monotone convergence,
+
+- the first and third integrals converge respectively to  $P_Y(-\infty, a)$  and $0$
+
+- the second term equals $\alpha P_Y\{a\}$.
+
+`r fontawesome::fa("square")`
+
+---
+name: sectioninversionformula
+class: middle, inverse, center
+
+## Inversion formula
+
+
+---
+name: injectivitytheorem
+
+The characteristic function maps probability measures to $\mathbb{C}$-valued functions.
+
+`r fontawesome::fa("exclamation-triangle")` Characteristic functions/Fourier transforms define is an injective operator on the set of Probability measures on the real line
+
+.content-box-gray[
+
+### Injectivity Theorem
+
+If two probability distribution $P$ and $Q$ have the same characteristic function, they are equal.
+
+]
+
+???
+
+The injectivity property follows from an explicit inversion recipe.
+
+The characteristic function
+allows us to recover the cumulative distribution function at all its continuity points
+
+Again, as continuity points of
+cumulative distribution functions are dense on $\mathbb{R}$, this is enough.
+
+---
+name:reginversion
+
+### Proposition (Inversion formula for regularized RV)
+
+Let $X \sim F$ and $Z \sim \mathcal{N}(0,1)$ with $X ⟂\!\!\!⟂ Z$
+
+Let $Y = X + \sigma Z$, then:
+
+- the distribution of $Y$ has characteristic function
+$$\widehat{F}_\sigma(t) = \widehat{\Phi}(t\sigma) \times \widehat{F}(t) = \mathrm{e}^{- \frac{t^2 \sigma^2}{2}} \widehat{F}(t)$$
+
+- the distribution of $Y$ is absolutely continuous with respect to Lebesgue measure
+
+- a version of the  density of the distribution of $Y$ is given by
+$$\frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}} \widehat{F}(t)\mathrm{e}^{-ity} \mathrm{d}t
+  = \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}}  \widehat{F}_\sigma(t)\mathrm{e}^{-ity} \mathrm{d}t$$
+
+
+---
+
+
+
+`r fontawesome::fa("puzzle-piece")` Why can we take for granted the existence of a probability space with two independent random variables $X, Z$ distributed as above?
+
+--
+
+`r fontawesome::fa("exclamation")` The proposition states that a (the) density of the distribution of $X + \sigma Z$ can be recovered from its characteristic function by the _Fourier inversion formula_ for functions with integrable Fourier transforms
+
+---
+
+
+### Proof
+
+The fact that for any $\sigma >0$, the distribution of $Y = X + \sigma Z$ is absolutely continuous with respect to Lebesgue measure comes from [Regularization by convolution Proposition](#convdensity)
+
+--
+
+A density of the distribution of $X + \sigma Z$ is given by
+
+$$\int_{\mathbb{R}} \frac{1}{\sigma} \phi\Big(\frac{y -x}{\sigma}\Big) \mathrm{d}F(x)$$
+
+--
+
+The characteristic function of $Y$  at $t$ is $\mathrm{e}^{- \frac{t^2 \sigma^2}{2}} \widehat{F}(t)$.
+
+---
+
+### Proof (continued)
+
+\begin{align*}
+\mathbb{P}\Big\{ Y \leq u\Big\}
+& = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma} \phi\Big(\frac{y -x}{\sigma}\Big) \mathrm{d}F(x)  \mathrm{d}y \\
+& = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma}
+\frac{1}{\sqrt{2 \pi}} \int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-it 	\frac{y-x}{\sigma}} \mathrm{d}t
+\mathrm{d}F(x)  \mathrm{d}y \\
+& = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma}
+\frac{1}{\sqrt{2 \pi}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-\frac{ity}{\sigma}} \int_{\mathbb{R}}  \mathrm{e}^{\frac{itx}{\sigma}} \mathrm{d}F(x)  \mathrm{d}t
+ \mathrm{d}y \\
+& = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma}
+\frac{1}{\sqrt{2 \pi}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-\frac{ity}{\sigma}} \widehat{F}(t/\sigma)  \mathrm{d}t
+ \mathrm{d}y \\
+& = \int_{-\infty}^u  \left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y
+\end{align*}
+
+The quantity $\left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right)$ is a version of the density of the distribution of $Y = X + \sigma Z$  (why?).
+
+
+`r fontawesome::fa("square")`
+
+???
+
+Note that it is obtained
+from the same inversion formula that readily worked for the Gaussian density.
+
+---
+name: generalInvFormula
+
+Now we have to show that an inversion formula works for all probability distributions,
+not only for the smooth probability distributions obtained by adding Gaussian noise.
+
+.content-box-gray[
+
+### Theorem
+
+Let $X \sim P$,  with cumulative distribution function $F$ and characteristic function $\widehat{F}$.
+
+Then:
+
+$$\lim_{\sigma \downarrow 0} \int_{-\infty}^u  \left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{-ity}  \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y =  F(u_-) + \frac{1}{2} P\{u\}$$
+
+where
+
+$$F(u_-) = \lim_{v \uparrow u} F(v) = P(-\infty, u)$$
+
+]
+
+
+???
+
+
+---
+
+### Proof
+
+The proof consists in combining  [Proposition](#approxident) and  [Inversion formula for regularized RV](#reginversion)
+
+`r fontawesome::fa("square")`
+
+---
+
+`r fontawesome::fa("triangle-exclamation")`  [Theorem](#generalInvFormula) does not deliver directly the distribution function $F$
+
+`r fontawesome::fa("frown")`  If CDF $F$ is not continuous,
+$u \mapsto \widetilde{F}(u) = F(u_-) + \frac{1}{2} P\{u\}$, is not a CDF
+
+
+`r fontawesome::fa("smile")` The right-continuous modification of $\widetilde{F}$ : $u \mapsto \lim_{v \downarrow u} \widetilde{F}(v)$ coincides with $F$
+
+
+### `r fontawesome::fa("glass-cheers")` We have established the [Injectivity Theorem](#injectivitytheorem)
+
+
+
+
+---
+
+When the distribution function is absolutely continuous, Fourier inversion is simpler `r fontawesome::fa("smile")`
+
+.content-box-gray[
+
+### Theorem
+
+Let $X \sim P$,  with cumulative distribution function $F$ and characteristic function $\widehat{F}$
+
+Assume that $\widehat{F}$ is integrable (with respect to Lebesgue measure)
+
+Then:
+
+- $P ⊴ \text{Lebesgue}$
+
+- $y \mapsto \frac{1}{\sqrt{2 \pi}} \int_{\mathbb{R}} \widehat{F}(t) \mathrm{e}^{-ity} \mathrm{d}t$ is a uniformly continuous version of the density of $P$.
+
+]
+
+---
+
+### Proof
+
+Let $X \sim P$ with cumulative distribution function $F$ and characteristic function $\widehat{F}$.
+
+Let $Z \sim \mathcal{N}(0,1)$ be independent from $Z \perp\!\!\!\perp X$
+
+Let $x$  be a continuity point of $F$.
+
+$$\lim_{\sigma \downarrow 0} P\Big\{ X + \sigma Z  \leq x \Big\} = F(x)$$
+
+\begin{align*}
+\lim_{\sigma \downarrow 0} P\Big\{ X + \sigma Z  \leq x \Big\}
+ & = \lim_{\sigma \downarrow 0}
+ \int_{-\infty}^x  \left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y \\
+ & = \int_{-\infty}^x   \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \lim_{\sigma \downarrow 0} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \\
+ & = \int_{-\infty}^x   \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \,
+\end{align*}
+
+where interversion of limit and integration is justified by dominated convergence.
+
+`r fontawesome::fa("square")`
+
+---
+
+### An alternative inversion formula.
+
+Let $P$ be a probability distribution over $\mathbb{R}$ with cumulative distribution function $F$, then
+
+$$\lim_{T \to \infty} \frac{1}{2\pi} \int_{-T}^T \frac{\mathrm{e}^{-it a} - \mathrm{e}^{-it b}}{it} \widehat{F}(t) \mathrm{d}t
+= F(b_-) - F(a) + \frac{1}{2} \Big(P\{b\} + P\{a\}\Big)$$
+
+
+---
+
+The proof of the alternative inversion formula can be found in textbooks like [Durrett 2010]
+
+.content-box-gray[
+
+### Corollary
+Let $\widehat{F}$ denote the characteristic function of the probability distribution $P$.
+
+$$\widehat{F}(t) = \mathrm{e}^{-\frac{t^2}{2}} \Rightarrow  P = \mathcal{N}(0,1)$$
+
+]
+
+.content-box-gray[
+
+### Corollary
+
+Let $\widehat{F}$ denote the characteristic function of probability distribution $P$,
+
+$$\widehat{F}(t) = \mathrm{e}^{i\mu t -\frac{\sigma^2 t^2}{2}} \Rightarrow  P = \mathcal{N}(\mu,\sigma^2)$$
+
+]
+
+---
+name: steinsidentity
+
+### `r fontawesome::fa("piggy-bank")`
+
+Another important byproduct of the proof of injectivity of the characteristic function
+is Stein's identity, an important property of the standard Gaussian distribution.
+
+.content-box-gray[
+
+### Theorem Stein's identity
+
+Let  $X \sim \mathcal{N}(0,1)$, and $g$ be a differentiable function such that $\mathbb{E}|g'(X)|< \infty$, then
+
+$$\mathbb{E}[g'(X)] = \mathbb{E}[Xg(X)]$$
+
+Conversely, if $X$ is a random variable such that
+
+$$\mathbb{E}[g'(X)] = \mathbb{E}[X g(X)]$$
+
+holds for any differentiable funtion  $g$ such that  $g'$ is integrable, then
+ $X \sim \mathcal{N}(0,1)$.
+
+]
+
+---
+
+### Proof
+
+Direct part follows by integration by parts.
+
+Converse,
+
+- Note that if $X$ satisfies the identity in the Theorem,
+then for all $t \in \mathbb{R}$, the functions $t \mapsto \mathbb{E} \cos(tX)$
+and $t \mapsto \mathbb{E} \sin(tX)$ satisfy the differential equation $g'(t) = t g(t)$
+with conditions $\mathbb{E} \cos(0X)=1$ and $\mathbb{E} \sin(0X) =0$.
+
+- This entails $\mathbb{E} \mathrm{e}^{itX} = \exp\Big(-\frac{t^2}{2}\Big)$, that is
+$X \sim \mathcal{N}(0,1)$
+
+`r fontawesome::fa("square")`
+
+---
+name: secdifferentiabilityintegrability
+class: inverse, center, middle
+
+## Differentiability and integrability
+
+
+---
+name:differentiabilitytehorem
+
+Differentiability of the Fourier transform at $0$ and  integrability
+are intimately related
+
+.content-box-gray[
+
+### Theorem
+
+If $X$ is $p$-integrable for some $p \in \mathbb{N}$
+
+then
+
+- the Fourier transform of the distribution of $X$ is $p$-times
+differentiable at $0$
+
+- the $p^{\text{th}}$ derivative at $0$ equals $i^k \mathbb{E}X^k$
+
+]
+
+???
+
+Recall what we had for probability generating function
+
+---
+
+### Proof
+
+The proof relies on a Taylor expansion with remainder of $x \mapsto \mathrm{e}^{ix}$  at $x=0$:
+
+$$\mathrm{e}^{ix} - \sum_{k=0}^n \frac{(ix)^k}{k!} = \frac{i^{n+1}}{n!} \int_0^x (x-s)^n \mathrm{e}^{is} \mathrm{d}s$$
+
+---
+
+### Proof (continued)
+
+The modulus of the right hand side can be upper-bounded in two different ways.
+
+$$\frac{1}{n+!}\Big| \int_0^x (x-s)^n \mathrm{e}^{is} \mathrm{d}s \Big|
+  \leq \frac{|x|^{n+1}}{(n+1)!}$$
+
+which is good when $|x|$ is small.
+
+--
+
+To handle large values of $|x|$, integration by parts leads to
+
+$$\frac{i^{n+1}}{n!} \int_0^x (x-s)^n \mathrm{e}^{is} \mathrm{d}s =  \frac{i^{n}}{(n-1)!} \int_0^x (x-s)^{n-1} \left(\mathrm{e}^{is}-1\right) \mathrm{d}s \,.$$
+
+--
+
+The modulus of the right hand side can be upper-bounded by $2|x|^n/n!$.
+
+---
+
+### Proof (continued)
+
+Applying this Taylor expansion to $x=t X$, using the pointwise upper bounds and taking expectations leads to
+\begin{align*}
+  \Big| \widehat{F}(t) - \sum_{k=0}^n \mathbb{E}\frac{(itX)^k}{k!}  \Big|
+    & \leq \mathbb{E} \Big[\min\Big( \frac{|tX|^{n+1}}{(n+1)!} ,2 \frac{|tX|^n}{n!}\Big)\Big] \\
+    & = \frac{|t|^n}{(n+1)!} \mathbb{E} \Big[\min\Big(|tX|^{n+1} ,2 (n+1) |X|^n \Big)\Big] \, .
+\end{align*}
+
+The right hand side is well defined as soon as $\mathbb{E}|X|^n < \infty$.
+
+---
+
+### Proof (continued)
+
+By dominated convergence,
+
+$$\lim_{t \to 0} \mathbb{E} \Big[\min\Big(|tX|^{n+1} ,2 (n+1) |X|^n \Big)\Big] = 0\,$$
+Hence we have established that if $\mathbb{E}|X|^n < \infty$,
+
+$$\widehat{F}(t) = \sum_{k=0}^n i^k \mathbb{E}X^k \frac{t^k}{k!} + o(|t|^n)$$
+
+
+`r fontawesome::fa("square")`
+
+---
+
+In the other direction, the connection is not as simple (`r fontawesome::fa("frown")`): differentiability
+of the Fourier transform does not imply integrability.
+
+But ...
+
+.content-box-gray[
+
+### Theorem
+
+If the Fourier transform $\widehat{F}$ of the distribution of $X$ satisfies
+
+$$\lim_{h \downarrow 0} \frac{2 - \widehat{F}(h) - \widehat{F}(-h)}{h^2} = \sigma^2 < \infty$$
+
+then $\mathbb{E}X^2 = \sigma^2$
+
+]
+
+
+---
+
+### Proof
+
+$$2 - \widehat{F}(h) - \widehat{F}(-h) =  2\mathbb{E}\Big[1 - \cos(hX)\Big]$$
+
+--
+
+Using Taylor with remainder formula for $\cos$ at $0$:
+
+$$1 - \cos x = \int_0^x \cos(s) (x-s) \mathrm{d}s = x^ 2 \int_0^1 \cos(sx) (1-s) \mathrm{d}s$$
+
+--
+
+`r fontawesome::fa("exclamation")`  $\int_0^1 \cos(sx) (1-s) \mathrm{d}s\geq 0$ for all $x \in \mathbb{R}$.
+
+\begin{align*}
+  \frac{2\mathbb{E}\Big[1 - \cos(hX)\Big]}{h^2}
+    & = 2 \frac{\mathbb{E}\Big[ h^2 X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s\Big]}{h^2} \\
+    & = 2 \mathbb{E}\Big[ X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s\Big] \, .
+\end{align*}
+
+
+---
+
+### Proof (continued)
+
+By Fatou's Lemma:
+
+$$\sigma^2 = \lim_{h \downarrow 0} 2\mathbb{E}\Big[ X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s\Big]
+\geq 2\mathbb{E}\Big[\liminf_{h \downarrow 0} X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s \Big]$$
+
+--
+
+But for all $x \in \mathbb{R}$, by dominated convergence:
+
+$$\liminf_{h \downarrow 0} x^ 2 \int_0^1 \cos(shx) (1-s) \mathrm{d}s = \frac{x^2}{2}$$
+
+Hence $$\sigma^2 \geq \mathbb{E} X^2$$
+
+The proof is completed by invoking the [Theorem connecting integrability and smoothness of Fourier transform](#differentiabilitytehorem)
+
+`r fontawesome::fa("square")`
+
+---
+name:secquantiles
+
+class: inverse, middle, center
+
+## Quantile functions
+
+---
+
+So far we have seen several characterizations of probability distributions:
+
+- Cumulative Distribution Functions,
+- Probability Generating Functions
+- Characteristic functions.
+
+The last characterization is praised
+for its behavior with respect to sums of independent random variables.
+
+For _univariate distributions_, a companion to the cumulative distribution function  is the quantile function. It plays a significant role in simulations, statistics and
+risk theory.
+
+
+---
+
+### `r fontawesome::fa("syringe")`
+
+A cumulative distribution function $F$ is
+
+- non-negative,
+- $[0,1]$-valued,
+- non-decreasing,
+- right-continuous, with left-limit at any point.
+
+`r fontawesome::fa("smile")` The cumulative distribution function of a diffuse probability measure is continuous at any point.
+
+---
+
+The quantile function $F^{\leftarrow}$ is defined as an extended inverse
+of the cumulative distribution function $F$.
+
+.content-box-gray[
+
+### Definition
+
+The quantile function $F^{\leftarrow}$ of random variable  $X$
+distributed according to $P$ (with cumulative distribution function $F$) is defined as
+
+\begin{align*}
+F^{\leftarrow} (p)
+   & = \inf \Big\{ x : P\{X \leq x\} \geq p \Big\} \\
+   & = \inf \Big\{ x : F (x) \geq p \Big\} \qquad \text{for } p \in (0,1).
+\end{align*}
+
+]
+
+---
+
+`r fontawesome::fa("triangle-exclamation")` The quantile function is  non-decreasing and  left-continuous
+
+---
+
+The interplay between the quantile and cumulative distribution functions
+is summarized in the next proposition.
+
+
+
+### Proposition
+
+If $F$ and $F^\leftarrow$ are  the CDF and the quantile function of
+(the distribution of) $X$, the following statements hold  for  $p \in] 0, 1 [$:
+
+1. $p \leq  F (x)$ iff $F^\leftarrow (p) \leq  x$
+
+1. $F \circ F^\leftarrow (p) \geq p$
+
+1. $F^\leftarrow \circ F (x) \leq  x$
+
+1. If  $F ⊴ \text{Lebesgue}$, then $F \circ F^\leftarrow (p) = p$
+
+
+
+---
+
+### Proof
+
+According to the definition of $F^\leftarrow$ if $F (x) \geq p$
+then $F^\leftarrow (p) \leq  x$
+
+--
+
+To prove the  converse, it suffices to check that $F \circ F^\leftarrow (p) \geq p$
+
+--
+
+Indeed, if $x \geq F^\leftarrow (p),$ as
+$F ↘$,  $F (x) \geq F \circ F^\leftarrow (p)$
+
+If $y = F^\leftarrow (p),$ by definition of $y = F^\leftarrow (p)$
+
+$\exists (z_n)_{n \in \mathbb{N}}$ with $z_n \searrow y$ such that $F (z_n) \geq p$
+
+But as $F$ is right-continuous $\lim_n F(z_n) = F(\lim_n z_n) = F(y)$
+
+Hence $F (y) \geq p$
+
+We just proved  1. and 2. `r fontawesome::fa("smile")`
+
+---
+
+### Proof  (continued)
+
+3.) is an immediate  consequence de 1). Let $p = F (x) .$ Hence
+$p \leq  F (x),$ according to 1.) this is equivalent to  $F^\leftarrow (p)
+\leq  x,$ that is  $F^\leftarrow \circ F (x) \leq  x.$
+
+4.) For every $p$ in $] 0, 1 [,$  $\{ x : p = F (x)\}$ is non-empty (Mean value Theorem).
+Let $y = \inf \{ x : p = F (x)\} =F^\leftarrow (p)$.
+According to  $1)$,  $F (y) \geq p$.
+Now,  if $(z_n)_{n \in \mathbb{N}}$ is an increasing sequence
+converging to  $y$, for every  $n$, $F (z_n) < p,$ and, by left-continuity,
+$F (y) = F (\lim_n z_n) = \lim_n F (z_n) \leq
+p.$ Hence $F (y) = p,$ that is  $F \circ F^\leftarrow (p) = p.$
+
+`r fontawesome::fa("square")`
+
+---
+
+### Proposition (Quantile transformation)
+
+If $U$ is uniformly distributed on $(0,1)$, and $F$ is a cumulative
+distribution over $\mathbb{R}$, $F^{\leftarrow}(U)$ has cumulative distribution $F$.
+
+
+The quantile transformation works whatever the continuity properties of $F$
+
+---
+
+### Proof
+
+\begin{align*}
+  P\Big\{ F^\leftarrow(U) \leq x \Big\}
+  & = P\Big\{ U \leq F(x) \Big\} \\
+  & = F(x) \, .
+\end{align*}
+
+`r fontawesome::fa("square")`
+
+---
+
+The quantile transformation has many applications. It can be used to
+show stochastic domination properties.
+
+### Example
+
+
+The quantile function
+of a discrete distribution is a step function  that jumps at the cumulative probability of every possible outcome.
+If a probability distribution is a mixture of a discrete distribution and a continuous distribution, the
+quantile function jumps at the cumulative probability of every possible outcome of the discrete component.
+
+???
+
+In Figures \@ref(fig:quantiles)-\@ref(fig:quantiles4), we illustrate quantile functions for discrete (binomial)
+distributions and for distributions that are neither discrete nor continuous.
+
+---
+
+### Quantile functions of binomial distributions.
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+require(tidyverse)
+```
+
+.pull-left[
+
+```{r quantiles, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:quantiles)'}
+# %%
+n <- 10
+p <- seq(0, 1, by=.01)
+probs <-  c(.2,  .5)
+
+df <- as.data.frame(c(list("p"=p),
+                      probs %>% purrr::map(.f = function(prob) qbinom(p, n, prob))))
+
+names(df) <- c("p", format(probs, digits=2))
+
+df <- tidyr::gather(df, key="prob", value="quantile", -p)
+
+p <- ggplot2::ggplot(data = df) +
+     ggplot2::geom_step(mapping=ggplot2::aes(x=p, y=quantile, linetype=prob), color=1, direction = "hv", lineend="butt") +
+     ggplot2::xlab("p") +
+     ggplot2::ylab("Quantile function ") +
+     ggplot2::xlim(xlim = c(-.1, 1.1))  +
+     ggplot2::scale_y_continuous(breaks=seq(0,10)) +
+     ggplot2::scale_x_continuous(breaks=seq(0, 1, by=.25))
+p
+
+rm(df, probs, p)
+# %%
+```
+
+]
+
+.pull-right[
+
+Quantile functions of Binomial distributions with parameters $n=10$ and $p \in \{.2, .5\}$
+
+The two quantile functions have the same range: $\{0, 1, \ldots, 10\}$
+
+]
+
+---
+
+
+.pull-left[
+
+```{r quantiles2, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:quantiles2)'}
+# %%
+tau <-  c(0,  -1)
+df <- tibble::tibble(p=seq(0.01, .99, by=0.01)) %>%
+      mutate('0' = qnorm(pmax(pnorm(0), p)),
+             '-1' =qnorm(pmax(pnorm(-1), p))) %>%
+      tidyr::gather(key="tau", value="quantile", -p)
+
+p <- ggplot2::ggplot(data = df,
+                     mapping= ggplot2::aes(x=p, y=quantile, group=tau)) +
+  ggplot2::xlab("p") +
+  ggplot2::ylab("quantile function") +
+  ggplot2::xlim(xlim = c(-0.1, 1.1)) +
+  ggplot2::ylim(ylim = c(-1.1, 2.5)) +
+  ggplot2::geom_line(aes(linetype=tau)) +
+  ggplot2::scale_y_continuous(breaks=seq(-2,10)) +
+  ggplot2::scale_x_continuous(breaks=seq(0, 1, by=.25), limits=c(-0.1, 1.1))
+
+p
+
+rm(df, tau, p)
+# %%
+```
+
+Quantile functions $\max(X, \tau)$ where $X \sim \mathcal{N}(0,1)$ for $\tau \in \{0, -1\}$
+
+]
+
+.pull-right[
+
+The quantile  function of $\max(X,\tau)$ is
+
+$$\mathbb{I}_{(0,\Phi(\tau))}(p) \times \tau + \Phi^{\leftarrow}(p) \times \mathbb{I}_{(\Phi(\tau), 1)}(p)$$
+
+or
+
+$$\Phi^{\leftarrow}(p \vee \Phi(\tau))$$
+
+The two distributions are neither absolutely continuous nor discrete
+
+]
+
+
+???
+
+Let $\Phi^\leftarrow$ denote the quantile function of $\mathcal{N}(0,1)$
+
+
+---
+
+
+.pull-left[
+
+```{r quantiles3, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:quantiles3)'}
+df2 <- tibble::tibble(x=seq(-2, 2, by=0.01)) %>%
+      mutate('0' = ifelse(x<0, 0, pnorm(x)),
+             '-1' = ifelse(x< (-1), 0, pnorm(x))) %>%
+      tidyr::gather(key="tau", value="cdf", -x)
+
+q <- ggplot2::ggplot(data = df2,
+                     mapping= ggplot2::aes(x=x, y=cdf, group=tau)) +
+  ggplot2::xlab("x") +
+  ggplot2::ylab("cumulative distribution function") +
+  ggplot2::geom_line(aes(linetype=tau)) +
+  ggplot2::scale_x_continuous(breaks=seq(-2, 2, by=1.), limits=c(-2, 2)) +
+  ggplot2::scale_y_continuous(breaks=seq(0, 1, by=.25), limits=c(-0.1, 1.1))
+
+q
+
+rm(df2, q)
+```
+
+]
+
+.pull-right[
+
+Cumulative distribution functions for the probability distributions illustrated in Figure \@ref(fig:quantiles2)
+
+]
+
+---
+
+
+
+.pull-left[
+
+```{r quantiles4, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:quantiles4)'}
+
+df <- tibble::tibble(p=seq(0.01, .99, by=0.001)) %>%
+      mutate(tau0 = qnorm(pmax(pnorm(0), p)),
+             tau1 =qnorm(pmax(pnorm(-1), p))) %>%
+      mutate('0' = ifelse(tau0<=0, pnorm(0), pnorm(tau0)),
+             '-1' = ifelse(tau1<=(-1), pnorm(-1), pnorm(tau1))) %>%
+      dplyr::select(-dplyr::starts_with('tau')) %>%
+      tidyr::gather(key="tau", value="value", -p)
+
+p <- ggplot2::ggplot(data = df,
+                     mapping= ggplot2::aes(x=p, y=value, group=tau)) +
+  ggplot2::xlab("p") +
+  ggplot2::ylab("...") +
+  ggplot2::geom_line(aes(linetype=tau)) +
+  ggplot2::scale_y_continuous(breaks=c(0, pnorm(-1), .25, .5, .75, 1.), limits=c(-0.1, 1.1)) +
+  ggplot2::scale_x_continuous(breaks=c(0, pnorm(-1), .25, .5, .75, 1.),
+                              labels=format(c(0, pnorm(-1), .25, .5, .75, 1.), digits=2),
+                              limits=c(-0.1, 1.1)) +
+  ggplot2::geom_abline(slope=1, intercept=0, linetype=81)
+
+p
+
+rm(df, p)
+
+```
+]
+
+.pull-right[
+
+(ref:quantiles4) Representation of $F \circ F^{\leftarrow}$ for the probability distributions illustrated in Figures \@ref(fig:quantiles2)  and \@ref(fig:quantiles3). The function $F \circ F^{\leftarrow}$ always lies above the line $y=x$ (dotted line) as prescribed in Proposition \@ref(prp:quantilekit). Plateaux that lie strictly above the dotted line are in correspondence with  jumps of the quantile function.
+
+
+]
+
+---
+
+### QQ-plots
+
+.pull-left[
+
+```{r qqplot, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:qqplot)', evaluate=FALSE}
+# %%
+n <- 500
+sample <- sort(rnorm(n))
+p <- seq(.01, .99, by=1/n)
+df <- tibble::tibble('x'=qnorm(p),
+                     'y'=quantile(sample, p, type=1))
+
+q <- ggplot2::ggplot(data = df) +
+     ggplot2::geom_step(mapping=ggplot2::aes(x=x, y=y), color=1, direction = "hv", lineend="butt") +
+     ggplot2::geom_abline(slope=1, intercept=0, linetype="dotted") +
+     ggplot2::ylim(range(df$x)) +
+     ggplot2::xlab("Theoretical quantiles") +
+     ggplot2::ylab("Empirical quantiles")
+q
+
+rm(n, sample, p, df, q)
+# %%
+```
+
+]
+
+.pull-right[
+
+ This is a popular device for comparing two probability distributions on the real line defined by their cumulative distributions $F$ and $G$.
+
+ The QQ-plot consists in plotting function $G^{\leftarrow} \circ F$.
+
+ If the two distributions are the same, the line $y = G^{\leftarrow} \circ F(x)$ should lie below $y=x$ (according to Proposition \@ref(prp:quantilekit)), and should even coincide with the diagonal if $F=G$ is continuous and increasing.
+
+ Here
+
+ - $F = \Phi$ is the cumulative distribution function of $\mathcal{N}(0,1)$.
+
+ - $G$ is the empirical distribution of a sample of size $500$ of $\mathcal{N}(0,1)$.
+
+
+]
+
+---
+
+
+
+Let us conclude this section with an important observation  concerning
+the behavior of $F(X)$ when $X \sim P$  with cumulative distribution function
+$F$.
+
+
+### Corollary
+
+If  $X \sim P$ with continuous cumulative distribution function $F$,
+
+then
+
+$F (X)$ and $1 - F (X)$ are uniformly distributed on $[0, 1]$.
+
+
+`r fontawesome::fa("piece-puzzle")` Prove Corollary
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: 100%
+background-position: 1% 1%
+
+# The End
