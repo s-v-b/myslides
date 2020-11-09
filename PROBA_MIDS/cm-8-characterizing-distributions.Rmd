@@ -67,15 +67,15 @@ name: roadmap
 class: inverse, middle
 
 
-##  [Characteristic fucntions](#characteristic-functions)
+##  [Characteristic functions](#characteristic-functions)
 
-## [Convolutions](#convolution)
+## [Convolutions](#convolutions)
 
-## [Gaussian functions](#gaussian-characteristic)
+## [Gaussian characteristic functions](#secgaussiancharac)
 
-## [Inversion Theorem](#inversion-theorem)
+## [Inversion Theorem](#sectioninversionformula)
 
-## [Quantile functions](#quantile-functions)
+## [Quantile functions](#secquantiles)
 
 
 ---
@@ -265,6 +265,7 @@ $$\Big(\forall t \in \mathbb{R}, \quad \widehat{F}_{X+Y}(t) =  \widehat{F}_X(t) 
 
 
 ---
+name: secgaussiancharac
 class: inverse, middle, center
 
 ## Characteristic function of a univariate Gaussian distribution
@@ -909,141 +910,22 @@ class: inverse, middle, center
 
 So far we have seen several characterizations of probability distributions:
 
-- Cumulative Distribution Functions,
+- Cumulative Distribution Functions
+
 - Probability Generating Functions
-- Characteristic functions.
+
+- Characteristic functions
+
+--
 
 The last characterization is praised
 for its behavior with respect to sums of independent random variables.
 
-For _univariate distributions_, a companion to the cumulative distribution function  is the quantile function. It plays a significant role in simulations, statistics and
-risk theory.
+For _univariate distributions_, a companion to the cumulative distribution function  is the _quantile function_
 
+???
 
----
-
-### `r fontawesome::fa("syringe")`
-
-A cumulative distribution function $F$ is
-
-- non-negative,
-- $[0,1]$-valued,
-- non-decreasing,
-- right-continuous, with left-limit at any point.
-
-`r fontawesome::fa("smile")` The cumulative distribution function of a diffuse probability measure is continuous at any point.
-
----
-
-The quantile function $F^{\leftarrow}$ is defined as an extended inverse
-of the cumulative distribution function $F$.
-
-.content-box-gray[
-
-### Definition
-
-The quantile function $F^{\leftarrow}$ of random variable  $X$
-distributed according to $P$ (with cumulative distribution function $F$) is defined as
-
-\begin{align*}
-F^{\leftarrow} (p)
-   & = \inf \Big\{ x : P\{X \leq x\} \geq p \Big\} \\
-   & = \inf \Big\{ x : F (x) \geq p \Big\} \qquad \text{for } p \in (0,1).
-\end{align*}
-
-]
-
----
-
-`r fontawesome::fa("triangle-exclamation")` The quantile function is  non-decreasing and  left-continuous
-
----
-
-The interplay between the quantile and cumulative distribution functions
-is summarized in the next proposition.
-
-
-
-### Proposition
-
-If $F$ and $F^\leftarrow$ are  the CDF and the quantile function of
-(the distribution of) $X$, the following statements hold  for  $p \in] 0, 1 [$:
-
-1. $p \leq  F (x)$ iff $F^\leftarrow (p) \leq  x$
-
-1. $F \circ F^\leftarrow (p) \geq p$
-
-1. $F^\leftarrow \circ F (x) \leq  x$
-
-1. If  $F ⊴ \text{Lebesgue}$, then $F \circ F^\leftarrow (p) = p$
-
-
-
----
-
-### Proof
-
-According to the definition of $F^\leftarrow$ if $F (x) \geq p$
-then $F^\leftarrow (p) \leq  x$
-
---
-
-To prove the  converse, it suffices to check that $F \circ F^\leftarrow (p) \geq p$
-
---
-
-Indeed, if $x \geq F^\leftarrow (p),$ as
-$F ↘$,  $F (x) \geq F \circ F^\leftarrow (p)$
-
-If $y = F^\leftarrow (p),$ by definition of $y = F^\leftarrow (p)$
-
-$\exists (z_n)_{n \in \mathbb{N}}$ with $z_n \searrow y$ such that $F (z_n) \geq p$
-
-But as $F$ is right-continuous $\lim_n F(z_n) = F(\lim_n z_n) = F(y)$
-
-Hence $F (y) \geq p$
-
-We just proved  1. and 2. `r fontawesome::fa("smile")`
-
----
-
-### Proof  (continued)
-
-3.) is an immediate  consequence de 1). Let $p = F (x) .$ Hence
-$p \leq  F (x),$ according to 1.) this is equivalent to  $F^\leftarrow (p)
-\leq  x,$ that is  $F^\leftarrow \circ F (x) \leq  x.$
-
-4.) For every $p$ in $] 0, 1 [,$  $\{ x : p = F (x)\}$ is non-empty (Mean value Theorem).
-Let $y = \inf \{ x : p = F (x)\} =F^\leftarrow (p)$.
-According to  $1)$,  $F (y) \geq p$.
-Now,  if $(z_n)_{n \in \mathbb{N}}$ is an increasing sequence
-converging to  $y$, for every  $n$, $F (z_n) < p,$ and, by left-continuity,
-$F (y) = F (\lim_n z_n) = \lim_n F (z_n) \leq
-p.$ Hence $F (y) = p,$ that is  $F \circ F^\leftarrow (p) = p.$
-
-`r fontawesome::fa("square")`
-
----
-
-### Proposition (Quantile transformation)
-
-If $U$ is uniformly distributed on $(0,1)$, and $F$ is a cumulative
-distribution over $\mathbb{R}$, $F^{\leftarrow}(U)$ has cumulative distribution $F$.
-
-
-The quantile transformation works whatever the continuity properties of $F$
-
----
-
-### Proof
-
-\begin{align*}
-  P\Big\{ F^\leftarrow(U) \leq x \Big\}
-  & = P\Big\{ U \leq F(x) \Big\} \\
-  & = F(x) \, .
-\end{align*}
-
-`r fontawesome::fa("square")`
+The quantile function plays a significant role in simulations, statistics and  risk theory.
 
 ---
 
@@ -1055,6 +937,8 @@ show stochastic domination properties.
 
 The quantile function
 of a discrete distribution is a step function  that jumps at the cumulative probability of every possible outcome.
+
+
 If a probability distribution is a mixture of a discrete distribution and a continuous distribution, the
 quantile function jumps at the cumulative probability of every possible outcome of the discrete component.
 
@@ -1064,8 +948,9 @@ In Figures \@ref(fig:quantiles)-\@ref(fig:quantiles4), we illustrate quantile fu
 distributions and for distributions that are neither discrete nor continuous.
 
 ---
+name: quantiles1
 
-### Quantile functions of binomial distributions.
+### Quantile functions of binomial distributions
 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -1111,6 +996,9 @@ The two quantile functions have the same range: $\{0, 1, \ldots, 10\}$
 ]
 
 ---
+name: quantiles2
+
+### Quantile functions of clipped Gaussians
 
 
 .pull-left[
@@ -1164,6 +1052,9 @@ Let $\Phi^\leftarrow$ denote the quantile function of $\mathcal{N}(0,1)$
 
 
 ---
+name: quantiles3
+
+### Cumulative distribution functions of clipped Gaussians
 
 
 .pull-left[
@@ -1191,11 +1082,12 @@ rm(df2, q)
 
 .pull-right[
 
-Cumulative distribution functions for the probability distributions illustrated in Figure \@ref(fig:quantiles2)
+Cumulative distribution functions for the probability distributions illustrated in [Figure](#quantiles2) (clipped Gaussian distributions)
 
 ]
 
 ---
+name: quantiles4
 
 
 
@@ -1231,12 +1123,156 @@ rm(df, p)
 
 .pull-right[
 
-(ref:quantiles4) Representation of $F \circ F^{\leftarrow}$ for the probability distributions illustrated in Figures \@ref(fig:quantiles2)  and \@ref(fig:quantiles3). The function $F \circ F^{\leftarrow}$ always lies above the line $y=x$ (dotted line) as prescribed in Proposition \@ref(prp:quantilekit). Plateaux that lie strictly above the dotted line are in correspondence with  jumps of the quantile function.
+Representation of $F \circ F^{\leftarrow}$ for the probability distributions illustrated in Figures [clipped Gaussian quantile functions](#quantiles2)  and [clipped Gaussian CDFs](#quantiles3).
+
+The function $F \circ F^{\leftarrow}$ always lies above the line $y=x$ (dotted line) as prescribed in [Proposition](#fundapropquantiles)
+
+Plateaux that lie strictly above the dotted line are in correspondence with  jumps of the quantile function
 
 
 ]
 
 ---
+
+### `r fontawesome::fa("syringe")`
+
+A cumulative distribution function $F$ is
+
+- non-negative
+
+- $[0,1]$-valued
+
+- non-decreasing
+
+- right-continuous, with left-limit at any point.
+
+`r fontawesome::fa("smile")` The cumulative distribution function of a diffuse probability measure is continuous at any point.
+
+---
+
+The quantile function $F^{\leftarrow}$ is defined as an _extended inverse_
+of the cumulative distribution function $F$.
+
+.content-box-gray[
+
+### Definition
+
+The quantile function $F^{\leftarrow}$ of random variable  $X$
+distributed according to $P$ (with cumulative distribution function $F$) is defined as
+
+\begin{align*}
+F^{\leftarrow} (p)
+   & = \inf \Big\{ x : P\{X \leq x\} \geq p \Big\} \\
+   & = \inf \Big\{ x : F (x) \geq p \Big\} \qquad \text{for } p \in (0,1).
+\end{align*}
+
+]
+
+---
+
+`r fontawesome::fa("triangle-exclamation")` The quantile function is  non-decreasing and  left-continuous
+
+---
+name: fundapropquantiles
+
+The interplay between the quantile and cumulative distribution functions
+is summarized in the next proposition.
+
+
+
+### Proposition
+
+If $F$ and $F^\leftarrow$ are  the CDF and the quantile function of
+(the distribution of) $X$, the following statements hold  for  $p \in] 0, 1 [$:
+
+1. $p \leq  F (x)$ iff $F^\leftarrow (p) \leq  x$
+
+1. $F \circ F^\leftarrow (p) \geq p$
+
+1. $F^\leftarrow \circ F (x) \leq  x$
+
+1. If  $F ⊴ \text{Lebesgue}$, then $F \circ F^\leftarrow (p) = p$
+
+
+
+---
+
+### Proof
+
+According to the definition of $F^\leftarrow$ if $F (x) \geq p$
+then $F^\leftarrow (p) \leq  x$
+
+--
+
+To prove the  converse, it suffices to check that $F \circ F^\leftarrow (p) \geq p$
+
+--
+
+Indeed, if $x \geq F^\leftarrow (p),$ as
+$F ↘$,  $F (x) \geq F \circ F^\leftarrow (p)$
+
+If $y = F^\leftarrow (p),$ by definition of $y = F^\leftarrow (p)$
+
+$\exists (z_n)_{n \in \mathbb{N}}$ with $z_n \searrow y$ such that $F (z_n) \geq p$
+
+But as $F$ is right-continuous $\lim_n F(z_n) = F(\lim_n z_n) = F(y)$
+
+Hence $F (y) \geq p$
+
+We just proved  1. and 2. `r fontawesome::fa("smile")`
+
+---
+
+### Proof  (continued)
+
+3.) is an immediate  consequence de 1).
+
+Let $p = F (x) .$ Hence $p \leq  F (x),$ according to 1.)
+
+This is equivalent to  $F^\leftarrow (p)
+\leq  x,$ that is  $F^\leftarrow \circ F (x) \leq  x.$
+
+4.) For every $p$ in $] 0, 1 [,$  $\{ x : p = F (x)\}$ is non-empty (Mean value Theorem).
+
+Let $y = \inf \{ x : p = F (x)\} =F^\leftarrow (p)$.
+
+According to  $1)$,  $F (y) \geq p$.
+
+Now,  if $(z_n)_{n \in \mathbb{N}} \nearrow y$,
+
+for every  $n$, $F (z_n) < p,$ and,
+
+By left-continuity, $F (y) = F (\lim_n \uparrow z_n) = \lim_n F (z_n) \leq p.$
+
+Hence $F (y) = p,$ that is  $F \circ F^\leftarrow (p) = p$
+
+`r fontawesome::fa("square")`
+
+---
+
+### Proposition (Quantile transformation)
+
+If $U$ is uniformly distributed on $(0,1)$, and $F$ is a cumulative
+distribution over $\mathbb{R}$, $F^{\leftarrow}(U)$ has cumulative distribution $F$.
+
+
+The quantile transformation works whatever the continuity properties of $F$
+
+---
+
+### Proof
+
+\begin{align*}
+  P\Big\{ F^\leftarrow(U) \leq x \Big\}
+  & = P\Big\{ U \leq F(x) \Big\} \\
+  & = F(x) \, .
+\end{align*}
+
+`r fontawesome::fa("square")`
+
+
+---
+name: qqplots
 
 ### QQ-plots
 
@@ -1261,18 +1297,24 @@ q
 rm(n, sample, p, df, q)
 # %%
 ```
+A popular device for comparing two probability distributions on the real line defined by their cumulative distributions $F$ and $G$.
+
+The QQ-plot consists in plotting function $G^{\leftarrow} \circ F$.
 
 ]
 
 .pull-right[
 
- This is a popular device for comparing two probability distributions on the real line defined by their cumulative distributions $F$ and $G$.
 
- The QQ-plot consists in plotting function $G^{\leftarrow} \circ F$.
+ If the two distributions are the same, the line
 
- If the two distributions are the same, the line $y = G^{\leftarrow} \circ F(x)$ should lie below $y=x$ (according to Proposition \@ref(prp:quantilekit)), and should even coincide with the diagonal if $F=G$ is continuous and increasing.
+ $$y = G^{\leftarrow} \circ F(x)$$
 
- Here
+ should lie below $y=x$ (according to [Proposition](#fundapropquantiles).
+
+ The two lines should coincide if $F=G$ is continuous and increasing.
+
+ Here:
 
  - $F = \Phi$ is the cumulative distribution function of $\mathcal{N}(0,1)$.
 
@@ -1289,6 +1331,7 @@ Let us conclude this section with an important observation  concerning
 the behavior of $F(X)$ when $X \sim P$  with cumulative distribution function
 $F$.
 
+.content-box-gray[
 
 ### Corollary
 
@@ -1298,6 +1341,7 @@ then
 
 $F (X)$ and $1 - F (X)$ are uniformly distributed on $[0, 1]$.
 
+]
 
 `r fontawesome::fa("piece-puzzle")` Prove Corollary
 
@@ -1306,7 +1350,7 @@ $F (X)$ and $1 - F (X)$ are uniformly distributed on $[0, 1]$.
 class: middle, center, inverse
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: 100%
-background-position: 1% 1%
+background-size: 112%
+
 
 # The End

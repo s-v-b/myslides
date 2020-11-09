@@ -1235,7 +1235,19 @@ $$\sum_{i=1}^n X_i, \frac{X_1}{\sum_{i=1}^n X_i}, \frac{X_2}{\sum_{i=1}^n X_i}, 
 
 
 ---
+exclude: true
 class: middle, center, inverse
 
 
 # `r fontawesome::fa("coffee", fill="white")`
+
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: 112%
+
+
+# The End

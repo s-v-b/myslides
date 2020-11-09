@@ -1,5 +1,5 @@
 ---
-title: "Convergences"
+title: "Stochastic convergences"
 subtitle: "⚔<br/>Probabilités Master I, MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
@@ -67,8 +67,1107 @@ background-position: 97% 3%
 [<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
 
 ---
+class: inverse, middle
+
+## [Almost sure convergence](#secasconv)
+
+## [$L_p$ convergence](#seclpconv)
+
+## [Convergence in probability](#secconvinp)
+
+## [Law of large numbers](#seclln)
+
+
+---
+name: motivation
 class: inverse, center, middle
 
 ## Motivation
 
 ## `r fontawesome::fa("grin", fill = "white")`
+
+
+???
+
+We need to put topological structures in the world of random variables
+living on some probability space. As random variables are (measurable) functions,
+we shall borrow and adapt the notions used in Analysis: pointwise convergence (Section \@ref(asconvergence)), convergence in $L_p, 1 \leq p <\infty$ (Section \@ref(Lpconvergence)).
+
+Finally, we  define and investigate _convergence in probability_. This
+notion weakens both $L_p$ and almost sure (pointwise) convergence.
+Just as $L_p$ convergences, it can be metrized.
+
+Convergence in probability and almost sure convergence are
+illustrated  by weak and strong law of large numbers (Sections \@ref(wlln) and \@ref(secslln)). Laws of large numbers
+assert that empirical means converge towards expectations (under mild conditions),
+they are the workhorses of statistical learning theory.
+
+In Section \@ref(expineq), we look at non-asymptotic counterparts of the weak law of
+large numbers. We establish exponential tail bounds for sums of independent
+random variables (under stringent integrability assumptions).
+
+---
+name: secasconv
+class: middle, center, inverse
+
+
+## Almost sure convergence
+
+
+---
+
+
+In probabilistic settings, the notion of almost sure convergence mirrors the analytical notion of pointwise convergence
+
+
+`fontawesome::fa("syringe")` A sequence of real-valued functions $(f_n)_n$ mapping some space $\Omega$
+to $\mathbb{R}$ _converges pointwise_ to $f: \Omega \to \mathbb{R}$, if
+
+$$\forall \omega \in \Omega, \quad f_n(\omega) \to f(\omega)$$
+
+There is no uniformity condition
+
+
+
+---
+
+We assume that random variables are real-valued. The definition
+is easily extended to multivariate settings.
+
+
+### Definition Almost sure Convergences
+
+$(\Omega, \mathcal{F}, P)$: a probability space,
+
+A sequence $(X_n)_n$ of random variables converges almost
+surely (a.s.) towards a random variable $X$
+
+if
+
+the event
+$$E = \left\{ \omega : \lim_n X_n(\omega) = X(\omega)\right\}$$
+has $P$-probability $1$.
+
+
+---
+
+- Almost sure convergence, is (just) pointwise convergence with probability $1$
+
+- Almost sure convergence is not tied to integrability
+
+- `r fontawesome::fa("exclamation")` All random variables involved in the above statements live on the same probability space.
+
+- `r fontawesome::fa("puzzle-piece")` Can we design a metric for almost-sure convergence? The answer
+is no, as for pointwise convergence, in general
+
+---
+name: seclpconv
+class: middle, center, inverse
+
+## $L_p$ convergence
+
+
+---
+
+### Definition
+For $p \in [1, \infty)$, $L_p$ is the set of random variables over $(\Omega, \mathcal{F}, P)$ that satisfy $\mathbb{E} |X|^p <\infty$.
+
+The $p$-pseudo-norm is defined by $\|X\|_p = \big(\mathbb{E} |X|^p \big)^{1/p}$.
+
+Convergence in $L_p$ means convergence for this pseudo-norm.
+
+---
+
+`r fontawesome::fa("syringe")` Recall that $L_p$ spaces are nested (by Holder's inequality) and complete.
+
+
+### Proposition
+
+Convergence in $L_q, q\geq 1$  implies convergence in $L_p, 1\leq p \leq q$.
+
+
+---
+
+Almost sure convergence is not tied to integrability.
+
+We cannot ask whether almost sure convergence implies $L_p$ convergence.
+
+But we can ask whether  $L_p$ convergence implies almost sure convergence.
+
+The next statement is  a by-product  of the proof  of the completeness of $L_p$ spaces,
+
+### Theorem
+
+Convergence in $L_p$ implies almost sure convergence along a subsequence.
+
+
+`r fontawesome::fa("triangle-exclamation")` A counter-example  shows that convergence in $L_p$
+does not imply almost-sure convergence.
+
+
+
+
+---
+name: secconvinp
+class: middle, center, inverse
+
+## Convergence in probability
+
+---
+
+__Convention__: $L_0=L_0(\Omega, \mathcal{F}, P)$ is the set of real-valued
+random variables over $(\Omega, \mathcal{F}, P)$
+
+Like almost sure convergence,  the notion of convergence in probability is relevant
+to all sequences in  $L_0$
+
+Like convergence in $L_p, p\geq 1$, convergence in probability can be metrized
+
+---
+
+### Definition
+
+Let $(\Omega, \mathcal{F}, P)$ be a probability space,
+a sequence $(X_n)_n$ of random variables _converges in probability_
+towards a random variable $X$ if
+
+$$\forall \epsilon >0, \qquad \lim_n P \{ |X_n -X| \geq \epsilon\}  = 0$$
+
+---
+
+### Proposition
+
+Convergence in $L_p, p\geq 1$ implies convergence in probability.
+
+
+`r fontawesome::fa("smile")` This is an immediate consequence of Markov's inequality
+
+---
+
+### Proposition A criterion for convergence in probability
+
+The sequence $(X_n)_n$ converges in probability towards $X$ iff
+
+$$\lim_n \mathbb{E} \Big[ 1 \wedge |X_n -X|\Big] = 0$$
+
+
+---
+
+### Proof
+
+Assuming convergence in probability
+
+$$\begin{array}{rl}\mathbb{E} \Big[ 1 \wedge |X_n -X|\Big]& \leq \mathbb{E} \Big[ (1 \wedge |X_n -X|)\mathbb{I}_{|X-X_n| \geq \epsilon}\Big] + \mathbb{E} \Big[ (1 \wedge |X_n -X|)\mathbb{I}_{|X-X_n| < \epsilon}\Big] \\ & \leq P \Big\{|X-X_n| \geq \epsilon \Big\} + \epsilon\end{array}$$
+
+the limit of the right-hand side is not larger than $\epsilon$.
+
+As we can take $\epsilon$ arbitrarily small, this entails that the limit of the
+left-hand side is zero.
+
+---
+
+### Proof (continued)
+
+Conversely, for all $0< \epsilon< 1$
+
+$$\begin{array}{rl}P \Big\{|X-X_n| \geq \epsilon \Big\}  & \leq \frac{1}{\epsilon} \mathbb{E}\Big[ 1 \wedge |X-X_n|\Big]\end{array}$$
+
+Hence
+$$\lim_n \mathbb{E} \Big[ 1 \wedge |X_n -X|\Big] = 0 \Rightarrow  \lim_n P \big\{|X-X_n| \geq \epsilon \big\} =0$$
+
+As this holds for all $\epsilon>0$, $\lim_n \mathbb{E} \Big[ 1 \wedge |X_n -X|\Big] = 0$
+entails convergence in Probability
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Proposition
+Almost sure convergence implies convergence in probability.
+
+
+### Proof
+
+Assume $X_n \to X$ a.s., that is $|X_n -X| \to 0$.
+
+Then by dominated convergence,
+
+$$\lim_n \mathbb{E}\Big[ |X_n -X| \wedge 1\Big] = 0$$
+
+which entails convergence in probability of $(X_n)_n$ towards $X$.
+
+`r fontawesome::fa("square")`
+
+
+---
+
+### A metric for convergence in probability.
+
+### Definition  Ky-Fan distance
+
+The Ky-Fan distance is defined as
+
+$$\mathrm{d}_{\mathrm{KF}}(X, Y) = \inf_{\epsilon\geq 0} P\Big\{ |X-Y| >\epsilon\Big\}  \leq \epsilon$$
+
+
+---
+
+`r fontawesome::fa("triangle-attention")` we have to check that $\mathrm{d}_{\mathrm{KF}}$ is indeed a distance.
+
+This is the content of Proposition below
+
+
+### Proposition
+
+In the definition of  the Ky-Fan distance, the infimum is attained.
+
+---
+
+### Proof
+
+Let $a > \mathrm{d}_{\mathrm{KF}}(X, Y)$
+
+The event $A_a = \Big\{ |X-Y| > a \Big\}$ has probability smaller than
+$\epsilon$.
+
+And if $\epsilon < a < b$, $A_b \subseteq  A_a$.
+
+By monotone converence,
+
+$$P\Big(\cap_n A_{\epsilon + 1/n}\Big)=  \lim_{n} \uparrow P\Big(A_{\epsilon + 1/n}\Big) = \epsilon$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Proposition
+
+Ky-Fan distance satisfies:
+
+1. $\mathrm{d}_{\mathrm{KF}}(X, Y)=0 \Rightarrow X=Y \qquad \text{a.s.}$
+
+1. $\mathrm{d}_{\mathrm{KF}}(X, Y) = \mathrm{d}_{\mathrm{KF}}(Y, X)$
+
+1. $\mathrm{d}_{\mathrm{KF}}(X, Z) \leq  \mathrm{d}_{\mathrm{KF}}(X, Y) + \mathrm{d}_{\mathrm{KF}}(Y, Z)$
+
+
+---
+
+### Proof
+
+We check that $\mathrm{d}_{\mathrm{KF}}$  satisfies the triangle inequality.
+
+There exists two events $B$ and $C$ with respective probabilities
+$\mathrm{d}_{\mathrm{KF}}(X, Y)$ and $\mathrm{d}_{\mathrm{KF}}(Y, Z)$
+such that
+
+$$|X(\omega) -Y(\omega)| \leq \mathrm{d}_{\mathrm{KF}}(X, Y) \qquad \text{on } B^c$$
+
+and
+
+$$|Z(\omega) -Y(\omega)| \leq \mathrm{d}_{\mathrm{KF}}(Z, Y) \qquad \text{on } C^c\,.$$
+
+---
+
+### Proof (continued)
+
+On $B^c \cap C^c$, by the triangle inequality on $\mathbb{R}$:
+
+$$|X(\omega) - Z(\omega)|  \leq \mathrm{d}_{\mathrm{KF}}(X, Y) + \mathrm{d}_{\mathrm{KF}}(Y, Z)$$
+
+We conclude by observing
+
+$$\begin{array}{rl}
+P \Big( |X(\omega) - Z(\omega)| > \mathrm{d}_{\mathrm{KF}}(X, Y) + \mathrm{d}_{\mathrm{KF}}(Y, Z)
+\Big)
+& \leq P\Big( (B^c \cap C^c)^c\Big)\\
+& =  P(B \cup C) \\
+& \leq P(B) + P(C) \\
+& = \mathrm{d}_{\mathrm{KF}}(X, Y) + \mathrm{d}_{\mathrm{KF}}(Y, Z) \, .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Proposition
+
+The two statements are equivalent:
+
+1. $(X_n)_n$ converges in probability towards $X$
+
+1. $\mathrm{d}_{\mathrm{KF}}(X_n, X)$ tends to $0$ as $n$ tends to infinity.
+
+
+--
+
+### exercise
+
+Check the proposition.
+
+---
+
+`r fontawesome::fa("brain")` We leave the following questions as exercises:
+
+- Is $\mathcal{L}_0(\Omega, \mathcal{F}, P)$ complete under the Ky-Fan metric?
+
+- Does convergence in probability imply almost sure convergence?
+
+- Does convergence in probability imply convergence in $L_p, p\geq 1$?
+
+---
+
+Finally, we state a more gemeral definition of convergence in probability.
+The notion can be tailored to random variables that map some universe
+to some metric space. The connections with almost-sure convergence
+and $L_p$ convergences remain unchanged.
+
+
+### Definition Convergence in probability, multivariate setting
+
+A sequence $(X_n)_{n \in \mathbb{N}}$  of $\mathbb{R}^k$-valued random variables  living on the same probability space $(\Omega, \mathcal{F}, P)$  converges in  probability (in ${P}$-probability) towards a $\mathbb{R}^k$-valued  random variable $X$ iff
+for every $\epsilon >0$
+
+$$\forall \epsilon>0, \quad \lim_{n \to \infty} {P} \{ \Vert X_n -X\Vert > \epsilon \} = 0$$
+
+
+
+
+---
+name: seclln
+class: middle, center, inverse
+
+
+## Law(s) of large numbers
+
+---
+
+### Weak law of large numbers {#wlln}
+
+The weak and the strong law of large numbers are concerned with
+the convergence of empirical means of independent, identically distributed,
+integrable random variables  towards their common expectation.
+
+### Theorem Weak  law of large numbers
+If $X_1, \ldots, X_n, \ldots$  are
+
+- independently,
+- identically distributed,
+- integrable $\mathbb{R}^k$-valued
+
+random variables over $(\Omega, \mathcal{F}, P)$ with expectation  $\mu$
+
+then
+
+the sequence $(\overline{X}_n)$ defined by $\overline{X}_n := \frac{1}{n} \sum_{i=1}^n X_i$ converges in $P$-probability towards $\mu$
+
+
+---
+
+### Proof
+
+Assume first that $\mathbb{E}\Big[\Big(X_i-\mu\Big)^2\Big] = \sigma^2 < \infty.$
+
+Then, for all $\epsilon>0$, by the Markov-Chebychev inequality:
+
+$$\begin{array}{rl}
+  P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Big\}
+  & \leq \frac{\mathbb{E} \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big|^2 }{\epsilon^2} \\
+  & =  \frac{\mathbb{E}\Big[\Big(X_i-\mu\Big)^2\Big] }{n \epsilon^2} \\
+  & = \frac{\sigma^2}{n \epsilon^2}
+\end{array}$$
+
+because the variance of a sum of independent  random variables equals the
+sum of the variances of the summands.
+
+The right-hand side converges to $0$  for all $\epsilon >0$.
+
+The WLLN holds for square-integrable random variables `r fontawesome::fa("glass-cheers")`
+
+---
+
+### Proof (continued)
+
+Let us turn to the general case.
+
+Without loss of generality, assume all $X_n$ are centered.
+
+Let $\tau >0$  be a truncation threshold (which value will be tuned later).
+
+For each $i \in \mathbb{N}$, $X_i$ is decomposed into a sum:
+
+$$X_i = X^\tau_i + Y^\tau_i$$
+
+with $X^\tau_i =  \mathbb{I}_{|X_i|\leq \tau} X_i$
+and
+$Y^\tau_i =  \mathbb{I}_{|X_i|>\tau} X_i$.
+
+---
+
+### Proof (continued)
+
+For every $\epsilon >0$,
+
+$$\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i \Big| >\epsilon\Big\} \subseteq \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X^\tau_i \Big| > \frac{\epsilon}{2}\Big\} \cup \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big| >\frac{\epsilon}{2} \Big\}$$
+
+Invoking  the union bound, Markov's inequality (twice), the boundedness of the variances
+of the $X^\tau_i$ leads to:
+
+$$\begin{array}{rl} P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Big\} & \leq P \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X^\tau_i \Big| > \frac{\epsilon}{2}\Big\} + P \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big| >\frac{\epsilon}{2}\Big\} \\ & \leq 4 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n X^\tau_i \Big|^2}{\epsilon^2} + 2 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + 2 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + 2 \frac{1}{n}\sum_{i=1}^n  \frac{\mathbb{E}\Big|Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + 2 \frac{\mathbb{E} \Big|Y^\tau_1 \Big|}{\epsilon} \end{array}$$
+
+---
+
+### Proof (continued)
+
+Taking $n$ to infinity leads to
+
+$$\limsup_n P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Big\} \leq 2  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}$$
+
+Now as ${\tau \uparrow \infty}$  $|Y^\tau_1|  \downarrow 0$ while $|Y^\tau_1| \leq |X_1|$,
+dominated convergence (here a special case of monotone convergence) warrants
+that $\lim_{\tau \uparrow \infty}  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}=0$.
+
+This completes the proof of the WLLN.  `r fontawesome::fa("glass-cheers")`
+
+`r fontawesome::fa("square")`
+
+
+---
+name: secstronglln
+
+## Strong law of large numbers {#secslln}
+
+
+
+Infinite product space endowed with cylinders $\sigma$-algebra, and
+infinite product distribution.
+
+
+
+
+
+### Theorem Strong  law of large numbers (direct part)
+
+If $X_1, \ldots, X_n, \ldots$  are independently, identically distributed, integrable $\mathbb{R}$-valued random variables over $(\Omega, \mathcal{F}, P)$ with expectation  $\mu$
+
+then $P$-a.s.
+
+$$\lim_{n \to \infty}    \overline{X}_n =   \mu \qquad\text{with} \quad \overline{X}_n := \frac{1}{n} \sum_{i=1}^n X_i$$
+
+---
+
+
+### Lemma  Borel-Cantelli I  `r fontawesome::fa("syringe")`
+
+Let $A_1, A_2, \ldots, A_n$ be events from probability space $(\Omega, \mathcal{F}, P)$.
+If
+
+$$\sum_{n} P(A_n) < \infty$$
+
+then with probability $1$, only finitely many events among $A_1, A_2, \ldots, A_n$ occur:
+
+$$P \Big\{ \omega : \sum_{n} \mathbb{I}_{A_n}(\omega) < \infty\Big\} = 1$$
+
+---
+
+### Proof
+
+An outcome $\omega$ belongs to infinitely many events $A_k$, iff $\omega \in \cap_{n} \cup_{k\geq n} A_k$.
+
+By monotone convergence,
+
+$$\begin{array}{rl}P \Big\{ \omega : \omega \text{ belongs to infinitely many events } A_k\Big\}
+  & = P \Big\{ \cap_{n} \cup_{k\geq n} A_k \Big\} \\
+  & = \lim_n \downarrow P \Big\{ \cup_{k\geq n} A_k \Big\} \\
+  & \leq \lim_n \downarrow \sum_{k \geq n} P \Big\{ A_k \Big\} \\
+  & =  0\end{array}$$
+
+
+---
+
+
+
+### Proof of SLLN direct part
+
+The event
+
+$$\Big\{ \omega : \lim_n \sum_{i=1}^n \frac{X_i}{n} = \mu \Big\}$$
+
+belongs to the tail $\sigma$-algebra. To check  the Strong Law of Large Numbers, it
+suffices to check that this event has non-zero probability.
+
+Moreover, using the usual decomposition $X = (X)_+ - (X)_-$ where $(X)_+$ and $(X)_-$
+are the positive and negative parts of $X$, we observe that we can assume without loss of
+generality that $X_i$s are non-negative.
+
+
+---
+
+### Proof (continued)
+
+Recall the definition of truncated variables $X_i^i = \mathbb{I}_{X_i \leq i}X_i$ for $i \in \mathbb{N}$.
+
+Let $S_n = \sum_{i=1}^n X_i$ and $T_n = \sum_{i=1}^n X_i^i$.
+
+The difference $S_n - T_n = \sum_{i=1}^n (X_i - X^i_i)$ is a sum of non-negative random variables.
+As
+
+$$P \{ X_i - X^i_i >0 \} = P\{ X_i >i \} = P\{ X_1 > i\}$$
+
+thanks to $\mathbb{E} X_1 < \infty$,
+
+$$\sum_{i \in \mathbb{N}} P \{ X_i - X^i_i >0 \} < \infty$$
+
+---
+
+### Proof (continued)
+
+By the first Borel-Cantelli Lemma, this implies that almost surely,
+only finitely many events $\{ X_i - X^i_i >0 \}$ are realized.
+
+Hence almost surely, $T_n$ and $S_n$ differ by at most a bounded number of summands, and $\lim_n \uparrow (S_n - T_n)$ is finite.
+
+Now
+
+$$\lim_n \uparrow \mathbb{E} \frac{T_n}{n} = \mathbb{E} X_1$$
+
+---
+
+### Proof (continued)
+
+We shall first check that $T_{n(k)}/n(k)$  converges almost surely towards $\mathbb{E} X_1$
+for some (almost) geometrically increasing subsequence $(n(k))_{k \in \mathbb{N}}$.
+
+Fix $\alpha>1$ and let $n(k) = \lfloor \alpha^k \rfloor$.
+
+If for all $\epsilon>0$, almost surely, only finitely many events
+
+$$\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| \geq n(k) > \epsilon \Big\}$$
+
+occur, then $\Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big|/n(k)$ converges almost surely to $0$ and thus
+$T_{n(k)}/n(k)$ converges almost surely to $\mathbb{E}X_1$.
+
+---
+
+### Proof (continued)
+
+Let
+
+$$\Theta = \sum_{k\in \mathbb{N}}  P\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| \geq n(k) > \epsilon \Big\}$$
+
+Thanks to  truncation, each $T_{n(k)}$ is square-integrable.
+
+By Chebychev's inequality:
+
+$$P\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| \geq n(k) > \epsilon \Big\} \leq \frac{\operatorname{var}(T_{n(k)})}{\epsilon^2 n(k)^2}$$
+
+---
+
+### Proof (continued)
+
+As $X_i^i$'s are independent,
+
+$$\begin{array}{rl}\operatorname{var}(T_{n(k)}) & = \sum_{i \leq n(k)} \operatorname{var}(X_i^i)  \\
+& \leq \sum_{i \leq n(k)} \mathbb{E}\Big[(X_i^i)^2\Big] \\ & =  \sum_{i \leq n(k)} \int_0^\infty 2 t P \{ X^i_i >t \} \mathrm{d}t \\ & \leq \sum_{i \leq n(k)} \int_0^i 2 t P \{ X_1 >t \} \mathrm{d}t \end{array}$$
+
+
+---
+
+### Proof (continued)
+
+
+$$\begin{array}{rl}\Theta
+  & \leq \sum_{k\in \mathbb{N}} \frac{1}{\epsilon^2 n(k)^2}\sum_{i \leq n(k)} \int_0^i 2 t P \{ X_1 >t \} \mathrm{d}t \\  & = \frac{1}{\epsilon^2} \sum_{i \in \mathbb{N}} \int_0^i 2 t P \{ X_1 >t \} \mathrm{d}t \sum_{k: n(k)\geq i} \frac{1}{n(k)^2}\end{array}$$
+
+---
+
+### Proof (continued)
+
+Thanks to the fact that $\alpha^k >1$ for $k\geq 1$, the following holds:
+
+$$\sum_{k: n(k)\geq i} \frac{1}{n(k)^2} =  \sum_{k: \lfloor \alpha^k \rfloor \geq i} \frac{1}{\lfloor \alpha^k \rfloor^2} \leq \frac{4}{i^2} \frac{\alpha^2}{\alpha^2- 1}$$
+
+
+$$\begin{array}{rl}
+\Theta
+  & \leq \frac{4\alpha^2}{\epsilon^2(\alpha^2-1)} \sum_{i \in \mathbb{N}} \frac{1}{i^2}  \int_0^i 2 t P \{ X_1 >t \} \mathrm{d}t \\
+  & \leq \frac{4\alpha^2}{\epsilon^2(\alpha^2-1)} \sum_{i \in \mathbb{N}} \frac{1}{i^2} \sum_{j<i} \int_{j}^{j+1} 2P \{ X_1 >t \} \mathrm{d}t \\
+  & \leq \frac{4\alpha^2}{\epsilon^2(\alpha^2-1)} \sum_{j=0}^\infty  \int_{j}^{j+1} 2t P \{ X_1 >t \} \mathrm{d}t \sum_{i >j} \frac{1}{i^2} \\
+  & \leq \frac{4\alpha^2}{\epsilon^2(\alpha^2-1)} \sum_{j=0}^\infty  \int_{j}^{j+1} 2t P \{ X_1 >t \} \mathrm{d}t
+   \frac{2}{j\vee 1} \\
+   & \leq 8\frac{4\alpha^2}{\epsilon^2(\alpha^2-1)} \sum_{j=0}^\infty  \int_{j}^{j+1}  P \{ X_1 >t \} \mathrm{d}t \\
+   & \leq 8\frac{4\alpha^2}{\epsilon^2(\alpha^2-1)} \mathbb{E} X_1 \\
+   & < \infty\end{array}$$
+
+---
+
+### Proof (continued)
+
+
+By the first Borell-Cantelli Lemma, with probability $1$, only finitely many events
+
+$$\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| \geq n(k) > \epsilon \Big\}$$
+
+occur.
+
+As this holds for each $\epsilon>0$, it holds simultaneously for all $\epsilon= 1/n$,
+
+This implies that $\Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big|/n(k)$ converges almost surely to $0$.
+
+This also implies that $S_{n(k)}/n(k)$ converges almost surely to $\mathbb{E}X_1$.
+
+---
+
+### Proof (continued)
+
+To complete the proof, we need to check that this holds for $S_n/n$.
+
+If $n(k) \leq n < n(k+1)$, as $(S_n)_n$ is non-decreasing,
+
+$$\frac{n(k)}{n(k+1)}\frac{S_{n(k)}}{n(k)}\leq \frac{S_n}{n}\leq \frac{n(k+1)}{n(k)}\frac{S_{n(k+1)}}{n(k+1)}$$
+
+with
+
+$$\frac{1}{\alpha} \Big(1 - \frac{1}{\alpha^k} \Big)\leq \frac{n(k+1)}{n(k)}  \leq \alpha \left(1 + \frac{1}{\lfloor \alpha^k\rfloor}\right)$$
+
+Taking $k \uparrow \infty$, almost surely
+
+$$\frac{1}{\alpha} \mathbb{E} X_1 \leq \liminf_n \frac{S_n}{n} \leq \limsup_n \frac{S_n}{n} \leq \alpha \mathbb{E} X_1$$
+
+
+
+Finally, we may choose $\alpha$ arbitrarily close to $1$, to establish the desired result
+
+
+`r fontawesome::fa("square")`
+
+
+---
+
+`r fontawesome::fa("triangle-exclamation")`
+
+In the statement of the Theorem, we can replace the independence assumption by a pairwise independence assumption.
+
+The converse Theorem  shows that, under independence assumption, the conditions in for
+the Strong Law of Large Numbers are tight.
+
+
+
+
+
+### Lemma  Borel-Cantelli II `r fontawesome::fa("syringe")`
+
+Let $A_1, A_2, \ldots, A_n$ be independent
+events from probability space $(\Omega, \mathcal{F}, P)$.
+If
+
+$$\sum_{n} P(A_n) = \infty$$
+
+then with probability $1$, infinitely many events among $A_1, A_2, \ldots, A_n$ occur:
+
+$$P \Big\{ \omega : \sum_{n} \mathbb{I}_{A_n}(\omega) = \infty \Big\} = 1$$
+
+
+---
+exclude:true
+
+### Proof
+
+An outcome $\omega$ does not belong to infinitely many events $A_k$, iff $\omega \in \cup_{n} `r fontawesome::fa("square")`\cap_{k\geq n} A^c_k$.
+By monotone convergence,
+$$\begin{array}{rl}
+  P \Big\{ \omega : \omega \text{ does not belong to infinitely many events } A_k\Big\}
+  & = P \Big\{ \omega \in \cup_{n} \cap_{k\geq n} A^c_k  \Big\} \\
+  & = \lim_n \uparrow P \Big\{ \cap_{k\geq n} A^c_k  \Big\} \\
+  & = \lim_n \uparrow \lim_{m \uparrow \infty } \downarrow P \Big\{ \cap_{k=n}^m A^c_k  \Big\} \\
+  & = \lim_n \uparrow \lim_{m \uparrow \infty } \downarrow \prod_{k=n}^m \Big( 1 - P (A_k)   \Big\} \Big) \\
+  & = \lim_n \uparrow  \prod_{k=n}^\infty \Big( 1 - P ( A_k ) \Big) \\
+  & = \lim_n \uparrow \exp\Big( - \sum_{k=n}^\infty P ( A_k)\Big) \\
+  & = \lim_n \uparrow 0 \\
+  & = 0
+\end{array}$$
+
+
+
+---
+
+### Theorem Strong  law of large numbers, converse part
+
+Let $X_1, \ldots, X_n, \ldots$  be independently, identically distributed  $\mathbb{R}$-valued random variables over some $(\Omega, \mathcal{F}, P)$. If for some finite constant $\mu$,
+
+$$\lim_{n \to \infty}    \sum_{i\leq n} X_i/n =   \mu \qquad \text{almost surely,}$$
+
+then all $X_i$ are integrable and $\mathbb{E}X_i = \mu.$
+
+
+---
+
+We may assume that $X_i$'s are non-negative random variables.
+
+### Proof
+
+In order to check that the $X_i$'s are integrable, it suffices to show that
+
+$$\sum_{n=0}^\infty P \big\{ X_1 > n \big\} = \sum_{n=0}^\infty P \big\{ X_n > n \big\} < \infty$$
+
+Let $S_n = \sum_{i=1}^n X_i$. Observe that
+
+$$\begin{array}{rl}
+\Big\{ \omega : X_{n+1}(\omega) > n+1 \Big\}
+  & =  \Big\{ \omega : S_{n+1}(\omega) - S_{n}(\omega) > n+1 \Big\} \\
+  & =  \Big\{ \omega : \frac{S_{n+1}(\omega)}{n+1} - \frac{S_{n}(\omega)}{n} > 1 + \frac{S_{n}(\omega)}{n(n+1)} \Big\} \, .
+\end{array}$$
+
+---
+
+Assume by contradiction that the $X_i$'s are not integrable. Then by the second Borel-Cantelli Lemma,
+with probability $1$, infinitely many events
+
+$$\Big\{ \omega : \frac{S_{n+1}}{n+1} - \frac{S_{n}}{n} > 1 + \frac{S_{n}}{n(n+1)} \Big\}$$
+
+occur.
+
+But this cannot happen if $S_n/n$ converges toward a finite limit.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+The law of large numbers is the cornerstone of consistency proofs.
+
+Before shifting to non-exponential inequalities, we point a general result about events
+that depend on the limiting behavior of sequences of independent random variables.
+
+
+### Definition Tail sigma-algebra
+
+Assume $X_1, \ldots, X_n, \ldots$ are  random variables. The tail $\sigma$-algebra
+(or the $\sigma$-algebra of tail events) is defined as:
+
+$$\mathcal{T} = \cap_{n=}^\infty \sigma\Big(X_n, X_{n+1}, \ldots \Big)$$
+
+
+---
+
+Observe that the event $\sum_{i=1}^n X_i/n$ converges towards a finite limit belongs to
+the tail $\sigma$-algebra. The Strong Law of Large Numbers tells us that
+under integrability and independence assumptions, this tail event has probability $1$.
+This is no accident.  The $0-1$-law asserts that under independence,  tail events
+have trivial probabilities.
+
+### Theorem "0-1-Law"
+
+Assume $X_1, \ldots, X_n, \ldots$ are  independent random variables.
+Any event in the tail $\sigma$-algebra $\mathcal{T}$ has probability either $0$ or $1$.
+
+
+---
+
+
+### Proof
+
+It suffices to check that any event $A \in \mathcal{T}$ satisfies $P(A)^2 = P(A)$,
+or equivalently that $P(A) = P(A \cap A) = P(A) \times P(A)$, that is $A$ is
+independent of itself.
+
+For any $n$, as an event in  $\sigma\big(X_n, X_{n+1}, \ldots \big)$, $A$ is independent
+from any event in $\sigma\big(X_1, \ldots, X_n\big)$. But this entails that
+$A$ is independent from any event in $\cup_n \sigma\big(X_1, \ldots, X_n\big)$.
+
+Observe that $\cup_n \sigma\big(X_1, \ldots, X_n\big)$ is a $\pi$-system.
+Hence, $A$ is independent from any event from the $\sigma$-algebra generated
+by $\cup_n \sigma\big(X_1, \ldots, X_n\big)$, which happens to be $\mathcal{F}$.
+As $A \in \mathcal{T}  \subset \mathcal{F}$, $A$ is independent from itself.
+
+`r fontawesome::fa("square")`
+
+
+---
+
+`r fontawesome::fa("brain")` Derive the second Borel-Cantelli Lemma as a special case of the $0-1$-law.
+
+---
+name: secexpoineq
+class: middle, center, inverse
+
+## Exponential inequalities
+
+---
+
+Laws of large numbers are asymptotic statements.
+In applications, in Statistics, in Statistical Learning Theory, it is often desirable
+to have guarantees  for fixed $n$. Exponential inequalities are
+refinements of Chebychev inequality. Under strong integrability assumptions
+on the summands, it is possible and relatively easy to derive sharp tail
+bounds for sums of independent random variables.
+
+---
+
+### Lemma  Hoeffding Lemma
+
+Let $Y$ be a random variable  taking
+values in a bounded interval $[a,b]$ and
+let $\psi_Y(\lambda)=\log \mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}$
+
+Then
+
+$$\operatorname{var}(Y) \leq \frac{(b-a)^2}{4}\qquad \text{and} \qquad \psi_Y(\lambda) \leq \frac{1}{2} \frac{(b-a)^2}{4}$$
+
+
+---
+
+
+### Proof
+
+The upper bound on the variance of $Y$ has been established in Section \@ref(variance).
+
+Now let $P$ denote the distribution of $Y$ and let $P_{\lambda}$ be the
+probability distribution with density
+
+$$x \rightarrow e^{-\psi_{Y}\left(  \lambda\right)  }e^{\lambda (x - \mathbb{E}Y)}$$
+
+with respect to $P$.
+
+Since $P_{\lambda}$ is concentrated on
+$[a,b]$ ( $P_\lambda([a, b]) = P([a, b]) =1$ ), the variance of a random
+variable $Z$ with distribution $P_{\lambda}$ is bounded by $(b-a)^2/4$
+
+---
+
+Note that $P_0 = P$.
+
+Dominated convergence arguments allow to compute the derivatives of $\psi_Y(\lambda)$.
+
+Namely
+
+$$\psi'_Y(\lambda) = \frac{\mathbb{E}\Big[ (Y- \mathbb{E}Y) e^{\lambda (Y- \mathbb{E}Y)} \Big]}{\mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}} = \mathbb{E}_{P_\lambda} Z$$
+
+and
+
+$$\psi^{\prime\prime}_Y(\lambda) = \frac{\mathbb{E}\Big[ (Y- \mathbb{E}{Y})^2 e^{\lambda (Y- \mathbb{E}Y)} \Big]}{\mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}} - \Bigg(\frac{\mathbb{E}\Big[ (Y- \mathbb{E}{Y}) e^{\lambda (Y- \mathbb{E}Y)} \Big]}{\mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}}\Bigg)^2
+= \operatorname{var}_{P_\lambda}(Z)$$
+
+
+---
+
+Hence,  thanks to the variance upper bound:
+\begin{align*}
+\psi_Y^{\prime\prime}(\lambda) & \leq \frac{(b-a)^2}{4}~.
+\end{align*}
+
+Note that
+$\psi_{Y}(0)  = \psi_{Y}'(0) =0$, and
+by Taylor's theorem, for some
+$\theta \in [0,\lambda]$,
+
+$$\psi_Y(\lambda) = \psi_Y(0) + \lambda\psi_Y'(0)  + \frac{\lambda^2}{2}\psi_Y''(\theta)   \leq  \frac{\lambda^2(b-a)^2}{8}$$
+
+
+---
+
+
+The upper bound on the variance is sharp in the
+special case of a _Rademacher_ random variable
+$X$ whose distribution is defined by
+
+$$P\{X =-1\} = P\{X =1\} = 1/2$$
+
+Then one may take $a=-b=1$ and $\operatorname{var}(X)  =1=\left(  b-a\right)^2/4$.
+
+--
+
+We can now build on Hoeffding's Lemma to derive  very practical tail bounds
+for sums of bounded independent random variables.
+
+---
+
+### Theorem Hoeffding's inequality
+
+Let $X_1,\ldots,X_n$ be
+independent random variables such that $X_i$
+takes its values in $[a_i,b_i]$ almost surely for all $i\leq n$.
+
+Let
+
+$$S=\sum_{i=1}^n\left(X_i- \mathbb{E} X_i \right)$$
+
+Then
+
+$$\operatorname{var}(S) \leq v = \sum_{i=1}^n  \frac{(b_i-a_i)^2}{4}$$
+
+$$\forall \lambda \in \mathbb{R}, \qquad \log \mathbb{E} \mathrm{e}^{\lambda S} \leq \frac{\lambda^2 v}{2}$$
+
+$$\forall t>0, \qquad P\left\{  S \geq t \right\}  \le
+\exp\left( -\frac{t^2}{2 v}\right)$$
+
+---
+
+The proof is based on the so-called Cramer-Chernoff bounding technique and on Hoeffding's Lemma.
+
+### Proof
+
+The upper bound on variance follows from $\operatorname{var}(S) = \sum_{i=1}^n \operatorname{var}(X_i)$ and from the first part of Hoeffding's Lemma.
+
+For the upper-bound on $\log \mathbb{E} \mathrm{e}^{\lambda S}$,
+
+$$\begin{array}{rl}\log \mathbb{E} \mathrm{e}^{\lambda S} & = \log \mathbb{E} \mathrm{e}^{\sum_{i=1}^n \lambda (X_i - \mathbb{E} X_i)} \\ & = \log \mathbb{E} \Big[\prod_{i=1}^n  \mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big]  \\ & = \log \Big(\prod_{i=1}^n  \mathbb{E} \Big[\mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big]\Big)  \\ & = \sum_{i=1}^n \log \mathbb{E} \Big[\mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big] \\ & \leq  \sum_{i=1}^n \frac{\lambda^2 (b_i-a_i)^2}{8} \\ & = \frac{\lambda^2 v}{2}\end{array}$$
+
+where the third equality comes from independence of the $X_i$'s and the  inequality follows from
+invoking  Hoeffding's Lemma for each summand.
+
+---
+
+### Proof (continued)
+
+The Cramer-Chernoff technique consists of using Markov's inequality with exponential moments.
+
+$$\begin{array}{rl}P \big\{ S \geq t \big\} & \leq \inf_{\lambda\geq 0}\frac{\mathbb{E} \mathrm{e}^{\lambda S}}{\mathrm{e}^{\lambda t}} \\ & \leq \exp\Big(- \sup_{\lambda \geq 0} \big( \lambda t - \log \mathbb{E} \mathrm{e}^{\lambda S}\big) \Big)\\ & \leq \exp\Big(- \sup_{\lambda \geq 0}\big(  \lambda t - \frac{\lambda^2 v}{2}\big) \Big) \\ & = \mathrm{e}^{- \frac{t^2}{2v}  }\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+Hoeffding's inequality provides interesting tail bounds for binomial random variables which are sums of independent $[0,1]$-valued random variables.
+
+However in some cases, the variance  upper bound used in Hoeffding's inequality
+is excessively conservative.
+
+Think for example of binomial random variable with parameters $n$ and $\mu/n$,
+the variance upper-bound obtained from the boundedness assumption is $n$ while the true variance is $\mu$
+
+This motivates the next two exponential inequalities stated in Theorem \@ref(thm:zbennett)  and Theorem \@ref(thm:zbernstein).
+
+---
+
+### Theorem Bennett's inequality
+
+Let $X_1,\ldots,X_n$ be independent  random variables with finite
+variance such that $X_i\le b$ for some $b>0$
+almost surely for all $i\leq n$.
+
+Let
+
+$$S=\sum_{i=1}^n \left(  X_i-\mathbb{E} X_i\right)$$
+
+and $v=\sum_{i=1}^n \mathbb{E}\left[X_i^2\right]$.
+Let $\phi(u)=e^u-u-1$ for $u\in \mathbb{R}$.
+
+Then, for all $\lambda > 0$,
+
+$$\log \mathbb{E} e^{\lambda S}  \leq \frac{v}{b^2} \phi(b\lambda)$$
+
+and  for any $t>0$,
+
+$$P\{  S\geq t\}  \leq \exp\left(  -\frac{v}{b^2}h\left(\frac{bt}{v}\right) \right)$$
+
+where $h(u)=\phi^*(u) = (1+u)\log(1+u) -u$ for $u>0$.
+
+---
+
+`r fontawesome::fa("triangle-exclamation")`
+
+Bennett's inequality provides us with improved tail bounds for  the
+binomial random variable with parameters $n$ and $\mu/n$.
+
+This binomial random variable is distributed like the sum $n$ independent
+Bernoulli random variables with parameter $\mu/n$.
+
+This fits in the scope of Bennett's inequality, we can choose $b=1$ and $v=\mu.$
+
+`r fontawesome::fa("triangle-exclamation")` The obtained upper bound on the logarithmic moment generating function coincides with logarithmic moment generating function of a centered Poisson random variable with parameter $\mu$
+
+
+---
+
+### Proof
+
+The proof combines the Cramer-Chernoff technique with an _ad hoc_ upper bound
+on $\log \mathbb{E} \mathrm{e}^{\lambda (X_i - \mathbb{E}X_i)}$.
+
+By homogeneity, we may assume $b=1$.
+
+Note that $\phi(\lambda)/\lambda^2$ is non-decreasing over $\mathbb{R}$. For
+$x\leq 1, \lambda \geq 0$, $\phi(\lambda x)\leq x^2 \phi(\lambda)$.
+
+$$\begin{array}{rl}
+\log \mathbb{E} \mathrm{e}^{\lambda (X_i - \mathbb{E}X_i)}
+ & = \log \mathbb{E} \mathrm{e}^{\lambda X_i}  - \lambda \mathbb{E}X_i \\
+ & \leq \mathbb{E} \mathrm{e}^{\lambda X_i} - 1 - \lambda \mathbb{E}X_i \\
+ & =  \mathbb{E} \phi(\lambda X_i) \\
+ & = \mathbb{E}X_i^2 \phi(\lambda)\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+Whereas Bennett's bound works well for Poisson-like random variables,
+our last bound  is geared towards Gamma-like random variables. It is
+one of the pillars of statistical learning theory.
+
+
+---
+
+### Theorem Bernstein's inequality
+
+Let $X_1,\ldots,X_n$ be independent
+real-valued random variables.
+Assume that there exist positive numbers
+$v$ and $c$ such that $\sum_{i=1}^n \mathbb{E}\left[X_i^2\right]  \leq v$ and
+
+$$\sum_{i=1}^n \mathbb{E}\left[  \left(X_i\right)_+^q \right] \leq\frac{q!}{2}vc^{q-2}\quad \text{for all integers }  q \geq 3$$
+
+Let $S=\sum_{i=1}^n \left(X_i-\mathbb{E} X_i \right)$
+
+Then for all $\lambda\in (0,1/c)$
+
+$$\log \mathbb{E} \mathrm{e}^{\lambda (S- \mathbb{E}S)} \leq \frac{v\lambda^2}{2(1-c\lambda)}$$
+
+For $t>0$,
+
+$$P \big\{ S > t \big\} \leq \exp\Big( - \frac{v}{c^2} h_1\big(\frac{ct}{v}\big)\Big)$$
+
+with $h_1(x)= 1+x - \sqrt{1+2x}$
+
+---
+
+### Proof
+
+The proof combines again the Cramer-Chernoff technique with an _ad hoc_ upper bound
+on $\log \mathbb{E} \mathrm{e}^{\lambda (S - \mathbb{E}S)}$.
+
+
+Let again $\phi(u)=e^u-u-1$ for $u\in \mathbb{R}$.
+
+For $\lambda>0$,
+
+$$\begin{array}{rl}\phi(\lambda X_i)  & = \sum_{k=2}^\infty \frac{\lambda^k X_i^k}{\lambda^k} \\ & \leq \frac{\lambda^2 X_i^2}{2!} + \sum_{k=3}^\infty \frac{\lambda^k (X_i)_+^k}{\lambda^k}\end{array}$$
+
+---
+
+### Proof (continued)
+
+For $c> \lambda>0$,
+
+$$\begin{array}{rl} \log \mathbb{E} \mathrm{e}^{\lambda S}  & = \sum_{i=1}^n \log \mathbb{E} \mathrm{e}^{\lambda (X_i - \mathbb{E}X_i)} \\  & \leq \sum_{i=1}^n \mathbb{E} \phi(\lambda X_i) \\
+  & \leq \frac{\lambda^2 \sum_{i=1}^n  \mathbb{E} X_i^2}{2!} + \sum_{k=3}^\infty \frac{\lambda^k \sum_{i=1}^n \mathbb{E}(X_i)_+^k}{k!} \\  & \leq \frac{\lambda^2 v}{2} + \sum_{k=3}^\infty \frac{\lambda^k v c^{k-2}}{2} \\  & =  \frac{\lambda^2 v}{2 (1 - c \lambda)}\end{array}$$
+
+The tail bound follows by maximizing
+
+$$\sup_{\lambda \in [0,1/c)}  \lambda t - \frac{\lambda^2 v}{2 (1 - c \lambda)} = \frac{v}{c^2} \sup_{\eta \in [0,1)} \eta \frac{ct}{v} - \frac{\eta^2}{2(1-\eta)}$$
+
+`r fontawesome::fa("square")`
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: 112%
+
+
+# The End
