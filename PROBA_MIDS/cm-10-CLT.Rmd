@@ -72,6 +72,7 @@ require(tidyverse)
 require(latex2exp)
 require(kableExtra)
 require(gt)
+require(plotly)
 old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
 # %%
 ```
@@ -97,61 +98,160 @@ class: inverse, center, middle
 
 ---
 
+.pull-left[
+
+```{r, echo=FALSE}
+# %%
+n <- 250
+m <- 50
+# %%
+```
 
 
-Consider Binomial distributions with parameters $(n, \lambda/n)$ and
-Poisson distribution with parameter $\lambda$. Graphical inspection of
-probability mass functions suggests that as $n$ grows, Binomial
-distributions with parameters $(n, \lambda/n)$ look more and more alike
-Poisson distribution with parameter $\lambda$.
+```{r  binom-poisson, warning=FALSE, echo=FALSE, fig.show='hold'}
+# %%
+k <- 0:20
+data <- as_tibble(list(k,
+                           dbinom(k, n, 1/m),
+                           dpois(k, n/m),
+                           dbinom(k, 10*n, 1/(10*m))),
+                  .name_repair="minimal")
 
---
 
-Comparing
-probability generating functions is more compelling. The
-probability generating function of the Binomial distribution with
-parameters $(n, \lambda/n)$ is $s \mapsto (1 +\lambda(s-1)/n )^n$.
+names(data) <- c("k",
+                 stringr::str_c("Binomial(", as.character(n), ",", as.character(1/m), ")"),
+                 stringr::str_c("Poisson(", as.character(n/m), ")"),
+                 stringr::str_c("Binomial(", as.character(10*n), ",", as.character(.1/m), ")"))
 
-As $n$ tends towards infinity, the probability generating functions
-of the Binomials converge pointwise towards the  probability
-generating function of the Poisson
-distribution with mean $\lambda$: $s \mapsto \exp(\lambda(s-1))$.
+( data %>%
+  tidyr::gather(key="Distribution", value="Density", -k) %>%
+  ggplot(mapping=aes(x=k, y=Density, alpha=Distribution, linetype=Distribution) ) +
+  geom_col(width=.6, position=position_dodge2(), color=1) +
+  theme_bw() +
+  theme(legend.position = 'none') )
+#  %>% plotly::ggplotly()
+# %%
+```
 
---
+PMFs of
+- Binom(250,0.02) (left)
+- Binom(2500,0.002) (middle)
+- Poisson(5) (right)
+]
 
-In Lesson \@ref(intro), we saw other examples of distributions
-which tend to look alike some limiting distributions as some parameter
-moves.
+.pull-right[
+
+Graphical inspection of
+probability mass functions suggests that as $n$ grows,
+
+> Binomial distributions with parameters $(n, \lambda/n)$ look more and more alike Poisson distribution with parameter $\lambda$.
+
+Comparing probability generating functions (PGFs) is more compelling.
+
+The PGF of Binom $(n, \lambda/n)$ is
+
+$$s \mapsto (1 +\lambda(s-1)/n )^n$$
+
+`r fontawesome::fa("exclamation-triangle")`
+
+$$\lim_{n \uparrow \infty} (1 +\lambda(s-1)/n )^n = \underbrace{\exp(\lambda(s-1))}_{\text{PGF of} \operatorname{Poi}(\lambda)}$$
+
+]
 
 ---
 
+### Law of rare events
 
-In this lesson, we consider the set of probability distributions
-over some measurable space $(\Omega, \mathcal{F})$.
+.left-column[
 
-This set can be equipped
-with a variety of topologies.
+
+Distance between
+
+- Binom $(n, 5/n)$
+
+and
+
+- Poisson $(5)$
+
+w.r.t. $n$
+
+
+]
+
+.right-column[
+
+```{r lawrareevents, echo=FALSE, warning=FALSE, message=FALSE}
+
+lambda <- 5
+ns <- 10^(1:7)
+x <- 0:20
+difs <- purrr::map_dbl(ns, .f = ~ sum(abs (dbinom(x, ., lambda/.) - dpois(x, lambda))))
+
+(tibble(ns, difs) %>%
+  ggplot(mapping=aes(x=ns, y=difs)) +
+#  geom_line(lty=2) +
+  geom_point() +
+  geom_smooth(method="lm", lty=2, size=.5) +
+  scale_x_log10() +
+  scale_y_log10() +
+  xlab("n") +
+  ylab("Total variation distance") +
+  theme_bw()) %>% ggplotly()
+```
+
+]
+
+
+
+ Logarithmic scales on both axes `r fontawesome::fa("exclamation-triangle")`
+
+
+---
+
+## `r fontawesome::fa("radiation")`
+
+The set of probability distributions
+over some measurable space $(\Omega, \mathcal{F})$
+can be equipped with a variety of topologies
+
+--
 
 We shall focus on the topology defined
 by _convergence in distribution_ also called _weak convergence_.
 
 ---
 
-In Section \@ref(weakandvague), we introduce weak and vague convergences for sequences of probability distributions.
-In Section \@ref(secConvDistribution) Weak convergence induces the definition of convergence in distribution for random variables that possibly live on different probability spaces (just as our occupancy scores in Lesson \@ref(intro)).
+### Roadmap
 
-Section \@ref(secPortManteau) is dedicated to the Portemanteau Theorem. This theorem
-lists a number of alternative and equivalent characterizations of convergence in distribution.
-Alternative characterizations are useful in two respects: they may be easier to check
-than the characterization used in the definition; they may supply a larger range of applications.
+.pull-left[
+We introduce _weak and vague convergences_ for sequences of probability distributions
 
-In Section  \@ref(secLevyCont), we state and prove the Lévy continuity theorem.
-The Levy continuity theorem relates convergence in distribution with pointwise convergence of characteristic functions: characteristic functions not only allow us to identify  probability distributions, they are also
-convergence determining. It could be one more line in the statement
-of Theorem \@ref(thm:portemanteau). But the Lévy continuity Theorem stands out
+Weak convergence induces the definition of _convergence in distribution_ for random variables that possibly live on different probability spaces
+
+
+
+The Portemanteau Theorem lists a number of alternative and equivalent characterizations of convergence in distribution.
+
+Alternative characterizations are useful in two respects: they may be easier to check; they may supply a larger range of applications
+
+]
+
+--
+
+.pull-right[
+
+We state and prove the Lévy continuity theorem
+
+The Lévy continuity theorem relates convergence in distribution with pointwise convergence of characteristic functions
+
+The Lévy continuity theorem could be one more line in the statement
+of the Portemanteau Theorem
+
+But it stands out
 because it provides us with a concise proof of the Central Limit Theorem
-for normalized sums of centered i.i.d. random variables. This is the content of
-Section \@ref(clt).
+for normalized sums of centered i.i.d. random variables
+
+]
 
 ---
 name: weakandvague
@@ -160,14 +260,15 @@ class: middle, center, inverse
 ## Weak convergence, vague convergence
 
 
-{#weakandvague}
-
 
 ---
 
 
 Weak convergence of probability measures assesses the proximity of probability measures by
-comparing their action on a collection of test functions.
+comparing their action on a _collection of test functions_
+
+
+.content-box-gray[
 
 ### Definition: Weak convergence
 
@@ -180,20 +281,22 @@ for any bounded and continuous function $f: \mathbb{R}^k \to \mathbb{R}$,
 
 $$\lim_n \mathbb{E}_{P_n} [f] =  \mathbb{E}_P [f]$$
 
-
+]
 
 ---
 
 
-- `r fontawesome::fa("smile")`The there is some flexibility in the choice of the class of test functions
+- `r fontawesome::fa("smile")` The there is some flexibility in the choice of the class of test functions
 
-- `r fontawesome::fa("triangle-exclamation")` this choice is not unlimited
+- `r fontawesome::fa("exclamation-triangle")` This choice is not unlimited
 
-> If we restrict the collection of test functions to continuous functions with _compact support_ (which are always bounded), we obtain a different notion of convergence.
+> If we restrict the collection of test functions to continuous functions with _compact support_ (which are always bounded), we obtain a _different_ notion of convergence.
 
 
 ---
 name: vagueconv
+
+.content-box-gray[
 
 ### Definition  Vague convergence
 
@@ -205,6 +308,8 @@ iff
 for any  continuous function $f$ with _compact support_ from $\mathbb{R}^k \to \mathbb{R}$,
 
 $$\lim_n \mathbb{E}_{P_n} [f] = \mathbb{E}_P [f]$$
+
+]
 
 ---
 
@@ -227,6 +332,8 @@ name: secConvDistribution
 
 ---
 
+.content-box-gray[
+
 ### Definition
 
 A sequence  $(X_n)_{n \in \mathbb{N}}$ of $\mathbb{R}^k$-valued random variables defined
@@ -239,6 +346,9 @@ $$X_n \rightsquigarrow X \qquad \text{or} \qquad  X_n \rightsquigarrow \mathcal{
 
 where $\mathcal{L}$  denotes a probability distribution.
 
+]
+
+--
 
 The probability spaces are defined implicitly
 
@@ -254,8 +364,9 @@ name: portemanteau
 
 ---
 
+.content-box-gray[
 
-### Portemanteau Theorem
+### Portemanteau Theorem `r fontawesome::fa("luggage-cart")`
 
 A sequence of probability distributions $(P_n)_{n \in \mathbb{N}}$ on $\mathbb{R}^k$ converges weakly
 towards a probability distribution $P$ (on $\mathbb{R}^k$) iff one of the equivalent properties hold:
@@ -273,13 +384,11 @@ $(\mathbb{E}_{P_n} [f])$ converges towards $\mathbb{E}_P [f]$.
 1. For every open subset  $O$ of $\mathbb{R}^k$, $\liminf P_n (O) \geq  P(O).$
 1. For every $A \in \mathcal{B}(\mathbb{R})$ such that $P(A^\circ) = P(\overline{A})$ (the boundary of  $A$ is $P$-negligible), $\lim_n P_n(A)=P(A)$.
 
-
-`r fontawesome::fa("luggage-cart")` A _portemanteau_ is a suitcase.
-
+]
 
 ---
 
-# Proof
+### Proof `r fontawesome::fa("luggage-cart")`
 
 Implications $1) \Rightarrow 2) \Rightarrow 3)$ are obvious.
 
@@ -293,6 +402,8 @@ is an open set
 
 
 ---
+
+### Proof `r fontawesome::fa("luggage-cart")`
 
 $5)$ and $6)$ imply $7)$:
 
@@ -308,6 +419,8 @@ $$\lim_n P_n(A) = \liminf_n P_n (A) = \limsup_n P_n(A) = P(A^\circ) = P(\overlin
 
 
 ---
+
+### Proof `r fontawesome::fa("luggage-cart")`
 
 Let us check that $3) \Rightarrow 5)$. Let $F$ be a closed subset of $\mathbb{R}^k$. For $x\in \mathbb{R}^k$, let $\mathrm{d}(x,F)$ denote the distance from $x$ to $F$. For $m \in \mathbb{N}$, let $f_m(x) = \big(1 - m \mathrm{d}(x, F)\big)_+$.
 
@@ -328,6 +441,8 @@ $$\limsup_n P_n(F) = \limsup_n \mathbb{E}_{P_n} \mathbb{I}_F \leq \lim_m \downar
 
 ---
 
+### Proof `r fontawesome::fa("luggage-cart")`
+
 Checking $7) \Rightarrow 1)$
 
 Let $f$ be a bounded continuous function. Assume w.l.o.g. that $f$ is non-negative and upper-bounded by $1$. Recall that for each $\sigma$-finite measure $\mu$
@@ -344,6 +459,8 @@ $$\overline{\{ f > t\}} \setminus \{ f > t\}^\circ = \{f = t\}$$
 
 ---
 
+### Proof `r fontawesome::fa("luggage-cart")`
+
 The  set of values $t$ such that $P \{ f = t\}>0$ is at most countable and thus Lebesgue-negligible
 
 Let $E$ be its complement. For $t\in E$, $\lim_n P_n\{ f> t\} = P\{f >t\}$.
@@ -351,28 +468,38 @@ Let $E$ be its complement. For $t\in E$, $\lim_n P_n\{ f> t\} = P\{f >t\}$.
 $$\begin{array}{rl}  \lim_n \mathbb{E}_{P_n} f    & = \lim_n \int_{[0, 1]} P_n \{ f >t \} \mathrm{d}t \\    & = \lim_n \int_{[0, 1]} P_n \{ f >t \} \mathbb{I}_E(t) \mathrm{d}t \\    & = \int_{[0, 1]} \lim_n  P_n \{ f >t \} \mathbb{I}_E(t) \mathrm{d}t \\    & = \int_{[0,1]} P\{f >t\}  \mathbb{I}_E(t) \mathrm{d}t \\    & = \int_{[0,1]} P\{f >t\}   \mathrm{d}t \\    & = \mathbb{E}_P f\end{array}$$
 
 
-`r fontawesome::fa("square")`
+`r fontawesome::fa("square")`  `r fontawesome::fa("tired")`
 
 
----
 
 `r fontawesome::fa("brain")` complete the proofs
 
 
 ---
 
-For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is determined by cumulative distribution functions. This is sometimes taken as a definition of weak convergence in elementary books.
+> For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is determined by cumulative distribution functions. This is sometimes taken as a definition of weak convergence in elementary books.
+
+.content-box-gray[
 
 ### Corollary
 
-A sequence of probability measures   defined by their cumulative distribution functions $(F_n)_n$ converges weakly towards a probability measure defined by cumulative distribution function $F$ iff $\lim_n F_n(x) = F(x)$ at every $x$ which is a  continuity point of $F$.
+A sequence of probability measures   defined by their cumulative distribution functions $(F_n)_n$ converges weakly towards a probability measure defined by cumulative distribution function $F$
 
+iff
+
+$$\lim_n F_n(x) = F(x)$$
+
+at every $x$ which is a  continuity point of $F$
+
+]
 
 ---
 name: weakconvquantiles
 
 
 For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is also determined by quantile functions
+
+.content-box-gray[
 
 ### Theorem
 
@@ -384,11 +511,14 @@ $$\lim_n F_n^\leftarrow(x) = F^\leftarrow(x)$$
 
 at every $x$ which is a  continuity point of $F^\leftarrow$
 
+]
 
 `r fontawesome::fa("brain")` Prove  Proposition \@ref(prp:weakconvquantiles).
 
 ---
 name: asrepweakconv
+
+.content-box-gray[
 
 ### Proposition   Almost sure representation
 
@@ -399,6 +529,7 @@ and $Y$,   such that $\forall n, X_n \sim Y_n$, $X \sim Y$, and
 
 $$Y_n \to Y \qquad P\text{-a.s.}$$
 
+]
 
 `r fontawesome::fa("triangle-exclamation")`
 The random variables $(X_n)_n$  and $X$ may live on different probability spaces.
@@ -439,6 +570,8 @@ class: middle, inverse, center
 
 ---
 
+.content-box-gray[
+
 ### Theorem  Lévy's continuity theorem
 
 A sequence $(P_n)_n$ of probability distributions over $\mathbb{R}^d$  converges weakly towards
@@ -447,6 +580,8 @@ a probability distribution $P$ over $\mathbb{R}^d$
 iff
 
 the sequence of characteristic functions converges pointwise towards the characteristic function of $P$.
+
+]
 
 ---
 
@@ -465,6 +600,7 @@ These functions are bounded and infinitely many times differentiable.
 
 ---
 
+.content-box-gray[
 
 ### Lemma
 
@@ -477,6 +613,8 @@ $$\forall \sigma>0, \quad X_n + \sigma Z \rightsquigarrow X+\sigma Z$$
 then
 
 $$X_n \rightsquigarrow X$$
+
+]
 
 
 ---
@@ -515,6 +653,8 @@ $$\limsup_n \Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| \leq 2\epsilon$$
 
 ---
 
+.content-box-gray[
+
 ### Scheffé's Lemma
 
 Let $(P_n)_n$  be a sequence of absolutely continuous probability distributions
@@ -524,6 +664,8 @@ Assume that densities $(f_n)_n$ converge pointwise towards the
 density $f$ of some probability distribution $P$, then
 
 $$P_n \rightsquigarrow P$$
+
+]
 
 ---
 
@@ -583,6 +725,8 @@ The question arises whether the pointwise
 limit of characteristic functions is the characteristic function of some probability
 distribution or something else.
 
+--
+
 The answer may be negative: if $P_n = \mathcal{N}(0, n)$, the sequence
 of characteristic functions is $\big(t \mapsto \exp(-nt^2/2)\big)_n$ which converges pointwise
 to $0$ except at $0$ where it is equal to $1$ all along.
@@ -594,6 +738,7 @@ any probability measure: it is not continuous at $0$.
 
 The next Theorem settles the question.
 
+.content-box-gray[
 
 ### Theorem  Lévy's continuity theorem, second form
 
@@ -607,8 +752,11 @@ of characteristic functions converges pointwise towards a function _that is cont
 
 The limit function is the characteristic function of some probability distribution.
 
+]
 
 ---
+
+.content-box-gray[
 
 ### Definition Uniform tightness
 
@@ -622,6 +770,8 @@ such that
 
 $$\forall n, \qquad P_n(K) \geq 1 - ϵ$$
 
+]
+
 ---
 
 To establish uniform tightness of $(P_n)_n$, it is enough to show that for every $\epsilon>0$,
@@ -633,6 +783,8 @@ $$\forall n \geq n_0(\epsilon), \qquad P_n(K) \geq 1 - ϵ$$
 
 We admit the (important) next Theorem
 
+.content-box-gray[
+
 ### Theorem Prokhorov-Le Cam
 
 If $(P_n)_n$ is  a uniformly tight sequence of probability measures on $\mathbb{R}$,
@@ -642,7 +794,11 @@ then
 there is some subsequence $(P_{n(k)})_{k \in \mathbb{N}}$ such that $P_{n(k)} ⇝ P$
 for some probability measure $P$
 
+]
+
 ---
+
+.content-box-gray[
 
 ### Uniform tightness Lemma
 
@@ -656,9 +812,14 @@ then
 
 the sequence $(P_n)_n$ is _uniformly tight_.
 
+]
+
+
 ---
 
-.pull-left[The proof of the truncation inequality takes advantage on easy bounds satisfied by the $\operatorname{sinc}$ function.
+.pull-left[
+
+The proof of the truncation inequality takes advantage on easy bounds satisfied by the $\operatorname{sinc}$ function.
 
 
 $$\forall t \in \mathbb{R} \setminus[-1,1]$$
@@ -689,14 +850,17 @@ ggplot(data=tibble(x=seq(-15,15,by=.001)),
 
 ---
 
+.content-box-gray[
+
 ### Truncation Lemma
 
 Assume $\widehat{F}$ is the characteristic function of some probability measure $P$ on the real line,
 
 then
 
+$$\forall u>0, \quad \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}(v)\big) \mathrm{d}v  \geq \frac{1}{7} P \Big[\frac{-1}{u}, \frac{1}{u}\Big]$$
 
-$$\forall u>0, \quad \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}(v)\big) \mathrm{d}v  \geq \frac{1}{7} P \Big[\frac{-1}{u}, \frac{1}{u}\Big)$$
+]
 
 ---
 
@@ -756,7 +920,7 @@ Finally, by the Levy continuity Theorem, $P_{n}\rightsquigarrow  P \text{ as }{n
 
 `r fontawesome::fa("square")`
 
-`r fontawesome::fa("triangle-exclamation")`
+`r fontawesome::fa("exclamation-triangle")`
 All definitions and results in this section can be extended to the $k$-dimensional setting for all $k \in \mathbb{N}$.
 
 ---
@@ -773,11 +937,13 @@ proof of the next Proposition.
 
 ---
 
+.content-box-gray[
+
 ### Proposition
 
 Convergence in probability implies convergence in distribution
 
-
+]
 
 ---
 
@@ -791,6 +957,10 @@ Without loss of generality, assume that $|f(x)|\leq 1$  for all $x$ and $|f(x)-f
 Let $\epsilon>0$
 
 $$\begin{array}{rl}\Big| \mathbb{E}h(X_n) - \mathbb{E}h(X)  \Big| & = \Big| \mathbb{E}\Big[(h(X_n) - h(X) \mathbb{I}_{\mathrm{d}(X,X_n)> \epsilon}\Big] \\ & \qquad  + \mathbb{E}\Big[(h(X_n) - h(X) \mathbb{I}_{\mathrm{d}(X,X_n)\leq \epsilon}\Big] \Big| \\ & \leq  \mathbb{E}\Big[2 \mathbb{I}_{\mathrm{d}(X,X_n)> \epsilon} \Big] \\ \mathbb{E}\Big[ |h(X_n) - h(X)| \mathbb{I}_{\mathrm{d}(X,X_n)\leq \epsilon}\Big] \\ & \leq 2 P\big\{ \mathrm{d}(X,X_n)> \epsilon \big\} + \epsilon\end{array}$$
+
+---
+
+### Proof (continued)
 
 Convergence in probability entails that
 
@@ -810,9 +980,9 @@ name: clt
 
 ---
 
-The Lévy Continuity Theorem (Theorem \@ref(thm:thmlevycont))
+The Lévy Continuity Theorem
 is the conerstone of a very concise proof the simplest version of the
-Central Limit Theorem (CLT).
+Central Limit Theorem (CLT)
 
 Under square-integrability assumption, the
 CLT refines the Laws of Large Numbers.
@@ -824,6 +994,8 @@ tends to be of order $1/\sqrt{n}$ and, once rescaled, to be normally distributed
 
 ---
 
+.content-box-gray[
+
 ### Theorem
 
 Let $\ldots, X_n, \ldots$  be i.i.d. with finite variance $\sigma^2$  and expectation $\mu$.
@@ -832,6 +1004,7 @@ Let $S_n = \sum_{i=1}^n X_i$.
 
 $$\sqrt{n} \left(\frac{S_n}{n} - \mu \right) \rightsquigarrow \mathcal{N}\big(0, \sigma^2 \big)$$
 
+]
 
 ---
 
@@ -840,11 +1013,9 @@ $$\sqrt{n} \left(\frac{S_n}{n} - \mu \right) \rightsquigarrow \mathcal{N}\big(0,
 $\widehat{F}$ denote the characteristic function of the (common) distribution
 of the random variables $((X_i-\mu)/\sigma)_i$.
 
-Recall that the
-centering and square integrability assumptions imply that
+The centering and square integrability assumptions imply that
 
-$$\widehat{F}(t) = \widehat{F}(0) +\widehat{F}'(0) t + \frac{\widehat{F}'(0)}{2} t^2
-+ t^2 R(t) = 1 - \frac{t^2}{2} + t^2R(t)$$
+$$\widehat{F}(t) = \widehat{F}(0) +\widehat{F}'(0) t + \frac{\widehat{F}'(0)}{2} t^2 + t^2 R(t) = 1 - \frac{t^2}{2} + t^2R(t)$$
 
 where $\lim_{t \to 0} R(t)=0$.
 
@@ -869,7 +1040,7 @@ $$\lim_n \Big(1 - \frac{t^2}{2n} + \frac{t^2}{n} R(t/\sqrt{n})\Big)^n  = \mathrm
 ---
 
 
-`r fontawesome::fa("triangle-exclamation")`
+`r fontawesome::fa("exclamation-triangle")`
 
 The conditions in the Theorem statement allows for a short proof. They are by no mean necessary.
 
@@ -902,7 +1073,17 @@ rm(foo)
 
 .pull-right[
 
-(ref:cltbinom) Pointwise convergence of cumulative distribution functions towards the Gaussian cumulative distribution functions of $\mathcal{N}(0,1)$ (plain line) illustrates the Central Limit Theorem. The dotted and the dashed lines represent the cumulative distribution function of $(X_n -np)/\sqrt{n(p*(1-p))}$ where  $X_n \sim \text{Binomial}(n,p)$ for $p=.3$ and $n=30 \text(dotted), 100 \text(dashed)$.
+Pointwise convergence of CDFs towards the Gaussian CDF of $\mathcal{N}(0,1)$ (plain line)
+
+The dotted and the dashed lines represent the CDF of
+
+$$\frac{(X_n -np)}{\sqrt{n(p*(1-p))}}$$
+
+ where
+
+ $$X_n \sim \text{Binom}(n,p)$$
+
+ for $p=.3$ and $n=30 \text(dotted), 100 \text(dashed)$.
 
 ]
 
@@ -933,14 +1114,21 @@ in the  next device which proof is left to the reader.
 It consists in the adapting the
 proof of Theorem \@ref(thm:injeccharfunc).
 
+.content-box-gray[
+
 ### Theorem Cramer-Wold device
 
-The distribution of a $\mathbb{R}^k$-valued random vector $X = (X_1, \ldots, X_k)^T$ is completely determined by the collection of distributions of univariate random variables  $\langle t, X\rangle =\sum_{i=1}^n t_i X_i$ where $(t_1, \ldots, t_n)^T \in \mathbb{R}^n$
+The distribution of a $\mathbb{R}^k$-valued random vector $X = (X_1, \ldots, X_k)^T$ is completely determined by the collection of distributions of univariate random variables
+
+$$\langle t, X\rangle =\sum_{i=1}^n t_i X_i  \text{ where } (t_1, \ldots, t_n)^T \in \mathbb{R}^n$$
+
+]
 
 ---
 
 The Cramer-Wold device  provides a short path to the Multivariate Central Limit Theorem
 
+.content-box-gray[
 
 ### Theorem
 
@@ -949,6 +1137,9 @@ Let $X_1, \ldots, X_n, \ldots$  be i.i.d. vector valued random variables with fi
 Let $S_n = \sum_{i=1}^n X_i$.
 
 $$\sqrt{n} \left(\frac{S_n}{n} - \mu \right) \rightsquigarrow \mathcal{N}\big(0, \Gamma\big)$$
+
+]
+
 
 ---
 name: weakconvtransforms
@@ -959,33 +1150,52 @@ class: center, middle, inverse
 
 ---
 
-In Lesson \@ref(chapchar), we introduced different characterizations of probability distributions: probability generating functions,
-Laplace transforms, Fourier transforms (characteristic functions), cumulative distribution functions, quantiles functions.
-Within their scope, all those transforms are _convergence determining_: if a sequence of probability distributions converges
-weakly, so does (pointwise) the corresponding sequence of transforms, at least at the continuity points of the limiting transform.
+.pull-left[
+We introduced different characterizations of probability distributions:
+
+- probability generating functions,
+- Laplace transforms,
+- Fourier transforms (characteristic functions),
+- cumulative distribution functions,
+- quantiles functions.
+
+]
+
+.pull-right[
+
+Within their scope, all those transforms are _convergence determining_: if a sequence of probability distributions converges weakly, so does (pointwise) the corresponding sequence of transforms, at least at the continuity points of the limiting transform.
 
 In the next two theorems, each random variable is assumed to live on
 some (implicit) probability space.
 
+]
+
 ---
+
+.content-box-gray[
 
 ### Theorem
 
 A sequence of _non-negative_ random variables  $(X_n)_n$  converges in distribution
 towards the _non negative_ random variable  $X$ iff the sequence of Laplace transforms converges pointwise towards the Laplace transform of the probability distribution of $X$.
 
+]
 
-The proof parallels the derivation of Theorem \@ref(thm:thmlevycont).
+The proof parallels the derivation of the continuity Theorem
 
 ---
 
 As probability generating functions allows us to recover Laplace transforms, the next theorem is a special case of the statement concerning Laplace transforms.
+
+.content-box-gray[
 
 ### Theorem
 
 A sequence of integer-valued random variables  $(X_n)_n$  converges in distribution
 towards the integer-valued random variable  $X$ iff the sequence of Laplace transforms converges pointwise towards the Laplace transform of the
 probability distribution of $X$.
+
+]
 
 ---
 exclude: true
