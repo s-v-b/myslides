@@ -1,5 +1,5 @@
 ---
-title: "Convergences"
+title: "Conditioning"
 subtitle: "⚔<br/>Probabilités Master I, MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
@@ -57,7 +57,7 @@ background-position: 97% 3%
 
 
 
-# Convergences
+# Conditioning
 
 ### `r Sys.Date()`
 
@@ -66,9 +66,1707 @@ background-position: 97% 3%
 
 [<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
 
+
+
+
 ---
 class: inverse, center, middle
 
 ## Motivation
 
+## Definition and elementary properties
+
+## Construction for $X \in \mathcal{L}_2$
+
+## Construction for $X \in \mathcal{L}_1$
+
+## Conditional probabilities
+
+## Conditional densities
+
+## Regular conditional probability kernels
+
+
+---
+name: motivcondexp
+class: inverse, center, middle
+
+## Motivation: Defining conditional expectation
+
 ## `r fontawesome::fa("grin", fill = "white")`
+
+---
+
+In this lesson, $(\Omega,\mathcal{F},P)$ is a
+probability space, and $\mathcal{G} \subseteq \mathcal{F}$ a sub- $\sigma$ -algebra.
+
+`r fontawesome::fa("exclamation-triangle")` The sub- $\sigma$ -algebra need not be _atomic_
+
+We cannot define conditional probabilities by conditioning with respect to  atoms
+generating $\mathcal{G}$
+
+Our objective is nervertheless to define conditional expectations
+with respect to  sub- $\sigma$ -algebra $\mathcal{G}$, while retaining the nice properties
+surveyed in  the atomic context
+
+
+---
+
+The general definition of conditional expectation starts from
+the property described in Proposition
+
+### Definition Conditional expectation
+
+Let $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$ and
+$\mathcal{G}$ be a sub- $\sigma$ -algebra of $\mathcal{F}$, then a random variable
+ $Y$  is a version of the conditional expectation of
+$X$ with respect to  $\mathcal{G}$ iff
+
+i. $Y$ is $\mathcal{G}$-measurable.
+
+i. For every event  $B$ in $\mathcal{G}$:
+
+$$\mathbb{E} \left[\mathbb{I}_B X \right] = \mathbb{E} \left[ \mathbb{I}_B Y \right]$$
+
+
+
+
+---
+
+Leaving aside the question of the existence of a version of conditional expectation
+of $X,$ we first check that if there exist  different versions, they
+differ only up to a negligible event.
+
+
+### Proposition
+
+Let $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$   and
+$\mathcal{G}$ a sub- $\sigma$ -algebra of $\mathcal{F}$,
+
+then
+
+if $Y'$ and $Y$ are two versions of the conditional expectation of  $X$  with respect to  $\mathcal{G}$:
+
+$$P \left\{ Y = Y' \right\} = 1$$
+
+
+
+
+---
+
+### Proof
+
+As $Y$ and  $Y'$  are $\mathcal{G}$-measurable, the event
+
+$$B = \left\{ \omega~:~Y(\omega) >Y'(\omega)\right\}$$
+
+belongs to $\mathcal{G}.$ Moreover,
+
+$$\begin{array}{rl}
+\mathbb{E}\left[\mathbb{I}_B\, X\right]
+& =  \mathbb{E}\left[\mathbb{I}_B \, Y\right] \\
+& =  \mathbb{E}\left[\mathbb{I}_B \, Y'\right]  \, .
+\end{array}$$
+
+
+Thus
+
+$$\mathbb{E}\left[\mathbb{I}_B (Y-Y') \right] = 0$$
+
+As random variable $\mathbb{I}_B (Y-Y')$ is non-negative,
+its expectation is zero, it is null with probability $1$.
+Thus
+
+$$P \{Y>Y'\}=0$$
+
+We can conclude by proceeding in a similar way for event $\{Y<Y'\}$.
+
+`r fontawesome::fa("square")`
+
+
+---
+
+Still postponing the  existence question, let us check now a few properties
+versions of conditional expectation of $X$ should satisfy.
+
+### Proposition
+
+Let $X_1, X_2 \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$,
+$\mathcal{G}$ a sub- $\sigma$ -algebra of  $\mathcal{F}$, $a_1, a_2$
+two real numbers,
+
+then
+
+if  $Y_1$, $Y_2$,  and  $Z$  are respectively versions
+versions of conditional expectation of  $X_1, X_2$  and  $a_1 X_1 + a_2 X_2$
+with respect to  $\mathcal{G}$,
+
+we have
+
+$$P\{a_1 Y_1 + a_2 Y_2 = Z\} = 1$$
+
+
+
+
+---
+
+
+### Proof
+
+Let  $B$ be the event  of $\mathcal{G}$  defined by
+
+$$\{ a_1 Y_1 + a_2 Y_2 > Z\}$$
+
+We get
+
+$$\begin{array}{rcl}
+\mathbb{E}
+[\mathbb{I}_B Z] & = &  \mathbb{E} [\mathbb{I}_B (a_1 X_1 + a_2 X_2)]  \\
+& = & a _1 \mathbb{E} [\mathbb{I}_B  X_1 ]+a_2 \mathbb{E} [\mathbb{I}_B X_2] \\
+& = & a_1  \mathbb{E} [\mathbb{I}_B  Y_1 ]+a_2 \mathbb{E}
+[\mathbb{I}_B Y_2] \\
+& = & \mathbb{E} [\mathbb{I}_B (a_1 Y_1 + a_2 Y_2)]\end{array}$$
+
+and thus
+
+$$\mathbb{E}[\mathbb{I}_B (Z-(a_1 Y_1 + a_2 Y_2))]=  0$$
+
+We conclude as in the preceding proof that  $P\{B\}=0.$
+
+The proof is completed by handling in a similar way the event $\{ a_1 Y_1 + a_2 Y_2 < Z\}$
+
+`r fontawesome::fa("square")`
+
+
+---
+
+
+### Proposition
+
+If
+
+- $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$
+
+- $\mathcal{G}$ is a sub- $\sigma$ algebra of  $\mathcal{F}$
+
+- $Z$ is a version the conditional expectation of  $X$ with respect to  $\mathcal{G}$
+
+- $X$ is  $P$-a.s. non-negative,
+
+then
+
+$$P\{Z \geq 0\} =1$$
+
+
+
+
+The proof reproduces the argument used to established that
+different versions of the conditional expectation are almost surely equal.
+
+
+---
+
+
+### Proof
+
+For $n \in \mathbb{N}$, let   $B_n$ denote the event (from
+$\mathcal{G}$) defined by
+
+$$B_n = \left\{ \mathbb{E} \left[ X \mid \mathcal{G} \right] < - \frac{1}{n} \right\}$$
+
+To prove the proposition, it is enough to check
+
+$$P \left\{ \cup_n B_n \right\} = 0$$
+
+As $P \left\{ \cup_n B_n \right\} = \lim_n P\{B_n \}$,  it suffices to check
+$P \left\{ B_n\right\} = 0.$ For all  $n$,
+
+$$\begin{array}{rl}
+  0
+  & \leq \mathbb{E}\big[\mathbb{I}_{B_n} X\big] \\
+  & = \mathbb{E} \left[ \mathbb{I}_{B_n} X \right] \\
+  & = \mathbb{E} \left[ \mathbb{I}_{B_n}  \mathbb{E} \left[ X \mid \mathcal{G} \right] \right] \\
+  & \leq  - \frac{P\{B_n \}}{n} \, .
+\end{array}$$
+
+
+Hence, for all $n$,   $P\{B_n \}= 0$.
+
+`r fontawesome::fa("square")`
+
+
+---
+
+
+
+### Corollary
+
+If $(X_n)_{n \in \mathbb{N}}$ is a sequence of random variables from
+$\mathcal{L}_1 (\Omega, \mathcal{F}, P)$ satisfying
+$X_{n + 1} \geq X_n$ $P$-a.s.
+
+then
+
+there exists an $P$ -a.s. non-decreasing sequence of versions
+of conditional expectations
+
+$$\forall n \in \mathbb{N},\quad\mathbb{E} \left[ X_{n + 1} \mid \mathcal{F} \right] \geq \mathbb{E} \left[ X_n \mid \mathcal{F} \right]$$
+
+
+
+---
+
+`r fontawesome::fa("brain")`
+
+Let  $\mathcal{E}$ be a  $\pi$ -system generating $\mathcal{G}$ and containing
+$\Omega$
+
+Check that $\mathbb{E} \left[ X \mid \mathcal{G} \right]$ is the unique
+element from $\mathcal{L}_1 \left( \Omega, \mathcal{G}, P\right)$ which satisfies
+
+$$\forall B \in \mathcal{E}, \quad \mathbb{E} \left[
+\mathbb{I}_B X \right] = \mathbb{E} \left[ \mathbb{I}_B
+\mathbb{E} \left[ X \mid \mathcal{G} \right] \right]$$
+
+
+---
+
+For nested sub- $\sigma$ -algebras, conditional expectations satisfy the
+tower property:
+
+### Proposition
+
+Let  $(\Omega, \mathcal{F}, P)$ be a probability space, and $\mathcal{G} \subseteq \mathcal{H} \subseteq \mathcal{F}$
+be  two nested sub- $\sigma$ -algebras.
+Then for every   $X \in \mathcal{L}_1(\Omega, \mathcal{F}, P)$:
+
+$$\mathbb{E} \Big[ \mathbb{E}\left[ X \mid \mathcal{G} \right] \mid \mathcal{H} \Big]
+= \mathbb{E} \Big[ \mathbb{E} \, \left[ X \mid \mathcal{H} \right] \mid \mathcal{G} \Big]
+= \mathbb{E} \left[ X \mid \mathcal{G} \right]$$
+
+
+---
+
+
+### Proof
+
+The second equality is trivial: any
+$\mathcal{G}$-measurable random variable is also  $\mathcal{H}$-measurable.
+
+To check the first equality: for every $B \in \mathcal{G}$,
+$$\begin{array}{rcl}
+\mathbb{E} \left[ \mathbb{I}_B \mathbb{E} \left[ \mathbb{E}
+\left[ X \mid \mathcal{H} \right] \mid \mathcal{G} \right] \right] & = &
+\mathbb{E} \left[ \mathbb{I}_B \mathbb{E} \left[ X \mid
+\mathcal{H} \right] \right]\\
+&  & \text{comme } B \in \mathcal{H}\\
+& = & \mathbb{E} \left[ \mathbb{I}_B X \right] .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+
+---
+class: inverse, center, middle
+name: predictpoint
+
+## Conditional expectation in $\mathcal{L}_2(\Omega, \mathcal{F}, P)$
+
+
+---
+
+If we focus on square-integrable random variables, building versions of conditional expectation turn out to be easy
+
+
+
+`r fontawesome::fa("syringe")`
+
+When the conditioning  $\sigma$ sub-algebra $\mathcal{G}$ is atomic,
+the condition expectation $\mathbb{E}[X \mid \mathcal{G}]$ defines an optimal predictor of $X$ with respect to quadratic error
+amongst all $\mathcal{G}$ measurable random variables
+
+
+This characterization remains valid for square integrable random variables
+even when the conditioning  $\sigma$ sub-algebra is no more atomic `r fontawesome::fa("smile")`
+
+---
+
+### Theorem (Conditional expectation for square-integrable random variables)
+
+Let be $X \in \mathcal{L}_2 (\Omega, \mathcal{F}, P)$ and
+$\mathcal{G}$ a sub- $\sigma$ -algebra of $\mathcal{F}$.
+
+
+$$\exists Y \in \mathcal{L}_2(\Omega, \mathcal{F}, P) \qquad \mathbb{E}(Y-X)^2 =  \inf \Big\{ \mathbb{E}(Z-X)^2 : Z \in \mathcal{L}_2(\Omega, \mathcal{G}, P) \Big\}$$
+
+A version  $Y$ of the _orthogonal projection_ of $X$ on $\mathcal{L}_2(\Omega, \mathcal{G}, P)$ is also a version of the conditional expectation of $X$ with respect to $\mathcal{G}$:
+
+$$\forall B \in \mathcal{G}, \quad
+\mathbb{E} \left[\mathbb{I}_B X \right] = \mathbb{E} \left[ \mathbb{I}_B\, Y \right]$$
+
+
+---
+
+`r fontawesome::fa("exclamation-triangle")` The theorem contains two statements:
+
+i. there exists a minimizer of $\mathbb{E}(X-Z)^2$ in
+$\mathcal{L}_2(\omega, \mathcal{F}, P)$,
+
+i. such a minimizer is a version of the conditional expectation
+
+--
+
+Checking the first statement amounts to invoke the right arguments from Hilbert spaces theory.
+
+---
+
+`r fontawesome::fa("syringe")` Basics if Hilbert spaces theory
+
+### Definition Hilbert space
+
+A real vector space $E$ equipped with a norm $\|\cdot\|$ is a Hilbert space iff $\langle \cdot, \cdot \rangle$
+defined by
+
+$$\forall x, y \in E, \langle x, y \rangle = \frac{1}{4} \Big(\Vert x+y \Vert^2 + \Vert x-y \Vert^2\Big)$$
+
+is an _inner product_ and $E$ is complete for the topology induced by the norm
+
+
+---
+
+
+### Theorem
+
+Let $(\Omega, \mathcal{F}, P)$ be a probability space,
+
+then
+
+the set $L_2(\Omega, \mathcal{F}, P)$  of equivalence classes of
+square integrable variables,
+equipped with $\Vert X\Vert^2=  (\mathbb{E} X^2)^{1/2}$ is a Hilbert space
+
+
+---
+
+
+`r fontawesome::fa("exclamation-triangle")` In this context,
+
+$$\langle X, Y \rangle  = \mathbb{E}\left[ XY \right]$$
+
+--
+
+From Hilbert space theory, the essential tool we shall use is the
+projection Theorem below.
+
+---
+
+
+Our starting point is the next observation
+
+
+### Proposition
+
+- Let $(\Omega, \mathcal{F}, P)$ be a probability space,
+
+- Let $\mathcal{G} \subseteq \mathcal{F}$  be a sub- $\sigma$ -algebra,
+
+then
+
+$L_2(\Omega, \mathcal{G}, P)$  is a _closed_, _convex_ subset (subspace) of $L_2(\Omega, \mathcal{F}, P)$.
+
+---
+
+We look for the element from $L_2(\Omega, \mathcal{G}, P)$ that is closest (in the $L_2$ sense)
+to a random variable from $L_2(\Omega, \mathcal{F}, P)$.
+
+
+The existence and unicity of
+this closest $\mathcal{G}$-measurable random variable are warranted by the Projection Theorem.
+
+---
+
+### Theorem: Hilbert space Projection Theorem
+
+Let $E$ be a Hilbert space and $F$ a closed convex subset of
+$F$.
+
+For every $x \in E$, there exists a unique $y \in F$, such that
+
+$$\|x - y\|= \inf_{z \in F} \|x - z\|$$
+
+This unique closest point in $F$ is called the _(orthogonal) projection_ of $x$ over $F$
+
+For any $z \in F$,
+
+$$\langle x-y, z-y\rangle \leq 0$$
+
+If $F$ is a linear subspace of $E$, the Pythagorean relationship holds:
+
+$$\|x\|^2 =  \|y\|^2 + \|x - y\|^2$$
+
+and for any $z \in F$, $\langle x - y, z\rangle =0$
+
+
+---
+
+### Proof
+
+Let $d = \inf_{z \in F} \|x - z\|$.
+Let  $(z_n)_n$ be a sequence of elements from $F$  such that
+
+$$\lim_n \|x - z_n \|= d$$
+
+According to the parallelogram law,
+
+$$2 \left( \|x - z_n \|^2 +\|x - z_m \|^2 \right)  = \|2 x - (z_n + z_m)\|^2 + \|z_n - z_m \|^2 .$$
+
+Since $F$ is convex, $(z_n + z_m) / 2 \in F$, so
+
+$$\|x - (z_n + z_m) / 2\| \geq d$$
+
+Let $\epsilon \in (0, 1]$ and  $n_0$ be such that
+for $n \geq n_0$,  $\|x - z_n \| \leq d + \epsilon .$
+For $n, m \geq n_0$
+
+$$4 (d + \epsilon)^2 \geq 4 d^2 +\|z_n - z_m \|^2$$
+
+or equivalently
+
+$$\|z_n - z_m \|^2 \leq 4 (2 d + 1) \epsilon$$
+
+
+---
+
+### Proof (continued)
+
+Hence, the minimizing sequence $(z_n)_n$ has the Cauchy property. As $F$
+is closed, it has a unique limit $y \in F$ and $d  = \|x - y\|$.
+
+To verify uniqueness, suppose there exists $y' \in F$, such as
+$\|x - y' \|= d$. Now,  let us build a new sequence $(z'_n)_{n \in \mathbb{N}}$
+such that $z'_{2 n} = z_n$ and $z'_{2 n + 1} = y'$.
+
+This $F$-valued
+sequence satisfies $\lim_n \|z'_n - x\|= d.$ By the argument above, it admits
+a  limit $y^{\prime\prime}$ in $F$.
+
+The limit $y^{\prime\prime}$ coincides with the
+limit of any sub-sequence, so it equals  $y$ and $y'.$
+
+Fix $z \in F \setminus \{y\}$, for any $u \in (0,1]$, let $z_u = y + u (z-y)$, then
+$z_u \in F$ and
+
+$$\Vert  x - z_u\Vert^2 - \Vert x -y \Vert^2 = -2 u \langle x-y, z-y \rangle +  u^2 \Vert z - y \Vert^2$$
+
+As this quantity is non-negative for $u \in [0,1]$, $\langle x-y, z-y \rangle$ has to be non-positive
+
+---
+
+### Proof (continued)
+
+Now suppose that $F$ is a subspace of $E.$
+
+If there is $y \in F$ such as $\langle x - y, z \rangle = 0$ for any $z\in F$,
+then $y$ is the orthogonal projection of $x$ on $F$ since for all $z \in F$:
+
+$$\begin{array}{rl}
+\|x - z\|^2
+  & =  \|x - y\|^2 - 2 \langle x - y, z \rangle +\|z\|^2\\
+  & \geq  \|x - y\||^2 .
+\end{array}$$
+
+Conversely, if $y$ is the orthogonal projection of $x$ on $F$, for
+all $z$ of $F$ and all $\lambda \in \in \mathbb{R}$:
+
+$$\begin{array}{rl}
+\|x - y\||^2
+  & \leq  \|x - (y + \lambda z)\|^2 \\
+  & =  \|x - y\|^2 - 2 \lambda \langle x - y, z \rangle + \lambda^2 \|z\|^2,
+\end{array}$$
+
+
+so $0 \leq 2 \lambda \langle x - y, z \rangle + \lambda^2 \|z\|^2$
+
+For this polynomial in $\lambda$ to be of constant sign, it is necessary that
+$\langle x - y, z \rangle = 0$
+
+
+`r fontawesome::fa("square")`
+
+---
+
+As $\mathcal{L}_2 (\Omega, \mathcal{G}, P)$ is a closed convex subset
+of $\mathcal{L}_2 (\Omega, \mathcal{F}, P)$, the existence and uniqueness of the
+projection on a closed convex part of a Hilbert space
+gives the following corollary
+
+
+
+
+### Corollary
+
+Given $X \in \mathcal{L}_2 (\Omega, \mathcal{F}, P)$ and
+$\mathcal{G}$ a sub- $\sigma$ -algebra of $\mathcal{F}$,
+
+there exists  $Y \in \mathcal{L}_2 (\Omega, \mathcal{G}, P)$  that  minimizes
+
+$$\mathbb{E} \left[ \left( X - Z \right)^2 \right] \qquad \text{ for } Z \in \mathcal{L}_2 (\Omega, \mathcal{G}, P)$$
+
+Any other minimizer in $\mathcal{L}_2 (\Omega, \mathcal{G}, P)$  is $P$-almost surely equal to $Y$
+
+
+
+---
+
+### Proof
+
+Let  $Y$ be a version of the orthogonal projection of $X$ on
+$L_2(\Omega,\mathcal{G},P)$ and $B$ an element of $\mathcal{G}.$
+
+The inner product of $\mathbb{I}_B \in \mathcal{L}_2(\Omega,\mathcal{G},P)$) and $X-Y$ is
+
+$$\langle X-Y, \mathbb{I}_B \rangle = \mathbb{E}\left[(X-Y)\mathbb{I}_B\right]$$
+
+By the Projection Theeorem, $\mathbb{E}\left[(X-Y)\mathbb{I}_B\right]=0$.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+
+### Definition Conditional variance
+
+Let $X \in \mathcal{L}_2(\Omega, \mathcal{F}, P)$
+and $\mathcal{G} \subseteq \mathcal{F}$ a sub- $\sigma$ -algebra.
+
+The *conditional variance* of $X$ with respect to  $\mathcal{G}$ is defined by
+
+$$\operatorname{Var} \left[ X \mid \mathcal{G} \right] = \mathbb{E} \left[\left( X - \mathbb{E} [X \mid \mathcal{G}] \right)^2 \mid \mathcal{G}\right]$$
+
+
+
+The conditional variance is a  $\mathcal{G}$ -measurable random variable, just as
+the conditional expectation
+
+It is the conditional expectation of the prediction error that is incurred when trying to predict $X$
+using $\mathbb{E}[X \mid \mathcal{G}]$.
+
+???
+
+ a Pythagorean  theorem for the variance.
+
+---
+
+### Proposition  (Pythagorean identity)
+
+Let $X \in \mathcal{L}_2(\Omega, \mathcal{F}, P)$
+and $\mathcal{G} \subseteq \mathcal{F}$ a sub- $\sigma$ -algebra.
+
+Then
+
+$$\operatorname{Var} [X] = \operatorname{Var} \Big[ \mathbb{E} \left[ X \mid \mathcal{G} \right] \Big] + \mathbb{E} \Big[ \operatorname{Var} \left[ X \mid \mathcal{G} \right] \Big]$$
+
+
+
+
+---
+
+### Proof
+
+Recall that  $\mathbb{E} \left[ \mathbb{E} \left[ X \mid \mathcal{G} \right] \right] = \mathbb{E} \left[ X \right]$.
+
+
+
+$$\begin{array}{rl}
+\operatorname{Var} \left[ X \right] & =  \mathbb{E} \left[ \left( X -
+\mathbb{E} \left[ X \right] \right)^2 \right]\\
+& =  \mathbb{E} \left[ \left( X - \mathbb{E} \left[ X \mid
+\mathcal{G} \right] + \mathbb{E} \left[ X \mid \mathcal{G} \right] -
+\mathbb{E} \left[ X \right] \right)^2 \right]\\
+& =  \mathbb{E} \left[ \left( X - \mathbb{E} \left[ X \mid
+\mathcal{G} \right] \right)^2 \right]\\
+&  \qquad + 2 \mathbb{E} \left[ \left( X - \mathbb{E} \left[ X \mid
+\mathcal{G} \right] \right) \left( \mathbb{E} \left[ X \mid \mathcal{G}
+\right] - \mathbb{E} \left[ X \right] \right) \right]\\
+&  \qquad + \mathbb{E} \left[ \left( \mathbb{E} \left[ X \mid
+\mathcal{G} \right] - \mathbb{E} \left[ X \right] \right)^2 \right]\\
+& =  \mathbb{E} \left[ \mathbb{E} \left[ \left( X - \mathbb{E}
+\left[ X \mid \mathcal{G} \right] \right)^2 \mid \mathcal{G} \right]
+\right]\\
+&  \qquad + 2 \mathbb{E} \Big[ \mathbb{E} \left[ \left( X -
+\mathbb{E} \left[ X \mid \mathcal{G} \right] \right) \mid \mathcal{G}
+\right]  \left( \mathbb{E} \left[ X \mid \mathcal{G} \right] -
+\mathbb{E} \left[ X \right] \right) \Big]\\
+&  \qquad + \operatorname{Var} \left[ \mathbb{E} \left[ X \mid \mathcal{G}
+\right] \right]\\
+& =  \mathbb{E} \left[ \operatorname{Var} \left[ X \mid \mathcal{G} \right]
+\right] + \operatorname{Var} \left[ \mathbb{E} \left[ X \mid \mathcal{G}
+\right] \right] .
+\end{array}$$
+
+
+`r fontawesome::fa("square")`
+
+
+---
+class: inverse, center, middle
+name: condexpl1
+
+## Conditional expectation in $\mathcal{L}_1 (\Omega, \mathcal{F}, P)$
+
+---
+name: kolmoespcond
+
+To construct the conditional expectation of a random variable,
+square-integrability is not necessary.
+
+### Theorem
+
+If $Y \in \mathcal{L}_1 (\Omega, \mathcal{F},P)$,
+
+then
+
+there exists  an integrable  $\mathcal{G}$-measurable random variable,
+denoted by $\mathbb{E} \left[ Y \mid \mathcal{G} \right]$ such that
+
+$$\forall B \in \mathcal{G}, \mathbb{E} \left[ \mathbb{I}_B Y \right] =\mathbb{E} \left[ \mathbb{I}_B \mathbb{E} \left[ Y \mid \mathcal{G}\right] \right]$$
+
+---
+
+
+`r fontawesome::fa("brain")`
+Let $\mathcal{G}'$ be a $\pi$-system that contains $\Omega$ and generates $\mathcal{G}$.
+If $Z$ is an integrable $\mathcal{G}$-measurable variable that satisfies
+
+$$\forall B \in \mathcal{G}', \mathbb{E} \left[ \mathbb{I}_B Y \right]= \mathbb{E} \left[ \mathbb{I}_B \mathbb{E} \left[ Y \mid\mathcal{G} \right] \right]$$
+
+then $Z = \mathbb{E} \left[ Y \mid \mathcal{G} \right]$
+
+
+
+---
+
+To establish the theorem, we use the _usual machinery_ of limiting arguments.
+
+### Proposition
+
+If $(Y_n)_n$ is a non-decreasing sequence of  non-negative
+square-integrable random variables such as $Y_n \uparrow Y$ a.s.
+
+then
+
+there exists a $\mathcal{G}$-measurable random variable  $Z$ such that
+
+$$\mathbb{E} \left[ Y_n \mid \mathcal{G} \right] \uparrow Z \qquad \text{a.s.}$$
+
+
+
+
+---
+
+### Proof
+
+As $(Y_n)_n$ is non-decreasing,
+$\left( \mathbb{E} \left[ Y_n \mid \mathcal{G} \right] \right)_n$ is an
+(a.s.) non-decreasing sequence  of $\mathcal{G}$-measurable random variables,
+
+It admits a  $\mathcal{G}$-measurable limit (finite or not)
+
+`r fontawesome::fa("square")`
+
+---
+
+We now proceed to the proof of Theorem
+
+### Proof
+
+Without losing in generality, we  assume $Y \geq 0$
+
+> if this is not the case, let $Y = (Y)_+ - (Y)_-$ with
+> $(Y)_+ = |Y| \mathbb{I}_{Y\geq 0}$ and $(Y)_- = |Y| \mathbb{I}_{Y < 0}$, handle $(Y)_+$ and $(Y)_-$
+> separately and  use the linearity of conditional expectation
+
+Let
+
+$$Y_n = Y \mathbb{I}_{|Y|Y| \leq n}$$
+
+so that  $Y_n \nearrow Y$ everywhere.
+
+The random variable $Y_n$ is bounded
+and thus square-integrable. The random variable  $\mathbb{E}\left[ Y_n \mid \mathcal{G} \right]$
+is therefore well defined for each  $n$
+
+The sequence $\mathbb{E} \left[ Y_n \mid \mathcal{G} \right]$
+is  $P$-a.s. monotonous.
+
+It  converges monotonously towards a $\mathcal{G}$-measurable
+random variable $Z$ which takes values in $\mathbb{R}_+ \cup \{\infty\}$.
+
+We need to check that this random variable
+$Z \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$.
+
+---
+
+### Proof (continued)
+
+By monotonous convergence:
+
+$$\begin{array}{rl}
+\mathbb{E} Y
+& = \mathbb{E}\big[ \lim_n  \uparrow Y_n\big] \\
+& = \lim_n  \uparrow \mathbb{E}\big[  Y_n\big] \\
+& = \lim_n  \uparrow \mathbb{E} \Big[ \mathbb{E} \left[ Y_n \mid \mathcal{G} \right] \Big]  \\
+& = \mathbb{E} \Big[ \lim_n \uparrow  \mathbb{E} \left[ Y_n \mid \mathcal{G} \right] \Big] \\
+& = \mathbb{E} Z\end{array}$$
+
+
+---
+
+### Proof (continued)
+
+If $A \in \mathcal{G}$, by monotonous convergence,
+
+$$\lim_n \uparrow \mathbb{E} \left[ \mathbb{I}_A Y_n \right] = \mathbb{E}  \left[ \mathbb{I}_A Y \right]$$
+
+and so
+
+$$\lim_n \uparrow  \mathbb{E} \left[ \mathbb{I}_A \mathbb{E} \left[ Y_n \mid\mathcal{G} \right] \right] = \mathbb{E} \left[ \mathbb{I}_A Y \right]$$
+
+By monotonous convergence again:
+
+$$\lim_n \uparrow  \mathbb{E} \left[ \mathbb{I}_A \lim_n \mathbb{E} \left[ Y_n \mid\mathcal{G}\right] \right] = \mathbb{E} \left[ \mathbb{I}_A Z \right]$$
+
+
+`r fontawesome::fa("square")`
+
+---
+class: inverse, center, middle
+name: propcondexp
+
+## Properties of (general) conditional expectation
+
+---
+
+### `r fontawesome::fa("exclamation-triangle")`
+
+In this Section
+$(\Omega, \mathcal{F}, P)$ is a probability space, $\mathcal{G}$ is a sub- $\sigma$ -algebra  of
+$\mathcal{F}$.
+
+Random variables  $(X_n)_n, (Y_n)_n, X, Y, Z$ are meant to be integrable,
+and a.s. means $P$-a.s.
+
+
+---
+
+The easiest property is:
+
+### Proposition
+
+If $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$
+
+then
+
+$$\mathbb{E} \left[ X \right] = \mathbb{E} \left[ \mathbb{E} \left[ X \mid \mathcal{G} \right] \right]$$
+
+
+`r fontawesome::fa("brain")`
+Check it.
+
+
+---
+
+### Proposition
+
+If $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$ and $X$ is
+$\mathcal{G}$-measurable
+
+then
+
+$$X = \mathbb{E} \left[ X \mid \mathcal{G} \right]  \hspace{1em} P   \text{-a.s.}$$
+
+
+`r fontawesome::fa("brain")`
+Check  it.
+
+
+---
+
+Using the definition of conditional expectation and monotone approximation by simple functions (see Section \@ref(simplefunctions)),
+we obtain an alternative characterization of conditional expectation.
+
+### Proposition
+
+Let  $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$
+and  $\mathcal{G} \subseteq \mathcal{F}$ be a sub- $\sigma$ -algebra,
+
+then
+
+for every  $Y \in\mathcal{L}_1 (\Omega, \mathcal{G}, P)$, such that $\mathbb{E} \left[ |XY| \right] < \infty$
+  |
+$$\mathbb{E} \left[ XY \right] = \mathbb{E} \left[ Y \mathbb{E}   \left[ X \mid \mathcal{G} \right] \right]$$
+
+
+
+`r fontawesome::fa("brain")`
+Prove it.
+
+
+---
+
+We pocket the next proposition for future and frequent use. We could go ahead
+with listing many other useful properties of conditional expectation.
+
+They are best discovered and established when needed.
+
+### Proposition
+
+If $X, Y \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$ and  $Y$ is
+$\mathcal{G}$ -measurable
+
+then
+
+$$\mathbb{E} \left[ XY \mid \mathcal{G} \right] = Y \mathbb{E} \left[   X \mid \mathcal{G} \right]  \hspace{1em} P \text{-a.s.}$$
+
+
+---
+
+### Proof
+
+As  $Y \mathbb{E} \left[ X \mid \mathcal{G} \right]$ is
+$\mathcal{G}$ -measurable, it  suffices to check that for every  $B \in \mathcal{G}$,
+
+$$\mathbb{E} \left[ \mathbb{I}_B XY \right] = \mathbb{E} \left[\mathbb{I}_B \left( Y \mathbb{E} \left[ X \mid \mathcal{G} \right]\right) \right]$$
+
+But
+$$\begin{array}{rcl}
+\mathbb{E} \left[ \mathbb{I}_B XY \right] & = & \mathbb{E} \left[
+( \mathbb{I}_B Y) X \right]\\
+& = & \mathbb{E} \left[ ( \mathbb{I}_B Y) \mathbb{E} \left[ X
+\mid \mathcal{G} \right] \right]\\
+& = & \mathbb{E} \left[ \mathbb{I}_B \left( Y \mathbb{E} \left[ X
+\mid \mathcal{G} \right] \right) \right] .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+class: inverse, center, middle
+name: condconvtheorems
+
+## Conditional convergence theorems
+
+---
+
+Limit theorems from integration theory  (monotone convergence theorem,
+Fatou's Lemma, Dominated  convergence theorem) can be adapted to
+the conditional expectation setting.
+
+### Theorem Conditional Monotone convergence
+
+Let the sequence $(X_n)_n$ of non-negative random variables converge monotonously to $X$ ( $X_n \uparrow X$ a.s.), with $X$
+integrable,
+
+then
+
+for every sequence of versions of conditional expectations:
+
+$$\lim_n \uparrow \mathbb{E} \left[ X_n \mid \mathcal{G} \right] = \mathbb{E}  \left[ X \mid \mathcal{G} \right]  \text{ a.s.}$$
+
+
+---
+
+### Proof
+
+The sequence $X - X_n$ is non-negative and decreases to $0$ a.s.
+
+It suffices to show that  $\lim_n \downarrow \mathbb{E} \left[ X - X_n \mid \mathcal{G} \right] = 0$ a.s.
+
+Note first that the sequence
+$\mathbb{E} \left[ X - X_n \mid \mathcal{G} \right]$ converges a.s. toward
+a non-negative  limit.
+
+We need to check that this limit is a.s. zero.
+
+For  $A \in \mathcal{G}$ :
+
+$$\begin{array}{rl}
+\mathbb{E} \left[ \mathbb{I}_A \lim_n \mathbb{E} \left[ X - X_n
+\mid \mathcal{G} \right] \right] & =  \lim_n \mathbb{E} \left[
+\mathbb{I}_A  \mathbb{E} \left[ X - X_n \mid \mathcal{G} \right]
+\right]\\
+&  \qquad \text{ monotone convergence theorem}\\
+& = \lim_n \mathbb{E} \left[ \mathbb{I}_A \left( X_n - X \right)
+\right]\\
+&  \qquad \text{ monotone convergence theorem}\\
+& =  0 \, .
+\end{array}$$
+
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Theorem (Conditional Fatou's Lemma)
+
+Let $(X_n)_n$ be a sequence of non-negative random variables, then
+
+$$\mathbb{E} \left[ \liminf_n X_n \mid \mathcal{G} \right] \leq
+\liminf_n \mathbb{E} \left[ X_n \mid \mathcal{G} \right]  \hspace{1em}
+\text{a.s.}$$
+
+
+
+As for the proof of Fatou's Lemma, the argument boils down
+to monotone convergence arguments.
+
+---
+
+### Proof
+
+Let $B \in \mathcal{G}$. Let  $X = \liminf_n X_n$, $X$
+is a non-negative random variable.
+
+Let  $Y = \liminf_n \mathbb{E} \left[ X_n \mid \mathcal{G} \right]$, $Y$ is a
+$\mathcal{G}$ -measurable integrable random variable.
+
+The theorem compares $\mathbb{E} \left[ X \mid \mathcal{G} \right]$ and $Y.$
+
+
+Let $Z_k = \inf_{n \geq k} X_n$.
+Thus $\lim_k \uparrow Z_k =  \liminf_n X_n = X$.
+According to  Theorem \@ref(thm:cmon),
+
+$$\mathbb{E} \left[ Z_k \mid \mathcal{G} \right] \uparrow_k \mathbb{E} \left[ \liminf_n X_n \mid \mathcal{G} \right]\text{ a.s.}$$
+
+---
+
+### Proof (continued)
+
+For every $n \geq k$, $X_n \geq Z_k$ a.s. Hence by the comparison Theorem,
+
+$$\forall n \geq k \hspace{1em} \mathbb{E} \left[ Z_k \mid\mathcal{G} \right] \leq \mathbb{E} \left[ X_n \mid \mathcal{G} \right]   \text{ a.s.}$$
+
+as a countable union of  $P$-negligible events is
+$P$-negligible. Hence for every $k$,
+
+$$\mathbb{E} \left[ Z_k \mid \mathcal{G} \right] \leq \liminf_n \mathbb{E} \left[ X_n \mid \mathcal{G} \right]  \hspace{1em}\text{a.s.}$$
+
+This entails
+
+$$\lim_k \uparrow \mathbb{E} \left[ Z_k \mid \mathcal{G} \right] \leq\liminf_n  \mathbb{E} \left[ X_n \mid \mathcal{G} \right]\quad  \text{ a.s.}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Theorem (Conditional Dominated convergence)
+
+Let $V \in \mathcal{L}_1(\Omega, \mathcal{F}, P)$.
+Let  sequence $(X_n)_n$ satisfy  $|X_n | \leq V$ for every $n$ and
+ $X_n \rightarrow X \text{a.s.}$,
+
+then
+
+for any sequence of versions of conditional expectations
+of  $(X_n)_n$ and  $X$
+
+$$\mathbb{E} \left[ X_n \mid \mathcal{G} \right] \rightarrow \mathbb{E} \left[ X \mid \mathcal{G} \right]  \hspace{1em} \text{a.s.}$$
+
+
+
+
+---
+
+### Proof
+
+Let  $Y_n = \inf_{m \geq n} X_m$ and  $Z_n = \sup_{m \geq n} X_m$.
+Hence  $-V \leq Y_n \leq Z_n \leq V$. As $Y_n \uparrow X$ and $Z_n \downarrow X$.
+
+By the conditional monotone convergence Theorem,
+$\mathbb{E} \left[ Y_n \mid \mathcal{G} \right] \uparrow\mathbb{E} [X \mid \mathcal{G}]$ and  \ $\mathbb{E} \left[ Z_n \mid\mathcal{G} \right] \downarrow \mathbb{E} [X \mid \mathcal{G}] \text{a.s}$
+
+Observe that for every $n$
+
+$$\mathbb{E} \left[ Y_n \mid \mathcal{G} \right] \leq \mathbb{E}\left[ X_n \mid \mathcal{G} \right] \leq \mathbb{E} \left[ Z_n\mid \mathcal{G} \right]\text{ a.s.}$$
+
+`r fontawesome::fa("square")`
+
+Jensen's inequality also has a conditional version. The proof
+relies again on the variational representation of convex lower semi-comntinuous
+functions and on the monotonicity property of conditional expectation
+
+---
+
+### Theorem (Conditional Jensen's inequality)
+
+If  $g$ is a lower semi-continuous convex function on
+$\mathbb{R}$, with $\mathbb{E} \left[ | g (X) | \right] < \infty$
+
+then
+
+$$g \left( \mathbb{E} \left[ X \mid \mathcal{G} \right] \right) \leq
+\mathbb{E} \left[ g (X) \mid \mathcal{G} \right]  \text{a.s.}$$
+
+
+
+
+---
+
+### Proof
+
+A lower semi-continuous convex function is a countable supremum of
+affine functions:
+
+there exists a countable collection $(a_n, b_n)_n$ such that for every $x$,
+
+$$g (x) = \sup_n  \left[ a_n x + b_n \right]$$
+
+$$\begin{array}{rcl}
+g \left( \mathbb{E} \left[ X \mid \mathcal{G} \right] \right) & = &
+\sup_n \left[ a_n \mathbb{E} \left[ X \mid \mathcal{G} \right] + b_n
+\right] \\
+& = & \sup_n \left[ \mathbb{E} \left[ a_n X + b_n \mid \mathcal{G}
+\right] \right]\\
+& \leq & \mathbb{E} \left[ \sup_n \left( a_n X + b_n \right) \mid
+\mathcal{G} \right] P \text{-a.s.}\\
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+name: condIndependance
+
+
+
+### Independence
+
+When the conditioning $\sigma$ -algebra $\mathcal{G}$ is atomic, if the conditioned
+random variable $X$ is independent from the conditioning $\sigma$ -algebra,
+it is obvious that the conditional expectation is an a.s.  constant  random variable
+which value  equals $\mathbb{E}X$.
+
+This remains true in the general framework
+
+It deserves a proof
+
+---
+
+### Proposition
+
+If  $X \perp\!\!\!\perp \mathcal{G}$, then
+
+$$\mathbb{E} \left[ X \mid \mathcal{G} \right] = \mathbb{E} \left[ X \right]\text{ a.s.}$$
+
+
+---
+
+### Proof
+
+Note  that $\mathbb{E} \left[ X \right]$ is $\mathcal{G}$-measurable.
+Let  $B \in \mathcal{G}$,
+
+$$\begin{array}{rl}
+\mathbb{E} \left[ \mathbb{I}_B X \right]
+& =  \mathbb{E} \left[ \mathbb{I}_B \right]  \mathbb{E} \left[ X \right]\\
+&  \qquad \text{by  independence} \\
+& =  \mathbb{E} \left[ \mathbb{I}_B \times \mathbb{E} \left[ X
+\right] \right]\end{array}$$
+
+
+Hence $\mathbb{E} \left[ X \right] = \mathbb{E} \left[ X \mid\mathcal{G} \right]$
+
+`r fontawesome::fa("square")`
+
+---
+
+Conditional independance can be generalized to a more general setting.
+
+### Proposition
+
+If sub- $\sigma$ -algebra $\mathcal{H}$ is  independent from  $\sigma (\mathcal{G}, \sigma (X))$ then
+
+$$\mathbb{E} \left[ X \mid \sigma ( \mathcal{G}, \mathcal{H}) \right] =
+   \mathbb{E} \left[ X \mid \mathcal{G} \right] \hspace{1em} \text{a.s.}$$
+
+
+
+---
+
+### Proof
+
+Recall that conditional expectation  with respect to $\sigma(\mathcal{G}, \mathcal{H})$ can be characterized
+using a
+$\pi$-system containing  $\Omega$ and generating $\sigma \left( \mathcal{G,H} \right)$,
+for  example $\mathcal{G} \times \mathcal{H}$. Let  $B \in \mathcal{G}$ and  $C \in \mathcal{H}$,
+
+$$\begin{array}{rl}
+\mathbb{E} \left[ \mathbb{I}_B  \mathbb{I}_C  \mathbb{E} \left[
+X \mid \mathcal{G} \right] \right]
+& =  \mathbb{E} \left[\mathbb{I}_B  \mathbb{E} \left[ X \mid \mathcal{G} \right] \right]
+      \times \mathbb{E} \left[ \mathbb{I}_C  \right]\\
+&   \qquad C \text{ is independent from }     \sigma ( \mathcal{G}, \sigma (X))\\
+& =  \mathbb{E} \left[ \mathbb{I}_B X \right] \times \mathbb{E}\left[ \mathbb{I}_C  \right]\\
+& =  \mathbb{E} \left[ \mathbb{I}_C  \mathbb{I}_B X \right] \\
+&  \qquad C  \text{ is independent from }  \sigma ( \mathcal{G}, \sigma (X))\,  .
+\end{array}$$
+
+
+
+`r fontawesome::fa("square")`
+
+---
+class: inverse, center, middle
+name: condProbDistrib
+
+## Conditional probability distributions
+
+
+---
+name: easyregcondprob
+
+### `r fontawesome::fa("syringe")` Easy case: conditioning with respect to a discrete $\sigma$ -algebra
+Back to the basic setting: Given $(\Omega,\mathcal{F},P)$, $\mathcal{G}\subseteq \mathcal{F}$
+denotes an _atomic_  sub- $\sigma$ -algebra
+generated by a countable partition $(A_n)_n$ of $\Omega$  `r fontawesome::fa("atom")`
+
+Either from conditional expectations with respect to  $\mathcal{G}$, or  from
+conditional probabilities knowing the events $A_n,$ we can
+define a $N : \Omega \times \mathcal{F} \to [0, \infty)$
+
+$$N(\omega, B) = \mathbb{E}_{P}[\mathbb{I}_B\mid \mathcal{G}](\omega) =
+P\{B\mid A_n\}\text{  when } \omega \in A_n$$
+
+The $N$ function has two remarkable properties:
+
+i. For every $\omega \in \Omega,$ $N(\omega,\cdot)$ defines a probability on $(\Omega,\mathcal{F}).$
+
+i. For every event $B\in \mathcal{F},$ the function $N(\cdot,B)$ is a $\mathcal{G}$-measurable function.
+
+`r fontawesome::fa("exclamation-triangle")` In this atomic setting, it is intuitive  to
+define conditional expectation starting from conditional probabilities,
+we could also proceed the other way around:
+we can  build  conditional probabilities starting from conditional expectations.
+
+---
+name: impediments
+
+### Impediments
+
+Now, we attempt to construct conditional probabilities
+when the conditioning $\sigma$ -algebra is not atomic `r fontawesome::fa("hiking")`.
+
+For each $B \in \mathcal{F}$, we can rely on the existence of
+random variable $\sigma (X)$-measurable which is $P$-a.s. a version of
+the conditional expectation of $\mathbb{I}_B$ with respect to  $X$.
+
+Indeed, for any kind of _countable_ collection of events $(B_n)_n$ of $\mathcal{F}$,
+we can take for granted  that there exists  a collection of random variables
+which, almost surely, form a _consistent collection of  versions_
+of the expectation of $(\mathbb{I}_{B_n})_n$ with respect to  $X$.
+
+If $(B_n)_n$ is   non-decreasing tending  towards $B$, by Theorem  \@ref(thm:cmon),
+we are confident in the fact  that  the following holds
+
+$$\lim_n \uparrow \mathbb{E} \left[ \mathbb{I}_{B_n} \mid X \right]  = \mathbb{E} \left[ \mathbb{I}_B \mid X \right] \qquad \text{a.s.}$$
+
+
+---
+
+`r fontawesome::fa("spider")` It is therefore  tempting to define a conditional probability
+with respect  to $\sigma(X)$ as a function
+
+$$\begin{array}{rl}
+\Omega \times \mathcal{F} &
+\to [0, 1] \\
+(\omega, B) & \mapsto \mathbb{E} \left[ \mathbb{I}_B \mid
+\sigma(X) \right](\omega) \, .
+\end{array}$$
+
+---
+
+`r fontawesome::fa("frown")`
+we cannnot  guarantee that $P$-a.s., this object has the
+properties of a probability distribution $(\Omega, \mathcal{F})$.
+
+The problem does not arise from the diffuse nature of the distribution of $X$ but from
+the size of $\mathcal{F}$
+
+As $\mathcal{F}$ _may not be countable_, it is possible to build an uncountable non-decreasing sequence of
+events.
+
+Checking the a.s. monotonicity of the sequence of corresponding conditional probabilities
+looks beyond our reach (an uncountable union of $P$-negligible events is not necessarily $P$-negligible).
+
+---
+
+`r fontawesome::fa("smile")` , the situation is not desperate. In most settings envisioned
+in an introductory course on Probability, we can take the existence of conditional probabilities for granted.
+
+We first review the easy case, where we can
+define conditional probabilities that even have a density
+with respect to a reference measure.
+
+Later,  we shall see that if $\Omega$
+is not too large, we can rely on  the existence of conditional probabilities.
+
+---
+name: jointdensity
+class: inverse, middle, center
+
+## Conditional densities
+
+---
+
+If $\Omega = \mathbb{R}^k$, $\mathcal{F} = \mathcal{B}(\mathbb{R}^k)$ and
+the probability distribution $P ⊴ \text{Lebesgue}$ (has a density denoted by $p$), defining conditional density
+with respect to coordinate projections is almost as simple
+as conditioning with respect to an atomic $\sigma$ -algebra.
+
+For the sake of simplicity, we stick to the case  $k=2$. A generic outcome is denoted by $\omega = (x, y)$
+and the  coordinated projections define two random variables $X(x, y) = x$ and $Y (x, y) = y$.
+We denote by $p_X$ the _marginal density_ of the distribution of $X$:
+
+$$p_X (x) = \int_{\mathcal{\mathbb{R}}} p (x, y) \mathrm{d} y$$
+
+And we agree on $D =\{x : p_X (x) > 0\}$.
+
+This is the support of  the density  $p_X$ (beware, this may be different from the support of distribution $P \circ X^{- 1}$)
+
+`r fontawesome::fa("brain")`
+Check that $p_X$ is the density of $P \circ X^{- 1}$.
+
+
+---
+name: conddensity
+
+Having a density allows us to  calculate
+conditional expectation and to define just as easily what we
+will call a conditional probability of $Y$ knowing $X$.
+
+
+
+### Theorem (Conditional density)
+
+Let be $X, Y$ be the projection coordinates on $\mathbb{R}^2$.
+
+Let  $P ⊴ \text{Lebesgue}$ on $(\mathbb{R}^2, \mathcal{B}(\mathbb{R}^2))$
+with density $p (., .)$
+
+Let the first marginal density (density of $P \circ X^{-1}$) be  denoted by $p_X$.
+
+The function $N: \quad\mathbb{R}^2  \to  [0,\infty)$ defined by
+
+$$N(x, y) =  \Bigg\{
+\begin{array}{lr}
+\frac{p (x, y)}{p_X (x)} & \text{if } p_X (x) > 0\\
+0 &  \text{ otherwise}
+\end{array}$$
+
+satisfies  the following properties:
+
+`r fontawesome::fa("ellipsis-h")`
+
+---
+
+### Theorem (Conditional density, continued)
+
+i. For each $x$ such that  $p_X (x) > 0$, the set function $P_{\cdot \mid X=x}$
+ defined by
+
+$$\begin{array}{rl}
+\mathcal{B}(\mathbb{R}^2) & \to [0, 1]\\
+B & \mapsto P_{\cdot \mid X=x} \{B\} = \int_{\mathbb{R}} \mathbb{I}_B(x,y) N (x, y) \mathrm{d} y
+\end{array}$$
+
+is a probability measure on $(\mathbb{R}^2, \mathcal{B} ( \mathbb{R}^2))$.
+It is supported by $\{x\} \times \mathbb{R}$.
+
+i.  For every $B \in \mathcal{B} ( \mathbb{R}^2)$, the function
+
+$$\omega \mapsto \int_{\mathbb{R}} \mathbb{I}_B(X(\omega),y) N (X(\omega), y) \mathrm{d} y
+= \mathbb{E}_{P_{\cdot \mid X=X(\omega)}} \mathbb{I}_B$$
+
+is a version of $\mathbb{E}\big[\mathbb{I}_B \mid \sigma(X)\big]$.
+
+
+`r fontawesome::fa("ellipsis-h")`
+
+---
+
+### Theorem (Conditional density, continued)
+
+i. For every $B \in \mathcal{B} ( \mathbb{R}^2)$
+
+$$P(B) = \int \left( \int \mathbb{I}_B (s,y) N (s,y) \mathrm{d} y
+\right) p_X (s) \mathrm{d} s =  \int P_{\cdot \mid X=s}(B) p_X(s) \mathrm{d} s$$
+
+i. For any  $P$-integrable function $f$ on $\mathbb{R}^2$,
+
+$$x \mapsto \int_{\mathbb{R}} f (x, y) N (x, y) \mathrm{d} y$$
+
+is a version of   $\mathbb{E}[f(X, Y)\mid \sigma(X)]$
+
+
+
+---
+
+### `r fontawesome::fa("exclamation-triangle")`
+For each $x$ such that $p_X(x)>0$, $P_{\cdot \mid X=x}$
+is a probability on $\mathbb{R}^2$.
+
+But this probability measure is supported by $\{x\} \times \mathbb{R}$,
+it is the product of the Dirac mass in $\{x\}$ times the probability distribution
+on $\mathbb{R}$ defined by the density $N(x, \cdot)$.
+
+This is why $N(x, \cdot)$ is often
+called the conditional density of $Y$ given $X=x$, and the distribution over $\mathbb{R}$ defined
+by this density is often called the conditional distribution of $Y$ given $X$.
+
+
+
+`r fontawesome::fa("brain")`
+Is $N(x,y)$  a probability density? If yes, with respect to which $\sigma$-finite measure?
+
+
+---
+
+The proof of Theorem consists of milking the Tonelli-Fubini Theorem.
+
+
+### Proof
+
+Proof of (i). Let us agree on notation:
+
+$$P_x \{B\}= \int_{\mathbb{R}} \mathbb{I}_B(x,y) N (x, y) \mathrm{d} y$$
+
+The fact that the  $P_x$ is $[0, 1]$-valued   is
+immediate.
+
+Same for the fact that $P_x (\{x\} \times \{\emptyset\}) = 0$
+and $P_x (\{x\} \times \{\mathbb{R}\}) = 1$. The same applies to additivity.
+
+It remains to check that if $(B_n)$ is a non-decreasing sequence of Borelians from $\mathbb{R}^2$
+that tends to to a limit $B$  then
+
+$$\lim_n \uparrow P_x (B_n) = P_x (B)$$
+
+This is an immediate consequence of the monotonous convergence theorem, for each $(x',y')$
+
+$$\lim_n \uparrow \mathbb{I}_{B_n} (x', y') N (x', y') =  \mathbb{I}_{B} (x', y') N (x', y')$$
+
+---
+
+### Proof  (continued)
+
+Proof of ii) As the function $(x, y) \mapsto p (x, y) \mathbb{I}_B (x,y)$
+is $\mathcal{B} ( \mathbb{R}^2)$-measurable and integrable, by the Tonelli-Fubini
+Theorem,
+
+$$x \mapsto \int_B p (x, y) \mathbb{I}_B (x,y) \mathrm{d} y$$
+
+is defined almost everywhere and Borel-measurable.
+
+Proof of iii) This is also an immediate consequence of the
+Tonelli-Fubini Theorem.
+
+Proof of iv), It follows from  i.),
+using the usual approximation by simple functions argument.
+
+
+`r fontawesome::fa("square")`
+
+---
+
+
+`r fontawesome::fa("brain")`
+We consider the uniform law on the surface of $\mathbb{R}^2$ defined
+by $0 \leq x \leq y \leq y \leq 1$.
+
+Give the attached density $p()$, the marginal density $p_X$ and the kernel $N (,)$
+
+
+---
+name:  regconprob
+class: middle, inverse, center
+
+## Regular conditional probabilities, kernels
+
+
+---
+
+We will outline some results that allow us to work within a more general framework.
+We introduce two new notions.
+
+### Definition Conditional probability kernel
+
+Let  $(\Omega, \mathcal{F})$ be a measurable  space, and $\mathcal{G}$ a sub- $\sigma$ -algebra of $\mathcal{F}.$
+
+We call _conditional probability kernel with respect to_ $\mathcal{G}$
+a  function  $N : \Omega \times \mathcal{F} \rightarrow \mathbb{R}_+$ that  satisfies:
+
+i. For any $\omega \in \Omega$, $N (\omega, \cdot)$ defines a probability
+on $(\Omega, \mathcal{F})$.
+
+i. For any $A \in \mathcal{F}$, $N (\cdot, A)$ is
+$\mathcal{G}$-measurable
+
+
+
+---
+
+If the measurable space is endowed with a probability distribution $P$,
+we are interested in conditional probability kernels with respect to $\mathcal{G}$
+that are compliant with $P$. We call them _regular conditional probability kernels_.
+
+### Definition (Regular conditional probability)
+
+Let  $(\Omega, \mathcal{F}, P)$ be a probability space
+ and $\mathcal{G} \subseteq \mathcal{F}$ a sub- $\sigma$ -algebra.
+A kernel $N : \Omega \times \mathcal{F} \to \mathbb{R}_+$ is a
+_regular conditional probability_ with respect $\mathcal{G}$ if and only if
+
+i. For any $B \in \mathcal{F}$, $\omega \mapsto N (\omega, B)$
+is a version of the conditional expectation of $\mathbb{I}_B$
+knowing $\mathcal{G}$ ($N (\cdot, B)$ is therefore
+$\mathcal{G}$ -measurable):
+
+$$N(\cdot, B) = \mathbb{E}[\mathbb{I}_B \mid \mathcal{G}]\quad P-\text{a.s.}$$
+
+
+i. For $P$ -almost all $\omega \in \Omega$,
+$B \mapsto N(\omega, B)$ defines a probability on $(\Omega, \mathcal{F})$.
+
+
+
+---
+
+A regular conditional probability (whenever it exists) is
+defined from versions of conditional expectations. Conversely,
+a regular conditional probability  provides us with  a way to
+to compute conditional expectations.
+
+
+
+### Theorem
+
+Let  $(\Omega, \mathcal{F}, P)$ be a probability space
+and $\mathcal{G} \subseteq \mathcal{F}$ a sub- $\sigma$ -algebra. Let $N$
+be a probability kernel on $(\Omega,\mathcal{F})$ with respect to $\mathcal{G}$.
+
+The following properties are equivalent
+
+1. $N(\cdot,\cdot)$ defines a regular conditional probability kernel with respect to $\mathcal{G}$
+for $(\Omega, \mathcal{G}, P)$
+
+1. $P$-almost surely, for any $P$-integrable function $f$  on $(\Omega, \mathcal{F})$:
+$$\mathbb{E} \left[ f \mid \mathcal{G} \right](\omega) =
+\mathbb{E}_{N(\omega,\cdot)}[f]$$
+
+1. For any $P$-integrable random variable  $X$  on $(\Omega, \mathcal{F})$
+$$\mathbb{E} \left[ X \right] =
+\mathbb{E}\left[ \mathbb{E}_{N(\omega,\cdot)}[X]\right]$$
+
+
+
+---
+
+### `r fontawesome::fa("exclamation-triangle")`
+The demonstration of $1) \Rightarrow 2)$ relies on  the usual machinery:
+approximation of  positive integrable functions by
+an increasing sequences of simple functions,
+monotone convergence  of expectation and conditional expectation.
+
+$2) \Rightarrow 3)$ is trivial.
+
+$3) \Rightarrow 1)$ is more interesting.
+
+
+
+---
+
+### Existence of regular conditional probability distributions when  $\Omega =\mathbb{R}$
+
+We shall check  the existence of conditional probabilities in at least
+one  non-trivial case.
+
+
+### Theorem
+
+Let  $P$ be a probability on $( \mathbb{R}, \mathcal{B} (\mathbb{R}))$
+and $\mathcal{G} \subseteq \mathcal{B} (\mathbb{R})$,
+
+then
+
+there exists a regular conditional probability kernel with respect to $\mathcal{G}.$
+
+---
+
+### `r fontawesome::fa("exclamation-triangle")`
+
+We take advantage of  the fact that
+$\mathcal{B} (\mathbb{R})$ is countably  generated
+
+---
+
+### Proof
+
+Let  $\mathcal{C}$ be the set formed by  half-lines with rational endpoint, the empty set,  and $\mathbb{R}$:
+
+$$\mathcal{C}  = \big\{ (-\infty, q]:  q \in \mathbb{Q} \big\} \cup \{\emptyset, \mathbb{R} \}$$
+
+This countable collection of half-lines  is a $\pi$ -system  that generates $\mathcal{B}(\mathbb{R})$.
+
+For $q < q' \in \mathbb{Q},$ we can choose  versions of $Y_q$
+and $Y_{q'}$ of the conditional expectations of $\mathbb{I}_{(-\infty, q]}$ and $\mathbb{I}_{(- \infty, q']}$ such that
+
+$$Y_q < Y_{q'} \qquad P\text{-a.s.}$$
+
+Observe that $Y_{q'} - Y_q$ is also a version of the conditional expectation
+of $\mathbb{I}_{(q, q']}$.
+
+---
+
+### Proof (continued)
+
+A countable union of $P$-negligible events is $P$-negligible,
+so, as $\mathbb{Q}^2$ is countable,
+we can choose versions $\left( Y_q \right)_{q \in\mathbb{Q}}$ of the
+conditional expectations of $\mathbb{I}_{(-\infty, q]}$ such that
+
+$$P\text{-a.s.} \qquad\forall q,q' \in \mathbb{Q}, \quad q < q' \Rightarrow Y_q < Y_{q'},$$
+
+Let $\Omega_0$ be the  $P$-almost sure event on which
+all $Y_q, q \in \mathbb{Q}$ satisfy the good properties.
+
+---
+
+### Proof (continued)
+
+For each $x \in \mathbb{R}$, we can define $Z_x$ for
+each $\omega \in \mathbb{R}$ by
+
+$$Z_x (\omega) = \inf \left\{ Y_q (\omega) : q \in \mathbb{Q}, x < q
+\right\}$$
+
+On $\Omega_0$, the function $x \mapsto Z_x (\omega)$
+is increasing, it has a limit on the left at each point and
+it is right-continuous.
+
+The function $x \mapsto Z_x(\omega)$  tends to $0$ when $x$ tends to $- \infty$, to $1$
+when $x$ tends towards $+ \infty$.
+
+In  words, on $\Omega_0$, $x\mapsto Z_x (\omega)$ is a cumulative distribution function,
+it defines so (uniquely) a unique probability measure on $\mathbb{R}$.
+We will denote it by $\nu (\omega, .)$
+
+In addition, for each $x$, $Z_x$ is defined as a countable infimum of $\mathcal{G}$-measurable random variables, $Z_x$ is therefore $\mathcal{G}$-measurable.
+
+---
+
+### Proof (continued)
+
+It remains to check  that for every $B \in \mathcal{F}$, $\omega\mapsto \nu (\omega, B)$ for $\omega \in \Omega_0$, $0$ elsewhere, defines
+a version of the conditional expectation of $\mathbb{I}_B$ with respect to
+$\mathcal{G}$.
+
+This property is satisfied for $B \in \mathcal{C}$.
+
+Let us call $\mathcal{D}$ the set of all the events for which
+$\omega \mapsto \nu (\omega, B)$ (on $\Omega_0$, $0$ elsewhere)
+defines a version of the conditional expectation of
+$\mathbb{I}_B$ with respect to  $\mathcal{G}$. We shall show that
+$\mathcal{D}$ is a $\lambda$-system, that is
+
+i. $\mathcal{D}$ contains $\emptyset$ and $\mathbb{R} = \Omega$
+
+i. If $B, B'$ belong to $\mathcal{D},$ and $B \subseteq B'$
+then $B' \setminus B \in \mathcal{D}$
+
+i. If $(B_n)_n$ is a growing sequence of events from
+$\mathcal{D},$ limit $B$ then $B \in \mathcal{D}$
+
+---
+
+### Proof (continued)
+
+Clause i.) is guaranteed by construction.
+
+Clause ii.) If $B' \subseteq B$  belong to $\mathcal{D}$, then
+by linearity of conditional expectations, if $\mathbb{E}\left[ \mathbb{I}_{B' \setminus B} \mid \mathcal{G} \right]$ is a
+version of the conditional expectation of $\mathbb{I}_{B' \setminus B}$ with respect to  $\mathcal{G}$,
+on an almost-sure event $\Omega_1 \subseteq\Omega_0$:
+
+$$\begin{array}{rl}\mathbb{E} \left[ \mathbb{I}_{B' \setminus B} \mid \mathcal{G} \right]
+  & = \mathbb{E} \left[ \mathbb{I}_{B'} - \mathbb{I}_B \mid \mathcal{G} \right] \\
+  & = \mathbb{E} \left[ \mathbb{I}_{B'} \mid \mathcal{G} \right] - \mathbb{E} \left[ \mathbb{I}_B \mid \mathcal{G} \right] \\
+  & = \nu (\omega, B') - \nu (\omega, B) \\
+  & = \nu (\omega, B' \setminus B)\end{array}$$
+
+
+---
+
+### Proof (continued)
+
+Clause iii.). If $(B_n)_n$ is
+a non-decreasing sequence of events from $\mathcal{D},$ with  $B_n \uparrow B$,
+if $\mathbb{E} \left[ \mathbb{I}_B \mid \mathcal{G} \right]$ is
+a version of the conditional expectation of $\mathbb{I}_B$ with respect to
+$\mathcal{G}$, on an event $\Omega_1 \subseteq \Omega_0$ with
+probability $1$:
+
+$$\mathbb{E} \left[ \mathbb{I}_B \mid \mathcal{G} \right] = \lim_n\mathbb{E} \left[ \mathbb{I}_{B_n} \mid \mathcal{G} \right] =
+\lim_n \nu (\omega, B_n) = \nu (\omega, B)$$
+
+So $B \in \mathcal{D}$.
+
+The Monotone class Theorem tells us that $\mathcal{F \subseteq \mathcal{D}}$.
+
+`r fontawesome::fa("square")`
+
+---
+
+### `r fontawesome::fa("exclamation-triangle")`
+
+Working harder would allow us to show that the existence of regular
+conditional probabilities is guaranteed as soon as  $\Omega$
+can be endowed with a complete and separable metric space structure
+and that the $\sigma$ -algebra $\mathcal{F}$  is the Borelian $\sigma$ -algebra induced by this metric.
+
+---
+
+We often define a probability distribution starting from a marginal distribution
+and a kernel
+
+### Proposition
+
+Let
+
+- $(\Omega, \mathcal{F})$ be a measurable space
+- $X$ a random variable from $(\Omega, \mathcal{F})$
+- $N$ a conditional probability kernel with respect to $\sigma(X)$
+- $P_X$ be a probability measure on $(\Omega \sigma(X))$
+
+Then
+
+- there exists a unique  probability measure $P$ on
+$(\Omega, \mathcal{F})$ such that $P_X = P \circ X^{- 1}$
+- $N$ is a regular conditional probability kernel with respect to $\sigma(X)$,
+- for every $B \in \mathcal{F}$:
+
+$$P(B) = \int_{X(\Omega)} N(x, B) \mathrm{d}P_x(x)$$
+
+
+
+---
+
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: 112%
+
+
+# The End

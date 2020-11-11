@@ -74,6 +74,348 @@ class: inverse, center, middle
 ## `r fontawesome::fa("grin", fill = "white")`
 
 
+---
+
+
+---
+class: inverse, center, middle
+name: ess
+
+## Efron-Stein-Steele inequalities
+
+---
+
+In this section, $X_1, \ldots, X_n$ denote independent random variables on
+some probability space with values in $\mathcal{X}_1, \ldots, \mathcal{X}_n$, and $f$ denote a measurable function
+from $\mathcal{X}_1 \times  \ldots \times \mathcal{X}_n$ to $\mathbb{R}$. Let $Z=f(X_1, \ldots, X_n)$.
+The random variable $Z$ is a general function of independent random variables. We assume $Z$ is integrable.
+
+If we had $Z = \sum_{i=1}^n X_i$, we could write
+
+$$\operatorname{var}(Z)
+= \sum_{i=1}^n \operatorname{var}(X_i)
+= \sum_{i=1}^n \mathbb{E}\Big[\operatorname{var}( Z \mid X_1, \ldots, X_{i-1}, X_{i+1}, \ldots X_n)\Big]$$
+
+even though the last expression looks pedantic.
+
+The aim of this section is to
+show that even if $f$ is not as simple as the sum of its arguments, the last expression can still
+serve as an upper bound on the variance.
+
+---
+
+It is a natural idea to bound the variance of such a general function
+by expressing $Z-\mathbb{E} Z$
+as a sum of  differences and to
+use the orthogonality of these differences.
+
+More precisely, if we denote by
+$\mathbb{E}_i$ the conditional expectation operator, conditioned on
+$\left(X_{1},\ldots,X_{i}\right)$, and use the convention
+$\mathbb{E}_0=\mathbb{E}$, then we may define
+
+$$\Delta_{i}=\mathbb{E}_i Z  -\mathbb{E}_{i-1} Z$$
+
+for every $i=1,\ldots,n$.
+
+---
+
+`r fontawesome::fa("brain")`
+Check that $\mathbb{E} \Delta_i=0$ and that for $j>i$, $\mathbb{E}_i \Delta_j=0$ a.s.
+
+
+Starting from the decomposition
+
+$$Z-\mathbb{E} Z  =\sum_{i=1}^{n}\Delta_{i}$$
+
+one has
+
+$$\operatorname{var}\left(  Z\right)  =\mathbb{E}\left[  \left(  \sum_{i=1}
+^{n}\Delta_{i}\right)  ^{2}\right]  =\sum_{i=1}^{n}\mathbb{E}\left[
+\Delta_{i}^{2}\right]  +2\sum_{j>i}\mathbb{E}\left[  \Delta_{i}\Delta
+_{j}\right]  \text{.}$$
+
+Now if $j>i$, $\mathbb{E}_i \Delta_{j}  =0$ implies that
+
+$$\mathbb{E}_i\left[  \Delta_{j}\Delta_{i}\right]  =\Delta_{i}
+\mathbb{E}_{i} \Delta_{j}  =0~,$$
+
+and, a fortiori, $\mathbb{E}\left[  \Delta_{j}\Delta_{i}\right]  =0$.
+Thus, we obtain the following analog of the additivity formula
+of the variance:
+
+$$\operatorname{var}\left(  Z\right)  =\mathbb{E}\left[  \left(  \sum_{i=1}
+^{n}\Delta_{i}\right)  ^{2}\right]  =\sum_{i=1}^{n}\mathbb{E}\left[
+\Delta_{i}^{2}\right]~.$$
+
+Observe that up to now, we have not made any use of the fact that $Z$ is a function of
+ independent variables $X_{1},\ldots,X_{n}$.
+
+Independence may be used as in the following argument:
+for any integrable function $Z= f\left(  X_{1},\ldots,X_{n}\right)$ one may write,
+by the Tonelli-Fubini theorem,
+
+$$\mathbb{E}_i Z  =\int
+_{\mathcal{X}^{n-i}}f\left(  X_{1},\ldots,X_{i},x_{i+1},\ldots,x_{n}\right)
+d\mu_{i+1}\left(  x_{i+1}\right)  \ldots d\mu_{n}\left(  x_{n}\right)  \text{,}$$
+
+where, for every $j= 1,\ldots,n$, $\mu_{j}$ denotes the
+probability distribution of $X_{j}$. Also, if we denote by
+$\mathbb{E}^{(i)}$ the conditional expectation operator conditioned on
+$X^{(i)}=(X_{1},\ldots,X_{i-1},X_{i+1},\ldots,X_{n})$, we have
+
+$$\mathbb{E}^{(i)}Z %%%%%\left[  Z\right]
+=\int_{\mathcal{X}}
+f\left(  X_{1},\ldots,X_{i-1},x_{i},X_{i+1},\ldots,X_{n}\right)  d\mu_{i}\left(
+x_{i}\right)~.$$
+
+Then, again by the Tonelli-Fubini theorem,
+\begin{equation}
+\mathbb{E}_i\left[  \mathbb{E}^{\left(  i\right)  } Z \right]
+ =\mathbb{E}_{i-1} Z  \text{.}
+  (\#eq:efundind)
+\end{equation}
+
+---
+
+
+### Theorem Efron-Stein-Steele's inequalities
+
+
+Let $X_1,\ldots,X_n$
+be independent random variables and let $Z=f(X)$ be
+a square-integrable function of $X=\left(  X_{1},\ldots,X_{n}\right)$.
+
+Then
+
+$$\operatorname{var}\left(  Z\right)  \leq\sum_{i=1}^n\mathbb{E}\left[
+\left(  Z-\mathbb{E}^{(i)} Z  \right)^2\right]  = v$$
+
+Moreover if
+$X_1',\ldots,X_n'$ are independent copies of $X_1,\ldots,X_n$ and if we define,
+for every $i=1,\ldots,n$,
+
+$$Z_i'=  f\left(X_1,\ldots,X_{i-1},X_i',X_{i+1},\ldots,X_n\right)~,$$
+
+then
+
+$$v=\frac{1}{2}\sum_{i=1}^n\mathbb{E}\left[  \left(  Z-Z_i'\right)^2\right]
+=\sum_{i=1}^n\mathbb{E}\left[  \left(  Z-Z_i'\right)_+^2\right]
+=\sum_{i=1}^n\mathbb{E}\left[  \left(  Z-Z_i'\right)_-^2\right]$$
+
+where $x_+=\max(x,0)$ and $x_-=\max(-x,0)$ denote the positive and
+negative parts of a real number $x$.
+
+$$v=\inf_{Z_{i}}\sum_{i=1}^{n}\mathbb{E}\left[  \left(  Z-Z_{i}\right)^2\right]~,$$
+
+where the infimum is taken over the class of all $X^{(i)}$-measurable
+and square-integrable variables $Z_{i}$, $i=1,\ldots,n$.
+
+---
+
+### Proof
+
+We begin with the proof of the first statement.
+Note that, using \@ref(eq:efundind), we may write
+
+$$\Delta_{i}=\mathbb{E}_i\left[  Z-\mathbb{E}^{\left(  i\right)  } Z  \right]$$
+
+By the conditional Jensen inequality,
+
+$$\Delta_{i}^{2}\leq\mathbb{E}_i\left[  \left(  Z-\mathbb{E}^{\left(
+i\right)  }Z  \right)  ^{2}\right]$$
+
+Using $\operatorname{var}(Z) = \sum_{i=1}^n \mathbb{E}\left[ \Delta_i^2\right]$,
+we obtain the desired inequality.
+
+---
+
+### Proof (continued)
+
+To prove the identities for $v$,
+denote by
+$\operatorname{var}^{\left(i\right) }$ the conditional variance operator conditioned on
+$X^{\left(  i\right)  }$. Then we may write $v$ as
+
+$$v=\sum_{i=1}^{n}\mathbb{E}\left[  \operatorname{var}^{\left(  i\right)  }\left(
+Z\right)  \right]  \text{.}$$
+
+Now note that one may
+simply
+use (conditionally) the elementary fact that
+if $X$ and $Y$ are independent and identically
+distributed real-valued random variables, then $\operatorname{var}(X)=(1/2) \mathbb{E}[(X-Y)^2]$.
+
+---
+
+### Proof (continued)
+
+Since conditionally on $X^{\left(  i\right)  }$,
+  $Z_i'$ is an independent copy of $Z$, we may write
+
+$$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\frac{1}{2}\mathbb{E}
+^{\left(  i\right)  }\left[  \left(  Z-Z_i'\right)^2\right]
+=\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_i'\right)_+^2\right]
+=\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_i'\right)_-^2\right]$$
+
+where we used the fact that the conditional distributions of $Z$ and $Z_i'$
+are identical.
+
+---
+
+### Proof (continued)
+
+The last identity is obtained
+by recalling that, for any real-valued random variable $X$,
+$\operatorname{var}(X) = \inf_{a\in \mathbb{R}} \mathbb{E}[(X-a)^2]$.
+Using this fact conditionally, we have, for every $i=1,\ldots,n$,
+
+$$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\inf_{Z_{i}}
+\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_{i}\right)^2\right]~.$$
+
+Note that this
+infimum is achieved whenever $Z_{i}=\mathbb{E}^{\left(  i\right)  } Z$.
+`r fontawesome::fa("square")`
+
+---
+
+
+`r fontawesome::fa("exclamation-triangle")` Observe that in the case when $Z=\sum_{i=1}^n X_i$ is a sum of
+independent random variables (with finite variance) then
+the Efron-Stein-Steele inequality  becomes an equality.
+
+Thus, the bound in the Efron-Stein-Steele inequality is, in a sense,
+not improvable.
+
+---
+class: inverse, center, middle
+name: mcdiarmid
+
+## Bounded differences inequality
+
+---
+
+In this section we combine Hoeffding's inequality and conditioning
+to establish the so-called _Bounded differences inequality_ (also known
+as McDiarmid's inequality). This inequality is a first example of the
+_concentration of measure phenomenon_. This phenomenon is best portrayed by the
+following say:
+
+> A function of many independent random variables that does not depend too
+much on any of them is concentrated around its mean or median value.
+
+---
+
+### Theorem: Bounded differences inequalities
+
+Let $X_1, \ldots, X_n$ be independent random variables on some probability space
+with values in $\mathcal{X}_1, \mathcal{X}_2, \ldots, \mathcal{X}_n$.
+Let $f : \mathcal{X}_1 \times \mathcal{X}_2 \times  \ldots \times  \mathcal{X}_n \to \mathbb{R}$
+be a  measurable function such that there exists non-negative constants $c_1, \ldots, c_n$ satisfying
+$\forall x_1, \ldots, x_n \in \prod_{i=1}^n \mathcal{X}_i$,
+$\forall y_1, \ldots, y_n \in \prod_{i=1}^n \mathcal{X}_i$,
+
+$$\Big| f(x_1, \ldots, x_n) - f(y_1, \ldots, y_n)\Big|  \leq \sum_{i=1}^n c_i \mathbb{I}_{x_i\neq y_i}$$
+
+Let $Z =  f(X_1, \ldots, X_n)$ and $v = \sum_{i=1}^n \frac{c_i^2}{4}$.
+Then $$\operatorname{var}(Z)  \leq v$$
+
+
+$$\log \mathbb{E} \mathrm{e}^{\lambda (Z -\mathbb{E}Z)} \leq \frac{\lambda^2 v}{2}$$
+
+and
+
+$$P \Big\{ Z \geq \mathbb{E}Z + t \Big\} \leq \mathrm{e}^{-\frac{t^2}{2v}}$$
+
+
+
+---
+
+### Proof
+
+The variance bound is an immediate consequence of the Efron-Stein-Steele inequalities.
+
+The tail bound follows from the upper bound on the logarithmic moment generating function
+by Cramer-Chernoff bounding.
+
+Let us now check the upper-bound on the logarithmic moment generating function.
+
+We proceed by inudction on the number of arguments $n$.
+
+If $n=1$, the upper-bound on the logarithmic moment generating function is just Hoeffing's Lemma (see Section \@ref(expineq)).
+
+Assume the upper-bound is valid up to $n-1$.
+
+$$\begin{array}{rl}
+\mathbb{E} \mathrm{e}^{\lambda (Z - \mathbb{E}Z)}
+  & = \mathbb{E}\Big[ \mathbb{E}_{n-1}\mathrm{e}^{\lambda (Z - \mathbb{E}Z)} \Big] \\
+  & = \mathbb{E}\Big[ \mathbb{E}_{n-1}\big[\mathrm{e}^{\lambda (Z - \mathbb{E}_{n-1}Z)}\big] \times \mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}  \Big]\end{array}$$
+
+
+---
+
+### Proof (continued)
+
+Now,
+
+$$\mathbb{E}_{n-1}Z = \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, u) \mathrm{d}P_{X_n}(u) \qquad\text{a.s.}$$
+
+and
+
+$$\begin{array}{rl}
+& \mathbb{E}_{n-1}\big[\mathrm{e}^{\lambda (Z - \mathbb{E}_{n-1}Z)}\big] \\
+  & = \int_{\mathcal{X}_n}  \exp\Big(\lambda  \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, v) -f(x_1,\ldots,x_{n-1}, u) \mathrm{d}P_{X_n}(u)  \Big) \mathrm{d}P_{X_n}(v)\end{array}$$
+
+For every $x_1, \ldots, x_{n-1} \in \mathcal{X_1} \times \ldots \times \mathcal{X}_{n-1}$,
+for every $v, v' \in \mathcal{X}_n$,
+
+$$\begin{array}{rl}
+& \Big| \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, v) -f(x_1,\ldots,x_{n-1}, u) \mathrm{d}P_{X_n}(u) \\
+& - \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, v') -f(x_1,\ldots,x_{n-1}, u) \mathrm{d}P_{X_n}(u)\Big| \leq c_n
+\end{array}$$
+
+
+---
+
+### Proof (continued)
+
+hence, by Hoeffding's Lemma
+
+$$\mathbb{E}_{n-1}\big[\mathrm{e}^{\lambda (Z - \mathbb{E}_{n-1}Z)}\big] \leq \mathrm{e}^{\frac{\lambda^2 c_n^2}{8}}$$
+
+$$\begin{array}{rl}
+  \mathbb{E} \mathrm{e}^{\lambda (Z - \mathbb{E}Z)}
+  & \leq \mathbb{E}\Big[  \mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}  \Big] \times \mathrm{e}^{\frac{\lambda^2 c_n^2}{8}} \, .
+\end{array}$$
+
+But, if $X_1=x_1, \ldots X_{n-1}=x_{n-1}$,
+
+$$\mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}
+= \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, v) \mathrm{d}P_{X_n}(v) - \mathbb{E}Z \,,$$
+
+it is a function of $n-1$ independent random variables that satisfies the bounded differences conditions
+with constants $c_1, \ldots, c_{n-1}$. By the induction hypothesis:
+
+$$\mathbb{E}\Big[  \mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}  \Big]
+\leq \mathrm{e}^{\frac{\lambda^2}{2} \sum_{i=1}^{n-1} \frac{c_i^2}{4}}$$
+
+`r fontawesome::fa("square")`
+
+---
+exclude: true
+
+## Bibliographic remarks {#bibconditionning}
+
+Conditional expectations can  be constructed from the  Radon-Nikodym Theorem, see [@MR1932358].
+
+It is also possible to prove the Radon-Nikodym Theorem starting from the construction of conditional expectation in $\mathcal{L}_2$, see [@MR1155402].
+
+The Section on Efron-Stein-Steele's inequalities is from [@BoLuMa13]
+
+Bounded difference inequality is due to C. McDiarmid. It became popular in (Theoretical) computer science during the 1990's.
+See [@McD97]
+
+
 
 ---
 class: middle, center, inverse
