@@ -156,7 +156,7 @@ The _characteristic function_ $\widehat{F}$ of distribution $P$ is defined by
 - The definition can be extended to distributions on $\mathbb{R}^k, k\geq 1$
 
 ---
-
+exclude: true 
 ### Characteristic functions of Absolutely Continuous distributions
 
 
