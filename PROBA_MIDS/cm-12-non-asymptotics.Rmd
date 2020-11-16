@@ -57,7 +57,7 @@ background-position: 97% 3%
 
 
 
-# Non asymptotic results
+# Non asymptotic results: concentration
 
 ### `r Sys.Date()`
 
@@ -75,6 +75,33 @@ class: inverse, center, middle
 
 
 ---
+
+### Example of non-asymptotic results
+
+- Bounds on approximation error in limit theory
+
+
+$$\mathrm{d}_{\text{TV}}\left(\text{Poi}\left(\lambda\right), \text{Binom}\left(n, \frac{\lambda}{n} )\right) \leq \min\left(\frac{\lambda^}{n}, ... \right)$$
+
+- Non-asymptotic tail bounds $≈$ Hoeffding's inequality
+
+
+???
+
+---
+
+### Why?
+
+- Refining limit theorems
+
+- High dimensional probability
+
+???
+
+---
+class: inverse, middle, center
+
+m                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         .
 
 
 ---
@@ -287,6 +314,49 @@ the Efron-Stein-Steele inequality  becomes an equality.
 Thus, the bound in the Efron-Stein-Steele inequality is, in a sense,
 not improvable.
 
+
+---
+class: inverse, center, middle
+name: mcdiarmid
+
+## Bounding the variance : examples
+
+
+---
+
+### Random graphs  (Erdös-Rényi)
+
+- clique number
+
+- chromatic number
+
+- size of giant component (for super-critical graphs)
+
+---
+
+### Longest Increasing Subsequence
+
+- Ulam's problem
+
+---
+
+### Norms of random vectors
+
+---
+
+### Random matrices
+
+- Largest eigenvalue
+
+---
+
+###  Bin packing
+
+
+---
+
+### Order statistics
+
 ---
 class: inverse, center, middle
 name: mcdiarmid
@@ -414,6 +484,29 @@ The Section on Efron-Stein-Steele's inequalities is from [@BoLuMa13]
 
 Bounded difference inequality is due to C. McDiarmid. It became popular in (Theoretical) computer science during the 1990's.
 See [@McD97]
+
+---
+class: inverse, middle, center
+
+## Maximal inequalities
+
+---
+
+### Simplest setting
+
+$$Z = \max(X_1, \ldots, X_n)$$
+
+with
+
+$$X_1, \ldots, X_n \sim_{\text{i.i.d.}} P$$
+
+--
+
+$$\mathbb{E} Z \leq \text{something that depends on }n \text{ and on }P$$
+
+Dependance on $n$ is tied to the tail behavior of $P$
+
+---
 
 
 
