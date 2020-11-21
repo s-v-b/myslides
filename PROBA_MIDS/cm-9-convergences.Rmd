@@ -120,7 +120,7 @@ class: middle, center, inverse
 In probabilistic settings, the notion of almost sure convergence mirrors the analytical notion of pointwise convergence
 
 
-`fontawesome::fa("syringe")` A sequence of real-valued functions $(f_n)_n$ mapping some space $\Omega$
+`r fontawesome::fa("syringe")` A sequence of real-valued functions $(f_n)_n$ mapping some space $\Omega$
 to $\mathbb{R}$ _converges pointwise_ to $f: \Omega \to \mathbb{R}$, if
 
 $$\forall \omega \in \Omega, \quad f_n(\omega) \to f(\omega)$$
@@ -151,14 +151,14 @@ has $P$-probability $1$.
 
 ---
 
-- Almost sure convergence, is (just) pointwise convergence with probability $1$
+- Almost sure convergence:  pointwise convergence with probability $1$
 
 - Almost sure convergence is not tied to integrability
 
 - `r fontawesome::fa("exclamation")` All random variables involved in the above statements live on the same probability space.
 
-- `r fontawesome::fa("puzzle-piece")` Can we design a metric for almost-sure convergence? The answer
-is no, as for pointwise convergence, in general
+- `r fontawesome::fa("puzzle-piece")` Can we design a metric for almost-sure convergence?   
+The answer is no, as for pointwise convergence, in general
 
 ---
 name: seclpconv
@@ -444,8 +444,9 @@ class: middle, center, inverse
 ## Law(s) of large numbers
 
 ---
+name: wlln
 
-### Weak law of large numbers {#wlln}
+### Weak law of large numbers 
 
 The weak and the strong law of large numbers are concerned with
 the convergence of empirical means of independent, identically distributed,
@@ -590,7 +591,102 @@ $$\begin{array}{rl}P \Big\{ \omega : \omega \text{ belongs to infinitely many ev
 
 
 
-### Proof of SLLN direct part
+
+### Definition Tail sigma-algebra
+
+Assume $X_1, \ldots, X_n, \ldots$ are  random variables. 
+
+The tail $\sigma$-algebra (or the $\sigma$-algebra of tail events) is defined as:
+
+$$\mathcal{T} = \cap_{n=}^\infty \sigma\Big(X_n, X_{n+1}, \ldots \Big)$$
+
+???
+
+
+
+The law of large numbers is the cornerstone of consistency proofs.
+
+Before shifting to non-exponential inequalities, we point a general result about events
+that depend on the limiting behavior of sequences of independent random variables.
+---
+
+The $0-1$-law asserts that under independence,  tail events
+have trivial probabilities.
+
+.content-box-gray[
+
+### Theorem "0-1-Law"
+
+Assume $X_1, \ldots, X_n, \ldots$ are  independent random variables.
+
+Any event in the tail $\sigma$-algebra $\mathcal{T}$ has probability either $0$ or $1$.
+
+]
+
+---
+
+
+### Proof
+
+It suffices to check that any event $A \in \mathcal{T}$ satisfies 
+
+$$P(A)^2 = P(A)$$
+
+or equivalently that 
+
+$$P(A) = P(A \cap A) = P(A) \times P(A)$$
+
+that is $A$ is independent of itself.
+
+--
+
+For any $n$,  an event $A \in \mathcal{T}$, is independent
+from any event in $\sigma\big(X_1, \ldots, X_n\big)$. 
+
+--
+
+This entails that
+$A \in \mathcal{T}$ is independent from any event in $\cup_n \sigma\big(X_1, \ldots, X_n\big)$.
+
+---
+
+### Proof (continued)
+
+`r fontawesome::fa("exclamation-triangle")` 
+
+Collection $\cup_n \sigma\big(X_1, \ldots, X_n\big)$ is a $\pi$-system.
+
+This $\pi$-system generates the cylinder $\sigma$-algebra
+
+Hence, $A$ is independent from any event from the $\sigma$-algebra generated
+by $\cup_n \sigma\big(X_1, \ldots, X_n\big)$, which happens to be $\mathcal{F}$.
+
+As $A \in \mathcal{T}  \subset \mathcal{F}$, $A$ is independent from itself.
+
+`r fontawesome::fa("square")`
+
+
+---
+exclude: true
+
+`r fontawesome::fa("brain")` Derive the second Borel-Cantelli Lemma as a special case of the $0-1$-law.
+
+
+---
+
+
+`r fontawesome::fa("exclamation")` The event 
+
+$$\left\{\omega : \frac{1}{n}\sum_{i=1}^n X_i(\omega) \to \text{finite limit}\right\}$$ 
+
+belongs to the tail $\sigma$-algebra.
+
+The Strong Law of Large Numbers tells us that under integrability and independence assumptions, this _tail event_ has probability $1$.
+
+
+---
+
+### Proof of SLLN (direct part)
 
 The event
 
@@ -645,7 +741,7 @@ Fix $\alpha>1$ and let $n(k) = \lfloor \alpha^k \rfloor$.
 
 If for all $\epsilon>0$, almost surely, only finitely many events
 
-$$\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| \geq n(k) > \epsilon \Big\}$$
+$$\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| / n(k) > \epsilon \Big\}$$
 
 occur, then $\Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big|/n(k)$ converges almost surely to $0$ and thus
 $T_{n(k)}/n(k)$ converges almost surely to $\mathbb{E}X_1$.
@@ -656,7 +752,7 @@ $T_{n(k)}/n(k)$ converges almost surely to $\mathbb{E}X_1$.
 
 Let
 
-$$\Theta = \sum_{k\in \mathbb{N}}  P\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| \geq n(k) > \epsilon \Big\}$$
+$$\Theta = \sum_{k\in \mathbb{N}}  P\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| / n(k) > \epsilon \Big\}$$
 
 Thanks to  truncation, each $T_{n(k)}$ is square-integrable.
 
@@ -709,7 +805,7 @@ $$\begin{array}{rl}
 
 By the first Borell-Cantelli Lemma, with probability $1$, only finitely many events
 
-$$\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big| \geq n(k) > \epsilon \Big\}$$
+$$\Big\{ \Big|T_{n(k)} - \mathbb{E}T_{n(k)} \Big|/ n(k) > \epsilon \Big\}$$
 
 occur.
 
@@ -747,14 +843,16 @@ Finally, we may choose $\alpha$ arbitrarily close to $1$, to establish the desir
 
 ---
 
-`r fontawesome::fa("triangle-exclamation")`
+`r fontawesome::fa("exclamation-triangle")`
 
 In the statement of the Theorem, we can replace the independence assumption by a pairwise independence assumption.
 
-The converse Theorem  shows that, under independence assumption, the conditions in for
-the Strong Law of Large Numbers are tight.
+--
+
+The converse Theorem  shows that, under independence assumption, the conditions in for the Strong Law of Large Numbers are tight.
 
 
+---
 
 
 
@@ -796,11 +894,15 @@ $$\begin{array}{rl}
 
 ### Theorem Strong  law of large numbers, converse part
 
-Let $X_1, \ldots, X_n, \ldots$  be independently, identically distributed  $\mathbb{R}$-valued random variables over some $(\Omega, \mathcal{F}, P)$. If for some finite constant $\mu$,
+Let $X_1, \ldots, X_n, \ldots$  be independently, identically distributed  $\mathbb{R}$-valued random variables over some $(\Omega, \mathcal{F}, P)$. 
+
+If for some finite constant $\mu$,
 
 $$\lim_{n \to \infty}    \sum_{i\leq n} X_i/n =   \mu \qquad \text{almost surely,}$$
 
-then all $X_i$ are integrable and $\mathbb{E}X_i = \mu.$
+then 
+
+all $X_i$ are integrable and $\mathbb{E}X_i = \mu.$
 
 
 ---
@@ -834,61 +936,6 @@ But this cannot happen if $S_n/n$ converges toward a finite limit.
 
 `r fontawesome::fa("square")`
 
----
-
-
-The law of large numbers is the cornerstone of consistency proofs.
-
-Before shifting to non-exponential inequalities, we point a general result about events
-that depend on the limiting behavior of sequences of independent random variables.
-
-
-### Definition Tail sigma-algebra
-
-Assume $X_1, \ldots, X_n, \ldots$ are  random variables. The tail $\sigma$-algebra
-(or the $\sigma$-algebra of tail events) is defined as:
-
-$$\mathcal{T} = \cap_{n=}^\infty \sigma\Big(X_n, X_{n+1}, \ldots \Big)$$
-
-
----
-
-Observe that the event $\sum_{i=1}^n X_i/n$ converges towards a finite limit belongs to
-the tail $\sigma$-algebra. The Strong Law of Large Numbers tells us that
-under integrability and independence assumptions, this tail event has probability $1$.
-This is no accident.  The $0-1$-law asserts that under independence,  tail events
-have trivial probabilities.
-
-### Theorem "0-1-Law"
-
-Assume $X_1, \ldots, X_n, \ldots$ are  independent random variables.
-Any event in the tail $\sigma$-algebra $\mathcal{T}$ has probability either $0$ or $1$.
-
-
----
-
-
-### Proof
-
-It suffices to check that any event $A \in \mathcal{T}$ satisfies $P(A)^2 = P(A)$,
-or equivalently that $P(A) = P(A \cap A) = P(A) \times P(A)$, that is $A$ is
-independent of itself.
-
-For any $n$, as an event in  $\sigma\big(X_n, X_{n+1}, \ldots \big)$, $A$ is independent
-from any event in $\sigma\big(X_1, \ldots, X_n\big)$. But this entails that
-$A$ is independent from any event in $\cup_n \sigma\big(X_1, \ldots, X_n\big)$.
-
-Observe that $\cup_n \sigma\big(X_1, \ldots, X_n\big)$ is a $\pi$-system.
-Hence, $A$ is independent from any event from the $\sigma$-algebra generated
-by $\cup_n \sigma\big(X_1, \ldots, X_n\big)$, which happens to be $\mathcal{F}$.
-As $A \in \mathcal{T}  \subset \mathcal{F}$, $A$ is independent from itself.
-
-`r fontawesome::fa("square")`
-
-
----
-
-`r fontawesome::fa("brain")` Derive the second Borel-Cantelli Lemma as a special case of the $0-1$-law.
 
 ---
 name: secexpoineq
