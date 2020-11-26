@@ -547,9 +547,13 @@ $$\begin{array}{rl}  \lim_n \mathbb{E}_{P_n} f    & = \lim_n \int_{[0, 1]} P_n \
 
 - $X_n ⇝ X$
 
-- Closed set $F = (-\infty, 0]$, $P_n(F) = 0, quad \forall n$, but $P(F) = 1 \geq \limsup_n P_n(F)=0$
+- Closed set $F = (-\infty, 0]$, 
+$$P_n(F) = 0, \quad \forall n$$   
+but $P(F) = 1 \geq \limsup_n P_n(F)=0$
 
-- Open set $O = ]0, \infty)$, $P_n(O) = 1, quad \forall n$, but $P(O) = 0 \leq \liminf_n P_n(O)=1$
+- Open set $O = ]0, \infty)$, 
+$$P_n(O) = 1, \quad \forall n$$   
+but $P(O) = 0 \leq \liminf_n P_n(O)=1$
 
 
 
@@ -576,7 +580,7 @@ at every $x$ which is a  continuity point of $F$
 
 Consequence of 7) in the statement of the Portemanteau Theorem: if $x$ is a continuity point of $F$, then
 
-$$F(x) = P(-\infty, x] = P(-infty, x[ = P(-infty, x]^{\circ} = \lim_{x_n \uparrow x} F(x_n)$$
+$$F(x) = P(-\infty, x] = P(-\infty, x[ = P(-\infty, x]^{\circ} = \lim_{x_n \uparrow x} F(x_n)$$
 
 ---
 name: weakconvquantiles
@@ -776,7 +780,7 @@ $$\begin{array}{rl}  \Big| \mathbb{E} h(X_n) -h(X) \Big|  & \leq  4  \underbrace
 
 --
 
-- (b) tends to $0$ as $n \uparrow \infty$ ($X_n + \sigma Z \rightsquigarrow X+\sigma Z$ )
+- (b) tends to $0$ as $n \uparrow \infty$ ( $X_n + \sigma Z \rightsquigarrow X+\sigma Z$ )
 
 - (a) tends to $0$ as $\sigma \downarrow 0$
 
