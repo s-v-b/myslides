@@ -26,9 +26,6 @@ output:
 name: layout-general
 layout: true
 class: left, middle
-background-image: url('./img/Universite_Paris_logo_horizontal.jpg')
-background-size: 10%
-background-position: 97% 3%
 
 <style>
 .remark-slide-number {
@@ -50,10 +47,28 @@ background-position: 97% 3%
 }
 </style>
 
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```
+
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+```
+
 ---
 class: middle, center, inverse
-background-size: 4%
-background-position: 97% 3%
 
 
 
@@ -133,7 +148,7 @@ names(data) <- c("k",
 # %%
 ```
 
-PMFs of
+PMFs  (densities) of
 - Binom(250,0.02) (left)
 - Binom(2500,0.002) (middle)
 - Poisson(5) (right)
@@ -142,21 +157,33 @@ PMFs of
 .pull-right[
 
 Graphical inspection of
-probability mass functions suggests that as $n$ grows,
+probability mass functions suggests that
 
-> Binomial distributions with parameters $(n, \lambda/n)$ look more and more alike Poisson distribution with parameter $\lambda$.
+> As $n$ grows, Binomial distributions with parameters $(n, \lambda/n)$ look more and more alike Poisson distribution with parameter $\lambda$.
 
-Comparing probability generating functions (PGFs) is more compelling.
+`r fontawesome::fa("exclamation-triangle")` Comparing probability generating functions (PGFs) is even more compelling:
 
-The PGF of Binom $(n, \lambda/n)$ is
 
-$$s \mapsto (1 +\lambda(s-1)/n )^n$$
-
-`r fontawesome::fa("exclamation-triangle")`
-
-$$\lim_{n \uparrow \infty} (1 +\lambda(s-1)/n )^n = \underbrace{\exp(\lambda(s-1))}_{\text{PGF of} \operatorname{Poi}(\lambda)}$$
+$$\lim_{n \uparrow \infty}  \underbrace{(1 +\lambda(s-1)/n )^n}_{\text{PGF of} \operatorname{Binom}(n,\lambda/n)} = \underbrace{\exp(\lambda(s-1))}_{\text{PGF of} \operatorname{Poi}(\lambda)}$$
 
 ]
+
+
+
+---
+
+### Convergence of Binomial PMFs towards Poisson PMFs
+
+- PMFs belong to $\ell_1(\mathbb{N})$
+
+- We can score the proximity between two probability distributions $P, Q$ over $\mathbb{N}$ by computing the $\ell_1$ distance between the associated PMFs $p$ and $q$
+
+$$\sum_{k \in \mathbb{N}} \big|p(k) - q(k)\big|$$
+
+- Up to a factor of $2$, this is the _Total Variation_ distance between $P$ and $Q$
+
+- For Binomials and Poisson distributions with respective parameters $(n, \lambda/n)$ and $\lambda$, meaningful bounds can be derived at modest price
+
 
 ---
 
@@ -209,6 +236,15 @@ difs <- purrr::map_dbl(ns, .f = ~ sum(abs (dbinom(x, ., lambda/.) - dpois(x, lam
 ---
 
 ## `r fontawesome::fa("radiation")`
+
+We are talking about probability distributions, not random variables
+
+We are not talking about Binomial and Poisson random variables leaving on the same
+probability space but on probability distributions of random variables leaving
+on possibly different probability spaces
+
+--
+
 
 The set of probability distributions
 over some measurable space $(\Omega, \mathcal{F})$
@@ -283,6 +319,10 @@ $$\lim_n \mathbb{E}_{P_n} [f] =  \mathbb{E}_P [f]$$
 
 ]
 
+--
+
+`r fontawesome::fa("language")` $$P_n \rightsquigarrow P$$
+
 ---
 
 
@@ -300,16 +340,21 @@ name: vagueconv
 
 ### Definition  Vague convergence
 
-A sequence of probability distributions $(P_n)_{n \in
-\mathbb{N}}$ over $\mathbb{R}^k$ converges vaguely towards measure $\mu$ (on $\mathbb{R}^k$)
+A sequence of probability distributions $(P_n)_{n\in\mathbb{N}}$ over $\mathbb{R}^k$ converges _vaguely_ towards measure $\mu$ (on $\mathbb{R}^k$)
 
 iff
 
 for any  continuous function $f$ with _compact support_ from $\mathbb{R}^k \to \mathbb{R}$,
 
-$$\lim_n \mathbb{E}_{P_n} [f] = \mathbb{E}_P [f]$$
+$$\lim_n \mathbb{E}_{P_n} [f] = \int f \mathrm{d}\mu$$
 
 ]
+
+
+--
+
+`r fontawesome::fa("exclamation-triangle")` the limit measure $\mu$ is not necessarily  a probability measure
+
 
 ---
 
@@ -317,9 +362,13 @@ $$\lim_n \mathbb{E}_{P_n} [f] = \mathbb{E}_P [f]$$
 
 Consider the sequence of probability masses over the integers $(\delta_n)_{n \in \mathbb{N}}$.
 
+--
+
 - This sequence converges vaguely towards the null measure
 
 - This sequence  does not converge weakly
+
+--
 
 `r fontawesome::fa("brain")` If a sequence of probability distributions over $\mathbb{R}^k$ converges vaguely towards a probability measure, does it also converge weakly towards this probability measure?
 
@@ -338,19 +387,23 @@ name: secConvDistribution
 
 A sequence  $(X_n)_{n \in \mathbb{N}}$ of $\mathbb{R}^k$-valued random variables defined
 on a sequence of probability spaces  $(\Omega_n, \mathcal{F}_n, P_n)$ converges _in distribution_
-if the sequence  $(P_n \circ X_n^{-1})_{n \in \mathbb{N}}$  ia weakly convergent
+towards $X \sim \mathcal{L}$
 
-This is denoted by
+if
+
+$(P_n \circ X_n^{-1})_{n \in \mathbb{N}}$  is weakly convergent towards  probability distribution  $\mathcal{L}$ over $(\mathbb{R}^k, \mathcal{B}(\mathbb{R}^k))$
+
+`r fontawesome::fa("language")` This is denoted by
 
 $$X_n \rightsquigarrow X \qquad \text{or} \qquad  X_n \rightsquigarrow \mathcal{L}$$
 
-where $\mathcal{L}$  denotes a probability distribution.
+
 
 ]
 
 --
 
-The probability spaces are defined implicitly
+`r fontawesome::fa("exclamation")` The probability spaces are (often) defined implicitly
 
 In order to check or use convergence in distribution, many equivalent characterizations are available.
 
@@ -407,7 +460,7 @@ is an open set
 
 $5)$ and $6)$ imply $7)$:
 
-$$\limsup_n P_n(\overline{A}) \leq P(\overline{A}) = P(A^\circ) \leq \liminf_n P_n(A^\ci)$$
+$$\limsup_n P_n(\overline{A}) \leq P(\overline{A}) = P(A^\circ) \leq \liminf_n P_n(A^\circ)$$
 
 By monotony
 
@@ -422,7 +475,11 @@ $$\lim_n P_n(A) = \liminf_n P_n (A) = \limsup_n P_n(A) = P(A^\circ) = P(\overlin
 
 ### Proof `r fontawesome::fa("luggage-cart")`
 
-Let us check that $3) \Rightarrow 5)$. Let $F$ be a closed subset of $\mathbb{R}^k$. For $x\in \mathbb{R}^k$, let $\mathrm{d}(x,F)$ denote the distance from $x$ to $F$. For $m \in \mathbb{N}$, let $f_m(x) = \big(1 - m \mathrm{d}(x, F)\big)_+$.
+Let us check that $3) \Rightarrow 5)$. Let $F$ be a closed subset of $\mathbb{R}^k$.
+
+For $x\in \mathbb{R}^k$, let $\mathrm{d}(x,F)$ denote the distance from $x$ to $F$.
+
+For $m \in \mathbb{N}$, let $f_m(x) = \big(1 - m \mathrm{d}(x, F)\big)_+$.
 
 The function $f_m$
 $m$-is Lifchitz, lower bounded by $\mathbb{I}_F$, and for every $x \in \mathbb{R}^k$ $\lim_m \downarrow f_m(x)= \mathbb{I}_F(x)$
@@ -431,13 +488,20 @@ Weak convergence of $P_n$ to $P$ implies
 
 $$\lim_n \mathbb{E}_{P_n} f_m = \mathbb{E}_P f_m$$
 
+
+---
+
+### Proof `r fontawesome::fa("luggage-cart")`  $3) \Rightarrow 5)$ (continued)
+
 Hence for every $m \in \mathbb{N}$
 
-$$\limsup_n \mathbb{E}_{P_n} \mathbb{I}_F = \mathbb{E}_P f_m$$
+$$\limsup_n P_n(F) = \limsup_n \mathbb{E}_{P_n} \mathbb{I}_F \leq  \lim_n \mathbb{E}_{P_n} f_m  = \mathbb{E}_P f_m$$
 
 Taking the limit on the right side leads to
 
 $$\limsup_n P_n(F) = \limsup_n \mathbb{E}_{P_n} \mathbb{I}_F \leq \lim_m \downarrow \mathbb{E}_P f_m = \mathbb{E}_P \mathbb{I}_F =P (F)$$
+
+(teaking the Monotone Converence Theorem)
 
 ---
 
@@ -477,6 +541,20 @@ $$\begin{array}{rl}  \lim_n \mathbb{E}_{P_n} f    & = \lim_n \int_{[0, 1]} P_n \
 
 ---
 
+### Illustration
+
+- $X_n \sim P_n = \delta_{1/n}$  and $X \sim \delta_0$
+
+- $X_n ⇝ X$
+
+- Closed set $F = (-\infty, 0]$, $P_n(F) = 0, quad \forall n$, but $P(F) = 1 \geq \limsup_n P_n(F)=0$
+
+- Open set $O = ]0, \infty)$, $P_n(O) = 1, quad \forall n$, but $P(O) = 0 \leq \liminf_n P_n(O)=1$
+
+
+
+---
+
 > For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is determined by cumulative distribution functions. This is sometimes taken as a definition of weak convergence in elementary books.
 
 .content-box-gray[
@@ -492,6 +570,13 @@ $$\lim_n F_n(x) = F(x)$$
 at every $x$ which is a  continuity point of $F$
 
 ]
+
+
+--
+
+Consequence of 7) in the statement of the Portemanteau Theorem: if $x$ is a continuity point of $F$, then
+
+$$F(x) = P(-\infty, x] = P(-infty, x[ = P(-infty, x]^{\circ} = \lim_{x_n \uparrow x} F(x_n)$$
 
 ---
 name: weakconvquantiles
@@ -513,7 +598,7 @@ at every $x$ which is a  continuity point of $F^\leftarrow$
 
 ]
 
-`r fontawesome::fa("brain")` Prove  Proposition \@ref(prp:weakconvquantiles).
+`r fontawesome::fa("brain")` Prove  this proposition
 
 ---
 name: asrepweakconv
@@ -522,10 +607,16 @@ name: asrepweakconv
 
 ### Proposition   Almost sure representation
 
-If $(X_n)_n ⇝  X$, then
+If $(X_n)_n ⇝  X$,
+
+then
 
 there exists  $(\Omega, \mathcal{F}, P)$ with random variables $(Y_n)_n$
-and $Y$,   such that $\forall n, X_n \sim Y_n$, $X \sim Y$, and
+and $Y$,   such that:
+
+-  $\forall n, X_n \sim Y_n$,
+-  $X \sim Y$,
+-  and
 
 $$Y_n \to Y \qquad P\text{-a.s.}$$
 
@@ -540,15 +631,23 @@ If variables $X_n$ are real-valued, the proposition  follows  from [characteriza
 ---
 
 
-### Proof
+### Proof (for real-valued random variables)
 
 Let $\Omega= [0,1], \mathcal{F}=\mathcal{B}(\mathbb{R})$ and $\omega$ be uniformly distributed over $\Omega = [0,1]$. Let
 
 $$Y_n = F_n^\leftarrow(\omega) \text{ and } Y = F^\leftarrow(\omega)$$
 
-Then for each $n$, $Y_n \sim F_n$ and  $Y \sim F$:
+Then for each $n$,
 
 $$P \Big\{ Y_n \leq t \Big\} = P\Big\{\omega : F_n^\leftarrow(\omega) \leq t \Big\} = P\Big\{\omega : \omega \leq F_n(t) \Big\} = F_n(t)$$
+
+
+
+
+---
+
+### Proof (continued)
+
 
 As a non-decreasing function has at most countably many discontinuities,
 
@@ -562,11 +661,42 @@ $$\text{This translates to }\quad P \Big\{\omega :  \lim_n Y_n(\omega) =Y(\omega
 
 `r fontawesome::fa("square")`
 
+
+
+---
+
+
+.content-box-gray[
+
+### Proposition
+
+Let $(X_n)_n, X$ be random variables over $(\Omega, \mathcal{F}, P)$
+
+
+If $(X_n)_n \stackrel{P-\text{a.s.}}{\longrightarrow}  X$,
+
+then
+
+$$ X_n \rightsquigarrow X$$
+
+]
+
+`r fontawesome::fa("brain")`  Check it
+
+
 ---
 name: secLevyCont
 class: middle, inverse, center
 
-## [Lévy](https://en.wikipedia.org/wiki/Paul_Lévy_\(mathematician\)) continuity theorem
+## Lévy continuity theorem
+
+
+---
+class: middle, center
+
+```{r, echo=FALSE}
+knitr::include_url("https://en.wikipedia.org/wiki/Paul_Lévy_(mathematician)")
+```
 
 ---
 
@@ -623,8 +753,8 @@ $$X_n \rightsquigarrow X$$
 
 Let $h$ be bounded by $1$ and $1$-Lipschitz
 
-$$\begin{array}{rl}\Big| \mathbb{E} h(X_n) -h(X) \Big| & \leq \Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| \\ & \qquad +  \Big| \mathbb{E} h(X_n + \sigma Z) - h(X + \sigma Z) \Big| \\
-& \qquad +  \Big| \mathbb{E} h(X + \sigma Z) - h(X) \Big|\end{array}$$
+$$\begin{array}{rl}\Big| \mathbb{E} h(X_n) -h(X) \Big| & \leq \Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| \\ & \quad +  \Big| \mathbb{E} h(X_n + \sigma Z) - h(X + \sigma Z) \Big| \\
+& \quad +  \Big| \mathbb{E} h(X + \sigma Z) - h(X) \Big|\end{array}$$
 
 The first and third summand can be handled in the same way.
 
@@ -636,14 +766,21 @@ Let $\epsilon >0$,
 
 $$\begin{array}{rl}\Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| & \leq \Big| \mathbb{E} (h(X_n) - h(X_n + \sigma Z)) \mathbb{I}_{\sigma |Z|>\epsilon} \Big| \\ & \qquad + \Big| \mathbb{E} (h(X_n) - h(X_n + \sigma Z)) \mathbb{I}_{\sigma |Z|\leq\epsilon} \Big| \\ & \leq 2 P\{\sigma |Z|>\epsilon\} + \epsilon\end{array}$$
 
+---
+
+### Proof (continued)
+
 Combining the different bounds leads to
 
-$$\begin{array}{rl}  \Big| \mathbb{E} h(X_n) -h(X) \Big|  & \leq  4  P\{\sigma |Z|>\epsilon\} + 2\epsilon + \Big| \mathbb{E} h(X_n + \sigma Z) - h(X + \sigma Z) \Big|\end{array}$$
+$$\begin{array}{rl}  \Big| \mathbb{E} h(X_n) -h(X) \Big|  & \leq  4  \underbrace{P\{\sigma |Z|>\epsilon\}}_{(a)} + 2\epsilon + \underbrace{\Big| \mathbb{E} h(X_n + \sigma Z) - h(X + \sigma Z) \Big|}_{(b)}\end{array}$$
 
+--
 
+- (b) tends to $0$ as $n \uparrow \infty$ ($X_n + \sigma Z \rightsquigarrow X+\sigma Z$ )
 
-The last summmand on the right-hand-side tends to $0$ as $n$ tends to infinity. The first summand
-tends to $0$ as $\sigma$ tends to $0$.
+- (a) tends to $0$ as $\sigma \downarrow 0$
+
+--
 
 Hence
 
@@ -686,7 +823,7 @@ $$P_n(A) - P(A) = \int_{\mathbb{R}} \mathbb{I}_A (f_n -f) \leq \int_{\mathbb{R}}
 
 `r fontawesome::fa("square")`
 
-We proved more than weak convergence: $\lim_n \sup_{A \in \mathcal{B}(\mathbb{R})} |P_n(A) - P(A)| )$ `r fontawesome::fa("glass-cheers")`
+We proved more than weak convergence: $\lim_n \sup_{A \in \mathcal{B}(\mathbb{R})} |P_n(A) - P(A)| )=0$ `r fontawesome::fa("glass-cheers")`
 
 ---
 
@@ -796,6 +933,24 @@ for some probability measure $P$
 
 ]
 
+
+
+---
+class: middle, center
+
+
+```{r, echo=FALSE}
+knitr::include_url("https://en.wikipedia.org/wiki/Lucien_Le_Cam")
+```
+
+---
+class: middle, center
+
+```{r, echo=FALSE}
+knitr::include_url("https://en.wikipedia.org/wiki/Yuri_Prokhorov")
+```
+
+
 ---
 
 .content-box-gray[
@@ -806,7 +961,7 @@ Let $(P_n)_n$ be a sequence of probability distributions over $\mathbb{R}$,
 with characteristic functions $\widehat{F}_n$.
 
 If the sequence
-$\widehat{F}_n)_n$ converge pointwise towards a function that is continuous at $0$
+$(\widehat{F}_n)_n$ converges pointwise towards a function that is continuous at $0$
 
 then
 
@@ -816,6 +971,8 @@ the sequence $(P_n)_n$ is _uniformly tight_.
 
 
 ---
+
+
 
 .pull-left[
 
@@ -830,7 +987,7 @@ $$\qquad   \frac{\sin(t)}{t} \leq \sin(1) \leq \frac{6}{7}$$
 
 .pull-right[
 
-```{r techdude, echo=FALSE, fig.cap='(ref:techdude)'}
+```{r techdude, echo=FALSE}
 require(ggplot2)
 require(tibble)
 ggplot(data=tibble(x=seq(-15,15,by=.001)),
@@ -858,7 +1015,7 @@ Assume $\widehat{F}$ is the characteristic function of some probability measure 
 
 then
 
-$$\forall u>0, \quad \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}(v)\big) \mathrm{d}v  \geq \frac{1}{7} P \Big[\frac{-1}{u}, \frac{1}{u}\Big]$$
+$$\forall u>0, \quad \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}(v)\big) \mathrm{d}v  \geq \frac{1}{7} P \Big[\frac{-1}{u}, \frac{1}{u}\Big]^c$$
 
 ]
 
@@ -883,7 +1040,9 @@ Note that $\widehat{F}_n(0)=1$ for all $n$, hence, trivially,  $1 =\lim_n \wideh
 
 As $|\operatorname{Re}\widehat{F}_n(t)|\leq 1$, $|\operatorname{Re}\widehat{F}(t)|\leq 1$ also holds.
 
-Fix $ϵ>0$, as $\widehat{F}$ is continuous at $0$, for some $u>0$, for all $v \in [-u,u]$, $0 \geq 1- \widehat{F}(u) \leq \epsilon/2$
+Fix $ϵ>0$, as $\widehat{F}$ is continuous at $0$, for some $u>0$, for all $v \in [-u,u]$,
+
+$$0 \leq 1- \operatorname{Re}\widehat{F}(u) \leq \epsilon/2$$
 
 ---
 
@@ -893,35 +1052,66 @@ $$0 \leq \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}(v)\big) \math
 
 By dominated convergence,
 
-$$\lim_n \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}_n(v)\big) \mathrm{d}v= \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}(v)\big) \mathrm{d}v  \leq \epsilon)$$
+$$\lim_n \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}_n(v)\big) \mathrm{d}v= \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}(v)\big) \mathrm{d}v  \leq \frac{\epsilon}{2}$$
 
 For sufficiently large $n$, $0 \leq \frac{1}{u}\int_0^u \big(1 - \operatorname{Re}\widehat{F}_n(v)\big) \mathrm{d}v \leq \epsilon$.
 
-Bythe truncation Lemma, for sufficiently large $n$
+By the truncation Lemma, for sufficiently large $n$
 
-$$P_n \Big[\frac{-1}{u}, \frac{1}{u}\Big]^c \leq 7 ϵ)$$
+$$P_n \Big[\frac{-1}{u}, \frac{1}{u}\Big]^c \leq 7 ϵ$$
+
+$(P_n)_n$ is uniformly tight
 
 `r fontawesome::fa("square")`
 
 ---
 
+
+We combine the Uniform Tightness Lemma, the Prokhorov-Le Cam Theorem, and the first form
+of the Lévy continuity Theorem to establish the (full) Lévy continuity Theorem
+
+--
+
 ### Proof of the second form of the continuity theorem
 
-We combine the Uniform Tightness Lemma and the Prokhorov-Le Cam Theorem
-
 Under the assumptions of the second form of the continuity  Theorem,
-there is a probability measure $P$ (with characteristic function $\widehat{F}$), and a subsequence
+
+$\widehat{F}_n \rightarrow F$ with $F$ continuous at $0$
+
+--
+
+By the Uniform Tightness Lemma, $(P_n)_n$  is uniformly tight
+
+--
+
+By the Prokhorov-Le Cam Theorem, there is a probability measure $P$ (with characteristic function $\widehat{F}$), and a subsequence
 $(P_{n(k)})_{k \in \mathbb{N}}$ such that $P_{n(k)} \rightsquigarrow P \text{ as } {k \to \infty}$
 
-This entails $\widehat{F}_{n(k)} \rightarrow \widehat{F} \text{ as } {k \to \infty}$ and also
- $\widehat{F}_n \rightarrow \widehat{F}$
+---
 
-Finally, by the Levy continuity Theorem, $P_{n}\rightsquigarrow  P \text{ as }{n \to \infty}$.
+### Proof of the second form of the continuity theorem (continued)
+
+By the definition of weak convergence,  $P_{n(k)} \rightsquigarrow P \text{ as } {k \to \infty}$  entails
+$\widehat{F}_{n(k)} \rightarrow \widehat{F}'' \text{ as } {k \to \infty}$
+where $\widehat{F}''$ is the characteristic function of $P$
+--
+
+As $\widehat{F}_n \rightarrow \widehat{F}$, by the unicity of limits, $\widehat{F}= \widehat{F}'$
+and thus $\widehat{F}$ is the characteristic function the probability distribution $P$
+
+--
+
+Finally, by the first form of the Levy continuity Theorem, $P_{n}\rightsquigarrow  P \text{ as }{n \to \infty}$.
 
 `r fontawesome::fa("square")`
 
+<br>
+
 `r fontawesome::fa("exclamation-triangle")`
-All definitions and results in this section can be extended to the $k$-dimensional setting for all $k \in \mathbb{N}$.
+
+All definitions and results in this section can be extended to the $k$-dimensional setting for all $k \in \mathbb{N}$
+
+`r fontawesome::fa("glass-cheers")`
 
 ---
 class: middle, center, inverse
@@ -943,6 +1133,11 @@ proof of the next Proposition.
 
 Convergence in probability implies convergence in distribution
 
+If $(X_n)_n$ is a sequence of RV over $(\Omega, \mathcal{F}, P)$ such that
+
+$$X_n \stackrel{P-\text{probability}}{\longrightarrow} X \quad \Rightarrow \quad X_n \rightsquigarrow X$$
+
+
 ]
 
 ---
@@ -952,7 +1147,11 @@ Convergence in probability implies convergence in distribution
 Assume $(X_n)_n$ converges in probability towards $X$.
 
 Let $h$ be a bounded and Lipschitz function.
-Without loss of generality, assume that $|f(x)|\leq 1$  for all $x$ and $|f(x)-f(y)|\leq \mathrm{d}(x,y)$.
+
+Without loss of generality, assume that
+
+$$|f(x)|\leq 1 \quad \text{and} \quad |f(x)-f(y)|\leq \mathrm{d}(x,y) \qquad \forall x, y$$
+
 
 Let $\epsilon>0$
 
@@ -964,7 +1163,8 @@ $$\begin{array}{rl}\Big| \mathbb{E}h(X_n) - \mathbb{E}h(X)  \Big| & = \Big| \mat
 
 Convergence in probability entails that
 
-$$\limsup_n \Big| \mathbb{E}h(X_n) - \mathbb{E}h(X)  \Big| \leq \)$$
+$$\limsup_n \Big| \mathbb{E}h(X_n) - \mathbb{E}h(X)  \Big| \leq 0$$
+
 
 $$\lim_n \Big| \mathbb{E}h(X_n) - \mathbb{E}h(X)  \Big|=0$$
 
@@ -996,13 +1196,13 @@ tends to be of order $1/\sqrt{n}$ and, once rescaled, to be normally distributed
 
 .content-box-gray[
 
-### Theorem
+### Theorem  (Central Limit Theorem)
 
 Let $\ldots, X_n, \ldots$  be i.i.d. with finite variance $\sigma^2$  and expectation $\mu$.
 
 Let $S_n = \sum_{i=1}^n X_i$.
 
-$$\sqrt{n} \left(\frac{S_n}{n} - \mu \right) \rightsquigarrow \mathcal{N}\big(0, \sigma^2 \big)$$
+$$\frac{1}{\sigma\sqrt{n}} \left({S_n} - n\mu \right) \rightsquigarrow \mathcal{N}\big(0, 1\big)$$
 
 ]
 
@@ -1015,19 +1215,24 @@ of the random variables $((X_i-\mu)/\sigma)_i$.
 
 The centering and square integrability assumptions imply that
 
-$$\widehat{F}(t) = \widehat{F}(0) +\widehat{F}'(0) t + \frac{\widehat{F}'(0)}{2} t^2 + t^2 R(t) = 1 - \frac{t^2}{2} + t^2R(t)$$
+$$\widehat{F}(t) = \widehat{F}(0) +\widehat{F}'(0) t + \frac{\widehat{F}^{\prime\prime}(0)}{2} t^2 + t^2 R(t) = 1 - \frac{t^2}{2} + t^2R(t)$$
 
 where $\lim_{t \to 0} R(t)=0$.
 
-Let $\widehat{F}_n$ denote the characteristic function of $\sqrt{n} \left(\frac{S_n}{n} - \mu \right)/\sigma$.
 
 ---
 
 ### Proof (continued)
 
+Let $\widehat{F}_n$ denote the characteristic function of $\frac{1}{\sigma\sqrt{n}} \left({S_n} - n\mu \right)$.
+
+--
+
 Fix $t \in \mathbb{R}$,
 
 $$\widehat{F}_n(t) = \Big(\widehat{F}(t/\sqrt{n})\Big)^n= \Big(1 - \frac{t^2}{2n} + \frac{t^2}{n} R(t/\sqrt{n})\Big)^n$$
+
+--
 
 As $n\to \infty$,
 
@@ -1042,19 +1247,41 @@ $$\lim_n \Big(1 - \frac{t^2}{2n} + \frac{t^2}{n} R(t/\sqrt{n})\Big)^n  = \mathrm
 
 `r fontawesome::fa("exclamation-triangle")`
 
-The conditions in the Theorem statement allows for a short proof. They are by no mean necessary.
+The conditions in the Theorem statement allows for a short proof
+
+They are by no mean necessary
+
+--
 
 - The summands need not be identically distributed.
+
 - The summands need not be independent.
+
+--
 
 A version of the Lindeberg-Feller Theorem  states that under mild assumptions, centered and normalized sums of independent square-integrable random variables converge in distribution towards a Gaussian distribution.
 
 
+--
+
+Consider the number $Z_n$ of cycles in a random permutation over $1, \ldots, n$
+
+$$Z_n \sim \sum_{i=1}^n Y_i \qquad \text{with}\quad Y_i \sim \operatorname{Be}(1/i)$$
+
+and
+
+$$\frac{1}{\sqrt{H_n}}\left(Z_n - H_n\right) ⇝ \mathcal{N}(0,1)$$
+
+with $H_n = \sum_{i=1}^n 1/i$
+
+
 ---
+
+### [De Moivre](https://en.wikipedia.org/wiki/De_Moivre–Laplace_theorem) CLT illustrated
 
 .pull-left[
 
-```{r cltbinom, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:cltbinom)'}
+```{r cltbinom, echo=FALSE, message=FALSE, warning=FALSE}
 foo <- function(x, size, prob){
   pbinom(sqrt(size*prob*(1-prob))*x+size*prob, size=size, prob=prob)
 }
@@ -1079,11 +1306,11 @@ The dotted and the dashed lines represent the CDF of
 
 $$\frac{(X_n -np)}{\sqrt{n(p*(1-p))}}$$
 
- where
+where
 
- $$X_n \sim \text{Binom}(n,p)$$
+$$X_n \sim \text{Binom}(n,p)$$
 
- for $p=.3$ and $n=30 \text(dotted), 100 \text(dashed)$.
+for $p=.3$ and $n=30 \text(dotted), 100 \text(dashed)$.
 
 ]
 
@@ -1112,7 +1339,7 @@ The importance of multivariate characteristic functions is reflected
 in the  next device which proof is left to the reader.
 
 It consists in the adapting the
-proof of Theorem \@ref(thm:injeccharfunc).
+proof of the injectivity Theorem
 
 .content-box-gray[
 
@@ -1192,7 +1419,11 @@ As probability generating functions allows us to recover Laplace transforms, the
 ### Theorem
 
 A sequence of integer-valued random variables  $(X_n)_n$  converges in distribution
-towards the integer-valued random variable  $X$ iff the sequence of Laplace transforms converges pointwise towards the Laplace transform of the
+towards the integer-valued random variable  $X$
+
+iff
+
+the sequence of Laplace transforms $\lambda \mapsto \mathbb{E} \mathrm{e}^{- \lambda X_n}, \lambda\geq 0$ converges _pointwise_ towards the Laplace transform $\lambda \mapsto \mathbb{E} \mathrm{e}^{- \lambda X}$ of the
 probability distribution of $X$.
 
 ]
@@ -1218,6 +1449,53 @@ This goes back at least to the Berry-Esseen's Theorem (1942). Quantitative appro
 have acquired a new momentum with the popularization of Stein's method.
 This methods is geared towards,  but exclusively focused on,  general yet  quantitative versions of the Central Limit Theorem [@MR2732624] .
 A thorough yet readable introduction to Stein's method is [@MR2861132].
+
+
+---
+exclude: true
+
+### References
+
+.pull-left[
+
+```{r, echo=FALSE}
+knitr::include_url("https://news.mit.edu/2020/richard-dudley-mit-mathematics-professor-emeritus-dies-0218")
+```
+
+]
+
+
+.pull-right[
+
+```{r, echo=FALSE}
+knitr::include_url("https://mathscinet-ams-org.ezproxy.math-info-paris.cnrs.fr/mathscinet-getitem?mr=982264")
+```
+
+]
+
+
+---
+
+
+### References
+
+
+[Dudley, Richard M.(1-MIT)](https://news.mit.edu/2020/richard-dudley-mit-mathematics-professor-emeritus-dies-0218)
+
+__Real analysis and probability.__
+
+The Wadsworth & Brooks/Cole Mathematics Series. 1989. xii+436 pp. ISBN: 0-534-10050-3
+
+> This is a remarkable textbook on real analysis and probability.
+
+> ...
+
+> Among the less standard topics contained in the book, the following should be mentioned: weak convergence of probability measures on metric spaces, with the Strassen and Kantorovich-Rubinstein theorems, and the Skorokhod characterization of weak convergence;
+
+> ...
+
+
+From  [MR0982264  Math Reviews by E. Giné](https://mathscinet-ams-org.ezproxy.math-info-paris.cnrs.fr/mathscinet-getitem?mr=982264)
 
 ---
 class: middle, center, inverse

@@ -775,6 +775,13 @@
       "Repository": "CRAN",
       "Hash": "4a5081acfb7b81a572e4384a7aaf2af1"
     },
+    "uuid": {
+      "Package": "uuid",
+      "Version": "0.1-4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e4169eb989a5d03ccb6b628cad1b1b50"
+    },
     "vctrs": {
       "Package": "vctrs",
       "Version": "0.3.4",
@@ -823,6 +830,18 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "5fdd151bfda7f52aa06471de764241f7"
+    },
+    "xaringanExtra": {
+      "Package": "xaringanExtra",
+      "Version": "0.2.4",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "xaringanExtra",
+      "RemoteUsername": "gadenbuie",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "aebe20a761c018687a7dc8e5c92bdab64b97de00",
+      "Hash": "88635e1437837a293d4b30f7e7a97f68"
     },
     "xfun": {
       "Package": "xfun",
