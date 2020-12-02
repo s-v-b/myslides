@@ -245,11 +245,11 @@ We can proceed in a similar way for event $\{Y<Y'\}$
 Still postponing the _existence_ question, let us check now a few properties
 versions of conditional expectation of $X$ (if they exist) should satisfy
 
---
+---
 
 .bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-### Proposition
+### Proposition (Linearity of Conditional Expectation)
 
 - $X_1, X_2 \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$,
 
@@ -303,7 +303,7 @@ The proof is completed by handling in a similar way the event $\{ a_1 Y_1 + a_2 
 
 .bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-### Proposition
+### Proposition  (Monotony of Conditional Expectation)
 
 If
 
@@ -362,6 +362,8 @@ Hence, for all $n$,   $P\{B_n \}= 0$.
 
 
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Corollary
 
 If $(X_n)_{n \in \mathbb{N}}$ is a sequence of random variables from
@@ -375,6 +377,7 @@ of conditional expectations
 
 $$\forall n \in \mathbb{N},\quad\mathbb{E} \left[ X_{n + 1} \mid \mathcal{F} \right] \geq \mathbb{E} \left[ X_n \mid \mathcal{F} \right]$$
 
+]
 
 
 ---
@@ -394,10 +397,12 @@ $$\forall B \in \mathcal{E}, \quad \mathbb{E} \left[
 
 ---
 
-For nested sub- $\sigma$ -algebras, conditional expectations satisfy the
-tower property:
 
-### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Proposition  (Tower Property)
 
 Let  $(\Omega, \mathcal{F}, P)$ be a probability space, and $\mathcal{G} \subseteq \mathcal{H} \subseteq \mathcal{F}$
 be  two nested sub- $\sigma$ -algebras.
@@ -406,6 +411,8 @@ Then for every   $X \in \mathcal{L}_1(\Omega, \mathcal{F}, P)$:
 $$\mathbb{E} \Big[ \mathbb{E}\left[ X \mid \mathcal{G} \right] \mid \mathcal{H} \Big]
 = \mathbb{E} \Big[ \mathbb{E} \, \left[ X \mid \mathcal{H} \right] \mid \mathcal{G} \Big]
 = \mathbb{E} \left[ X \mid \mathcal{G} \right]$$
+
+]
 
 
 ---
@@ -1133,15 +1140,18 @@ to monotone convergence arguments.
 Let $B \in \mathcal{G}$. Let  $X = \liminf_n X_n$, $X$
 is a non-negative random variable.
 
-Let  $Y = \liminf_n \mathbb{E} \left[ X_n \mid \mathcal{G} \right]$, $Y$ is a
-$\mathcal{G}$ -measurable integrable random variable.
+Let  $Y = \liminf_n \mathbb{E} \left[ X_n \mid \mathcal{G} \right]$, 
 
-The theorem compares $\mathbb{E} \left[ X \mid \mathcal{G} \right]$ and $Y.$
+$Y$ is a $\mathcal{G}$ -measurable integrable random variable.
+
+`r fontawesome::fa("hand-point-right")` The theorem compares $\mathbb{E} \left[ X \mid \mathcal{G} \right]$ and $Y.$
 
 
 Let $Z_k = \inf_{n \geq k} X_n$.
+
 Thus $\lim_k \uparrow Z_k =  \liminf_n X_n = X$.
-According to  Theorem \@ref(thm:cmon),
+
+According to  the  .ttc[conditional monotone convergence theorem]
 
 $$\mathbb{E} \left[ Z_k \mid \mathcal{G} \right] \uparrow_k \mathbb{E} \left[ \liminf_n X_n \mid \mathcal{G} \right]\text{ a.s.}$$
 
@@ -1489,23 +1499,25 @@ Having a density allows us to
 ---
 
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Theorem (Conditional density)
 
 
 - $P ⊴ \text{Lebesgue}$ on $(\mathbb{R}^2, \mathcal{B}(\mathbb{R}^2))$
-with density $p (., .)$
+with density $p (.,.)$
 
 - Let $X, Y$ be the projection coordinates on $\mathbb{R}^2$
 
 - Let $p_X$ be the density of $P \circ X^{-1}$
 
-The function $N: \quad\mathbb{R}^2  \to  [0,\infty)$ defined by
+The function $N$ defined by 
 
 $$N(x, y) =  \Bigg\{\begin{array}{lr} \frac{p (x, y)}{p_X (x)} & \text{if } p_X (x) > 0\\ 0 & \text{ otherwise} \end{array}\bigg.$$
 
 satisfies  the following properties
 
-
+]
 
 to be continued ...
 
