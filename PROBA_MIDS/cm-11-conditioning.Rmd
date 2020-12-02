@@ -751,6 +751,17 @@ $$\operatorname{Var} [X] = \operatorname{Var} \Big[ \mathbb{E} \left[ X \mid \ma
 
 ]
 
+---
+
+### `r fontawesome::fa("binoculars")` 
+
+- $X - \mathbb{E}X = \underbrace{X - \mathbb{E}[X \mid \mathcal{G}]}_{\text{orthogonal to any } \mathcal{G} \text{-measurable}}  + \quad \underbrace{\mathbb{E}[X \mid \mathcal{G}] - \mathbb{E}X}_{\mathcal{G} \text{-measurable}}$
+
+- $\operatorname{Var}\left(X\right) =  \mathbb{E}\left[\left(X - \mathbb{E}X\right)^2\right]$
+
+- $\mathbb{E}\left[\operatorname{Var}[X \mid\mathcal{G}]\right] = \mathbb{E}\left[\left(X - \mathbb{E}[X  \mid \mathcal{G}]\right)^2\right]$
+
+- $\operatorname{Var}\left(\mathbb{E}[X \mid \mathcal{G}]\right) = \mathbb{E}\left[ \left(\mathbb{E}[X \mid \mathcal{G}] - \mathbb{E}X\right)^2 \right]$
 
 ---
 
