@@ -90,7 +90,7 @@ class: middle, center, inverse
 ---
 class: inverse, middle
 
-## `r fontawesome::fa("map")`
+## `r fontawesome::fa("map", fill="white")`
 
 ### Univariate Gaussian Distributions
 

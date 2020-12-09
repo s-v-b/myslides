@@ -26,9 +26,6 @@ output:
 name: layout-general
 layout: true
 class: left, middle
-background-image: url('./img/Universite_Paris_logo_horizontal.jpg')
-background-size: 10%
-background-position: 97% 3%
 
 <style>
 .remark-slide-number {
@@ -50,10 +47,32 @@ background-position: 97% 3%
 }
 </style>
 
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```
+
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons(minified = FALSE)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+```
+
 ---
 class: middle, center, inverse
-background-size: 4%
-background-position: 97% 3%
 
 
 
@@ -64,31 +83,49 @@ background-position: 97% 3%
 #### Probabilités Master I MIDS
 
 
-[<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
+---
+class: middle, inverse
+
+## `r fontawesome::fa("map", fill="white")`
+
+
+### Concentration
+
+### Variance bounds for functions of independent random variables
+
+### Exponential inequalities
+
+### Maximal inequalities
+
+
 
 ---
+exclude: true
 class: inverse, center, middle
 
-## Motivation
+## Motivation(s)
 
 ## `r fontawesome::fa("grin", fill = "white")`
 
-
 ---
-
+exclude: true
 ### Example of non-asymptotic results
 
 - Bounds on approximation error in limit theory
 
+$$\mathrm{d}_{\text{TV}}\left(\text{Poi}(\lambda), \text{Binom}\left(n, \frac{\lambda}{n}\right)\right) \leq \min\left(\frac{\lambda}{n}, \frac{1}{n}\right)$$
 
-$$\mathrm{d}_{\text{TV}}\left(\text{Poi}\left(\lambda\right), \text{Binom}\left(n, \frac{\lambda}{n} )\right) \leq \min\left(\frac{\lambda^}{n}, ... \right)$$
 
-- Non-asymptotic tail bounds $≈$ Hoeffding's inequality
+- Non-asymptotic tail bounds
+
+.center[ ≈ Hoeffding's inequality]
+
 
 
 ???
 
 ---
+exclude: true
 
 ### Why?
 
@@ -101,7 +138,47 @@ $$\mathrm{d}_{\text{TV}}\left(\text{Poi}\left(\lambda\right), \text{Binom}\left(
 ---
 class: inverse, middle, center
 
-m                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         .
+## Concentration
+
+---
+
+### Concentration in product spaces
+
+In a nutshell:
+
+.cf[
+
+> A function of many independent random variables that does not depend too much
+> on any of them is approximately constant       .fr[Talagrand]
+
+]
+
+The concentration of measure phenomenon describes the deviations of
+_smooth_ functions (random variables) around their median/mean in some
+probability spaces
+
+- Product spaces
+- Gaussian spaces
+- High-dimensional spheres
+- Compact topological groups
+- ...
+
+---
+
+In Gaussian probability spaces, the Poincaré Inequality asserts:
+
+> If $X_1, \ldots, X_n \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$ and $f$ is $L$-Lipschitz,
+
+> $$\operatorname{Var}(f(X_1, \ldots, X_n )) \leq L^2$$
+
+Borrell-Gross-Cirelson inequalities show that similar bounds hold for exponential
+moments.
+
+--
+
+Comparable results hold in product spaces
+
+We need workable definitions of _smoothness_
 
 
 ---
@@ -112,10 +189,21 @@ name: ess
 
 ---
 
-In this section, $X_1, \ldots, X_n$ denote independent random variables on
-some probability space with values in $\mathcal{X}_1, \ldots, \mathcal{X}_n$, and $f$ denote a measurable function
-from $\mathcal{X}_1 \times  \ldots \times \mathcal{X}_n$ to $\mathbb{R}$. Let $Z=f(X_1, \ldots, X_n)$.
-The random variable $Z$ is a general function of independent random variables. We assume $Z$ is integrable.
+### Scene
+
+$X_1, \ldots, X_n$ denote _independent_ random variables on
+some probability space with values in $\mathcal{X}_1, \ldots, \mathcal{X}_n$,
+
+$f$ denote a measurable function from $\mathcal{X}_1 \times  \ldots \times \mathcal{X}_n$ to $\mathbb{R}$.
+
+$$Z=f(X_1, \ldots, X_n)$$
+
+$Z$ is a general function of independent random variables
+
+We assume $Z$ is integrable.
+
+---
+
 
 If we had $Z = \sum_{i=1}^n X_i$, we could write
 
@@ -123,33 +211,51 @@ $$\operatorname{var}(Z)
 = \sum_{i=1}^n \operatorname{var}(X_i)
 = \sum_{i=1}^n \mathbb{E}\Big[\operatorname{var}( Z \mid X_1, \ldots, X_{i-1}, X_{i+1}, \ldots X_n)\Big]$$
 
-even though the last expression looks pedantic.
+--
 
-The aim of this section is to
+.cf[.fr[even though the last expression looks pedantic]]
+
+--
+
+Our aim is to
 show that even if $f$ is not as simple as the sum of its arguments, the last expression can still
-serve as an upper bound on the variance.
+serve as an upper bound on the variance
 
 ---
 
-It is a natural idea to bound the variance of such a general function
-by expressing $Z-\mathbb{E} Z$
-as a sum of  differences and to
-use the orthogonality of these differences.
+### Doob's embedding
 
-More precisely, if we denote by
-$\mathbb{E}_i$ the conditional expectation operator, conditioned on
-$\left(X_{1},\ldots,X_{i}\right)$, and use the convention
-$\mathbb{E}_0=\mathbb{E}$, then we may define
+We express $Z-\mathbb{E} Z$ as a sum of  differences
+
+Denote by $\mathbb{E}_i$ the conditional expectation operator, conditioned on
+$\left(X_{1},\ldots,X_{i}\right)$:
+
+$$\mathbb{E}_i Y = \mathbb{E}\left[ Y \mid \sigma(X_{1},\ldots,X_{i})\right]$$
+
+Convention: $\mathbb{E}_0=\mathbb{E}$
+
+--
+
+For every $i=1,\ldots,n$:
 
 $$\Delta_{i}=\mathbb{E}_i Z  -\mathbb{E}_{i-1} Z$$
 
-for every $i=1,\ldots,n$.
+$$Z - \mathbb{E}Z = \sum_{i=1}^n \left(\mathbb{E}_i Z  - \mathbb{E}_{i-1}Z \right)= \sum_{i=1}^n Δ_i$$
 
 ---
 
 `r fontawesome::fa("brain")`
-Check that $\mathbb{E} \Delta_i=0$ and that for $j>i$, $\mathbb{E}_i \Delta_j=0$ a.s.
 
+Check that
+
+$$\mathbb{E} \Delta_i=0$$
+
+and that for $j>i$,
+
+$$\mathbb{E}_i \Delta_j=0 \qquad \text{a.s.}$$
+
+
+---
 
 Starting from the decomposition
 
@@ -157,70 +263,84 @@ $$Z-\mathbb{E} Z  =\sum_{i=1}^{n}\Delta_{i}$$
 
 one has
 
-$$\operatorname{var}\left(  Z\right)  =\mathbb{E}\left[  \left(  \sum_{i=1}
-^{n}\Delta_{i}\right)  ^{2}\right]  =\sum_{i=1}^{n}\mathbb{E}\left[
-\Delta_{i}^{2}\right]  +2\sum_{j>i}\mathbb{E}\left[  \Delta_{i}\Delta
-_{j}\right]  \text{.}$$
+$$\operatorname{var}\left(Z\right)  =\mathbb{E}\left[  \left(  \sum_{i=1}^{n}\Delta_{i}\right)  ^{2}\right]  =\sum_{i=1}^{n}\mathbb{E}\left[ \Delta_{i}^{2}\right]  +2\sum_{j>i}\mathbb{E}\left[  \Delta_{i}\Delta
+_{j}\right]$$
+
+--
 
 Now if $j>i$, $\mathbb{E}_i \Delta_{j}  =0$ implies that
 
-$$\mathbb{E}_i\left[  \Delta_{j}\Delta_{i}\right]  =\Delta_{i}
-\mathbb{E}_{i} \Delta_{j}  =0~,$$
+$$\mathbb{E}_i\left[  \Delta_{j}\Delta_{i}\right]  =\Delta_{i}\mathbb{E}_{i} \Delta_{j}  =0$$
 
-and, a fortiori, $\mathbb{E}\left[  \Delta_{j}\Delta_{i}\right]  =0$.
-Thus, we obtain the following analog of the additivity formula
-of the variance:
+and, a fortiori,
 
-$$\operatorname{var}\left(  Z\right)  =\mathbb{E}\left[  \left(  \sum_{i=1}
-^{n}\Delta_{i}\right)  ^{2}\right]  =\sum_{i=1}^{n}\mathbb{E}\left[
-\Delta_{i}^{2}\right]~.$$
+$$\mathbb{E}\left[  \Delta_{j}\Delta_{i}\right]  =0$$
 
-Observe that up to now, we have not made any use of the fact that $Z$ is a function of
- independent variables $X_{1},\ldots,X_{n}$.
+---
+
+We obtain the following analog of the additivity formula of the variance:
+
+$$\operatorname{var}\left(  Z\right)  =\mathbb{E}\left[  \left(  \sum_{i=1}^{n}\Delta_{i}\right)  ^{2}\right]  =\sum_{i=1}^{n}\mathbb{E}\left[ \Delta_{i}^{2}\right]$$
+
+`r fontawesome::fa("hand-point-right")`  Up to now, we have not made any use of the fact that $Z$ is a function of
+ independent variables $X_{1},\ldots,X_{n}$
+
+---
+
+### Independence at work
 
 Independence may be used as in the following argument:
-for any integrable function $Z= f\left(  X_{1},\ldots,X_{n}\right)$ one may write,
+
+For any integrable function $Z= f\left(  X_{1},\ldots,X_{n}\right)$ one may write,
 by the Tonelli-Fubini theorem,
 
-$$\mathbb{E}_i Z  =\int
-_{\mathcal{X}^{n-i}}f\left(  X_{1},\ldots,X_{i},x_{i+1},\ldots,x_{n}\right)
-d\mu_{i+1}\left(  x_{i+1}\right)  \ldots d\mu_{n}\left(  x_{n}\right)  \text{,}$$
+$$\mathbb{E}_i Z  =\int _{\mathcal{X}^{n-i}}f\left(  X_{1},\ldots,X_{i},x_{i+1},\ldots,x_{n}\right) d\mu_{i+1}\left(  x_{i+1}\right)  \ldots d\mu_{n}\left(  x_{n}\right)  \text{,}$$
 
-where, for every $j= 1,\ldots,n$, $\mu_{j}$ denotes the
-probability distribution of $X_{j}$. Also, if we denote by
-$\mathbb{E}^{(i)}$ the conditional expectation operator conditioned on
-$X^{(i)}=(X_{1},\ldots,X_{i-1},X_{i+1},\ldots,X_{n})$, we have
+where, $X_j \sim \mu_{j}$ for  $j= 1,\ldots,n$
 
-$$\mathbb{E}^{(i)}Z %%%%%\left[  Z\right]
-=\int_{\mathcal{X}}
-f\left(  X_{1},\ldots,X_{i-1},x_{i},X_{i+1},\ldots,X_{n}\right)  d\mu_{i}\left(
-x_{i}\right)~.$$
+---
 
-Then, again by the Tonelli-Fubini theorem,
-\begin{equation}
-\mathbb{E}_i\left[  \mathbb{E}^{\left(  i\right)  } Z \right]
- =\mathbb{E}_{i-1} Z  \text{.}
-  (\#eq:efundind)
-\end{equation}
+Denote by $\mathbb{E}^{(i)}$ the conditional expectation operator conditioned on
+$X^{(i)}=(X_{1},\ldots,X_{i-1},X_{i+1},\ldots,X_{n})$,
+
+$$\mathbb{E}^{(i)} Y = \mathbb{E}\left[ Y \mid \sigma(X_{1},\ldots,X_{i-1},X_{i+1},\ldots,X_{n})\right]$$
+
+--
+
+$$\mathbb{E}^{(i)}Z  =\int_{\mathcal{X}} f\left(  X_{1},\ldots,X_{i-1},x_{i},X_{i+1},\ldots,X_{n}\right) d\mu_{i}\left(x_{i}\right)$$
+
+Again by the Tonelli-Fubini theorem:
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+$$\mathbb{E}_i\left[  \mathbb{E}^{\left(  i\right)  } Z \right] =\mathbb{E}_{i-1} Z$$
+
+]
 
 ---
 
 
-### Theorem Efron-Stein-Steele's inequalities
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
+### Theorem:  Efron-Stein-Steele's inequalities (I)
 
-Let $X_1,\ldots,X_n$
-be independent random variables and let $Z=f(X)$ be
+Let $X_1,\ldots,X_n$ be independent random variables and let $Z=f(X)$ be
 a square-integrable function of $X=\left(  X_{1},\ldots,X_{n}\right)$.
 
 Then
 
-$$\operatorname{var}\left(  Z\right)  \leq\sum_{i=1}^n\mathbb{E}\left[
+$$\operatorname{var}\left(  Z\right)  \leq \sum_{i=1}^n\mathbb{E}\left[
 \left(  Z-\mathbb{E}^{(i)} Z  \right)^2\right]  = v$$
 
-Moreover if
-$X_1',\ldots,X_n'$ are independent copies of $X_1,\ldots,X_n$ and if we define,
-for every $i=1,\ldots,n$,
+]
+
+---
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Theorem:  Efron-Stein-Steele's inequalities (II)
+
+Let $X_1',\ldots,X_n'$ be independent copies of $X_1,\ldots,X_n$ and
 
 $$Z_i'=  f\left(X_1,\ldots,X_{i-1},X_i',X_{i+1},\ldots,X_n\right)~,$$
 
@@ -238,47 +358,68 @@ $$v=\inf_{Z_{i}}\sum_{i=1}^{n}\mathbb{E}\left[  \left(  Z-Z_{i}\right)^2\right]~
 where the infimum is taken over the class of all $X^{(i)}$-measurable
 and square-integrable variables $Z_{i}$, $i=1,\ldots,n$.
 
+]
+
+
 ---
 
 ### Proof
 
-We begin with the proof of the first statement.
-Note that, using \@ref(eq:efundind), we may write
+Using
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+$$\mathbb{E}_i\left[\mathbb{E}^{\left(i\right)} Z \right] = \mathbb{E}_{i-1} Z$$
+
+]
+
+we may write
 
 $$\Delta_{i}=\mathbb{E}_i\left[  Z-\mathbb{E}^{\left(  i\right)  } Z  \right]$$
 
-By the conditional Jensen inequality,
+By the conditional Jensen Inequality,
 
-$$\Delta_{i}^{2}\leq\mathbb{E}_i\left[  \left(  Z-\mathbb{E}^{\left(
-i\right)  }Z  \right)  ^{2}\right]$$
+$$\Delta_{i}^{2}\leq\mathbb{E}_i\left[  \left(  Z-\mathbb{E}^{\left(i\right)  }Z  \right)  ^{2}\right]$$
 
-Using $\operatorname{var}(Z) = \sum_{i=1}^n \mathbb{E}\left[ \Delta_i^2\right]$,
-we obtain the desired inequality.
+---
+
+### Proof  (continued)
+
+Using
+
+$$\operatorname{var}(Z) = \sum_{i=1}^n \mathbb{E}\left[ \Delta_i^2\right]$$
+
+we obtain
+
+$$\operatorname{var}(Z) \leq \sum_{i=1}^n \mathbb{E}\left[\mathbb{E}_i\left[  \left(  Z-\mathbb{E}^{\left(i\right)  }Z  \right)  ^{2}\right]\right]$$
 
 ---
 
 ### Proof (continued)
 
 To prove the identities for $v$,
-denote by
-$\operatorname{var}^{\left(i\right) }$ the conditional variance operator conditioned on
-$X^{\left(  i\right)  }$. Then we may write $v$ as
 
-$$v=\sum_{i=1}^{n}\mathbb{E}\left[  \operatorname{var}^{\left(  i\right)  }\left(
-Z\right)  \right]  \text{.}$$
+Denote by
+$\operatorname{var}^{\left(i\right) }$ the conditional variance operator conditioned on $X^{\left(  i\right)  }$
 
-Now note that one may
-simply
-use (conditionally) the elementary fact that
-if $X$ and $Y$ are independent and identically
-distributed real-valued random variables, then $\operatorname{var}(X)=(1/2) \mathbb{E}[(X-Y)^2]$.
+$$\operatorname{var}^{\left(i\right)}(Y) =  \mathbb{E}\left[ \left(Y - \mathbb{E}^{\left(i\right)}Y\right)^2\mid \sigma(X_1, \ldots, X_{i-1}, X_{i+1}, \ldots, X_n)\right]$$
+
+Then we may write $v$ as
+
+$$v=\sum_{i=1}^{n}\mathbb{E}\left[  \operatorname{var}^{\left(  i\right)  }\left(Z\right)  \right]$$
 
 ---
 
 ### Proof (continued)
 
-Since conditionally on $X^{\left(  i\right)  }$,
-  $Z_i'$ is an independent copy of $Z$, we may write
+`r fontawesome::fa("hand-point-right")` one may simply use (conditionally) the elementary fact that
+if $X$ and $Y$ are independent and identically distributed real-valued random variables, then
+
+$$\operatorname{var}(X)=(1/2) \mathbb{E}[(X-Y)^2]$$
+
+
+Conditionally on $X^{\left(  i\right)  }$, $Z_i'$ is an independent copy of $Z$
 
 $$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\frac{1}{2}\mathbb{E}
 ^{\left(  i\right)  }\left[  \left(  Z-Z_i'\right)^2\right]
@@ -286,43 +427,41 @@ $$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\frac{1}{2}\mathbb{E
 =\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_i'\right)_-^2\right]$$
 
 where we used the fact that the conditional distributions of $Z$ and $Z_i'$
-are identical.
+are identical
 
 ---
 
 ### Proof (continued)
 
-The last identity is obtained
-by recalling that, for any real-valued random variable $X$,
-$\operatorname{var}(X) = \inf_{a\in \mathbb{R}} \mathbb{E}[(X-a)^2]$.
-Using this fact conditionally, we have, for every $i=1,\ldots,n$,
+`r fontawesome::fa("syringe")` For any real-valued random variable $X$,
 
-$$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\inf_{Z_{i}}
-\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_{i}\right)^2\right]~.$$
+$$\operatorname{var}(X) = \inf_{a\in \mathbb{R}} \mathbb{E}[(X-a)^2]$$
 
-Note that this
-infimum is achieved whenever $Z_{i}=\mathbb{E}^{\left(  i\right)  } Z$.
+Using this fact conditionally, for every $i=1,\ldots,n$,
+
+$$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\inf_{Z_{i}}\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_{i}\right)^2\right]$$
+
+`r fontawesome::fa("hand-point-right")` the infimum is achieved whenever $Z_{i}=\mathbb{E}^{\left(i\right)}Z$.
+
 `r fontawesome::fa("square")`
 
 ---
 
-
-`r fontawesome::fa("exclamation-triangle")` Observe that in the case when $Z=\sum_{i=1}^n X_i$ is a sum of
+`r fontawesome::fa("exclamation-triangle")` When $Z=\sum_{i=1}^n X_i$ is a sum of
 independent random variables (with finite variance) then
 the Efron-Stein-Steele inequality  becomes an equality.
 
-Thus, the bound in the Efron-Stein-Steele inequality is, in a sense,
-not improvable.
-
+The bound in the Efron-Stein-Steele inequality is, _in a sense_, not improvable.
 
 ---
 class: inverse, center, middle
 name: mcdiarmid
 
-## Bounding the variance : examples
+## Bounding the variance : example
 
 
 ---
+exclude: true
 
 ### Random graphs  (Erdös-Rényi)
 
@@ -333,12 +472,14 @@ name: mcdiarmid
 - size of giant component (for super-critical graphs)
 
 ---
+exclude: true
 
 ### Longest Increasing Subsequence
 
 - Ulam's problem
 
 ---
+exclude: true
 
 ### Norms of random vectors
 
@@ -346,16 +487,200 @@ name: mcdiarmid
 
 ### Random matrices
 
-- Largest eigenvalue
+- Largest eigenvalue of a random symmetric matrix with bounded entries
+
+$$X =\begin{pmatrix}0 & \epsilon_{1,2} & \ldots & \epsilon_{1,n} \\
+\epsilon_{1,2} &  0 & \ddots & \vdots \\
+\vdots & \ddots & \ddots & \epsilon_{n-1,n}\\
+\epsilon_{1,n} &  \ldots & \epsilon_{n-1,n} &  0
+\end{pmatrix}$$
+
+where $(\epsilon_{i,j})_{i<j}$ are i.i.d. random symmetric signs
+
+
+$$Z =  \sup_{\|\lambda\|_2 \leq 1} \lambda^T X \lambda = 2 \sup_{\|\lambda\|_2 \leq 1} \sum_{i< j} \lambda_i \lambda_j \epsilon_{i,j}$$
+
+
+$$\operatorname{var}\left(Z\right) \leq 4$$
+
 
 ---
+exclude: true
 
 ###  Bin packing
 
 
 ---
+exclude: true
 
 ### Order statistics
+
+
+---
+class: inverse, center, middle
+name: hoeffding
+
+## Hoeffding's inequality
+
+---
+
+Laws of large numbers are asymptotic statements.
+In applications, in Statistics, in Statistical Learning Theory, it is often desirable
+to have guarantees  for fixed $n$. Exponential inequalities are
+refinements of Chebychev inequality. Under strong integrability assumptions
+on the summands, it is possible and relatively easy to derive sharp tail
+bounds for sums of independent random variables.
+
+---
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Lemma  Hoeffding Lemma
+
+Let $Y$ be a random variable  taking
+values in a bounded interval $[a,b]$ and
+let $\psi_Y(\lambda)=\log \mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}$
+
+Then
+
+$$\operatorname{var}(Y) \leq \frac{(b-a)^2}{4}\qquad \text{and} \qquad \psi_Y(\lambda) \leq \frac{1}{2} \frac{(b-a)^2}{4}$$
+
+]
+
+---
+
+
+### Proof
+
+The upper bound on the variance of $Y$ has been established.
+
+Now let $P$ denote the distribution of $Y$ and let $P_{\lambda}$ be the
+probability distribution with density
+
+$$x \rightarrow e^{-\psi_{Y}\left(  \lambda\right)  }e^{\lambda (x - \mathbb{E}Y)}$$
+
+with respect to $P$.
+
+Since $P_{\lambda}$ is concentrated on
+$[a,b]$ ( $P_\lambda([a, b]) = P([a, b]) =1$ ), the variance of a random
+variable $Z$ with distribution $P_{\lambda}$ is bounded by $(b-a)^2/4$
+
+---
+
+### Proof (continued)
+
+Note that $P_0 = P$.
+
+Dominated convergence arguments allow to compute the derivatives of $\psi_Y(\lambda)$.
+
+Namely
+
+$$\psi'_Y(\lambda) = \frac{\mathbb{E}\Big[ (Y- \mathbb{E}Y) e^{\lambda (Y- \mathbb{E}Y)} \Big]}{\mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}} = \mathbb{E}_{P_\lambda} Z$$
+
+and
+
+$$\psi^{\prime\prime}_Y(\lambda) = \frac{\mathbb{E}\Big[ (Y- \mathbb{E}{Y})^2 e^{\lambda (Y- \mathbb{E}Y)} \Big]}{\mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}} - \Bigg(\frac{\mathbb{E}\Big[ (Y- \mathbb{E}{Y}) e^{\lambda (Y- \mathbb{E}Y)} \Big]}{\mathbb{E} e^{\lambda (Y- \mathbb{E}Y)}}\Bigg)^2
+= \operatorname{var}_{P_\lambda}(Z)$$
+
+
+---
+
+### Proof (continued)
+
+Hence,  thanks to the variance upper bound:
+\begin{align*}
+\psi_Y^{\prime\prime}(\lambda) & \leq \frac{(b-a)^2}{4}~.
+\end{align*}
+
+Note that
+$\psi_{Y}(0)  = \psi_{Y}'(0) =0$, and
+by Taylor's theorem, for some
+$\theta \in [0,\lambda]$,
+
+$$\psi_Y(\lambda) = \psi_Y(0) + \lambda\psi_Y'(0)  + \frac{\lambda^2}{2}\psi_Y''(\theta)   \leq  \frac{\lambda^2(b-a)^2}{8}$$
+
+`r fontawesome::fa("square")`
+
+
+---
+
+
+The upper bound on the variance is sharp in the
+special case of a _Rademacher_ random variable
+$X$ whose distribution is defined by
+
+$$P\{X =-1\} = P\{X =1\} = 1/2$$
+
+Then one may take $a=-b=1$ and $\operatorname{var}(X)  =1=\left(  b-a\right)^2/4$.
+
+--
+
+We can now build on Hoeffding's Lemma to derive  very practical tail bounds
+for sums of bounded independent random variables.
+
+---
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Theorem Hoeffding's inequality
+
+Let $X_1,\ldots,X_n$ be
+independent random variables such that $X_i$
+takes its values in $[a_i,b_i]$ almost surely for all $i\leq n$.
+
+Let
+
+$$S=\sum_{i=1}^n\left(X_i- \mathbb{E} X_i \right)$$
+
+Then
+
+$$\operatorname{var}(S) \leq v = \sum_{i=1}^n  \frac{(b_i-a_i)^2}{4}$$
+
+$$\forall \lambda \in \mathbb{R}, \qquad \log \mathbb{E} \mathrm{e}^{\lambda S} \leq \frac{\lambda^2 v}{2}$$
+
+$$\forall t>0, \qquad P\left\{  S \geq t \right\}  \le
+\exp\left( -\frac{t^2}{2 v}\right)$$
+
+]
+
+---
+
+The proof is based on the so-called Cramer-Chernoff bounding technique and on Hoeffding's Lemma.
+
+### Proof
+
+The upper bound on variance follows from $\operatorname{var}(S) = \sum_{i=1}^n \operatorname{var}(X_i)$ and from the first part of Hoeffding's Lemma.
+
+For the upper-bound on $\log \mathbb{E} \mathrm{e}^{\lambda S}$,
+
+$$\begin{array}{rl}\log \mathbb{E} \mathrm{e}^{\lambda S} & = \log \mathbb{E} \mathrm{e}^{\sum_{i=1}^n \lambda (X_i - \mathbb{E} X_i)} \\ & = \log \mathbb{E} \Big[\prod_{i=1}^n  \mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big]  \\ & = \log \Big(\prod_{i=1}^n  \mathbb{E} \Big[\mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big]\Big)  \\ & = \sum_{i=1}^n \log \mathbb{E} \Big[\mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big] \\ & \leq  \sum_{i=1}^n \frac{\lambda^2 (b_i-a_i)^2}{8} \\ & = \frac{\lambda^2 v}{2}\end{array}$$
+
+where the third equality comes from independence of the $X_i$'s and the  inequality follows from
+invoking  Hoeffding's Lemma for each summand.
+
+---
+
+### Proof (continued)
+
+The Cramer-Chernoff technique consists of using Markov's inequality with exponential moments.
+
+$$\begin{array}{rl}P \big\{ S \geq t \big\} & \leq \inf_{\lambda\geq 0}\frac{\mathbb{E} \mathrm{e}^{\lambda S}}{\mathrm{e}^{\lambda t}} \\ & \leq \exp\Big(- \sup_{\lambda \geq 0} \big( \lambda t - \log \mathbb{E} \mathrm{e}^{\lambda S}\big) \Big)\\ & \leq \exp\Big(- \sup_{\lambda \geq 0}\big(  \lambda t - \frac{\lambda^2 v}{2}\big) \Big) \\ & = \mathrm{e}^{- \frac{t^2}{2v}  }\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+Hoeffding's inequality provides interesting tail bounds for binomial random variables which are sums of independent $[0,1]$-valued random variables.
+
+However in some cases, the variance  upper bound used in Hoeffding's inequality
+is excessively conservative.
+
+Think for example of binomial random variable with parameters $n$ and $\mu/n$,
+the variance upper-bound obtained from the boundedness assumption is $n$ while the true variance is $\mu$
+
 
 ---
 class: inverse, center, middle
@@ -376,28 +701,31 @@ much on any of them is concentrated around its mean or median value.
 
 ---
 
-### Theorem: Bounded differences inequalities
 
-Let $X_1, \ldots, X_n$ be independent random variables on some probability space
-with values in $\mathcal{X}_1, \mathcal{X}_2, \ldots, \mathcal{X}_n$.
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Theorem: Bounded Differences Inequality
+
+Let $X_1, \ldots, X_n$ be independent with values in $\mathcal{X}_1, \mathcal{X}_2, \ldots, \mathcal{X}_n$.
+
 Let $f : \mathcal{X}_1 \times \mathcal{X}_2 \times  \ldots \times  \mathcal{X}_n \to \mathbb{R}$
-be a  measurable function such that there exists non-negative constants $c_1, \ldots, c_n$ satisfying
+be  measurable
+
+Assume there exists non-negative $c_1, \ldots, c_n$ satisfying
+
 $\forall x_1, \ldots, x_n \in \prod_{i=1}^n \mathcal{X}_i$,
 $\forall y_1, \ldots, y_n \in \prod_{i=1}^n \mathcal{X}_i$,
 
 $$\Big| f(x_1, \ldots, x_n) - f(y_1, \ldots, y_n)\Big|  \leq \sum_{i=1}^n c_i \mathbb{I}_{x_i\neq y_i}$$
 
-Let $Z =  f(X_1, \ldots, X_n)$ and $v = \sum_{i=1}^n \frac{c_i^2}{4}$.
-Then $$\operatorname{var}(Z)  \leq v$$
+Let $Z =  f(X_1, \ldots, X_n)$ and $v = \sum_{i=1}^n \frac{c_i^2}{4}$
+
+Then $\operatorname{var}(Z)  \leq v$
+
+$$\log \mathbb{E} \mathrm{e}^{\lambda (Z -\mathbb{E}Z)} \leq \frac{\lambda^2 v}{2}\qquad \text{and} \qquad P \Big\{ Z \geq \mathbb{E}Z + t \Big\} \leq \mathrm{e}^{-\frac{t^2}{2v}}$$
 
 
-$$\log \mathbb{E} \mathrm{e}^{\lambda (Z -\mathbb{E}Z)} \leq \frac{\lambda^2 v}{2}$$
-
-and
-
-$$P \Big\{ Z \geq \mathbb{E}Z + t \Big\} \leq \mathrm{e}^{-\frac{t^2}{2v}}$$
-
-
+]
 
 ---
 
@@ -408,11 +736,10 @@ The variance bound is an immediate consequence of the Efron-Stein-Steele inequal
 The tail bound follows from the upper bound on the logarithmic moment generating function
 by Cramer-Chernoff bounding.
 
-Let us now check the upper-bound on the logarithmic moment generating function.
+To check the upper-bound on the logarithmic moment generating function,
+we proceed by induction on the number of arguments $n$.
 
-We proceed by inudction on the number of arguments $n$.
-
-If $n=1$, the upper-bound on the logarithmic moment generating function is just Hoeffing's Lemma (see Section \@ref(expineq)).
+If $n=1$, the upper-bound on the logarithmic moment generating function is just Hoeffing's
 
 Assume the upper-bound is valid up to $n-1$.
 
@@ -449,7 +776,7 @@ $$\begin{array}{rl}
 
 ### Proof (continued)
 
-hence, by Hoeffding's Lemma
+By Hoeffding's Lemma
 
 $$\mathbb{E}_{n-1}\big[\mathrm{e}^{\lambda (Z - \mathbb{E}_{n-1}Z)}\big] \leq \mathrm{e}^{\frac{\lambda^2 c_n^2}{8}}$$
 
@@ -464,7 +791,9 @@ $$\mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}
 = \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, v) \mathrm{d}P_{X_n}(v) - \mathbb{E}Z \,,$$
 
 it is a function of $n-1$ independent random variables that satisfies the bounded differences conditions
-with constants $c_1, \ldots, c_{n-1}$. By the induction hypothesis:
+with constants $c_1, \ldots, c_{n-1}$.
+
+By the induction hypothesis:
 
 $$\mathbb{E}\Big[  \mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}  \Big]
 \leq \mathrm{e}^{\frac{\lambda^2}{2} \sum_{i=1}^{n-1} \frac{c_i^2}{4}}$$
@@ -482,8 +811,10 @@ It is also possible to prove the Radon-Nikodym Theorem starting from the constru
 
 The Section on Efron-Stein-Steele's inequalities is from [@BoLuMa13]
 
-Bounded difference inequality is due to C. McDiarmid. It became popular in (Theoretical) computer science during the 1990's.
-See [@McD97]
+Bounded difference inequality is due to C. McDiarmid.
+
+It became popular in (Theoretical) computer science during the 1990's.
+
 
 ---
 class: inverse, middle, center
@@ -492,21 +823,222 @@ class: inverse, middle, center
 
 ---
 
-### Simplest setting
+### Maximal inequalities: simplest setting
 
-$$Z = \max(X_1, \ldots, X_n)$$
-
-with
-
-$$X_1, \ldots, X_n \sim_{\text{i.i.d.}} P$$
+$Z = \max(X_1, \ldots, X_n)$ with
+$X_1, \ldots, X_n \sim_{\text{i.i.d.}} P$
 
 --
+
+Goal:
 
 $$\mathbb{E} Z \leq \text{something that depends on }n \text{ and on }P$$
 
 Dependance on $n$ is tied to the tail behavior of $P$
 
 ---
+
+The purpose of this section is to show how information on the
+Cramér transform of random variables in a finite collection
+can be used to bound the expected maximum of these random variables.
+
+
+---
+
+The main idea is perhaps most transparent if we consider _sub-Gaussian_ random variables.
+
+Let $Z_1,\ldots,Z_N$ be real-valued
+random variables such that there exists a $v>0$ such that for every
+$i=1,\ldots,N$, the logarithm of the moment generating function
+of $Z_i$ satisfies
+$\psi_{Z_i}(\lambda)  \leq \lambda^2v/2$ for all $\lambda >0$.
+
+Then by Jensen's inequality,
+
+$$\begin{array}{rcl} \exp \left(\lambda\,\mathbb{E} \max_{i=1,\ldots,N} Z_i \right)  & \leq & \mathbb{E} \exp\left(\lambda  \max_{i=1,\ldots,N} Z_i \right) \\ & = &   \mathbb{E} \max_{i=1,\ldots,N} e^{\lambda Z_i} \\ & \leq & \sum_{i=1}^N \mathbb{E} e^{\lambda Z_i} \\ & \leq &   N e^{\lambda^2v/2} \end{array}$$
+
+---
+
+Taking logarithms on both sides, we have
+
+$$\mathbb{E} \max_{i=1,\ldots,N} Z_i \le \frac{\log N}{\lambda}    + \frac{\lambda v}{2}$$
+
+The upper bound is minimized for  $\lambda = \sqrt{2\log N/v}$ which yields
+
+$$\mathbb{E} \max_{i=1,\ldots,N}Z_i\le \sqrt {2v\log N}$$
+
+This simple bound is (asymptotically) sharp if the $Z_i$ are i.i.d. normal random variables,
+
+---
+
+
+The argument above may be generalized beyond sub-Gaussian
+variables.
+
+Next we formalize such a general inequality but
+
+We start with a technical result that establishes a useful
+formula for the inverse of the Fenchel-Legendre dual of a smooth convex
+function.
+
+---
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Lemma
+
+Let $\psi$ be a convex and continuously differentiable
+function defined on  $\left[  0,b\right)$ where $0<b\leq\infty$.
+
+Assume that $\psi\left(  0\right)  =\psi'\left(  0\right)  =0$ and set, for every
+$t\geq0$,
+
+$$\psi^*(t)  =\sup_{\lambda\in (0,b)} \left( \lambda t-\psi(\lambda)\right)$$
+
+Then $\psi^*$ is a nonnegative convex and nondecreasing function on $[0,\infty)$.
+
+For every $y\geq 0$,  $\left\{  t \ge 0: \psi^*(t)  >y\right\}\neq \emptyset$
+and  the generalized inverse of $\psi^*$, defined by
+
+$$\psi^{*\leftarrow}(y)  =\inf\left\{  t\ge 0:\psi^*(t)  >y \right\}$$
+
+can also be written as
+
+$$\psi^{*\leftarrow}(y)  =\inf_{\lambda\in (0,b)  } \left[ \frac{y +\psi(\lambda)}{\lambda}\right]$$
+
+]
+
+---
+
+### Proof
+
+By definition, $\psi^*$ is the supremum of convex and nondecreasing
+functions on $[0,\infty)$ and $\psi^*(0)  =0$,
+
+therefore
+
+$\psi^*$ is a nonnegative, convex, and nondecreasing function on $[0,\infty)$.
+
+Given $\lambda\in (0,b)$, since $\psi^*(t)  \geq\lambda t-\psi(\lambda)$,
+$\psi^*$ is unbounded which shows that
+
+$$\forall y\geq 0, \qquad \left\{  t\geq 0:\psi^*(t)  >y\right\} \neq \emptyset$$
+
+Defining
+
+$$u=\inf_{\lambda\in (0,b)} \left[  \frac{y+\psi(\lambda)  }{\lambda}\right]$$
+
+For every $t \ge 0$, we have $u\geq t$ iff
+
+$$\forall  \lambda \in (0,b), \qquad \frac{y+\psi(\lambda)  }{\lambda}\geq t$$
+
+As this implies $y\ge \psi^*(t)$, we have $\left\{ t\ge 0:\psi^*(t)> y\right\} = (u,\infty)$
+
+This proves that $u=\psi^{*-1}(y)$ by definition of $\psi^{*-1}$.
+
+`r fontawesome::fa("square")`
+
+---
+
+The next result offers a convenient bound for the expected value
+of the maximum of finitely many exponentially integrable
+random variables.
+
+This type of bound has been used in _chaining arguments_ for bounding
+suprema of Gaussian or empirical processes
+
+---
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+
+### Theorem
+
+Let $Z_1,\ldots,Z_N$ be real-valued random variables
+such that for every $\lambda\in (0,b)$ and
+$i=1,\ldots,N$, the logarithm of the moment generating function
+of $Z_i$ satisfies
+
+$$\psi_{Z_i}(\lambda)  \leq \psi(\lambda)$$
+
+where $\psi$ is a convex and
+continuously differentiable function on $(0,b)$
+with $0<b\leq\infty$ such that $\psi(0)=\psi'(0)=0$
+
+Then
+
+$$\mathbb{E} \max_{i=1,\ldots,N} Z_i \leq \psi^{*\leftarrow}(\log N)$$
+
+
+]
+
+---
+
+If the $Z_i$ are sub-Gaussian with variance factor $v$,
+that is, $\psi(\lambda)  =\lambda^2v/2$ for every $\lambda\in (0,\infty)$,
+then
+
+$$\mathbb{E} \max_{i=1,\ldots,N}Z_i \leq \sqrt {2v\log N}$$
+
+
+
+---
+
+### Proof
+
+By Jensen's inequality, for any $\lambda\in (0,b)$,
+
+$$\exp\left(  \lambda \mathbb{E} \max_{i=1,\ldots,N}Z_i \right) \leq \mathbb{E} \exp\left( \lambda\max_{i=1,\ldots,N}Z_i \right) = \mathbb{E} \max_{i=1,\ldots,N}\exp\left(\lambda Z_i \right)$$
+
+Recalling that $\psi_{Z_i}(\lambda)  =\log\mathbb{E}\exp\left(\lambda Z_i \right)$,
+
+$$\exp\left(  \lambda \mathbb{E} \max_{i=1,\ldots,N}Z_i \right)\leq \sum_{i=1}^N \mathbb{E} \exp\left(\lambda Z_i\right)
+\leq N  \exp\left(  \psi(\lambda)  \right)$$
+
+Therefore, for any $\lambda\in (0,b)$,
+
+$$\lambda \mathbb{E}  \max_{i=1,\ldots,N}Z_i -\psi(\lambda) \leq \log N$$
+
+which means that
+
+$$\mathbb{E} \max_{i=1,\ldots,N}Z_i \leq \inf_{\lambda\in (0,b)}\left(  \frac{\log N +\psi(\lambda)  }{\lambda}\right)$$
+
+and the result follows from Lemma
+
+`r fontawesome::fa("square")`
+
+---
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Corollary
+
+Let $Z_1,\ldots,Z_N$ be real-valued random variables belonging to $\Gamma_+(v,c)$
+
+Then
+
+$$\mathbb{E} \max_{i=1,\ldots,N} Z_i  \leq\sqrt{2v\log N}+ c\log N$$
+
+]
+
+---
+
+`r fontawesome::fa("binoculars")`
+
+.ttc[chi-squared distribution]
+
+If $p$ is a positive integer, a gamma random variable with parameters
+$a=p/2$ and $b=2$ is said to have chi-square distribution with
+$p$ _degrees of freedom_ ( $\chi^2_p$ )
+
+`r fontawesome::fa("point-hand-right")` If $Y_1,\ldots,Y_p \sim_{\tetx{i.i.d.}} \mathcal{N}(0,1)$ then $\sum_{i=1}^p Y_i^2  \sim \chi^2_p$
+
+If $X_1,\ldots,X_N$ have chi-square distribution with $p$ degrees of freedom,
+
+then
+
+$$\mathbb{E}\left[  \max_{i=1,\ldots,N} X_i - p\right] \leq 2\sqrt{p\log N }+ 2\log N$$
 
 
 
