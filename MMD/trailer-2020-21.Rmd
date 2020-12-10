@@ -76,7 +76,7 @@ class: middle, center, inverse
 
 .avenir[
 
-.f1.b[Algorithms for Big Data]
+.f1.b[MMD: Algorithms for Big Data]
 
 .f2[ `r Sys.Date()`]
 
@@ -84,98 +84,155 @@ class: middle, center, inverse
 
 ]
 
----
-class: middle
-
-
-
-.avenir.f3.b[Nearest Neighbour Methods and High Dimension]
-
 
 ---
 
-.helvetica.f3.b.ttc[nearest neighbour methods]
+.avenir.w-third.fl.pa2[
 
+.f3[Nearest Neighbors]
 
+.f3.moon-gray[Streaming]
 
-.helvetica.w-50.fl.pa2[
- 
-.f4[Statistical curse of dimensionality]
-  
-Nearest neighbor methods suffer from the curse of dimensionality  
-  
-]
+.f3.moon-gray[Robust estimation]
 
-.helvetica.w-50.fl.pa2[
-
-.f4[Algorithmic curse of dimensionality]
-
-A nearest-neighbor query should not require linear time
 
 ]
 
+.avenir.w-two-thirds.fl.pa2[
 
----
+.f3.b[Nearest neighbors `r fontawesome::fa("users")`]
 
+.f3[
 
-.helvetica[
+- Curse of dimensionality  `r fontawesome::fa("satellite-dish")`
 
-.w-50.fl.pa2[
+- Nearest neighbors and feature engineering
 
-.f3.b[Problems]
+- Similarity detection  `r fontawesome::fa("theater-masks")`
 
-- given a collection $E$ of $n$ points and a new point $x$ (in some space), find the $r$ points in $E$ that are closest to $x$
+- Randomization (Hashing) helps: LSH
 
-- given a collection $E$ of $n$ points, find all pair of points 
-that are within distance $\delta$
+- Which similarities enjoy LSH schemes? `r fontawesome::fa("coffee")`
 
-]
-
-.w-50.fl.pa2[
-
-.f3.b[Scope:]
-
-- Spark .ttc[feature engineering]
-
-- Dask
-
-- Sk-Learn 
-
-]
+- `spark.ml....`
 
 ]
 
 
-
----
-
-.avenir.f2.b[Streaming]
-
----
-
-.avenir.f2.b[Median of Means]
+]
 
 ---
 
 
+.avenir.w-third.fl.pa2[
+
+.f3.moon-gray[Nearest Neighbors]
+
+.f3[Streaming]
+
+.f3.moon-gray[Robust estimation]
+
+
+]
+
+.avenir.w-two-thirds.fl.pa2[
+
+.f3.b[Streaming `r fontawesome::fa("mug-hot")` ]
+
+.f3[
+
+- stream sampling `r fontawesome::fa("stream")`
+
+- stream statistics `r fontawesome::fa("chart-area")`
+
+- `Kafka`
+
+- `spark.stream`
+
+]
+
+
+]
+
+---
+
+.avenir.w-third.fl.pa2[
+
+.f3.moon-gray[Nearest Neighbors]
+
+.f3.moon-gray[Streaming]
+
+.f3[Robust estimation]
+
+
+]
+
+.avenir.w-two-thirds.fl.pa2[
+
+.f3.b[Robustness `r fontawesome::fa("dumbbell")` ]
+
+.f3[
+
+- MOM: Median of Means
+
+- MOM tournaments
+
+- Learning without concentration
+
+- Polynomial optimization
+
+]
+
+]
+
+
+---
+
+.avenir[
+
+.f2.b[Evaluation  `r fontawesome::fa("user-graduate")`]
+
+.f3[
+
+- Neighbors `r fontawesome::fa("laptop-code")`
+
+
+- Streams  `r fontawesome::fa("laptop-code")`
+
+
+- Robustness `r fontawesome::fa("pen-nib")`
+
+]
+
+]
+
 ---
 
 
+.avenir[
+
+.f3[Stéphane Boucheron]
+
+]
+
+```{r, echo=FALSE}
+knitr::include_url("http://stephane-v-boucheron.fr")
+```
 
 ---
+exclude: true
+class: middle, center, inverse
 
 
----
 
+.f1.b.avenir[Merci]
 
----
 
 ---
 
 class: middle, center, inverse
-
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
 background-size: 112%
 
 
-# The End
+.f1.b.avenir[Merci]
