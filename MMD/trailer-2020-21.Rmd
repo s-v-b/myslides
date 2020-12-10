@@ -225,7 +225,7 @@ class: middle, center, inverse
 
 
 
-.f1.b.avenir[Merci]
+.f1.avenir[Merci]
 
 
 ---
@@ -235,4 +235,4 @@ background-image: url('./img/pexels-cottonbro-3171837.jpg')
 background-size: 112%
 
 
-.f1.b.avenir[Merci]
+.f1.avenir[Merci]
