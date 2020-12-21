@@ -1,0 +1,1505 @@
+---
+title: "Univariate statistics"
+subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css",  "conf/css/style.css", "conf/css/fonts.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+xaringanExtra::use_animate_css()
+
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_tachyons(minified = FALSE)
+
+xaringanExtra::use_logo(
+  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+
+xaringanExtra::use_editable(expires = 1)
+
+source("./loaders_fixers.R")
+```
+
+
+<style>
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: red;
+}
+</style>
+
+
+
+
+---
+class: middle, center, inverse
+
+# Univariate Statistics
+
+### `r Sys.Date()`
+
+#### EDA Master I MIDS et MFA
+
+
+---
+class: inverse, middle
+
+## `r fontawesome::fa("map", fill="white")`
+
+### Samples and variables
+
+### Summary statistics for numerical samples
+
+### Graphical summaries for numerical samples
+
+### Summary statistics for categorical samples
+
+### Graphical summaries for categorical samples
+
+### Cummulative distribution functions and quantile functions
+
+---
+exclude: false
+
+Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.
+
+
+.font50[
+
+Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.
+
+
+]
+
+
+---
+class: middle, center, inverse
+
+## Samples
+
+---
+
+### Definition
+
+A _sample_ is a sequence of items of the same type
+
+
+In `r fontawesome::fa("r-project")`, if the type matches a basetype, a sample is typically represented using a `vector`
+
+A numerical (quantitative) sample is just a sequence of numbers (either integers
+or floats), it is represented by a `numeric` vector.
+
+A _categorical_ (qualitative)  sample is a sequence of values  from  some predefined finite set
+
+In `r fontawesome::fa("r-project")`, categorical samples are handled using a special class: `factor`
+
+---
+
+In this lesson, we are concerned with _univariate statistics_, that
+is either with
+
+- _numerical samples_,
+
+- with _categorical samples_ taken from some finite (or seldom countable) set
+
+
+`r fontawesome::fa("exclamation-triangle")` The boundary between qualitative and quantitative is not always straightforward
+
+---
+class: middle, center, inverse
+
+## Summary statistics
+
+---
+
+### For quantitative variables
+
+- Mean: $\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i$  (location)
+
+- Standard deviation: $s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2$  or $s^2 = \frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2$  (dispersion)
+
+- Skewness   $\frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^3}{s^3}$
+
+- Kurtosis $\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^4}{s^4} - 2$
+
+---
+
+
+
+```{r}
+s <- rnorm(1000)
+
+mean(s) - sum(s)/length(s)
+
+sd(s) - sqrt(sum((s-mean(s))^2)/(length(s)-1))
+
+mean((s- mean(s))^4)/sd(s)^4 -3
+```
+
+---
+
+### TODO
+
+```{r}
+s <- rnorm(10)
+s[c(2, 3, 7)] = NA_real_
+s
+```
+
+```{r}
+mean(s)
+mean(s, na.rm = TRUE)
+mean(s[-c(2, 3, 7)])
+```
+
+
+
+---
+
+### Missing values and trimming
+
+The code for `mean.default` goes beyond computing the weighted mean
+
+```{r, eval=FALSE}
+function (x, trim = 0, na.rm = FALSE, ...)
+{
+    if (!is.numeric(x) && !is.complex(x) && !is.logical(x)) {
+        warning("argument is not numeric or logical: returning NA")
+        return(NA_real_)
+    }
+    if (na.rm)    #<<
+        x <- x[!is.na(x)]    #<<
+    if (!is.numeric(trim) || length(trim) != 1L)
+        stop("'trim' must be numeric of length one")
+    n <- length(x)
+    if (trim > 0 && n) {
+        if (is.complex(x))
+            stop("trimmed means are not defined for complex data")
+        if (anyNA(x))
+            return(NA_real_)
+        if (trim >= 0.5)
+            return(stats::median(x, na.rm = FALSE))
+        lo <- floor(n * trim) + 1      #<<
+        hi <- n + 1 - lo               #<<
+        x <- sort.int(x, partial = unique(c(lo, hi)))[lo:hi]  #<<
+    }
+    .Internal(mean(x))
+}
+
+```
+
+---
+
+- What happens when `na.rm` is `TRUE`?
+
+- What are the possible values of argument `trim`?
+
+- If `trim` belongs to $(0, 1/2)$ what happens?
+
+- Which lines actually compute the (uniformly) weighted mean?
+
+
+---
+
+In a _tidy_ sample, _missing values_ are explicitely pointed as missing information using special objects `NA`, `NA_integer_`, `NA_real_`, ...
+
+To compute summary statistics when facing missing values,  `na.rm` has to be `TRUE`.
+
+What is the class of `NA`, `NA_integer_`, `NA_real_`?
+
+---
+class: middle, center, inverse
+
+## Robust summary statistics
+
+
+---
+
+```{r}
+summary(s)
+```
+
+---
+
+- Order statistics: $x_{1:n} \leq x_{2:n} \leq \ldots \leq x_{n:n}$
+
+- Median.  $x_{\lfloor n/2\rfloor+1:n}$ if $n$ is odd,
+$(x_{n/2:n}+ x_{n/2+1:n})/2$ if $n$ is even
+
+- Quartiles, $x_{\lfloor n/4\rfloor:n}$ and $x_{\lfloor 3 n/4\rfloor:n}$
+
+- Quintiles $x_{\lfloor k n/5\rfloor:n}$ pour $k \in 1, \ldots, 4$
+
+- Deciles $x_{\lfloor k n/10\rfloor:n}$ pour $k \in 1, \ldots, 9$
+
+- Percentiles
+
+- L-estimators
+
+---
+
+Why _robustness_?
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
+
+]
+
+---
+exclude: true
+
+
+Let $x_1, \ldots,  x_n$ be a numerical sample.
+
+```{r}
+rapportools::kurtosis
+```
+
+Check that the kurtosis and the skewness are translation invariant.
+
+---
+class: middle, center, inverse
+
+## Boxplots
+
+---
+
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+In descriptive statistics, a box plot or boxplot is a method for graphically depicting groups of numerical data through their _quartiles_.
+
+Box plots may also have lines extending from the boxes (whiskers) indicating variability outside the upper and lower quartiles, hence the terms box-and-whisker plot and box-and-whisker diagram.
+
+_Outliers_ may be plotted as individual points.
+
+Box plots are non-parametric: they display variation in samples of a statistical population without making any assumptions of the underlying statistical distribution (though Tukey's boxplot assumes symmetry for the whiskers and normality for their length).
+
+The spacings between the different parts of the box indicate the degree of _dispersion_ (spread) and _skewness_ in the data, and show _outliers_.
+
+In addition to the points themselves, they allow one to visually estimate various _L-estimators_, notably the _interquartile range_, _midhinge_, _range_, _mid-range_, and _trimean_.
+
+
+.tr[
+[Wikipedia](https://en.wikipedia.org/wiki/Box_plot)
+]
+
+]
+
+---
+
+> Tukey's boxplot assumes symmetry for the whiskers and normality for their length
+
+What does this mean?
+
+Assume that we _boxplot_ the $\mathcal{N}(\mu, \sigma^2) \sim \mu + \sigma \mathcal{N}(0, 1)$ distribution instead of an empirical distribution.
+
+Then:
+
+- The median is equal to $\mu$ because of the symmetry of $\mathcal{N}(0,1)$,
+
+- The quartiles are $\mu - \sigma \Phi^{\leftarrow}(3/4)$ and $\mu + \sigma \Phi^{\leftarrow}(3/4)$.
+
+- The IQR is $2 \sigma  \Phi^{\leftarrow}(3/4) \approx 1.35\times \sigma$
+
+
+- The default length of the whiskers (under `geom_boxplot`) is
+$1.5 \times \text{IQR}$.
+
+- For a Gaussian population, this leads to
+$1.5 \text{IQR} = 3 \sigma \Phi^{\leftarrow}(3/4) \approx 2.02 \sigma \approx \sigma \Phi^{\leftarrow}(.98)$.
+
+---
+
+### Boxplot of a Gaussian sample
+
+.fl.w-50.pa2[
+
+```{r normal-boxplot-label, message=FALSE, warning=FALSE, fig.show='hide'}
+sample <-  rnorm(1000)
+title <- stringr::str_c("Standard Gaussian sample, size : ",
+                        length(sample))
+qplot(y=sample, x=1L) +
+  geom_boxplot() +  #<<
+  ggtitle(title) +
+  ylab("") +
+  ggplot2::theme(
+  axis.text.x = element_blank(),
+  axis.ticks.x = element_blank()
+  )
+
+summary(sample)
+```
+]
+
+.fl.w-50.pa2[
+
+
+![gauss-boxplot-label](`r knitr::fig_chunk("normal-boxplot-label", "png")`)
+
+]
+
+---
+
+If we _boxplot_ a Gaussian sample, on average, $4\%$ of the points lie outside the
+whiskers. Such points are called _outliers_
+
+Boxplots provide a visual assessment of the departure of a sample from normality.
+
+---
+
+
+### Boxplot of a non-Gaussian sample.
+
+
+.fl.w-50.pa2[
+
+The sampling distribution ($t$-distribution with $3$ degrees of freedom)
+is _heavy-tailed_
+
+Some sample points lie far away from the whiskers.
+
+```{r non-gauss-boxplot-label, fig.show='hide', out.width=.8}
+sample <- rt(1000, df=3)
+qplot(y=sample,
+      x=1L) +
+  geom_boxplot(linetype=1,      # <<
+               outlier.shape=10) +
+  ylab("") +
+  ggtitle("Non Gaussian sample")
+
+summary(sample)
+```
+
+]
+
+.fl.w-50.pa2[
+
+![non-gauss-boxplot-label](`r knitr::fig_chunk("non-gauss-boxplot-label", "png")`)
+
+]
+
+
+---
+class: middle, center, inverse
+
+## Violinplots
+
+
+---
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
+
+]
+
+
+
+---
+class: middle, center, inverse
+
+## Histograms
+
+
+---
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
+
+]
+
+---
+class: middle, center, inverse
+
+## Numerical summaries for categorical samples
+
+
+---
+
+### Titanic passenger dataset
+
+.fl.w-third.pa2[
+
+`r fontawesome::fa("ship")` The `Titanic` dataset comprises a list of (related) univariate 
+ samples: `Survived`, `Pclass`, `Sex`, `Embarked`, ...
+
+`r fontawesome::fa("swimmer")` Each sample element corresponds to a unique passenger on board of HMS Titanic 
+during her first transatlantic trip on April 1912. 
+
+`r fontawesome::fa("file-csv")`  The dataset obtained from [kaggle]() is built from two `csv` files: `train.csv` and `test.csv`. Column `Survived` is absent from file `test`. 
+
+
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+```{r}
+tit_col_types = cols(
+  
+  PassengerId = col_integer(),
+
+  Survived = col_factor(levels=c("0", "1"), 
+                        include_na = TRUE), 
+
+  Pclass = col_factor(levels=c("1", "2", "3"),  #<<
+                      ordered = TRUE,           #<<
+                      include_na = TRUE),       #<< 
+
+  Sex = col_factor(levels = c("female", "male")), 
+  Age = col_double(), 
+  SibSp = col_integer(), 
+  Parch = col_integer(),
+
+  Embarked = col_factor(levels = c("S", "C", "Q"), 
+                        include_na = TRUE)
+
+)
+
+```
+
+]
+
+---
+
+### Viewing (part of) the dataset
+
+.fl.w-40.pa2[ 
+
+`r fontawesome::fa("database")`  Table wrangling
+
+```{r load-titanic-label, echo=TRUE}
+train <- read_csv("DATA/titanic/train.csv", 
+          col_types=tit_col_types)  
+test <- read_csv("DATA/titanic/test.csv",
+          col_types=tit_col_types)
+
+test <- mutate(test, #<<
+               Survived=NA)  #<<
+
+tit <- union(train, 
+             test) 
+```
+
+]
+
+.fl.w-60.pa2[
+
+.small[
+
+`r fontawesome::fa("chalkboard-teacher")`  Reporting 
+
+```{r , echo=FALSE}
+tit %>% 
+  dplyr::select(Survived, Pclass, Sex, Age) %>% 
+  dplyr::sample_n(5) %>% 
+  kable()
+```
+
+]
+
+]
+
+---
+
+### Counts 
+
+For qualitative samples, summary statistics consists of _counts_: for each modality, we record the _number of occurences_ or _frequency_
+
+`r fontawesome::fa("exclamation-triangle")` In English, the _frequency_ of a symbol in a sequence is the number of  occurences
+
+In French, the _frequence_ of that symbol is the ratio between the number
+of occurences of the symbol and the total length of the sequence
+
+---
+
+### Summarizing `Pclass`
+
+
+```{r}
+summary(train$Pclass)
+
+table(train$Pclass) %>% 
+  kable(col.names = c("PClass", "Frequency"))
+```
+
+
+`r fontawesome::fa("r-project")`  : function `table()` uses the cross-classifying factors to build a _contingency table_ of the counts at each combination of factor levels.
+
+For univariate samples, ...  
+
+---
+
+### Summarizing `Embarked`
+
+
+```{r}
+summary(train$Embarked)
+
+table(train$Embarked) %>% 
+  kable(col.names = c("Embarkment", "Frequency"))
+```
+
+
+
+`r fontawesome::fa("")` Base function `summary` tells us everything there is to know: number of passengers for every class and passengers, and number of sample elements  with unknown class 
+
+`r fontawesome::fa("exclamation-triangle")` Base function `table` puts dust under the carpet:  number of passengers with unknown class is unreported 
+
+
+
+---
+exclude: true
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
+
+]
+
+---
+
+---
+exclude: true
+
+### Contingency tables
+
+
+```{r, eval=FALSE}
+data %>%
+  table() %>%
+  kable()
+```
+---
+class: middle, center, inverse
+
+## Graphical summaries for categorical samples
+
+---
+exclude: true
+
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
+
+]
+xx
+
+---
+class: middle, center, inverse
+
+## Barplots
+
+---
+
+For qualitative samples, `barplot` are a simple way of visualizing counts
+
+---
+
+### Bar plotting in one step using `geom_bar`
+
+.fl.w-50.pa2[
+
+
+
+
+```{r titanic-label-allin1, fig.show='hide'}
+tit %>% 
+  ggplot(mapping=aes(x=Pclass)) +  
+  geom_bar(width=.3) +      #<< 
+  ylab("Count") +
+  ggtitle("Titanic: boarding distributions")
+
+
+```
+
+]
+
+
+.fl.w-50.pa2[
+
+![titanic-label](`r knitr::fig_chunk("titanic-label-allin1", "png")`)
+
+
+]
+
+---
+
+### Barplotting as a two-step process. 
+
+1.  Compute _statistics_ from the raw
+data: we _count the number of occurrences of each symbol_. This is a simple yet non-trivial task. In SQL, this consists in `group by` and then `count`.    
+How would you proceed if you had to code this counting step? 
+
+2. Plot the counting data: for example, map the modalities/categories on the `X-axis` (possibly choosing an ordering), the counts are mapped on the `Y-axis`, they specify the height of each bar
+
+Most of the flexibility lies in the mapping of modalities on the `X-axis` or doing something different
+
+???
+
+Empasize 
+
+- distinction betweem `geom_`  and `stat_` 
+
+- 
+
+---
+
+### Bar plotting in two steps using `group_by()`, `n()` and `geom_col()`
+
+.fl.w-50.pa2[
+
+.small[
+
+
+```{r titanic-label, fig.show='hide'}
+p <- tit %>% 
+  group_by(Pclass) %>% 
+  summarise(Count=n()) %>%
+  ggplot(mapping=aes(x=Pclass, 
+                     y=Count)) +    
+  ggtitle("Titanic: boarding distributions") 
+
+p + geom_col(width=.3)  #<<
+```
+
+]
+]
+
+
+.fl.w-50.pa2[
+
+![titanic-label](`r knitr::fig_chunk("titanic-label", "png")`)
+
+
+]
+
+
+---
+
+### Playing with `stat_` and `geom_`
+
+`r fontawesome::fa("hand-point-right")`
+
+In the `ggplot` framework, a `geom_` function is paired with a default `stat_` function
+
+Once a data source and an (aesthetic) mapping have been fixed (telling which columns are fed to which axis), the data are (possibly) transformed using the `stat_`: a sample may be transformed into counts in order to build a contingency table and the result is then fed to the `geom_`
+
+---
+
+.fl.w-50.pa2[
+
+We could obtain the same plot using `geom_bar` using the `identity` stat.
+
+```{r tweak-bar-stat-label, fig.show='hide'}
+p + 
+  geom_bar(stat="identity", #<<
+           width=.3) #<< 
+```
+
+]
+
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("tweak-bar-stat-label", "png")`)
+
+
+]
+
+---
+
+.fl.w-50.pa2[
+Barplots provide us with a great way to compare counts of different categories.
+
+But it is somewhat difficult to figure out the relative frequencies
+of the different categories.
+
+One way to facilitate this consists of normalizing
+the counts by dividing all counts by sample size.
+
+```{r normalize-col-plot-label, fig.show='hide'}
+dt <- dt %>%
+  dplyr::mutate(Prop=Count/sum(Count))
+
+p <- dt %>%
+  ggplot(mapping=aes(x=Cat, y=Prop))
+
+p + geom_col(width=.3)  #<<
+```
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk('normalize-col-plot-label', 'png')`)
+
+]
+
+---
+
+.fl.w-third.pa2[
+
+It may be a good idea to doctor the tick labels on the Y-axis, indicating
+percentages rather than numbers between $0$ and $1$ (this depends on the readership)
+
+We may focus on passengers without repeating the whole process, just
+upgrading the data.
+
+Defining a `ggplot` object is very much
+like defining a _pipeline_
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+```{r, echo=FALSE}
+(p + geom_col(width=.3)) %+% dt[dt$Cat != 'Crew',]
+```
+
+]
+
+
+---
+
+.fl.w-third.pa2[
+A stacked barplot offers another possibility to show the different proportions
+]
+
+.fl.w-two-thirds.pa2[
+
+```{r}
+p <- dt %>%
+  ggplot(mapping=aes(x=Cat, y=Prop))
+```
+
+]
+
+---
+class: middle, inverse, center
+
+## Pieplots
+
+---
+
+
+.fl.w-third.pa2[
+
+Another possibility is to use a `Pieplot`
+
+Counts are normalized and mapped
+to angular values (fractions of $2\pi$).
+
+It is up to the data scientist to decide whether one plot is more
+relevant than the other.
+
+```{r pieplot-label, fig.show='hide'}
+dt %>%
+   dplyr::mutate(Prop = Count/sum(Count)) %>%
+   ggplot() +
+   geom_bar(mapping=aes(x=factor(1),
+                        y=Prop,
+                        fill=Cat),
+            stat='identity') +
+   coord_polar(theta='y') +
+   xlab("") +
+  ylab("")
+```
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk('pieplot-label', 'png')`)
+
+]
+
+
+---
+
+### Semmelweis dataset
+
+
+.fl.w-third.pa2[
+.middle[
+
+![](img/355px-Ignaz_Semmelweis_1860.jpg)
+
+[Filip Semmelweis 1818-865](https://en.wikipedia.org/wiki/Ignaz_Semmelweis)
+]
+]
+
+
+.fl.w-two-thirds.pa2[
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Semmelweis discovered that the incidence of _puerperal_ fever could be cut by the use of hand disinfection in obstetrical clinics.
+
+Puerperal fever was common in mid-19th-century hospitals and often fatal.
+
+Semmelweis proposed the practice of washing hands with chlorinated lime solutions in 1847 while working in Vienna General Hospital's First Obstetrical Clinic, where doctors' wards had three times the mortality of midwives' wards.
+
+.tr[
+[wikipedia](https://en.wikipedia.org/wiki/Ignaz_Semmelweis)
+]
+
+]
+
+]
+
+---
+class: middle, center
+
+### Vienna General Hospital
+
+![](img/AAKH-1784.jpg)
+
+---
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Maternity institutions were set up all over Europe to address problems of infanticide of illegitimate children. They were set up as gratis institutions and offered to care for the infants, which made them attractive to underprivileged women, including prostitutes. In return for the free services, the women would be subjects for the training of doctors and midwives.
+
+_Two maternity clinics_ were at the Viennese hospital.
+
+The First Clinic had an average maternal mortality rate of about $10\%$ due to _puerperal fever_.
+
+The Second Clinic's rate was considerably lower, averaging less than $4\%$.
+
+This fact was known outside the hospital. The two clinics admitted on alternate days, but women begged to be admitted to the Second Clinic, due to the bad reputation of the First Clinic.
+
+Semmelweis described desperate women begging on their knees not to be admitted to the First Clinic.
+
+Some women even preferred to give birth in the streets, pretending to have given sudden birth en route to the hospital (a practice known as street births), which meant they would still qualify for the child care benefits without having been admitted to the clinic.
+
+]
+
+---
+
+### 
+
+.fl.w-two-thirds.pa2[
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Semmelweis was puzzled that puerperal fever was rare among women giving street births.
+
+> "To me, it appeared logical that patients who experienced street births would become ill at least as frequently as those who delivered in the clinic. [...] What protected those who delivered outside the clinic from these destructive unknown endemic influences?"
+
+]
+
+
+
+]
+
+.fl.w-third.pa2[
+
+```{r, echo=FALSE}
+read_csv("DATA/semmelweis.csv",
+        col_types = cols(BirthsL = col_integer(), #<<
+                         BirthsM = col_integer(),
+                         DeathsL = col_integer(),
+                         DeathsM = col_integer(),
+                         Year = col_integer())
+                       ) -> semmelweis     #<<
+
+semmelweis %>%
+  dplyr::select(Year, RateM, RateL) %>%
+  knitr::kable(format = 'html')
+```
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+The result was the mortality rate in the First Clinic declined $90\%$, and was then comparable to that in the Second Clinic.
+
+The mortality rate in April 1847 was $18.3\%$.
+
+After hand washing was instituted in mid-May, the rates in June were $2.2\%$, July $1.2\%$, August $1.9\%$ and, for the first time since the introduction of anatomical orientation, the death rate was zero in two months in the year following this discovery.
+
+]
+]
+
+---
+
+- What is the sample here?
+
+- Is there just one sample?
+
+- Does the Semmelweis dataset contain a sample or a statistic (something computed from a sample)?
+
+
+---
+
+Plot the yearly death rates at both clinics. Choose aesthetics
+so as to emphasize the difference in mortality rates in the
+clinic supervised by doctors and the clinic supervised by midwifes.
+
+
+---
+
+### Pivoting
+
+.fl.w-third.pa2[
+
+`semmelweis` dataframe has _wide format_
+
+It is convenient (but not necessary) to `pivot` columns
+`RateM` and `RateL` to a pair of columns: `Clinic`  and `Death_rate`
+
+Column `Clinic` is retyped as a `factor`
+
+Column `Year` is also retyped as a `factor` (It would be
+more natural to handle "Year" as a `Date` object)
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+
+```{r}
+tmp <- semmelweis %>%
+  select(Year, RateM, RateL) %>%
+  pivot_longer(cols=c(RateM, RateL),  #<<
+               names_to="Clinic",
+               values_to="Death_rate"
+             ) %>%
+  mutate(Clinic = as_factor(Clinic), #<<
+         Year = as_factor(Year)) %>%
+  mutate(Clinic = fct_recode(Clinic,
+                             Doctors="RateM",
+                            Midwifes="RateL")
+         )
+```
+
+```{r, echo=FALSE}
+head(tmp, 4) %>% knitr::kable(format = 'html')
+```
+
+]
+
+---
+
+### Keywords and buzzwords
+
+- Randomized clinical trials
+
+- A/B testing
+
+- Case Control studies
+
+- Quasi-experiments
+
+- Observational data
+
+- Experimental data
+
+---
+
+.fl.w-third.pa2[
+
+Data wrangling makes plotting easy.
+
+```{r semmelweis-label, fig.show="hide"}
+tmp %>%
+  ggplot(mapping = aes(x=Year,
+                       y=Death_rate,
+                       group=Clinic,
+                       fill=Clinic,
+                       linetype=Clinic)) +
+        geom_col(position="dodge",   #<<
+                 colour="black",
+                 width=.2) +
+  ggtitle("Semmelweis data") +
+  ylab("Death rate (%)")
+
+
+```
+]
+
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk("semmelweis-label", "png")`)
+
+]
+
+---
+class: center, middle, inverse
+
+## Cumulative distribution function
+
+---
+
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+$P$ be a probability distribution over $\mathbb{R}$ (endowed with the
+Borelian $\sigma$-algebra)
+
+The cumulative distribution function (CDF) $F$ is a function from $\mathbb{R}$ to $[0,1]$
+
+$$F(x) = P(-\infty, x)$$
+
+]
+
+
+---
+
+A real-valued sample defines a probability distribution, called the _empirical distribution_.
+Each sample point is assigned a probability equal to its relative frequency.
+
+
+The cumulative distribution function associated with this empirical distribution
+is called the _empirical cumulative distribution function_ (ECDF).
+
+---
+
+Let $x_1, \ldots, x_n$ denote the points from a real sample (they may not be pairwise
+distincts), let $P_n$ be the empirical distribution and $F_n$ be the ECDF.
+
+$$\begin{array}{rl}  P_n(A) & = \frac{1}{n} \sum_{i=1}^n \mathbb{I}_{x_i \in A}  \\ F_n(z) & = \frac{1}{n} \sum_{i=1}^n \mathbb{I}_{x_i \leq z} \end{array}$$
+
+---
+
+Let $x_{1:n} \leq x_{2:n} \leq \ldots \leq x_{n:n}$ denote the _order statistics_
+of the sample (that is the non-decreasing rearrangement of sample, with possible
+repetitions).
+
+
+The ECDF is easily computed from the order statistics:
+
+
+$$F_n(z) = \begin{cases} 0           & \text{if } z < x_{1:n}               \\ \frac{k}{n} & \text{if } x_{k:n} \leq z < x_{k+1:n}\\ 1           & \text{if } x_{n:n} \leq z \end{cases}$$
+
+---
+
+Recall that ECDFs are determined  by order statistics (and conversely)
+
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+### Proposition
+
+The empirical cumulative distribution function $F_n$ is
+
+- right-continuous over $\mathbb{R}$
+
+- non-decreasing
+
+- takes values in $\{ k/n , k \in \{0, 1, \ldots, n\}\}$
+
+- is constant between consecutive order statistics
+
+]
+
+---
+
+### Example
+
+Any numerical dataset may be used to illustrate ECDFs.
+
+
+For example,
+
+`faithful`: a data frame with `272` observations on `2` variables concerning waiting time between eruptions and the duration of the eruption for the _Old Faithful_ geyser in Yellowstone National Park, Wyoming, USA.
+
+- `eruptions`:	`numeric`,	Eruption time in minutess
+
+- `wating`:	`numeric`	Waiting time to next eruption (in minutes)
+
+> A closer look at `faithful$eruptions` reveals that these are heavily rounded times originally in seconds, where multiples of 5 are more frequent than expected under non-human measurement.
+
+
+---
+
+```{r, echo=TRUE}
+data(faithful)
+faithful %>%
+  glimpse()
+```
+
+
+
+---
+
+
+
+### Plotting an empirical CDF
+
+.fl.w-third.pa2[
+
+Eruptions durations
+
+Under the hood, `ggplot` combines `geom_step`  and `ecdf` statistic
+
+
+```{r  geyser-label, echo=TRUE, fig.show='hide'}
+faithful %>%
+  ggplot(mapping=aes(x=eruptions)) +
+  geom_step(stat="ecdf") +   #<<
+  ylab("ECDF") +
+  xlab("Eruptions duration in minutes") +
+  ggtitle("Old Faithful Geyser Data")
+```
+
+]
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk('geyser-label', 'png')`)
+
+]
+
+---
+exclude: true
+
+### Computing the ECDF statistic
+
+
+.fl.w-third.pa2[
+
+ECDF plots may be used to compare two samples or to compare an empirical
+cumulative distribution function with the cumulative distribution function
+of some well-known probability distribution.
+
+```{r  geyser-label-2, echo=TRUE, fig.show='hide'}
+Fn <- ecdf(faithful$eruptions) #<<
+
+x_grid <- seq(min(faithful$eruptions)-1,
+              max(faithful$eruptions)+1,
+              0.01)
+
+df <- data_frame(x=x_grid,
+                 Fn=Fn(x_grid))
+
+df %>%
+  ggplot(mapping=aes(x=x, y=Fn)) +
+  geom_step(direction="hv")
+```
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk('geyser-label-2', 'png')`)
+
+]
+
+
+---
+class: center, middle, inverse
+
+## Quantile function
+
+---
+exclude: true
+
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+The _quantile function_ of a probability distribution over $\mathbb{R}$ is
+the generalized, left-continuous inverse function of the cumulative
+distribution function.
+
+For $p \in (0,1)$
+
+$$F_n^{\leftarrow}(p) = \inf \Big\{ z : F_n(z) \geq p\Big\}$$
+
+$$F_n^{\leftarrow}(p) =  X_{k+1:n} \qquad \text{if } \qquad\frac{k}{n} < p \leq \frac{k+1}{n}$$
+
+]
+
+
+---
+
+
+.fl.w-third.pa2[
+
+In order to plot the quantile function, it is almost enough to exchange the
+role of the axes in the ECDF plot.
+
+```{r  eruptions-label, echo=TRUE, fig.show='hide'}
+faithful[1:10,] %>%
+  ggplot(mapping=aes(x=eruptions)) +
+  geom_step(stat="ecdf", direction='vh') +
+  coord_flip() +
+  xlab("Quantiles") +
+  ylab("Probabilities") +
+  ggtitle("Old Faithful Geyser Data")
+```
+
+Why is it safe to set the `direction` argument in the call to `geom_step()`
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk("eruptions-label", "png")`)
+
+
+]
+
+
+---
+exclude: true
+
+### Comparing sample quantiles with distributional quantiles
+
+`r fontawesome::fa("bullhorn")`
+
+
+When it comes to comparing the empirical distributions defined by two samples,
+_quantile-quantile plots_ ( `qqplot` ) are favored.
+
+
+- $F_n$ and $G_m$ : two ECDFs
+
+- the quantile-quantile function is defined by
+
+$$G_m^\leftarrow \circ F_n(z) = Y_{k+1:m}\qquad \text{if} \qquad \frac{k}{m}< F_n(z) \leq \frac{k+1}{m}$$
+
+
+---
+
+
+If $G_m = F_n$ (if the two samples are equal up to a permutation), then
+
+$$F_n^\leftarrow \circ F_n(z) = X_{k+1:n} \text{if} \qquad X_{k:n} < z \leq X_{k+1:n}$$
+
+The quantile-quantile plot lies above line $y=x$ and meets this line at every
+unique order statistics.
+
+`r fontawesome::fa("grin")` The departure of the quantile-quantile funcion from identity reflects
+the  differences between   the two empirical distribution functions.
+
+We can for example compare the first and second half of the `faithfull`
+dataset.
+
+---
+
+### Defining an empirical quantile function
+
+.pull-left[
+
+Function `equantile` returns a function
+
+The returned function is parametrized by argument
+`sample`
+
+`closure`
+
+]
+
+.pull-right[
+
+```{r}
+equantile <- function(sample){
+  sample <- sort(sample)
+  m <- length(sample)
+  function(p){     #<<
+    ks <- pmax(1, ceiling(m * p)) #<<
+    sample[ks]  #<<
+  }
+}
+```
+
+]
+
+
+---
+
+.fl.w-third.pa2[
+
+```{r, faithful-split-label, echo=TRUE, fig.show='hide'}
+first <- faithful[1:135,]
+second <- faithful[-(1:135),]
+
+Fn <- ecdf(first$eruptions)
+
+Qm <- equantile(second$eruptions)
+
+df <- data.frame(x= seq(min(first$eruptions)-1, max(first$eruptions)+1, 0.01)) %>%
+  dplyr::mutate(y = Qm(Fn(x)))
+
+
+df %>%
+  ggplot(mapping = aes(x=x, y=y)) +
+  geom_step(direction='vh') +
+  geom_abline(slope=1,
+              intercept = 0,
+              linetype='dashed')
+
+```
+]
+
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk('faithful-split-label','png')`)
+
+]
+
+
+---
+
+We can repeat this experiment after sample shuffling.
+
+.fl.w-third.pa2[
+
+```{r shuffle-faithful-label, echo=TRUE, fig.show='hide'}
+unfaithful <- faithful[sample(seq(1,nrow(faithful)),
+                               size=nrow(faithful),
+                               replace = FALSE),
+                        ]
+
+first <- unfaithful[1:135,]
+second <- unfaithful[-(1:135),]
+
+Fn <- ecdf(first$eruptions)
+
+Qm <- equantile(second$eruptions)
+
+df <- data.frame(x= seq(min(first$eruptions)-1,
+                        max(first$eruptions)+1, 0.01)) %>%
+  dplyr::mutate(y = Qm(Fn(x)))
+
+df %>%
+  ggplot(mapping = aes(x=x, y=y)) +
+  geom_step(direction='vh') +
+  geom_abline(slope=1,
+    intercept = 0,
+    linetype='dashed')
+
+```
+]
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk('faithful-shuffle-label','png')`)
+
+]
+---
+class: inverse, center, middle
+
+## Inequalities
+
+---
+
+### Why and what
+
+- Quantifying income inequalities
+
+- Quantifying market share concentration
+
+
+---
+
+### How
+
+Normalizing income distribution
+
+Non-decreasing rearrangement
+
+---
+
+### Lorenz curve
+
+```{r, echo=TRUE, eval=FALSE}
+ineq::Lc
+function (x, n = rep(1, length(x)), plot = FALSE)
+{
+    ina <- !is.na(x)
+    n <- n[ina]
+    x <- as.numeric(x)[ina]
+    k <- length(x)
+    o <- order(x)
+    x <- x[o]
+    n <- n[o]
+    x <- n * x
+    p <- cumsum(n)/sum(n)
+    L <- cumsum(x)/sum(x)
+    p <- c(0, p)
+    L <- c(0, L)
+    L2 <- L * mean(x)/mean(n)
+    Lc <- list(p, L, L2)
+    names(Lc) <- c("p", "L", "L.general")
+    class(Lc) <- "Lc"
+    if (plot)
+        plot(Lc)
+    Lc
+}
+```
+
+---
+
+
+### Indices and Schur monotonicity
+
+
+- Gini
+
+- Atkinson
+
+- Decile ratis
+
+
+
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: 112%
+
+
+# The End

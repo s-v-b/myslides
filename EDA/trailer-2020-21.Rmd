@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "default", "hygge", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -69,6 +69,8 @@ xaringanExtra::use_logo(
   link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
   exclude_class = c("hide_logo")
 )
+
+source("./loaders_fixers.R")
 ```
 
 ---
@@ -202,7 +204,7 @@ knitr::include_url("https://experience.arcgis.com/experience/478220a4c454480e823
 
 .helvetica[
 
-- Matrix Analysis
+- Matrix Analysis  ![:faic](bullhorn)
 
 - Algorithms
 
