@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css",  "conf/css/style.css", "conf/css/fonts.css"]
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"] 
     lib_dir: libs
     seal: false
     includes:
@@ -119,6 +119,95 @@ class: middle, center, inverse
 
 ---
 
+
+### Titanic passenger dataset
+
+.fl.w-third.pa2[
+
+`r fontawesome::fa("ship")` The `Titanic` dataset comprises a list of (related) univariate 
+ samples: `Survived`, `Pclass`, `Sex`, `Embarked`, ...
+
+`r fontawesome::fa("swimmer")` Each sample element corresponds to a unique passenger on board of HMS Titanic 
+during her first transatlantic trip on April 1912. 
+
+`r fontawesome::fa("file-csv")`  The dataset obtained from [kaggle]() is built from two `csv` files: `train.csv` and `test.csv`. Column `Survived` is absent from file `test`. 
+
+
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+```{r}
+tit_col_types = cols(
+  
+  PassengerId = col_integer(),
+
+  Survived = col_factor(levels=c("0", "1"), 
+                        include_na = TRUE), 
+
+  Pclass = col_factor(levels=c("1", "2", "3"),  #<<
+                      ordered = TRUE,           #<<
+                      include_na = TRUE),       #<< 
+
+  Sex = col_factor(levels = c("female", "male")), 
+  Age = col_double(), 
+  SibSp = col_integer(), 
+  Parch = col_integer(),
+
+  Embarked = col_factor(levels = c("S", "C", "Q"), 
+                        include_na = TRUE)
+
+)
+
+```
+
+]
+
+---
+
+### Viewing (part of) the dataset
+
+.fl.w-40.pa2[ 
+
+`r fontawesome::fa("database")`  Table wrangling
+
+```{r load-titanic-label, echo=TRUE}
+train <- read_csv("DATA/titanic/train.csv", 
+          col_types=tit_col_types)  
+test <- read_csv("DATA/titanic/test.csv",
+          col_types=tit_col_types)
+
+test <- mutate(test, #<<
+               Survived=NA)  #<<
+
+tit <- union(train, 
+             test) 
+```
+
+]
+
+.fl.w-60.pa2[
+
+.small[
+
+`r fontawesome::fa("chalkboard-teacher")`  Reporting 
+
+```{r , echo=FALSE}
+tit %>% 
+  dplyr::select(Survived, Pclass, Sex, Age) %>% 
+  dplyr::sample_n(5) %>% 
+  kable()
+```
+
+]
+
+]
+
+
+
+---
 ### Definition
 
 A _sample_ is a sequence of items of the same type
@@ -154,13 +243,21 @@ class: middle, center, inverse
 
 ### For quantitative variables
 
-- Mean: $\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i$  (location)
+- Mean: 
 
-- Standard deviation: $s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2$  or $s^2 = \frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2$  (dispersion)
+$$\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i \qquad  \text{(location)}$$
 
-- Skewness   $\frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^3}{s^3}$
+- Standard deviation: 
 
-- Kurtosis $\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^4}{s^4} - 2$
+$$s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2 \quad \text{or}\quad s^2 = \frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2\qquad\text{(dispersion)}$$  
+
+- Skewness   
+
+$$\frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^3}{s^3}$$
+
+- Kurtosis 
+
+$$\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i -\overline{X}_n\big)^4}{s^4} - 2$$
 
 ---
 
@@ -274,7 +371,7 @@ $(x_{n/2:n}+ x_{n/2+1:n})/2$ if $n$ is even
 
 - Percentiles
 
-- L-estimators
+- ...
 
 ---
 
@@ -308,9 +405,9 @@ class: middle, center, inverse
 
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
-In descriptive statistics, a box plot or boxplot is a method for graphically depicting groups of numerical data through their _quartiles_.
+In descriptive statistics, a box plot or boxplot is a method for graphically depicting groups of numerical data through their _quantiles_ (more specifically _quartiles_)
 
-Box plots may also have lines extending from the boxes (whiskers) indicating variability outside the upper and lower quartiles, hence the terms box-and-whisker plot and box-and-whisker diagram.
+Box plots also have lines extending from the boxes (__whiskers__) indicating variability outside the upper and lower quartiles, hence the terms _box-and-whisker plot_ and box-and-whisker diagram.
 
 _Outliers_ may be plotted as individual points.
 
@@ -345,23 +442,28 @@ Then:
 
 
 - The default length of the whiskers (under `geom_boxplot`) is
-$1.5 \times \text{IQR}$.
+$1.5 \times \text{IQR}$
 
-- For a Gaussian population, this leads to
-$1.5 \text{IQR} = 3 \sigma \Phi^{\leftarrow}(3/4) \approx 2.02 \sigma \approx \sigma \Phi^{\leftarrow}(.98)$.
+- For a Gaussian population, $1.5 \text{IQR} = 3 \sigma \Phi^{\leftarrow}(3/4)$
+
+- In a Gaussian population, the probability that a sample point lies outside the whiskers is $2 \times (1 - \Phi(4 \times \Phi^{\leftarrow}(3/4))) \approx 7/1000$
+
 
 ---
+class: top, left 
 
 ### Boxplot of a Gaussian sample
 
-.fl.w-50.pa2[
 
-```{r normal-boxplot-label, message=FALSE, warning=FALSE, fig.show='hide'}
-sample <-  rnorm(1000)
-title <- stringr::str_c("Standard Gaussian sample, size : ",
-                        length(sample))
-qplot(y=sample, x=1L) +
-  geom_boxplot() +  #<<
+
+```{r normal-boxplot-label, message=FALSE, warning=FALSE, out.width="70%", fig.show='hide'}
+n <- 100
+fake_data <- tibble(normal=rnorm(n),t=rt(n, df=3)) 
+title <- stringr::str_c("Standard Gaussian sample, size : ", n)
+
+fake_data %>% 
+  ggplot(mapping = aes(x=1L, y=normal)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 2, coef=1.5) + #<<
   ggtitle(title) +
   ylab("") +
   ggplot2::theme(
@@ -369,65 +471,179 @@ qplot(y=sample, x=1L) +
   axis.ticks.x = element_blank()
   )
 
-summary(sample)
+summary(fake_data$normal)
 ```
+
+
+.plot-callout[
+![gauss-boxplot-label](`r knitr::fig_chunk("normal-boxplot-label", "png")`)
 ]
 
-.fl.w-50.pa2[
+---
 
+### Boxplot of a Gaussian sample
+
+.fl.w-60.pa2[
 
 ![gauss-boxplot-label](`r knitr::fig_chunk("normal-boxplot-label", "png")`)
 
 ]
 
+???
+
+Playing with boxplots
+
+- Tune whiskers lengths using `coef`
+
+- Jitter to spot the whole  
+
 ---
 
-If we _boxplot_ a Gaussian sample, on average, $4\%$ of the points lie outside the
-whiskers. Such points are called _outliers_
+If we _boxplot_ a Gaussian sample, on average, $4\%$ of the points lie outside the whiskers. Such points are called _extremes_
 
-Boxplots provide a visual assessment of the departure of a sample from normality.
+Deciding which points should be considered as extremes is partly a matter of taste
+
+Boxplots provide a visual assessment of the departure of a sample from normality/Gaussianity
+
+[`geom_boxplot` documentation](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
+
+???
+
+Point out the distinction between outliers and extremes 
+
 
 ---
 
 
-### Boxplot of a non-Gaussian sample.
+### Boxplot of a non-Gaussian sample
 
 
-.fl.w-50.pa2[
 
-The sampling distribution ($t$-distribution with $3$ degrees of freedom)
+
+The sampling distribution ( $t$-distribution with $3$ degrees of freedom)
 is _heavy-tailed_
 
 Some sample points lie far away from the whiskers.
 
 ```{r non-gauss-boxplot-label, fig.show='hide', out.width=.8}
-sample <- rt(1000, df=3)
-qplot(y=sample,
-      x=1L) +
-  geom_boxplot(linetype=1,      # <<
-               outlier.shape=10) +
+title <- stringr::str_c("Student sample with 3 df, size : ", n)
+ggplot(fake_data,
+       aes(y=t, x=1L)) +
+  geom_boxplot(outlier.shape=2, outlier.colour = 'red', outlier.alpha=.5, coef=1.5) + #<<
   ylab("") +
-  ggtitle("Non Gaussian sample")
-
-summary(sample)
+  ggtitle(title) +
+  ggplot2::theme(
+  axis.text.x = element_blank(),
+  axis.ticks.x = element_blank()
+  )
+summary(fake_data$t)
 ```
 
-]
 
-.fl.w-50.pa2[
+
+.plot-callout[
 
 ![non-gauss-boxplot-label](`r knitr::fig_chunk("non-gauss-boxplot-label", "png")`)
 
 ]
 
+---
+
+### Boxplot of a non-Gaussian sample
+
+.fl.w-60.pa2[
+
+![non-gauss-boxplot-label](`r knitr::fig_chunk("non-gauss-boxplot-label", "png")`)
+
+]
+
+---
+
+### Plotting two boxplots side by side
+
+.fl.w-60.pa2[
+```{r, echo=FALSE}
+n <- 1000
+tibble(normal=rnorm(n), t=rt(n, df=3))%>% 
+  pivot_longer(cols=c(normal, t), names_to='Distribution') %>%  #<<
+  ggplot(aes(x=Distribution, y=value)) +   #<<
+  geom_boxplot(outlier.alpha = .5, 
+               outlier.colour = 'red', 
+               outlier.shape = 2) +
+  ggtitle("Gaussian versus heavy-tailed samples")
+```
+]
+
+.fl.w-40.pa2[
+
+With usual whiskers length
+
+- in Gaussian samples: very few sample points outside the whiskers (few extremes/outliers), extremes lie close to the whiskers endpoints
+
+- in heavy-tailed distributions: many sample points outside the whiskers, and some extremes may lie far far away
+
+]
+
+
+???
+
+Comment on pivoting
+
+---
+
+### Boxplotting Titanic Fare prices
+
+.fl.w-60.pa2[
+
+```{r titanic-fares-boxplot-label, echo=FALSE}
+title <- stringr::str_c("Titanic Fare prices")
+
+p <- ggplot(tit,
+       aes(y=Fare, x=1L)) +
+  geom_boxplot(outlier.shape=2, outlier.colour = 'red', outlier.alpha=.5, coef=1.5) + #<<
+  ylab("") +
+  ggtitle(title) +
+  ggplot2::theme(
+  axis.text.x = element_blank(),
+  axis.ticks.x = element_blank()
+  )
+
+p
+# summary(tit$Fare)
+```
+]
+
+
+.fl.w-40.pa2[
+
+Titanic fare prices distribution exhibits a non-Gaussian behavior
+`r fontawesome::fa("smile-wink")`
+
+The median looks much closer to the first quartile than to the third quartile (asymmetry)
+
+There are many extreme points 
+
+Extreme lie far away above the whiskers 
+
+]
 
 ---
 class: middle, center, inverse
 
 ## Violinplots
 
+---
+
+
+
+```{r}
+
+```
+
+
 
 ---
+exclude: true 
 
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
@@ -444,6 +660,7 @@ class: middle, center, inverse
 
 
 ---
+exclude: true
 
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
@@ -456,93 +673,6 @@ class: middle, center, inverse
 
 ## Numerical summaries for categorical samples
 
-
----
-
-### Titanic passenger dataset
-
-.fl.w-third.pa2[
-
-`r fontawesome::fa("ship")` The `Titanic` dataset comprises a list of (related) univariate 
- samples: `Survived`, `Pclass`, `Sex`, `Embarked`, ...
-
-`r fontawesome::fa("swimmer")` Each sample element corresponds to a unique passenger on board of HMS Titanic 
-during her first transatlantic trip on April 1912. 
-
-`r fontawesome::fa("file-csv")`  The dataset obtained from [kaggle]() is built from two `csv` files: `train.csv` and `test.csv`. Column `Survived` is absent from file `test`. 
-
-
-
-]
-
-
-.fl.w-two-thirds.pa2[
-
-```{r}
-tit_col_types = cols(
-  
-  PassengerId = col_integer(),
-
-  Survived = col_factor(levels=c("0", "1"), 
-                        include_na = TRUE), 
-
-  Pclass = col_factor(levels=c("1", "2", "3"),  #<<
-                      ordered = TRUE,           #<<
-                      include_na = TRUE),       #<< 
-
-  Sex = col_factor(levels = c("female", "male")), 
-  Age = col_double(), 
-  SibSp = col_integer(), 
-  Parch = col_integer(),
-
-  Embarked = col_factor(levels = c("S", "C", "Q"), 
-                        include_na = TRUE)
-
-)
-
-```
-
-]
-
----
-
-### Viewing (part of) the dataset
-
-.fl.w-40.pa2[ 
-
-`r fontawesome::fa("database")`  Table wrangling
-
-```{r load-titanic-label, echo=TRUE}
-train <- read_csv("DATA/titanic/train.csv", 
-          col_types=tit_col_types)  
-test <- read_csv("DATA/titanic/test.csv",
-          col_types=tit_col_types)
-
-test <- mutate(test, #<<
-               Survived=NA)  #<<
-
-tit <- union(train, 
-             test) 
-```
-
-]
-
-.fl.w-60.pa2[
-
-.small[
-
-`r fontawesome::fa("chalkboard-teacher")`  Reporting 
-
-```{r , echo=FALSE}
-tit %>% 
-  dplyr::select(Survived, Pclass, Sex, Age) %>% 
-  dplyr::sample_n(5) %>% 
-  kable()
-```
-
-]
-
-]
 
 ---
 
@@ -1490,7 +1620,6 @@ function (x, n = rep(1, length(x)), plot = FALSE)
 - Atkinson
 
 - Decile ratis
-
 
 
 
