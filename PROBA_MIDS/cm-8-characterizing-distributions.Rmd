@@ -50,6 +50,30 @@ background-position: 97% 3%
 }
 </style>
 
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```
+
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons(minified = FALSE)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+```
+
 ---
 class: middle, center, inverse
 
@@ -505,6 +529,8 @@ cumulative distribution functions are dense on $\mathbb{R}$, this is enough.
 ---
 name:reginversion
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Proposition (Inversion formula for regularized RV)
 
 Let $X \sim F$ and $Z \sim \mathcal{N}(0,1)$ with $X ⟂\!\!\!⟂ Z$
@@ -519,6 +545,8 @@ $$\widehat{F}_\sigma(t) = \widehat{\Phi}(t\sigma) \times \widehat{F}(t) = \mathr
 - a version of the  density of the distribution of $Y$ is given by
 $$\frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}} \widehat{F}(t)\mathrm{e}^{-ity} \mathrm{d}t
   = \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}}  \widehat{F}_\sigma(t)\mathrm{e}^{-ity} \mathrm{d}t$$
+
+]
 
 
 ---
@@ -542,7 +570,7 @@ The fact that for any $\sigma >0$, the distribution of $Y = X + \sigma Z$ is abs
 
 A density of the distribution of $X + \sigma Z$ is given by
 
-$$\int_{\mathbb{R}} \frac{1}{\sigma} \phi\Big(\frac{y -x}{\sigma}\Big) \mathrm{d}F(x)$$
+$$y \mapsto \int_{\mathbb{R}} \frac{1}{\sigma} \phi\Big(\frac{y -x}{\sigma}\Big) \mathrm{d}F(x)$$
 
 --
 
@@ -556,18 +584,18 @@ The characteristic function of $Y$  at $t$ is $\mathrm{e}^{- \frac{t^2 \sigma^2}
 \mathbb{P}\Big\{ Y \leq u\Big\}
 & = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma} \phi\Big(\frac{y -x}{\sigma}\Big) \mathrm{d}F(x)  \mathrm{d}y \\
 & = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma}
-\frac{1}{\sqrt{2 \pi}} \int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-it 	\frac{y-x}{\sigma}} \mathrm{d}t
+\frac{1}{\sqrt{2 \pi}} \int_{\mathbb{R}} \frac{\mathrm{e}^{- \frac{t^2}{2}}}{\sqrt{2\pi}} \mathrm{e}^{-it 	\frac{y-x}{\sigma}} \mathrm{d}t
 \mathrm{d}F(x)  \mathrm{d}y \\
 & = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma}
-\frac{1}{\sqrt{2 \pi}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-\frac{ity}{\sigma}} \int_{\mathbb{R}}  \mathrm{e}^{\frac{itx}{\sigma}} \mathrm{d}F(x)  \mathrm{d}t
+\frac{1}{{2 \pi}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-\frac{ity}{\sigma}} \int_{\mathbb{R}}  \mathrm{e}^{\frac{itx}{\sigma}} \mathrm{d}F(x)  \mathrm{d}t
  \mathrm{d}y \\
 & = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma}
-\frac{1}{\sqrt{2 \pi}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-\frac{ity}{\sigma}} \widehat{F}(t/\sigma)  \mathrm{d}t
+\frac{1}{{2 \pi}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-\frac{ity}{\sigma}} \widehat{F}(t/\sigma)  \mathrm{d}t
  \mathrm{d}y \\
-& = \int_{-\infty}^u  \left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y
+& = \int_{-\infty}^u  \left( \frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y
 \end{align*}
 
-The quantity $\left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right)$ is a version of the density of the distribution of $Y = X + \sigma Z$  (why?).
+The quantity $\frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t$ is a version of the density of the distribution of $Y = X + \sigma Z$  (why?).
 
 
 `r fontawesome::fa("square")`
@@ -591,7 +619,7 @@ Let $X \sim P$,  with cumulative distribution function $F$ and characteristic fu
 
 Then:
 
-$$\lim_{\sigma \downarrow 0} \int_{-\infty}^u  \left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{-ity}  \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y =  F(u_-) + \frac{1}{2} P\{u\}$$
+$$\lim_{\sigma \downarrow 0} \int_{-\infty}^u  \left( \frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{-ity}  \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y =  F(u_-) + \frac{1}{2} P\{u\}$$
 
 where
 
@@ -643,7 +671,7 @@ Then:
 
 - $P ⊴ \text{Lebesgue}$
 
-- $y \mapsto \frac{1}{\sqrt{2 \pi}} \int_{\mathbb{R}} \widehat{F}(t) \mathrm{e}^{-ity} \mathrm{d}t$ is a uniformly continuous version of the density of $P$.
+- $y \mapsto \frac{1}{{2 \pi}} \int_{\mathbb{R}} \widehat{F}(t) \mathrm{e}^{-ity} \mathrm{d}t$ is a uniformly continuous version of the density of $P$.
 
 ]
 
@@ -662,12 +690,12 @@ $$\lim_{\sigma \downarrow 0} P\Big\{ X + \sigma Z  \leq x \Big\} = F(x)$$
 \begin{align*}
 \lim_{\sigma \downarrow 0} P\Big\{ X + \sigma Z  \leq x \Big\}
  & = \lim_{\sigma \downarrow 0}
- \int_{-\infty}^x  \left( \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y \\
- & = \int_{-\infty}^x   \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \lim_{\sigma \downarrow 0} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \\
- & = \int_{-\infty}^x   \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \,
+ \int_{-\infty}^x  \left( \frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y \\
+ & = \int_{-\infty}^x   \frac{1}{{2 \pi}}\int_{\mathbb{R}} \lim_{\sigma \downarrow 0} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \\
+ & = \int_{-\infty}^x   \frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \,
 \end{align*}
 
-where interversion of limit and integration is justified by dominated convergence.
+where interchange of limit and integration is justified by dominated convergence.
 
 `r fontawesome::fa("square")`
 

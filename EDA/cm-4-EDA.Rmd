@@ -225,7 +225,6 @@ This modeling deserves to be challenged
 
 ]
 
-
 .fl.w-two-thirds.pa2[
 
 ```{r whitesidesimple, echo=FALSE, message=FALSE, warning=FALSE}
@@ -233,7 +232,8 @@ whiteside %>%
   ggplot(mapping=aes(y=Gas, x=Temp)) +
   geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
   ggtitle("Whiteside data", subtitle = "simple linear regression") +
-  geom_point(aes(shape=Insul))
+  geom_point(aes(shape=Insul)) +
+  theme(legend_position=c(0.1, .15))
 ```
 ]
 
@@ -495,7 +495,7 @@ class and even a package: `Formula` (Extended Model Formulas)
 
 .fl.w-two-thirds.pa2[
 
-```{r}
+```{r, eval=FALSE}
 knitr::include_url("https://rdrr.io/cran/Formula/")
 ```
 
@@ -677,11 +677,49 @@ whiteside %>%
 
 ### GLM interpretation
 
-Figure  corresponds to least-square fitting of the following model.
+Figure  corresponds to least-square fitting of the following model
 
 $$\begin{bmatrix}\mathrm{Gas}_1 \\  \vdots \\  \mathrm{Gas}_{56} \end{bmatrix}  = \begin{bmatrix}  1 & 0 & \mathrm{Temp}_1 &  0 & \mathrm{Temp}^2_1 &  0\\  \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\  1 & 0 & \mathrm{Temp}_{26} &  0 & \mathrm{Temp}^2_{26} &  0\\  1 & 1 & \mathrm{Temp}_{27} & \mathrm{Temp}_{27} & \mathrm{Temp}^2_{27} & \mathrm{Temp}^2_{27}  \\  \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\   1 & 1 & \mathrm{Temp}_{56} & \mathrm{Temp}_{56} & \mathrm{Temp}^2_{56} & \mathrm{Temp}^2_{56} \end{bmatrix} \times \begin{bmatrix}  \beta_{0,b} \\  \beta_{0,a} \\  \beta_{1, b} \\  \beta_{1, a} \\  \beta_{2, b} \\  \beta_{2, a}\end{bmatrix} + \sigma \begin{bmatrix}  \epsilon_1 \\  \vdots \\  \epsilon_{56}\end{bmatrix}$$
 
 We still assume _homoschedastic_ noise
+
+---
+
+exclude: true
+```{r}
+require("parsnip")
+require(Formula)
+```
+
+
+```{r}
+formule <- Formula(Gas ~ Temp * Insul)
+
+lm_mod <-
+  linear_reg() %>%
+  set_engine("lm")
+
+lm_fit <-
+    lm_mod %>%
+    fit(formule,
+        data = whiteside)
+```
+
+```{r}
+model.matrix(lm_2) %>% View()
+```
+
+---
+exclude:true
+
+```{r }
+pacman::p_load(ggfortify)
+```
+
+```{r}
+autoplot(lm_2, which = 6)
+```
+
 
 ---
 class: middle, center, inverse
@@ -710,6 +748,8 @@ class: middle, center, inverse
 ## Variable selection in Gaussian Linear Models
 
 ---
+
+
 
 In the sequel of this section, we use simulated data to introduce and motivate
 the ANOVA method.
@@ -750,6 +790,8 @@ names(df)  <- c(paste("x", 1:p, sep="_"), "y")
 
 ---
 
+### True model versus full model
+
 Dataframe `df` fits Gaussian linear modeling assumptions
 
 We may feed it to `lm()`
@@ -762,6 +804,267 @@ Hence, we can compare the linear model obtained by brute force `lm(y ~ . -1, df)
 to non-null coefficients of `betas`
 
 We call the former the _true model_
+
+---
+
+### Building formulae
+
+```{r}
+formula_full <- formula("y ~ . - 1")
+
+formula_true <- formula(str_c("y",
+                              paste(str_c("x",
+                                          important_coeffs,
+                                          sep = "_"),
+                                     collapse =" + "),
+                              sep=" ~ "))
+
+formulae <-  c(formula_full, formula_true)
+
+lm_df <- map(formulae,
+             lm,
+             data=df)
+
+names(lm_df) <- c("full", "true")
+```
+
+---
+### The true model
+
+```{r}
+formula_true
+```
+
+---
+
+```{r, echo=FALSE}
+rsss <- map_dbl(lm_df,
+                ~ round(sum(residuals(.)^2), 1))
+```
+
+---
+
+### Comparing reconstruction errors
+
+We can compare the true and full models using the quadratic error criterion.
+
+The residuals can be gathered from both models using function `residuals()`.
+
+The Residual Sum of Squares (RSS)  are respectively `r rsss['full']` for the full model and `r rsss['true']`.
+
+At first glance, the full model achieves a better fit to the data than the true model
+
+---
+
+### Comparing estimation errors
+
+`r fontawesome::fa("exclamation-triangle")` This comparison is not fair
+
+The full model is obtained by optimizing the quadratic error over a set which is much larger  than the set used
+for the true model
+
+As we are handling simulated data, we can compare the coefficient
+estimates in the two models and see whether one comes closer to
+the coefficients used to generate the data
+
+The squared $\ell_2$ distances to $\beta$ are substantially different:
+
+$$\| \beta - \widehat{\beta}^{\text{true}}\|^2  = 1.31 \times 10^{-2}$$
+
+while
+
+$$\| \beta - \widehat{\beta}^{\text{full}}\|^2  = 9.75 \times 10^{-2}$$
+
+---
+
+### Overfitting
+
+The fact that the full model outperforms the small model with
+respect to the Residual Sum of Squares criterion is righteously called _overfitting_.
+
+```{r, echo=FALSE, include=FALSE}
+full_distance = norm(coefficients(lm_df[['full']]) - betas, type = "2")^2
+
+small_distance = norm(coefficients(lm_df[['true']]) - betas[important_coeffs], type = "2")^2
+```
+
+---
+
+### Diagnosing the full model
+
+.fl.w-third.pa2[
+
+```{r qplot-residuals-label, fig.show='hide', fig.height=4}
+xx <- residuals(lm_df[['full']])
+yy <- fitted.values(lm_df[['full']])
+qplot(y=yy,
+      x=xx,
+      alpha=I(.25)) +
+  xlab("fitted values") +
+  ylab("residuals") +
+  ggtitle("Gaussian linear model",
+  subtitle = "n=1000, p=100, full model")
+```
+
+]
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk("qplot-residuals-label","png")`)
+
+]
+---
+
+###
+
+
+```{r}
+head((anova(lm_df[['full']]))  %>%
+       broom::tidy(.n), 10)
+```
+
+---
+
+```{r, echo=FALSE}
+tib <-
+  tibble(residuals= residuals(lm_df[['full']]))
+m <- mean(tib$residuals)
+s <- sd(tib$residuals)
+tit <- "Kernel density estimate of residuals distribution (full model)"
+```
+
+`r chunk_reveal("kde_residuals", break_type="auto", title="### Residual distribution (full model)")`
+
+
+
+```{r kde_residuals, include=FALSE, fig.width=6, cache=F, comment = ""}
+tib %>%
+  ggplot(aes(x=residuals)) +
+  geom_histogram(aes(y=..density..),
+                 alpha=.3) +
+  stat_density(kernel = "epanechnikov",
+               bw = .15,
+               alpha=.0,
+               col=1) +
+  stat_function(fun = dnorm,
+                args=list(mean=m,
+                          sd=s),
+                linetype=2) +
+  ggtitle(tit,
+          "Dashed curve: Gaussian fit")
+```
+
+---
+
+### Assessing residuals
+
+```{r}
+shapiro.test(residuals(lm_df[['full']]))
+```
+
+
+```{r}
+# (coefficients(lm.1)[1])^2 + norm(betas - coefficients(lm.1)[-1])^2
+
+# norm(betas - lm.0$coefficients)^2
+```
+
+---
+class: middle, center, inverse
+
+## Using Fisher $F$ statistic
+
+---
+
+### Computing the Fisher $F$ statistic for comparing model 0 and model 1
+
+As we are dealing with simulated data, we can behave as if a benevolent _oracle_
+had whispered that all but `13` coefficients are null, and even told us the index
+of the non-null coefficients.
+
+We fit this exact and minimal model to the data.
+
+Under the Gaussian linear model assumption, the empirical distribution of residuals is the empirical distribution of the projection of a standard Gaussian vector onto the linear subspace orthogonal to the subspace generated by the design columns.
+
+As such the distribution of residuals is not the empirical distribution of an i.i.d Gaussian sample. Nevertheless, if the linear subspace is not too correlated with the canonical basis, the residuals empirical distribution is not too far from a Gaussian distribution.
+
+---
+exclude: true
+
+```{r residdistrib, echo=FALSE, warning=FALSE, fig.cap='(ref:residdistrib)'}
+residuals(lm_df[['true']]) %>%
+  tibble(residuals= .) %>%
+  ggplot(aes(x=residuals)) +
+  stat_density(kernel = "epanechnikov", bw = .15, alpha=.0, col=1) +
+  stat_function(fun = dnorm,
+                mean=mean(residuals(lm_df[['true']])),
+                sd=sd(residuals(lm_df[['true']])),
+                linetype=2) +
+  ggtitle("True model: Kernel density estimate of residuals distribution (true model)",
+          "Dashed curve: Gaussian fit")
+```
+
+---
+
+### Comparing true model and full model
+
+We are facing a _binary hypotheses problem_.
+
+- Null hypothesis: all coefficients but `x_2 , x_9 , x_22 , x_27 , x_41 , x_49 , x_52 , x_53 , x_59, x_60 , x_77 , x_88 , x_93` are null
+
+- Alternative hypothesis: the vector of coefficients doesnot satisfy the $13$ linear equations defining the null hypothesis
+
+Note that both the null and alternative hypotheses are composite.
+
+---
+
+The null hypothesis asserts that the true vector of coefficients belong to a linear subspace of dimension `13` of $\mathbb{R}^{100}$. If we stick to Gaussian linear modelling
+we may test this null hypothesis by performing a _Fisher test_.
+
+Under the null hypothesis,
+
+$$\frac{\|\widehat{Y} - \widehat{Y}^\circ\|^2/(p-p^\circ)}{\|{Y} - \widehat{Y}\|^2/(n-p)} \sim F_{p-p^\circ, n-p}$$
+
+where $F_{p-p^\circ, n-p}$ stands for the Fisher distribution with
+$p-p^\circ$ and $n-p$ degrees of freedom.
+
+Function `anova`  does this.
+
+---
+exclude: true
+
+```{r, tidy.opts=''}
+anova(lm_df[['true']], lm_df[['full']]) %>%
+  broom::tidy() %>%
+  dplyr::mutate_if(is.numeric, round, 2)
+```
+
+On the second row, column `statistic` contains the Fisher statistic. The `p.value` tells us the probability that a random variable distributed according to Fisher distribution with $87$ and $900$ degrees of freedom ($F_{87,900}$) exceeds the statistic's value $0.89$. The fact that `p.value` (`pf(.89, 87, 900, lower.tail = FALSE)`) is $0.75$ does not prompt us to reject the null hypothesis.
+
+---
+
+The rule of thumb when using the `p.value` reported by a test function is the following: if you are ready to be wrong _under the null hypothesis_ with probability $\alpha$, then you should reject when the `p.value` is less than $\alpha$.
+
+We can decompose the computations performed by ANOVA.
+
+---
+exclude: true
+
+```{r, eval=FALSE}
+setdiff(important_coeffs, # 2  9 22 27 41 49 52 53 59 60 77 88 93
+        which(
+(df %>%
+  select(starts_with("x")) %>%
+  purrr::map_dbl(.f = ~ cor(., df$y)) %>%
+  abs() ) > .05)
+)
+```
+
+```{r, eval=FALSE}
+lm.0 %>% summary()
+(svd(t(Z) %*% (Z))$d)^(-1)
+   # Inverse of covariance matrix of coefficients in lm.0
+```
 
 ---
 class: middle, center, inverse
@@ -826,7 +1129,6 @@ class: middle, center, inverse
 ##
 
 ---
-exclude: true
 class: center, middle, inverse
 background-image: url(img/Piet_Mondriaan_1921_-_Composition_en_rouge_jaune_bleu_et_noir.jpg)
 background-size: cover
