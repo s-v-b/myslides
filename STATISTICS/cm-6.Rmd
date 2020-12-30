@@ -1,12 +1,12 @@
 ---
-title: "Statistiques II"
-subtitle: "⚔<br/>Statistiques Master I, MFA et MIDS"
+title: "Statistique VI"
+subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
-date: "2020/12/11 (updated: `r Sys.Date()`)"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -26,6 +26,37 @@ output:
 name: layout-general
 layout: true
 class: left, middle
+
+```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+xaringanExtra::use_animate_css()
+
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_tachyons(minified = FALSE)
+
+xaringanExtra::use_logo(
+  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+
+xaringanExtra::use_panelset()
+
+xaringanExtra::use_editable(expires = 1)
+
+source("./loaders_fixers.R")
+
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+library(flipbookr)
+```
+
+
 
 <style>
 .remark-slide-number {
@@ -48,78 +79,55 @@ class: left, middle
 </style>
 
 
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
-```
 
-
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
-
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
-```
 
 ---
 class: middle, center, inverse
 
-
-
-# Statistiques II
+# Statistique III
 
 ### `r Sys.Date()`
 
-#### Statistiques Master I MIDS
+#### Statistique Fondamentale Master I MIDS et MFA
 
 
 ---
-class: middle, inverse
+class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla 1
+### Bla
 
-### Bla 2
+### Bla
 
-### Bla 3
 
-### Bla 4
+---
+class: center, middle, inverse
+
+## So what
 
 ---
 
----
+### igloo `r fontawesome::fa("igloo")`
+
+.fl.w-third.pa2[
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+
+]
 
 ---
 
----
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
+---
+class: center, middle, inverse
+background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
+## The End
 
-# The End
+---

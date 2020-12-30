@@ -69,6 +69,20 @@ xaringanExtra::use_logo(
   link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
   exclude_class = c("hide_logo")
 )
+
+
+xaringanExtra::use_panelset()
+
+xaringanExtra::use_editable(expires = 1)
+
+source("./loaders_fixers.R")
+
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+library(flipbookr)
 ```
 
 ---
@@ -106,7 +120,7 @@ class: middle, inverse
 class: middle, center, inverse
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: 112%
+background-size: cover
 
 
 # The End
