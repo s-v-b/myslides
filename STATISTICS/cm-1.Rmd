@@ -61,7 +61,7 @@ xaringanExtra::use_tile_view()
 xaringanExtra::use_tachyons(minified = FALSE)
 ```
 
-```{r xaringan-logo, echo=FALSE}
+```{r xaringan-logo, echo=FALSE, warning=FALSE, message=FALSE}
 xaringanExtra::use_logo(
   image_url = "./img/Universite_Paris_logo_horizontal.jpg",
   position = xaringanExtra::css_position(top = "1em", right = "1em"),
@@ -70,19 +70,21 @@ xaringanExtra::use_logo(
   exclude_class = c("hide_logo")
 )
 
-
 xaringanExtra::use_panelset()
 
 xaringanExtra::use_editable(expires = 1)
 
-source("./loaders_fixers.R")
+
 
 knitr::opts_chunk$set(fig.width = 6,
                       message = FALSE,
                       warning = FALSE,
                       comment = "",
                       cache = F)
-library(flipbookr)
+
+source("./loaders_fixers.R")
+
+require(flipbookr)
 ```
 
 ---
@@ -102,19 +104,886 @@ class: middle, inverse
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla 1
+### Objectifs
 
-### Bla 2
+### Un problème jouet
 
 ### Bla 3
 
 ### Bla 4
 
 ---
+class: center, middle, inverse
+
+## Objectifs
+
 
 ---
 
+### Trois piliers de l'inférence statistique
+
+- Estimation ponctuelle
+
+- Région de confiance
+
+- Tests d'hypothèses
+
+
+???
+
+Ce premier cours introduit autour d'un exemple élémentaire les principaux thèmes de la statistique dite inférentielle (qu'on distingue de la statistique dite descriptive). Ces trois thèmes, l'estimation ponctuelle, la construction de régions de confiance et la construction de procédures de décision (les tests), suppose un effort préalable de modélisation stochastique.
+Sur l'exemple élémentaire, on peut mener ce travail  de modélisation. Cela nous conduit à une première formulation de ce qu'est une expérience ou un modèle statistique. Dans le cadre le plus simple, une expérience statistique est une collection de lois de probabilités. On observe une ou des réalisations d'une de ces lois (sans savoir à laquelle on a affaire). On cherche à estimer, inférer des propriétés de cette loi, peut être pour prendre une décision. Nous passerons en revue des définitions qui
+nous seront utiles pendant toute la suite du cours (statistique, estimateur, biais, risque, ...) et surtout nous verrons
+à cette occasion comment les théorèmes limites du calcul des probabilités, loi des grands nombres, théorème central limite, nous guident dans la construction et la justification des méthodes d'estimation et de décision. Nous verrons aussi que ces théorèmes limites sont complétés par des résultats non-asymptotiques appelés inégalités de concentration. Nous terminerons ce cours par une première version du résultat fondateur de la thérie des tests, le lemme de Neyman et Pearson.
+
 ---
+class: center, middle, inverse
+
+## Un problème jouet
+
+---
+
+### Coups de dés, lancers de pièces
+
+On s'apprête à jouer à pile ou face avec une pièce de monnaie.
+
+On soupçonne que cette pièce n'est pas parfaitement équilibrée, que la probabilité d'obtenir _face_ ( $\theta$ ) n'est pas $1/2$.
+
+Avant de jouer avec un adversaire, on veut estimer cette  probabilité $\theta$ ou encore le ratio $\theta/(1- \theta)$
+
+Pour estimer cette probabilité durant un jeu futur (et peut être ajuster une stratégie), on réalise $n$ lancers aléatoires indépendants.
+
+On note les résultats $x_1, x_2, \ldots, x_n$.
+
+---
+
+### Estimation ponctuelle
+
+Ces résultats constituent _les données_ ou l'_échantillon_.
+
+On construit à partir de ces données une _estimation_ $\widehat{\theta}_n$ de $\theta$, cette estimation est une fonction des données, pas de l'estimande $\theta$ qui reste inconnue.
+
+On espère que $\widehat{\theta}_n$  sera proche de $\theta$. Nous avons affaire là à un problème d'_estimation ponctuelle_.
+
+Le résultat d'une estimation ponctuelle est une valeur.
+
+---
+
+### Région de confiance
+
+Savoir que cette valeur est probablement proche de l'estimande est satisfaisant mais d'un intérêt limité. Pour envisager l'avenir, il est plus utile de construire un intervalle de confiance, c'est-à-dire deux fonctions des données $\underline{\theta}_n, \overline{\theta}_n$   telles qu'avec une forte probabilité, l'estimande $\theta$ appartient à l'intervalle aléatoire
+
+$$\left[  \underline{\theta}_n(x_1, \ldots, x_n), \overline{\theta}_n (x_1, \ldots, x_n)\right] =: [\underline{\theta}_n, \overline{\theta}_n]$$
+
+Ce problème est celui   de la construction  de _régions de confiance_.
+
+Il faut réaliser un bon _compromis_ entre la _précision_ de l'intervalle de confiance
+
+$$\overline{\theta}_n -\underline{\theta}_n$$
+
+et la probabilité de _couverture_, c'est à dire la probabilité que
+
+$$\theta \in [\underline{\theta}_n, \overline{\theta}_n]$$
+
+---
+
+### Décision
+
+on peut se poser un problème de _décision_.
+
+Si par exemple, on est prêt à jouer avec une pièce biaisée en faveur de _face_, mais pas avec une pièce biaisée en faveur de _pile_, comment décider à partir des données si on est prêt à jouer ou non (comment décider entre l'hypothèse $\theta > 1/2$ et l'hypothèse $\theta<1/2$) ?
+
+C'est le problème des _tests_.
+
+---
+class: middle, center, inverse
+
+## Quelques définitions
+
+---
+
+### Expérience statistique, échantillon, statistique, estimateur
+
+
+La notion d'_expérience statistique_ est  une formalisation dans le langage du calcul des probabilités
+du jeu que nous venons d'évoquer.
+
+Au départ, on dispose d'un espace probabilisable $(\Omega, \mathcal{F})$ (l'univers et une tribu de parties).
+
+Ici $\Omega=  \{ \text{pile}, \text{face}\}$ et $\mathcal{F}= 2 ^ \Omega$
+
+C'est en général plus riche, avec $\Omega = \mathbb{R}^d$ et $\mathcal{F}$ les boréliens de $\mathbb{R}^d$
+
+On peut aussi rencontrer des situations où  $\Omega$ est un espace de fonctions (statistique des processus), le choix de la tribu n'est plus tout à fait évident.
+
+---
+
+Sur cet espace probabilisable, on considère un _ensemble de lois de probabilités}  $\mathcal{P}$.
+
+Chaque loi de $\mathcal{P}$  est susceptible de régir le phénomène que le statisticien cherche à étudier.
+
+Dans le cadre du problème jouet, on peut choisir $\mathcal{P}$  comme l'ensemble de lois non-dégénérées sur $\{ \text{pile}, \text{face}\}$ (la probabilité  d'obtenir _face_ $\theta \in  ]0,1[$)
+
+---
+
+### Paramétrisation
+
+On peut munir $\mathcal{P}$  d'un _système de coordonnées_, d'une _paramétrisation_, c'est à dire d'une fonction d'un ensemble $\Theta$ (souvent une partie de $\mathbb{R}^d$ ) dans $\mathcal{P}$
+
+On note génériquement
+$P_ \theta$ l'élément de $\mathcal{P}$ associé à $\theta.$
+
+Dans le cas de notre problème jouet, nous avons implicitement paramétrisé les lois de Bernoulli par les probabilités de succès.
+
+Une paramétrisation est un choix de convenance.
+
+---
+
+### Identifiabilité
+
+Une paramétrisation est dite _identifiable_ si
+
+$$\theta \neq \theta' \Rightarrow P_ \theta \neq P_{\theta'}$$
+
+Dans notre problème jouet, les  paramétrisations (par la probabilité de _face_, par le  ratio des probabilités _face_/_pile_, ou son logarithme) sont identifiables.
+
+L'identifiabilité est une propriété désirable mais ce n'est pas indispensable (les modèles de _mélange_ sont utiles mais rarement identifiables).
+
+Il est possible que le statisticien n'ait pas directement accès aux réalisations des tirages selon $P$ (la loi de la nature), c'est à dire aux éléments de $\Omega$.
+
+Par exemple, lorsque $\Omega$ est un espace de fonctions (les trajectoires d'un processus), il est sans doute trop couteux d'observer l'infinité de points qui forment la trajectoire, on se contente d'observer la trajectoire périodiquement, on _échantillonne_.
+
+---
+
+###
+
+Pour formaliser ce genre de situations, on ajoute à l'expérience un espace d'observations $\mathcal{X}$ (muni d'une tribu $\mathcal{G}$) et une fonction $X:  \Omega \longrightarrow \mathcal{X}$ qu'on suppose $\mathcal{G}/\mathcal{F}$ mesurable.
+
+Toute loi $P \in \mathcal{P}$  définit une loi image $P \circ X^{-1}$
+
+Au lieu d'observer $\omega\in \Omega$, on observe $x = X(\omega)$
+
+Une expérience statistique générale est donc définie par $(\Omega, \mathcal{F}, \mathcal{P}, \Theta, \mathcal{X}, \mathcal{G}, X)$.
+
+Dans les situations dites canoniques, $\Omega=\mathcal{X}$  et $X =\text{Id}$.
+
+---
+
+### Expériences produit
+
+Dans ce cours, nous nous concentrons sur les expériences dites _produit_, construites à partir de répétitions indépendantes d'une expérience de base.
+
+Ces expériences sont de la forme $(\Omega^n, \sigma\left(\times_{i=1}^n \mathcal{F}\right), \mathcal{P}_n:= \{ P^{\otimes n}, P \in \mathcal{P} \}, \Theta, \mathcal{X}^n, \sigma\left( \times_{i=1}^n \mathcal{G}\right), X)$.
+
+On dit que $x_i$ est la réalisation de $X_i$ (variable aléatoire).
+
+La loi jointe de $X_1, \ldots, X_n$ est une loi produit de la forme $(P_ \theta \circ X^{-1})^{\otimes n}$ pour $\theta \in \Theta$:  pour $B_1, \ldots, B_n \in \mathcal{G}$,
+
+$$P_ \theta^{\otimes n}\left( \cup_{i=1}^n \{ X_i \in B_i \}\right) = \prod_{i=1}^n P_ \theta \{X_i \in B_i\}$$
+
+On parle d'_expérience échantillonnée_.
+
+Très souvent, on se contente de rappeler $(P_ \theta, \theta \in \Theta)$, le reste étant sous-entendu.
+
+Par exemple, dans notre problème jouet, $(B_ \theta, \theta \in ]0,1[)$ où  $B_ \theta $ est la loi de Bernoulli de probabilité de succès $\theta$.
+
+---
+
+### Statistique
+
+Toute fonction mesurable sur l'espace des observations ($\mathcal{X}^n$)  définit ce qu'on nomme une _statistique}.
+
+Exemples
+
+- La moyenne empirique
+
+$$\overline{X}_n:=  \frac{1}{n} \sum_{i=1}^n x_i$$
+
+- La  variance empirique -
+
+$$S^2:= \frac{1}{n} \sum_{i=1}^n \left(x_i - \overline{X}_n \right)^2$$
+
+???
+
+Dans le langage des statistiques descriptives, la moyenne empirique décrit la localisation de l'échantillon, la variance empirique décrit la dispersion.
+
+---
+
+### Estimateur
+
+Un _estimateur_ n'est qu'une statistique  censée estimer une caractéristique (inconnue) de la loi inconnue qui sous-tend l'échantillonage.
+
+Par exemple, dans notre problème jouet, on peut chercher à estimer $P_ \theta\{ \text{Face}\}= \theta$, par $\overline{X}_n$ en utilisant la convention $X(\text{Face})=1= 1-X(\text{Pile}).$
+
+
+Attention: un estimateur est une fonction de l'échantillon, et non pas une fonction de la loi de l'échantillonnage. La loi de l'estimateur dépend (en général)  de la loi de l'échantillonnage.
+
+Quand le paramètre à estimer s'appelle $\theta, \psi, \ldots$, on utilise souvent le raccourci $\widehat{\theta}$ ou $\widehat{\theta}_n, \widehat{\psi}_n , \ldots$ pour désigner l'estimateur (plutôt que $\widehat{\theta}(X_1, \ldots, X_n)$ ou $\widehat{\psi}(X_1, \ldots, X_n)$)
+
+---
+
+Un estimateur est une variable  aléatoire. On peut visualiser ses fluctuations à l'aide de maintes techniques  graphiques comme les histogrammes,
+
+
+
+
+\includegraphics[width=.9\textwidth]{TP-CM1_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+
+
+## Echantillons binomiaux
+
+Pour engendrer une suite de $N=$ `r N <- 100; N` variables de Bernoulli indépendantes de  probabilité  de succès $p=$ `r p <- .4; p`, on utilise le générateur `rbinom`,
+
+```{r rbernoulli, results='hold'}
+N <- 100
+p <- .4
+s <- rbinom(n=N, prob=p, size=1)
+mean(s)
+```
+Le premier argument nommé
+
+- `n`  désigne le nombre de répétitions,
+- `prob` la probabilité de succès des lois de Bernoulli, e
+- `size` désigne le paramètre de taille des binomiales
+
+on effectue `N` tirages binomiaux de paramètres `size=1` et `prob`
+
+---
+
+La _loi des grands nombres_ peut être illustrée dans ce contexte.
+
+On visualise $10$ trajectoires construites chacune sur $N=$ `r N<- 1000; N` épreuves de Bernoulli.
+`reps` est un tableau de $10$  lignes et $N$  colonnes.
+
+```{r LGN}
+reps <- plyr::raply(.n=10, .expr=rbinom(n=N, prob=p, size=1))
+paths <- plyr::aaply(.data=reps, .margins = 1, .fun = cumsum)
+```
+
+
+---
+
+## Estimation empirique de la probabilité de succès d'une Bernoulli à partir d'un échantillon
+
+.fl.w-third.pa2[
+
+```{r hist_estim_binom, fig.show='hide'}
+rs <- rbinom(n=N*10000, prob=p, size=1) %>%
+  matrix(ncol=10000, nrow=N)
+
+estimes <- apply(rs, MARGIN=2, FUN=mean)
+
+tibble(x=estimes) %>%
+  ggplot(aes(x=x)) +
+  geom_histogram(aes(y=..density..), binwidth=.01, alpha=I(.5)) +
+  stat_function(fun=dnorm, args = c(mean=.4, sd=sqrt(.4*.6/N))) +
+  xlab(paste("Estimes à partir de ",N," points",sep = "")) +
+  ggtitle("Histogramme des estimés d'un paramètre binomial")
+```
+
+]
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk("hist_estim_binom", "png")`)
+
+]
+---
+
+```{r}
+summary(estimes)
+var(estimes)
+sd(estimes)
+IQR(estimes)
+```
+
+
+---
+class: center, middle, inverse
+
+## Propriétés des estimateurs
+
+---
+
+La plupart des expériences/modèles statistiques que nous rencontrerons dans ce cours, seront de nature paramétrique, autrement dit indexés par des parties de $\mathbb{R}^d$.
+
+Dans de nombreux développements des statistiques, par exemple en estimation de densité, on travaille sur des modèles plus riches qui n'admettent pas de paramétrisation _naturelle_ par une partie d'un espace euclidien de dimension finie.
+
+On parle pourtant de paramètre d'une distribution pour désigner ce qui devrait plutôt s'appeler une fonctionnelle.
+
+Par exemple, la moyenne, la covariance  d'une   distribution sur $\mathbb{R}^d$ sont des paramètres de cette distribution. Les quantiles, l'asymétrie, la kurtosis sont d'autres paramètres.
+
+---
+
+### Definition: biais
+
+Soit $\psi(P)$ un paramètre à estimer, et $\widehat{\psi}$  un
+estimateur, on appelle _biais_ (ou biais moyen) sous la loi $P$ de l'estimateur
+$\hat{\psi}$,  la quantité
+
+$$\mathbb{E}_{P}\left[ \widehat{\psi}- \psi(P)\right]$$
+
+
+C'est l'écart entre la valeur moyenne de $\widehat{\psi}$ et la valeur
+visée $\psi(P).$
+
+L'estimateur est dit _sans biais_ s'il est de biais nul.
+
+---
+
+### Exemple d'estimateur sans biais
+
+Si on se place dans le modèle binomial et qu'on cherche à estimer la probabilité de succès $\theta$, la fréquence empirique des succès est un estimateur sans biais de $\theta$
+
+`r fontawesome::fa("exclamation")` On peut vérifier qu'il n'existe pas d'estimateur sans biais de $1/\theta$ ou de $\theta/(1- \theta)$.
+
+La fréquence empirique d'un événement est toujours un estimateur sans biais de la probabilité de cet événement
+
+---
+
+
+### Exemple d'estimateur biaisé
+
+Si $\psi(P)$ désigne la variance de la loi $P$  sur $\mathbb{R}$, la variance empirique $S^2$ définie plus haut est un estimateur biaisé  de $\psi(P)$:
+
+
+$$\mathbb{E}_P\left[ S^2 \right] =  \frac{n-1}{n} \mathbb{E}_P \left[\left(X - \mathbb{E}_P X\right)^2\right]$$
+
+
+---
+
+### Definition : risque quadratique
+
+Soit $\psi(P)$ une paramètre à estimer, et $\widehat{\psi}$  un
+estimateur, on appelle _écart quadratique moyen_  sous la loi $P$ de l'estimateur
+$\widehat{\psi}$ la quantité
+
+$$\mathbb{E}_{P}\left[ (\hat{\psi}- \psi(P))^2\right]$$
+
+---
+
+### Exemple
+
+Dans le cas du problème jouet, le risque quadratique de l'estimateur $\overline{X}_n$ de $\theta$ n'est autre que la variance de l'estimateur:
+
+$$\mathbb{E}_{\theta} \left[\left(\overline{X}_n - \theta\right)^2\right] =  \frac{\theta(1- \theta )}{n}$$
+
+
+
+---
+
+### Décomposition biais-variance du risque quadratique
+
+
+
+$$\mathbb{E}_{P} \left[(\hat{\psi}-\psi)^2\right] = \underbrace{\operatorname{Var}_{P} [\hat{\psi}]}_{\text{variance}} + \underbrace{\left(\mathbb{E}_{P}[\hat{\psi}]-\psi \right)^2}_{\text{carré du biais}}$$
+
+C'est une relation pythagoricienne !
+
+La dépendance du risque  quadratique vis à vis de la taille de l'échantillon est une question importante en statistique mathématique.
+
+Elle concerne la _vitesse d'estimation_ (pour une suite d'expériences donnée, quelles sont les meilleures vitesses envisageables, et comment les obtenir ?).
+
+
+---
+
+Pour introduire la notion de consistance d'une suite d'estimateurs,  nous aurons besoin
+des notions de convergence en probabilité et de convergence presque sûre.
+
+
+### Definition  `r fontawesome::fa("syringe")`
+
+Une suite de variables aléatoires $X_n$ à valeurs dans
+$\mathbb{R}^k$, vivant sur un espace probabilisé
+$(\Omega,\mathcal{F},\mathbb{P})$ _converge en probabilité_ vers une
+variable aléatoire $X$ à valeurs dans
+$\mathbb{R}^k$, vivant sur cet espace probabilisé si et seulement
+si, pour tout $\epsilon >0$
+
+$$\lim_n \mathbb{P} \{ \Vert X_n -X\Vert > \epsilon \} = 0$$
+
+
+
+---
+
+### Definition: consistance
+
+Dans une suite d'expériences statistiques échantillonnées,
+une suite d'estimateurs $(\widehat{\theta}_n)$ est _consistante_ (pour l'estimation de $\theta$)
+si
+
+$$\forall \theta \in \Theta, \forall \epsilon>0, \qquad \lim_n     P^{\otimes n}_ \theta \left\{ \| \widehat{\theta}-\theta\| > \epsilon \right\} =0 \qquad\text{(convergence en probabilité).}$$
+
+La suite est _fortement consistante_ si
+
+$$\forall \theta \in \Theta, \forall \epsilon>0, \qquad     P^{\otimes \mathbb{N}}_ \theta \left\{ \lim_n \| \widehat{\theta}-\theta\| =0 \right\} =1 \qquad\text{(convergence presque sûre).}$$
+
+---
+
+Pour notre problème jouet, la suite d'estimateurs $(\overline{X}_n)$ est fortement consistante pour l'estimation de $\theta$ (loi forte des grands nombres). On peut aussi vérifier que la suite $(\overline{X}_n/(1-\overline{X}_n))$ est fortement consistante pour l'estimation de $\theta/(1- \theta)$.
+
+Ces suites d'estimateurs répondent aux questions d'estimation ponctuelle. On peut toutefois se demander s'il s'agit des meilleures réponses possibles. On peut par exemple se demander s'il n'y a pas d'information inexploitée dans l'échantillon. On peut se rassurer en remarquant que pour tout $\theta$
+
+$$\begin{array}{rcl} P_ \theta\{ x_1, \ldots, x_n \} &=  & \theta^{n \overline{X}_n} (1- \theta)^{n(1-\overline{X}_n)} \\
+& = & \left(\frac{\theta}{1- \theta}\right)^{n \overline{X}_n} (1- \theta)^n  \\ & = & \exp\left( n \overline{X}_n \log\left(\frac{\theta}{1- \theta  }\right) - n \log (1- \theta)\right)\end{array}$$
+
+et que donc
+
+$$P_ \theta\{ x_1, \ldots, x_n \mid \overline{X}_n\} = \frac{\mathbb{I}_{n \overline{X}_n = \sum_{i=1}^n x_i}}{\binom{n}{n \overline{X}_n}}$$
+
+autrement dit que conditionnellement à $\overline{X}_n$,
+la probabilité de l'échantillon  ne dépend pas de $\theta$, est  _libre_ de $\theta$
+
+Dans ce modèle jouet, $\overline{X}_n$  est une _statistique suffisante_ ou _exhaustive_
+
+---
+
+## Intervalles de confiance
+
+---
+
+### Definition: intervalle de niveau de confiance $1-\alpha$
+
+Lorsque l'espace des paramètres $\Theta$ est inclus dans $\mathbb{R}$, un intervalle  de niveau de 	confiance $1- \alpha$ ( $\alpha \in ]0,1[$ ) est un couple de statistiques $\underline{\theta}_n, \overline{\theta}_n$ telles que
+
+$$\forall \theta \in \Theta, \qquad P_ \theta^{\otimes n} \left\{ \theta \in [\underline{\theta}_n, \overline{\theta}_n]\right\} \geq 1- \alpha$$
+
+
+
+---
+
+
+Il ne faut jamais perdre de vue que l'intervalle de confiance est une statistique, il doit être calculable à partir des données accessibles au statisticien (l'échantillon, y compris sa taille, $\alpha$, le cadre de l'expérience statistique).
+
+Il n'est pas toujours évident de construire un intervalle de niveau de confiance exactement $1- \alpha$. On est très souvent amené à proposer des solutions très conservatrices (des intervalles trop larges).
+
+En revanche, le calcul des probabilités nous fournit des constructions assez simples d'intervalles de niveau de confiance asymptotique prescrit.
+
+---
+
+### Definition: intervalle de niveau de confiance asymptotique $1-\alpha$
+
+Lorsque l'espace des paramètres $\Theta$ est inclus dans $\mathbb{R}$, un intervalle  de niveau de   confiance asymptotique $1- \alpha$ ($\alpha \in ]0,1[$) est un couple de statistiques $\underline{\theta}_n, \overline{\theta}_n$ telles que
+
+$$\forall \theta \in \Theta, \qquad \lim_n P_ \theta^{\otimes n} \left\{ \theta \in [\underline{\theta}_n, \overline{\theta}_n]\right\} =  1- \alpha $$
+
+
+---
+
+### Construction naïve
+
+Si les $X_i$ sont des variables de Bernoulli indépendantes et si $Z=\sum_{i=1}^n X_i$ alors l'inégalité de Chebychev implique
+
+$$\mathbf{P} \left\{  |Z- \mathbf{E} Z| \geq \sqrt{\frac{n}{4\alpha}} \right\} \leq \alpha$$
+
+On en déduit un intervalle de niveau de confiance $1-\alpha$:
+
+$$\left[\widehat{\theta} - \sqrt{\frac{1}{4n\alpha}}, \widehat{\theta} + \sqrt{\frac{1}{4n\alpha}} \right]$$
+
+Si on cherche à évaluer le taux de couverture de l'IC déduit de l'inégalité de Bienaymée-Chebychev lorsque la taille de l'échantillon n'est que $N=1000$, en visant un niveau de confiance $1-\alpha$ avec $\alpha=.25$, on constate que ce taux évalué à partir de $1000$ essais est largement supérieur au taux de couverture ciblé. Cet intervalle manque définitivement de précision.
+
+---
+
+### Construction asymptotique
+
+Dans cette section nous ne considérons que des probabilités sur $\mathbb{R}.$
+
+Celles-ci sont complètement caractérisées par leur fonction de
+répartition. Les livres d'introduction aux probabilités contiennent
+souvent la définition suivante.
+
+---
+
+### Definition
+
+Une suite $(P_n)_{n\in \mathbb{N}}$ de probabilités sur $\mathbb{R}$ (de fonctions de
+répartition $(F_n)_{n\in \mathbb{N}}$)  converge
+étroitement/faiblement vers une loi de probabilité $P$ de fonction de répartition
+$F$  si et seulement si, pour tout $x$ où    $F$  est continue, on a
+
+$$\lim_n F_n(x) = F(x)$$
+
+---
+
+La situation des points où  $F$ est discontinue est la suivante.
+
+### Proposition
+
+Si une suite de fonctions de répartition $(F_n)_{n\in \mathbb{ N}}$
+converge simplement vers une fonction de répartition $F$
+en tout point de continuité de $F,$  alors en tout $x$ de
+$\mathbb{R}$
+
+$$\limsup_n F_n(x) \leq F(x)$$
+
+---
+
+### Convention : Pour \(\alpha \in ]0,1[\), on note \(z_{\alpha}\) le
+quantile d'ordre \(1-\alpha\) de la gaussienne centrée réduite (standard)
+
+C'est la solution de l'équation en \(x\):
+
+$$1-\alpha =  \int_{-\infty}^x \frac{\mathrm{e}^{-u^2/2}}{\sqrt{2\pi}} \mathrm{d}u =: \Phi(x)$$
+
+Dans la suite du texte, on utilise la notation $\rightsquigarrow$ pour désigner la convergence en loi/distribution.
+
+Le théorème central limite dans sa version la plus simple (De
+Moivre-Laplace) nous indique que si les \(\widehat{\theta}_n\) sont
+distribués selon \(P_\theta^{\otimes n}\),
+
+$$\frac{\sqrt{n}}{\sqrt{\theta(1-\theta)}} \left( \widehat{\theta}_n -\theta\right) \rightsquigarrow \mathcal{N}(0,1)$$
+
+ce qui se traduit (entre autres) par la convergence simple des
+fonctions de répartitions, soit pour tout $$\alpha \in ]0,1[$$
+
+$$\lim_n \mathbf{P}_{\theta}^{\otimes n} \left\{ \frac{\sqrt{n}}{\sqrt{\theta(1-\theta)}} \left( \widehat{\theta}_n -\theta\right) \leq z_{\alpha}\right\} = 1-\alpha$$
+
+---
+
+Le lemme de Slutsky (voir Appendice \ref{sec:methode_delta}), et le fait que \(\widehat{\theta}_n/\theta\)
+converge en probabilité vers \(1\) lorsque \(n\to \infty\), permet
+d'écrire pour tout \(\alpha \in ]0,1[\),
+
+$$\lim_n \mathbf{P}_{\theta}^{\otimes n} \left\{ \frac{\sqrt{n}}{\sqrt{\widehat{\theta}_n(1-\widehat{\theta}_n)}} \left( \widehat{\theta}_n \theta\right) \leq z_{\alpha}\right\} = 1-\alpha$$
+
+Cela conduit à proposer l'intervalle de niveau de confiance
+asymptotique \(1-\alpha\):
+
+$$\left[\widehat{\theta}_n - z_{\alpha/2}\sqrt{\frac{\widehat{\theta}_n(1-\widehat{\theta}_n)}{n}}, \widehat{\theta}_n + z_{\alpha/2}\sqrt{\frac{\widehat{\theta}_n(1-\widehat{\theta}_n)}{n}}\right]$$
+
+---
+
+
+Un raffinement du théorème central limite, le théorème de Berry-Esseen (voir Appendice \ref{thm:tcl:berry}),
+nous indique que le niveau de confiance est
+$1- \alpha+ O(1/\sqrt{n})$.
+
+---
+
+### Intervalle non-asymptotique construit à partir de l'inégalité de Hoeffding
+
+
+L'inégalité de Hoeffding est la plus simple des inégalités exponentielles qui fournissent des bornes non-asymptotiques sur les probabilités de queue des sommes de variables aléatoires indépendantes.
+
+### Lemma de hoeffding
+
+Si $X$  est une variable aléatoire qui prend ses valeurs dans $[a,b]$, alors pour tout $\lambda \geq 0$,
+
+$$\log \mathbb{E} \mathe^{\lambda (X- \mathbb{E}X)} \leq \frac{\lambda^2 (b-a)^2}{8}$$
+
+
+---
+
+### Proof
+
+Sans perdre en généralité,  on suppose $X$ centrée (au pire cela revient à translater l'intervalle $[a, b]$, ce qui ne change pas sa longueur).
+On note $Q$  la loi (implicite) de la variable aléatoire $X$.
+
+Observons d'abord  que la variance de toute variable aléatoire qui prend ses valeurs dans $[a,b]$ est majorée par $(b-a)^2/4.$  Considérons maintenant la fonction $F$ de $\lambda$ définie par
+
+$$F(\lambda) =  \log \mathbb{E}_Q  \mathe^{\lambda X}$$
+
+
+Et notons $Q_\lambda$ la loi de densité $\exp\left(\lambda x  - F(\lambda)\right)$ par rapport à $Q$.
+On vérifie que
+
+$$F'(\lambda) = \mathbb{E}_{Q_ \lambda} X  \qquad \text{ et } \qquad F^{\prime\prime}(\lambda) =  \operatorname{var}_{Q_ \lambda} (X)$$
+
+---
+
+### Proof (suite)
+
+Comme $Q_ \lambda$ est absolument continue par rapport à $Q$, sous $Q_ \lambda$, $X$ est à valeur dans $[a,b]$, et donc
+$$F^{\prime\prime}(\lambda) \leq \frac{(b-a)^2}{4}\, .$$
+On peut intégrer cette inégalité différentielle en notant au passage que $F(0)=F'(0)=0$, et vérifier
+$$F(\lambda) \leq \frac{\lambda^2 (b-a)^2}{8} \, .$$
+
+
+---
+
+###  Inégalité de hoeffding
+
+Si les $(X_i)_{i \leq n}$ sont des variables aléatoires indépendantes à valeur dans $[a_i, b_i]$ et si $Z=\sum_{i=1}^n X_i$ alors pour tout $t>0$
+
+$$\mathbb{P} \left\{ Z \geq \mathbb{E}Z + t \right\} \leq \mathe^{- \frac{2 t^2}{\sum_{i=1}^n (b_i-a_i)^2}}$$
+
+---
+
+### Proof
+
+La preuve se réduit à une invocation de l'inégalité de Markov exponentielle et du lemme de Hoeffding.
+
+
+---
+
+Si les $X_i$ sont des variables de Bernoulli indépendantes et si $Z=\sum_{i=1}^n X_i$ alors l'inégalité de Hoeffding implique
+$$ \mathbf{P} \left\{  |Z- \mathbf{E} Z| \geq \sqrt{\frac{n\log (2/\alpha)}{2}} \right\} \leq \alpha \, .  $$
+On en déduit un intervalle de niveau de confiance $1-\alpha$:
+
+$$\left[\widehat{\theta} - \sqrt{\frac{\log (2/\alpha)}{2n}}, \widehat{\theta} + \sqrt{\frac{\log (2/\alpha)}{2n}} \right]$$
+
+Dans toutes ces constructions on retrouve deux ingrédients, l'intervalle est d'une largeur proportionnelle à
+$\sqrt{{1}/{n}}$ et à un facteur qui dépend du niveau de couverture recherché. Plus nos renseignements sur les fluctuations de $\overline{X}_n$ autour de son espérance sont précis, plus petit est l'intervalle de confiance.
+
+---
+
+### Construction calculatoire
+
+Dans cette section, on note $\operatorname{qb}(\alpha,n,\theta)$ le quantile d'ordre $\alpha$ de la loi binomiale de paramètres $n,\theta$ (cela correspond à la fonction \texttt{qbinom()}  de \texttt{R}). On définit la région empirique
+
+$$\left\{\theta':  \operatorname{qb}(\alpha/2,n,\theta') \leq  n\widehat{\theta}_n \leq   \operatorname{qb}(1-\alpha/2,n,\theta')\right\}$$
+
+Cette région est un intervalle. On peut le vérifier à l'aide d'un argument de _domination stochastique}: si
+$0<\theta < \theta'<1$ et si $F_{n,\theta}$, $F_{n,\theta'}$
+désignent les fonctions de répartition des binomiales de paramètres $(n,\theta)$  et $(n,\theta')$, alors pour tout $x$
+
+$$F_{n,\theta'}(x) \leq F_{n,\theta}(x)$$
+
+---
+
+Cette dernière relation se vérifie par un argument de couplage.
+
+La région de confiance est délimitée par
+
+$$\underline{\theta} = \inf \{ \theta': \operatorname{qb}(1-\alpha/2,n,\theta')\geq n\widehat{\theta}_n \}$$
+
+et
+
+$$\overline{\theta} = \sup \{ \theta': \operatorname{qb}(\alpha/2,n,\theta')\leq n\widehat{\theta}_n \}$$
+
+C'est aussi une région de niveau de confiance $1-\alpha + O(1/\sqrt{n})$.
+
+---
+class: middle, center, inverse
+
+## Tests
+
+---
+
+### Definition: Hypothèse
+
+Une _hypothèse} est une collection de loi de probabilités. La collection peut être réduite à une seule loi,
+on parle alors d'_hypothèse simple}, sinon on parle d'_hypothèse composée ou composite}.
+
+---
+
+Ici, on veut tester
+
+1. $H_0$: l'hypothèse nulle,  $\theta \leq \theta_0 =.5$  contre
+
+1. $H_1$: l'alternative   $\theta > .5$.
+
+Un test binaire est une fonction des données qui vaut $1$ (on rejette l'hypothèse nulle $H_0$) ou $0$ (on ne rejette pas $H_0$). Dans la suite on notera $T$ le test binaire.
+
+---
+
+On peut se demander pourquoi on emploie l'expression _on ne rejette pas l'hypothèse nulle $H_0$_, plutôt que _on accepte l'hypothèse nulle_.
+
+Ce n'est pas par goût des formes négatives.
+
+C'est parce que dans les usages historiques qui ont conduit à la construction de la notion de test, l'hypothèse nulle et l'alternative ne jouent pas le même rôle.
+
+L'hypothèse nulle correspond à une position conservatrice.
+
+Lorsqu'on procède à des essais cliniques, pour évaluer l'intérêt de mettre sur le marché un nouveau médicament, l'hypothèse nulle affirme que ce nouveau traitement ne vaut pas mieux que l'existant, l'alternative affirme qu'au contraire ce nouveau traitement est meilleur.
+
+Ne pas rejeter l'hypothèse nulle, cela ne veut pas dire accepter l'existant pour l'éternité, mais s'y tenir jusqu'à l'apparition d'éléments nouveaux.
+
+---
+
+On note $\mathcal{P}_0$  la collection des lois de probabilité qui définissent l'hypothèse nulle et $\mathcal{P}_1$ la collection des lois de probabilité qui définissent l'alternative.
+
+
+### Définition: type d'erreurs
+
+
+De même que le risque quadratique nous permet de quantifier les performances d'un estimateur, les notions d'erreur de première et de seconde espèce nous permettent de quantifier les performances d'un test binaire.  Notez qu'il nous faut introduire deux quantités pour quantifier les performances d'un test.
+
+L'_erreur de première espèce} consiste à rejeter $H_0$ à tort lorsque les données sont des tirages selon une loi appartenant à l'hypothèse nulle (les données sont tirées sous l'hypothèse nulle).
+
+L'_erreur de seconde espèce} consiste à ne pas rejeter $H_0$ à tort lorsque les données sont des tirages selon une loi appartenant à l'hypothèse alternative (les données sont tirées sous l'alternative).
+
+---
+
+### Niveau et puissance
+
+On appelle _niveau} du test $T$,
+
+$$\sup_{P \in \mathcal{P}_0 } P \{ T= 1\}$$
+
+(le supremum de l'erreur de première espèce).
+
+On appelle _puissance} du test $T$  sous $P \in \mathcal{P}_1 \cup \mathcal{P}_0$,
+la probabilité que $T$ rejette $H_0$ sous~$P$:
+
+$$\beta_T(P)=  P\{ T=1\}$$
+
+Sous l'alternative, la puissance est le complément à un de l'erreur de seconde espèce.
+
+On veut à la fois un test de petit niveau et de grande puissance sous l'alternative. Ces deux souhaits sont antagonistes.
+Dans le cas où on teste deux hypothèses simples, il existe une méthodologie qui réalise le meilleur compromis possible.
+
+---
+
+### Tests dits de rapport de vraisemblance
+
+
+On peut associer à chaque $\theta \in ]0,1[$  et à chaque échantillon $x_1, \ldots, x_n$, une _vraisemblance} qui n'est autre que la probabilité de $x_1, \ldots, x_n$ sous $P_ \theta^{\otimes n}$:
+
+$$P_ \theta^{\otimes n} \{ x_1 , \ldots, x_n\} =  \left( \frac{\theta}{1- \theta}\right)^{n \overline{X}_n} (1- \theta)^n$$
+
+---
+
+### Definition Test de rapport de vraisemblance entre hypothèses simples
+
+Un test de rapport de vraisemblance de $H_1$  contre $H_0$ consiste à comparer le rapport
+$P_{\theta_1}^{\otimes n} \{ x_1 , \ldots, x_n\}/ P_ {\theta_0}^{\otimes n} \{ x_1 , \ldots, x_n\}$
+à un seuil, à rejeter $H_0$ si le seuil est dépassé, à ne pas rejeter $H_0$ si le seuil n'est pas dépassé.
+
+
+---
+
+Ici, le rapport de vraisemblance est  une fonction de $\overline{X}_n = \sum_{i=1}^n X_i/n=  \widehat{\theta}_n$ (ce n'est pas du tout une simple coïncidence).
+
+$$\left(\frac{1-\theta_1}{1-\theta_0}\right)^n \left(\frac{\theta_1(1-\theta_0)}{\theta_0(1-\theta_1)} \right)^{n \widehat{\theta}_n}$$
+
+Comparer le rapport de vraisemblance à un seuil, c'est ici équivalent à comparer  $\widehat{\theta}_n$ à un seuil,
+à rejeter $H_0$ lorsque $\widehat{\theta}_n$  dépasse le seuil, à ne pas rejeter $H_0$ si $\widehat{\theta}_n$  ne dépasse pas le seuil.
+
+---
+class: middle, center, inverse
+
+## Optimalité des tests dits de rapport de vraisemblance
+
+---
+
+### Version préliminaire du Lemme de Neyman-Pearson
+
+S'il existe un test de rapport de
+vraisemblance $T_0$ de niveau $\alpha > 0$ et de fonction
+puissance $\beta_{T_0}$, alors pour tout test $T$ \ de niveau
+inférieur ou égal à $\alpha_{}$, la \ fonction puissance $\beta_T$
+de $T$ vérifie
+
+$$\beta_T (P_1) \leq \beta_{T_0} (P_1)$$
+
+
+---
+
+### Proof
+
+On note $p_0 ()$ \ et $p_1 ()$ les versions des densités utilisées dans
+la définition du test $T_0$. Il existe une valeur $\tau < \infty$, telle
+que
+
+$$P_0 \left\{ \text{$p_0 (X) / p_1 (X) > \tau$} \right\} = \alpha$$
+
+Et $T_0$ est défini par
+
+$$T_0 (x) = \mathbbm{1}_{p_1 (x) / p_0 (x) > \tau .}$$
+
+La preuve du lemme \ref{lem:neyman:pearson} se réduit alors à:
+
+$$\begin{array}{rcl}\beta_{T_0} (P_1) - \beta_T (P_1) & = & \mathbbm{E}_{P_1} \left[ T_0 - T
+\right]\\ & = & \mathbbm{E}_{P_0} \left[ \frac{p_1 (X)}{p_0 (X)_{}} (T_0 - T)
+\right] + \mathbbm{E}_{P_1} \left[ (T_0 - T) \mathbbm{1}_{p_0 (X) = 0}
+\right]\\ &  & \text{sur l'événement } p_0 (X) = 0, T_0 = 1, \operatorname{car}
+\operatorname{le} \operatorname{rapport}\\ &  & \operatorname{de} \operatorname{vraisemblance} \operatorname{est} \operatorname{infini}\\
+& \geq & \mathbbm{E}_{P_0} \left[ \frac{p_1 (X)}{p_0 (X)_{}} (T_0 -
+T) \right]\\ & = & \mathbbm{E}_{P_0} \left[ \left( \frac{p_1 (X)}{p_0 (X)_{}} - \tau
+\right) (T_0 - T) \right] + \tau \mathbbm{E}_{P_0} \left[ T_0 - T
+\right]\\ &  & \operatorname{comme} \left( \frac{p_1 (X)}{p_0 (X)_{}} - \tau \right) (T_0 -
+T) \geq 0,\\ & \geq & \tau \mathbbm{E}_{P_0} \left[ T_0 - T \right] \\ & \geq & 0\end{array}$$
+
+---
+
+```{r, echo=FALSE}
+theta0 <- .5
+theta1 <- .525
+n <- 100
+```
+
+```{r niveaupuissance, echo=FALSE}
+n <- 100
+thresholds <- (seq(.01,.99,by=.01))
+underH0 <- plyr::aaply(.data=outer(thresholds, rbinom(n = 10000, size = n, prob = theta0 )/n, "<"),
+                       .margin=1,
+                       .fun=mean)
+underH1 <- plyr::aaply(.data=outer(thresholds, rbinom(n = 10000, size = n, prob = theta1 )/n, "<"),
+                       .margin=1,
+                       .fun=mean)
+p <- ggplot2::qplot(x=underH0,y=underH1,geom="line")
+p <- p +ggplot2::xlab("niveau") + ggplot2::ylab("puissance")
+p <- p +ggplot2::geom_abline(intercept=0,slope=1,colour=2)
+
+n <- 1000
+underH0bis <- plyr::aaply(.data=outer(thresholds, rbinom(n = 10000, size = n, prob = theta0 )/n, "<"),
+                       .margin=1,
+                       .fun=mean)
+underH1bis <- plyr::aaply(.data=outer(thresholds, rbinom(n = 10000, size = n, prob = theta1 )/n, "<"),
+                       .margin=1,
+                       .fun=mean)
+n <- 5000
+underH0ter <- plyr::aaply(.data=outer(thresholds, rbinom(n = 10000, size = n, prob = theta0 )/n, "<"),
+                       .margin=1,
+                       .fun=mean)
+underH1ter <- plyr::aaply(.data=outer(thresholds, rbinom(n = 10000, size = n, prob = theta1 )/n, "<"),
+                       .margin=1,
+                       .fun=mean)
+
+p <- p + ggplot2::geom_line(mapping=ggplot2::aes(x=underH0bis,y=underH1bis),linetype=2)
+p <- p + ggplot2::geom_line(mapping=ggplot2::aes(x=underH0ter,y=underH1ter),linetype=3)+ggplot2::theme_bw()
+```
+
+```{r, echo=FALSE}
+compromis <- c(min(1+underH0-underH1),
+  min(1+underH0bis-underH1bis),
+  min(1+underH0ter-underH1ter))
+```
+
+.fl.w-two-thirds.pa2[
+```{r}
+p + ggplot2::geom_abline(slope=1,intercept=1-compromis[2],colour=3)
+```
+]
+
+
+.fl.w-third.pa2[
+
+Pour une grille de seuils, on évalue niveau  et puissance pour différentes tailles d'échantillon (100, 1000, 5000). Sur un même graphique on représente la courbe niveau/puissance pour ces trois tailles d'échantillon (lignes brisées noires). Pour chaque courbe, le meilleur compromis erreur de première espèce/erreur de seconde espèce est la distance $\ell_1$ au point $(0,1)$. On constate (sans surprise) que cette distance diminue lorsque la taille de l'échantillon augmente.
+Les compromis optimaux (au sens de la minimisation de $\alpha_T(P_0)- \beta_T(P_1)$) peuvent être visualisés en traçant des parallèles
+à la diagonale principale comme la ligne verte, en choisissant comme \texttt{intercept}
+l'écart maximal entre puissance et niveau.
+On observe  que les compromis optimaux ne sont pas obtenus en
+égalisant les erreurs de première et de seconde espèce. Pour les tailles
+d'échantillons (1000,5000), au compromis optimal, l'erreur de première
+espèce est sensiblement plus importante que l'erreur de seconde espèce.
+
+]
+
+
+---
+class: middle, center, inverse
+
+## Références
+
+---
+
+
+Pour une introduction puissante mais d'un formalisme minimal à la modélisation statistique, on pourra lire
+_Statistical models} de \citet{Fre05} et le volume compagnon \citep{freedman2009statistical}.
+
+Il s'agit de livres écrits par un mathématicien engagé,
+pour un public cultivé mais large. Une discussion critique et érudite de l'usage de l'inférence  statistique dans la vie.
+
+Les ouvrages de \citet*{LehRom05} \citet*{LehCas98} constituent toujours une somme sur les problèmes fondamentaux de la statistique.
+
+L'inégalité de Hoeffding est la plus simple des inégalités de concentration. Voir \cite{Led01} pour une perspective générale
+sur le phénomène de concentration,  \cite{BoLuMa13} pour un exposé tourné vers les applications.
+
+
+
 
 ---
 class: middle, center, inverse
