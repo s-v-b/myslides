@@ -1,5 +1,5 @@
 ---
-title: "EDA I"
+title: "EDA X"
 subtitle: "⚔<br/>Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
@@ -90,7 +90,7 @@ class: middle, center, inverse
 
 
 
-# Exploratory Data Analysis I
+# Exploratory Data Analysis X Factorizations
 
 ### `r Sys.Date()`
 
