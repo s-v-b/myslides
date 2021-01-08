@@ -104,6 +104,8 @@ class: inverse, middle
 
 ### `lm()`  as a statistical pipeline
 
+### Tidy approach to modeling
+
 ### ANOVA
 
 ### Variable selection

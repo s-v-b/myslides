@@ -80,7 +80,10 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### Probabilités Master I MIDS
+#### [Probabilités Master I MIDS](http://stephane-v-boucheron.fr/courses/probability/)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+
 
 
 
@@ -90,21 +93,21 @@ class: middle, center, inverse
 ---
 class: inverse, middle
 
-## `r fontawesome::fa("map")`
+## `r fontawesome::fa("map", fill="white")`
 
 ## Motivation
 
-## Definition and elementary properties
+### Definition and elementary properties
 
-## Construction for $X \in \mathcal{L}_2$
+### Construction for $X \in \mathcal{L}_2$
 
-## Construction for $X \in \mathcal{L}_1$
+### Construction for $X \in \mathcal{L}_1$
 
-## Conditional probabilities
+### Conditional probabilities
 
-## Conditional densities
+### Conditional densities
 
-## Regular conditional probability kernels
+### Regular conditional probability kernels
 
 
 ---
@@ -760,7 +763,7 @@ $$\operatorname{Var} [X] = \operatorname{Var} \Big[ \mathbb{E} \left[ X \mid \ma
 
 ---
 
-### `r fontawesome::fa("binoculars")` 
+### `r fontawesome::fa("binoculars")`
 
 - $X - \mathbb{E}X = \underbrace{X - \mathbb{E}[X \mid \mathcal{G}]}_{\text{orthogonal to any } \mathcal{G} \text{-measurable}}  + \quad \underbrace{\mathbb{E}[X \mid \mathcal{G}] - \mathbb{E}X}_{\mathcal{G} \text{-measurable}}$
 
@@ -1151,7 +1154,7 @@ to monotone convergence arguments.
 Let $B \in \mathcal{G}$. Let  $X = \liminf_n X_n$, $X$
 is a non-negative random variable.
 
-Let  $Y = \liminf_n \mathbb{E} \left[ X_n \mid \mathcal{G} \right]$, 
+Let  $Y = \liminf_n \mathbb{E} \left[ X_n \mid \mathcal{G} \right]$,
 
 $Y$ is a $\mathcal{G}$ -measurable integrable random variable.
 
@@ -1522,7 +1525,7 @@ with density $p (.,.)$
 
 - Let $p_X$ be the density of $P \circ X^{-1}$
 
-The function $N$ defined by 
+The function $N$ defined by
 
 $$N(x, y) =  \Bigg\{\begin{array}{lr} \frac{p (x, y)}{p_X (x)} & \text{if } p_X (x) > 0\\ 0 & \text{ otherwise} \end{array}\bigg.$$
 

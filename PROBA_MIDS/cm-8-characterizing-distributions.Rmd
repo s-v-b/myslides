@@ -81,9 +81,9 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### Probabilités Master I MIDS
+#### [Probabilités Master I MIDS](http://stephane-v-boucheron.fr/courses/probability/)
 
-[<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 
 ---
@@ -180,7 +180,7 @@ The _characteristic function_ $\widehat{F}$ of distribution $P$ is defined by
 - The definition can be extended to distributions on $\mathbb{R}^k, k\geq 1$
 
 ---
-exclude: true 
+exclude: true
 ### Characteristic functions of Absolutely Continuous distributions
 
 
@@ -360,7 +360,7 @@ fontawesome::fa("puzzle-piece")
 
 A byproduct of Proposition is the following integral representation of the Gaussian density.
 
-$$\phi(x)  =  \frac{1}{\sqrt{2 \pi}} \int_{\mathbb{R}} \widehat{\Phi}(t) \mathrm{e}^{-itx} \mathrm{d}t$$
+$$\phi(x)  =  \frac{1}{2 \pi} \int_{\mathbb{R}} \widehat{\Phi}(t) \mathrm{e}^{-itx} \mathrm{d}t$$
 
 It does not look interesting, but it is a milestone for the derivation of the _general inversion formula_
 
@@ -543,8 +543,8 @@ $$\widehat{F}_\sigma(t) = \widehat{\Phi}(t\sigma) \times \widehat{F}(t) = \mathr
 - the distribution of $Y$ is absolutely continuous with respect to Lebesgue measure
 
 - a version of the  density of the distribution of $Y$ is given by
-$$\frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}} \widehat{F}(t)\mathrm{e}^{-ity} \mathrm{d}t
-  = \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}}  \widehat{F}_\sigma(t)\mathrm{e}^{-ity} \mathrm{d}t$$
+$$\frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}} \widehat{F}(t)\mathrm{e}^{-ity} \mathrm{d}t
+  = \frac{1}{{2 \pi}}\int_{\mathbb{R}}  \widehat{F}_\sigma(t)\mathrm{e}^{-ity} \mathrm{d}t$$
 
 ]
 
@@ -912,8 +912,7 @@ $$1 - \cos x = \int_0^x \cos(s) (x-s) \mathrm{d}s = x^ 2 \int_0^1 \cos(sx) (1-s)
 
 By Fatou's Lemma:
 
-$$\sigma^2 = \lim_{h \downarrow 0} 2\mathbb{E}\Big[ X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s\Big]
-\geq 2\mathbb{E}\Big[\liminf_{h \downarrow 0} X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s \Big]$$
+$$\begin{array}{rl}\sigma^2  & = \lim_{h \downarrow 0} 2\mathbb{E}\Big[ X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s\Big]\\ & \geq 2\mathbb{E}\Big[\liminf_{h \downarrow 0} X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s \Big]\end{array}$$
 
 --
 

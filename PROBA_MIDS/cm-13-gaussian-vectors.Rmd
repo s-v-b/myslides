@@ -80,8 +80,9 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### Probabilités Master I MIDS
+#### [Probabilités Master I MIDS](http://stephane-v-boucheron.fr/courses/probability/)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr/)
 
 
 
@@ -786,20 +787,19 @@ $$\mathbb{E} \left[ \mathrm{e}^{\imath \mu Z} \mathrm{e}^{\imath \mu' Y} \right]
 
 ### Proof (continued)
 
+.small[
 $$\begin{array}{rcl}
 \mathbb{E} \left[ \mathrm{e}^{\imath \mu Z} \mathrm{e}^{\imath \mu' Y} \right] &
 = & \mathbb{E} \left[ \mathrm{e}^{\imath \mu \sum_i \lambda_i    X_i}
 \mathrm{e}^{\imath \mu' \sum_i \lambda'_i    X_i} \right]\\
 & = & \mathbb{E} \left[ \prod_{i = 1}^n    \mathrm{e}^{\imath (\mu
-\lambda_i + \mu' \lambda'_i)    X_i} \right]\\
-&  & X_i \text{ are  independent} \ldots\\
+\lambda_i + \mu' \lambda'_i)    X_i} \right] \qquad  (X_i \text{ are  independent} \ldots)\\
 & = & \prod_{i = 1}^n  \mathbb{E} \left[ \mathrm{e}^{\imath (\mu \lambda_i +
 \mu' \lambda'_i)    X_i} \right]\\
 & = & \prod_{i = 1}^n \mathrm{e}^{- (\mu \lambda_i + \mu' \lambda'_i)
 ^2 / 2}\\
 & = & \exp \left( - \frac{1}{2} \sum_{i = 1}^n \mu^2 \lambda_i^2 + 2 \mu
-\mu' \lambda_i \lambda'_i + \mu'^2 \lambda'^2_i    \right)\\
-&  & \text{orthogonality}\\
+\mu' \lambda_i \lambda'_i + \mu'^2 \lambda'^2_i    \right)\qquad  (\text{orthogonality})\\
 & = & \exp \left( - \frac{1}{2} \sum_{i = 1}^n \mu^2 \lambda_i^2 + \mu'^2
 \lambda'^2_i    \right)\\
 &  & \ldots\\
@@ -809,6 +809,7 @@ $$\begin{array}{rcl}
 
 `r fontawesome::fa("square")`
 
+]
 
 ---
 
@@ -1068,20 +1069,32 @@ By the Cauchy-Schwarz Inequality, $\rho \in [-1,1]$.
 
 ---
 
-These two theorems are usually addressed in the order in which they are stated. Conditional expectation is characterized by adopting the $L^2$ (predictive) viewpoint: the conditional expectation of the random vector $Y$ knowing $X$ is defined as the best $X$-measurable predictor of the vector $Y$  with respect to  quadratic error (the random vector $Z$, $X$-measurable that minimizes $\mathbb{E} \left[ \| Y- Z\|^2 \right]$).
+These two theorems are usually addressed in the order in which they are stated. 
+
+Conditional expectation is characterized by adopting the $L^2$ (predictive) viewpoint: 
+
+> the conditional expectation of the random vector $Y$ knowing $X$ is defined as the best $X$-measurable predictor of the vector $Y$  with respect to  quadratic error (the random vector $Z$, $X$-measurable that minimizes $\mathbb{E} \left[ \| Y- Z\|^2 \right]$).
+
+---
 
 In order to characterize conditional expectation,
 we first compute the optimal affine predictor of
-$(X_{k+1},\ldots,X_n)^T$  based on $(X_{1},\ldots,X_k)^T$. This optimal affine predictor is
+$(X_{k+1},\ldots,X_n)^T$  based on $(X_{1},\ldots,X_k)^T$. 
+
+This optimal affine predictor is
 
 $$\begin{pmatrix} \mu_{k+1} \\ \vdots \\ \mu_n \end{pmatrix}   + \left(B A^{-1}  \right) \times  \left( \begin{pmatrix}
 X_{1} \\ \vdots \\ X_{k} \end{pmatrix}  - \begin{pmatrix} \mu_{1} \\ \vdots \\ \mu_k \end{pmatrix}\right)$$
 
 
-(if Gaussian vectors are centred, this amounts to determine the matrix $P$  with  dimensions $(n-k)\times k$
+`r fontawesome::fa("hand-point-right")` If Gaussian vectors are centred, this amounts to determine the matrix $P$  with  dimensions $(n-k)\times k$
 which minimizes  $\text{trace}(PA P^t -2 B P^t$)).
-The optimal affine predictor is a Gaussian vector,
-one can check that the residual vector
+
+---
+
+The optimal affine predictor is a Gaussian vector.
+
+One can check that the residual vector
 
 $$\begin{pmatrix} X_{k+1}\\ \vdots \\ X_n \end{pmatrix} - \left\{ \begin{pmatrix} \mu_{k+1} \\ \vdots \\ \mu_n \end{pmatrix}   + \left(B A^{-1}\right) \times  \left( \begin{pmatrix}
 X_{1} \\ \vdots \\ X_{k}
@@ -1091,6 +1104,8 @@ X_{1} \\ \vdots \\ X_{k}
 
 is also Gaussian and orthogonal to the affine predictor. The residual vector  is independent
 from the  affine predictor.
+
+---
 
 This is enough to establish that the affine predictor is the orthogonal projection of
 $(X_{k+1}, \ldots, X_n)^T$ on the closed linear subspace of  square-integrable

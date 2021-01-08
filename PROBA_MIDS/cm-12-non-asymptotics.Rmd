@@ -80,7 +80,10 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### Probabilités Master I MIDS
+#### [Probabilités Master I MIDS](http://stephane-v-boucheron.fr/courses/probability/)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+
 
 
 ---

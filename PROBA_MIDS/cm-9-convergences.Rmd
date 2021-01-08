@@ -50,10 +50,31 @@ background-position: 97% 3%
 }
 </style>
 
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```
+
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons(minified = FALSE)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+```
+
 ---
 class: middle, center, inverse
-background-size: 4%
-background-position: 97% 3%
 
 
 
@@ -61,10 +82,11 @@ background-position: 97% 3%
 
 ### `r Sys.Date()`
 
-#### Probabilités Master I MIDS
+#### [Probabilités Master I MIDS](http://stephane-v-boucheron.fr/courses/probability/)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 
-[<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
 
 ---
 class: inverse, middle
@@ -157,7 +179,7 @@ has $P$-probability $1$.
 
 - `r fontawesome::fa("exclamation")` All random variables involved in the above statements live on the same probability space.
 
-- `r fontawesome::fa("puzzle-piece")` Can we design a metric for almost-sure convergence?   
+- `r fontawesome::fa("puzzle-piece")` Can we design a metric for almost-sure convergence?
 The answer is no, as for pointwise convergence, in general
 
 ---
@@ -446,7 +468,7 @@ class: middle, center, inverse
 ---
 name: wlln
 
-### Weak law of large numbers 
+### Weak law of large numbers
 
 The weak and the strong law of large numbers are concerned with
 the convergence of empirical means of independent, identically distributed,
@@ -594,7 +616,7 @@ $$\begin{array}{rl}P \Big\{ \omega : \omega \text{ belongs to infinitely many ev
 
 ### Definition Tail sigma-algebra
 
-Assume $X_1, \ldots, X_n, \ldots$ are  random variables. 
+Assume $X_1, \ldots, X_n, \ldots$ are  random variables.
 
 The tail $\sigma$-algebra (or the $\sigma$-algebra of tail events) is defined as:
 
@@ -628,11 +650,11 @@ Any event in the tail $\sigma$-algebra $\mathcal{T}$ has probability either $0$ 
 
 ### Proof
 
-It suffices to check that any event $A \in \mathcal{T}$ satisfies 
+It suffices to check that any event $A \in \mathcal{T}$ satisfies
 
 $$P(A)^2 = P(A)$$
 
-or equivalently that 
+or equivalently that
 
 $$P(A) = P(A \cap A) = P(A) \times P(A)$$
 
@@ -641,7 +663,7 @@ that is $A$ is independent of itself.
 --
 
 For any $n$,  an event $A \in \mathcal{T}$, is independent
-from any event in $\sigma\big(X_1, \ldots, X_n\big)$. 
+from any event in $\sigma\big(X_1, \ldots, X_n\big)$.
 
 --
 
@@ -652,7 +674,7 @@ $A \in \mathcal{T}$ is independent from any event in $\cup_n \sigma\big(X_1, \ld
 
 ### Proof (continued)
 
-`r fontawesome::fa("exclamation-triangle")` 
+`r fontawesome::fa("exclamation-triangle")`
 
 Collection $\cup_n \sigma\big(X_1, \ldots, X_n\big)$ is a $\pi$-system.
 
@@ -675,9 +697,9 @@ exclude: true
 ---
 
 
-`r fontawesome::fa("exclamation")` The event 
+`r fontawesome::fa("exclamation")` The event
 
-$$\left\{\omega : \frac{1}{n}\sum_{i=1}^n X_i(\omega) \to \text{finite limit}\right\}$$ 
+$$\left\{\omega : \frac{1}{n}\sum_{i=1}^n X_i(\omega) \to \text{finite limit}\right\}$$
 
 belongs to the tail $\sigma$-algebra.
 
@@ -894,13 +916,13 @@ $$\begin{array}{rl}
 
 ### Theorem Strong  law of large numbers, converse part
 
-Let $X_1, \ldots, X_n, \ldots$  be independently, identically distributed  $\mathbb{R}$-valued random variables over some $(\Omega, \mathcal{F}, P)$. 
+Let $X_1, \ldots, X_n, \ldots$  be independently, identically distributed  $\mathbb{R}$-valued random variables over some $(\Omega, \mathcal{F}, P)$.
 
 If for some finite constant $\mu$,
 
 $$\lim_{n \to \infty}    \sum_{i\leq n} X_i/n =   \mu \qquad \text{almost surely,}$$
 
-then 
+then
 
 all $X_i$ are integrable and $\mathbb{E}X_i = \mu.$
 

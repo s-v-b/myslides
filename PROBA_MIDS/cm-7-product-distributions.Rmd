@@ -26,9 +26,6 @@ output:
 name: layout-general
 layout: true
 class: left, middle
-background-image: url('./img/Universite_Paris_logo_horizontal.jpg')
-background-size: 10%
-background-position: 97% 3%
 
 <style>
 .remark-slide-number {
@@ -50,6 +47,30 @@ background-position: 97% 3%
 }
 </style>
 
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```
+
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons(minified = FALSE)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+```
+
 ---
 class: middle, center, inverse
 background-size: 4%
@@ -61,10 +82,10 @@ background-position: 97% 3%
 
 ### `r Sys.Date()`
 
-#### Probabilités Master I MIDS
+#### [Probabilités Master I MIDS](http://stephane-v-boucheron.fr/courses/probability/)
 
+### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
-[<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
 
 ---
 class: inverse, center, middle

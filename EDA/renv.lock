@@ -23,6 +23,13 @@
       "Repository": "CRAN",
       "Hash": "4744be45519d675af66c28478720fce5"
     },
+    "Formula": {
+      "Package": "Formula",
+      "Version": "1.2-4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "cc8c8c4d61346cde1ca60030ff9c241f"
+    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-51.6",
@@ -327,6 +334,13 @@
       "Repository": "CRAN",
       "Hash": "4ded8b439797f7b1693bd3d238d0106b"
     },
+    "globals": {
+      "Package": "globals",
+      "Version": "0.14.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "eca8023ed5ca6372479ebb9b3207f5ae"
+    },
     "glue": {
       "Package": "glue",
       "Version": "1.4.2",
@@ -571,6 +585,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "121198ce37b5a6b5227edc5a38223da4"
+    },
+    "parsnip": {
+      "Package": "parsnip",
+      "Version": "0.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3dcb8ae85c17af1169a7c27efbe178e2"
     },
     "pillar": {
       "Package": "pillar",

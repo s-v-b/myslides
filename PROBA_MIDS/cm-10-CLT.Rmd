@@ -76,10 +76,12 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### Probabilités Master I MIDS
+#### [Probabilités Master I MIDS](http://stephane-v-boucheron.fr/courses/probability/)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 
-[<img src="img/Universite_Paris_logo_horizontal.jpg" align="left" width="300px" style="vertical-align:bottom">](https://www.u-paris.fr)
+
 
 ```{r load, echo=FALSE, message=FALSE, warning=FALSE}
 # %%
@@ -547,12 +549,12 @@ $$\begin{array}{rl}  \lim_n \mathbb{E}_{P_n} f    & = \lim_n \int_{[0, 1]} P_n \
 
 - $X_n ⇝ X$
 
-- Closed set $F = (-\infty, 0]$, 
-$$P_n(F) = 0, \quad \forall n$$   
+- Closed set $F = (-\infty, 0]$,
+$$P_n(F) = 0, \quad \forall n$$
 but $P(F) = 1 \geq \limsup_n P_n(F)=0$
 
-- Open set $O = ]0, \infty)$, 
-$$P_n(O) = 1, \quad \forall n$$   
+- Open set $O = ]0, \infty)$,
+$$P_n(O) = 1, \quad \forall n$$
 but $P(O) = 0 \leq \liminf_n P_n(O)=1$
 
 
