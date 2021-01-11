@@ -313,9 +313,13 @@ $P_ \theta$ l'élément de $\mathcal{P}$ associé à $\theta$
 
 ### Identifiabilité `r fontawesome::fa("fingerprint")`
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Une paramétrisation est dite _identifiable_ si
 
 $$\theta \neq \theta' \Rightarrow P_ \theta \neq P_{\theta'}$$
+
+]
 
 > Dans notre problème jouet, les  paramétrisations (par la probabilité de _face_, par le  ratio des probabilités _face_/_pile_, ou son logarithme) sont identifiables
 
@@ -399,17 +403,26 @@ Le reste est sous-entendu `r fontawesome::fa("smile-wink")`
 
 ### Statistique
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Toute fonction mesurable sur l'espace des observations $\mathcal{X}^n$  définit ce qu'on nomme une _statistique_
+
+]
+
 
 Exemples
 
-- La _moyenne empirique_
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-$$\overline{X}_n:=  \frac{1}{n} \sum_{i=1}^n x_i$$
+- La _moyenne empirique_  $\overline{X}_n:=  \frac{1}{n} \sum_{i=1}^n x_i$
+]
 
-- La  _variance empirique_
 
-$$S^2:= \frac{1}{n} \sum_{i=1}^n \left(x_i - \overline{X}_n \right)^2$$
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+- La  _variance empirique_ $S^2:= \frac{1}{n} \sum_{i=1}^n \left(x_i - \overline{X}_n \right)^2$
+
+]
 
 ???
 
@@ -419,7 +432,12 @@ Dans le langage des statistiques descriptives, la moyenne empirique décrit la l
 
 ### Estimateur
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 `r fontawesome::fa("frown")` Un _estimateur_ n'est qu'une statistique  censée estimer une caractéristique (inconnue) de la loi inconnue qui sous-tend l'échantillonage
+
+]
+
 
 Par exemple, dans notre problème jouet,
 on peut chercher à estimer
@@ -498,6 +516,8 @@ est construite à partir des résultats fondamentaux du calcul des probabilités
 
 ### Loi(s) des grands nombres `r fontawesome::fa("syringe")`
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 - $X_1, \ldots, X_n, \ldots \sim_{\text{i.i.d.}} P$
 
 - $\mu = \mathbb{E}_P X_i$  (on sous-entend $\mathbb{E}_P |X_i| <\infty$)
@@ -506,13 +526,13 @@ est construite à partir des résultats fondamentaux du calcul des probabilités
 
 $$\mathbb{P} (B_1 \times B_2 \times \ldots \times B_n) = \prod_{i=1}^n P(B_i) \qquad \forall B_i \in \mathcal{B}(\mathbb{R})$$
 
---
 
 $$\forall \epsilon >0, \qquad \mathbb{P} \Bigg\{ \left| \frac{1}{n}\sum_{i=1}^n X_i - \mu\right| > \epsilon \Bigg\} \rightarrow 0 \qquad \text{loi faible}$$
 
---
 
 $$\mathbb{P} \Bigg\{  \lim_n \underbrace{\frac{1}{n}\sum_{i=1}^n X_i}_{\text{moyenne empirique}} =  \mu \Bigg\} = 1 \qquad \text{loi forte}$$
+
+]
 
 ---
 
@@ -691,6 +711,8 @@ Les _quantiles_, l'_asymétrie_, la _kurtosis_ sont d'autres paramètres
 
 ### Definition: biais
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Soit $\psi(P)$ un paramètre à estimer, et $\widehat{\psi}$  un
 estimateur, on appelle _biais_ (ou biais moyen) sous la loi $P$ de l'estimateur
 $\hat{\psi}$,  la quantité
@@ -700,6 +722,8 @@ $$\mathbb{E}_{P}\left[ \widehat{\psi}- \psi(P)\right]$$
 
 C'est l'écart entre la valeur moyenne de $\widehat{\psi}$ et la valeur
 visée $\psi(P)$
+
+]
 
 L'estimateur est dit _sans biais_ s'il est de biais nul
 
@@ -732,11 +756,14 @@ $$\mathbb{E}_P\left[ S^2 \right] =  \frac{n-1}{n} \mathbb{E}_P \left[\left(X - \
 
 ### Definition : risque quadratique
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Soit $\psi(P)$ une paramètre à estimer, et $\widehat{\psi}$  un
 estimateur, on appelle _écart quadratique moyen_  sous la loi $P$ de l'estimateur
 $\widehat{\psi}$ la quantité
 
 $$\mathbb{E}_{P}\left[ \left(\widehat{\psi}- \psi(P)\right)^2\right]$$
+]
 
 ---
 
@@ -753,9 +780,13 @@ $$\mathbb{E}_{\theta} \left[\left(\overline{X}_n - \theta\right)^2\right] =  \fr
 
 ### Décomposition biais-variance du risque quadratique
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 $$\mathbb{E}_{P} \left[(\hat{\psi}-\psi)^2\right] = \underbrace{\operatorname{Var}_{P} [\hat{\psi}]}_{\text{variance}} + \underbrace{\left(\mathbb{E}_{P}[\hat{\psi}]-\psi \right)^2}_{\text{carré du biais}}$$
+
+]
+
 
 `r fontawesome::fa("brain")` vérifier
 
@@ -778,6 +809,8 @@ des notions de convergence en probabilité et de convergence presque sûre
 
 ### Definition  `r fontawesome::fa("syringe")`
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Une suite $(X_n)_n$  de variables aléatoires à valeurs dans
 $\mathbb{R}^k$, vivant sur un espace probabilisé
 $(\Omega,\mathcal{F},\mathbb{P})$ _converge en probabilité_ vers une
@@ -788,33 +821,37 @@ si et seulement si,
 
 $$\forall \epsilon>0, \qquad \lim_n \mathbb{P} \{ \Vert X_n -X\Vert > \epsilon \} = 0$$
 
-
+]
 
 ---
 
 ### Definition: consistance
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Dans une suite d'expériences statistiques échantillonnées,
-une suite d'estimateurs $(\widehat{\theta}_n)$ est
+une suite d'estimateurs $(\widehat{\theta}_n)_n$ est
 
 - _consistante_ (pour l'estimation de $\theta$)
 
 si
 
-$$\forall \theta \in \Theta, \forall \epsilon>0, \qquad \lim_n     P^{\otimes n}_ \theta \left\{ \| \widehat{\theta}-\theta\| > \epsilon \right\} =0 \qquad\text{(convergence en probabilité).}$$
+$$\forall \theta \in \Theta, \forall \epsilon>0, \qquad \lim_n     P^{\otimes n}_ \theta \left\{ \| \widehat{\theta}_n-\theta\| > \epsilon \right\} =0 \qquad\text{(convergence en probabilité).}$$
 
 - _fortement consistante_
 
 si
 
-$$\forall \theta \in \Theta, \forall \epsilon>0, \qquad     P^{\otimes \mathbb{N}}_ \theta \left\{ \lim_n \| \widehat{\theta}-\theta\| =0 \right\} =1 \qquad\text{(convergence presque sûre).}$$
+$$\forall \theta \in \Theta, \forall \epsilon>0, \qquad     P^{\otimes \mathbb{N}}_ \theta \left\{ \lim_n \| \widehat{\theta}_n-\theta\| =0 \right\} =1 \qquad\text{(convergence presque sûre).}$$
+
+]
 
 ---
 
-Pour notre problème jouet, la suite d'estimateurs $(\overline{X}_n)$ est fortement consistante pour l'estimation de $\theta$ (loi forte des grands nombres) `r fontawesome::fa("glass-cheers")`
+Pour notre problème jouet, la suite d'estimateurs $(\overline{X}_n)_n$ est fortement consistante pour l'estimation de $\theta$ (loi forte des grands nombres) `r fontawesome::fa("glass-cheers")`
 
 
-On peut aussi vérifier que la suite $(\overline{X}_n/(1-\overline{X}_n))$ est fortement consistante pour l'estimation de $\theta/(1- \theta)$.
+On peut aussi vérifier que la suite $(\overline{X}_n/(1-\overline{X}_n))_n$ est fortement consistante pour l'estimation de $\theta/(1- \theta)$.
 
 `r fontawesome::fa("brain")`
 
@@ -857,6 +894,8 @@ class: middle, center, inverse
 
 ### Definition: intervalle de niveau de confiance $1-\alpha$
 
+
+
 <img src="./img/pexels-dids-2379020.jpg" width="300px" align="right">
 
 Lorsque l'espace des paramètres $\Theta$ est inclus dans $\mathbb{R}$,
@@ -868,6 +907,7 @@ est
 un couple de statistiques $\underline{\theta}_n, \overline{\theta}_n$ telles que
 
 $$\forall \theta \in \Theta, \qquad P_\theta^{\otimes n} \left\{ \theta \in [\underline{\theta}_n, \overline{\theta}_n]\right\} \geq 1- \alpha$$
+
 
 
 ---
@@ -935,15 +975,17 @@ cat("Taux de couverture empirique de l'IC Chebychev à 75% : ",   round(couv* 10
 
 ### Definition: intervalle de niveau de confiance _asymptotique_ $1-\alpha$
 
+
+
 Lorsque l'espace des paramètres $\Theta$ est inclus dans $\mathbb{R}$,
 
-un _intervalle  de niveau de   confiance asymptotique $1- \alpha$_ avec $\alpha \in ]0,1[$
+une suite  d' _intervalles  de confiance_ $[\underline{\theta}_n, \overline{\theta}_n]$ est de niveau de   confiance asymptotique $1- \alpha$_ avec $\alpha \in ]0,1[$
 
-est
-
-un couple de statistiques $\underline{\theta}_n, \overline{\theta}_n$ telles que
+si et seulement si 
 
 $$\forall \theta \in \Theta, \qquad \lim_n P_ \theta^{\otimes n} \left\{ \theta \in [\underline{\theta}_n, \overline{\theta}_n]\right\} =  1- \alpha$$
+
+
 
 ---
 
@@ -960,6 +1002,8 @@ souvent la définition suivante
 
 ### Definition Convergence faible/étroite `r fontawesome::fa("syringe")`
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Une suite $(P_n)_{n\in \mathbb{N}}$ de probabilités sur $\mathbb{R}$ (de fonctions de
 répartition $(F_n)_{n\in \mathbb{N}}$)  converge
 _étroitement/faiblement_ vers une loi de probabilité $P$ de fonction de répartition
@@ -971,6 +1015,8 @@ pour tout $x$ où    $F$  est continue, on a
 
 $$\lim_n F_n(x) = F(x)$$
 
+]
+
 --
 
 `r fontawesome::fa("hand-point-right")` on utilise la notation $\rightsquigarrow$ pour désigner la convergence en loi/distribution
@@ -981,6 +1027,8 @@ La situation des points où  $F$ est discontinue est la suivante.
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Si une suite de fonctions de répartition $(F_n)_{n\in \mathbb{ N}}$
 converge simplement vers une fonction de répartition $F$
 en tout point de continuité de $F,$
@@ -990,6 +1038,9 @@ alors
 en tout $x$ de $\mathbb{R}$
 
 $$\limsup_n F_n(x) \leq F(x)$$
+
+]
+
 
 ---
 
@@ -1007,9 +1058,13 @@ $$1-\alpha =  \int_{-\infty}^x \frac{\mathrm{e}^{-u^2/2}}{\sqrt{2\pi}} \mathrm{d
 
 ### Théorème Central Limite (De Moivre-Laplace)
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Si les estimateurs $\widehat{\theta}_n$ sont distribués selon $P_\theta^{\otimes n}$,
 
 $$\frac{\sqrt{n}}{\sqrt{\theta(1-\theta)}} \left( \widehat{\theta}_n -\theta\right) \rightsquigarrow \mathcal{N}(0,1)$$
+
+]
 
 --
 
@@ -1044,7 +1099,9 @@ on peut s'appuyer sur le lemme de Slutsky `r fontawesome::fa("glass-cheers")`
 
 ### Lemme de Slutsky
 
-Si  $(X_n)_n$ et $(X_n)_n$ est deux  suites de variables aléatoires
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Si  $(X_n)_n$ et $(Y_n)_n$ sont  deux  suites de variables aléatoires
 sur $(\Omega_n, \mathcal{F}_n, P_n)$  telles que
 
 - $X_n \rightsquigarrow X$
@@ -1054,13 +1111,20 @@ alors
 
 $$(Y_n, X_n) \rightsquigarrow (y,X)$$
 
+]
+
+`r fontawesome::fa("hand-point-right")` $Y_n \rightsquigarrow y$ implique 
+$Y_n \stackrel{\text{en probabilité}}{\longrightarrow} y$
+
 ---
 
 On invoque en général la forme  prête à l'emploi
 
 ### Théorème
 
-Si  $(X_n)_n$ et $(X_n)_n$ est deux  suites de variables aléatoires
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Si  $(X_n)_n$ et $(Y_n)_n$ est deux  suites de variables aléatoires
 sur $(\Omega_n, \mathcal{F}_n, P_n)$  telles que
 
 - $X_n \rightsquigarrow X$ à valeurs dans $\mathbb{R}^k$
@@ -1072,6 +1136,7 @@ alors
 
 $$g (X_n, Y_n) \rightsquigarrow g (X, y)$$
 
+]
 ---
 
 ### Preuve
@@ -1134,11 +1199,15 @@ L'inégalité de Hoeffding (1963) est la plus simple des _inégalités exponenti
 
 ### Lemma de hoeffding
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Si $X$  est une variable aléatoire qui prend ses valeurs dans $[a,b]$,
 
 alors
 
 $$\forall \lambda \in \mathbb{R}\qquad \log \mathbb{E} \mathrm{e}^{\lambda (X- \mathbb{E}X)} \leq \frac{\lambda^2 (b-a)^2}{8}$$
+
+]
 
 --
 
@@ -1187,11 +1256,15 @@ $$F(\lambda) \leq \frac{\lambda^2 (b-a)^2}{8}$$
 
 ###  Inégalité de hoeffding
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Si les $(X_i)_{i \leq n}$ sont des variables aléatoires _indépendantes_ à valeur dans $[a_i, b_i]$ et si $Z=\sum_{i=1}^n X_i$
 
 alors
 
 $$\forall t >0, \qquad \mathbb{P} \left\{ Z \geq \mathbb{E}Z + t \right\} \leq \mathrm{e}^{- \frac{2 t^2}{\sum_{i=1}^n (b_i-a_i)^2}}$$
+
+]
 
 ---
 
@@ -1299,11 +1372,15 @@ class: middle, center, inverse
 
 ### Definition: Hypothèse
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Une _hypothèse_ est une collection de loi de probabilités.
 
 La collection peut être réduite à une seule loi, on parle alors d'_hypothèse simple_,
 
 Sinon on parle d'_hypothèse composée ou composite_
+
+]
 
 ---
 
@@ -1361,13 +1438,19 @@ De même que le risque quadratique nous permet de quantifier les performances d'
 
 Notez qu'il nous faut introduire deux quantités pour quantifier les performances d'un test
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 - Une _erreur de première espèce_ consiste à rejeter $H_0$ à tort lorsque les données sont des tirages selon une loi appartenant à l'hypothèse nulle (les données sont tirées sous l'hypothèse nulle).
 
 - Une _erreur de seconde espèce_ consiste à ne pas rejeter $H_0$ à tort lorsque les données sont des tirages selon une loi appartenant à l'hypothèse alternative (les données sont tirées sous l'alternative).
 
+]
+
 ---
 
 ### Niveau et puissance
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 On appelle _niveau_ du test $T$,
 
@@ -1380,9 +1463,12 @@ la probabilité que $T$ rejette $H_0$ sous $P$:
 
 $$\beta_T(P)=  P\{ T=1\}$$
 
+]
+
+---
+
 Sous l'alternative, la puissance est le complément à un de l'erreur de seconde espèce.
 
---
 
 On veut à la fois un test de petit niveau et de grande puissance sous l'alternative
 
@@ -1408,7 +1494,9 @@ $$P_ \theta^{\otimes n} \{ x_1 , \ldots, x_n\} =  \left( \frac{\theta}{1- \theta
 
 ### Definition Test de rapport de vraisemblance entre hypothèses simples
 
-Un test de rapport de vraisemblance de $H_1$  contre $H_0$ consiste à
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Un _test de rapport de vraisemblance_ de $H_1$  contre $H_0$ consiste à
 
 comparer le rapport
 
@@ -1420,6 +1508,7 @@ $$P_{\theta_1}^{\otimes n} \{ x_1 , \ldots, x_n\}/ P_ {\theta_0}^{\otimes n} \{ 
 
 - à ne pas rejeter $H_0$ si le seuil n'est pas dépassé.
 
+]
 
 ---
 
@@ -1446,6 +1535,8 @@ class: middle, center, inverse
 
 ### Version préliminaire du Lemme de Neyman-Pearson
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 S'il existe un test de rapport de
 vraisemblance $T_0$ de niveau $\alpha > 0$ et de fonction
 puissance $\beta_{T_0}$,
@@ -1456,6 +1547,8 @@ pour tout test $T$  de niveau inférieur ou égal à $\alpha$, la  fonction puis
 de $T$ vérifie
 
 $$\beta_T (P_1) \leq \beta_{T_0} (P_1)$$
+
+]
 
 --
 
@@ -1528,8 +1621,8 @@ t %>%
 
 .fl.w-third.pa2[
 
-Courbes puissance en fonction du niveau pour des tests de rapports 
-de vraisemblance entre deux Bernoullis de paramètres `r theta0` et 
+Courbes puissance en fonction du niveau pour des tests de rapports
+de vraisemblance entre deux Bernoullis de paramètres `r theta0` et
 `r theta1`, pour différentes tailles d'échantillons `n`
 
 Pour chaque courbe puissance/niveau, le meilleur compromis erreur de première espèce/erreur de seconde espèce est la distance $\ell_1$ au point $(0,1)$.
