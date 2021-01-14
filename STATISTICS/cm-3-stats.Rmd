@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    css: ["header-footer.css", "xaringan-themer.css", "hygge"]
     lib_dir: libs
     seal: false
     includes:
@@ -28,6 +28,8 @@ layout: true
 class: left, middle
 
 ```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+
+
 xaringanExtra::use_animate_css()
 
 xaringanExtra::use_tile_view()
@@ -46,6 +48,10 @@ xaringanExtra::use_panelset()
 
 xaringanExtra::use_editable(expires = 1)
 
+xaringanExtra::use_broadcast()
+
+xaringanExtra::use_fit_screen()
+
 source("./loaders_fixers.R")
 
 knitr::opts_chunk$set(fig.width = 6,
@@ -54,6 +60,8 @@ knitr::opts_chunk$set(fig.width = 6,
                       comment = "",
                       cache = F)
 library(flipbookr)
+
+
 ```
 
 
@@ -84,43 +92,1102 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-# Statistique III
+# Statistique III : Estimation dans les modèles gaussiens
 
 ### `r Sys.Date()`
 
-#### Statistique Fondamentale Master I MIDS et MFA
+#### [Statistique Fondamentale Master I MIDS et MFA](/courses/statistics-paris/index.html)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla
+### Exemples de modèles gaussiens
 
-### Bla
+### Modèle de translation gaussienne
+
+### Régression avec design fixe et bruit homoschédastique
+
+### Test d'hypothèses linéaires
+
+### Illustration
 
 
 ---
-class: center, middle, inverse
+class: inverse, middle, center
 
-## So what
+## Exemples de modèles gaussiens
 
 ---
 
-### igloo `r fontawesome::fa("igloo")`
+
+Les modèles (ou expériences statistiques) gaussiens sont  au centre à la fois de la statistique classique et  de la statistique moderne dite _en grande dimension_
+
+Les propriétés des vecteurs gaussiens rendent certains calculs exacts possibles `r fontawesome::fa("glass-cheers")`: ce sont des modèles didactiques `r fontawesome::fa("chalkboard-teacher")`
+
+`r fontawesome::fa("hand-point-right")` Le _théorème central limite_, et une multitude de _principes d'invariance_ font des modèles gaussiens la _limite de nombreuses suites d'expériences statistiques_
+
+???
+
+Commenter sur la signification des résultats limites
+
+---
+
+### Translation gaussienne (_Gaussian shift_)
+
+Le plus simple des modèles gaussiens est celui  de la translation  (_shift_)
+
+$$\mathcal{P} = \left\{  \mathcal{N}(\theta, \Sigma): \theta \in  \Theta = \mathbb{R}^d\right\}\qquad \Sigma \text{ matrice définie positive supposée connue}$$
+
+L'espace des paramètres est un _espace vectoriel_
+
+On parle de _modèle linéaire_
+
+---
+
+### Modèles courbes
+
+On peut étudier les modèles gaussiens sans se contenter des modèles linéaires
+
+En visant  éventuellement des modèles en dimension infinie, on peut s'intéresser à
+$$\Theta = B^d_q(r)$$
+boule $\ell_q$  de rayon $r$ dans $\mathbb{R}^d$,
+
+$$\mathcal{P} = \left\{  \mathcal{N}(\theta, \sigma^2): \theta \in  \Theta = B^d_p(r)\right\}\qquad \sigma \text{ supposée connue.}$$
+
+On convient de noter
+
+$$B^d_p(r)=  \left\{ \theta: \theta \in \mathbb{R}^d, \sum_{i=1}^d |\theta_i|^p \leq r^p \right\}$$
+
+C'est un cas particulier de _modèle courbe_
+
+---
+
+### Parcimonie (sparsité)
+
+On peut s'intéresser dans le cadre gaussien, à l'inférence sous contrainte de _parcimonie_
+
+Pour $0 \leq s \leq d$,
+$\Theta_s \subset \mathbb{R}^d$  est l' _ensemble des vecteurs à au plus $s$ coordonnées non-nulles_
+
+On se propose de reconstruire $\theta \in \Theta_s$ inconnu  à partir de
+
+$$\left(\langle X_i, \theta \rangle\right)_{i \leq n} \text{ où }  X_i \sim_{\text{i.i.d.}} \mathcal{N}\big(0, \text{Id}_d\big)$$
+
+On note $Y$ le vecteur aléatoire dont les coordonnées sont les $\langle X_i, \theta \rangle$.
+
+Les observations sont les vecteurs $X_1, \ldots, X_n$  et la suite
+$\langle X_1, \theta \rangle, \ldots,\langle X_n, \theta \rangle$
+
+C'est un domaine (_Compressed sensing_) qui a explosé au début du millénaire
+
+`r fontawesome::fa("surprise")` Avec forte probabilité, on peut reconstruire $\theta \in \Theta_s$ à partir de moins de $d$ mesures aléatoires bien distribuées
+
+---
+class: inverse, middle, center
+
+## Modèles  de translation gaussien
+
+---
+
+### Contexte
+
+On se concentre ici sur les modèles gaussiens définis par les lois $\mathcal{N}(\mu, \Sigma)$ où
+
+- $\mu\in \mathbb{R}^d$
+-
+- $\Sigma \in \text{DP}(d)$
+
+$\text{DP}(d)$ désigne le _cône des matrices (symétriques) définies positives_ de dimension $d$
+
+Le problème est d'estimer $\mu$  et $\Sigma$ à partir d'un échantillon
+
+Quand $\Sigma$ est connue, on parle de problème de _décalage gaussien_ (translation gaussienne)
+sinon on parle de modèle translation/dilatation _location/scale_
+
+
+---
+
+Ces modèles gaussiens sont des cas particuliers de _modèles dominés_
+
+### Définition : modèles dominés
+
+On dit qu'un modèle $(\Omega, \mathcal{F}, \mathcal{P}, \ldots)$ est _dominé_ si toutes les lois de $\mathcal{P}$ sont absolument continues par rapport à une mesure $\sigma$-finie sur $(\Omega, \mathcal{F})$
+
+
+Toutes les lois $\mathcal{N}(\mu, \Sigma)$ avec $\Sigma$ définie positive sont en effet mutuellement absolument continues et absolument continues par rapport à la mesure de Lebesgue
+
+`r fontawesome::fa("exclamation-triangle")` on postule $\Sigma \in \text{DP}(d)$, $\Sigma \in \text{SDP}(d)$ n'est pas suffisant
+
+---
+
+###  Notion de _vraisemblance_
+
+Dans le cadre des modèles gaussiens, la (fonction de) _vraisemblance_ est une fonction
+
+- des paramètres
+- de l'échantillon
+
+son domaine est $\Theta \times \mathcal{X}^{d \times n}$)
+
+À $\theta = (\mu, \Sigma), x=(x_1, \ldots, x_n) \in \mathbb{R}^{d\times n}$ la fonction de vraisemblance fait correspondre la densité de la loi $\mathcal{N}(\mu, \Sigma)$  en $x$ :
+
+$$\prod_{i=1}^n \frac{1}{(2 \pi)^{d/2} \text{det}(\Sigma)^{1/2}} \exp \left(- \frac{(x_i- \mu)^t \Sigma^{-1} (x_i- \mu)}{2} \right)$$
+
+La _log-vraisemblance_ est le logarithme de la vraisemblance
+
+---
+
+Dans les modèles gaussiens en dimension $d$,
+
+si on s'intéresse aux problèmes d'inférence (estimation, régions de confiance, tests),
+
+sans perdre d'information,
+
+on peut _résumer_ un échantillon de $n\geq d$ observations par :
+
+- un vecteur aléatoire de dimension $d$, la _moyenne empirique_ $\overline{X}_n$
+
+$$\overline{X}_n =  \sum_{i=1}^n \frac{1}{n} X_i$$
+
+et
+
+- une matrice aléatoire à valeur dans $\text{DP}(d)$, la _matrice de covariance empirique_ $\widehat{\Sigma}$
+
+$$\widehat{\Sigma} =  \sum_{i=1}^n \frac{1}{n} (X_i - \overline{X}_n) (X_i - \overline{X}_n)^t$$
+
+---
+
+
+### Définition :  Statistique suffisante
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Dans un modèle paramétré, une statistique $T$ est dite _suffisante_ si la loi conditionnelle de l'échantillon
+sachant la statistique $T$ est _libre_ du paramètre
+
+]
+
+`r fontawesome::fa("hand-point-right")` D'un point de vue opérationnel, si $T$  est une statistique suffisante, le rapport entre les  vraisemblances évaluées en deux points de l'espace des paramètres peut se calculer à partir de la statistique suffisante $T$,   sans connaître le détail de l'échantillon
+
+---
+
+On peut démontrer la suffisance de $(\overline{X}_n, \widehat{\Sigma})$ dans les modèles gaussiens à partir de l'observation:  la vraisemblance d'un échantillon gaussien ne dépend de l'échantillon qu'au travers de la moyenne empirique
+et de la (co)variance empirique.
+
+- Dans le cas univarié, pour la log-vraisemblance:
+
+$$\ell_n(\mu,\sigma^2):=  \ell( \mu, \sigma^2, x_1, \ldots, x_n )  =  -\frac{n}{2} \log (2 \pi \sigma^2) - \frac{n}{2} \frac{(\overline{X}_n- \mu)^2}{\sigma^2} - \frac{\sum_{i=1}^n(x_i - \overline{X}_n)^2}{2 \sigma^2}$$
+
+- Dans cadre multivarié ($d >1$), pour un $n$-échantillon, on obtient pour la log-vraisemblance:
+
+$$\begin{array}{rcl} \ell_n(\mu,\Sigma)  & = & -\frac{n \times d}{2} \log (2 \pi) - \frac{n}{2} \log \text{det}(\Sigma) \\ & &     - \frac{n}{2} (\overline{X}_n- \mu)^t \Sigma^{-1} (\overline{X}_n -\mu) \\
+& &    - \frac{1}{2}\text{trace}\left(\Sigma^{-1}  \sum_{i=1}^n(x_i - \overline{X}_n)(x_i - \overline{X}_n)^t  \right) \\ & = &  -\frac{n \times d}{2} \log (2 \pi) - \frac{n}{2} \log \text{det}(\Sigma) \\ & &  -  \frac{n}{2} \text{trace}\left(\Sigma^{-1} (\overline{X}_n -\mu) (\overline{X}_n -\mu)^t \right) \\ &  & -  \frac{n}{2} \text{trace}\left(\Sigma^{-1}  \widehat{\Sigma} \right)\end{array}$$
+
+---
+
+L'échantillon lui même constitue toujours une statistique suffisante
+
+Ce n'est pas un résumé impressionnant de l'information fournie par l'échantillon `r fontawesome::fa("frown")`
+
+Les résumés intéressants sont les _statistiques suffisantes minimales_
+
+### Définition Statistique suffisante minimale
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Une _statistique suffisante_ $T$  est _minimale_ si pour tout autre statistique suffisante $T'$, $T$ est une fonction de $T'$.
+
+]
+
+---
+
+### Exemple
+
+Dans le modèle gaussien
+
+$$\{ \mathcal{N}(\mu, \Sigma): \mu \in \mathbb{R}^d, \Sigma \in  \text{DP}(d) \}$$,
+
+la moyenne empirique et la covariance empirique forment une statistique suffisante minimale `r fontawesome::fa("glass-cheers")`
+
+Si la covariance est connue (modèle $\{ \mathcal{N}(\mu, \Sigma): \mu \in \mathbb{R}^d\}$), la moyenne empirique est une statistique suffisante minimale `r fontawesome::fa("glass-cheers")` `r fontawesome::fa("glass-cheers")`
+
+---
+
+Alors que les statistiques suffisantes semblent en  apparence les ingrédients nécessaires à la construction des bons estimateurs, les statistiques dites _ancillaires_ semblent superflues
+
+### Définition : Statistique ancillaire
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Dans un modèle, une statistique dont la loi est libre d'un paramètre est dite _ancillaire_ par rapport à ce paramètre
+
+]
+
+---
+
+### Exemple
+
+Dans le modèle gaussien $\{ \mathcal{N}(\mu, \Sigma): \mu \in \mathbb{R}^d, \Sigma \in  \text{DP}(d) \}$, la covariance empirique est ancillaire par rapport à l'espérance
+
+L'estimateur de choix ($\overline{X}_n$) suffit pour l'estimation ponctuelle de $\mu$
+
+`r fontawesome::fa("exclamation")` Si on s'intéresse à la construction de _régions de confiance_ pour $\mu$, la statistique ancillaire $\widehat{\Sigma}$ intervient naturellement (via le théorème de Student)
+
+---
+
+`r fontawesome::fa("hand-point-right")` Dans un modèle, une variable aléatoire est dite _pivotale_ si sa loi est libre des paramètres du modèle
+
+`r fontawesome::fa("skull-crossbones")` Une variable aléatoire pivotale  n'est pas nécessairement une statistique!
+
+Ce n'est  pas toujours une quantité calculable à partir des seules données (c'est même ce qui fait son intérêt).
+
+En revanche, une statistique ancillaire est une statistique, c'est-à-dire une fonction de l'échantillon. Et sa loi doit être libre des paramètres ou d'au moins d'une partie d'entre eux.
+
+---
+
+Le théorème de Student,  qui implique l'indépendance de $\overline{X}_n$  et de $\widehat{\Sigma}$, suggère qu'une statistique suffisante minimale est indépendante d'une statistique ancillaire
+
+Ce n'est pas toujours le cas.
+
+Pour caractériser les cas d'indépendance, on introduit la notion de _complétude_
+
+---
+
+### Définition (modèle _complet_ pour une statistique)
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Un modèle $(P_ \theta, \theta \in \Theta)$  est dit _complet_ pour une statistique $T$ si pour toute fonction mesurable $g$,
+
+$$\left(\forall \theta \in \Theta, \quad \mathbb{E}_ \theta [g(T(X))] = 0 \right) \quad \Rightarrow \quad \left(\forall \theta \in \Theta. \quad P_ \theta\{ g(T(X))= 0\} = 1\right)$$
+
+]
+
+---
+
+Nous admettrons le théorème suivant.
+
+
+### Théorème (Basu)
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Si $T$ est une _statistique suffisante minimale_ et si le modèle est _complet pour la statistique_ alors $T$ est indépendante de toute _statistique ancillaire_
+
+]
+
+
+---
+
+### Exemple  `r fontawesome::fa("brain")`
+
+Si $P_ \theta$  est la loi uniforme sur $[\theta-1,\theta+1]$, vérifier
+
+- $\left( (X_{(n)} + X_{(1)})/2 , (X_{(n)}-X_{(1)})/2\right)$ est une statistique suffisante minimale
+
+- $(X_{(n)}-X_{(1)})/2$ est une statistique ancillaire
+
+avec la convention : $X_{(i)}$  est la $i^{\text{eme}}$ _statistique d'ordre_ de l'échantillon
+
+`r fontawesome::fa("hand-point-right")` Le modèle n'est pas complet pour cette statistique suffisante minimale
+
+---
+
+Le théorème dit de Student
+
+> dans un échantillon gaussien, la covariance empirique est indépendante de la moyenne empirique
+
+peut être vu comme un corollaire du théorème de Basu.
+
+Si on suppose la covariance connue, la moyenne empirique est une statistique suffisante complète et minimale pour l'espérance alors que la covariance empirique est ancillaire
+
+---
+
+### Estimation au maximum de vraisemblance
+
+L'estimation au _maximum de vraisemblance_ consiste à estimer les paramètres en recherchant les valeurs de $\mu, \sigma^2$ qui maximisent $\ell_n(\mu, \sigma^2)$ (cas univarié) ou $\ell_n( \mu, \Sigma)$ (cas multivarié)
+
+Dans le cas univarié, on obtient directement les estimateurs
+
+$$\left( \overline{X}_n, \frac{1}{n} \sum_{i=1}^n (x_i -\overline{X}_n)^2\right)$$
+
+c'est-à-dire la moyenne empirique et la variance empirique
+
+Dans le cas général, un peu plus de travail conduit à la version multivariée des estimateurs précédents
+
+$$\left( \overline{X}_n , \widehat{\Sigma}\right):= \left( \overline{X}_n, \frac{1}{n} \sum_{i=1}^n (x_i -\overline{X}_n) (x_i - \overline{X}_n)^t\right)$$
+
+
+---
+class: inverse, middle, center
+
+## Régression avec design fixe et bruit gaussien homoschédastique
+
+---
+
+### Un problème de régression élémentaire
+
+Le problème de régression gaussienne avec _design fixe_ et _bruit homoschédastique_ est le plus simple des problèmes de _régression_
+
+C'est une généralisation du problème de _décalage gaussien_ (_Gaussian shift_).
+
+On dispose d'une matrice $n \times p$  le _design_ $\mathbf{X}$, on observe
+
+$Y$ à valeur dans $\mathbb{R}^n$ obtenu par
+
+$$Y =  \mathbf{X} \theta_0 + \sigma \epsilon \qquad  \text{ avec }  \epsilon \sim  \mathcal{N}(0, \text{Id}_n)$$
+
+où le paramètre inconnu est  $\theta_0$ dans $\mathbb{R}^p$. Selon les circonstances, on connait ou on ne connait pas $\sigma$
+
+---
+
+En statistique classique, on suppose que $\textbf{X}$  est de plein rang (ce qui implique $p \leq n$)
+
+En  _grande dimension_, on suppose au contraire que $n \ll p$  mais on suppose alors que $\theta_0$ vérifie une hypothèse de _parcimonie_ ($\theta_0$ possède peu de coordonnées non-nulles)
+
+On estime $\theta_0$ en cherchant à minimiser l'erreur quadratique de prédiction (d'où  le nom de _méthode des moindre carrés ordinaires_ (MCO)
+
+$$\widehat{\theta}_n := \arg\min \Vert y - \textbf{X} \theta\Vert^2 \qquad \text{ où } y \text{ est la réalisation de } Y$$
+
+---
+
+On note $\mathcal{L}(\textbf{X})$ le sous-espace vectoriel de $\mathbb{R}^n$ engendré par les colonnes de $\textbf{X}$.
+
+La relation pythagoricienne suivante est la clé de l'analyse:
+
+$$\Vert y - \mathbf{X} \theta\Vert^2  =  \Vert y - \widehat{y} \Vert^2  + \Vert \widehat{y} - \mathbf{X} \theta\Vert^2$$
+
+où  $\widehat{y}$ est la projection orthogonale de $y$  sur $\mathcal{L}(\mathbf{X})$.
+
+Comme $\mathbf{X}$ est _de plein rang_, la matrice de la projection orthogonale sur le sous-espace $\mathcal{L}(\mathbf{X})$ est
+
+$$\mathbf{H}:=  \mathbf{X}(\mathbf{X}^t\mathbf{X})^{-1}\mathbf{X}^t$$
+
+`r fontawesome::fa("brain")` Vérifier
+
+???
+
+
+En effet,
+
+- cette matrice laisse invariant les colonnes de $\mathbf{X}$, donc le sous-espace $\mathcal{L}(\mathbf{X})$
+
+et
+
+- tout vecteur orthogonal aux colonnes de $\mathbf{X}$ appartient au noyau de  matrice $\mathbf{H}$
+
+---
+
+Dans le monde de la régression (gaussienne ou non) la matrice $\mathbf{H}$ est souvent appelée _hat matrix_, ou _matrice d'influence_.
+
+Ses coefficients diagonaux sont appelés (en anglais) _leverage_ et parfois traduits en français par _influence_ ou _effet levier_
+
+---
+
+Comme $\mathbf{X}$ est de plein rang, il existe un unique optimum, la solution de $\widehat{y} = \mathbf{X} \theta$
+
+---
+
+Comme
+
+$$\widehat{y} = \mathbf{X} (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t y$$
+
+cette solution est
+
+$$\widehat{\theta} = (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t \widehat{y}$$
+
+On note
+
+$$\mathbf{X}^+:= (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t$$
+
+C'est la _pseudo-inverse_ de Moore-Penrose de $\mathbf{X}$
+
+---
+
+On a donc
+
+$$\widehat{\theta} = (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t \mathbf{X} (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t y =  (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t y =  \mathbf{X}^+ y$$
+
+et
+
+$$\widehat{\theta} - \theta_0 =  \sigma (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t   \epsilon = \sigma  \mathbf{X}^+ \epsilon$$
+
+Comme
+
+$$\mathbb{E}_{\theta_0}\left[\widehat{\theta}- \theta_0 \right] =  \sigma \mathbf{X}^+ \mathbb{E} [\epsilon] = 0$$
+
+L'estimateur  des moindres carrés $\widehat{\theta}$ est un estimateur _sans biais_ `r fontawesome::fa("glass_cheers")`
+
+---
+
+`r fontawesome::fa("hand-point-right")`
+
+Jusqu'à maintenant, nous n'avons pas utilisé l'hypothèse gaussienne mais seulement le fait que le bruit $\epsilon$ est centré
+
+L'estimateur des moindre carrés $\mathbf{X}^+ y$ peut être utilisé chaque fois que l'on utilise un modèle du type
+
+$$Y =  \mathbf{X} \theta_0 + \epsilon$$
+
+où $\epsilon$ est un bruit centré $\mathbb{E} \epsilon= 0$
+
+L'estimateur des moindre carrés restera sans biais
+
+--
+
+`r fontawesome::fa("exclamation-triangle")` les résultats qui suivent, les estimations du risque, les constructions de régions de confiance ne seront plus valables si on ne suppose plus le bruit gaussien
+
+Ces résultats reposent sur l'hypothèse de normalité du bruit
+
+---
+
+Dans le cadre des _modèles linéaires gaussiens avec bruit homoschédastique_, l'estimation de la variance du bruit $\sigma^2$ est grandement facilitée `r fontawesome::fa("glass_cheers")`
+
+Et la construction de région de confiance pour $\theta_0$ et $\sigma^2$  est immédiate `r fontawesome::fa("glass_cheers")`
+
+---
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Dans les modèles linéaires gaussiens avec bruit homoschédastique,
+
+$$\widehat{\theta}- \theta_0 \sim \mathcal{N}\left( 0 , \sigma^2 (\mathbf{X}^t\mathbf{X})^{-1}\right)$$
+
+Si l'écart-type du bruit $\sigma$ est connu, on dispose d'une quantité pivotale:
+
+$$\frac{1}{\sigma} (\mathbf{X}^t\mathbf{X})^{1/2} \left(  \widehat{\theta}- \theta_0\right) \sim  \mathcal{N}\left(0, \operatorname{Id}_p \right)$$
+
+]
+
+---
+
+### Preuve
+
+On part de l'identité $\widehat{\theta} - \theta_0 =  \sigma \mathbf{X}^+ \epsilon$.
+
+Sous l'hypothèse $\epsilon \sim \mathcal{N}(0, \mathbf{Id}_n)$, on a
+
+$$\widehat{\theta} - \theta_0 \sim  \mathcal{N}\left( 0, \sigma^2 \mathbf{X}^+ (\mathbf{X}^+)^t \right) =  \mathcal{N}\left( 0, \sigma^2 (\mathbf{X}^t \mathbf{X})^{-1} \right)$$
+
+La preuve se termine en utilisant la _décomposition spectrale_ de la matrice symétrique définie positive
+$\mathbf{X}^t \mathbf{X}$:
+
+$$\mathbf{X}^t \mathbf{X} = \mathbf{O} \times \mathbf{D} \times \mathbf{O}^t$$
+
+avec $\mathbf{O}$ _orthogonale_ et $\mathbf{D}$ _diagonale_ à coefficients diagonaux positifs
+
+On multiplie $\widehat{\theta} - \theta_0$  par
+$\mathbf{O} \mathbf{D}^{1/2} \mathbf{O}^t =(\mathbf{X}^t \mathbf{X})^{1/2}$
+
+
+
+---
+
+### Preuve (suite)
+
+On en déduit une région de confiance pour $\theta$ lorsque l'intensité (l'écart-type) du bruit $\sigma$ est connue: l'ellipsoïde
+
+$$\left\{  \theta': \left\Vert \frac{1}{\sigma} (\mathbf{X}^t\mathbf{X})^{1/2}\left(  \widehat{\theta}- \theta'\right) \right\Vert^2 \leq q_{p, 1- \alpha} \right\} \qquad \text{où } q_{p,1- \alpha} \text{ est le quantile d'ordre } 1- \alpha \text{ de } \chi^2_p$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+Lorsque l'écart-type du bruit $\sigma$ n'est pas connu, la  région aléatoire
+
+$$\left\{  \theta': \left\Vert \frac{1}{\sigma} (\mathbf{X}^t\mathbf{X})^{1/2}\left(  \widehat{\theta}- \theta'\right) \right\Vert^2 \leq q_{p, 1- \alpha} \right\} \qquad \text{où } q_{p,1- \alpha} \text{ est le quantile d'ordre } 1- \alpha \text{ de } \chi^2_p$$
+
+n'est plus une région de confiance `r fontawesome::fa("frown")`
+
+Pour construire une région de confiance, il faut estimer $\sigma$ `r fontawesome::fa("road")`
+
+
+---
+
+### Analyse des résidus
+
+On appelle _résidus_ les coefficients de
+
+$$\widehat{\epsilon}:=  \widehat{y} - y$$
+
+La loi du vecteur des résidus est facilement déduite de l'observation:
+
+$$\widehat{Y} -Y =  (\mathbf{H} - \textbf{Id}) Y =  (\mathbf{H}- \textbf{Id}) (\mathbf{X} \theta_0 + \sigma \epsilon) = \sigma (\mathbf{H}- \textbf{Id}) \epsilon$$
+
+Comme $\mathbf{Id}-\mathbf{H}$ est la matrice de la projection orthogonale sur le sous-espace orthogonal à $\mathcal{L}(\mathbf{X})$, on peut invoquer le _théorème de Cochran_ 
+
+---
+exclude: true 
+
+### Théorème de Cochran `r fontawesome::fa("syringe")`
+
+
+...
+
+
+---
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Dans le modèle de régression linéaire avec _bruit  gaussien homoschédastique_,
+
+$$\widehat{Y}- Y \perp\!\!\!\perp \mathbf{X}(\widehat{\theta} - \theta_0)$$
+
+$$\frac{\Vert \widehat{Y}- Y \Vert^2}{\sigma^2}  \sim \chi^2_{n-p}$$
+
+$$\frac{\Vert \mathbf{X}(\widehat{\theta} - \theta_0) \Vert^2}{\sigma^2}  \sim \chi^2_{p}$$
+
+
+]
+
+
+---
+
+### Preuve
+
+On observe
+
+$$\widehat{Y}- Y= \sigma (\mathbf{H}-\textbf{Id}) \epsilon$ et $\mathbf{X}(\widehat{\theta} - \theta_0)=  \sigma \mathbf{H} \epsilon$$
+
+Au facteur $\sigma$ près, on obtient $\widehat{Y}- Y$ et $\mathbf{X}(\widehat{\theta}-\theta_0)$ en projetant le vecteur gaussien standard $\epsilon$ sur deux sous espaces orthogonaux de $\mathbb{R}^n$
+
+La proposition est donc une conséquence immédiate du théorème de Cochran
+
+`r fontawesome::fa("square")`
+
+---
+
+Une nouvelle famille de lois de probabilité
+
+### Définition : distribution de Fisher
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Si $U \sim \chi^2_j$ est indépendante de $V \sim \chi^2_k$ alors $\frac{U/j}{V/k}$ est distribuée selon une loi de
+Fisher à $j,k$ degrés de liberté. On note cette loi $F_{j,k}$.
+
+
+La quantité aléatoire $\frac{\| H \epsilon\|^2}{\|(\text{Id}-H) \epsilon\|^2}$ est distribuée selon
+$F_{p,n-p}$. Le fait que cette quantité aléatoire soit pivotale  conduit à une région de confiance pour $\theta_0$.
+
+On note $f_{p,n-p, 1- \alpha}$ est le quantile d'ordre $1- \alpha$ de $F_{p,n-p}$.
+
+]
+
+
+---
+
+
+### Proposition
+
+
+
+Dans le modèle linéaire gaussien avec bruit homoschédastique,  l'ellipsoïde
+
+$$\left\{\theta': \frac{\left\Vert \mathbf{X} \left(  \widehat{\theta}- \theta'\right) \right\Vert^2/p}{\|\widehat{\epsilon}\|^2/(n-p)} \leq f_{p,n-p, 1- \alpha}\right\}$$
+
+est  une région de confiance pour $\theta_0$  de taux de couverture $1- \alpha$, $\alpha \in ]0,1[$
+
+
+
+Le volume de cet ellipsoïde est proportionnel à (une puissance de) l'estimateur de l'écart type du bruit.
+
+La forme de cet ellipsoide est dictée par les valeurs propres de $\mathbf{X}^t \mathbf{X}$, autrement dit par les valeurs singulières non nulles de $\mathbf{X}$.
+
+
+---
+class: inverse, middle, center
+
+## Tests d'hypothèses linéaires
+
+---
+
+### Choix de modélisation
+
+La régression linéaire est un outil de modélisation.
+
+Le statisticien peut hésiter entre plusieurs modèles et se poser des questions de test.
+
+On peut par exemple se demander si les observations  $y_1, \ldots, y_n$ ne sont pas simplement  un échantillon d'une loi $\mathcal{N}(0,\sigma^2)$
+
+Cela revient à poser le problème de test suivant:
+
+- $\text{Hyp}_0$: $\theta = 0$ ;
+
+- $\text{Hyp}_1$: $\theta \neq 0$ .
+
+---
+
+L'hypothèse nulle $\text{Hyp}_0$ est simple mais l'alternative $\text{Hyp}_1$ ne l'est pas
+
+D'une manière générale, on peut chercher à tester:
+
+- $\text{Hyp}_0$: les $p-k$ dernières coordonnées de $\theta$  sont nulles ;
+
+- $\text{Hyp}_1$: les $p-k$ dernières coordonnées de $\theta$  ne sont pas nulles ;
+
+
+---
+
+Dans tous les cas, l'hypothèse nulle est indexée par un sous-espace vectoriel de l'ensemble des paramètres.
+
+On notera $\mathbf{X}^0$  la matrice formée par les $k$ premières colonnes de $\mathbf{X}$ et $\mathcal{L}(\mathbf{X}^0)$  le sous-espace de $\mathbb{R}^n$ engendré par les
+colonnes de $\mathbf{X}^0$
+
+On notera $\mathbf{H}^0$ la matrice de projection orthogonale sur $\mathcal{L}(\mathbf{X}^0),$
+
+$$\widehat{y}^0=  \mathbf{H}^0  y = \mathbf{H}^0 \times \mathbf{H} y $$
+
+On note $\theta^0$ le vecteur de dimension $k$ formé par les $k$ premiers coefficients de $\theta$.
+
+---
+
+Sous l'hypothèse nulle $\text{Hyp}_0$,
+
+$$\widehat{y} - \widehat{y}^0 =  \left(\mathbf{H} - \mathbf{H}^0  \right) \left( \mathbf{X}  \left[ \begin{array}{c} \theta ^0\\ \ldots \\0 \end{array}\right] + \sigma \epsilon\right) = \sigma \left(\mathbf{H} - \mathbf{H}^0  \right) \epsilon$$
+
+Donc $\widehat{Y} - \widehat{Y}^0$ et $Y - \widehat{Y}$
+sont indépendantes (Théorème de Cochran)
+
+et
+
+sous $\text{Hyp}_0$,
+
+$$S:= \frac{\|\widehat{Y} - \widehat{Y}^0\|^2/(p-k)}{\| \widehat{Y} - {Y}\|^2/(n-p)} \sim F_{p-k,n-p}$$
+
+---
+
+Le test qui rejette $\text{Hyp}_0$ lorsque la statistique $S$
+est plus grande que le quantile d'ordre $1- \alpha$ de la loi $F_{p-k,n-p}$ est de niveau $\alpha$
+(la probabilité d'une erreur de première espèce est égale à $\alpha$).
+
+L'étude de la puissance de ce test (la probabilité de rejeter $\text{Hyp}_0$  lorsque les données sont tirées sous l'alternative $\text{Hyp}_1$) est plus délicate.
+
+On peut cependant vérifier que le  test est _sans biais_, c'est à dire que la probabilité de rejeter $\text{Hyp}_0$  dans ce cas est supérieure à $\alpha$.
+
+---
+
+Choisissons une loi relevant de l'alternative. Cela revient à choisir $\theta^0 \in \mathbb{R}^k$
+et $\theta^1 \in  \mathbb{R}^{p-k}$, avec $\theta^1\neq 0$.
+
+On note $\mathbf{X}^1$ la matrice formée par les $p-k$ dernières colonnes de $\mathbf{X}$.
+
+Sous cette loi relevant de $\text{Hyp}_1$, les observations sont distribuées selon
+$\mathcal{N}\left( \mathbf{X}^0 \theta^0 + \mathbf{X}^1 \theta^1, \sigma^2 \textbf{Id}_n\right)$.
+
+Les vecteurs aléatoires $\widehat{Y} - \widehat{Y}^0$ et $Y - \widehat{Y}$  restent indépendants, mais  la statistique
+
+$${\|\widehat{Y} - \widehat{Y}^0\|^2/\sigma_0^2}$$
+
+est maintenant distribuée selon une loi du $\chi^2$ à $p-k$ degrés de liberté décentrée de
+$\|(\textbf{Id}-\mathbf{H}^0) \mathbf{X}^1 \theta^1 \|_2$.
+
+La quantité aléatoire   ${\| \widehat{Y} - {Y}\|^2/\sigma_0^2}$ reste distribuée selon $\chi^2_{n-p}$.
+
+Pour établir que la loi de $S$ sous $\text{Hyp}_1$ domine  stochastiquement la loi de $S$ sous $\text{Hyp}_0$, il suffit de se rappeler que à nombres de degrés de liberté égaux, la loi du  $\chi^2$ décentrée domine stochastiquement la loi du $\chi^2$ centrée.
+
+
+---
+class: inverse, middle, center
+
+## Données `whiteside`
+
+---
+
+### Données `whiteside`  `r fontawesome::fa("igloo")`
 
 .fl.w-third.pa2[
 
+```{r load_whiteside}
+whiteside <- MASS::whiteside
+
+whiteside %>%
+  dplyr::sample_n(5) %>%
+  knitr::kable()
+```
 ]
 
 
 .fl.w-two-thirds.pa2[
 
+Les données `whiteside` viennent du package  `MASS` de `r fontawesome::fa("r-project")`
+
+> Mr Derek Whiteside of the UK Building Research Station recorded the weekly gas consumption and average external temperature at his own house in south-east England for two heating seasons, one of 26 weeks before, and one of 30 weeks after cavity-wall insulation was installed. The object of the exercise was to assess the effect of the insulation on gas consumption.
+
+`Temp`: Purportedly the average outside temperature in degrees Celsius.
+
+`Gas`: The weekly gas consumption in 1000s of cubic feet.
+
+Venables, W. N. and Ripley, B. D. (2002) _Modern Applied Statistics with S._ Fourth edition. Springer.
 
 ]
 
 ---
+### Données `whiteside` `r fontawesome::fa("igloo")`
+
+
+.fl.w-third.pa2[
+
+`r fontawesome::fa("hand-point-right")` C'est une étude sur  la relation entre consommation de gaz et
+température extérieure, menée au domicile de  l'ingénieur Whiteside
+
+L'étude visait à évaluer l'effet des mesures d'isolation
+
+
+
+]
+
+.fl.w-two-thirds.pa2[
+
+```{r whitescatter, echo=FALSE, message=FALSE, warning=FALSE}
+p <- whiteside %>%
+  ggplot(mapping=aes(y=Gas, x=Temp)) +
+  xlab("Température extérieure") +
+  ylab("Consommation de gaz") +
+  ggtitle("Données Whiteside") +
+  geom_point(aes(shape=Insul)) +
+  theme(legend.position=c(0.1, .15))
+
+p
+```
+]
+
+
+---
+
+Durant deux hivers consécutifs, Whiteside a noté
+
+- la consommation hebdomadaire de gaz
+- la température extérieure hebdomadaire moyenne
+
+Soit
+
+- 26 enregistrements réalisés avantisolation
+- 30 enregistrements après
+
+
+Les $56$ observations sont arrangées en un `data.frame` comprenant trois colonnes,
+
+- `Gas` : volume de gaz consommé durant la semaine
+- `Temp` : température extérieure moyenne durant la semaine d'observation
+- `Insul` : observation effectuée avant (`Before`) ou après (`After`) l'isolation
+
+La colonne `Insul` forme ce que l'on appelle une _variable qualitative_ ou un _facteur_.
+
+---
+
+### Première modélisation
+
+La première tentative de modélisation
+postule une dépendance linéaire
+entre la _variable à expliquer_ $Y=$ `Gas` et la _variable explicative_ `Temp`
+
+On se place dans le cadre de la régression linéaire gaussienne
+
+Le design $\mathbf{X}$ est formé par une colonne de $1$  et par la colonne `Temp` de l'échantillon.
+
+`r fontawesome::fa("")` La fonction `lm` de `r fontawesome::fa("r-project")`
+
+- construit le design à partir du `dataframe`
+- invoque la méthode des moindres carrés (MCO)
+
+Dans le jargon _apprentissage_, `lm` construit un _pipeline_
+
+
+---
+
+### Droite de régression
+
+.fl.w-third.pa2[
+
+`r fontawesome::fa("hand-point-right")` C'est une étude sur  la relation entre consommation de gaz et
+température extérieure, menée au domicile de  l'ingénieur Whiteside
+
+L'étude visait à évaluer l'effet des mesures d'isolation
+
+
+
+]
+
+.fl.w-two-thirds.pa2[
+
+```{r whitesreg, echo=FALSE, message=FALSE, warning=FALSE}
+p <- whiteside %>%
+  ggplot(mapping=aes(y=Gas, x=Temp)) +
+  xlab("Température extérieure") +
+  ylab("Consommation de gaz") +
+  ggtitle("Données Whiteside") +
+  geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
+  geom_point(aes(shape=Insul)) +
+  theme(legend.position=c(0.1, .15))
+
+p
+```
+]
+
+
+
+---
+
+### `lm(formula, data)` en action
+
+.small[
+
+```{r, echo=TRUE, eval=TRUE}
+lm(formula = Gas ~ Temp, data = whiteside) %>%
+  summary()
+```
+
+]
+
+---
+
+### Visualisation des résidus 
+
+.fl.w-third.pa2[
+
+Les résidus sont les coeffcients du vecteur _colonne_
+$y - \widehat{y}$
+
+Ce sont (au signe près) les longueurs
+des segments qui relient les points $(x_i,y_i)$
+aux prédictions $(x_i, \widehat{y}_i)$
+
+Les segments sont coloriés selon le signe du résidu
+
+]
+
+.fl.w-two-thirds.pa2[
+```{r whitesresid, echo=FALSE, message=FALSE, warning=FALSE}
+aw <- broom::augment(lm(Gas ~ Temp, data=whiteside)) 
+foo <- bind_cols(whiteside[,1], aw)
+names(foo)[1] <- 'Insul'
+
+foo %>% 
+  ggplot(mapping=aes(y=Gas, x=Temp)) +
+  xlab("Température extérieure") +
+  ylab("Consommation de gaz") +
+  ggtitle("Données Whiteside") +
+  geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
+  geom_point(aes(shape=Insul)) +
+  geom_segment(aes(x=Temp, xend=Temp, y=.fitted, yend=Gas, color=forcats::as_factor(sign(.resid)))) +
+  labs(shape="Isolation") +
+  guides(color=FALSE) +
+  theme(legend.position=c(0.1, .15))
+
+```
+]
+
+---
+
+### Retour sur `lm(...)`
+
+La dernière ligne de `summary(...)` décrit un _test d'hypothèses linéaires_ 
+
+- Sous $H_0$, on postule que la _pente_ (`Temp`)  est nulle.
+
+La $F$-statistique calculée doit être comparée aux quantiles 
+d'une loi de Fisher à $1$ et $54$ degrés de libertés
+
+$$n=56  \qquad  p= 2 \qquad k= 1$$
+
+La dernière information:  la $p$-value ou _degré de signification atteint_, est de $6.545 \times 10^{-9}$,
+
+Ceci signifie qu'on a atteint le quantile d'ordre $1 - 6.545 \times 10^{-9}$ de la loi de Fisher à $1$ et $54$  degrés de liberté $F_{1,54}$
+
+Un statisticien raisonnable qui croit en la modélisation d'ensemble sera conduit à rejeter l'hypothèse nulle
+
+---
+
+Mais cette modélisation est très critiquable.
+
+> Pourquoi la consommation de gaz ne dépendrait-elle que  de la température extérieure moyenne ? et pas du vent ? de l'humidité ? de la durée du jour ? des aléas de la vie en société (vacances, congés de maladie, ...), et bien sûr de l'état de la maison ? On n'est pas non plus obligé de croire que les écarts à la linéarité sont dus à un bruit gaussien homoschédastique.
+
+--
+
+Nous ne disposons pas d'informations pour explorer
+toutes ces voies, mais on peut tout de même se demander si l'isolation modifie la sensibilité de la consommation de gaz à la température extérieure moyenne.
+
+C'est ce que suggère la figure. On y a reporté les observations et la droite de régression issue de la modélisation naïve. La forme des points
+indique s'ils proviennent d'une observation effectuée avant ou après l'isolation.
+
+---
+
+
+### Une modélisation plus ambitieuse
+
+On envisage que la droite de régression peut être modifiée par l'isolation
+
+
+```{r, eval=FALSE, echo=TRUE}
+lm(Gas ~ Temp * Insul, whiteside)
+```
+construit un design à quatre colonnes: 
+
+- une colonne de $1$ correspondant au coefficient
+appelé `Intercept`, 
+- une colonne comportant des $0$  pour les observations effectuées avant isolation, des $1$ pour les autres : coefficient `InsulAfter`,
+- une colonne formée par la colonne `Temp`  
+- une colonne formée en multipliant les colonnes `InsulAfter`  et `Temp`: `InsulFater:Temp`
+
+---
+
+
+.fl.w-third.pa2[
+
+`r fontawesome::fa("hand-point-right")` 
+
+L'étude visait à évaluer l'effet des mesures d'isolation
+
+
+
+]
+
+.fl.w-two-thirds.pa2[
+
+```{r whitescatter3, echo=FALSE, message=FALSE, warning=FALSE}
+aw <- broom::augment(lm(Gas ~ Temp *Insul, data=whiteside)) 
+
+
+aw %>% 
+  ggplot(mapping=aes(y=Gas, x=Temp)) +
+  xlab("Température extérieure") +
+  ylab("Consommation de gaz") +
+  ggtitle("Données Whiteside") +
+  geom_line(aes(x=Temp, y=.fitted, color=Insul), 
+            data=filter(aw, Insul=='Before')) +
+  geom_line(aes(x=Temp, y=.fitted, color=Insul), 
+            data=filter(aw, Insul=='After')) +
+  geom_segment(aes(x=Temp, xend=Temp, y=.fitted, yend=Gas, linetype=forcats::as_factor(sign(.resid)))) +
+  geom_point(aes(shape=Insul)) +
+  labs(shape="Isolation") +
+  guides(linetype=FALSE, color=FALSE) +
+  theme(legend.position=c(0.1, .15))
+
+```
+]
+
+---
+
+### Interpretation 
+
+On peut intrepréter le résultat comme la production de deux droites de régression, avec des intercepts différents et des pentes différentes
+
+Pour la seconde année, 
+
+- l'intercept est `Intercept`+`InsulAfter`, 
+
+- la pente est `Temp`+`InsulAfter:Temp`
+
+
+
+---
+
+### Analyse
+
+On constate que 
+
+- la distribution des résidus est moins asymétrique (la médiane est plus proche de $0$)
+
+- moins dispersée (l'écart interquartile est divisé par quatre)
+
+- La somme des carrés des résidus (la variance inexpliquée) qui est égale  au carré de la `Residual standard error` multiplié par le nombre de degrés de liberté est divisé par à peu près quatre
+
+- L'adéquation aux données (le _fit_) est bien meilleure, en apparence au moins 
+
+---
+
+
+.small[
+```{r}
+lm(data=whiteside, Gas ~ Insul  * Temp) %>% 
+  summary() 
+```
+]
+
+
+---
+
+### Analyse de la variance 
+
+On peut effectuer un test d'hypothèses linéaires pour comparer les performances de la modélisation naïve
+et celles de la modélisation qui l'est moins. 
+
+La fonction `anova` (_analysis of variance_) prend
+en argument les deux modèles renvoyés par `lm` et elle calcule la statistique de Fisher.
+
+Le _degré de signification atteint_ est inférieur à la précision des calculs numériques sur la machine:
+
+la statistique de Fisher dépasse le quantile d'ordre $1- 2.2\times 10^{-16}$ de $F_{2,52}$.
+
+---
+
+### `anova(...)` en action 
+
+```{r, echo=TRUE, eval=TRUE}
+anova(lm(data=whiteside, Gas ~ Temp),
+      lm(data=whiteside, Gas ~ Insul*Temp)) %>% 
+  broom::tidy() %>% 
+  kable( digits=3,caption = "ANOVA des données Whiteside")
+```
+
+
+---
+exclude: true
+class: inverse, middle, center
+
+## Remarques bibliographiques} % (fold)
+\label{sec:remarques_bibli}
+
+---
+exclude: true
+Les notions de statistique suffisante ou exhaustive, de statistique suffisante minimale, de statistique ancillaire, complète sont discutées en détail dans \cite{LehCas98}.
+
+Le théorème de Basu est prouvé dans \cite{LehCas98}.
+
+L'inférence dans les modèles gaussiens est le problème de référence en statistique mathématiques.
+Le modèle des suites gaussiennes est étudié en profondeur dans la monographie de \cite{johnstone:2002}.
+Il existe une abondante littérature appliquée sur la régression linéaire ou non,
+par exemple le livre de Fox et Weisberg~\cite{FoxWei01} qui accompagne le paquet `r fontawesome::fa("r-project")` nommé `car`.
+
+Pour les limites de suites d'expériences statistiques, la théorie de la normalité asymptotique locale (\textsc{lan}),
+ce que l'on appelle la théorie de Le Cam, voir \citep{vandervaart:1998}.
+
+Sur la sélection de modèles gaussiennes, voir \citep{Mas06} et références.
+
+Sur la statistique en grandes dimensions voir \cite{MR3307991} ou \citep{BuhGee11}.
+Sur le _compressed sensing}  voir \citep{FouRau13}.
+
+Sur les modèles graphiques gaussiens, voir \citep{MAL-001}.
+% section remarques_bibli (end)
+
+Les données `whiteside`
+
+sont analysées dans \cite{MR1337030}.
+% section références (end)
+\printbibliography[title=Références,heading=subbibliography]
+
+% \printbibliography[type=book,title=Ouvrages,heading=subbibliography]
+% \printbibliography[type=article,title=Journaux/Revues,heading=subbibliography]
+
+
+%%% BIBLATEX
+\end{refsection}
+%%% BIBLATEX
 
 
 ---
@@ -130,4 +1197,4 @@ background-size: cover
 
 ## The End
 
----
+

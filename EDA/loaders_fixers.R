@@ -6,7 +6,7 @@ pacman::p_load(latex2exp)
 pacman::p_load(kableExtra)
 pacman::p_load(gt)
 # old_theme <-theme_set(theme_xaringan())
-old_theme <-theme_set(theme_bw(base_size=14, base_family = "Helvetica"))
+old_theme <-theme_set(theme_minimal(base_size=14, base_family = "Helvetica"))
 
 pacman::p_load("knitr")
 

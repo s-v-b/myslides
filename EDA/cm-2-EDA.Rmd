@@ -44,6 +44,8 @@ xaringanExtra::use_logo(
 
 xaringanExtra::use_editable(expires = 1)
 
+xaringanExtra::use_broadcast()
+
 source("./loaders_fixers.R")
 ```
 
@@ -78,7 +80,9 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### EDA Master I MIDS et MFA
+#### [EDA Master I MIDS et MFA](/courses/eda/index.html)
+
+#### [Stéphane Bocuheron](http://stephane-v-boucheron.fr)
 
 
 ---
@@ -99,7 +103,7 @@ class: inverse, middle
 ### Cummulative distribution functions and quantile functions
 
 ---
-exclude: false
+exclude: true
 
 Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.
 
@@ -374,6 +378,7 @@ $(x_{n/2:n}+ x_{n/2+1:n})/2$ if $n$ is even
 - ...
 
 ---
+exclude: true
 
 Why _robustness_?
 
@@ -638,10 +643,39 @@ class: middle, center, inverse
 ---
 
 
+.fl.w-60.pa2[
 
-```{r}
+```{r titanic-fares-violinplot-label, echo=FALSE}
+title <- stringr::str_c("Titanic Fare prices")
 
+p <- ggplot(tit,
+       aes(y=Fare, x=1L)) +
+  geom_violin(aes(x=Pclass)) + #<<
+  ylab("") +
+  scale_y_continuous(
+  labels = scales::number_format(scale = 1,
+                                 suffix = " £"))+
+  ggtitle(title) +
+  xlab("Passenger class") +
+  ggplot2::theme(
+  #axis.text.x = element_blank(),
+  # axis.ticks.x = element_blank()
+  )
+
+p
+# summary(tit$Fare)
 ```
+]
+
+
+.fl.w-40.pa2[
+
+Titanic fare prices distribution exhibits a non-Gaussian behavior
+`r fontawesome::fa("smile-wink")`
+
+They are a mix of three populations that also exhibit non-Gaussian behavior
+]
+
 
 
 
@@ -734,7 +768,7 @@ exclude: true
 
 ]
 
----
+
 
 ---
 exclude: true
@@ -743,9 +777,9 @@ exclude: true
 
 
 ```{r, eval=FALSE}
-data %>%
-  table() %>%
-  kable()
+# data %>%
+#   table() %>%
+#   kable()
 ```
 ---
 class: middle, center, inverse
@@ -787,7 +821,6 @@ tit %>%
   geom_bar(width=.3) +      #<<
   ylab("Count") +
   ggtitle("Titanic: boarding distributions")
-
 
 ```
 
@@ -896,15 +929,20 @@ of the different categories.
 One way to facilitate this consists of normalizing
 the counts by dividing all counts by sample size.
 
-```{r normalize-col-plot-label, fig.show='hide'}
-dt <- dt %>%
-  dplyr::mutate(Prop=Count/sum(Count))
+```{r normalize-col-plot-label, fig.show='hide', message=FALSE}
+dt <- tit %>%
+    group_by(Pclass) %>%
+  dplyr::summarise(Count=n() ) %>%
+  dplyr::mutate(Prop=Count/sum(Count)) 
 
-p <- dt %>%
-  ggplot(mapping=aes(x=Cat, y=Prop))
+p <- dt %>% 
+  ggplot(mapping=aes(x=Pclass,
+                     y=Prop)) +
+  ggtitle("Titanic: boarding distributions")
 
-p + geom_col(width=.3)  #<<
+(p + geom_col(width=.3)) 
 ```
+
 ]
 
 .fl.w-50.pa2[
@@ -932,7 +970,7 @@ like defining a _pipeline_
 .fl.w-two-thirds.pa2[
 
 ```{r, echo=FALSE}
-(p + geom_col(width=.3)) %+% dt[dt$Cat != 'Crew',]
+(p + geom_col(width=.3)) 
 ```
 
 ]
@@ -973,11 +1011,10 @@ relevant than the other.
 
 ```{r pieplot-label, fig.show='hide'}
 dt %>%
-   dplyr::mutate(Prop = Count/sum(Count)) %>%
    ggplot() +
    geom_bar(mapping=aes(x=factor(1),
                         y=Prop,
-                        fill=Cat),
+                        fill=Pclass),
             stat='identity') +
    coord_polar(theta='y') +
    xlab("") +
@@ -1586,11 +1623,13 @@ df %>%
 
 ]
 ---
+exclude: true
 class: inverse, center, middle
 
 ## Inequalities
 
 ---
+exclude: true
 
 ### Why and what
 
@@ -1600,6 +1639,7 @@ class: inverse, center, middle
 
 
 ---
+exclude: true
 
 ### How
 
@@ -1608,6 +1648,7 @@ Normalizing income distribution
 Non-decreasing rearrangement
 
 ---
+exclude: true
 
 ### Lorenz curve
 
@@ -1638,7 +1679,7 @@ function (x, n = rep(1, length(x)), plot = FALSE)
 ```
 
 ---
-
+exclude: true
 
 ### Indices and Schur monotonicity
 

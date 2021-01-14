@@ -46,6 +46,8 @@ xaringanExtra::use_panelset()
 
 xaringanExtra::use_editable(expires = 1)
 
+xaringanExtra::use_broadcast()
+
 source("./loaders_fixers.R")
 ```
 
@@ -80,8 +82,9 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### EDA Master I MIDS et MFA
+#### [EDA Master I MIDS et MFA](/courses/eda/index.html)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: inverse, middle
@@ -106,48 +109,91 @@ class: center, middle, inverse
 
 ---
 
+### Definition
 
-A bivariate sample is a sequence of couples from sets $\mathcal{X}$
-and $\mathcal{Y}$.
+A bivariate sample is a sequence of couples from  $\mathcal{X} \times \mathcal{Y}$
 
-A bivariate sample is a two-dimensional array with $n$ rows and
-2 columns. The two columns may be of the same type or not.
+Computationally, a bivariate sample is a two-dimensional array (not a matrix) with $n$ rows and $2$ columns 
 
-Assume that $\mathcal{X} \times \mathcal{Y}$ may be endowed with a
-$\sigma$-algebra and a probability distribution $P$. If we
-collect an i.i.d sample from $P$, we obtain a bivariate sample.
+The two columns may be of the same type (`numeric`, `integer`, `character`, `factor`, `date`) or  not
 
----
+--
 
+Assume that $\mathcal{X} \times \mathcal{Y}$ may be endowed witha
+$\sigma$-algebra and a probability distribution $P$
 
-We can poll repeatedly a well-defined human population by picking
-uniformly at random elements of the population (individuals). For
-each individual, we measure *blood pressure* and *heart rate* (pulses per minute) at wake up.
-In this way we obtain a bivariate sample. In that case, both variables are quantitative (and non-negative).
+If we collect an i.i.d sample from $P$, we obtain a _bivariate_ sample
 
 ---
 
-We may consider the collection of passengers on board of HMS Titanic on April the 12th, 1912.
+### Setting I
 
-For each passenger, we record class (`Pclass`) and Fate (`Survived/Deceased`). This
-is again a bivariate sample. Both variables are qualitative/categorical.
+For a health survey, we can poll repeatedly a well-defined human population by picking
+uniformly at random elements of the population (individuals) 
 
-Finally, consider again the Titanic dataset, but record class (`Pclass`) and fare (`Fare`).
-One variable is qualitative, the other quantitative.
+For each individual, we measure at wake up
+
+- *blood pressure* 
+
+- *heart rate* (pulses per minute) 
+
+We obtain a bivariate sample 
+
+Both variables are quantitative (and non-negative)
 
 ---
 
-In the sequel, when we deal with a generic bivariate sample, we denote
-by $X$ the first coordinate, and $Y$ the second coordinate. If $(x,y) \in \mathcal{X} \times \mathcal{Y}$
-then $X(x, y) =x$ and $Y(x, y)=y$.
-In statistical parlance, $X$ and $Y$ are called variables. The domains of the two
-coordinates may be finite or not. The domains may be different or not.
+### Setting II  `r fontawesome::fa("ship")`
+
+Consider the collection of passengers on board of HMS Titanic on April the 12th, 1912
+
+For each passenger, we record class (`Pclass`) and Fate (`Survived/Deceased`). 
+
+This is again a bivariate sample 
+
+Both variables are _qualitative_/categorical
+
+Finally, consider again the `Titanic` dataset, but record class (`Pclass`) and fare (`Fare`).
+
+One variable is _qualitative_, the other _quantitative._
 
 ---
+
+### Convention 
+
+When we deal with a generic bivariate sample, we denote
+by $X$ the first coordinate, and $Y$ the second coordinate
+
+If $(x,y) \in \mathcal{X} \times \mathcal{Y}$
+
+then 
+
+$$X(x, y) =x  \qquad \text{and} \qquad Y(x, y)=y$$
+
+In statistical parlance, $X$ and $Y$ are called _variables_ 
+
+The ranges of the two coordinates may be finite or not 
+
+The ranges may be different or not
+
+---
+
+### Two dimensional arrays: `dataframe`  
+
+A $n \times p$ array with columns of different types is not a `matrix`
+
+In `r fontawesome::fa("r-project")`, `r fontawesome::fa("python")`, `r fontawesome::fa("database")`, such arrays are called _tables_ (databases) or _dataframes_ (`r fontawesome::fa("r-project")`, `r fontawesome::fa("python")`)
+
+_dataframes_ are _column-oriented_
+
+In `r fontawesome::fa("r-project")`, a _dataframe_ is a `list` of `vectors`
+
+All vectors in the `list` have the same length, they may be of different types (`class`) 
 
 We should think of a bivariate sample as dataframe `df` with two columns `X` and `Y` and
-as many rows as there are individuals in the sample. If we project on either coordinate,
-we obtain a univariate sample (`df$X`, `df[["X"]]` or `df$Y`).
+as many rows as there are individuals in the sample 
+
+If we project on either coordinate, we obtain a univariate sample (`df$X`, `df[["X"]]` or `df$Y`).
 
 ```{r, eval=FALSE}
 df <-  tibble::tibble(X= letters[seq(1,6,2)], Y=rnorm(3))
@@ -161,25 +207,33 @@ class: center, middle, inverse
 
 ---
 
-Just as we did for univariate samples, we review the different statistics used to summarize bivariate sampples.
+### Roadmap
 
-We start with qualitative bivariate samples, then proceed  to quantitative bivariate
-samples and to mixed qualitative/quantitative samples.
+Just as we did for univariate samples, we review the different statistics used to summarize bivariate samples
+
+We start with  qualitative bivariate samples, then proceed  to quantitative bivariate
+samples and to mixed qualitative/quantitative samples
 
 Summary statistics are enhanced by visualization, that
-is standard graphic displays that depend on the kind of bivariate sample under consideration.
+is standard graphic displays that depend on the kind of bivariate sample under consideration
 
 ---
 
-The main goal of bivariate sample exploration is the assessment of possible association between the two variables.
+### Goals
 
-Association is a loose term. It can be assigned a technical meaning if we
-consider purely quantitative or purely qualitative bivariate samples.
+The main goal of bivariate sample exploration is the assessment of possible _association_ between the two variables
+
+_Association_ is a loose term
+
+_Association_ can be assigned  technical definitions if we
+consider purely quantitative or purely qualitative bivariate samples
 
 
 - linear correlation and regression
 
-- chi-square statistics.
+- chi-square statistics
+
+
 
 ---
 class: center, middle, inverse
@@ -190,45 +244,46 @@ class: center, middle, inverse
 
 ### Two-ways contingency tables
 
-Qualitative univariate samples  are summarized using one-way contingency tables, that
+Qualitative univariate samples  are summarized using _one-way contingency tables_, that
 is by counting the number of occurrences of each modality
 
-Qualitative bivariate samples are also summarized by counts, namely the counts of co-occurrences of couples of modalities
-
+Qualitative bivariate samples are summarized using _two-way contingency tables_: the counts of co-occurrences for each couples of modalities
 
 When $X$ and $Y$ are qualitative variables with respectively $p$  and $q$ modalities, let
 
 $$\begin{array}{rl}  n_{i,j} & = \sum_{k=1}^n \mathbb{I}_{X_k=i, Y_k=j} \\
   n_{i,\cdot} & = \sum_{k=1}^n \mathbb{I}_{X_k=i} \\  n_{\cdot,j} & = \sum_{k=1}^n \mathbb{I}_{Y_k=j} \\  n & = \sum_{i \leq p} n_{i,\cdot} = \sum_{j\leq q} n_{\cdot,j}  \end{array}$$
 
----
-
-Counts like $n_{i, \cdot}$ or $n_{\cdot, j}$ are called marginal counts.
-
-For a pair of qualitative variables, a bivariate sample is summarized
-by a **2-way contingency table**.
-
+Counts like $n_{i, \cdot}$ or $n_{\cdot, j}$ are called _marginal counts_
 
 ---
 
-### Class struggle
-
-From the Titanic dataset (Kaggle), we extract columns `Pclass`  and `Survived`.
-`Pclass` has three modalities (1, 2, 3) and `Survived` has two (`Deceased`, `Survived`).
-The next contingency table is obtained from the `train` subset.
+### Class struggle  `r fontawesome::fa("ship")`
 
 
 
----
+.panelset[
+
+.panel[.panel-name[Two columns]
+
+From the Titanic dataset (`Kaggle`), we extract columns `Pclass`  and `Survived`
+
+- `Pclass` has three modalities: `(1, 2, 3)`  
+
+- `Survived` has two modalities: (`Deceased`, `Survived`)
 
 
-```{r tit_col_types, echo=FALSE}
+]
+
+.panel[.panel-name[Preparing for loading]
+
+```{r tit_col_types, echo=TRUE}
 tit_col_types = cols(
 
   PassengerId = col_integer(),
 
-  Survived = col_factor(levels=c("0", "1"),
-                        include_na = TRUE),
+  Survived = col_factor(levels=c("0", "1"),   #<<
+                        include_na = TRUE),   #<<
 
   Pclass = col_factor(levels=c("1", "2", "3"),  #<<
                       ordered = TRUE,           #<<
@@ -241,11 +296,12 @@ tit_col_types = cols(
 
   Embarked = col_factor(levels = c("S", "C", "Q"),
                         include_na = TRUE)
-
 )
-
 ```
+]
 
+
+.panel[.panel-name[Retyping]
 
 ```{r load-titanic-label, echo=TRUE}
 train <- read_csv("DATA/titanic/train.csv",
@@ -259,27 +315,35 @@ test <- mutate(test, #<<
 tit <- union(train,
              test)
 
-tit$Survived <- forcats::fct_recode(tit$Survived,
-                                    "Deceased"="0",
-                                    "Survived"="1") %>%
-                          forcats::fct_relevel(c("Survived", "Deceased"))
+tit$Survived <- forcats::fct_recode(tit$Survived,      #<<
+                                    "Deceased"="0",    #<<
+                                    "Survived"="1") %>%   #<<
+                          forcats::fct_relevel(c("Survived", "Deceased")) #<<
 
 ```
+]
 
-
-
----
+.panel[.panel-name[Two-ways table]
 
 ```{r, results='markup', echo=TRUE}
 tit %>%
-  dplyr::select(Pclass, Survived) %>%
-  table() %>%     # contingency table is Base R form
+  dplyr::select(Pclass, Survived) %>% # Projection on two columns
+  table() %>%     #<<  
   broom::tidy() %>%   # make it a dataframe
   tidyr::pivot_wider(names_from=Survived, values_from=n) %>%    # with usual look and feel
   knitr::kable(format="markdown")
 ```
 
+]
+
+]
+
+
+
+
 ---
+
+### Supercharged contingency tables
 
 ```{r, include=FALSE, echo=FALSE}
 # another way of polishing the output
@@ -289,17 +353,25 @@ tit %>%
   knitr::kable(format="markdown", row.names = TRUE)
 ```
 
----
 
 Package `summarytools` provides richer contingency tables.
 
-```{r, echo=TRUE, results='asis'}
+```{r, echo=TRUE, results='asis', eval=FALSE}
 pacman::p_load(summarytools)
 
-ctable(x=tit$Pclass, y=tit$Survived, style="rmarkdown" , headings = FALSE)
+ctable(x=tit$Pclass, 
+       y=tit$Survived, 
+       style="rmarkdown" , 
+       headings = FALSE)
 ```
 
-
+|        | __Survival__ |    Survived |    Deceased |      NA |         Total |
+|:-------:|---------:|------------:|------------:|------------:|--------------:|
+| __Pclass__ |          |             |             |             |               |
+|      1 |          | 136 (42.1%) |  80 (24.8%) | 107 (33.1%) |  323 (100.0%) |
+|      2 |          |  87 (31.4%) |  97 (35.0%) |  93 (33.6%) |  277 (100.0%) |
+|      3 |          | 119 (16.8%) | 372 (52.5%) | 218 (30.7%) |  709 (100.0%) |
+|  Total |          | 342 (26.1%) | 549 (41.9%) | 418 (31.9%) | 1309 (100.0%) |
 
 ---
 class: center, middle, inverse
@@ -321,7 +393,7 @@ it takes as input a contingency table and outputs a plot
 
 ---
 
-### A mosaic on the Titanic
+### A mosaic on the Titanic  `r fontawesome::fa("ship")`
 
 .fl.w-40.pa2[
 
@@ -333,12 +405,11 @@ tit %>%
   mosaicplot()   #<<
 ```
 
-For each Passenger Class, we draw a stacked bar plot
+For each Passenger Class `Pclass`, we draw a _stacked bar plot_
 
-The _width_ of each bar is proportional to the Class frequency
+The _width_ of each bar is proportional to the Class frequency  (count)
 
-Within each bar (Class), the _height_ of each (Survival Status) component is proportional  to the frequency of this Survival Status within
-that Passenger Class
+`r fontawesome::fa("hand-point-right")` Within each bar (Class), the _height_ of each (Survival Status) component is proportional  to the _relative frequency_ of this Survival Status within that Passenger Class
 
 
 ]
@@ -354,29 +425,49 @@ that Passenger Class
 
 ---
 
-A mosaicplot associates a rectangle to each couple of modalities.
+### `mosaicplot` from a Grammar of Graphics perspective
 
+
+The `stat_...` part consists in computing the $(n_{i,j}/n)_{i\in \mathcal{X}, j \in \mathcal{Y}}$
+
+The `geom_...` part consists in mapping the counts to rectangles: 
+a `mosaicplot` associates a rectangle to each couple of modalities
 
 The surface area of the rectangle associated with
 $(i,j) \in \mathcal{X}\times \mathcal{Y}$ is proportional
-to $n_{i,j}$.
+to 
 
-The width of the rectangle is proportional to marginal count $n_{i, .}$ and the height to $n_{i,j}/n_{i, \cdot}$.
+$$\underbrace{n_{i,j}}_{\propto\text{ surface area}} = \underbrace{n_{i, .}}_{\propto\text{ width}} \times \underbrace{\frac{n_{i, j}}{n_{i,.}}}_{\propto\text{ height}}$$
 
-Rectangles are placed on a 2-dimensional grid.
+Rectangles are placed on a 2-dimensional grid
 
-Observe that normalized counts $(n_{i,j}/n)_{i\in \mathcal{X}, j \in \mathcal{Y}}$ define a probability distribution on $\mathcal{X}\times \mathcal{Y}$, the so-called *empirical distribution* $P_n$:
-
-$$P_n\big\{(i,j)\big\} = P_n\{ X=i \wedge Y=j\} = \frac{n_{i,j}}{n}$$
 
 ---
 
-For each modality $i \in \mathcal{X}$, the sum of the heights of rectangles $(i,j)_{j \in \mathcal{Y}}$ is normalized.
+### From counts to probabilities 
+
+- Normalized counts 
+
+$$(n_{i,j}/n)_{i\in \mathcal{X}, j \in \mathcal{Y}}$$ 
+
+define a probability distribution on $\mathcal{X}\times \mathcal{Y}$, the so-called *empirical distribution* $P_n$:
+
+
+$$P_n\big\{(i,j)\big\} = P_n\{ X=i \wedge Y=j\} = \frac{n_{i,j}}{n}$$
+
+--
+
+- Marginal counts $(n_{i,.})_{i \in \mathcal{X}}$ define _empirical marginal distributions_
+
+--
+
+- For each modality $i \in \mathcal{X}$, the sum of the heights of rectangles $(i,j)_{j \in \mathcal{Y}}$ is normalized
 
 The heights  $\propto n_{i,j}/n_{i, \cdot}$ define (empirical) *conditional probability distributions*:
 
 $$\frac{n_{i,j}}{n_{i, \cdot}} = P_n \big\{Y=j \mid X=i\big\}$$
 
+--
 
 `r fontawesome::fa("exclamation-triangle")` This matters when we want to assess a possible _association_ between $X$ and $Y$, that is a departure of $P_n$ (the empirical joint distribution) from the *product distribution* defined from the marginal distributions
 
@@ -397,7 +488,7 @@ $$P_n \circ Y^{-1} \leftrightarrow \Big(\frac{n_{\cdot, j}}{n}\Big)_{j \in \math
 
 We need to count rows for each combination of the modalities of `Pclass` and `Survived`, and also to gather total counts per modality of `Pclass`
 
-```{r df-4-mosaic-ggplot-label}
+```{r df-4-mosaic-ggplot-label, message=FALSE, warning=FALSE}
 tit %>%
   filter(!is.na(Survived)) %>%
   group_by(Pclass, Survived) %>%
@@ -441,45 +532,67 @@ More work would allow to put the bars closer and to mimick the mosaicplot in a m
 In the Grammar of Graphics perspective,
 barplots, two-way mosaicplots, higher-dimensional mosaicplots are based on column plots and require stat functions involving aggregation operations from extended SQL
 
-]]
+]
+]
 
 ---
+exclude: true
 
-
-```{r }
+```{r , eval=FALSE, echo=FALSE}
 tit %>%
   dplyr::filter(!is.na(Survived)) %>%
   dplyr::group_by(Pclass, Survived) %>%
   summarise(count=n())  %>%
   ungroup() %>%
   ggplot(aes(x=Pclass, y=count)) +
-  geom_col(aes(fill=Survived, width=))
+  geom_col(aes(fill=Survived, width=)) 
 ```
 
 ---
 
 ### Transposing a two-way contingency table
 
-When building a mosaicplot, the two variables do not serve the same purpose: the variable mapped to the `x` axis
-serves as an *explanatory* variable.
+When building a `mosaicplot`, the two variables do not serve the same purpose: the variable mapped to the `x` axis serves as an *explanatory* variable.
 
 The one-way contingency table generated by the explanatory variable
-can be read directly from the widths of the different columns. This is not the case for the other variable.
+can be read directly from the widths of the different columns. This is not the case for the other variable
 
-The messages conveyed by the mosaicplot of the transpose of a contingency table differs from the original message.
+The messages conveyed by the `mosaicplot` of the transpose of a contingency table differs from the original message
 
 ---
 
-The order of the variable matters!
+### Variable order matters!
 
-Rather than telling us the fate of the different passenger classes, this mosaic diagram tells us about the class composition of survivors and casualties.
+.panelset[
 
-The two stories are related but this one is harder to comment.
+.panel[.panel-name[A tale of two tables]
 
+Rather than telling us the fate of the different passenger classes, 
+this `mosaicplot` tells us about the class composition of survivors and casualties
 
-```{r mosaictitanic, echo=TRUE, message=FALSE, warning=FALSE, fig.cap="(ref:mosaictitanic)"}
-mosaicplot(formula= Survived ~ Pclass, data= tit)  # almost tidyverse compliant API for moosaic plots
+`r fontawesome::fa("exclamation-triangle")` The two stories are related but  one is harder to comment about
+
+]
+
+.panel[.panel-name[Survival explained by Class]
+
+```{r mosaictitanic1, echo=TRUE, message=FALSE, warning=FALSE, fig.height=5}
+mosaicplot(formula= Pclass ~ Survived, data= tit)  
+
 ```
+
+]
+
+.panel[.panel-name[Class according to Survival]
+
+```{r mosaictitanic2, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=5}
+mosaicplot(formula= Survived ~ Pclass, data= tit)  
+
+```
+
+]
+]
+
 
 ---
 
@@ -500,20 +613,35 @@ tit %>%
   ggplot() +
   geom_mosaic(aes(x = product(Survived, Pclass), fill=Survived)) + #<<
   labs(x= "Passenger class", y="Fate") +
+  scale_fill_viridis_d() +   #<<
   ggtitle("Titanic mosaic with tidyverse flavor")
 ```
 ]
 
-.panel[.panel-name[Plot]
+.panel[.panel-name[Plot it]
 
 
-<img src=`r knitr::fig_chunk("titanic-ggmosaic-label","png")` alt="ggmosaic plot" height="400", align="left">
-
-]
+<img src=`r knitr::fig_chunk("titanic-ggmosaic-label","png")` alt="ggmosaic plot" height="400" align="left">
 
 ]
 
----
+.panel[.panel-name[Plot it again]
+
+
+```{r titanic-ggmosaic-label-transpose, echo=FALSE, fig.show='hide'}
+pacman::p_load(ggmosaic)
+
+tit %>%
+  dplyr::select(Pclass, Survived) %>%
+  ggplot() +
+  geom_mosaic(aes(x = product(Pclass, Survived), fill=Pclass)) + #<<
+  labs(y= "Passenger class", x="Fate") +
+  scale_fill_viridis_d() + #<< 
+  ggtitle("Titanic mosaic with tidyverse flavor (bis)")
+```
+
+
+<img src=`r knitr::fig_chunk("titanic-ggmosaic-label-transpose","png")` alt="ggmosaic plot" height="400" align="left">
 
 Here again the order of the variable names that are passed to `ggmosaic::product` is important.
 
@@ -522,6 +650,11 @@ trying to visualize the impact of (passenger) class on fate.
 
 It makes sense to map `Pclass` on the `x` axis and `Survived` on the `y` axis.
 
+]
+
+]
+
+
 ---
 class: middle, center, inverse
 
@@ -529,11 +662,13 @@ class: middle, center, inverse
 
 ---
 
-The numerical summary of a numerical bivariate sample consists of an **empirical mean**
+### Numerical summaries
+
+The numerical summary of a numerical bivariate sample consists of an _empirical mean_
 
 $$\begin{pmatrix}\overline{X}_n \\ \overline{Y}_n \end{pmatrix} = \frac{1}{n} \sum_{i=1}^n \begin{pmatrix} x_i \\ y_i \end{pmatrix}$$
 
-and an **empirical covariance matrix**
+and an _empirical covariance matrix_
 
 $$\begin{pmatrix}\operatorname{var}_n(X) & \operatorname{cov}_n(X, Y) \\
 \operatorname{cov}_n(X, Y) & \operatorname{var}_n(Y)\end{pmatrix}$$
@@ -548,69 +683,104 @@ $$\operatorname{cov}_n(X, Y) = \frac{1}{n}\sum_{k=1}^n \Big(x_i-\overline{X}_n\B
 
 ---
 
+### Covariance matrices have properties
+
 The empirical covariance matrix is the *covariance matrix of the joint empirical distribution*.
 
-As a covariance matrix, the empirical covariance matrix is *symmetric*, *semi-definite positive (SDP)*.
+As a covariance matrix, the empirical covariance matrix is *symmetric*, *semi-definite positive (SDP)*
+
+### `r fontawesome::fa("syringe")` 
+
+- A square $n \times n$ matrix $A$  is semi-definite positive (SDP) iff 
+
+$$\forall u \in \mathbb{R}^n, \qquad  u^T \times A u = \langle u, Au \rangle \geq 0$$
+
+- A square $n \times n$ matrix $A$  is definite positive (DP) iff 
+
+$$\forall u \in \mathbb{R}^n \setminus \{0\}, \qquad  u^T \times A u = \langle u, Au \rangle > 0$$
 
 ---
 
+### Linear correlation coefficient
 
 The **linear correlation coefficient** is defined from the covariance matrix as
 
 $$\rho = \frac{\operatorname{cov}_n(X, Y)}{\sqrt{\operatorname{var}_n(X)  \operatorname{var}_n(Y)}}$$
 
-By the Cauchy-Schwarz inequality, we always have $-1 \leq \rho \leq 1$.
+`r fontawesome::fa("hand-point-right")` By the Cauchy-Schwarz inequality, we always have 
 
-Translating and/or rescaling the columns does not modify the linear correlation coefficient!
+$$-1 \leq \rho \leq 1$$
 
-Functions `cov` and `cor` from base `R` perform the computations.
+`r fontawesome::fa("hand-point-right")` Translating and/or rescaling the columns does not modify the linear correlation coefficient!
+
+Functions `cov` and `cor` from base `r fontawesome::fa("r-project")` perform the computations
 
 ---
 
-### Do it the SQL way.
+### Do it the SQL way  `r fontawesome::fa("database")`
 
 ```{r enfants, warning=FALSE, message=FALSE, results='markup'}
 data <- read_delim('./DATA/Enfants.txt', delim='\t')
 
 data %>%
   dplyr::select(MASSE, TAILLE) %>%
-  dplyr::summarise(mx= mean(TAILLE), my=mean(MASSE), m2x=mean(TAILLE^2), m2y=mean(MASSE^2), mxy=mean(TAILLE*MASSE)) %>%
-  dplyr::mutate(var_taille=m2x-mx^2, var_masse=m2y-my^2, cov_masse_taille=mxy -mx*my) %>%
+  dplyr::summarise(mx= mean(TAILLE), my=mean(MASSE), 
+                   m2x=mean(TAILLE^2), m2y=mean(MASSE^2), 
+                   mxy=mean(TAILLE*MASSE)) %>%  
+  dplyr::mutate(var_taille=m2x-mx^2, 
+                var_masse=m2y-my^2, 
+                cov_masse_taille=mxy -mx*my) %>%
   dplyr::mutate(cor=cov_masse_taille/sqrt(var_taille * var_masse)) %>%
   dplyr::select(- starts_with('m'))
 ```
 
 ---
 
+### Visualizing quantitative bivariate samples
+
+<img src="img/pexels-katerina-holmes-5905611.jpg" align="right" width="200px">
 
 Suppose now, we want to visualize a quantitative bivariate sample of length $n$.
 
-This bivariate sample
-is a real matrix with $n$ rows and $2$ columns.
+This bivariate sample (a dataframe) may be handled as a _real matrix_ with $n$ rows and $2$ columns
+
+Geometric concepts come into play 
 
 ---
 
-We may attempt to visualize the columns, that is two $n$-dimensional vectors
+### Exploring column space
+
+We may attempt to visualize the two columns, that is the two $n$-dimensional vectors
 or the rows, that is $n$ points on the real plane.
 
-If we try to visualize the two columns, we simplify the problem by projecting on the plane generated by the two columns.
+`r fontawesome::fa("lightbulb")` If we try to visualize the two columns, we simplify the problem by _projecting on the plane generated by the two columns_
 
-Then what matters is the angle between the two vectors. Its cosine is precisely the linear correlation coefficient defined above.
+Then what matters is the _angle_ between the two vectors. 
+
+Its _cosine_ is precisely the _linear correlation coefficient_ defined above
 
 ---
+
+### Exploring row space
 
 If we try visualize the rows, the most basic visualization of a quantitative bivariate sample is the *scatterplot*.
 
 In the grammar of graphics parlance, it consists in mapping the two variables on the two axes,
-and mapping rows to points using `geom_point` and`stat_identity`, see Figure  .
+and mapping rows to points using `geom_point` and `stat_identity`
 
 ---
 
-### A Gaussian cloud
+### A Gaussian cloud  `r fontawesome::fa("cloud")`
+
+
+
+.panelset[
+
+.panel[.panel-name[Simulation]
 
 We build an artificial bivariate sample, by first building a covariance matrix `COV` (it is randomly generated). Then we build a bivariate normal sample `s` of length `n` and turn it into a dataframe `u`. The dataframe is then fed  to `ggplot`.
 
-```{r gaussiancloud, echo=TRUE, fig.cap='(ref:gaussiancloud)'}
+```{r gaussiancloud, echo=TRUE, fig.show='hide', fig.height=4}
 set.seed(1515) # for the sake of reproducibility
 
 n <- 100
@@ -620,12 +790,44 @@ COV <- V %*% t(V)         # a random covariance matrix, COV is symmetric and SDP
 s <- t(V %*% matrix(rnorm(2 * 10 * n), ncol=10*n))
 u <- tibble(X=s[,1], Y=s[, 2])                       # a bivariate normal sample
 
+emp_mean <- as_data_frame(t(colMeans(u)))
+
 p_scatter_gaussian <- ggplot(u, aes(x=X, y=Y)) +
-  geom_point(alpha=.5, size=.5) +
+  geom_point(alpha=.5, size=1) +
+  geom_point(data=emp_mean, color=2, size=5) +
+  coord_fixed() +
   ggtitle(stringr::str_c("Gaussian cloud, cor = ", round(cor(u$X, u$Y), 2), sep=""))
 
 p_scatter_gaussian
 ```
+]
+
+.panel[.panel-name[Numerical Summary]
+
+- Mean vector (Empirical mean)
+
+```{r}
+t(colMeans(u)) %>% 
+  knitr::kable(digits = 3, col.names = c("$\\overline{X_n}$", "$\\overline{Y_n}$"))
+```
+
+- Covariance matrix  (Empirical covariance matrix)
+
+```{r}
+cov(u) %>% as.data.frame() %>% knitr::kable(digits = 3)
+  
+```
+
+]
+
+
+.panel[.panel-name[Plot]
+
+![](`r knitr::fig_chunk("gaussiancloud", "png")`)
+  
+]
+
+]
 
 ---
 class: center, middle, inverse
@@ -635,33 +837,50 @@ class: center, middle, inverse
 
 ---
 
+### Back to `r fontawesome::fa("ship")`
 
-Back to  Titanic dataset, let us consider variables `Pclass` (qualitative) and `Fare` (quantitative).
+Back to  Titanic dataset, let us consider variables $X=$ `Pclass` (qualitative) and $Y=$ `Fare` (quantitative)
 
-The numerical summary of such a bivariate sample consists of list of numerical summaries of univariate samples.
+The numerical summary of such a bivariate sample consists of _list of numerical summaries of univariate samples_
 
-Namely for each modality of the qualitative variable $X$, we compute the conditional mean and variance the quantitative variable $Y$
+For each modality of the qualitative variable $X$, we compute the _conditional mean_ and _variance_ the quantitative variable $Y$
 
-As before, $\overline{Y}_n$ denotes the empirical mean of $Y$ and $\sigma^2_Y$ the empirical variance of $Y$
-(also called the total variance).
-
----
-
-For each modality $i \in \mathcal{X}$, we define the conditional mean of $Y$ and conditional variance of $Y$  given $X=i$
-
-$$\begin{array}{rl} \overline{Y}_{n/i} & = \frac{1}{n_i} \sum_{k\leq n} \mathbb{I}_{x_k =i} y_k \\ \sigma^2_{Y/i} & = \frac{1}{n_i} \sum_{k \leq n}  \mathbb{I}_{x_k =i} \big( y_k  - \overline{Y}_{n /i}\big)^2\end{array}$$
+As before, $\overline{Y}_n$ denotes the empirical mean of $Y$ and $\sigma^2_Y$ the empirical variance of $Y$  (also called the _total variance_)
 
 ---
 
-The Huygens-Pythagoras formula reads as:
+### Conditional summaries 
 
-$$\sigma^2_{Y} =  \underbrace{\sum_{i\in \mathcal{X}} \frac{n_i}{n} \sigma^2_{Y/i}}_{\text{mean of conditional variances}}  + \underbrace{\sum_{i\in \mathcal{X}} \frac{n_i}{n} \big(\overline{Y}_{n/i} - \overline{Y}_{n}\big)^2}_{\text{variance of conditional means}}$$
+
+For each modality $i \in \mathcal{X}$, we define: 
+
+- Conditional Mean of $X$ given $\{ X = i \}$
+
+$$\overline{Y}_{n\mid i}  = \frac{1}{n_i} \sum_{k\leq n} \mathbb{I}_{x_k =i} \times  y_k$$
+
+- Conditional Variance $Y$ given $\{ X= i\}$ 
+
+$$\sigma^2_{Y\mid i}  = \frac{1}{n_i} \sum_{k \leq n}  \mathbb{I}_{x_k =i} \times \bigg( y_k  - \overline{Y}_{n \mid i}\bigg)^2$$
+
 
 ---
 
-It is also possible and fruitful to compute conditional quantiles (median, quartiles) and interquartile ranges (IQR)
+### Huygens-Pythagoras formula
 
-Conditional mean, variance, median, IQR
+$$\sigma^2_{Y} =  \underbrace{\sum_{i\in \mathcal{X}} \frac{n_i}{n} \sigma^2_{Y \mid i}}_{\text{mean of conditional variances}}  + \underbrace{\sum_{i\in \mathcal{X}} \frac{n_i}{n} \big(\overline{Y}_{n \mid i} - \overline{Y}_{n}\big)^2}_{\text{variance of conditional means}}$$
+
+`r fontawesome::fa("brain")` Check it
+
+---
+
+### Robust bivariate summaries 
+
+It is also possible and fruitful to compute 
+
+- conditional quantiles (median, quartiles) and 
+- conditional interquartile ranges (IQR)
+
+Conditional mean, variance, median, IQR  (`r fontawesome::fa("database")`)
 
 ```{r, echo=TRUE}
 tit %>%
@@ -672,37 +891,83 @@ tit %>%
 
 ---
 
-Visualization of qualitative/quantitative bivariate samples essentially
-consists in displaying visual summaries of conditional distribution of $Y$
-given $X=i, i \in \mathcal{X}$
+### Visualization of mixed bivariate samples
 
-Boxplots and violinplots are relevant here.
+Visualization of qualitative/quantitative bivariate samples 
+
+consists in 
+
+displaying visual summaries of conditional distribution of $Y$ given $X=i, i \in \mathcal{X}$
+
+`Boxplots` and `violinplots` are relevant here
 
 ---
 
-```{r, echo=FALSE, fig.keep='all'}
-tit %>%
-  dplyr::select(Pclass, Fare) %>%
-  dplyr::filter(Fare > 0 ) %>%
-  ggplot(aes(x=Pclass, y=Fare)) +
-  geom_violin() +
-  scale_y_log10() +
-  ggtitle("Titanic: Fare versus Passenger Class")
+### Mixed bivariate samples from Titanic (violine plots)
 
-tit %>%
-  dplyr::select(Survived, Fare) %>%
-  dplyr::filter(Fare > 0 ) %>%
-  ggplot(aes(x=Survived, y=Fare)) +
-  geom_violin() +
-  scale_y_log10() +
+.panelset[
+
+.panel[.panel-name[Fare versus Passenger Class]
+```{r, echo=FALSE, fig.height=5}
+filtered_tit <- tit %>%
+  dplyr::select(Pclass, Survived, Fare) %>%
+  dplyr::filter(Fare > 0 ) 
+
+v <- filtered_tit %>% 
+  ggplot() +
+  aes(y=Fare) +
+  scale_y_log10() 
+
+vv <- v + geom_violin()
+
+vv + 
+  aes(x=Pclass) +
+  ggtitle("Titanic: Fare versus Passenger Class")
+```
+]
+
+.panel[.panel-name[Fare versus Survival]
+
+```{r, echo=FALSE, fig.height=5}
+vv + 
+  aes(x=Survived) +
+  ggtitle("Titanic: Fare versus Survival")
+```
+]
+]
+
+---
+
+---
+
+### Mixed bivariate samples from Titanic (boxplots)
+
+.panelset[
+
+.panel[.panel-name[Fare versus Passenger Class]
+```{r, echo=FALSE, fig.height=5}
+vw <- v + geom_boxplot() 
+
+vw + aes(x=Pclass) +
+  ggtitle("Titanic: Fare versus Passenger Class")
+```
+]
+
+.panel[.panel-name[Fare versus Survival]
+
+```{r, echo=FALSE, fig.height=5}
+vw + 
+  aes(x=Survived) +
   ggtitle("Titanic: Fare versus Survival")
 ```
 
+]
+
+]
+
 ---
 
-
-
-### Dataset `whiteside`  (from package `MASS`).
+### Dataset `whiteside`  (from package `MASS` of `r fontawesome::fa("r-project")`)
 
 > Mr Derek Whiteside of the UK Building Research Station recorded the weekly gas consumption and average external temperature at his own house in south-east England for two heating seasons, one of 26 weeks before, and one of 30 weeks after cavity-wall insulation was installed. The object of the exercise was to assess the effect of the insulation on gas consumption.
 
@@ -771,21 +1036,23 @@ on minimizing the mean quadratic deviation.
 
 .pull-left[
 
-```{r}
-knitr::include_url("https://en.wikipedia.org/wiki/Pierre-Simon_Laplace")
-```
+<img src="img/Rue_Laplace_(Paris).JPG" align="right" width="200">
 
-> The fourth chapter of this treatise includes an exposition of the method of least squares, a remarkable testimony to Laplace's command over the processes of analysis. In 1805 Legendre had published the method of least squares, making no attempt to tie it to the theory of probability. In 1809 Gauss had derived the normal distribution from the principle that the arithmetic mean of observations gives the most probable value for the quantity measured; then, turning this argument back upon itself, he showed that, if the errors of observation are normally distributed, the least squares estimates give the most probable values for the coefficients in regression situations. These two works seem to have spurred Laplace to complete work toward a treatise on probability he had contemplated as early as 1783. .tr[Wikiepdia]
+> The fourth chapter of Laplace treatise includes an exposition of the _method of least squares_, a remarkable testimony to Laplace's command over the processes of analysis. 
+
+> In 1805 Legendre had published the _method of least squares_, making no attempt to tie it to the theory of probability. 
 
 ]
 
 .pull-right[
 
-```{r}
-knitr::include_url("https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss")
-```
+<img src="img/gauss_10_DM.jpg" align="right" height="100">
+
+> In 1809 Gauss had derived the _normal distribution_ from the principle that the arithmetic mean of observations gives the most probable value for the quantity measured; then, turning this argument back upon itself, he showed that, if the errors of observation are normally distributed, the _least squares estimates_ give the most probable values for the coefficients in _regression_ situations
 
 ]
+
+.tr[Wikipedia]
 
 ---
 class: center, middle, inverse
@@ -803,6 +1070,8 @@ $$\begin{array}{rl} \ell_n(a,b)  & = \sum_{i=1}^n \big(y_i - a x_i -b \big)^2  \
 
 ---
 
+### Deriving the solution
+
 The function to be minimized is smooth and strictly convex over $\mathbb{R}^2$ :
 a unique minimum is attained where the gradient vanishes
 
@@ -816,7 +1085,18 @@ $$\begin{array}{rl}\frac{\partial \ell_n}{\partial a} & = - 2  \operatorname{cov
 
 ---
 
+### A closed-form solution 
+
 Zeroing partial derivatives leads to
+
+$$\begin{array}{rl}
+  \widehat{a} & = \frac{\operatorname{cov}(X,Y)}{\operatorname{var}(X)} \\
+  \widehat{b} & = \overline{Y}_n - \frac{\operatorname{cov}(X,Y)}{\operatorname{var}(X)} \overline{X}_n
+\end{array}$$
+
+--
+
+or 
 
 $$\begin{array}{rl}
   \widehat{a} & = \rho \frac{\sigma_y}{\sigma_x} \\
@@ -825,61 +1105,139 @@ $$\begin{array}{rl}
 
 --
 
-If the sample were standardized, that is if $X$ (resp. $Y$) were divided by $\sigma_X$ (resp. $\sigma_Y$), the slope of the regression line would be the correlation coefficient
+`r fontawesome::fa("hand-point-right")` If the sample were standardized, that is,  if $X$ (resp. $Y$) were divided by $\sigma_X$ (resp. $\sigma_Y$), the slope of the regression line would be the correlation coefficient
 
 ---
 
-We come back to the Gaussian cloud, and overplot the regression line.
+### Overplotting the  Gaussian cloud
 
-The slope and intercept of the regression line can be computed from the
-statistical summary of the sample (empirical means, empirical covariance matrix).
 
-It is generically obtained as part ou the output of function `lm()` (`lm` stands for *linear model*).
+
+.left-column[
+
+- The _slope_ and _intercept_  can be computed from the
+sample summary (empirical mean and covariance matrix)
+
+- In higher dimension, coefficients are  from `lm(...)` 
+
+]
+
+
+
+.right-column[
+
+```{r, message=FALSE, echo=FALSE}
+p_scatter_gaussian +
+  geom_smooth(method="lm", se=FALSE)
+```
+
+]
 
 ---
 
-### `lm()`
+### `lm(formula, data)`
+
+
 
 ```{r}
-model <- lm(formula=Y ~ X, data=u)
+mod <- lm(formula=Y ~ X, data=u) 
 
-summary(model)
+mod %>% summary()
 ```
 
+```{r, echo=FALSE, eval=FALSE}
+sqrt(sum((mod$residuals)^2)/(mod$df.residual))
+cor(u)^2
+```
 
 ---
 
-### Residual Standard Error
+### Residuals
 
-The `Residual standard error`, is the square root of the sum of squared
-residuals normalized by the number of rows diminished by the number of adjusted parameters (the so-called _degrees of freedom_)
+.panelset[
 
-This makes sense if we adopt
-a modeling perspective (if we accept the _Gaussian Linear Models_ assumptions from the Statistical Inference course).
+.panel[.panel-name[Residuals]
 
----
+The _residuals_ are the prediction errors $\left(y_i - \widehat{a}x_i - \widehat{b}\right)_{i\leq n}$
 
-### Multiple R-squared
+Residuals play a central role in _regression diagnostic_
 
-The `Multiple R-squared` is the squared correlation coefficient between the explanatory and the response variables.
+The `Residual Standard Error`, is the square root of the normalized sum of squared residuals: 
+
+$$\frac{1}{n-2}\sum_{i=1}^n \left(y_i - \widehat{a}x_i - \widehat{b}\right)^2$$
+
+The normalization coefficient is the number of rows $n$ diminished by the number of adjusted parameters (the so-called _degrees of freedom_)
+
+```{r, eval=FALSE, echo=FALSE}
+sqrt(sum((mod$residuals)^2)/(mod$df.residual))
+```
+
+`r fontawesome::fa("hand-point-right")` This makes sense if we adopt a modeling perspective, if we accept the _Gaussian Linear Models_ assumptions from the Statistical Inference course
+
+]
+
+.panel[.panel-name[Code]
+
+```{r scatplot-residuals, fig.height=3.5, fig.show='hide'}
+p_scatter_gaussian %+% 
+  broom::augment(lm(Y ~ X, u)) +  #<< 
+  geom_line(aes(x=X, y=.fitted)) +
+  geom_segment(aes(x=X, xend=X, y=.fitted, yend=Y, 
+                   color=forcats::as_factor(sign(.resid))),
+               alpha=.2) +
+  theme(legend.position = "None") +
+  ggtitle("Gaussian cloud",subtitle = "with residuals")
+```
+]
+
+.panel[.panel-name[Plot]
+
+![](`r knitr::fig_chunk("scatplot-residuals", "png")`)
 
 
----
+The residuals are the lengths of the segments connecting sample points to  their projections on the regression line
 
-### Adjusted R-squared
+]
 
-The `Adjusted R-squared` is a deflated version of `Multiple R-squared`.
+.panel[.panel-name[Multiple R-squared]
 
-It is useful when comparing the merits of several competing models (this takes us beyond
+Technically, the `Multiple R-squared`  or 
+:  _coefficient of determination_ is the squared empirical correlation coefficient  $\rho^2$ between the explanatory and the response variables (in simple linear regression)
+
+$$1 - \frac{\sum_{i=1}^n \left(y_i - \widehat{a}x_i - \widehat{b}\right)^2}{\sum_{i=1}^n \left(y_i - \overline{Y}_n\right)^2}= 1 - \frac{\sum_{i=1}^n \left(y_i - \widehat{y}_i \right)^2}{\sum_{i=1}^n \left(y_i - \overline{Y}_n\right)^2}$$
+
+```{r, echo=FALSE, eval=FALSE}
+cor(u$X, u$Y)^2
+
+(sum(u$X*u$Y)/nrow(u) - mean(u$X)* mean(u$Y))*(nrow(u)/(nrow(u)-1))
+((988/999)*cov(u$X, u$Y)/sqrt(var(u$X)*var(u$Y)))^2
+```
+
+It is also understood as the share of the variance of the response variable that is _explained_ by the explanatory variable
+
+
+]
+
+.panel[.panel-name[Adjusted R-squared]
+
+The `Adjusted R-squared` is a deflated version of `Multiple R-squared`
+
+$$1 - \frac{\sum_{i=1}^n \left(y_i - \widehat{a}x_i - \widehat{b}\right)^2/(n-p-1)}{\sum_{i=1}^n \left(y_i - \overline{Y}_n\right)^2/(n-1)}$$
+
+It is useful when comparing 
+the merits of several competing models (this takes us beyond
 the scope of this lesson)
 
-```{r, echo=TRUE}
-p_scatter_gaussian +
-  geom_smooth(method="lm", se=FALSE) +
-  ggtitle(stringr::str_c("Gaussian cloud with regression line, cor = ", round(cor(u$X, u$Y), 2),
-                         sep="")
-          )
-```
+
+]
+]
+
+---
+class: middle, inverse, center
+
+
+## $y = x^T \beta + \sigma \epsilon$: The biggest lie? 
+
 
 ---
 
@@ -1093,12 +1451,12 @@ then
 
 you should reject the independence hypothesis when the so-called $p$-value is smaller than $\alpha$.
 
----
-exclude: true
-
-## References
-
-
-[Wikipedia](en.wikipedia.org/wiki/Coefficient_of_determination)
 
 ---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: 112%
+
+
+# The End

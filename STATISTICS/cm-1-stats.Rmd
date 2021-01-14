@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css", "hygge"]
     lib_dir: libs
     seal: false
     includes:
@@ -74,7 +74,7 @@ xaringanExtra::use_panelset()
 
 xaringanExtra::use_editable(expires = 1)
 
-
+xaringanExtra::use_broadcast()
 
 knitr::opts_chunk$set(fig.width = 6,
                       message = FALSE,
@@ -96,8 +96,9 @@ class: middle, center, inverse
 
 ### `r Sys.Date()`
 
-#### Statistiques Master I MIDS
+#### [Statistiques Master I MIDS](/courses/statistics-paris/index.html)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: middle, inverse
@@ -189,7 +190,7 @@ $$\underbrace{x_1, x_2, \ldots, x_n}_{\text{les données, l'échantillon}}$$
 
 On construit à partir des données $x_1, x_2, \ldots, x_n$ une _estimation_ $\widehat{\theta}_n$ de $\theta$
 
-$$\underbrace{x_1, x_2, \ldots, x_n}_{\text{échantillon}} \stackrel{\text{estimation}}{⟶} \widehat{\theta}_n $$
+$$\underbrace{x_1, x_2, \ldots, x_n}_{\text{échantillon}} \stackrel{\text{estimation}}{⟶} \widehat{\theta}_n$$
 
 `r fontawesome::fa("exclamation-triangle")` Cette estimation est une _fonction des données_, pas de l'estimande $\theta$ qui reste inconnue
 
@@ -981,7 +982,7 @@ Lorsque l'espace des paramètres $\Theta$ est inclus dans $\mathbb{R}$,
 
 une suite  d' _intervalles  de confiance_ $[\underline{\theta}_n, \overline{\theta}_n]$ est de niveau de   confiance asymptotique $1- \alpha$_ avec $\alpha \in ]0,1[$
 
-si et seulement si 
+si et seulement si
 
 $$\forall \theta \in \Theta, \qquad \lim_n P_ \theta^{\otimes n} \left\{ \theta \in [\underline{\theta}_n, \overline{\theta}_n]\right\} =  1- \alpha$$
 
@@ -1113,7 +1114,7 @@ $$(Y_n, X_n) \rightsquigarrow (y,X)$$
 
 ]
 
-`r fontawesome::fa("hand-point-right")` $Y_n \rightsquigarrow y$ implique 
+`r fontawesome::fa("hand-point-right")` $Y_n \rightsquigarrow y$ implique
 $Y_n \stackrel{\text{en probabilité}}{\longrightarrow} y$
 
 ---
