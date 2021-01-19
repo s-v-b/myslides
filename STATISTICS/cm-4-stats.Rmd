@@ -1,6 +1,6 @@
 ---
 title: "Statistique IV"
-subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+subtitle: "EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
@@ -28,9 +28,11 @@ layout: true
 class: left, middle
 
 ```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+xaringanExtra::use_xaringan_extra(
+    include = c("tile_view", "fit_screen", "clipboard", "panelset", "broadcast"))
 xaringanExtra::use_animate_css()
 
-xaringanExtra::use_tile_view()
+# xaringanExtra::use_tile_view()
 
 xaringanExtra::use_tachyons(minified = FALSE)
 
@@ -42,18 +44,7 @@ xaringanExtra::use_logo(
   exclude_class = c("hide_logo")
 )
 
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
+source("./slides_setup.R")
 ```
 
 
@@ -84,11 +75,13 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-# Statistique III
+# Statistique IV : Méthode des Moments
 
 ### `r Sys.Date()`
 
-#### Statistique Fondamentale Master I MIDS et MFA
+#### [Statistique Fondamentale Master I MIDS et MFA](/courses/statistics-paris/index.html)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 
 ---
@@ -96,31 +89,1113 @@ class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla
+### Motivation
 
-### Bla
+### Outils probabilistes
+
+### Conditions suffisantes de consistance
+
+### Entropie relative
+
+### Modéles exponentiels
+
+### Performances de la méthode des moments
 
 
 ---
 class: center, middle, inverse
 
-## So what
+## Motivation
 
 ---
 
-### igloo `r fontawesome::fa("igloo")`
+###  `r fontawesome::fa("igloo")`
 
-.fl.w-third.pa2[
+A propos des modèles binomiaux et gaussiens, nous avons vu des méthodes d'estimation motivées par l'intuition `r fontawesome::fa("lightbulb")`
 
-]
+A chaque fois, nous avons utilisé la possibilité d'_identifier les lois par quelques moments_ `r fontawesome::fa("smile")`
 
+`r fontawesome::fa("hand-point-right")` Dans le cas gaussien, la _méthode des moindre carrés_ correspond à une _maximisation de vraisemblance_
 
-.fl.w-two-thirds.pa2[
+Nous revenons sur ces méthodes en essayant de dégager  une démarche
 
+???
 
-]
+Les méthodes que nous abordons ne sont pas exclusives les unes des autres.
+
+Ce que nous appelons méthode, il faudrait peut être l'appeler point de vue.
+
 
 ---
+
+### Quelques méthodes
+
+- Méthode des moments : $Z$-estimation
+
+- Maximisation de la vraisemblance : $M$-estimation
+
+- Minimisation de contraste : $M$-estimation
+
+Ces méthodes ne sont pas exclusives les unes des autres
+
+---
+class: middle, center, inverse
+
+## Méthode des moments
+
+---
+
+### Idée générale
+
+Dans une expérience  statistique
+échantillonnée $(\Omega=\mathcal{X},\mathcal{F}, \{ P_\theta: \theta \in \Theta \})$,
+
+on dispose d'une collection de fonctions intégrables $(T_1, \ldots, T_k)$ telles que:
+
+$$\theta \mapsto \mathbb{E}_{\theta}\left[ \begin{pmatrix} T_1(X)\\ \vdots \\ T_k(X) \end{pmatrix} \right] =: \mathbb{E}_ \theta[T(X)]\qquad \text{soit injective}$$
+
+Les lois $P_\theta$ peuvent être _identifiées_ par une collection de moments
+
+On peut re-paramétrer $(P_ \theta)_{\theta \in \Theta}$ en désignant chaque loi par un élément de $\mathbb{R}^k$, la collection des moments
+
+???
+
+Nous avons déjà mis à profit la _méthode des moments_ dans le cadre des modèles multinomiaux
+et des modèles gaussiens.
+
+---
+
+### Notation
+
+- $\Psi$:  le nouvel espace de paramètres
+
+- $\psi(\theta)$ le nouveau paramètre correspondant à $\theta$.
+
+La méthode des moments consiste à estimer le paramètre par la  solution (si elle existe) de l'équation en $\vartheta$:
+
+$$\psi(\vartheta) =  \frac{1}{n} \sum_{i=1}^n \begin{pmatrix} T_1(X_i)\\ \vdots \\ T_k(X_i) \end{pmatrix} =: \overline{T}_n$$
+
+---
+
+### Exemple : lois exponentielles paramétrées par leur intensité
+
+$$\Theta = ]0,+\infty), \qquad  P_\theta\{ [x, +\infty)\} = \exp(-\theta x)\quad \forall x\geq 0$$
+
+$$\mathbb{E}_ \theta X = 1/\theta$$
+
+$$\theta  \longleftrightarrow \mathbb{E}_ \theta X$$
+
+La nouvelle paramétrisation correspond au paramètre d'échelle
+
+---
+
+### Exemple : lois exponentielles paramétrées par leur intensité (suite)
+
+
+$$\psi(\theta)=1/\theta$$
+
+On peut _estimer sans biais_ ce paramètre d'échelle à partir de la moyenne empirique $\overline{X}_n$
+
+Pour estimer le paramètre originel,
+on _inverse_  $\psi$: on estime $\theta$  par
+
+$$\widehat{\theta}= 1/\overline{X}_n = \psi^{-1}(\overline{X}_n)$$
+
+L'estimateur est alors biaisé (inégalité de Jensen) `r fontawesome::fa("frown")`
+
+???
+
+Les moments empiriques sont des estimateurs sans biais des moments
+
+---
+
+### Questions
+
+- Existence et unicité des solutions de $\psi(\vartheta)= \overline{T}_n$
+
+- Consistance des estimateurs $\psi^{-1}(\overline{T}_n)$
+
+- Normalité asymptotique de  $\psi^{-1}(\overline{T}_n)$
+
+???
+
+Si ces réponses sont positives, peut-on s'assurer que les estimateurs construits de cette façon ont de bonnes propriétés ? Qu'ils sont de risque sinon minimal,  du moins  raisonnable ?
+
+La première question est la plus délicate. Nous verrons comment y répondre dans le cadre des modèles exponentiels, où la méthode dite du maximum de vraisemblance coïncide avec une méthode de moments.
+
+Pour le moment, nous allons supposer que nous sommes dans une situation comparable à celle rencontrée dans le cadre des modèles gaussiens, c'est à dire que  $\overline{T}_n$ prend (avec probabilité $1$) ses valeurs dans $\psi(\Theta) =: \Psi$.
+
+
+---
+class: center, middle, inverse
+
+## Outils probabilistes
+
+---
+
+Si on dispose de deux suites $(X_n)_{n \in \mathbb{N}}$ et $(Y_n)_{n \in \mathbb{N}}$ de variables aléatoires telles
+que:  $X_n \rightsquigarrow X$ et  $Y_n \rightsquigarrow Y$
+
+- on ne peut rien dire en général sur la suite $(X_n Y_n)_n$,
+
+- on ne peut pas affirmer à coup sûr que $X_n Y_n \rightsquigarrow XY$.
+
+Mais,
+
+si $Y$ est une variable aléatoire dégénéree presque sûrement égale à une constante $y$, alors on peut s'appuyer sur le lemme de Slutsky.
+
+---
+
+### Lemme de Slutsky
+
+Si
+- $(X_n)_n$  suite de v.a. sur $(\Omega_n, \mathcal{F}_n, P_n)$
+telle que $X_n \rightsquigarrow X$,
+- si $(Y_n)_n$ est une autre suite de v.a. sur $(\Omega_n, \mathcal{F}_n, P_n)$
+- $y$ une constante telle que $Y_n \rightsquigarrow y$,
+
+alors
+$$(Y_n, X_n) \rightsquigarrow (y,X)$$
+
+---
+
+### Preuve
+
+Il suffit d'après le _théorème portemanteau_ de s'intéresser au cas des fonctions
+bornées et lipschitziennes
+
+On suppose $\| g \|_\infty \leq b$  et $g$ $L$-lipschitzienne.
+
+$$\begin{array}{rl}\left| \mathbb{E}\left[ g(X_n, Y_n)\right] - \mathbb{E}\left[g(X,Y)\right] \right| & \leq \left| \mathbb{E}\left[ g(X_n, Y_n)\right] - \mathbb{E}\left[g(X_n,y)\right] \right|\\
+& \phantom{\leq}  + \left| \mathbb{E}\left[ g(X_n, y)\right] - \mathbb{E}\left[g(X,y)\right] \right|\end{array}$$
+
+La convergence en loi de la suite  $(X_n)$  vers $X$ garantit que
+
+$$\lim_n \left| \mathbb{E}\left[ g(X_n, y)\right] - \mathbb{E}\left[g(X,y)\right] \right| = 0$$
+
+Par ailleurs, les hypothèses sur $g$ garantissent pour tout $\epsilon>0$,
+
+$$\begin{array}{rl}  \left|  g(X_n, Y_n)- g(X_n,y) \right|  & \leq 2 \mathbb{I}_{d(Y_n,y)> \epsilon} \|g \|_\infty +  L \epsilon\end{array}$$
+
+La convergence en loi de $(Y_n)_n$ vers $y$ implique la convergence en probabilité, donc
+
+$$\lim_n \mathbb{E} \mathbb{I}_{d(Y_n,y)>\epsilon}=0$$
+
+`r fontawesome::fa("square")`
+
+
+---
+
+### Théorème `r fontawesome::fa("plug")`
+
+Soit $(X_n)_{n \in \mathbb{N}}$ une suite de v.a. à valeurs dans $\mathbb{R}^k, X$ une autre v.a. à valeur dans $\mathbb{R}^k$, soit $(Y_n)_{n \in \mathbb{N}}$ une suite de   v.a. à valeurs dans $\mathbb{R}^{k'}$
+
+Si
+$$\begin{array}{rl} X_n & \rightsquigarrow & X\\ Y_n & \rightsquigarrow & y \in \mathbb{R}^{k'}\end{array}$$
+alors
+
+pour $g$ continue de
+$\mathbb{R}^k \times  \mathbb{R}^{k'} \to \mathbb{R}^{k''}$
+$$g (X_n, Y_n) \rightsquigarrow g (X, y)$$
+
+
+---
+
+
+
+### Méthode Delta au premier ordre
+
+Soient
+- $(a_n)_n$ une suite positive qui tend vers l'infini.
+-  $(X_n)_n$ une suite de variables aléatoires à valeur dans
+$\mathbb{R}^k$.
+-  $X$  une variable aléatoire à valeur dans $\mathbb{R}^k$.
+-  $\vec{x} \in \mathbb{R}^k$.
+- $f$  une fonction de $\mathbb{R}^k$ dans $\mathbb{R}^m$,
+différentiable en $\vec{x}$, on note $Df$  sa différentielle en
+$\vec{x}$ (c'est une fonction linéaire de $\mathbb{R}^k$ dans $\mathbb{R}^m$)
+
+Si
+$$a_n \left( X_n - \vec{x}\right) \rightsquigarrow X$$
+alors
+- $X_n \stackrel{P}{\rightarrow} \vec{x}$;
+- $a_n\left(f(X_n) -f(\vec{x})\right) - a_n  Df \left(X_n - \vec{x}\right) \stackrel{P}{\rightarrow} 0$
+- $a_n\left(f(X_n) -f(\vec{x})\right) \rightsquigarrow Df X$.
+
+???
+
+Le lemme de Slutsky est un élément de la preuve du théorème suivant appelé
+méthode delta (Cramer, 1946)
+
+---
+
+### Preuve
+
+
+
+`r fontawesome::fa("square")`
+
+---
+class: center, middle, inverse
+
+## Conditions suffisantes de consistance et de normalité
+
+---
+
+Si on souhaite construire un estimateur pour la paramétrisation originelle (par exemple par l'intensité dans le cadre des lois exponentielles), il est tentant d'utiliser l'estimateur
+$$\psi^{-1}(\overline{T}_n)$$
+pour peu qu'il soit bien défini.
+
+La proposition suivante décrit des conditions _suffisantes_
+qui garantissent les performances asymptotiques de la méthode des moments.
+
+Ces conditions ne sont pas toujours faciles à vérifier.
+
+Meme si elles sont vérifiées, elles ne garantissent pas que la méthode des moments soit praticable
+
+
+---
+
+### Proposition
+
+Si $\Theta$  est un ouvert de $\mathbb{R}^k$, si la fonction
+$$\begin{array}{rl}\psi: & \Theta \rightarrow  \mathbb{R}^k \\ & \theta \mapsto  \left(\mathbb{E}_{\theta} T_1(X), \ldots, \mathbb{E}_{\theta} T_k(X)\right)^t \end{array}$$
+est
+- bijective,
+- continument différentiable et
+- d'inverse continuement différentiable  de $\Theta$ dans (l'ouvert) $\psi(\Theta)$,
+et si
+$$\forall \theta \in \Theta, j\leq k, \qquad \mathbb{E}_{\theta} T_j(X)^2 < \infty$$
+
+alors
+
+i.) avec probabilité qui tend vers $1$  (sous $P^{\otimes \mathbb{N}}_ \theta$), l'équation en $\vartheta$ $\psi(\vartheta) = \overline{T}_n$ admet une solution:
+$\widehat{\theta}_n = \psi^{-1}(\overline{T}_n)\in \Theta$
+
+ii.) $(\widehat{\theta}_n)_{n \in \mathbb{N}} \stackrel{\text{p.s.}}{\longrightarrow} \theta\qquad \text{sous } P^{\otimes \mathbb{N}}_ \theta$
+
+iii.) $\sqrt{n} \big( \widehat{\theta}_n  - \theta\big) \rightsquigarrow \mathcal{N}\left(0, (D \psi_{\vert \theta})^{-1}\operatorname{cov}_ \theta(T) (D \psi_{\vert \theta}^t)^{-1}\right)$
+
+
+???
+
+Les conditions décrites dans l'énoncé de la proposition sont si fortes
+que la preuve en est trivialisée.
+
+---
+
+### Preuve
+
+i) L'image de $\Theta$  par $\psi$ est un ouvert de $\mathbb{R}^k$
+
+Pour tout $\theta \in \Theta$,  sous $P^{\otimes \mathbb{N}}_ \theta$, $\overline{T}_n$ converge presque sûrement vers $\psi(\theta)$.
+
+Presque sûrement, pour $n$ assez grand, $\overline{T}_n$  appartient à un voisinage ouvert de $\psi(\theta)$  qui est inclus dans l'ouvert $\Psi=\psi(\Theta)$.
+
+L'équation $\psi= \overline{T}_n$  a alors une solution
+
+--
+
+Le point ii) est une conséquence de la loi des grands nombres
+
+--
+
+Le point iii) résulte d'une application de la méthode delta
+
+`r fontawesome::fa("square")`
+
+
+???
+
+La discussion sur l'approche des moments reste informelle, parce qu'il est difficile de caractériser les situations où  la question i) (voir plus haut) possède une réponse satisfaisante.
+
+---
+class: middle, center,inverse
+
+## Entropie relative
+
+---
+
+TODO:  ménager une transition
+
+
+---
+### Quantifier la similitude entre deux lois de probabilités
+
+Une _divergence d'information entre deux lois_ est une quantité _intrinsèque_: elle n'est pas définie relativement à une paramétrisation.
+
+Une divergence d'information peut être calculée en choisissant des densités par rapport à une mesure de référence.
+
+Mais le résultat du calcul ne doit dépendre que des lois, et pas du choix d'un mesure dominante ou du choix des densités.
+
+---
+
+### Exemples
+
+- Distance en variation
+
+- Entropie relative (information de Kullback)
+
+- Distance de Hellinger
+
+- Divergence du $\chi^2$
+
+---
+
+### Entropie relative
+
+
+#### Notation
+
+$P   \not\!\unlhd Q  \Leftrightarrow$   $P$  n'est  pas absolument continue par rapport à $Q$: $\exists A$ mesurable tel que $P(A) > 0 = Q(A)$
+
+### Definition
+
+Soit $P$  et $Q$  deux lois de probabilité sur $(\Omega,\mathcal{F})$, l'_entropie relative_ de $P$ par rapport à $Q$, notée $D(P\Vert Q)$ est définie par
+
+$$D(P\Vert Q) = \begin{cases} + \infty & \text{si }  P \not\!\unlhd Q \\
+\mathbb{E}_P\left[ \log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]& \text{sinon.}\end{cases}$$
+
+???
+
+L'entropie relative est particulièrement adaptée à l'étude des modèles exponentiels.
+
+La notion d'entropie relative s'est imposée dans différentes disciplines indépendamment
+
+- statistiques,
+- théorie de l'information,
+- mécanique statistique,
+- théorie des grandes déviations.
+
+On l'appelle aussi
+
+- _information de Kullback-Leibler_
+- _divergence d'information_
+
+---
+
+### Propriétés de l'entropie relative
+
+- Si $P \unlhd Q$ ( $P$ est  absolument continue par rapport à $Q$ ),
+
+$$\mathbb{E}_P\left[ \log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]= \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]$$
+est toujours bien défini, même si cette quantité n'est pas finie.
+
+En effet, $x \log x \geq - \mathrm{e}^{-1}$ sur $]0,\infty)$.
+
+- Si $P \unlhd Q$, l'identité du i) et la convexité de $x \mapsto x \log x$ nous indiquent que
+$$D(P \Vert Q) \geq \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\right] \log \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\right]=  0$$
+
+Le seul cas d'égalité possible est $P=Q$ (stricte convexité de $x \mapsto x \log x$)
+
+---
+class: middle, center,inverse
+
+## Modèles exponentiels
+
+???
+
+définition, identifiabilité, propriétés générales
+
+---
+
+Les modèles exponentiels sont définis par une collection de densités par rapport à une mesure de référence
+
+<!-- `r fontawesome::fa("syringe")` -->
+
+Une mesure $\nu$ sur $(\Omega, \mathcal{F})$ est dite $\sigma$ -finie si $\Omega$ est réunion _dénombrable_ d'ensembles de $\nu$ -mesure finie
+
+ - la mesure de Lebesgue est $\sigma$ -finie
+<!-- `r fontawesome::fa("smile")` -->
+
+- la mesure de comptage sur $\mathbb{R}$ n'est pas $\sigma$ -finie
+<!-- `r fontawesome::fa("frown")` -->
+
+En statistique, les mesures dominantes sont toujours des mesures $\sigma$-finies.
+
+Cette propriété permet de garantir sous conditions d'absolue continuité l'existence de de _densités_ ou _dérivées de Radon-Nikodym_
+
+---
+
+### Definition : forme canonique
+
+- Une mesure $\sigma$ -finie $\nu$  sur $(\Omega, \mathcal{F})$ et
+- une famille $T_1,\ldots,T_k$  de fonctions mesurables de $\Omega \to \mathbb{R}$
+définissent le _modèle exponentiel en forme canonique_ indexé par
+$\Theta = \widetilde{\Theta}^\circ$ (l'intérieur de $\widetilde{ \Theta}$) avec
+
+$$\widetilde{\Theta}:= \left\{ \theta: \theta \in \mathbb{R}^k, \quad Z(\theta):= \int_\Omega \mathrm{e}^{\langle \theta, T(x)\rangle} \mathrm{d} \nu(x) < \infty \right\} \,$$
+où  $T(x)= (T_1(x),\ldots,T_k(x))^t$
+
+On choisit pour densité de $P_\theta$ par rapport à $\nu$:
+$$p_ \theta(x):= \mathrm{e}^{\langle \theta, T(x)\rangle - \log Z(\theta)}$$
+
+
+---
+
+### Convention
+
+On peut appeler $\tilde{\Theta}$  le _domaine du modèle_
+
+On appelle la fonction  $\theta \mapsto Z(\theta)$ la _fonction de partition_
+
+L'ensemble $\tilde{\Theta}$ est en fait le domaine de définition de la fonction de partition
+
+---
+
+### Exemple
+
+n peut vérifier que les gaussiennes univariées s'inscrivent dans ce schéma:
+
+$$\frac{1}{\sigma} \phi\left( \frac{x- \mu}{\sigma}\right) =  \exp\left( \frac{\mu}{\sigma^2} x - \frac{1}{2 \sigma^2} x^2 - \frac{\mu^2}{2 \sigma^2} - \frac{1}{2} \log \left(2 \pi \sigma^2\right)\right)$$
+
+
+La mesure dominante $\nu$ est la mesure de Lebesgue,
+
+$T_1(x)= x, T_2(x) = - x^2$, $\theta =(\mu/\sigma^2, 1/(2 \sigma^2))^t$,
+
+et
+
+$$Z(\theta) = \exp\left(\frac{\mu^2}{2 \sigma^2} \right)\sqrt{2 \pi \sigma^2}$$
+
+---
+
+
+### Exemple (II)
+
+- Les lois Gamma sont paramétrées par $]0, \infty)^2$,
+
+- la loi $P_{p, \lambda}$ est définie par la densité sur $]0, \infty$:
+$$\begin{array}{rl} p_{p,\lambda}(x) & =  \frac{\lambda^p x^{p-1} \mathrm{e}^{-\lambda x}}{\Gamma(p)} \\  & = \exp\left( - \lambda x + (p-1) \log x - (\log \Gamma(p) - \lambda \log (p) )\right)\end{array}$$
+
+On est dans le cadre des modèles exponentiels avec
+
+$$\theta = \begin{pmatrix} - \lambda \\ p-1 \end{pmatrix} \quad \text{et} \quad T(x) = \begin{pmatrix}x \\ \log x \end{pmatrix}$$
+
+Nous collerons à la paramétrisation classique, avec $p$ paramètre de forme, et $\lambda$ paramètre d'intensité.
+
+---
+
+On peut formuler dans le cadre des modèles exponentiels en forme canonique,
+
+- les gaussiennes multivariées,
+- les lois gamma,
+- les lois de Poisson,
+- les lois géométriques,
+
+et bien d'autres familles de lois usuelles
+
+---
+
+### Convexité du modèle exponentiel
+
+
+La convexité joue un rôle essentiel dans l'étude des modèles exponentiels, mais aussi dans la mise en oeuvre
+des méthodes d'estimation.
+
+
+---
+
+### Théorème
+
+Soient
+- $\nu$   une mesure $\sigma$-finie dominante sur $(\mathcal{X},\mathcal{F})$, et
+- $T: \mathcal{X} \to \mathbb{R}^d$   $\mathcal{F}$ mesurable.
+
+1. S'il n'est pas vide, le domaine de la fonction de partition:
+$$\widetilde{\Theta}  = \left\{ \theta: \theta \in \mathbb{R}^d,   Z(\theta):= \int_{\mathcal{X}} \mathrm{e}^{\langle \theta, T(x)\rangle} \nu(\mathrm{d} x)< \infty\right\}$$  est convexe
+2. La fonction $\theta \mapsto \log Z(\theta)$ est convexe sur le domaine $\widetilde{\Theta}$
+
+---
+
+### Preuve
+
+La preuve s'appuie sur l'inégalité de Hölder `r fontawesome::fa("syringe")`
+
+- Soit $\theta$ et $\theta'$, tels que $Z(\theta)<\infty$ et
+$Z(\theta')<\infty$.
+- Soit $\lambda\in [0,1]$
+
+$$\begin{array}{rcl}
+\int \mathrm{e}^{\langle \lambda\theta+(1- \lambda)\theta', T(x)\rangle} \nu(\mathrm{d} x) & =&
+\int \left(\mathrm{e}^{\langle \theta, T(x)\rangle}\right)^\lambda \left(\mathrm{e}^{\langle \theta', T(x)\rangle}\right)^{1- \lambda}\nu(\mathrm{d} x) \\ &\leq & \left( \int \mathrm{e}^{\langle \theta, T(x)\rangle} \nu(\mathrm{d} x)\right)^\lambda  \times \left( \int \mathrm{e}^{\langle \theta', T(x)\rangle} \nu(\mathrm{d} x)\right)^{1- \lambda}\end{array}$$
+
+On a donc
+
+$$\log Z \left( \lambda\theta+(1- \lambda)\theta'\right) \leq \lambda \log Z(\theta) + (1- \lambda) \log Z(\theta') \, .$$
+
+
+---
+
+### Choix de la dominante
+
+Si $\Theta$  est  non-vide, on peut choisir $\theta_0 \in \Theta$ et utiliser $P_{\theta_0}$  comme dominante.
+La densité de $P_ \theta$  par rapport à $P_{\theta_0}$  est alors
+
+$$\exp\left( \langle \theta- \theta_0, T(X) \rangle - \log \frac{Z(\theta)}{Z(\theta_0)}\right)$$
+
+on peut alors changer de paramétrisation et utiliser $\theta- \theta_0$ à la place de $\theta$.
+
+Le nouvel espace de paramètres $\Theta -\theta_0$  contient alors $0$.
+
+Dans la suite, nous supposerons que la dominante est une loi du modèle, et donc que $0 \in \Theta$, on aura $\nu = P_0$.
+
+---
+
+### Identifiabilité du modèle exponentiel
+
+`r fontawesome::fa("syringe")` un modèle ou une expérience statistique est dite _identifiable_ si deux paramètres distincts définissent des lois distinctes.
+
+Dans les modèles exponentiels, l'_identifiabilité_ est liée à l'_irredondance_ des statistiques $T(X)$
+
+### Definition: modèle _minimal ou de plein rang_ (_irredondant_)
+
+Un modèle exponentiel est minimal ou de plein  rang si et seulement si
+pour tout $c \in \mathbb{R}^k$, le vecteur aléatoire $\langle c, T(X)\rangle$  n'est pas $\nu$-presque partout constant.
+
+
+---
+
+### Proposition
+
+Un modèle exponentiel en forme canonique est minimal (ou de plein rang)
+si et seulement si il est identifiable
+
+---
+
+### Preuve
+
+$\Rightarrow$)  Si $\theta\neq \theta'$ et $p_\theta(x)=p_{\theta'}(x)$ $\nu$-presque partout, alors
+
+$$\langle \theta- \theta', T(x)\rangle = \log Z(\theta)/Z(\theta') \qquad \nu-\text{p.p.}$$
+
+Ce qui signifie que
+$$\nu$-pp, $\langle \theta- \theta', T(x)\rangle$$
+
+
+est constant, ce qui contredit l'hypothèse de minimalité
+
+---
+
+### Preuve (suite)
+
+$\Leftarrow$)  Si un modèle n'est pas minimal, il existe $c \neq 0$ et $b \in \mathbb{R}$, tels que $P_0\{ \langle c, T(x) \rangle=b\}=1$.
+
+Dans ce cas $\theta$ et $\theta+c$  désignent la même loi de probabilité. Le modèle n'est donc pas identifiable.
+
+`r fontawesome::fa("square")`
+---
+
+### Régularité de la fonction de partition
+
+Si l'ouvert $\Theta$ est non vide, la fonction  de partition est infiniment différentiable sur $\Theta$.
+
+Et les différentielles de $\log Z$ en $\theta$ correspondent aux moments de $P_\theta$.
+
+Ces propriétés, résumées dans la proposition suivante, s'avèrent très utiles pour aborder les problèmes d'estimation,
+
+Elles motivent les méthodes de moments ou de vraisemblance (qui coïncident ici)
+
+Elles  permettent d'en étudier les propriétés
+
+---
+
+### Théorème
+
+La fonction $\theta \mapsto \log Z(\theta)$
+est $C^\infty$ sur $\Theta =  \widetilde{\Theta}^\circ$
+
+De plus
+
+$$\nabla \log Z(\theta) = \mathbb{E}_{P_\theta} T(X)$$
+
+et
+
+$$\nabla^2 \log Z(\theta) =  \operatorname{var}_{P_\theta}(T(X))$$
+
+
+
+---
+
+Les preuves sont des exercices de _convergence dominée_.
+
+Pour donner une idée des arguments, on vérifie la première identité en dimension $d=1$.
+
+
+La proposition suivante, intéressante en soi, jouera un rôle dans la preuve du théorème.
+
+---
+
+### Proposition
+
+Dans un modèle exponentiel canonique, si $\theta \in \Theta$, $\theta$ appartient à l'_intérieur_ du domaine de la fonction de partition
+
+alors
+
+pour tout $i \leq  d$, pour tout $k \in \mathbb{N}$,
+
+$$\mathbb{E}_\theta \left[ \left| T_i(X)\right|^k\right] < \infty$$
+
+
+
+---
+
+### Preuve
+
+Sans perdre en généralité, on se contente de vérifier la proposition en dimension $1$.
+
+On suppose $\theta \in \Theta$.
+
+Donc pour $|h| \leq h_0$, $\theta+h, \theta-h \in \Theta$ aussi.
+
+Cela entraine que sous $P_\theta$, $\exp(|hT(X)|)$ est intégrable, et que donc toutes les puissances de $|T(x)|$ le sont aussi.
+
+On peut  donc affirmer que
+
+$$\int_{\mathcal{X}} \mathrm{e}^{ \theta T(x)}  |T(x)|^k \nu(\mathrm{d}x) < \infty$$
+
+
+pour tout $\theta \in \Theta$ et $k \in \mathbb{N}$
+
+`r fontawesome::fa("square")`
+
+---
+
+### Preuve
+
+Pour établir la première identité en dimension $1$, il suffit de s'intéresser à la dérivée de $Z(\theta)$.
+
+$$\begin{array}{rl}  \frac{Z (\theta+h) -Z(\theta)}{h}  & =  \int_{\mathcal{X}} \mathrm{e}^{ \theta T(x)} \frac{\mathrm{e}^{hT(x)} -1}{h}  \nu(\mathrm{d}x) \end{array}$$
+
+Pour  $x, h$ fixés avec $|h|< h_0$, avec $[\theta -h_0, \theta + h_0] \subset \Theta$,
+
+$$\begin{array}{rl} \frac{\left|\mathrm{e}^{hT(x)} -1 \right|}{\left|h \right|} & \leq  |T(x)| \mathrm{e}^{|h_0T(x)|} \\ & \leq |T(x)| \left( \mathrm{e}^{h_0T(x)} + \mathrm{e}^{-h_0T(x)}\right)\end{array}$$
+
+
+---
+
+### Preuve (suite)
+
+
+La proposition technique montre que
+$$\int_{\mathcal{X}} \mathrm{e}^{ \theta T(x)}  |T(x)| \left( \mathrm{e}^{h_0T(x)} + \mathrm{e}^{-h_0T(x)}\right) \nu(\mathrm{d}x) < \infty$$
+
+
+on peut donc invoquer le théorème de convergence dominée et
+$\lim_{h \to 0}\frac{\mathrm{e}^{hT(x)} -1}{h}= T(x)$
+pour conclure que
+
+$$\lim_{h \to 0} \frac{Z (\theta+h) -Z(\theta)}{h} = \int_{\mathcal{X}} \mathrm{e}^{\theta T(x)} T(x) \nu(\mathrm{d}x)$$
+
+
+Ce qui établit $\nabla \log Z(\theta) = \mathbb{E}_\theta T(X)$ (en dimension 1).
+
+`r fontawesome::fa("square")`
+
+
+???
+
+La combinaison du théorème et de la proposition  nous livre une autre caractérisation de l'identifiabilité.
+
+---
+
+### Proposition
+
+Un modèle exponentiel est identifiable
+
+si et seulement si
+
+en tout $\theta \in \Theta$, la différentielle seconde de $\log Z$  est inversible, autrement dit,  le Hessien $∇^2_\theta \log Z$ est défini positif
+
+---
+
+### Preuve
+
+Supposons qu'en $\theta \in \Theta$, le Hessien de $\log Z$  ne soit
+pas défini positif.
+
+Il existe alors $c \in \mathbb{R}^k \setminus \{0\}$ tel que
+$$c^t \nabla^2 \log Z(\theta) c = 0$$
+
+Cela signifie que
+
+$$c^t  \operatorname{cov}_\theta(T) c = \operatorname{var}_\theta(\langle c, T\rangle) = 0$$
+
+Cela entraine que $\langle c, T\rangle$ est $P_\theta$ -presque surement constant, que le modèle n'est pas minimal et donc pas identifiable
+
+La réciproque se démontre en notant que la chaine d'implications
+peut etre renversé
+
+`r fontawesome::fa("square")`
+
+---
+
+### Entropie relative dans un modèle exponentiel
+
+
+La paramétrisation semble si naturelle dans les modèles exponentiels qu'on est tenté
+de cacher les lois derrière les paramètres.
+
+Il est pourtant très utile de disposer
+d'outils qui permettent de comparer les lois indépendamment de la paramétrisation.
+
+Les divergences d'information sont l'outil adéquat.
+
+Nous avons déjà utilisé la distance en variation.
+
+L'entropie relative permet elle aussi de comparer des lois plutôt que des paramètres.
+
+Ce n'est pas une distance entre lois
+mais elle possède des propriétés remarquables.
+
+---
+
+L'entropie relative entre deux éléments d'une famille exponentielle se lit directement sur la fonction $\log Z(\cdot)$:
+
+$$D(P_\theta \Vert P_{\theta'}) = \log Z(\theta') -\log Z(\theta) + \langle \nabla \log Z(\theta), \theta -\theta'\rangle$$
+
+Lorsque $\theta'$ tend vers $\theta$,
+
+$$D(P_\theta\Vert P_{\theta'}) \sim  \frac{1}{2} (\theta- \theta')^t \nabla^2 \log Z(\theta) (\theta-\theta')$$
+
+
+Ce calcul fournit une preuve concise de la relation entre
+identifiabilité et injectivite de $\theta \mapsto \nabla \log Z(\theta)$
+
+---
+
+### Proposition
+
+Si un modèle exponentiel est _identifiable_,
+
+alors
+
+$$ \Lambda:  \theta \mapsto \Lambda(\theta) = \nabla \log Z(\theta)$$
+
+est injective sur $\Theta$
+
+---
+
+### Preuve
+
+On vérifie la contraposée.
+
+D'après l'expression de l'entropie relative dans les modèles exponentiels,
+
+$$D(P_\theta\Vert P_{\theta'})+ D(P_{\theta'}\Vert P_{\theta}) = \langle  \nabla \log Z(\theta) - \nabla \log Z(\theta'), \theta- \theta'\rangle$$
+
+
+Si
+$$\nabla \log Z(\theta)=\nabla \log Z(\theta')$$
+alors
+$$D(P_\theta\Vert P_{\theta'}) + D(P_{\theta'}\Vert P_{\theta})=0$$
+
+Comme ces deux quantités sont positives ou nulles,
+elles sont toutes les deux nulles et donc $P_\theta=P_{\theta'}.$
+
+Le fait que l'injectivité implique l'identifiabilité est trivial,  compte tenu de l'observation
+
+$$\nabla \log Z(\theta) = \mathbb{E}_ \theta[T(X)]$$
+
+`r fontawesome::fa("square")`
+
+---
+class: center, inverse, middle
+
+
+## Modèles exponentiels et méthode  des moments
+
+
+???
+
+Nous sommes maintenant outillés pour vérifier que la méthode des moments fournit une recette pour construire des estimateurs dans le cadre des modèles exponentiels.
+
+---
+
+### Théorème
+
+Soit $(\mathbb{R}^p, \mathcal{B}(\mathbb{R}^p), \Theta \subseteq \mathbb{R}^d )$  un modèle exponentiel en forme canonique de mesure dominante $\nu$, défini par les vraisemblances
+
+$$p_\theta (x) = \exp\left( \langle \theta , T(x) \rangle - \log Z(\theta) \right)$$
+
+où  $T$ est une fonction mesurable de $\mathbb{R^p}$ dans $\mathbb{R}^d$, et où
+
+$$\Theta:=   \left\{ \theta:  \theta \in \mathbb{R}^d, \quad \int_{\mathcal{X}} \exp(\langle \theta, T(x)\rangle) \nu(dx) < \infty \right\}^\circ$$
+
+Le modèle est identifiable
+
+si et seulement si
+
+$$\Lambda: \theta \mapsto \Lambda(\theta) = \nabla \log Z(\theta)$$ est un difféomorphisme de $\Theta$  dans $\Lambda(\Theta)$.
+
+Si le modèle est identifiable, $\Lambda(\Theta)$ est un ouvert de $\mathbb{R}^d$.
+
+---
+
+### Preuve
+
+Nous avons vérifié que  le modèle est identifiable
+
+si et seulement si
+
+la différentielle de $\Lambda$ est inversible en tout $\theta \in \Theta$
+
+D'après  le _théorème d'inversion locale_:
+
+$\forall \theta \in \Theta$, il existe
+
+- un voisinage ouvert $V$ de $\theta$ et
+- un voisinage ouvert $W$ de $\Lambda(\theta)$,
+
+tels que
+
+- $\Lambda$ soit bijective de $V$ dans $W$, et
+- d'inverse différentiable en $\Lambda(\theta)$.
+
+`r fontawesome::fa("r")`
+
+On note au passage que $\Lambda(\Theta)$ est ouvert.
+
+???
+
+Nous avons vérifié que $\Lambda$ est continuement différentiable et meme plus.
+
+---
+
+### Théorème (inversion locale)
+
+Soit $E$  un espace euclidien, $U \subseteq E$ ouvert, $f: U \to E$ continument différentiable, et $y_0 \in U$.
+
+Si la différentielle de $f$  en $y_0$ ($Df(y_0)$) est
+
+- inversible,
+- d'inverse $(Df(y_0))^{-1}$
+
+alors
+
+- il existe un voisinage ouvert $V \subseteq U$  de $y_0$ et un voisinage ouvert $W$ de $x_0= f(y_0)$, tel que $f$  est bijective de $V$ vers $W$,
+- l'inverse $g$  de $f$ sur $W$ est  différentiable en $x_0$, de différentielle $(Df(y_0))^{-1}$
+
+???
+
+Nous avons fait un peu plus que vérifier que les conditions du théorème
+d'inversion locale en tout $\theta \in \Theta$, nous avons aussi établi que
+$\Lambda$ est injective sur $\Theta$. Nous somme donc en mesure d'invoquer
+le théorème d'inversion globale ci-dessous.
+
+---
+
+### Théorème (Théorème d'inversion globale)
+
+Soit
+
+- $E$ un espace euclidien, $U \subseteq E$ ouvert,
+- $f : U \to E$ continument différentiable (de classe $C^1$) et injective
+
+Si la différentielle de $f$  est inversible en tout point de $U$,
+
+alors
+
+- $f(U)$ est ouvert dans $E$,
+- $f$ admet une inverse continument différentiable sur $f(U)$ ($f$ est un difféomorphisme)
+
+---
+
+Les théorèmes d'inversion justifient l'emploi de la méthode des moments:
+
+> un modèle exponentiel minimal en forme canonique remplit les conditions suffisantes discutées
+
+`r fontawesome::fa("glass-cheers")` Sur le papier, nous disposons d'une méthode d'estimation: il _suffit_ de résoudre l'équation: en $\vartheta$
+
+$$\overline{T}_n=  \nabla \log Z(\vartheta)$$
+
+soit de définir l'estimateur comme
+
+$$\Lambda^{-1}(\overline{T}_n)$$
+
+
+???
+
+Il peut s'agir d'un problème calculatoire délicat, voire intraitable.
+
+Non seulement, il se peut que l'équation n'ait pas de solution explicite (le cas gaussien est plutôt un heureux accident),
+
+mais
+
+le simple calcul de $Z(\theta)$  pour $\theta$ peut s'avérer un problème difficile.
+
+Les modèles graphiques (_graphical models_) qui peuvent être considérés comme un regard particulier sur les modèles exponentiels forment une branche très active de la statistique computationnelle
+
+---
+
+### Exemple: Modèle des lois Gamma (re)
+
+$$p_{p,\lambda}(x) =  \exp(-\lambda x + (p-1)\log (x) - (\log \Gamma(p)-p \log \lambda)) \qquad \forall x \in ]0, \infty)$$
+
+Il s'agit d'un modèle exponentiel en forme (presque) canonique avec pour statistiques suffisantes $(\log X,-X)^t$.
+
+On a
+$$\Lambda(p, \lambda)^t = \log Z(p,\lambda)^t=  \log \Gamma(p)-p \log \lambda$$
+ et
+$$\nabla \Lambda \begin{pmatrix}  p \\ \lambda \end{pmatrix} = \nabla \log Z \begin{pmatrix}  p \\ \lambda \end{pmatrix} = \begin{pmatrix} \frac{\Gamma'(p) }{\Gamma(p)} - \log (\lambda) \\ - \frac{p}{\lambda} \end{pmatrix}$$
+
+---
+
+### Exemple: Modèle des lois Gamma (suite)
+
+Le système d'équations  en $p, \lambda$:
+
+$$\begin{array}{rcl} \frac{\Gamma'(p) }{\Gamma(p)} - \log (\lambda) & = & (\overline{\log X})_n\\ \frac{p}{\lambda} & = &  \overline{X}_n \end{array}$$
+
+n'admet pas de solution  explicite `r fontawesome::fa("frown")`
+
+---
+
+La résolution de l'équation
+$$\overline{T}_n = \nabla \log Z (\vartheta)$$
+est  un cas de _maximisation de la vraisemblance_.
+
+Comme la vraisemblance est ici une fonction concave de $\theta$ qui appartient lui-même à un ensemble convexe, cette façon de voir permet d'utiliser les outils de l'_optimisation convexe_.
+
+Elle ouvre la voie aux techniques de résolution, ou si nécessaire, aux techniques de relaxation.
+
+---
+class: middle, center,inverse
+
+## Performance de la méthode des moments dans les modèles exponentiels
+
+---
+
+Si un modèle exponentiel canonique est minimal,
+
+alors  $(\Lambda^{-1}(\overline{T}_n))_n$ est (fortement) consistante
+
+On peut raffiner par un résultat de normalité asymptotique.
+
+---
+
+Pour décrire la covariance asymptotique des estimateurs au maximum de vraisemblance,
+
+### Définition
+
+Nous introduisons la _fonction  score_ : le _gradient de la log-vraisemblance_
+par rapport à $\theta$,
+
+$$\nabla \ell_n(\theta)$$
+
+`r fontawesome::fa("hand-point-right")`  $\forall \vartheta \in  \Theta$,
+$$\nabla \ell_n(\vartheta) =  n( \overline{T}_n- \nabla \log Z(\vartheta))$$
+
+---
+
+S'il existe $\vartheta$ tel que $\nabla \ell_n (\vartheta)=0$,
+
+alors
+
+par convexité de $-\ell_n(\cdot)$,
+
+ce $\vartheta$ est un maximum global de la vraisemblance.
+
+Si $\log Z(.)$ est strictement convexe, ce maximum de vraisemblance est unique.
+
+Le maximum de vraisemblance est solution de l'équation
+
+$$\overline{T}_n= \nabla \log Z(\vartheta)$$
+
+La méthode des moments que nous venons de décrire, dans ces modèles exponentiels minimaux en forme canonique, coïncide avec la méthode du maximum de vraisemblance.
+
+---
+
+### Proposition
+
+Dans un modèle exponentiel minimal, pour tout $\theta \in \Theta$,
+la fonction score en $\theta$ est centrée:
+
+$$\mathbb{E}_ \theta \left[ \nabla \ell_n(\theta) \right] = \mathbb{E}_ \theta \left[ n( \overline{T}_n- \nabla \log Z(\theta))\right] = 0 \, .$$
+
+---
+
+### Definition
+
+La covariance  de la fonction score,
+est appelée  l'_information de Fisher_ pour le modèle échantillonné $n$ fois en $\theta$:
+
+$$I_n(\theta):=  \mathbb{E}_ \theta \left[ \nabla \ell_n(\theta) \nabla \ell_n (\theta) ^t\right] =  n I_1(\theta)$$
+
+---
+
+On notera $I(\theta):= I_1(\theta)$, l'information de Fisher du modèle échantillonné une fois.
+
+On a
+
+$$I_1(\theta) = \nabla^2 \log Z(\theta)$$
+
+---
+
+Du théorème central limite, se déduit la normalité asymptotique de
+
+$$\sqrt{n}\left( \overline{T}_n - \nabla \log Z(\theta)\right)$$,
+
+sous $P_ \theta^{\otimes \mathbb{N}}$:
+
+$$\sqrt{n}\left( \overline{T}_n - \nabla \log Z(\theta)\right) \rightsquigarrow \mathcal{N}\left(0, I(\theta) \right)$$
+
+---
+
+Si on note $\psi$  la fonction $\theta \mapsto \nabla \log Z(\theta)$, l'estimateur au maximum de vraisemblance de $\theta$ est donné par $\psi^{-1} (\overline{T}_n)$.
+
+Comme $\psi$  est un difféomorphisme et la méthode delta
+indique que
+
+$$\sqrt{n} \big( \widehat{\theta}_n - \theta\big) \rightsquigarrow \mathcal{N}\left(0, I(\theta)^{-1}\right)$$
+
+$$(\nabla^2 \log Z(\theta))^{-1} I(\theta) (\nabla^2 \log Z(\theta))^{-1} =  I(\theta)^{-1}$$
+
+???
+
+On peut conclure.
+
+---
+
+### Théorème (Normalité asymptotique)
+
+Si un modèle exponentiel canonique est minimal,
+
+alors
+
+l'estimateur du maximum de vraisemblance est aussi un estimateur des moments.
+
+La suite des estimateurs au maximum de vraisemblance
+est consistante et après centrage et normalisation, elle  est asymptotiquement normale:
+
+$$\sqrt{n} \left(\widehat{\theta}_n - \theta\right)  \rightsquigarrow \mathcal{N} \left( 0 , I(\theta)^{-1}\right)$$
+
+
+---
+exclude:true
+class: middle, center,inverse
+
+## Remarques bibliographiques
+
+---
+exclude: true
+
+L'étude de la méthode des moments décrite ici est inspirée de l'ouvrage
+de \citet{vandervaart:1998}.
+On  y trouve en particulier  une démonstration du théorème d'inversion locale.
+
+L'entropie relative est un cas particulier de divergence d'information. Parmi les autres divergences très utiles en statistique figurent
+la distance de Hellinger ou son carré, la distance en variation, la divergence $\chi^2$. On trouve dans l'ouvrage de \citet{CsiShi04}
+une exploration en profondeur des liens entre ces divergences d'information.
+
+---
+exclude: true
+
+ L'entropie relative joue un rôle essentiel en théorie des
+grandes déviations. Une étude détaillée de l'entropie relative et de ses relations avec la topologie de la convergence en loi est présentée par \citet{DeZe98}.
+
+L'introduction aux modèles exponentiels  est inspirée de \citet{bickel:doksum:2001}.
+
 
 
 ---
@@ -129,5 +1204,3 @@ background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
-
----
