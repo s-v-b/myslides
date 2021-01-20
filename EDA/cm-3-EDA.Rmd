@@ -1,6 +1,6 @@
 ---
-title: "Bivariate statistics"
-subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+title: "EDA: Bivariate statistics"
+subtitle: "EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
@@ -45,6 +45,8 @@ xaringanExtra::use_logo(
 xaringanExtra::use_panelset()
 
 xaringanExtra::use_editable(expires = 1)
+
+xaringanExtra::use_clipboard()
 
 xaringanExtra::use_broadcast()
 
@@ -180,6 +182,10 @@ The ranges may be different or not
 
 ### Two dimensional arrays: `dataframe`  
 
+.panelset[
+
+.panel[.panel-name[List of vectors]
+
 A $n \times p$ array with columns of different types is not a `matrix`
 
 In `r fontawesome::fa("r-project")`, `r fontawesome::fa("python")`, `r fontawesome::fa("database")`, such arrays are called _tables_ (databases) or _dataframes_ (`r fontawesome::fa("r-project")`, `r fontawesome::fa("python")`)
@@ -189,17 +195,21 @@ _dataframes_ are _column-oriented_
 In `r fontawesome::fa("r-project")`, a _dataframe_ is a `list` of `vectors`
 
 All vectors in the `list` have the same length, they may be of different types (`class`) 
+]
 
-We should think of a bivariate sample as dataframe `df` with two columns `X` and `Y` and
-as many rows as there are individuals in the sample 
+.panel[.panel-name[Dataframes, Tibble, ...]
 
-If we project on either coordinate, we obtain a univariate sample (`df$X`, `df[["X"]]` or `df$Y`).
+We should think of a _bivariate_ sample as dataframe `df` with two _columns_ `X` and `Y` and as many _rows_ as there are _individuals_ in the sample 
 
-```{r, eval=FALSE}
-df <-  tibble::tibble(X= letters[seq(1,6,2)], Y=rnorm(3))
+If we project on either coordinate, we obtain a _univariate_ sample (`df$X`, `df[["X"]]` or `df$Y`)
+
+```{r}
+df <-  tibble::tibble(X=letters[seq(1,6,2)], 
+                      Y=rnorm(3))
 df # a bivariate sample of length 3
 ```
-
+]
+]
 ---
 class: center, middle, inverse
 
@@ -275,7 +285,7 @@ From the Titanic dataset (`Kaggle`), we extract columns `Pclass`  and `Survived`
 
 ]
 
-.panel[.panel-name[Preparing for loading]
+.panel[.panel-name[Preparing]
 
 ```{r tit_col_types, echo=TRUE}
 tit_col_types = cols(
@@ -328,14 +338,25 @@ tit$Survived <- forcats::fct_recode(tit$Survived,      #<<
 ```{r, results='markup', echo=TRUE}
 tit %>%
   dplyr::select(Pclass, Survived) %>% # Projection on two columns
-  table() %>%     #<<  
-  broom::tidy() %>%   # make it a dataframe
-  tidyr::pivot_wider(names_from=Survived, values_from=n) %>%    # with usual look and feel
-  knitr::kable(format="markdown")
+  table()     #<<  
 ```
 
 ]
 
+.panel[.panel-name[Nicer output]
+
+```{r, results='markup', echo=TRUE}
+tit %>%
+  dplyr::select(Pclass, Survived) %>% 
+  table() %>%     
+  broom::tidy() %>%   # make it a dataframe
+  tidyr::pivot_wider(names_from=Survived, 
+                     values_from=n) %>%    # with usual look and feel
+  knitr::kable(format="markdown")
+```
+
+
+]
 ]
 
 
@@ -395,9 +416,11 @@ it takes as input a contingency table and outputs a plot
 
 ### A mosaic on the Titanic  `r fontawesome::fa("ship")`
 
-.fl.w-40.pa2[
+.panelset[
 
-```{r titanic-mosaic-label, fig.show="hide"}
+.panel[.panel-name[Code]
+
+```{r titanic-mosaic-label, fig.show="hide", fig.height=3.5}
 tit %>%
   dplyr::select(Pclass,
                 Survived) %>%
@@ -414,13 +437,15 @@ The _width_ of each bar is proportional to the Class frequency  (count)
 
 ]
 
-.fl.w-60.pa2[
+.panel[.panel-name[Plot]
 
 
 ![](`r knitr::fig_chunk("titanic-mosaic-label", "png")`)
 
 `r fontawesome::fa("hand-point-right")` Records with missing values have been omitted
 
+
+]
 ]
 
 ---
@@ -796,7 +821,8 @@ p_scatter_gaussian <- ggplot(u, aes(x=X, y=Y)) +
   geom_point(alpha=.5, size=1) +
   geom_point(data=emp_mean, color=2, size=5) +
   coord_fixed() +
-  ggtitle(stringr::str_c("Gaussian cloud, cor = ", round(cor(u$X, u$Y), 2), sep=""))
+  ggtitle(stringr::str_c("Gaussian cloud, cor = ", 
+                         round(cor(u$X, u$Y), 2), sep=""))
 
 p_scatter_gaussian
 ```
@@ -886,7 +912,10 @@ Conditional mean, variance, median, IQR  (`r fontawesome::fa("database")`)
 tit %>%
   dplyr::select(Survived, Fare) %>%
   dplyr::group_by(Survived) %>%
-  dplyr::summarise(cmean=mean(Fare, na.rm=TRUE), csd=sd(Fare,na.rm = TRUE), cmedian=median(Fare, na.rm = TRUE), cIQR=IQR(Fare,na.rm = TRUE))
+  dplyr::summarise(cmean=mean(Fare, na.rm=TRUE), #<<
+                   csd=sd(Fare,na.rm = TRUE), 
+                   cmedian=median(Fare, na.rm = TRUE), 
+                   cIQR=IQR(Fare,na.rm = TRUE))
 ```
 
 ---
@@ -907,8 +936,10 @@ displaying visual summaries of conditional distribution of $Y$ given $X=i, i \in
 
 .panelset[
 
-.panel[.panel-name[Fare versus Passenger Class]
-```{r, echo=FALSE, fig.height=5}
+
+.panel[.panel-name[Code]
+
+```{r}
 filtered_tit <- tit %>%
   dplyr::select(Pclass, Survived, Fare) %>%
   dplyr::filter(Fare > 0 ) 
@@ -920,6 +951,12 @@ v <- filtered_tit %>%
 
 vv <- v + geom_violin()
 
+
+```
+]
+
+.panel[.panel-name[Fare versus Passenger Class]
+```{r, fig.height=4}
 vv + 
   aes(x=Pclass) +
   ggtitle("Titanic: Fare versus Passenger Class")
@@ -928,7 +965,7 @@ vv +
 
 .panel[.panel-name[Fare versus Survival]
 
-```{r, echo=FALSE, fig.height=5}
+```{r, fig.height=4}
 vv + 
   aes(x=Survived) +
   ggtitle("Titanic: Fare versus Survival")
@@ -936,7 +973,6 @@ vv +
 ]
 ]
 
----
 
 ---
 
@@ -944,10 +980,20 @@ vv +
 
 .panelset[
 
-.panel[.panel-name[Fare versus Passenger Class]
-```{r, echo=FALSE, fig.height=5}
-vw <- v + geom_boxplot() 
+.panel[.pane-name[Code]
 
+- Comply with the `DRY` principle 
+- Avoid `WET`
+
+```{r}
+vw <- v + geom_boxplot() 
+```
+
+]
+
+
+.panel[.panel-name[Fare versus Passenger Class]
+```{r, echo=TRUE, fig.height=4}
 vw + aes(x=Pclass) +
   ggtitle("Titanic: Fare versus Passenger Class")
 ```
@@ -955,7 +1001,7 @@ vw + aes(x=Pclass) +
 
 .panel[.panel-name[Fare versus Survival]
 
-```{r, echo=FALSE, fig.height=5}
+```{r, echo=TRUE, fig.height=4}
 vw + 
   aes(x=Survived) +
   ggtitle("Titanic: Fare versus Survival")
@@ -1255,15 +1301,18 @@ and the same `Adjusted R-squared`
 
 ### Anscombe quartet
 
+.panelset[
+.panel[.panel-name[Beyond numbers]
 Visual inspection of the data
 reveals that some linear models are more relevant than others
 
 This is the message of the Anscombe quartet.
 
 It is made of four bivariate samples with $n=11$ individuals.
+]
 
-
-```{r, echo=TRUE}
+.panel[.panel-name[My code]
+```{r, echo=TRUE, eval=TRUE}
 anscombe <- datasets::anscombe   # From base R
 
 anscombe %>%     #  tidy it
@@ -1271,23 +1320,63 @@ anscombe %>%     #  tidy it
   pivot_longer(starts_with('y'), names_to = 'groupy', values_to = 'Y') %>%
   filter(stringr::str_sub(group, 2L)==stringr::str_sub(groupy, 2L)) %>%
   select(-groupy) %>%
-  mutate(group=stringr::str_sub(group, 2L)) -> anscombe
+  mutate(group=stringr::str_sub(group, 2L)) %>% 
+  arrange(group) ->  anscombe
+```
+]
 
-# write.csv(anscombe, '_data/anscombe.csv', sep=",", row.names = FALSE)
+.panel[.panel-name[Better code]
+```{r}
+datasets::anscombe %>%
+  pivot_longer(everything(),
+    names_to = c(".value", "group"),
+    names_pattern = "(.)(.)"
+  )  %>% 
+  rename(X=x, Y=y) %>% 
+  arrange(group)-> anscombe
 ```
 
+From [https://tidyr.tidyverse.org/articles/pivot.html](https://tidyr.tidyverse.org/articles/pivot.html) 
+
+]
+
+
+.panel[.panel-name[Before]
+
+```{r}
+datasets::anscombe  %>% 
+  head(8) %>%
+  knitr::kable()
+```
+
+
+
+]
+
+.panel[.panel-name[After]
+
+```{r}
+anscombe  %>% 
+  head(8) %>%
+  knitr::kable()
+```
+
+]
+]
 ---
+
+### Performing regression per group
 
 For each value of `group` we perform a linear regression of `Y`  versus `X`
 
 ```{r}
-list_lm <- purrr::map(as.character(1:4) ,
+list_lm <- purrr::map(anscombe$group ,
                       .f = function(g) lm(Y ~ X,
                                           anscombe,
                                           subset = anscombe$group==g))
 ```
 
-`r fontawesome::fa("magic")`  Don't Repeat Yourself
+`r fontawesome::fa("magic")`  Don't Repeat Yourself (DRY)
 
 We use _functional programming_: `purrr::map(.l, .f)` where
 
@@ -1300,13 +1389,17 @@ to be evaluated on each list item
 
 ---
 
+### Inspecting summaries 
+
 All four regressions lead to the same intercept and the same slope
 
-Moreover the four regressions have the same RSS
+All four regressions have the same RSS
 
-We are tempted to conclude that all four linear regressions are equally relevant
+We are tempted to conclude that 
 
-Plotting points and lines helps dispell this illusion
+> all four linear regressions are equally relevant
+
+Plotting points and lines helps dispel this illusion
 
 
 ---
@@ -1315,16 +1408,22 @@ Plotting points and lines helps dispell this illusion
 
 .panelset[
 
+.panel[.panel-name[Code]
+
+```{r}
+p <- anscombe %>%
+  ggplot(aes(x=X, y=Y)) +
+  geom_smooth(method="lm", se=FALSE) +  #<<
+  facet_wrap(~ group) +   #<<
+  ggtitle("Anscombe quartet: linear regression Y ~ X")
+```
+
+]
+
 .panel[.panel-name[Regression lines]
 
 .pull-left[
 ```{r, echo=FALSE}
-p <- anscombe %>%
-  ggplot(aes(x=X, y=Y)) +
-  geom_smooth(method="lm", se=FALSE) +
-  facet_wrap(~ group) +
-  ggtitle("Anscombe quartet: linear regression Y ~ X")
-
 p
 ```
 ]

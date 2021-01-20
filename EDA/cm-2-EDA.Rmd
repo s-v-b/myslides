@@ -44,7 +44,13 @@ xaringanExtra::use_logo(
 
 xaringanExtra::use_editable(expires = 1)
 
+xaringanExtra::use_fit_screen()
+
+xaringanExtra::use_panelset()
+
 xaringanExtra::use_broadcast()
+
+xaringanExtra::use_clipboard()
 
 source("./loaders_fixers.R")
 ```
@@ -1033,7 +1039,7 @@ dt %>%
 
 ---
 
-### Semmelweis dataset
+### Semmelweis inquiry
 
 
 .fl.w-third.pa2[
@@ -1073,9 +1079,14 @@ class: middle, center
 
 ---
 
+### Semmelweis inquiry (continued)
+
+.small[
+
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Maternity institutions were set up all over Europe to address problems of infanticide of illegitimate children. They were set up as gratis institutions and offered to care for the infants, which made them attractive to underprivileged women, including prostitutes. In return for the free services, the women would be subjects for the training of doctors and midwives.
+.small[
+Maternity institutions were set up [...] to address problems of infanticide of illegitimate children. They were set up as gratis institutions and offered to care for the infants, which made them attractive to underprivileged women [...]. In return for the free services, the women would be subjects for the training of doctors and midwives.
 
 _Two maternity clinics_ were at the Viennese hospital.
 
@@ -1083,30 +1094,30 @@ The First Clinic had an average maternal mortality rate of about $10\%$ due to _
 
 The Second Clinic's rate was considerably lower, averaging less than $4\%$.
 
-This fact was known outside the hospital. The two clinics admitted on alternate days, but women begged to be admitted to the Second Clinic, due to the bad reputation of the First Clinic.
+This fact was known outside the hospital. _The two clinics admitted on alternate days_, but women begged to be admitted to the Second Clinic, [...].
 
-Semmelweis described desperate women begging on their knees not to be admitted to the First Clinic.
 
 Some women even preferred to give birth in the streets, pretending to have given sudden birth en route to the hospital (a practice known as street births), which meant they would still qualify for the child care benefits without having been admitted to the clinic.
+]
 
+]
 ]
 
 ---
 
-###
+### Semmelweis inquiry (continued)
+
 
 .fl.w-two-thirds.pa2[
+
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
+.small[
 Semmelweis was puzzled that puerperal fever was rare among women giving street births.
 
 > "To me, it appeared logical that patients who experienced street births would become ill at least as frequently as those who delivered in the clinic. [...] What protected those who delivered outside the clinic from these destructive unknown endemic influences?"
 
-]
-
-
-
-]
+]]]
 
 .fl.w-third.pa2[
 
@@ -1124,6 +1135,12 @@ semmelweis %>%
   knitr::kable(format = 'html')
 ```
 
+]
+
+---
+
+### Semmelweis inquiry (continued)
+
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
 The result was the mortality rate in the First Clinic declined $90\%$, and was then comparable to that in the Second Clinic.
@@ -1132,7 +1149,6 @@ The mortality rate in April 1847 was $18.3\%$.
 
 After hand washing was instituted in mid-May, the rates in June were $2.2\%$, July $1.2\%$, August $1.9\%$ and, for the first time since the introduction of anatomical orientation, the death rate was zero in two months in the year following this discovery.
 
-]
 ]
 
 ---
@@ -1212,11 +1228,12 @@ head(tmp, 4) %>% knitr::kable(format = 'html')
 
 ---
 
-.fl.w-third.pa2[
+### Data wrangling makes ploting easy.
 
-Data wrangling makes plotting easy.
 
-```{r semmelweis-label, fig.show="hide"}
+.panelset[
+
+```{r semmelweis-label, panelset=c("Code", "Semmelweis barplot"), fig.height=4}
 tmp %>%
   ggplot(mapping = aes(x=Year,
                        y=Death_rate,
@@ -1226,11 +1243,26 @@ tmp %>%
         geom_col(position="dodge",   #<<
                  colour="black",
                  width=.2) +
+  theme(legend.position=c(5.5/6, 13/15)) +
   ggtitle("Semmelweis data") +
   ylab("Death rate (%)")
 
 
 ```
+
+]
+
+
+
+
+
+
+---
+exclude: true
+
+
+.fl.w-third.pa2[
+
 ]
 
 
