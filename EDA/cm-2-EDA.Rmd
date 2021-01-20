@@ -1047,7 +1047,7 @@ dt %>%
 
 ![](img/355px-Ignaz_Semmelweis_1860.jpg)
 
-[Filip Semmelweis 1818-865](https://en.wikipedia.org/wiki/Ignaz_Semmelweis)
+[Filip Semmelweis 1818-1865](https://en.wikipedia.org/wiki/Ignaz_Semmelweis)
 ]
 ]
 
