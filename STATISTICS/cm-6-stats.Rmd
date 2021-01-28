@@ -84,43 +84,519 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-# Statistique III
+# Statistique VI:  Tests
 
 ### `r Sys.Date()`
 
-#### Statistique Fondamentale Master I MIDS et MFA
+#### [Statistique Fondamentale Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/statistics-paris/)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla
+### Motivation
 
-### Bla
+### Lemme de neyman-Pearson
+
+### Inégalité de Pinsker
+
+### Application à l'estimation
 
 
 ---
 class: center, middle, inverse
 
-## So what
+## Introduction
 
 ---
 
-### igloo `r fontawesome::fa("igloo")`
+Dans les trois chapitres précédents, nous avons considéré des modèles outrageusement simples, régulièrement
+paramétrés par des parties de $\mathbb{R}^k$. Nous nous sommes concentrés sur l'estimation des paramètres, ou sur
+des questions de décision concernant ces paramètres. Les modèles que nous avons étudiés étaient des modèles
+dominés. Nous avons pu choisir des fonctions de vraisemblance continues en les paramètres et mêmes plusieurs fois différentiables. Ce fut l'occasion d'établir quelques propriétés des méthodes de maximisation de la vraisemblance.
+L'estimation au maximum de vraisemblance n'est pas le seul usage qu'un statisticien peut faire d'une fonction de vraisemblance. Dans ce chapitre nous allons aborder les questions de test avec des méthodes qui utilisent
+une fonction de vraisemblance. Nous n'allons pas nous restreindre aux modèles paramétriques, mais envisagé des modèles
+dominés où les lois sont paramétrées par leur densité ou la racine carré de leur densité. L'écart entre lois
+sera évalué par des divergence d'information (distance en variation, entropie relative et distance de Hellinger).
 
-.fl.w-third.pa2[
+???
 
-]
+Nous revenons d'abord au problème de la conception de tests, en particulier sur la conception de tests
+d'hypothèses binaires. La section \ref{sec:lemme_de_neyman_pearson} présente une preuve complète du Lemme de Neyman-Pearson (évoqué en Section \ref{sub:optimalit_des_tests_dits_de_rapport_de_vraisemblance}). Ce lemme nous impose une méthode pour construire un test entre deux hypothèses simples: comparer le rapport de vraisemblance à un seuil. La portée de ce résultat va bien au delà du problème du test d'hypothèses simples.
+Il nous fournit dans de nombreux cas un étalon-or. Par exemple, dans le cas d'hypothèses composites,
+on peut éprouver une méthode de test ad hoc (tests du $\chi^2$, tests de rapport de vraisemblance généralisés, tests de rang, de Student, de Kolmogorov-Smirnov, etc) en comparant son comportement à celui
+d'un test de rapport de vraisemblance entre une loi de l'hypothèse nulle et une loi de l'alternative. On peut aussi
+examiner le comportement des tests ad hoc pour distinguer un mélange de lois issues de l'hypothèse nulle d'un mélange de lois issues de l'alternative.
 
+Dans la section \ref{sec:s_paration_in_g_}, nous relions les probabilités d'erreur de première et de seconde espèce entre deux hypothèses simples à la distance en variation entre les
+lois qui définissent les hypothèses. Cette relation est fine mais elle nous aide pas beaucoup à comprendre comment la taille de l'échantillon influe sur notre capacité à distinguer deux lois. Nous ne disposons pas d'expressions simples de
+la distance en variation entre deux lois produits.
 
-.fl.w-two-thirds.pa2[
+En revanche, l'entropie relative et l'affinité de Hellinger entre lois produits se déduisent immédiatement
+de l'entropie relative et de l'affinité entre les facteurs.
+La  distance en variation est elle-même liée à l'entropie relative
+par l'inégalité de Pinsker. Cette relation importante (équivalente au lemme de Hoeffding \ref{lem:heoffding}) permet de minorer les probabilités d'erreur dans les tests
+entre lois _produit_
 
-
-]
+La distance et l'affinité de Hellinger permettent non seulement d'étudier l'influence de la taille de l'échantillon
+sur notre capacité à distinguer deux hypothèses simples, mais le point de vue _Hilbertie_est crucial
+dans la construction de tests de rapport de vraisemblance robustes entre hypothèses composites.
+La construction explicite de ces tests robustes a récemment ouvert de nouvelles portes à la statistique non-paramétrique.
 
 ---
+class: center, middle, inverse
+
+## Lemme de Neyman-Pearson
+
+---
+
+Dans notre version initiale du Lemme de Neyman-Pearson,
+nous avons supposé l'existence d'un test de rapport de vraisemblance
+de niveau spécifié.
+
+Nous n'avons pas établi l'existence de ce test.
+
+
+Nous comblons ici cette lacune en construisant un test randomisé.
+
+
+---
+
+### Lemme (Neyman-Pearson)
+
+
+Pour tout niveau $\alpha \in ]0,1[$,
+
+
+- il existe un test de rapport de vraisemblance (TRV) $T$ _éventuellement randomisé_, de niveau $\alpha$.
+Ce test consiste à comparer le rapport de vraisemblance à un seuil $\tau_\alpha$, à rejeter
+$H_0$ au dessus du seuil, à ne pas rejeter $H_0$ en dessous du seuil, à prendre une décision aléatoire
+lorsque le rapport de vraisemblance est exactement égal à $\tau_ \alpha$.
+
+- Sous l'alternative, le TRV est de puissance maximale parmi les tests de
+niveau inférieur ou égal.
+
+- Tout test $T'$ de niveau exactement $\alpha$ et de même puissance qu'un TRV  $T$
+de niveau $\alpha$, coïncide avec le TRV lorsque le rapport de vraisemblance est différent du seuil  $\tau_ \alpha$ qui définit $T$.
+
+
+---
+
+
+
+### Preuve
+
+
+
+i)  On note $G$  la fonction de répartition du rapport de vraisemblance sous $P_0$ et $G^{\leftarrow}$ la fonction quantile associée:
+
+$$G^{\leftarrow}(p) = \inf \left\{ x:  G(x) \geq p \right\} \, .$$
+
+Le seuil $\tau_\alpha$  est défini par
+
+$$\tau_ \alpha =  G^\leftarrow (1-\alpha) \, .$$
+
+Si $G(\tau_\alpha)> 1- \alpha$, cela signifie que $G$  est discontinue en $\tau_ \alpha$. Sous $P_0$,  la probabilité que le rapport de vraisemblance soit égal à  $\{ \tau_ \alpha\}  $  est positive. Et d'autre part
+
+$$G(\tau_ \alpha -):=  \lim_{t \nearrow \tau_ \alpha } G(t)  \leq  1- \alpha < G(\tau_\alpha) \, .$$
+
+Lorsque le rapport de vraisemblance est égal à $\tau_ \alpha$, le test de rapport de vraisemblance effectue un tirage uniforme $U$  sur $[0,1]$ et il rejette $H_0$  si
+
+$$U \leq \frac{G(\tau_\alpha)- (1- \alpha)}{G(\tau_ \alpha)-G(\tau_ \alpha-)} \, .$$
+
+Ce test (éventuellement) randomisé est de niveau exactement $\alpha.$ Nous le nommons $T$ par la suite.
+
+---
+
+### Preuve (suite)
+
+
+ii) On note $p_0$  et $p_1$ les versions des densités utilisée dans
+la définition du test $T$.
+
+Soit $T'$ un test de niveau inférieur ou égal à $\alpha$.
+
+La différence entre les puissances vaut
+
+$$\begin{array}{rcl}P_1\{ T= 1\} - P_1\{T'=1\} & = & \mathbb{E}_{P_1} \left[ T - T'    \right]\\& = & \mathbb{E}_{P_0} \left[ \frac{p_1 (X)}{p_0 (X)_{}} (T - T')\right] + \mathbb{E}_{P_1} \left[ (T - T') \mathbb{I}_{p_0 (X) = 0}
+\right]\\&  & \text{sur l'événement } p_0 (X) = 0, T - T' \geq 0, \text{car le rapport}\\&  & \text{de vraisemblance est infini}\\
+& \geq & \mathbb{E}_{P_0} \left[ \frac{p_1 (X)}{p_0 (X)_{}} (T -
+T') \right]\\& = & \mathbb{E}_{P_0} \left[ \left( \frac{p_1 (X)}{p_0 (X)_{}} - \tau_ \alpha\right) (T - T') \right] + \tau_ \alpha \mathbb{E}_{P_0} \left[ T - T'\right]\\& \geq  & \mathbb{E}_{P_0} \left[ \left( \frac{p_1 (X)}{p_0 (X)_{}} - \tau_ \alpha\right) (T - T') \right] \text{ comme }  \mathbb{E}_{P_0} \left[ T - T'\right]\geq 0\\ & \geq & 0  \qquad \text{ car } \left( \frac{p_1 (X)}{p_0 (X)_{}} - \tau_ \alpha \right) (T -T') \geq 0\end{array}$$
+
+---
+
+### Preuve (suite et fin)
+
+iii) Pour établir ce point,  il suffit de réexaminer la preuve du second point et de noter que
+pour avoir l'égalité entre puissances, il faut
+
+$$\left( \frac{p_1 (X)}{p_0 (X)_{}} - \tau_ \alpha \right) (T - T') = 0$$
+
+soit vraie $P_0$  presque sûrement.
+
+`r fontawesome::fa("square")`
+
+---
+class: center, middle, inverse
+
+## Séparation, inégalité de Pinsker
+
+---
+
+Le fait de savoir comment tester deux hypothèses simples de façon optimale ne nous donne pas un accès simple à la somme des erreurs de première et de seconde espèce commises par le meilleur test possible. Cette somme est reliée très directement à une distance entre lois.
+
+---
+
+### Définition (distance en variation)
+
+La distance en variation entre deux lois $P$ et $Q$ définies sur le même espace probabilisable $(\Omega, \mathcal{F})$ est définie par
+
+$$\mathrm{d}_{\text{TV}} (P,Q):=  \sup_{A \in \mathcal{F}} P(A) - Q(A) \, .$$
+
+
+Nous laissons en exercice la proposition qui motive la dénomination.
+
+---
+
+### Proposition
+
+La distance en variation est une distance sur l'ensemble des lois de probabilités sur $(\Omega, \mathcal{F})$.
+
+
+
+La distance en variation est exigeante. Elle définit en général une topologie plus fine que la topologie de la convergence en loi. Là encore nous laissons cette proposition en exercice (facile voir le Théorème du portemanteau).
+
+---
+
+### Proposition
+
+Si
+
+une suite de lois $(P_n)$ sur $(\Omega, \mathcal{F})$ vérifie
+
+$$\lim_n \mathrm{d}_{\text{TV}} (P_n,Q)=0$$
+
+où  $Q$ est une loi sur $(\Omega,\mathcal{F})$
+
+alors
+
+$(P_n)_n$  _converge étroitement_ vers $Q$
+
+---
+
+`r fontawesome::fa("exclamation-triangle")` La réciproque est fausse:
+
+si $P_n$  est obtenue en recentrant et en standardisant la loi binomiale de paramètres $n$ et $1/2$,
+
+$$P_n \rightsquigarrow \mathcal{N}(0,1)$$
+
+et pourtant $\mathrm{d}_{\text{TV}} (P_n,\mathcal{N}(0,1))= 1$.
+
+???
+
+Comme l'entropie relative, la distance en variation se définit à la fois comme une intégrale et comme un supremum
+
+---
+
+### Proposition
+
+Si $\nu$ est une mesure $\sigma$-finie sur $(\Omega,\mathcal{F})$ qui domine les lois $P$ et $Q$, alors
+
+$$\mathrm{d}_{\text{TV}} (P,Q) = \frac{1}{2} \int_ \Omega \left| \frac{\mathrm{d} P}{\mathrm{d} \nu}(\omega)- \frac{\mathrm{d} Q}{\mathrm{d} \nu}(\omega)\right| \mathrm{d} \nu(\omega)$$
+
+$$\mathrm{d}_{\text{TV}} (P,Q) =  1 - \int_ \Omega  \frac{\mathrm{d} P}{\mathrm{d} \nu}(\omega) \wedge \frac{\mathrm{d} Q}{\mathrm{d} \nu}(\omega) \mathrm{d} \nu(\omega)$$
+
+
+
+---
+
+### Proof
+
+On peut prendre comme mesure dominante $\nu = (P+Q)/2.$
+
+$$\begin{array}{rl}P(A) -Q(A) & = \int \mathbb{I}_A \left(\frac{\mathrm{d} P}{\mathrm{d} \nu}  - \frac{\mathrm{d} Q}{\mathrm{d} \nu}\right) \mathrm{d}\nu\end{array}$$
+
+Le membre droit est maximisé par le choix
+
+$$A:= \left\{ \omega:  \frac{\mathrm{d} P}{\mathrm{d} \nu}(\omega)>  \frac{\mathrm{d} Q}{\mathrm{d} \nu}(\omega) \right\}$$
+
+On a établi
+
+$$\begin{array}{rl}\mathrm{d}_{\text{TV}} (P,Q)  & = \int \left(\frac{\mathrm{d} P}{\mathrm{d} \nu}  - \frac{\mathrm{d} Q}{\mathrm{d} \nu}\right)_+ \mathrm{d}\nu\end{array}$$
+
+la proposition découle de
+
+$$\int \left(\frac{\mathrm{d} P}{\mathrm{d} \nu}  - \frac{\mathrm{d} Q}{\mathrm{d} \nu}\right)_+ \mathrm{d}\nu  = \int \left(\frac{\mathrm{d} P}{\mathrm{d} \nu}  - \frac{\mathrm{d} Q}{\mathrm{d} \nu}\right)_-\mathrm{d}\nu$$
+
+On a utilisé ici la convention
+
+$$\begin{array}{rl}(x)_+ & =  \max(x, 0) \\(x)_- & = \max(-x, 0)\end{array}$$
+
+La dernière partie de la proposition vient de
+
+$$\frac{1}{2}|a-b| = \frac{a+b}{2} - a \wedge b$$
+
+`r fontawesome::fa("square")`
+
+---
+
+La connexion entre erreurs de test et distance en variation est résumée ici.
+
+---
+
+### Proposition (affinité de test)
+
+
+$$\inf_{T} \left(  P_0 \{ T=1 \} + P_1 \{ T=0 \} \right) = 1 -\mathrm{d}_{\text{TV}}(P_0, P_1) =\int_ \Omega  \frac{\mathrm{d} P_1}{\mathrm{d} \nu}(\omega) \wedge \frac{\mathrm{d} P_0}{\mathrm{d} \nu}(\omega) \mathrm{d} \nu(\omega)$$
+
+L'expression $1 - \mathrm{d}_{\text{TV}}(P_0, P_1)$ est appelée _affinité de test_.
+
+
+
+---
+
+### Proof
+
+Soit $A$ la région critique d'un test $T$: $A:= \{ \omega: T(\omega) =1 \}$.
+
+$$\begin{array}{rcl}P_0 \{ T=1 \} + P_1 \{ T=0 \} & = &  1 - \left(P_1 \{ A\} - P_0 \{ A\}\right) \end{array}$$
+
+On obtient la proposition en choisissant une région critique qui _témoigne_ de la distance en variation.
+
+`r fontawesome::fa("square")`
+
+---
+
+Cette proposition est simple mais difficile  à utiliser telle quelle.
+Si  on veut étudier le comportement de la somme des deux erreurs lorsqu'on cherche à distinguer des lois _produit_ on peut être tenté d'utiliser la borne suivante:
+
+$$\mathrm{d}_{\text{TV}} (P^{\otimes n},Q^{\otimes n}) \leq n \mathrm{d}_{\text{TV}} (P,Q)$$
+
+pour se convaincre que deux hypothèses simples séparées d'au plus $1/(2n)$  en distance en variation, ne peuvent pas être distinguées avec des probabilités d'erreur de première et de seconde espèce toutes les deux inférieures à $1/4$ à partir d'échantillons  de taille $n$.
+
+Nous allons voir dans la section suivante, qu'on peut fournir une borne inférieure de bien meilleure qualité.
+
+---
+class: center, middle, inverse
+
+##  Une inégalité de transport
+
+---
+
+### Divergences d'information
+
+La distance en variation et l'entropie relative sont deux _divergences d'information_.
+
+On suppose ici que $P \unlhd Q$.
+
+Si $\nu$ est une mesure $\sigma$-finie qui domine $P$ et $Q$ et $f$ une fonction convexe qui s'annule en $1$,
+en notant $p$ et $q$ les densités des lois $P$ et $Q$ par rapport à $\nu$, on définit la $f$-divergence
+entre $P$ et $Q$ par
+
+$$I_f(P \Vert Q):=  \int_ \Omega f\left(\frac{p(\omega)}{q(\omega)}\right)  q(\omega)  \mathrm{d}\nu (\omega)$$
+
+---
+
+
+La distance en variation s'obtient en choisissant $f(x)=|x-1|$, l'entropie relative
+en choisissant $f(x)= x \log (x).$ En choisissant $f(x)= (\sqrt{x}- 1)^2$, on obtient le carré de la
+distance de Hellinger, en choisissant $f(x)= (x-1)^2$ on obtient la _distance du $\chi^2$_
+
+Ces deux divergences d'information sont liées par une inégalité qui s'avère être une conséquence du lemme de Hoeffding.
+
+---
+
+### Théorème (Inégalité de Pinsker)
+
+
+$$\mathrm{d}_{\text{TV}} (P,Q)  \leq \sqrt{\frac{1}{2} D(P \Vert Q)}$$
+
+---
+
+La représentation variationnelle de l'entropie relative permet d'étudier facilement
+de nombreuses propriétés de l'entropie relative.
+
+ Elle nous permettra d'établir l'inégalité de Pinsker
+de façon modulaire.
+
+---
+
+### Théorème (représentation variationnelle de l'entropie)
+
+Soit $P$  et $Q$  deux lois de probabilité sur $(\Omega,\mathcal{F})$, l'entropie relative de $P$ par rapport à $Q$ vérifie
+
+$$D(P \Vert Q) =  \sup_{f: \mathbb{E}_Q \mathrm{e}^f< \infty} \left\{  \mathbb{E}_P f - \log \mathbb{E}_Q \mathrm{e}^f \right\}$$
+
+
+
+
+---
+
+### Preuve
+
+Si $P \not\!\!\unlhd Q$, il existe $A$ telle que  $P(A)>0$ et $Q(A)=0$, en considérant $f_n = n \mathbb{I}_A$,
+on observe $\mathbb{E}_P f_n - \log \mathbb{E}_Q \mathrm{e}^{f_n} = n P(A)$ qui tend vers $\infty$ avec $n$.
+Si $P \not\!\!\unlhd Q$, la représentation variationnelle est vérifiée.
+
+Si $P \unlhd Q$, on vérifie d'abord que
+
+$$D(P \Vert Q) = \sup_{U: \mathbb{E}_Q \mathrm{e}^U =1} \mathbb{E}_P U$$
+
+En effet, pour toute variable aléatoire  $U$ vérifiant
+$\mathbb{E}_Q \mathrm{e}^U  =1$,
+on peut définir une autre loi $Q'$ de densité $\mathrm{e}^U$  par rapport
+à $Q$, et $\frac{\mathrm{d} P}{\mathrm{d} Q}\mathrm{e}^{-U}$ est une dérivée de Radon-Nykodym de $P$ par rapport à $Q'$
+
+
+---
+
+### Preuve (suite)
+
+
+On a alors
+
+$$D(P \Vert Q)  - \mathbb{E}_P   U = \mathbb{E}_{Q'} \left[ \frac{\mathrm{d} P}{\mathrm{d} Q}\mathrm{e}^{-U} \log \left( \frac{\mathrm{d} P}{\mathrm{d} Q}\mathrm{e}^{-U}\right)\right] \geq 0$$
+
+où  la dernière inégalité suit de l'inégalité de Jensen.
+
+Cela prouve
+
+$$P \unlhd Q \Rightarrow D(P \Vert Q) \geq  \sup_{U: \mathbb{E}_Q \mathrm{e}^U =1} \mathbb{E}_P U$$
+
+Comme il y a égalité lorsque $U = \log \frac{\mathrm{d} P}{\mathrm{d} Q}$, la première formule est établie.
+
+
+---
+
+### Preuve (suite et fin)
+
+Si $\mathbb{E}_Q \mathrm{e}^f < \infty$,
+
+$$\begin{array}{rcl} \mathbb{E}_P f - \log \mathbb{E}_Q \mathrm{e}^f & = & \mathbb{E}_P\left[ \log \frac{\mathrm{e}^f}{\mathbb{E}_Q \mathrm{e}^f}\right]\end{array}$$
+
+Le supremum dans l'énoncé de la formulation  variationnelle n'est pas plus grand que celui de ....
+
+
+
+`r fontawesome::fa("square")`
+
+???
+
+A partir de la représentation variationnelle, on vérifie (très) facilement des propriétés importantes de l'entropie relative.
+
+---
+
+### Corollaire
+
+L'entropie relative est
+
+
+- convexe vis à vis de ses deux arguments ;
+
+- l'entropie relative entre lois _image_ est inférieure ou égale à l'entropie relative entre les lois
+
+$$D(P \Vert Q) \geq D(P \circ f^{-1} \Vert Q \circ f^{-1})$$
+
+---
+
+### Proof [Inégalité de Pinsker]
+
+Pour tout $A \in \mathcal{F}$, tout $\lambda\geq 0$, d'après la formulation variationnelle de l'entropie relative
+
+$$D(P \Vert Q) \geq \mathbb{E}_P \left[\lambda (\mathbb{I}_A -\mathbb{E}_Q \mathbb{I}_A )\right] - \log \mathbb{E}_Q\left[\mathrm{e}^{\lambda (\mathbb{I}_A -\mathbb{E}_Q \mathbb{I}_A)} \right]$$
+
+D'après le lemme de Hoeffding,
+
+$$\log \mathbb{E}_Q\left[\mathrm{e}^{\lambda (\mathbb{I}_A -\mathbb{E}_Q \mathbb{I}_A)} \right] \leq \frac{\lambda^2}{8}$$
+
+On a donc:
+
+$$D(P \Vert Q) \geq \sup_{A \in \mathcal{F}, \lambda \geq 0} \left\{\lambda(P(A) - Q(A))  - \frac{\lambda^2}{8} \right\}$$
+
+Pour $A$ fixé, l'optimum  en $\lambda$  est atteint en $\lambda = 4 (P(A) - Q(A)) $, d'où
+
+$$D(P \Vert Q) \geq \sup_{A \in \mathcal{F}} 2 (P(A) - Q(A))^2  = 2 \mathrm{d}_{\text{TV}} (P,Q)^2$$
+
+`r fontawesome::fa("square")`
+
+---
+
+Comme $D(P^{\otimes n}\Vert Q^{\otimes n})= n D(P \Vert Q)$, on peut en déduire une borne inférieure pour la somme des erreurs d'un test opérant sur des $n$-échantillons.
+
+$$P_0^{\otimes n}\{T=1\} +  P_1^{\otimes n}\{T=0\} \geq 1 - \sqrt{\frac{n}{2} D(P_0 \Vert P_1)}$$
+
+---
+
+### Exemple
+
+Si on souhaite décider entre deux lois de Bernoulli
+$P_0 = \mathcal{B}(\theta)$ et $P_1 =  \mathcal{B}(\theta + h/\sqrt{n})$, on peut effectuer quelques calculs qui révèlent
+
+$$D\left(P_1 \Vert P_0 \right) \leq \frac{1}{2n} \frac{h^2}{\theta(1- \theta)}$$
+
+Ceci implique:
+
+$$P_0^{\otimes n}\{T=1\} +  P_1^{\otimes n}\{T=0\} \geq 1 - \frac{h}{2\sqrt{\theta(1 - \theta)}}$$
+
+Cette application illustre un phénomène plus général : si deux lois sont à distance en variation de l'ordre de $1/\sqrt{n}$, il est illusoire de chercher à les séparer à l'aide d'échantillons de taille sensiblement inférieure à $n$.
+
+---
+class: center, middle, inverse
+
+##  Application aux bornes inférieures en estimation
+
+---
+
+
+Dans les modèles exponentiels nous avons montré que les estimateurs au maximum de vraisemblance
+convergent à vitesse $\tfrac{1}{\sqrt{n}}$ (le risque quadratique décroit comme $\tfrac{1}{n}$).
+
+L'inégalité de Cramer-Rao nous indique que les estimateurs sans biais ne peuvent pas être plus rapides.
+
+Comme il n'y a pas de raison de ne considérer que les estimateurs sans biais, on peut se demander s'il n'est pas possible d'établir des bornes inférieures plus générales.
+
+---
+
+Nous nous plaçons dans un
+modèle exponentiel minimal
+$(P_ \theta, \theta \in \Theta \subseteq \mathbb{R}^k)$.
+
+Dans ce modèle, nous avons vu que
+
+$$D(P_ \theta \Vert P_ {\theta'}) = \frac{1}{2} (\theta'-\theta)^t I(\theta) (\theta'- \theta) + R(\theta'- \theta)$$
+
+avec $|R(\theta' - \theta)|=o(\|\theta' - \theta\|^2)$.
+
+---
+
+Soit $\widetilde{\theta}_n$ un estimateur à valeur dans $\mathbb{R}^k.$  Cet estimateur
+permet de définir un test $T$ entre $P_ \theta^{\otimes n}$  et $P_{\theta'}^{\otimes n}$:
+on rejette $H_0$ (constituée par $P_ \theta^{\otimes n}$) si
+
+$\|\widetilde{\theta}_n - \theta\|>\|\widetilde{\theta}_n - \theta'\|$
+
+---
+
+$$\begin{array}{rcl}{ \mathbb{E}_ \theta \left[ \| \widetilde{\theta}_n -\theta\|^2\right] + \mathbb{E}_ {\theta'} \left[ \| \widetilde{\theta}_n - \theta'\| ^2 \right]} & \geq & \mathbb{E}_ \theta \left[ \| \widetilde{\theta}_n - \theta\|^2 \mathbb{1}_{\|\widetilde{\theta}_n - \theta\|>\|\widetilde{\theta}_n - \theta'\|}\right] + \mathbb{E}_ {\theta'} \left[ \| \widetilde{\theta}_n - \theta'\| ^2 \mathbb{1}_{\|\widetilde{\theta}_n - \theta\|<\|\widetilde{\theta}_n - \theta'\|}\right]\\ & \geq & \frac{\|\theta' - \theta\|^2}{4} \left(P^{\otimes n}_ \theta \{ T= 1\} +  P^{\otimes n}_{\theta'} \{ T= 0\}\right) \\ & \geq & \frac{\|\theta' - \theta\|^2}{4} \left(1 - \sqrt{\frac{n}{2} D(P_ \theta \Vert P _ {\theta'})} \right)\end{array}$$
+
+---
+
+Maintenant, choisissons $h \in \mathbb{R}^k$ et $n_0$
+tels que $\theta + h /\sqrt{n_0} \in \Theta$ et tel que pour
+$n \geq n_0$, $|R(h/\sqrt{n})| \leq \frac{1}{4n } h^t I(\theta) h$.
+
+On suppose aussi que ${h^t I(\theta)h } < {8}$.
+
+Pour $n \geq n_0$, en combinant les calculs précédents avec l'inégalité de Pinsker, on obtient
+
+$$\begin{array}{rcl} { \mathbb{E}_ \theta \left[ \| \widetilde{\theta}_n - \theta\|^2\right] + \mathbb{E}_ {\theta  + h /\sqrt{n}} \left[ \| \widetilde{\theta}_n - \theta - \frac{h}{\sqrt{n}}\| ^2 \right]} & \geq & \frac{\|h\|^2}{4 n}  \left(1 - \sqrt{\frac{h^t I(\theta)h }{8} )} \right)\end{array}$$
+
+???
+
+Ce résultat peut être affiné. Les développements les plus intéressants s'appuient sur une autre $f$-divergence, la distance de Hellinger.
 
 
 ---
@@ -129,5 +605,3 @@ background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
-
----
