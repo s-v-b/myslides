@@ -1,9 +1,9 @@
 ---
-title: "Statistique III"
+title: "Statistique VI bis"
 subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
-date: "2020/11/20 (updated: `r Sys.Date()`)"
+date: "2021/01/28 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -84,43 +84,467 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-# Statistique III
+# Statistique VI bis : Tests, point de vue Hellinger
 
 ### `r Sys.Date()`
 
-#### Statistique Fondamentale Master I MIDS et MFA
+#### [Statistique Fondamentale Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/statistics-paris/)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla
+### Distance de Hellinger : propriétés
 
-### Bla
+### Tests entre hypothèses simples
+
+### Tests entre boules de Hellinger
+
+### Performances du test entre boules
+
+---
+class: inverse, middle, center
+
+
+## Distance de  Hellinger
+
+---
+
+Comme la distance en variation et l'entropie relative,
+la distance de Hellinger est une _divergence d'information_
+
+$$I(P \Vert Q) = \mathbb{E}_Q \left[f\left(\frac{\mathrm{d}P}{\mathrm{d}Q}\right) \right]\qquad \text{si} P \unlhd Q$$
+
+avec $f(1)=0$  et $f$ convexe
+
+- $f(x)=x  \log x$ pour l'entropie relative
+- $f(x)= |x-1|$ pour la distance en variation
+- $f(x)= (x-1)^2$ pour le $\chi^2$
+
+
+--
+
+La distance de Hellinger est au centre de
+
+- la théorie de Le Cam (version presque finale de la statistique paramétrique asymptotique)
+
+- de dévelepements actuels en statistique non-paramétrique: $ρ$-estimateurs
 
 
 ---
-class: center, middle, inverse
 
-## So what
+### Définition :  distance et affinité de Hellinger
+
+Soient $P$  et $Q$ deux lois de probabilités sur $(\Omega, \mathcal{F})$,
+$\nu$  une mesure qui domine $P,Q$ et $p,q$ deux densités de $P,Q$  par rapport à $\nu$.
+
+La _distance de Hellinger_ $H(P,Q)$  est définie par
+
+$$H(P,Q)^2 := \frac{1}{2} \int_{\Omega} \left(\sqrt{p} -\sqrt{q}\right)^2 \mathrm{d}\nu$$
+
+L'_affinité de Hellinger_ $\rho(P,Q)$ est définie par
+
+$$\rho(P,Q) :=  1 - H(P,Q)^2 =   \int_{\Omega} \sqrt{pq} \mathrm{d}\nu$$
+
+
+---
+
+### Question
+
+Le choix de la mesure dominante et celui des densités sont-ils importants ?
+
+--
+
+Non !
+
+--
+
+### Proposition
+
+Le choix de la dominante et des densités n'ont pas d'influence sur la
+valeur de la distance de Hellinger
 
 ---
 
-### igloo `r fontawesome::fa("igloo")`
 
-.fl.w-third.pa2[
+### Proposition
 
-]
+$$H(P,Q)^2 \leq \mathrm{d}_{\text{TV}} (P,Q)$$
 
+--
 
-.fl.w-two-thirds.pa2[
+### Proposition
 
+L'affinité de Hellinger entre produits se calcule immédiatement:
 
-]
+$$\rho(P^n,Q^n) = \left(\rho(P,Q) \right)^n$$
 
 ---
+
+Si on considère un modèle dominé $\mathcal{P}$, et un choix des densités par rapport à une dominante $\nu$,
+on peut _paramétriser_ le modèle $\mathcal{P}$ par une collection d'éléments de l'espace de Hilbert $L_2(\nu)$
+
+La distance et l'affinité de Hellinger sont deux notions très pratiques pour étudier les méthodes de vraisemblance, qu'il s'agisse des tests ou des techniques d'estimation
+
+---
+class: inverse, middle, center
+
+## Test entre hypothèses simples
+
+
+---
+
+
+La possibilité de distinguer deux hypothèses simples définies par des lois produits
+à partir d'un $n$-échantillon est facilement quantifiée à l'aide de la distance de Hellinger
+
+---
+
+### Théorème
+
+Soient $P,Q$  deux lois sur $(\Omega,\mathcal{F})$,
+
+On note $L_n$ la différence des log-vraisemblances calculées sur
+un $n$-échantillon :
+
+$$L_n = \sum_{i=1}^n \log q(X_i)/p(X_i)$$
+
+Pour tout  $z \in \mathbb{R}$
+
+$$P^n \left\{ L_n \geq z \right\} \leq \exp\left(- \frac{z}{2} - n H(P,Q)^2\right)$$
+
+et
+
+$$Q^n \left\{ L_n \leq z \right\} \leq \exp\left(+ \frac{z}{2} - n H(P,Q)^2\right)$$
+
+
+
+---
+
+### Preuve
+
+À partir de
+
+$$L_n \geq z \qquad \Longleftrightarrow \qquad \prod_{i=1}^n \sqrt{\frac{q(X_i)}{p(X_i)}} \geq \mathrm{e}^{z/2}$$
+
+l'inégalité de Markov entraine
+
+$$\begin{array}{rcl}	P^n \left\{ L_n \geq z \right\} & \leq & \mathrm{e}^{-z/2} \mathbb{E}_{P^n} \left[ \prod_{i=1}^n \sqrt{\frac{q(X_i)}{p(X_i)}}\right] \\	& = & \mathrm{e}^{-z/2}  \rho(P,Q)^n \\	& \leq & \exp\left(-\frac{z}{2} -n H(P,Q)^2\right)\end{array}$$
+
+La seconde inégalité se démontre de manière semblable.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+En choisissant $z=0$, et en définissant le test $T_n$  par
+
+$$T_n = \mathbb{I}_{L_n \geq 1}$$
+
+on a simultanément
+
+$$\max\left( \mathbb{E}_{P^n}  T_n , \mathbb{E}_{Q^n} (1-T_n) \right) \leq \exp\left(-n H(P,Q)^2\right)$$
+
+Pour tester $P^n$  contre $Q^n$, il suffit que $H(P,Q) \gg 1/\sqrt{n}$. Ce résultat peut être complété par une réciproque.
+
+---
+
+
+### Théorème
+
+Soit $P,Q$  deux lois sur $(\Omega,\mathcal{F})$,
+
+Pour toute région critique d'un test de $P^n$ contre $Q^n$ (tout événement $A$ dans $\mathcal{F}^{\otimes n}$),
+
+$$\max\left(P^n(A), Q^n({A}^c) \right) \geq \frac{1}{4} - \frac{n H(P,Q)^2}{2}$$
+
+
+
+---
+
+
+### Preuve
+
+$$\begin{array}{rcl}	\rho(P^n,Q^n) & = & \int_{\Omega^n} \sqrt{p^n q^n} \mathbb{I}_A \mathrm{d}\nu + \int_{\Omega^n} \sqrt{p^n q^n} \mathbb{I}_{A^c} \mathrm{d}\nu \\	& \leq & \left(\int_{\Omega^n} p^n \mathbb{I}_A \mathrm{d}\nu  \right)^{1/2} \left(\int_{\Omega^n}  q^n\mathrm{d}\nu  \right)^{1/2} + \left(\int_{\Omega^n} p^n \mathrm{d}\nu  \right)^{1/2} \left(\int_{\Omega^n}  \mathbb{I}_{A^c} q^n\mathrm{d}\nu  \right)^{1/2} \\ & = & P^n(A)^{1/2} + Q^n(A^c)^{1/2}\end{array}$$
+
+Par ailleurs,
+
+$$\rho(P^n,Q^n) = (1-H(P,Q)^2)^n$$
+
+Finalement
+
+$$\max\left(P^{\otimes n}(A), Q^{\otimes n}({A}^c) \right) \geq \frac{(1-H(P,Q)^2)^{2n}}{4}  \geq \frac{1}{4} - \frac{nH(P,Q)^2}{2}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+Si $H(P,Q) \ll 1/\sqrt{n}$,
+la probabilité d'erreur de première et  la probabilité d'erreur de seconde espèce ne peuventt  être simulatnément arbitrairement petites
+
+Ces observations permettent
+
+- d'estimer des vitesses de séparation
+
+- de quantifier rapidement les vitesses d'estimation dans les problèmes paramétriques
+
+---
+class: inverse, middle, center
+
+## Tests entre boules de Hellinger
+
+---
+
+La construction de bons tests entre hypothèses composées est (en général) un problème difficile si on cherche à disposer de garanties uniformes sous les deux hypothèses `r fontawesome::fa("frown")`
+
+--
+
+Lorsque les deux hypothèses sont des boules de Hellinger
+
+$$\mathcal{B}(P_0, \epsilon) =  \{P :  H(P,P_0) \leq \epsilon \} \qquad \text{et} \qquad \mathcal{B}(Q_0, \epsilon) = \{ Q :  H(Q,Q_0)\leq \epsilon \}$$
+
+dont les centres sont assez bien séparés $H(P_0,Q_0)\geq 3 \epsilon$,
+
+un test de rapport de vraisemblance bien construit permet de majorer les erreurs de première et de seconde espèce sur la réunion des deux boules
+`r fontawesome::fa("glass-cheers")`
+
+---
+
+
+Ce test de rapport de vraisemblance  (TRV) ne compare pas les vraisemblances sous $P_0$ et $Q_0$
+
+mais
+
+--
+
+Ce TRV compare les vraisemblances sous deux lois $P_1$ et $Q_1$ _à spécifier_, appartenant respectivement  à $\mathcal{B}(P_0, \epsilon)$ et $\mathcal{B}(Q_0, \epsilon)$
+
+---
+
+### Convention
+
+Les deux lois centrales $P_0$ et $Q_0$ sont identifiées à des points de la sphère unité de $L_2(\nu)$
+
+On note $\omega \in [0, \pi/2]$ la distance angulaire entre ces deux points:
+
+$$\cos(\omega)= \rho(P_0,Q_0) \qquad \text{soit}\qquad H(P_0,Q_0)^2=2 \sin(\omega/2)^2$$
+
+
+---
+
+### Définition : Arc de Hellinger
+
+L'arc de cercle  qui relie les points correspondants à $P_0$ et $Q_0$ sur la sphère unité peut être paramétré par l'angle $\beta \omega$  avec le rayon défini par $P_0$ ( $\beta \in [0,1]$ )
+
+La densité correspondante est $v_ \beta^2$ où
+
+$$v_ \beta = \frac{1}{\sin(\omega)} \left( \sin(\beta \omega) \sqrt{q_0} + \sin((1- \beta) \omega) \sqrt{p_0}\right)$$
+
+Cet arc et les lois  définies sont appelés _arc de Hellinger_ engendré par $P_0$ et $Q_0$
+
+
+---
+
+### Affinité sur l'arc de Hellinger
+
+L'affinité entre $P_0$ et une loi de l'arc de Hellinger $P_ \beta$ se déduit de l'écart angulaire :
+
+$$\cos(\beta \omega) = \rho(P_0, P_ \beta) = \sin(\beta \omega)  \cot(\omega) + \frac{\sin((1- \beta) \omega)}{\sin (\omega)}$$
+
+Les lois $P_1 \in \mathcal{B}(P_0,\epsilon)$ et $Q_1 \in \mathcal{B}(Q_0,\epsilon)$
+
+correspondent à
+
+$\beta=1/3$ et $\beta=2/3$.
+
+Notons que
+
+$$\rho(P_1,Q_1) = \rho(P_0,P_1) = \rho(Q_1,Q_0)= \cos(\omega/3)$$
+
+On note $p_1$ (resp. $q_1$) la densité de $P_1$ (resp. $Q_1$)
+
+
+---
+
+
+### Le test entre boules
+
+
+Le rapport de vraisemblance utilisé pour construire le test entre les boules de Hellinger
+
+$$\mathcal{B}(P_0, H(P_0,P_1))\qquad \text{et} \qquad \mathcal{B}(Q_0, H(Q_0,Q_1))$$
+
+est
+
+$$\psi(X_i) = \sqrt{\frac{q_1(X_i)}{p_1(X_i)}}$$
+
+Le test sur un $n$-échantillon  est construit sur la statistique
+
+$$\prod_{i=1}^n \sqrt{\frac{q_1(X_i)}{p_1(X_i)}}$$
+
+---
+class: inverse, middle, center
+
+
+## Les performances du test
+
+---
+
+
+### Théorème
+
+Soit $P_0,Q_0$ deux lois de probabilités sur $\mathcal{X}$,
+
+il existe une statistique $\psi: \mathcal{X} \rightarrow [0,\infty)$ telle que pour toute loi $R$ sur $\mathcal{X}$,
+
+$$\begin{array}{rcl}	\mathbb{E}_R \psi(X) & \leq & 1 -\frac{5}{24} H(P_0,Q_0)^2  \qquad \text{ si } H(P_0,R)\leq \frac{1}{4} H(P_0,Q_0)\\ 	\mathbb{E}_R \frac{1}{\psi(X)} & \leq & 1 -\frac{5}{24} H(P_0,Q_0)^2 \qquad\text{ si } H(Q_0,R)\leq \frac{1}{4} H(P_0,Q_0)\end{array}$$
+
+---
+
+### Preuve
+
+On note $\epsilon = H(P_0,P_1) = H(Q_0,Q_1)$.
+
+Soit $R \in \mathcal{B}(P_0,\epsilon)$
+
+Les lois $R, P_0, Q_0$  définissent une sphère de dimension 2
+dans la sphère unité de $L_2(\nu)$.
+
+Les lois $P_1$ et $Q_1$ appartiennent aussi à cette sphère puisqu'elles appartiennent au cercle engendré par $P_0$  et $Q_0$.
+
+On note $s,t$ et $r$ les densités de $Q_1,P_1$ et $R$ par rapport à $\nu$:
+
+$$\mathbb{E}_R \psi(X) = 	\int_{\mathcal{X}} r \sqrt{\frac{s}{t}} \mathrm{d}\nu =	\int_{\mathcal{X}}  \sqrt{\frac{s}{t}}\left(\sqrt{r} -\sqrt{t}\right)^2 \mathrm{d}\nu 	+ 2 \int_{\mathcal{X}}  \sqrt{{s}{r}} \mathrm{d}\nu	- \int_{\mathcal{X}}   \sqrt{{s}{t}} \mathrm{d}\nu$$
+
+---
+
+### Preuve (suite)
+
+Par construction de $s$ et $t$
+
+$$\sqrt{\frac{s}{t}}	\leq \frac{\sin(2 \omega/3)}{\sin(\omega/3)} = 2 \cos(\omega/3)$$
+
+ce qui entraine
+
+$$\mathbb{E}_R \psi(X) \leq 4 \cos(\omega/3) H(R,P_1)^2 +2 \rho(R,Q_1) - \rho(P_1,Q_1)$$
+
+On peut profiter du fait que $\sqrt{r} \in L_2(\nu)$: on peut décomposer $\sqrt{r}$ en une combinaison linéaire d'un élément de l'arc de Hellinger $v_ \gamma$ ( $\gamma\in [0,2 \pi/\omega)$ )
+et $u \in L_2(\nu), u \bot \sqrt{s}, u \bot \sqrt{t}$:
+
+$$\sqrt{r} = u +  \theta v_ \gamma$$
+
+avec $\int u^2 \mathrm{d}\nu + \theta^2=1$.
+
+
+---
+
+### Preuve (suite)
+
+Cette décomposition permet de réécrire
+
+$$\rho(R,Q_1) = \theta \cos((\gamma-2/3)\omega) \qquad \rho(R,P_1)= \theta \cos((\gamma-1/3)\omega)$$
+
+On utilisera
+
+$$H(P_1,P_0)^2 =  1 - \cos(\omega/3)=  2 \sin(\omega/6)^2\qquad H(P_0,Q_0)^2 =  2 \sin(\omega/2)^2$$
+
+et le fait que $\sin(x)/x$ est décroissant sur $[0,\pi/2]$, pour justifier
+
+$$H(P_1,P_0)^2 \geq \frac{1}{9} H(P_0,Q_0)^2$$
+
+En combinant ces observations :
+
+$$\begin{array}{rcl}	\mathbb{E}_R \psi(X) &\leq &4 \cos(\omega/3)( 1 - \theta\cos((\gamma-1/3)\omega) ) + 2 \theta \cos((\gamma-2/3)\omega)- \cos(\omega/3) \\& \leq & 3 \cos(\omega/3)- 2 \theta \cos(\gamma \omega) \\
+& = & 3 \rho(P_1,P_0) - 2 \rho(R,P_0) \\ & =  & 1 - 3 H(P_1,P_0)^2 + 2 H(R,P_0)^2 \\ & \leq & 1 - \tfrac{1}{3} H(Q_0,P_0)^2 + 2 H(R,P_0)^2\end{array}$$
+
+---
+
+### Preuve (suite et fin)
+
+Si $H(R,P_0) \leq \tfrac{1}{4} H(Q_0,P_0)$,
+
+$$\mathbb{E}_R \psi(X)  \leq 1 - \tfrac{5}{24} H(Q_0,P_0)^2$$
+
+Sous $R^{n}$,
+
+$$\begin{array}{rcl} {\mathbb{P} \left\{ \prod_{i=1}^n \psi(X_i) \geq 1 \right\}} & \leq  &  \left(\mathbb{E}_R \psi(X) \right)^n	\\ & \leq & \exp \left(- n \frac{5}{24}  H(Q_0,P_0)^2 \right)\end{array}$$
+
+`r fontawesome::fa("square")`
+
+
+---
+
+
+Pour séparer
+
+$$\mathcal{B}(P_0, H(P_0,Q_0)/4)\qquad \text{de}\qquad \mathcal{B}(Q_0, H(P_0,Q_0)/4)$$
+ à partir d'un $n$-échantillon,
+
+on utilise le test $T_n$ défini par
+
+$$T_n(X_1,\ldots,X_n) =  \begin{cases}		1 & \text{ si } \prod_{i=1}^n \psi(X_i) \geq 1 \\		0 & \text{ sinon.} \end{cases}$$
+
+
+---
+
+
+
+### Corollaire
+
+Soit $P_0,Q_0$  deux lois telles que $H(P_0,Q_0)= \epsilon$,
+
+il existe un test de rapport de vraisemblance  $T_n$
+
+tel que
+
+$$\max\left( \sup_{R \in \mathcal{B}(P_0, \frac{\epsilon}{4})} \mathbb{E}_R T_n , \sup_{R \in \mathcal{B}(Q_0,\frac{\epsilon}{4})} \mathbb{E}_R (1-T_n) \right)\leq \exp \left(- n \frac{5 \epsilon^2}{24}   \right)$$
+
+
+???
+
+La construction de ce test de rapport de vraisemblance original et son analyse conduisent à
+
+
+
+---
+exclude: true
+
+
+## Remarques bibliographiques % (fold)
+\label{sec:biblio_tests}
+
+Les mesures d'information (entropie relative, distance en variation, ...) sont discutées dans:
+
+\fullcite{CsiShi04}.
+
+On trouvera un model d'emploi raisonné et des comparaisons systématiques dans:
+
+\fullcite{MR2013911}.
+
+Le rôle essentiel de la distance de Hellinger dans l'analyse des modèles paramétriques est exposé dans:
+
+\fullcite{vandervaart:1998}
+
+La construction de tests robustes entre boules de Hellinger ouvre la voie à des méthodes d'estimations intéressantes.
+Cette idée remonte aux travaux de Lucien Le Cam durant les années 60 et 70. Aprés simplification, clarification et généralisation, grâce
+notamment à:
+
+\fullcite{MR3186748}.
+
+Ces tests robustes ont trouvé un usage dans la construction de méthodes d'estimation remarquables:
+
+\fullcite{BaBiSa16}.
+
+Dans le chapitre _Likelihood-based procedures_ de:
+
+\fullcite{GinNic15},
+
+on trouve des applications de la construction de tests entre boules de Hellinger à l'estimation non-paramétrique.
 
 
 ---
@@ -129,5 +553,3 @@ background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
-
----
