@@ -108,9 +108,7 @@ class: inverse, middle
 
 ### ANOVA
 
-### Variable selection
 
-### Linear regression and Optimization
 
 
 ---
@@ -234,8 +232,8 @@ whiteside %>%
   ggplot(mapping=aes(y=Gas, x=Temp)) +
   geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
   ggtitle("Whiteside data", subtitle = "simple linear regression") +
-  geom_point(aes(shape=Insul)) +
-  theme(legend_position=c(0.1, .15))
+  geom_point(aes(shape=Insul))  # +
+#  theme(legend_position=c(0.1, .15))
 ```
 ]
 
@@ -364,7 +362,7 @@ $$\begin{bmatrix} \mathrm{Gas}_1 \\  \vdots \\  \mathrm{Gas}_{56}\end{bmatrix}  
 
 ```{r, eval=FALSE, echo=TRUE}
 whiteside %>%
-  lm(formula = Gas ~ Temp * Insul) #<<
+  lm(formula = Gas ~ Temp * Insul, data = .)  #<<
 ```
 
 ---
@@ -686,8 +684,8 @@ $$\begin{bmatrix}\mathrm{Gas}_1 \\  \vdots \\  \mathrm{Gas}_{56} \end{bmatrix}  
 We still assume _homoschedastic_ noise
 
 ---
-
 exclude: true
+
 ```{r}
 require("parsnip")
 require(Formula)
@@ -708,7 +706,7 @@ lm_fit <-
 ```
 
 ```{r}
-model.matrix(lm_2) %>% View()
+# model.matrix(lm_2) %>% View()
 ```
 
 ---
@@ -831,13 +829,12 @@ names(lm_df) <- c("full", "true")
 ```
 
 ---
+
 ### The true model
 
 ```{r}
 formula_true
 ```
-
----
 
 ```{r, echo=FALSE}
 rsss <- map_dbl(lm_df,
@@ -894,9 +891,11 @@ small_distance = norm(coefficients(lm_df[['true']]) - betas[important_coeffs], t
 
 ### Diagnosing the full model
 
-.fl.w-third.pa2[
+.panelset[
 
-```{r qplot-residuals-label, fig.show='hide', fig.height=4}
+.panel[.panel-name[Code]
+
+```{r qplot-residuals-label, fig.show='hide', fig.height=3.5}
 xx <- residuals(lm_df[['full']])
 yy <- fitted.values(lm_df[['full']])
 qplot(y=yy,
@@ -910,14 +909,17 @@ qplot(y=yy,
 
 ]
 
-.fl.w-two-thirds.pa2[
+.panel[.panel-name[Residuals versus Fitted plot]
 
 ![](`r knitr::fig_chunk("qplot-residuals-label","png")`)
 
 ]
+
+]
+
 ---
 
-###
+###  
 
 
 ```{r}
@@ -981,7 +983,7 @@ class: middle, center, inverse
 ### Computing the Fisher $F$ statistic for comparing model 0 and model 1
 
 As we are dealing with simulated data, we can behave as if a benevolent _oracle_
-had whispered that all but `13` coefficients are null, and even told us the index
+had whispered that all but `97` coefficients are null, and even told us the index
 of the non-null coefficients.
 
 We fit this exact and minimal model to the data.
@@ -1020,7 +1022,9 @@ Note that both the null and alternative hypotheses are composite.
 
 ---
 
-The null hypothesis asserts that the true vector of coefficients belong to a linear subspace of dimension `13` of $\mathbb{R}^{100}$. If we stick to Gaussian linear modelling
+The null hypothesis asserts that the true vector of coefficients belong to a linear subspace of dimension `13` of $\mathbb{R}^{100}$. 
+
+If we stick to Gaussian linear modelling
 we may test this null hypothesis by performing a _Fisher test_.
 
 Under the null hypothesis,
@@ -1045,9 +1049,19 @@ On the second row, column `statistic` contains the Fisher statistic. The `p.valu
 
 ---
 
-The rule of thumb when using the `p.value` reported by a test function is the following: if you are ready to be wrong _under the null hypothesis_ with probability $\alpha$, then you should reject when the `p.value` is less than $\alpha$.
+### Handling $p$-values
 
-We can decompose the computations performed by ANOVA.
+The rule of thumb when using the `p.value` reported by a test function is the following: 
+
+> If, _under the null hypothesis_, you  accept to be wrong  with probability $\alpha$, 
+
+> then 
+
+> you should reject when the `p.value` is less than $\alpha$
+
+In words: if you are looking for a _level_ (probability of an error of the first kind) equal to $\alpha$, you should reject the null hypothesis when the $p$-value is less than $\alpha$
+
+We can decompose the computations performed by ANOVA
 
 ---
 exclude: true
@@ -1069,23 +1083,26 @@ lm.0 %>% summary()
 ```
 
 ---
+exclude: true
 class: middle, center, inverse
 
 ## Iterative methods for OLS
 
 ---
+exclude: true
 class: middle, center, inverse
 
 ## ...
 
 ---
+exclude: true
 class: middle, center, inverse
 
 ## Ridge regression
 
 
 ---
-
+exclude: true
 ### Regularized least squares criterion
 
 For each $\lambda>0$, the penalized least square costs is defined by
@@ -1101,40 +1118,43 @@ Unique optimum
 $$\big(\lambda \operatorname{Id} + Z^TZ\big)^{-1} Z^T Y$$
 
 ---
-
+exclude: true
 ### Solution
 
 
 
 ---
+exclude: true
 class: middle, center.inverse
 
 ## Split/Apply/Combine and (Ridge) regression
 
 ---
-
+exclude: true
 
 
 ---
+exclude: true
 class: middle, center, inverse
 
 ## Feature engineering
 
 ---
+exclude: true
 class: middle, center, inverse
 
 ##
 
 ---
+exclude: true
 class: middle, center, inverse
 
 ##
 
 ---
 class: center, middle, inverse
-background-image: url(img/Piet_Mondriaan_1921_-_Composition_en_rouge_jaune_bleu_et_noir.jpg)
+background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
 
----
