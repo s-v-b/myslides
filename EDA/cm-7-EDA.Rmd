@@ -1,6 +1,6 @@
 ---
-title: "EDA VI"
-subtitle: "⚔<br/>Statistiques Master I, MFA et MIDS"
+title: "EDA VII"
+subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
@@ -88,14 +88,13 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-
-
-# Exploratory Data Analysis VI CA
+# Exploratory Data Analysis VII CA
 
 ### `r Sys.Date()`
 
-#### EDA Master I MIDS et MFA
+#### [EDA Master I MIDS et MFA](/courses/eda/index.html)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: middle, inverse
