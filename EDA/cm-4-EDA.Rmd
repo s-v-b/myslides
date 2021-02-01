@@ -84,12 +84,13 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-# Multilinear Regression
+# Multilinear Regression I
 
 ### `r Sys.Date()`
 
-#### EDA Master I MIDS et MFA
+#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: inverse, middle
@@ -919,7 +920,7 @@ qplot(y=yy,
 
 ---
 
-###  
+###
 
 
 ```{r}
@@ -1022,7 +1023,7 @@ Note that both the null and alternative hypotheses are composite.
 
 ---
 
-The null hypothesis asserts that the true vector of coefficients belong to a linear subspace of dimension `13` of $\mathbb{R}^{100}$. 
+The null hypothesis asserts that the true vector of coefficients belong to a linear subspace of dimension `13` of $\mathbb{R}^{100}$.
 
 If we stick to Gaussian linear modelling
 we may test this null hypothesis by performing a _Fisher test_.
@@ -1051,11 +1052,11 @@ On the second row, column `statistic` contains the Fisher statistic. The `p.valu
 
 ### Handling $p$-values
 
-The rule of thumb when using the `p.value` reported by a test function is the following: 
+The rule of thumb when using the `p.value` reported by a test function is the following:
 
-> If, _under the null hypothesis_, you  accept to be wrong  with probability $\alpha$, 
+> If, _under the null hypothesis_, you  accept to be wrong  with probability $\alpha$,
 
-> then 
+> then
 
 > you should reject when the `p.value` is less than $\alpha$
 
@@ -1157,4 +1158,3 @@ background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
-
