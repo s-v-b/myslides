@@ -89,21 +89,24 @@ class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Motivation
+### [Motivation](./#motivation)
 
-### Outils probabilistes
+### [Principe](./#methode-moments)
 
-### Conditions suffisantes de consistance
+### [Outils probabilistes](./#outils)
 
-### Entropie relative
+### [Conditions suffisantes de consistance](./#tout-va-bien)
 
-### Modéles exponentiels
+### [Entropie relative](./#entropie-relative)
 
-### Performances de la méthode des moments
+### [Modéles exponentiels](./#modeles-exponentiels)
+
+### [Performances de la méthode des moments](./#performance-moments)
 
 
 ---
 class: center, middle, inverse
+name: motivation
 
 ## Motivation
 
@@ -138,8 +141,22 @@ Ce que nous appelons méthode, il faudrait peut être l'appeler point de vue.
 
 Ces méthodes ne sont pas exclusives les unes des autres
 
+
+???
+
+- $Z$-estimation. Z comme zéro. Ces méthodes reviennent à résoudre un système d'équations ou
+de manière équivalente à chercher les zéros d'une fonction
+
+- $M$-estimation. M comme maximisation de la vraisemblance, ou  minimisation d'un contraste, minimisation
+d'un risque quadratique, absolu, ...
+
+Ces méthodes ne sont pas les seules, les méthodes à noyau ou les méthodes de plus proches voisins,
+très utilisées en statistique non-paramétrique, ne sont pas dans ces catégories
+
+
 ---
 class: middle, center, inverse
+name: methode-moments
 
 ## Méthode des moments
 
@@ -228,6 +245,7 @@ Pour le moment, nous allons supposer que nous sommes dans une situation comparab
 
 ---
 class: center, middle, inverse
+name: outils
 
 ## Outils probabilistes
 
@@ -245,8 +263,12 @@ Mais,
 si $Y$ est une variable aléatoire dégénéree presque sûrement égale à une constante $y$, alors on peut s'appuyer sur le lemme de Slutsky.
 
 ---
+name: slutsky
+
 
 ### Lemme de Slutsky
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si
 - $(X_n)_n$  suite de v.a. sur $(\Omega_n, \mathcal{F}_n, P_n)$
@@ -256,6 +278,9 @@ telle que $X_n \rightsquigarrow X$,
 
 alors
 $$(Y_n, X_n) \rightsquigarrow (y,X)$$
+
+]
+
 
 ---
 
@@ -285,8 +310,11 @@ $$\lim_n \mathbb{E} \mathbb{I}_{d(Y_n,y)>\epsilon}=0$$
 
 
 ---
+name: slutsky-off-the-shelf
 
 ### Théorème `r fontawesome::fa("plug")`
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit $(X_n)_{n \in \mathbb{N}}$ une suite de v.a. à valeurs dans $\mathbb{R}^k, X$ une autre v.a. à valeur dans $\mathbb{R}^k$, soit $(Y_n)_{n \in \mathbb{N}}$ une suite de   v.a. à valeurs dans $\mathbb{R}^{k'}$
 
@@ -298,12 +326,15 @@ pour $g$ continue de
 $\mathbb{R}^k \times  \mathbb{R}^{k'} \to \mathbb{R}^{k''}$
 $$g (X_n, Y_n) \rightsquigarrow g (X, y)$$
 
+]
 
 ---
-
+name: delta-1
 
 
 ### Méthode Delta au premier ordre
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soient
 - $(a_n)_n$ une suite positive qui tend vers l'infini.
@@ -322,12 +353,16 @@ alors
 - $a_n\left(f(X_n) -f(\vec{x})\right) - a_n  Df \left(X_n - \vec{x}\right) \stackrel{P}{\rightarrow} 0$
 - $a_n\left(f(X_n) -f(\vec{x})\right) \rightsquigarrow Df X$.
 
+]
+
+
 ???
 
 Le lemme de Slutsky est un élément de la preuve du théorème suivant appelé
 méthode delta (Cramer, 1946)
 
 ---
+exclude: true
 
 ### Preuve
 
@@ -337,6 +372,7 @@ méthode delta (Cramer, 1946)
 
 ---
 class: center, middle, inverse
+name: tout-va-bien
 
 ## Conditions suffisantes de consistance et de normalité
 
@@ -358,6 +394,8 @@ Meme si elles sont vérifiées, elles ne garantissent pas que la méthode des mo
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Si $\Theta$  est un ouvert de $\mathbb{R}^k$, si la fonction
 $$\begin{array}{rl}\psi: & \Theta \rightarrow  \mathbb{R}^k \\ & \theta \mapsto  \left(\mathbb{E}_{\theta} T_1(X), \ldots, \mathbb{E}_{\theta} T_k(X)\right)^t \end{array}$$
 est
@@ -375,6 +413,8 @@ $\widehat{\theta}_n = \psi^{-1}(\overline{T}_n)\in \Theta$
 ii.) $(\widehat{\theta}_n)_{n \in \mathbb{N}} \stackrel{\text{p.s.}}{\longrightarrow} \theta\qquad \text{sous } P^{\otimes \mathbb{N}}_ \theta$
 
 iii.) $\sqrt{n} \big( \widehat{\theta}_n  - \theta\big) \rightsquigarrow \mathcal{N}\left(0, (D \psi_{\vert \theta})^{-1}\operatorname{cov}_ \theta(T) (D \psi_{\vert \theta}^t)^{-1}\right)$
+
+]
 
 
 ???
@@ -410,11 +450,13 @@ Le point iii) résulte d'une application de la méthode delta
 La discussion sur l'approche des moments reste informelle, parce qu'il est difficile de caractériser les situations où  la question i) (voir plus haut) possède une réponse satisfaisante.
 
 ---
+name: entropie-relative
 class: middle, center,inverse
 
 ## Entropie relative
 
 ---
+exclude: true
 
 TODO:  ménager une transition
 
@@ -422,11 +464,14 @@ TODO:  ménager une transition
 ---
 ### Quantifier la similitude entre deux lois de probabilités
 
-Une _divergence d'information entre deux lois_ est une quantité _intrinsèque_: elle n'est pas définie relativement à une paramétrisation.
+Une _divergence d'information entre deux lois_ est une quantité _intrinsèque_: elle n'est pas définie relativement à une paramétrisation
 
-Une divergence d'information peut être calculée en choisissant des densités par rapport à une mesure de référence.
+Une divergence d'information peut être calculée en choisissant des densités par rapport à une mesure de référence
 
-Mais le résultat du calcul ne doit dépendre que des lois, et pas du choix d'un mesure dominante ou du choix des densités.
+Mais le résultat du calcul ne doit dépendre que des lois, et pas du choix d'un mesure dominante ou du choix des densités
+
+???
+
 
 ---
 
@@ -490,6 +535,8 @@ Le seul cas d'égalité possible est $P=Q$ (stricte convexité de $x \mapsto x \
 
 ---
 class: middle, center,inverse
+name: modeles-exponentiels
+
 
 ## Modèles exponentiels
 
@@ -543,20 +590,22 @@ L'ensemble $\tilde{\Theta}$ est en fait le domaine de définition de la fonction
 
 ---
 
-### Exemple
+### Exemple gaussien
 
-n peut vérifier que les gaussiennes univariées s'inscrivent dans ce schéma:
+Les gaussiennes univariées s'inscrivent dans ce schéma:
 
 $$\frac{1}{\sigma} \phi\left( \frac{x- \mu}{\sigma}\right) =  \exp\left( \frac{\mu}{\sigma^2} x - \frac{1}{2 \sigma^2} x^2 - \frac{\mu^2}{2 \sigma^2} - \frac{1}{2} \log \left(2 \pi \sigma^2\right)\right)$$
 
 
 La mesure dominante $\nu$ est la mesure de Lebesgue,
 
-$T_1(x)= x, T_2(x) = - x^2$, $\theta =(\mu/\sigma^2, 1/(2 \sigma^2))^t$,
+$$T(x) = \begin{pmatrix} x \\ - x^2\end{pmatrix} \qquad \theta =\begin{pmatrix}\mu/\sigma^2 \\ 1/(2 \sigma^2)\end{pmatrix}$$
 
 et
 
 $$Z(\theta) = \exp\left(\frac{\mu^2}{2 \sigma^2} \right)\sqrt{2 \pi \sigma^2}$$
+
+$$\log Z(\theta) = \frac{\theta_1^2}{2\theta_2} - \frac{1}{2} \log \frac{\theta_2}{\pi}$$
 
 ---
 
@@ -579,24 +628,36 @@ Nous collerons à la paramétrisation classique, avec $p$ paramètre de forme, e
 On peut formuler dans le cadre des modèles exponentiels en forme canonique,
 
 - les gaussiennes multivariées,
+
 - les lois gamma,
+
 - les lois de Poisson,
+
 - les lois géométriques,
 
-et bien d'autres familles de lois usuelles
+et bien d'autres familles de lois usuelles  ...
+
+???
+
+Les modèles graphiques (_graphical models_) constituent des exemples importants et utiles de
+modèles exponentiels
 
 ---
 
 ### Convexité du modèle exponentiel
 
+La convexité joue un rôle essentiel
 
-La convexité joue un rôle essentiel dans l'étude des modèles exponentiels, mais aussi dans la mise en oeuvre
-des méthodes d'estimation.
+- dans l'étude des modèles exponentiels, mais aussi
+
+- dans la mise en oeuvre effective des méthodes d'estimation
 
 
 ---
 
 ### Théorème
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soient
 - $\nu$   une mesure $\sigma$-finie dominante sur $(\mathcal{X},\mathcal{F})$, et
@@ -605,6 +666,9 @@ Soient
 1. S'il n'est pas vide, le domaine de la fonction de partition:
 $$\widetilde{\Theta}  = \left\{ \theta: \theta \in \mathbb{R}^d,   Z(\theta):= \int_{\mathcal{X}} \mathrm{e}^{\langle \theta, T(x)\rangle} \nu(\mathrm{d} x)< \infty\right\}$$  est convexe
 2. La fonction $\theta \mapsto \log Z(\theta)$ est convexe sur le domaine $\widetilde{\Theta}$
+
+]
+
 
 ---
 
@@ -623,6 +687,8 @@ $$\begin{array}{rcl}
 On a donc
 
 $$\log Z \left( \lambda\theta+(1- \lambda)\theta'\right) \leq \lambda \log Z(\theta) + (1- \lambda) \log Z(\theta') \, .$$
+
+`r fontawesome::fa("square")`
 
 
 ---
@@ -650,7 +716,10 @@ Dans les modèles exponentiels, l'_identifiabilité_ est liée à l'_irredondanc
 
 ### Definition: modèle _minimal ou de plein rang_ (_irredondant_)
 
-Un modèle exponentiel est minimal ou de plein  rang si et seulement si
+Un modèle exponentiel est minimal ou de plein  rang
+
+si et seulement si
+
 pour tout $c \in \mathbb{R}^k$, le vecteur aléatoire $\langle c, T(X)\rangle$  n'est pas $\nu$-presque partout constant.
 
 
@@ -658,8 +727,15 @@ pour tout $c \in \mathbb{R}^k$, le vecteur aléatoire $\langle c, T(X)\rangle$  
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Un modèle exponentiel en forme canonique est minimal (ou de plein rang)
-si et seulement si il est identifiable
+
+si et seulement si
+
+il est identifiable
+
+]
 
 ---
 
@@ -670,7 +746,8 @@ $\Rightarrow$)  Si $\theta\neq \theta'$ et $p_\theta(x)=p_{\theta'}(x)$ $\nu$-pr
 $$\langle \theta- \theta', T(x)\rangle = \log Z(\theta)/Z(\theta') \qquad \nu-\text{p.p.}$$
 
 Ce qui signifie que
-$$\nu$-pp, $\langle \theta- \theta', T(x)\rangle$$
+
+$$\nu-\text{p.p.},\qquad \langle \theta- \theta', T(x)\rangle$$
 
 
 est constant, ce qui contredit l'hypothèse de minimalité
@@ -702,6 +779,8 @@ Elles  permettent d'en étudier les propriétés
 
 ### Théorème
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 La fonction $\theta \mapsto \log Z(\theta)$
 est $C^\infty$ sur $\Theta =  \widetilde{\Theta}^\circ$
 
@@ -713,7 +792,7 @@ et
 
 $$\nabla^2 \log Z(\theta) =  \operatorname{var}_{P_\theta}(T(X))$$
 
-
+]
 
 ---
 
@@ -728,6 +807,8 @@ La proposition suivante, intéressante en soi, jouera un rôle dans la preuve du
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Dans un modèle exponentiel canonique, si $\theta \in \Theta$, $\theta$ appartient à l'_intérieur_ du domaine de la fonction de partition
 
 alors
@@ -736,7 +817,7 @@ pour tout $i \leq  d$, pour tout $k \in \mathbb{N}$,
 
 $$\mathbb{E}_\theta \left[ \left| T_i(X)\right|^k\right] < \infty$$
 
-
+]
 
 ---
 
@@ -801,11 +882,15 @@ La combinaison du théorème et de la proposition  nous livre une autre caracté
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Un modèle exponentiel est identifiable
 
 si et seulement si
 
 en tout $\theta \in \Theta$, la différentielle seconde de $\log Z$  est inversible, autrement dit,  le Hessien $∇^2_\theta \log Z$ est défini positif
+
+]
 
 ---
 
@@ -854,17 +939,23 @@ L'entropie relative entre deux éléments d'une famille exponentielle se lit dir
 
 $$D(P_\theta \Vert P_{\theta'}) = \log Z(\theta') -\log Z(\theta) + \langle \nabla \log Z(\theta), \theta -\theta'\rangle$$
 
+`r fontawesome::fa("bulkhorn")` Ce calcul fournit une preuve concise de la relation entre
+identifiabilité et injectivite de $\theta \mapsto \nabla \log Z(\theta)$
+
+--
+
 Lorsque $\theta'$ tend vers $\theta$,
 
 $$D(P_\theta\Vert P_{\theta'}) \sim  \frac{1}{2} (\theta- \theta')^t \nabla^2 \log Z(\theta) (\theta-\theta')$$
 
 
-Ce calcul fournit une preuve concise de la relation entre
-identifiabilité et injectivite de $\theta \mapsto \nabla \log Z(\theta)$
 
 ---
 
 ### Proposition
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 
 Si un modèle exponentiel est _identifiable_,
 
@@ -873,6 +964,8 @@ alors
 $$ \Lambda:  \theta \mapsto \Lambda(\theta) = \nabla \log Z(\theta)$$
 
 est injective sur $\Theta$
+
+]
 
 ---
 
@@ -900,6 +993,7 @@ $$\nabla \log Z(\theta) = \mathbb{E}_ \theta[T(X)]$$
 `r fontawesome::fa("square")`
 
 ---
+name: modeles-exponentiels
 class: center, inverse, middle
 
 
@@ -913,6 +1007,8 @@ Nous sommes maintenant outillés pour vérifier que la méthode des moments four
 ---
 
 ### Théorème
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit $(\mathbb{R}^p, \mathcal{B}(\mathbb{R}^p), \Theta \subseteq \mathbb{R}^d )$  un modèle exponentiel en forme canonique de mesure dominante $\nu$, défini par les vraisemblances
 
@@ -930,6 +1026,8 @@ $$\Lambda: \theta \mapsto \Lambda(\theta) = \nabla \log Z(\theta)$$ est un diff�
 
 Si le modèle est identifiable, $\Lambda(\Theta)$ est un ouvert de $\mathbb{R}^d$.
 
+]
+
 ---
 
 ### Preuve
@@ -940,7 +1038,7 @@ si et seulement si
 
 la différentielle de $\Lambda$ est inversible en tout $\theta \in \Theta$
 
-D'après  le _théorème d'inversion locale_:
+D'après  le [_théorème d'inversion locale_](./#inv-locale):
 
 $\forall \theta \in \Theta$, il existe
 
@@ -961,12 +1059,15 @@ On note au passage que $\Lambda(\Theta)$ est ouvert.
 Nous avons vérifié que $\Lambda$ est continuement différentiable et meme plus.
 
 ---
+name: inv-locale
 
 ### Théorème (inversion locale)
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Soit $E$  un espace euclidien, $U \subseteq E$ ouvert, $f: U \to E$ continument différentiable, et $y_0 \in U$.
 
-Si la différentielle de $f$  en $y_0$ ($Df(y_0)$) est
+Si la différentielle de $f$  en $y_0$ ( $Df(y_0)$ ) est
 
 - inversible,
 - d'inverse $(Df(y_0))^{-1}$
@@ -976,6 +1077,8 @@ alors
 - il existe un voisinage ouvert $V \subseteq U$  de $y_0$ et un voisinage ouvert $W$ de $x_0= f(y_0)$, tel que $f$  est bijective de $V$ vers $W$,
 - l'inverse $g$  de $f$ sur $W$ est  différentiable en $x_0$, de différentielle $(Df(y_0))^{-1}$
 
+]
+
 ???
 
 Nous avons fait un peu plus que vérifier que les conditions du théorème
@@ -984,8 +1087,11 @@ $\Lambda$ est injective sur $\Theta$. Nous somme donc en mesure d'invoquer
 le théorème d'inversion globale ci-dessous.
 
 ---
+name: inv-globale
 
 ### Théorème (Théorème d'inversion globale)
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit
 
@@ -997,7 +1103,9 @@ Si la différentielle de $f$  est inversible en tout point de $U$,
 alors
 
 - $f(U)$ est ouvert dans $E$,
-- $f$ admet une inverse continument différentiable sur $f(U)$ ($f$ est un difféomorphisme)
+- $f$ admet une inverse continument différentiable sur $f(U)$ ( $f$ est un difféomorphisme )
+
+]
 
 ---
 
@@ -1061,6 +1169,7 @@ Elle ouvre la voie aux techniques de résolution, ou si nécessaire, aux techniq
 
 ---
 class: middle, center,inverse
+name: performance-moments
 
 ## Performance de la méthode des moments dans les modèles exponentiels
 
@@ -1108,10 +1217,14 @@ La méthode des moments que nous venons de décrire, dans ces modèles exponenti
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Dans un modèle exponentiel minimal, pour tout $\theta \in \Theta$,
 la fonction score en $\theta$ est centrée:
 
 $$\mathbb{E}_ \theta \left[ \nabla \ell_n(\theta) \right] = \mathbb{E}_ \theta \left[ n( \overline{T}_n- \nabla \log Z(\theta))\right] = 0 \, .$$
+
+]
 
 ---
 
@@ -1159,6 +1272,9 @@ On peut conclure.
 
 ### Théorème (Normalité asymptotique)
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+
 Si un modèle exponentiel canonique est minimal,
 
 alors
@@ -1170,6 +1286,7 @@ est consistante et après centrage et normalisation, elle  est asymptotiquement 
 
 $$\sqrt{n} \left(\widehat{\theta}_n - \theta\right)  \rightsquigarrow \mathcal{N} \left( 0 , I(\theta)^{-1}\right)$$
 
+]
 
 ---
 exclude:true

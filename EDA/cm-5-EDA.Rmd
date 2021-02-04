@@ -115,6 +115,18 @@ class: middle, center, inverse
 ## Motivations
 
 ---
+
+### Questions
+
+- Assessing Linear modelling assumptions
+
+
+???
+
+
+
+
+---
 class: middle, center, inverse
 
 ## Tidy approach to modeling
@@ -124,10 +136,904 @@ class: middle, center, inverse
 
 ## Diagnostics
 
+
+???
+
+From Weisberg (Applied Regression, Chapter 8)
+
+> Regression diagnostics are  used _after_ fitting to check if a fitted mean
+> function and assumptions are consistent with observed data.
+> The basic statistcs here are the residuals or possibly the rescaled residuals
+> If the fitted model does not give a set of residuals that appear to be reasonable,
+> then some aspect of the model, either the assumed mean function or assumptions
+> concerning the variance function may be called into doubt
+
+New concepts
+
+- distance measures
+- leverage values
+
+---
+
+### Residuals  `r fontawesome::fa("syringe")`
+
+$$H = X \times (X^ T \times X)^{-1}\times X\qquad \text{Hat matrix}$$
+
+$$\widehat{\epsilon} = Y - \widehat{Y} = (\text{Id} -H) \epsilon \qquad\text{residuals}$$
+
+Under Gaussian Linear Modeling Assumptions:
+
+- $\widehat{\epsilon} \sim \mathcal{N}(0, \sigma^2 (\text{Id} -H))$
+
+???
+
+The GLM Assumptions comprise different kind of assertions
+
+- noise has constant variance
+- noise is centered
+- noise is Gaussian
+- $\mathbb{E}Y$  in a linear function of $\mathbf{X}$
+
+A corollary of those assumptions is that the distribution of residuals is symmetric
+
+---
+
+### Leverages
+
+The Hat matrix satisfies
+
+$$\sum_{i=1}^n H_{i,i} =  \text{rank}(X)$$
+
+$$0 \leq H_{i,i } \leq 1 \qquad \forall i \leq n$$
+
+
+$$\widehat{Y}_i =  H_{i,i}Y_i + \sum_{j\neq i} H_{i, j} Y_j  \qquad \forall i \leq n$$
+
+$H_{i,i}$ is called the leverage of the $i^{\text{th}}$ case (row)
+
+
+
+???
+
+- Spectral properties of Projection matrices
+
+- If the design is orthogonal (with normed columns) $H = XX^T$
+
+- What does large or small leverages mean ?
+
+- What is a _typical_ leverage ?
+
+- The average leverage is $1/n$
+
+
+
+---
+
+### Leverages
+
+`r fontawesome::fa("hand-point-right")`
+
+Assume that the columns of $\mathbf{X}$ are centered (have zero mean)
+
+Denote by $X_i$ the $i^{th}$ column of $\mathbf{X}^T$
+
+$$H_{i,i} =  X_i^T \times (\mathbf{X}^T\mathbf{X})^{-1} \times X_i$$
+
+Lines $r^2 =  x^T \times (\mathbf{X}^T\mathbf{X})^{-1} \times x$ are centered ellipses
+with axes defined by the eigen vectors of $\mathbf{X}^T\mathbf{X}$
+
+???
+
+Assuming that the columns of $\mathbf{X}$ are centered means that $1$ is in the kernel
+(nullspace) of the Hat matrix
+
+---
+
+### Inspection of leverages for designs connected to `cystfibr`
+
+.panelset[
+
+.panel[.panel-name[`pemax ~ age`]
+
+
+
+]
+
+.panel[.panel-name[`pemax ~ .`]
+
+
+
+]
+
+.panel[.panel-name[Comments]
+
+
+
+]
+
+
+]
+
+
+???
+
+> In some problems, high-leverage points with values close to $1$ can occur, and
+> identifying these cases is very useful in understanding a regression problem
+
+Weisberg p. 170
+
+---
+
+### Standardized residuals
+
+
+
+---
+class: middle, center, inverse
+
+## Leave One Out (LOO)/Jackknife
+
+---
+
+### Notation
+
+.fl.w-50.pa2[
+
+- $Y^{(i)}$: $Y$ deprived from $i^{\text{th}}$ coordinate
+
+- $\mathbf{X}^{(i)}$: designed deprived from $i^{\text{th}}$ row
+
+- $\epsilon^{(i)}$: $ϵ$ deprived from $i^{\text{th}}$ coordinate
+
+]
+--
+
+.fl.w-50.pa2[
+
+- $\widehat{\theta}^{(i)}$: minimizer of $\big\|Y^{(i)} -\mathbf{X}^{(i)}ϑ \big\|^2_2$
+
+$$\widehat{\theta}^{(i)} = \left({\mathbf{X}^{(i)}}^T\mathbf{X}^{(i)}\right)^{-1}{\mathbf{X}^{(i)}}^T$$
+
+- $\widehat{Y}^{(i)} = \mathbf{X} \widehat{\theta}^{(i)}$
+
+]
+
+???
+
+These objects obtained by removing the $i^{\text{th}}$ observation from the data.
+
+Comparing $\widehat{\theta}$ and $\widehat{\theta}^{(i)}$ tells us about the _influence_
+of the $i^{\text{th}}$ sample point
+
+---
+
+### A weighted $\ell_2$ distance from $\widehat{\theta}$
+
+
+$$D(ϑ, \widehat{\theta})= \frac{1}{p \widehat{\sigma}^2}  (ϑ -\widehat{\theta})^T × \big(\mathbf{X}^T\mathbf{X}\big)× (ϑ -\widehat{\theta})$$
+
+
+---
+
+### Cook's distance
+
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+$$D_i = D(\widehat{\theta}^{(i)}, \widehat{\theta})= \frac{1}{p \widehat{\sigma}^2}  (\widehat{\theta}^{(i)} -\widehat{\theta})^T × \big(\mathbf{X}^T\mathbf{X}\big) × (\widehat{\theta}^{(i)} -\widehat{\theta})$$
+
+]
+
+This is a weighted $\ell_2$ distance between $\widehat{\theta}$ and $\widehat{\theta}^{(i)}$, the OLS solution obtained by removing the $i^{\text{th}}$ observation.
+
+???
+
+Cook (1977)
+
+Cook's distance  is a statistic
+
+
+---
+
+### Using $D_i$
+
+Deleting observations with large values of $D_i$ results in substantial changes in the analysis
+
+Observations with the largest few $D_i$ are o special interest
+
+???
+
+---
+
+If $D_i$ were exactly equal to the $\alpha$ quantile of $F_{p, n-p}$
+distribution,
+
+then
+
+deleting the $i^{\text{th}}$ observation would move
+the estimate of $\widehat{\beta}$ to the edge of $1-\alpha$ confidence region
+based on the complete dataset
+
+---
+
+### Efficient computation of Cook's distances
+
+$$D_i = \frac{1}{p} \frac{H_{i,i}}{(1 - H_{i,i})^2} \frac{\left(Y_i - \widehat{Y}_i\right)^2}{\widehat{\sigma}^2}$$
+
+
+--
+
+If all leverages are $1/n$
+
+$$\sum_{i=1}^n D_i =$$
+
+
+---
+
+### LOOCV
+
+
+???
+
+- Ouverture to resampling method
+
+- Jackknife
+
+- Bootstrap
+
+- Cross-Validation
+
+---
+
+###
+
+- $\widehat{Y}^{(i)}_i = X_i^T \widehat{\theta}^{(i)}$ is a linear function of $ϵ^{(i)}$
+
+- $Y_i$ is a linear function of $\epsilon_i$
+
+--
+
+- $Y_i$ and  $\widehat{Y}^{(i)}_i$ are stochastically independent
+
+- We do not need to assume that the noise is Gaussian to ensure that
+
+---
+
+- If noise is centered
+
+$$\mathbb{E}\left[Y_i - \widehat{Y}^{(i)}_i\right] = 0$$
+
+$$\mathbb{E}\left[\left(Y_i - \widehat{Y}^{(i)}_i\right)^2\right] = \sigma^2 (1+ H_{i,i})$$
+
+- If noise is Gaussian
+
+$$Y_i - \widehat{Y}^{(i)}_i \sim \mathcal{N}\left(0, \sigma^2 \left(1+ X_i^T \left({\mathbf{X}^{(i)}}^T \mathbf{X}^{(i)}\right)^{-1}X_i\right)\right)$$
+
+with
+
+$$X_i^T \left({\mathbf{X}^{(i)}}^T \mathbf{X}^{(i)}\right)^{-1}X_i = H_{i,i}$$
+
+---
+
+
+$$\mathbb{E}\left[\sum_{i=1}^n \left(Y_i - \widehat{Y}^{(i)}_i\right)^2\right] = \sigma^2 (n+p)$$
+
+???
+
+Computing the LOOCV estimate
+
+$$\sum_{i=1}^n \left(Y_i - \widehat{Y}^{(i)}_i\right)^2$$
+
+looks demanding
+
+---
+### Leave-One-Out Cross-Validation formula
+
+
+$$\sum_{i=1}^n \left(Y_i - \widehat{Y}^{(i)}_i\right)^2 = \sum_{i=1}^n  \frac{(Y_i - \widehat{Y}_i)^2}{(1-H_{i,i})^2}$$
+
+???
+
+One of the most beautiful formulae in statistics
+
+
+---
+
+### Shermann-Morrison formula (redux)
+
+Let $\mathbf{A}$ be an invertible square matrix and $u, v$ be two vectors
+
+- $\mathbf{A}+ u\,v^T$ is invertible iff $1 + v^T \mathbf{A}^{-1} u \neq 0$
+
+- if $1 + v^T \mathbf{A}^{-1} u \neq 0$
+
+$$\left(\mathbf{A} + u\,v^T\right)^{-1} = \mathbf{A}^{-1} - \frac{1}{1 + v^T \mathbf{A}^{-1} u} \mathbf{A}^{-1} uv^T \mathbf{A}^{-1}$$
+
+??
+
+The inverse of a rank-one perturbation is a rank-one perturbation of the inverse
+
+---
+
+### Proof of Shermann-Morrison formula
+
+If $\mathbf{A} + u\,v^T$ is not invertible, there exists a non-zero vector $w$ such that $$\mathbf{A} w + u\, v^T\, w=0$$
+
+Note that this implies $v^T\, w\neq 0$
+
+This also implies $v^T w + v^T \mathbf{A}^{-1} u v^T w=0$
+
+And thus $1 + v^T \mathbf{A}^{-1} u = 0$
+
+
+---
+
+### Proof of Shermann-Morrison formula (continued)
+
+Conversely, if $1 + v^T \mathbf{A}^{-1} u = 0$
+
+$$\left(\mathbf{A} + u v^T\right)× \left(\mathbf{A}^{-1} u\right) = u \left(1 + v^T \mathbf{A}^{-1} u\right)=0$$
+
+This implies  that $\mathbf{A} + u v^T$ is not invertible
+
+---
+
+### Proof of Shermann-Morrison formula (continued)
+
+To check the  formula, first check the easier formula
+$$\left(\mathbf{Id} + xy^T \right)^{-1} = \mathbf{Id} - \frac{1}{1+ y^Tx} xy^T$$
+for $1 + y^Tx\neq 0$
+
+Then use this formula with $x=\mathbf{A}^{-1}u$ and $y=v$
+
+`r fontawesome::fa("square")`
+---
+
+### Proof of LOOCV formula
+
+Let $\mathbf{X}$ denote the design matrix
+
+Let $X_i$ denote the  $i^{\text{th}}$ column of $\mathbf{X}^T$
+
+Let $\mathbf{X}^{(i)}$ denote the design matrix deprived from its  $i^{\text{th}}$  row
+
+$$\mathbf{X}^T \times \mathbf{X} = \left({\mathbf{X}^{(i)}}^T \mathbf{X}^{(i)}\right) + X_i X_i^T$$
+
+`r fontawesome::fa("hand-point-right")` ${\mathbf{X}^{(i)}}^T \mathbf{X}^{(i)}$ is a rank one perturbation of $\mathbf{X}^T \times \mathbf{X}$
+
+
+---
+
+### Proof of LOOCV formula (continued)
+
+
+
+$$$$
+
+`r fontawesome::fa("square")`
+---
+
+### Proof
+
 ---
 class: middle, center, inverse
 
 ## Exploring models: Variable selection in Gaussian Linear Models
+
+
+---
+
+### Exploring the `cysticfibr` data
+
+.panelset[
+
+.panel[.panel-name[Data]
+
+
+```{r}
+pacman::p_load('ISwR')
+cystfibr <- ISwR::cystfibr
+
+cystfibr <- cystfibr %>%
+  mutate(sex=forcats::fct_recode(factor(sex),
+                                 Male="0",
+                                 Female="1"))
+p <- cystfibr %>%
+  ggplot() +
+  aes(y=pemax) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE, formula = 'y ~ x')
+
+
+```
+
+]
+
+,panel[.panel-name[No effect versus some effect]
+
+
+
+
+]
+
+
+.panel[.panel-name[$p$-value paradox]
+
+
+
+
+- Fisher test suggests some effect
+
+- None of the Student's tests is suggestive
+
+- Fisher test suggests some effect due to variables that are not related
+to lung function
+
+]
+
+]
+
+---
+exclude: true
+
+```{r, echo=FALSE}
+extract_adjr <- function(lm_0){
+  lm_0 %>%
+    broom::glance() %>%
+    `[[`("adj.r.squared") %>%
+    round(2)
+}
+```
+---
+
+### Simple linear regression contest around `cysticfibr`
+
+.panelset[
+
+.panel[.panel-name[Height]
+
+.fl.w-50.pa2[
+```{r, echo=FALSE, fig.height=3}
+lm_cyst<- lm(pemax ~ height, cystfibr)
+
+p + aes(x=height) +
+    annotate("text", x = 1.1*min(cystfibr$height), y = 170,
+           label = paste("Adj. R squared:", extract_adjr(lm_cyst)))
+```
+]
+
+.fl.w-50.pa2[
+
+- Simple linear regression
+```
+lm(pemax ~ height, cystfibr)
+```
+
+- The fact that Adjusted R-Squared is not close to $1$ tells us
+that `height` does not predict `pemax` very accurately
+
+- A poor value of Adjusted R-Squared does not mean that the
+Gaussian Linear Modeling assumption is not valid
+
+
+]
+
+]
+
+.panel[.panel-name[Sex]
+
+.fl.w-50.pa2[
+```{r, echo=FALSE, fig.height=3}
+lm_cyst <- update(lm_cyst, pemax ~ sex)
+
+p + aes(x=sex) +
+  geom_jitter( alpha=.5) +
+  geom_abline(slope=lm_cyst$coefficients[2], #<<
+              intercept= 17 +lm_cyst$coefficients[1], #<<
+              color="blue") +  #<<
+  annotate("text", x = .65, y = 170,
+           label = paste("Adj. R squared:", extract_adjr(lm_cyst)))
+
+```
+]
+
+
+.fl.w-50.pa2[
+
+```
+lm(pemax ~ sex, cystfibr)
+```
+
+- `sex` is a factor (grey points are obtained by jittering)
+
+- `sex` is a poor predictor of `pemax`
+
+]
+
+]
+
+.panel[.panel-name[Age]
+
+.fl.w-50.pa2[
+
+```{r, echo=FALSE, fig.height=3}
+lm_cyst <- update(lm_cyst, pemax ~ age)
+
+
+p + aes(x=age) +
+  annotate("text", x = 1.5*min(cystfibr$age),
+            y = 170,
+            label = paste("Adj. R squared:", extract_adjr(lm_cyst)))
+```
+]
+
+.fl.w-50.pa2[
+
+```
+lm(pemax ~ age, cystfibr)
+```
+
+- Looks very much like
+`lm(pemax ~ height, cystfibr)`
+
+]
+
+]
+
+.panel[.panel-name[About age and height]
+
+.fl.w-50.pa2[
+```{r, echo=FALSE, fig.height=3}
+cystfibr %>%
+  ggplot() +
+  aes(x=age, y=height) +
+  geom_point(aes(shape=sex)) +
+  geom_smooth(method="lm", se=FALSE, formula = 'y ~ x') +
+  annotate("text", x = .8*max(cystfibr$age),
+            y = .7*max(cystfibr$height),
+            label = paste("Adj. R squared:", extract_adjr(lm(height ~ age, cystfibr))))
+```
+]
+
+.fl.w-50.pa2[
+
+```
+lm(height ~ age, cystfibr)
+```
+
+- `age` predicts `height` much better than it predicts `pemax`
+
+- does larger `R squared` mean model is more relevant?
+
+- what does this large `R squared` tell us about the respective merits of `age` and `height`
+when trying to predict `pemax`?
+
+]
+
+]
+
+
+.panel[.panel-name[Discussion]
+
+We can play that game with all covariates
+
+We end up with competing fits
+
+It is hard to tell which fits are the best
+
+Diagnostic statistics help us in deciding whether using a covariate
+is better than using no covariate at all
+
+Diagnostic statistics complement graphical inspection
+
+`r fontawesome::fa("question-circle")` We wonder whether adding more covariates would help
+
+]
+
+
+]
+
+---
+
+
+
+### Simulated data
+
+
+```{r}
+set.seed(1515)
+
+n <- 1000
+p <- 10
+B <- 2000
+s <- 5
+
+sigma <- 1
+```
+
+---
+
+### Regular grid, polynomials
+
+Use function `poly()` to create a design matrix with `n` rows and `p` columns.
+The $i^{\text{th}}$ row is made of $(x_i^k)_{k=0, \ldots, p-1}$ with $x_i= \frac{i}{n+1}$.
+
+Call the design $Z$, name the columns `x0, x1, ...`.
+
+```{r}
+grid <- (1:n)/(n+1)
+Z <- cbind(rep(1,n), poly(grid, degree=p-1, raw = TRUE))
+Z <- as.data.frame(Z)
+colnames(Z) <- stringr::str_c("x", 0:(p-1), sep = "")
+glimpse(Z)
+```
+
+---
+
+### QR factorization
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $Z$ be an $n \times p$ matrix with rank $r$
+
+There exist two matrices  $Q$  and $R$ such that
+
+$$Z = Q \times R$$
+
+and
+
+- $Q$ is an $n \times r$ matrix with $Q^T \times Q = \text{Id}_r$  (the columns of $Q$ are standardized and pairwise orthogonal)
+
+- $R$ is upper-triangular $r \times p$ matrix with non-negative diagonal coefficient
+
+]
+
+
+???
+
+- Applying the Gram-Schmidt orthogonalization procedure to matrix $Z$ eventually leads to QR factorization
+
+- The QR factorization should not be computed using Gram-Schmidt orthogonalization!
+
+- The columns of $Q$ form an orthonormal basis of the linear space spanned by the columns of $Z$
+
+---
+
+### Design properties
+
+The performance of Multiple Linear Regression depends on the
+conditionning of $Z$, namely on the operator norm of $(Z^T Z)^{-1}$
+
+- Compute the QR decomposition of the design matrix
+
+- Compute the _pseudo-inverse_ of the design matrix
+
+---
+
+```{r}
+qrz <- qr(as.matrix(Z))
+
+foo <- qr.Q(qrz)
+bar <- qr.R(qrz)
+H <- t(foo) %*% foo
+```
+
+---
+
+### Linear models with fixed design
+
+Generate a random polynomial of degree `p-1` with `s` non-null coefficients
+$1, 2, \ldots, s$.
+
+The position of the non-null coefficients is random.
+
+```{r}
+ix <- sort(sample(1:p, s))
+betas <- rep(0, p)
+betas[ix] <- 1:s
+```
+
+---
+
+Generate an instance of the linear model:
+
+$$\begin{bmatrix} y_1 \\ \vdots\\ y_n\end{bmatrix} = \underbrace{\begin{bmatrix} 1 & x^1_1 & \ldots & x_1^{p-1} \\ \vdots &  & & \vdots \\ 1 & x^1_n & \ldots & x_n^{p-1} \\ \end{bmatrix}}_{Z} \times \begin{bmatrix} \beta_0\\ \vdots \\ \beta^{p-1}\end{bmatrix} + \sigma \begin{bmatrix} \epsilon_1 \\ \vdots \\ \epsilon_n \end{bmatrix}$$
+
+---
+
+```{r}
+# TODO:
+# df <- ....
+# assertthat::assert_that(all(names(df) == c("x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "Y")))
+```
+
+---
+
+Compute the least squares estimate of $\beta$ given $Z$ and $Y$.
+Use `qr.solve()` and `lm()`. Compare the results.
+
+```{r}
+# TODO:
+```
+
+Comment the output of `summary(.)`
+
+```{r}
+# TODO
+```
+
+---
+
+- Provide an interpretation of each $t$ value
+- Provide an interpretation of `Pr(>|t|)`
+- Explain why the `Residual standard error` has `990` degrees of freedom.
+- How is `Residual standard error` computed?
+- What is `Residual standard error` supposed to estimate?
+- Is it an unbiased estimator?
+- What is `Multiple R-squared` ?
+- What is `Adjusted R-squared` ?
+- How do you reconcile the values of `Pr(>|t|)`  and the `p-value` of the `F-statistic`
+
+---
+
+Have a look at the body of `summary` method for class `lm` (`summary.lm`).
+
+```{r}
+# TODO:
+```
+
+Plot $Y$ and fitted values $\widehat{Y}$ against $x$ (second column of design, `x^1`).
+
+```{r}
+# TODO:
+```
+
+---
+
+### Analysis of variance
+
+Fit the minimal model (polynomial of degree $0$)
+to your observations
+
+```{r}
+# TODO: lm00 <- ...
+```
+
+Compare minimal model and full model with function `anova`
+
+```{r}
+# TODO: anova(., .)
+```
+
+---
+
+### Variable selection
+
+Package `MASS` offers function `stepAIC` to perform variable selection
+
+```{r, ehco=FALSE, eval=FALSE}
+require(MASS)
+```
+
+We pick another model with the same design matrix, but the estimand $\beta$
+shall be `r c(5:1, rep(0, 5))`
+
+```{r, }
+betas <- c(5:1, rep(0, 5))
+
+# df2 <- ..
+```
+
+---
+
+
+Fit polynomials of degree `0` up to `9` to the new data
+
+You may define the formulas in different ways. This is pedestrian. You may also
+use `poly()`.
+
+```{r}
+formulas <- purrr::map_chr(0:9 , .f = ~ stringr::str_c("x", 0:., collapse = " + ")) %>%
+  stringr::str_c("Y ~ ", .) %>%
+  stringr::str_c( " - 1") %>%
+  purrr::map(formula)
+```
+
+---
+
+Plot  sums of squared residuals as a function of order.
+
+```{r}
+# TODO:
+```
+
+
+Perform `anova` analysis between polynomial model of degree `i`  and polynomial model
+of degree `i + 1` for `0 <= i <9`.
+
+```{r}
+# TODO: anova(., .)
+```
+
+---
+
+### ...
+
+```{r}
+# TODO:
+```
+
+Use function `aov()`,  comment result and summary.
+
+```{r}
+# TODO:
+# df2.aov <- aov(formula = ., data = df2)
+
+# df2.aov
+```
+
+---
+
+### ...
+
+Update `df2.aov` using function `update`. Drop `x5, x6, x7, x8, x9`
+
+```{r}
+# TODO: update(df2.aov, . ~ . - x5 - x6 - x7 - x8 - x9)
+```
+
+Use function `dropterm` on full model with option `test = "F"` and without.
+Interpret in both cases.
+
+```{r}
+# TODO: dropterm(df2.aov, ...)
+```
+---
+
+### Using `addterm` between minimal and full model
+
+
+```{r}
+# TODO:
+```
+
+
+---
+class: center, middle, inverse
+
+## Choose a model by AIC in a Stepwise Algorithm
+
+---
+
+### AIC : Akaike Information Criterion
+
+---
+
+
+---
+
+
+### Using `stepAIC()`
+
+- `stats::step()`
+-
+- `MASS::stepAIC()`
+
+
+---
+
+
+- Choose a model by AIC in a Stepwise Algorithm
+
+
+Use function `stepAIC()` to search for a good balance
+between model complexity and goodness of fit
+
+```{r}
+# TODO
+```
 
 ---
 
@@ -140,8 +1046,10 @@ We generate
 
 - a design matrix $Z \in \mathcal{M}_{n,p}$
 with $n=1000$ and $p=100$,
-- a sparse random vector $\beta \in \mathbb{R}^p$
-- a vector of observation $Y = Z \times \beta + \sigma \epsilon$ where
+
+- a sparse random vector $\theta \in \mathbb{R}^p$
+
+- a vector of observation $Y = Z \times \theta + \sigma \epsilon$ where
 $\sigma=1$ and $\epsilon$ is a standard Gaussian vector of dimension $p$.
 
 ---
@@ -248,13 +1156,13 @@ As we are handling simulated data, we can compare the coefficient
 estimates in the two models and see whether one comes closer to
 the coefficients used to generate the data
 
-The squared $\ell_2$ distances to $\beta$ are substantially different:
+The squared $\ell_2$ distances to $\theta$ are substantially different:
 
-$$\| \beta - \widehat{\beta}^{\text{true}}\|^2  = 1.31 \times 10^{-2}$$
+$$\| \theta - \widehat{\theta}^{\text{true}}\|^2  = 1.31 \times 10^{-2}$$
 
 while
 
-$$\| \beta - \widehat{\beta}^{\text{full}}\|^2  = 9.75 \times 10^{-2}$$
+$$\| \theta - \widehat{\theta}^{\text{full}}\|^2  = 9.75 \times 10^{-2}$$
 
 ---
 
@@ -490,27 +1398,85 @@ class: middle, center, inverse
 
 ### Regularized least squares criterion
 
-For each $\lambda>0$, the penalized least square costs is defined by
+For each $\lambda>0$, the $\ell_2$ penalized least square costs is defined by
 
-$$\Big\Vert Y - Z \beta  \Big\Vert^2 + λ \big\|\beta\big\|^2$$
+$$\Big\Vert Y - Z \theta  \Big\Vert^2 + λ \big\|\theta\big\|^2$$
+
 
 ---
 
 ### Solution to Ridge Regression problem
 
-Gradient with respect to $\beta$
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-$$2\times\big(λ β + Z^T Z β - Z^T Y\big)$$
 
-Unique optimum:
+The $\ell_2$ penalized least square cost has a  unique optimum:
 
 $$\big(\lambda \operatorname{Id} + Z^TZ\big)^{-1} Z^T Y$$
 
+]
+
 ---
+
+### Proof
+
+The penalized least square cost is convex and differentiable with respect to $\theta$ with gradient
+
+$$- 2 Z^T Y   + 2 Z^TZ \theta 2 λ \theta$$
+
+The gradient vanishes at
+
+$$(\lambda \text{Id}_p + Z^TZ)^{-1}Z^T Y$$
+
+`r fontawesome::fa("square")`
+
+---
+
 
 ### Pseudo-inverse
 
+What happens when $λ ↓ 0$?
 
+--
+
+The limit of $(\lambda \text{Id}_p + Z^TZ)^{-1}Z^T Y$ as $λ ↓ 0$ is $Z^+ Y$
+where  $Z^+$ is the _pseudo-inverse_ of $Z$:
+
+- $Z^+$ has dimensions $p \times n$
+
+- $Z \times Z^+ \times Z = Z$
+
+- $Z^+ \times Z \times Z^+ = Z^+$
+
+- $Z^+$ has minimal Hilbert-Schmidt norm
+
+
+
+???
+
++ Constraints 2) and 3) do not always define $Z$ in a unique way
+
++ $Z^+$
+
+---
+
+### Proof
+
+
+
+`r fontawesome::fa("square")`
+
+---
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+- $(Z^T)^+ = (Z^+)^T$
+
+- If $Z^T Z$ is invertible, $Z^+ = (Z^T Z)^{-1} Z^T$
+
+]
 
 
 ---
@@ -590,6 +1556,25 @@ class: middle, center, inverse
 
 ##
 
+
+---
+
+```{r}
+data(iris)
+require(tidyverse)
+
+mutate_y <- function(data) {
+  data %>%
+  mutate(across(where(is.numeric), ~ . -mean(.)))
+}
+
+standardize <- function(df)
+  transmute(df, across(where(is_numeric) , ~ . /sd(.)))
+
+
+select(iris, -Species) %>% standardize() %>% glimpse()
+
+```
 ---
 class: center, middle, inverse
 background-image: url(img/pexels-cottonbro-3171837.jpg)

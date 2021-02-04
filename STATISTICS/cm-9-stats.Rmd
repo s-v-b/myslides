@@ -84,12 +84,14 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-# Statistique III
+# Statistique IX: Estimation de densité
 
 ### `r Sys.Date()`
 
-#### Statistique Fondamentale Master I MIDS et MFA
 
+#### [Statistique Fondamentale Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/statistics-paris/)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: inverse, middle

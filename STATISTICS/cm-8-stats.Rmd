@@ -84,11 +84,14 @@ library(flipbookr)
 ---
 class: middle, center, inverse
 
-# Statistique III
+# Statistique VIII: Tests non-paramétriques
 
 ### `r Sys.Date()`
 
-#### Statistique Fondamentale Master I MIDS et MFA
+
+#### [Statistique Fondamentale Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/statistics-paris/)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 
 ---

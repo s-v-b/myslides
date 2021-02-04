@@ -1,6 +1,6 @@
 ---
 title: "Statistique V : Maximum de Vraisemblance"
-subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+subtitle: "EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
@@ -112,19 +112,19 @@ class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Motivation
+### [Motivation](./#motivation)
 
-### Modèles dominés (bis)
+### [Modèles dominés (bis)](./#domines)
 
-### Maximisation de la vraisemblance
+### [Maximisation de la vraisemblance](./#maxim)
 
-### Maximisation de la vraisemblance et modèles exponentiels
+### [Maximisation de la vraisemblance et modèles exponentiels](./#maxim-modexp)
 
-### Phénomène de Wilks
+### [Phénomène de Wilks](./#wilks)
 
 
 ---
-
+name: motivation
 
 ### Motivation
 
@@ -144,6 +144,7 @@ les problèmes d'optimisation issus de la statistique sont de nature particuliè
 
 ---
 class: center, middle, inverse
+name: domines
 
 ## Modèles dominés et vraisemblance (bis)
 
@@ -234,23 +235,23 @@ est dominé par
 
 Dans le cadre des modèles/expériences statistiques, on parle de _mesure dominante_.
 
-Un modèle dominé admet une infinité de mesures dominantes 
+Un modèle dominé admet une infinité de mesures dominantes
 
 Il faut en choisir une mesure dominante
 
-Ce choix est un choix de convenance. 
+Ce choix est un choix de convenance.
 
 On peut/doit vérifier que le choix d'une mesure dominante n'a pas d'effet sur les méthodes d'inférence qui utilisent des méthodes de vraisemblance
 
 ---
 
-### Choix 
+### Choix
 
 Une fois le _choix de la mesure dominante_ arrêté, il faut choisir pour chaque loi de $\mathcal{P}$ une _densité
 par rapport à la dominante_
 
 Le choix d'une _version de la densité_ plutôt que d'une autre peut modifier les performances
-de la méthode 
+de la méthode
 
 Un choix pathologique peut dégrader ces performances de manière spectaculaire
 
@@ -291,6 +292,8 @@ On peut aussi choisir comme mesure dominante la gaussienne standard $\mathcal{N}
 
 ---
 class: center, middle, inverse
+name: maxim
+
 
 ## Maximisation de la Vraisemblance
 
@@ -342,7 +345,7 @@ Supposons les données collectées indépendamment sous $P_ \theta$
 
 Soit $P_ {\theta'}$, une autre loi
 
-On suppose 
+On suppose
 
 $$D(P_ \theta \Vert P_{\theta'})< \infty$$
 
@@ -350,13 +353,13 @@ soit:  $\log p_\theta(X)/p_{\theta'}(X)$ est intégrable sous $P_ \theta$
 
 ---
 
-### Différence entre log vraisemblances 
+### Différence entre log vraisemblances
 
 La différence entre les log vraisemblances notées
 
 $$\ell_n(\theta, X_1, \ldots, X_n)  \qquad \text{et}\qquad\ell_n(\theta', X_1, \ldots, X_n)$$
 
-est 
+est
 
 - une somme de variables aléatoires indépendantes,
 
@@ -374,7 +377,7 @@ $$\frac{1}{n} \left( \ell_n(\theta, X_1, \ldots, X_n) -\ell_n(\theta', X_1, \ldo
 
 si $P_ \theta \neq P_ \theta'$
 
-$$D(P_\theta \Vert P_{\theta'}) >0 $$
+$$D(P_\theta \Vert P_{\theta'}) >0$$
 
 --
 
@@ -393,16 +396,19 @@ Dans le cas général,  il faut développer un argument formel
 
 ---
 class: center, middle, inverse
+name: maxim-modexp
+
 
 ## Maximum de vraisemblance dans les modèles exponentiels canoniques
 
 ---
 
-`r fontawesome::fa("exclamation-triangle")` L'estimation par maximisation de la vraisemblance est invoquée dans des cadres beaucoup plus généraux que celui des  modèles exponentiels
+- `r fontawesome::fa("exclamation-triangle")` L'estimation par maximisation de la vraisemblance est invoquée dans des cadres beaucoup plus généraux que celui des  modèles exponentiels
 
 --
 
-Son étude et sa justification sont grandement facilités dans le cadre des modèles exponentiels `r fontawesome::fa("glass-cheers")`
+
+- Son étude et sa justification sont grandement facilités dans le cadre des modèles exponentiels `r fontawesome::fa("glass-cheers")`
 
 --
 
@@ -415,13 +421,14 @@ Elle permet de revisiter la méthode des moments
 Le _support d'une loi de probabilité_ sur $\mathbb{R}^k$ est le plus petit _fermé_ de probabilité $1$ sous cette loi.
 
 ### Definition
+
 Le _support convexe d'une loi de probabilité_ sur $\mathbb{R}^k$, est  le plus petit _convexe fermé_ de probabilité $1$ sous cette loi
 
 ???
 
 (est-ce une partie mesurable ? pourquoi ?).
 
-Ne pas confondre le support d'une loi et celui d'une densité 
+Ne pas confondre le support d'une loi et celui d'une densité
 ---
 
 ### Support convexe d'un modèle exponentiel
@@ -435,7 +442,7 @@ en raison de l'absolue continuité des lois les unes par rapport aux autres
 
 --
 
-Nous nous intéresserons au support convexe de la loi de $T(X)$ plutât qu'à celui de la loi de $X$
+Nous nous intéresserons au support convexe de la loi de $T(X)$ plutôt qu'à celui de la loi de $X$
 
 Nos statistiques sont construites à partir de $T(X_1), \ldots, T(X_n)$
 
@@ -459,14 +466,14 @@ $$\theta \mapsto \nabla \log Z(\theta)$$
 
 est un _difféomorphisme_
 
-??? 
+???
 
-### Difféomorphisme 
+### Difféomorphisme
 
 
 ---
 
-### ???
+### Réécriture
 
 Si la log-vraisemblance d'un $n$-échantillon s'écrit comme
 
@@ -481,7 +488,7 @@ $$\begin{array}{rl}
 
 --
 
-`r fontawesome::fa("exclamation-triangle")` Même dans un modèle exponentiel en forme canonique,   
+`r fontawesome::fa("exclamation-triangle")` Même dans un modèle exponentiel en forme canonique,
 
 
 le maximum de vraisemblance n'est pas toujours  défini  `r fontawesome::fa("frown")`
@@ -496,7 +503,7 @@ $$p_\theta(k)= \mathrm{e}^{-\theta k} (\mathrm{e}^{\theta}-1)= \exp\left( -\thet
 
 $$\ell_n(\vartheta, x_1, \ldots, x_n) = n \log \left(\mathrm{e}^{\vartheta}-1\right) - \Big(\sum_{1}^n x_i \Big) \vartheta$$
 
-Si $x_1= x_2 = \ldots = x_n =1$ (ce qui se produit avec probabilité $>0$ sous $P_{\theta}, \theta \in \Theta$), 
+Si $x_1= x_2 = \ldots = x_n =1$ (ce qui se produit avec probabilité $>0$ sous $P_{\theta}, \theta \in \Theta$),
 
 $$\ell_n(\vartheta) = n \log \left(\mathrm{e}^{\vartheta}-1\right) - n \vartheta =  n \log \left(1- \mathrm{e}^{-\vartheta}\right)$$
 
@@ -546,9 +553,9 @@ Notons aussi que cet échantillon extrême met la méthode des moments en défau
 
 ### Objectifs
 
-- caractériser les situations où  le maximum de vraisemblance n'est pas défini 
+- caractériser les situations où  le maximum de vraisemblance n'est pas défini
 
-- montrer que la probabilité de ces situations tend vers $0$ lorsque la taille de l'échantillon tend vers l'infini 
+- montrer que la probabilité de ces situations tend vers $0$ lorsque la taille de l'échantillon tend vers l'infini
 
 - montrer que dans certains modèles, cette probabilité est nulle
 
@@ -558,14 +565,19 @@ Notons aussi que cet échantillon extrême met la méthode des moments en défau
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Dans une famille exponentielle canonique,
 
-sur tout échantillon $\mathbf{\omega}$, la log-vraisemblance 
+sur tout échantillon $\mathbf{\omega}$, la log-vraisemblance
 $$\vartheta \mapsto \ell_n ({\vartheta}, \omega)$$
 
 est concave par rapport au paramètre ${\vartheta}$
 
 Si le modèle est _identifiable_, $\ell_n (\cdot)$ est _strictement concave_
+
+]
+
 
 ???
 
@@ -576,7 +588,7 @@ Nous débutons par une observation élémentaire mais importante.
 ### Preuve
 
 Immédiate à partir de l'expression  et de la
-convexité de 
+convexité de
 
 $$\vartheta \mapsto \log Z(\vartheta)$$
 
@@ -597,20 +609,26 @@ La concavité garantit tout de même que la région de $\mathbb{R}^k$ où le max
 
 ### Proposition
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 - Si l'équation en $\vartheta$
 $$t= \nabla \log Z(\theta)$$
 admet une solution $\widetilde{\theta}$ dans $\Theta$,
-cette solution maximise 
+cette solution maximise
 $$\langle t, \vartheta \rangle -\log Z(\vartheta)$$
 
-- Si $\widehat{\theta}$ maximise 
-$$\vartheta \mapsto \langle \vartheta, t\rangle - \log Z(\vartheta)$$ à l'intérieur de $\Theta$ alors 
+- Si $\widehat{\theta}$ maximise
+$$\vartheta \mapsto \langle \vartheta, t\rangle - \log Z(\vartheta)$$ à l'intérieur de $\Theta$ alors
 $$t = \nabla \log Z (\widehat{\theta})$$
+
+]
+
 
 ---
 
 
 ### Definition
+
 La _sous-différentielle_ d'une fonction convexe $f$ en $x \in \mathbb{R}^p$
 
 est un sous-ensemble (non vide, compact, convexe) de $\mathbb{R}^p$ de points $\lambda$ tels que
@@ -623,7 +641,9 @@ Les éléments de la sous-différentielle sont appelés _sous-gradients_
 
 ---
 
-### Extrema et sous-différentielles
+### Proposition: Extrema et sous-différentielles
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 - Tout minimum local d'une fonction convexe est un minimum global
 
@@ -633,9 +653,13 @@ $0 \in \partial f(x)$
 
 - Une fonction convexe $f$ est différentiable en un point $x \in \text{Dom}(f)^{\circ} \subseteq \mathbb{R}^p$ si et seulement si sa sous-différentielle est réduite à un point
 
+]
+
+
 ---
 
 ### Preuve
+
 i) Pour tout $\theta$,
 
 $$\langle t, \widetilde{\theta} \rangle -\log Z(\widetilde{\theta}) -\langle t, \theta \rangle +\log Z(\theta)=   \log Z(\theta) - \log Z(\widetilde{\theta}) - \left\langle \nabla \log Z(\widetilde{\theta}), \theta -\widetilde{\theta}\right \rangle$$
@@ -656,38 +680,41 @@ Ceci signifie que $t$ est un _sous-gradient_ de $\theta \mapsto \log Z(\theta)$ 
 
 ---
 
-### Remarques  
+### Remarques
 
-nous venons de vérifier que  
-$$\theta \mapsto \langle \theta, t\rangle - \log Z(\theta)$$  atteint son supremum dans $\Theta$  si et seulement s'il existe $\widehat{\theta} \in \Theta$  tel que
-$t = \nabla \log Z(\widehat{\theta})$ 
+nous venons de vérifier que
+$$\theta \mapsto \langle \theta, t\rangle - \log Z(\theta)$$
+atteint son supremum dans $\Theta$  si et seulement s'il existe $\widehat{\theta} \in \Theta$  tel que
+$t = \nabla \log Z(\widehat{\theta})$
 
 Autrement dit : la méthode du maximum de vraisemblance fonctionne exactement là où  fonctionne la méthode des moments (lorsque le choix des moments est dicté par les statistiques suffisantes dans le formalisme canonique)
 
+--
 
-Dans la suite, on définit  $\partial \Theta = \overline{\Theta} -\Theta$ la _frontière_ de $\Theta$. 
+Dans la suite, on définit  $\partial \Theta = \overline{\Theta} -\Theta$ la _frontière_ de $\Theta$.
 
 `r fontawesome::fa("hand-point-right")`  $\partial \Theta$ peut  contenir des points à l'infini
 
 Pour une suite $(\theta_n)$ d'éléments de $\Theta$ ouvert de $\mathbb{R}^d$, on s'accorde pour interpréter
-$\theta_n \to \partial \Theta$ de la façon suivante: 
+$\theta_n \to \partial \Theta$ de la façon suivante:
 
-on a  
-- $\theta_n \to \theta$  avec $\theta \not \in \Theta$, ou 
+on a
+- $\theta_n \to \theta$  avec $\theta \not \in \Theta$, ou
 - $\|\theta_n\| \to \infty$.
 
 ???
+
 ---
 
-### `r fontawesome::fa("syringe")` 
+### `r fontawesome::fa("syringe")`
 
-Si 
+Si
 
-- $\Theta \subseteq \mathbb{R}^d$ est ouvert, 
-- $f: \Theta \to \mathbb{R}$  est continue, 
+- $\Theta \subseteq \mathbb{R}^d$ est ouvert,
+- $f: \Theta \to \mathbb{R}$  est continue,
 - $\lim_{\theta \to \partial \Theta } f(\theta) = - \infty$
 
-alors 
+alors
 
 $f$ atteint son maximum dans $\Theta$.
 
@@ -695,6 +722,9 @@ $f$ atteint son maximum dans $\Theta$.
 
 
 ### Proposition
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Si
 
 - la fonction log-vraisemblance : ${\theta} \mapsto \ell_n ({\theta})$ est
@@ -702,9 +732,12 @@ strictement concave
 - $\ell_n(θ)$ tend vers $- \infty$  lorsque
 ${\theta} \to \partial\Theta = \overline{\Theta} \setminus \tilde{\Theta}$,
 
-alors 
+alors
 
 le maximum de vraisemblance est atteint en un point unique de $\Theta$.
+
+]
+
 
 ???
 
@@ -719,10 +752,12 @@ de la log-vraisemblance dans les modèles exponentiels de plein rang
 
 `r fontawesome::fa("brain")`
 
-Vérifier les conditions d'existence et d'unicité du maximum de vraisemblance dans les modèles 
+Vérifier les conditions d'existence et d'unicité du maximum de vraisemblance dans les modèles
 
-- Poisson, 
+- Poisson,
+
 - géométriques
+
 - multinomiaux
 
 Quels sont les supports convexes de la mesure dominante dans ces différents cas ?
@@ -732,7 +767,9 @@ Quels sont les supports convexes de la mesure dominante dans ces différents cas
 Le résultat suivant de convexité est un cas particulier du théorème de Hahn-Banach géométrique
 
 
-### Théorème (Hyperplan séparateur)  `r fontawesome::fa("syringe")` 
+### Théorème (Hyperplan séparateur)  `r fontawesome::fa("syringe")`
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soient $A,B$ deux sous-ensembles  convexes  de $\mathbb{R}^d$.
 
@@ -742,15 +779,19 @@ alors
 
 $$\exists c \in \mathbb{R}^d, \qquad \sup_{x \in A} \langle x, c \rangle \leq \inf_{x \in B} \langle x, c \rangle$$
 
+]
+
 ???
 
 
 ---
-
+name: thm-supint
 
 ### Théorème
 
-Dans un modèle exponentiel canonique minimal où  $\Theta=\widetilde{\Theta}$ (le domaine $\widetilde{\Theta}$ de la fonction de partition est un  ouvert),
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Dans un modèle exponentiel canonique minimal où  $\Theta=\widetilde{\Theta}$ (le domaine $\widetilde{\Theta}$ de la fonction de partition est un  _ouvert_),
 
 si
 
@@ -763,8 +804,11 @@ est strictement concave
 
 et
 
-- elle tend vers $- \infty$ lorsque $\theta$ tend vers
+- elle tend vers $- \infty$ lorsque $\theta$ tend vers la frontière du domaine
 $\partial  \Theta = \overline{\Theta} \setminus \Theta$
+
+]
+
 
 ---
 
@@ -822,9 +866,8 @@ ceci contredit l'hypothèse selon laquelle $t$ appartient à l'intérieur du sup
 
 ---
 
-### Preuve
+### Preuve du [Théorème](./#thm-supint)
 
-[Preuve du théorème \ref{th:intsupconv}]
 
 La stricte concavité a déjà été démontrée.
 
@@ -847,6 +890,12 @@ $$\langle \theta_m, t_0 \rangle \,  - \log Z (\theta_m)$$
 
 tend vers $- \infty$ lorsque $\theta_m$ tend vers $\eta$
 
+---
+
+
+### Preuve  (suite)
+
+
 b) Considérons maintenant le cas où  $\| \theta_m \|$ tend vers $\infty.$
 
 Pour alléger les notations on abrège $\log Z(\theta)$ en $\Lambda(\theta)$.
@@ -856,14 +905,25 @@ On suppose sans perdre en généralité que la mesure dominante est une probabil
 Comme la suite $\theta_m /\left\| \theta_m \right\|$ est bornée (confinée dans la boule unité de $\mathbb{R}^k$), elle possède au moins un point
 d'accumulation.
 
+---
+
+### Preuve  (suite)
+
 Appelons le $\eta$ (encore), et supposons que
 $\log Z(\eta) < \infty$ (si nécessaire, prendre un multiple de $\eta$).
 
 Il existe une sous-suite de la suite
 $(\theta_m)$ qui se dirige vers l'infini dans la direction de
-$\eta$. Sans perdre en généralité, admettons que c'est
+$\eta$.
+
+Sans perdre en généralité, admettons que c'est
 toute la suite $(\theta_m)$ qui se dirige vers l'infini dans la
 direction de $\eta$.
+
+---
+
+### Preuve  (suite)
+
 
 Dans le calcul qui suit,  $\delta>0$ est tel que
 
@@ -872,12 +932,12 @@ $$\mathbb{P}_0 \left\{ \langle \eta , T(X) \rangle \geq \langle \eta, t_0 \rangl
 L'existence de $\delta$ est garantie par
 l'hypothèse que $t_0 \in C^\circ$
 
----
 
 $$\begin{array}{rcl} \log Z (\theta_m) & = & \log \mathbb{E}_{0}\left[ \mathrm{e}^{\langle \theta_m, {T}(X) \rangle}
 \right]\\ & \geq  & \log \mathbb{E}_{0} \left[ \mathrm{e}^{\left\|\theta_m \right\| \langle \frac{\theta_m}{\left\| \theta_m \right\|}, {T}(X) \rangle} \mathbb{I}_{\langle\frac{\theta_m}{\left\| \theta_m \right\|}, {T} \rangle \geq \langle \frac{\theta_m}{\left\| \theta_m \right\|},{t_0} \rangle + \delta} \right]\\& \geq  &  \langle \theta_m, {t_0} \rangle + \| \theta_m \| \delta + \log P_{0} \left\{ \langle \frac{\theta_m}{\left\|\theta_m \right\|}, {T} \rangle \geq  \langle \frac{\theta_m}{\left\| \theta_m \right\|}, {t_0} \rangle + \delta \right]\end{array}$$
 
 ---
+### Preuve  (suite)
 
 Comme
 
@@ -902,9 +962,21 @@ direction $\eta$
 
 ### Corollaire
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+
 Dans un modèle exponentiel minimal dont le domaine est ouvert,
-si la frontière du support convexe est de mesure nulle sous la dominante, alors  le maximum de vraisemblance est presque sûrement
-bien défini
+
+si
+
+la frontière du support convexe est de mesure nulle sous la dominante,
+
+alors
+
+le maximum de vraisemblance est presque sûrement bien défini
+
+]
+
 
 ???
 
@@ -912,12 +984,14 @@ Le théorème \ref{th:intsupconv} entraîne  le corollaire suivant.
 
 ---
 class: center, middle, inverse
+name: wilks
+
 
 ## Phénomène de Wilks et régions de confiance
 
 ---
 
-### Conventions 
+### Conventions
 
 On travaille sur un modèle exponentiel minimal en forme canonique de dimension $k$
 
@@ -927,7 +1001,7 @@ Le vecteur des statistiques suffisantes est noté $T$
 
 ---
 
-### Définition : _information de Fisher_
+### Définition : _information de Fisher_  `r fontawesome::fa("syringe")`
 
 La _matrice d'information de Fisher_ $I_n(\theta)$ est définie par
 
@@ -940,22 +1014,26 @@ est pris par rapport à $\vartheta$ en $\theta$.
 
 ### Propriété
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Le gradient $\nabla \ell_n(\vartheta)$ est une fonction de $\overline{T}_n$, il vaut
 
 $$n \left( \overline{T}_n - \nabla \log Z(\vartheta) \right)$$
 
-Comme 
+Comme
 
 $$\mathbb{E}_{\theta}[\overline{T}_n] = \nabla \log Z(\theta)$$,
 
 $$I_n( \theta):= n^2 \operatorname{cov}_{\theta} \left( \overline{T}_n\right) = n \operatorname{cov}_{\theta} (T)
 = n \nabla^2 \log Z(\theta) = n I(\theta)$$
 
+]
+
 ---
 
 Lorsqu'il s'agit de construire des régions de niveau de confiance asymptotique garanti, ou des tests de niveau asymptotique
 garanti, on s'intéresse à la construction de _quantités pivotales_, c'est à dire de quantités qui font intervenir à
-la fois l'estimande et des quantités empiriques mais dont la loi asymptotique est libre de l'estimande. 
+la fois l'estimande et des quantités empiriques mais dont la loi asymptotique est libre de l'estimande.
 
 Les résultats
 sur la normalité asymptotique du maximum de vraisemblance dans les modèles exponentiels nous fournissent déjà des éléments:
@@ -972,14 +1050,14 @@ où $q_{k,1- \alpha}$ est le quantile d'ordre $1- \alpha$ de la loi $\chi^2_k$.
 
 ---
 
-### Studentisation 
+### Studentisation
 
 La région de confiance  (asymptotique)
 
 $$\left\{ \theta': n \left\| I(\theta') \left(\widehat{\theta}_n - \theta' \right) \right\| ^2 \leq q_{k, 1- \alpha} \right\}$$
 
 peut être rendue plus transparente en substituant à l'information $I(\theta')$
-la quantité empirique 
+la quantité empirique
 
 $$\widehat{I}_n = I(\widehat{\theta}_n)$$
 
@@ -989,7 +1067,7 @@ La région de confiance devient alors un _ellipsoïde centré en_ $\widehat{\the
 
 ### Autres constructions
 
-Cette construction de la région de confiance n'est pas la seule possible 
+Cette construction de la région de confiance n'est pas la seule possible
 
 Pour des tailles d'échantillon modérées, ce n'est pas la plus recommandée: la convergence en loi du maximum de vraisemblance recentré vers une gaussienne n'est pas toujours rapide
 
@@ -1002,8 +1080,12 @@ Le résultat suivant  reste valable pour des modèles plus généraux, il offre 
 Les régions de confiance ne sont pas nécessairement des ellipsoïdes, elles ne sont pas nécessairement symétriques autour du maximum de vraisemblance.
 
 ---
+name: thm-wilks
+
 
 ### Théorème (Phénomène de wilks)
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Dans un modèle exponentiel canonique minimal $(P_ \theta, \theta \in \Theta \subseteq \mathbb{R}^k)$,
 pour tout $\theta \in \Theta$, sous $P_ \theta^{\otimes \mathbb{N}}$,
@@ -1013,13 +1095,18 @@ $$2 n D\left(P_ \theta \Vert P_{\widehat{\theta}_n} \right) \rightsquigarrow \ch
 et
 $$n D\left(P_ \theta \Vert P_{\widehat{\theta}_n} \right) - \left( \ell_n(\widehat{\theta}_n) - \ell_n(\theta)\right) \stackrel{P}{\longrightarrow} 0$$
 
----
+]
 
+
+---
+name: thm-delta-2
 
 
 
 
 ### Théorème (méthode delta au second ordre)
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soient
 
@@ -1038,6 +1125,8 @@ alors
 - $X_n \stackrel{P}{\rightarrow} {x}$
 - $a_n^2 \left(f(X_n) -f({x})\right) - a_n^2  \frac{1}{2}\left(X_n - {x}\right)^t  \nabla^2 f \left(X_n -{x}\right) \stackrel{P}{\rightarrow} 0$
 - $a^2_n\left(f(X_n) -f({x})\right) \rightsquigarrow \frac{1}{2} X^t \nabla^2 f X$
+
+]
 
 ???
 
@@ -1076,7 +1165,7 @@ La tension uniforme  $\left(a_n (X_n -x)\right)_{n \in \mathbb{N}}$ entraine que
 $$\forall \eta>0, \exists M(\eta) >0, \forall n, \qquad \mathbb{P} \left\{ a_n^2\| X_n -x\|^2 \geq M(\eta) \right\} \leq \eta$$
 
 Pour tout $\delta>0$,
-il existe   $\epsilon(\delta)>0$ tel que 
+il existe   $\epsilon(\delta)>0$ tel que
 
 $$\| h \|^2 \leq \epsilon(\delta)   \Rightarrow R(h) \leq \delta^2 \|h\| ^2$$
 
@@ -1095,7 +1184,7 @@ $$\mathbb{P} \left\{ a_n^2 R(X_n -x) \geq \eta \right\} \leq  \eta$$
 
 Comme on peut choisir $\eta$ arbitrairement petit, on a établi la convergence en probabilité de  $a_n^2 R(X_n -x)$  vers $0$.
 
-La clause iii) est là encore une conséquence directe du Lemme de Slutsky. 
+La clause iii) est là encore une conséquence directe du Lemme de Slutsky.
 
 Si la différence de deux suites aléatoires converge en probabilité vers $0$, elles ont même limite en loi.
 
@@ -1107,11 +1196,11 @@ Nous pouvons maintenant passer à la preuve du Théorème de Wilws
 
 ---
 
-### Preuve
+### Preuve  du théorème de [Wilks](./thm-wilks)
 
 La fonction $\theta' \mapsto D(P_\theta\Vert P_{\theta'})$ possède un gradient nul en $\theta$  et son Hessien est égal à $I(\theta)$
 
-La normalité asymptotique du maximum de vraisemblance et la méthode delta au second ordre entrainent 
+La normalité asymptotique du maximum de vraisemblance et la méthode delta au second ordre entrainent
 que sous $P^{\otimes \mathbb{N}}_ \theta$
 
 $$n D\left( P_ \theta \Vert P_ {\widehat{\theta}_n} \right) - \frac{n}{2}  \left(\widehat{\theta}_n - \theta\right)^t  I(\theta)\left(\widehat{\theta}_n - \theta\right) \stackrel{P}{\longrightarrow} 0$$
@@ -1138,27 +1227,31 @@ Ceci établit la seconde partie du théorème.
 
 ---
 
-On défonit la région aléatoire $\widehat{A}_n(\alpha)$ par
+On définit la région aléatoire $\widehat{A}_n(\alpha)$ par
 
 $$\widehat{A}_n(\alpha):=  \left\{  \theta': \theta' \in \Theta, \ell_n(\widehat{\theta}_n) - \ell_n(\theta') \leq \frac{1}{2} q_{k,1- \alpha}  \right\}$$
 
 
-Un corollaire immédiat du Théorème de Wilks suit
+Un corollaire immédiat du Théorème de [Wilks](./#thm-wilks) suit
 
 --
 
 
 ### Corollaire
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Dans un modèle exponentiel canonique minimal $(P_ \theta, \theta \in \Theta \subseteq \mathbb{R}^k)$
 
-Pour tout $\theta \in \Theta$, 
+Pour tout $\theta \in \Theta$,
 
 Sous $P_ \theta^{\otimes \mathbb{N}}$,
 
 La suite de régions $\big(\widehat{A}_n(\alpha)\big)_n$  est de niveau de confiance asymptotique $1- \alpha$:
 
 $$\lim_n   P_ \theta^n \left\{ \theta \in \widehat{A}_n(\alpha) \right\} =  1 - \alpha$$
+
+]
 
 
 ---
@@ -1167,5 +1260,3 @@ background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
-
----

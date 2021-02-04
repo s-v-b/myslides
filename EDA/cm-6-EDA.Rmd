@@ -660,7 +660,7 @@ Data masking and tidy selection make interactive data exploration fast and fluid
 .panel[.panel-name[Code]
 ```{r}
 standardize <- function(df)
-  mutate(df, across(where(is_numeric), .funs = ~ ./sd(.)))
+  mutate(df, across(where(is.numeric),  ~ .x /sd(.x)))
 
 standardize_classic <- function(df)
   sweep(df,
@@ -669,10 +669,12 @@ standardize_classic <- function(df)
         FUN = "/")
 
 center <- function(df)
-  mutate(df, across(where(is.numeric),
-           .funs = ~ . - mean(.)))
+  mutate(df, across(where(is.numeric), ~ .x - mean(.x)))
 
-standardize(iris)
+scale <- function(df)
+  mutate(df, across(where(is.numeric), ~ (.x - mean(.x))/sd(.x)))
+
+scale(iris)
 ```
 ]
 ]
@@ -739,7 +741,7 @@ Standardizing the columns slightly spreads out the eigenvalues
 
 ```{r}
 iris %>%
-  mutate(across(where(is.numeric), ~ (. - mean(.))/sd(.))) %>%
+  scale()  %>% 
   select(-Species) %>%
   prcomp() %>%
   broom::tidy(matrix="pcs")
