@@ -89,19 +89,19 @@ class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [Motivation](./#motivation)
+### [Motivation](#motivation)
 
-### [Principe](./#methode-moments)
+### [Principe](#methode-moments)
 
-### [Outils probabilistes](./#outils)
+### [Outils probabilistes](#outils)
 
-### [Conditions suffisantes de consistance](./#tout-va-bien)
+### [Conditions suffisantes de consistance](#tout-va-bien)
 
-### [Entropie relative](./#entropie-relative)
+### [Entropie relative](#entropie-relative)
 
-### [Modéles exponentiels](./#modeles-exponentiels)
+### [Modéles exponentiels](#modeles-exponentiels)
 
-### [Performances de la méthode des moments](./#performance-moments)
+### [Performances de la méthode des moments](#performance-moments)
 
 
 ---
@@ -1038,7 +1038,7 @@ si et seulement si
 
 la différentielle de $\Lambda$ est inversible en tout $\theta \in \Theta$
 
-D'après  le [_théorème d'inversion locale_](./#inv-locale):
+D'après  le [_théorème d'inversion locale_](#inv-locale):
 
 $\forall \theta \in \Theta$, il existe
 

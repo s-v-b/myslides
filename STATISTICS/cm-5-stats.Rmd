@@ -112,15 +112,15 @@ class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [Motivation](./#motivation)
+### [Motivation](#motivation)
 
-### [Modèles dominés (bis)](./#domines)
+### [Modèles dominés (bis)](#domines)
 
-### [Maximisation de la vraisemblance](./#maxim)
+### [Maximisation de la vraisemblance](#maxim)
 
-### [Maximisation de la vraisemblance et modèles exponentiels](./#maxim-modexp)
+### [Maximisation de la vraisemblance et modèles exponentiels](#maxim-modexp)
 
-### [Phénomène de Wilks](./#wilks)
+### [Phénomène de Wilks](#wilks)
 
 
 ---
@@ -866,7 +866,7 @@ ceci contredit l'hypothèse selon laquelle $t$ appartient à l'intérieur du sup
 
 ---
 
-### Preuve du [Théorème](./#thm-supint)
+### Preuve du [Théorème](#thm-supint)
 
 
 La stricte concavité a déjà été démontrée.
@@ -1232,7 +1232,7 @@ On définit la région aléatoire $\widehat{A}_n(\alpha)$ par
 $$\widehat{A}_n(\alpha):=  \left\{  \theta': \theta' \in \Theta, \ell_n(\widehat{\theta}_n) - \ell_n(\theta') \leq \frac{1}{2} q_{k,1- \alpha}  \right\}$$
 
 
-Un corollaire immédiat du Théorème de [Wilks](./#thm-wilks) suit
+Un corollaire immédiat du Théorème de [Wilks](#thm-wilks) suit
 
 --
 
