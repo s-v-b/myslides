@@ -16,10 +16,10 @@ output:
       nature:
       slideNumberFormat: |
         <div class="progress-bar-container">
-          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          <div class="progress-bar" style="width: calc(%current/ %total* 100%);">
           </div>
         </div>
-      highlightStyle: github
+      highlightStyle: zenburn
       highlightLines: true
       countIncrementalSlides: false
 ---
@@ -78,11 +78,16 @@ library(flipbookr)
 }
 </style>
 
+---
+name: inter-slide
+class: middle, inverse, left
+
+{{content}}
 
 
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Statistique VIII: Tests non-paramétriques
 
@@ -95,35 +100,1324 @@ class: middle, center, inverse
 
 
 ---
-class: inverse, middle
+template: inter-slide
 
-## `r fontawesome::fa("map", fill="white")`
 
-### Bla
+### [Motivations](#motivation)  `r fontawesome::fa("map", fill="white")`
 
-### Bla
+### [Principe du test de Kolmogorov-Smirnov](#principe-ks)
+
+### [Transformation quantile](#transformation-quantile)
+
+### [Calcul de la Statistique Kolmogorov-Smirnov](#calcul-ks)
+
+### [Théorème de Glivenko-Cantelli](#glivenko-cantelli)
+
+### [Consistance](#consistance-ks)
+
+### [Inégalités de déviations](#sec-dkw)
+
+### [Adéquation à une famille de lois](#adequation-famille)
 
 
 ---
-class: center, middle, inverse
-
-## So what
-
----
+exclude: true
 
 ### igloo `r fontawesome::fa("igloo")`
 
-.fl.w-third.pa2[
+---
+template: inter-slide
+name: motivation
+
+## Motivations
+
+
+---
+
+### Conventions
+
+$P$ loi sur $\mathbb{R}$.
+
+Nous supposerons   $P$ absolument  continue par rapport à la mesure de
+Lebesgue
+
+Nous noterons $F$ la fonction de répartition de $P$  et $f$ une densité
+
+$$\forall a < b: \int_{[a, b]} f (x) \mathrm{d} (x) = F (b) - F (a) = P [a, b]$$
+
+Dans ce type de situation, on dispose  d'un résumé de l'échantillon
+$S_n = (X_1, X_2, \ldots, X_n)$, l'échantillon trié en ordre croissant:
+
+$$(X_{(1)}, \ldots, X_{(n)})$$
+
+---
+
+### Problème d'adéquation
+
+
+Soit $f$ une  densité sur $\mathbb{R}$ et $(x_1, \ldots, x_n)$ un échantillon de $n$
+points de $\mathbb{R}$.
+
+-  $\text{H}_0$: L'échantillon $(x_1, \ldots, x_n)$ a été engendré
+par $n$ tirages indépendants selon la loi $P$ de densité $f$ ?
+
+-  $\text{H}_1$: L'échantillon $(x_1, \ldots, x_n)$ a  été
+engendré par $n$ tirages indépendants selon une  loi différente de $P$ ?
+
+???
+
+Comme dans le cas du test d'adéquation du $\chi^2$, on veut aborder le problème de décision suivant.
+
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+Dans ce problème, l'hypothèse nulle est simple, l'alternative est
+composite et même extrêmement riche.
+
+
+---
+
+### Exemple
+
+Un constructeur prétend que les
+ampoules  _dur-à-cuir_  ont une durée de vie distribuée
+exponentiellement avec une paramètre $.001$ (La probabilité que
+l'ampoule fonctionne plus de $x$ jours est $\exp (- 0.001 \times x)$).
+
+Une association de consommateurs collecte des informations sur la durée de vie des
+ampoules _dur-à-cuir_ : elle rassemble un échantillon de durées
+de vie observées $(x_1, \ldots, x_n)$ et pose la question:
+
+  - cet échantillon peut-il  raisonnablement être considéré comme la réalisation de
+$n$ variables exponentiellement distribuées (avec le paramètre $.001$) ?
+
+
+
+???
+
+---
+
+
+### Premier essai
+
+
+Pour aborder ce problème, nous allons d'abord proposer un test de type $\chi^2$
+
+Nous allons réduire le problème à un problème d'ajustement
+à une hypothèse multinomiale simple.
+
+Avant d'observer les données, on se
+donne une partition de $\mathbb{R}$ en $k$ cellules: $A_1, A_2, \ldots, A_k$
+(on a $\cup_{i \leq  k} A_i = \mathbb{R}$, et les cellules sont bien deux
+à deux disjointes: $A_i \cap A_j = \emptyset$ pour $i \neq j$)
+
+On résume
+nos observations de manière brutale: on note pour chaque observation $x_i$
+la cellule à laquelle elle appartient et finalement on ne conserve que $k$
+compteurs: pour $j \leq k$, on note $n_j$ le nombre d'observations qui
+appartiennent à la cellule $A_j$.
+
+---
+
+L'échantillon $(x_1, \ldots, x_n)$ est
+donc résumé par $(n_1, \ldots, n_k)$ avec $\sum_{j \leq  k} n_j = n$.
+
+Sous l'hypothèse nulle, la suite de compteurs $(n_1, n_2, \ldots, n_k)$
+est une réalisation d'une loi multinomiale de paramètres
+
+$$\left( n, P\{A_1 \}, P\{A_2 \}, \ldots, P \{ A_k\} \right)$$
+
+techniquement, la probabilité d'obtenir $(n_1, \ldots, n_k)$ est donnée
+par:
+
+$$\frac{n!}{n_1 ! \ldots n_k !}  \prod_{i = 1}^k \left( P\{A_i \} \right)^{n_i}$$
+
+---
+
+Pour résoudre notre problème de test on se contente de résoudre le
+problème simplifié suivant:
+
+$\text{H}'_ 0:$ la suite des compteurs $(n_1, \ldots, n_k)$  _est_ une
+réalisation d'une loi multinomiale de paramètres
+
+$$ \left( n, P\{A_1 \}, P\{A_2 \}, \ldots, P \{ A_k\} \right)$$
+
+$\text{H}' _1:$la suite des compteurs $(n_1, \ldots, n_k)$  _n'est pas_ une
+réalisation d'une loi multinomiale de paramètres
+
+$$\left( n, P\{A_1 \}, P\{A_2 \}, \ldots, P \{ A_k\} \right)$$
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+Il faut être bien conscient que $\text{H}' _0$ est vérifiée lorsque
+$\text{H}_ 0$ est vérifiée, mais que la réciproque est fausse.
+
+
+Pour résoudre ce problème simplifié, on calcule la statistique de
+Pearson:
+$$\sum_{i = 1}^k  \frac{\left( N_i - nP\{A_i \} \right)^2}{nP\{A_i \}}$$
+
+et on rejette $\text{H}'_0$ si $S_n$ est supérieure au quantile d'ordre
+
+$1 - \alpha$ de la loi du $\chi^2$ à $k - 1$ degrés de liberté
+
+Si $\text{H}' _0$ est vérifiée la probabilité de rejeter
+$\text{H}' _0$ à tort tend vers $\alpha$.
+
+---
+
+Cette manière simple de
+procéder nous garantit donc un niveau asymptotique $\alpha$.
+
+Si $\text{H}' _0$ n'est pas vérifiée, la probabilité de rejeter tend
+vers $1$ lorsque le nombre d'observations $n$ tend vers l'infini.
+
+Mais il est facile de construire des lois $P'$ ( $P' \neq P$ ), qui ressemblent à $P$ sur la partition $A_1, \ldots, A_k$,
+
+$$P' \{A_j \}= P\{A_j \} \qquad \text{pour } j \leq k$$
+
+Si les observations sont engendrées par des tirages selon $P'$, notre
+procédure de test ne le détectera pas
+
+Notre procédure n'est pas consistante contre ces alternatives
+
+---
+
+En résumant nos données par quelques compteurs, nous avons perdu de
+l'information.
+
+Ce n'est pas forcément très grave, par exemple si on sait
+que l'alternative n'est pas _n'importe quoi_  mais qu'elle est au contraire
+formée de lois $P'$ qui se distinguent clairement de $P$ sur la partition
+$A_1, \ldots, A_k$.
+
+Mais si on n'a pas cette assurance, ou si on veut être prêt contre toute éventualité,
+
+---
+template: inter-slide
+name: principe-ks
+
+## Le principe du test de Kolmogorov et Smirnov
+
+---
+
+### Cahier des charges du test
+
+- La statistique du test doit être _facile à calculer_ (comme la
+statistique de Pearson pour les tests de type $\chi^2$).
+
+- La loi de la statistique de test  doit etre libre de la loi $P$
+qui définit le problème d'ajustement. Ceci permettra de calibrer le test
+pour atteindre un niveau donné.
+
+- Le test doit être _consistant_: si l'hypothèse nulle n'est pas
+vérifiée et si la taille de l'échantillon tend vers l'infini, la
+probabilité de rejeter doit tendre vers $1$.
+
+
+---
+
+Le test de Kolmogorov-Smirnov (par la suite) résume à peine les
+données: il oublie simplement l'ordre dans lequel elles ont été
+collectées. Les données $x_1, \ldots, x_n$ définissent une loi sur
+$\mathbb{R}$ appelée loi empirique, notée $P_n$:
+
+$$P_n \{[a, b]\}= \frac{1}{n}  \sum_{i = 1}^n  \mathbf{1}_{\left[ a, b \right]} (x_i) \text{pour tout intervalle } [a, b]$$
+
+Cette loi $P_n$ est une loi discrète, dont la fonction de répartition
+(appelée fonction de répartition empirique) est notée $F_n$
+
+$$F_n (t) = P_n \{(- \infty, t]\}= \frac{1}{n}  \sum_{i = 1}^n \mathbf{1}_{(- \infty, t]} (x_i)$$
+
+C'est une fonction en escalier, croissante, qui saute de $1/n$ en chaque point de l'échantillon
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+Si on considère le modèle formé par les lois sur $\mathbb{R}$   dominées par la
+mesure  de Lebesgue, les statistiques d'ordre, ou de manière équivalente,
+la mesure empirique, forment une statistique suffisante (ou exhaustive)
+
+Conditionnellement à la mesure empirique la loi de l'échantillon est la loi uniforme sur l'ensemble
+des permutations des statistiques d'ordre.
+
+
+
+---
+
+### Définition
+
+La statistique de Kolmogorov-Smirnov $D_n$ est définie par
+
+$$D_n \equiv \sqrt{n} \sup_{x \in \mathbb{R}} \left| F_n (x) - F(x) \right|$$
+
+Le test de Kolmogorov-Smirnov rejette l'hypothèse nulle si $D_n$ est trop
+grande
+
+
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+La fonction de répartition  $F$ est supposée connue
+
+C'est l'_adéquation_ par rapport à $F$ que l'on teste
+
+La statistique de Kolmogorov-Smirnov est bien une
+statistique: elle calculable à partir
+
+- des données $F_n$ et
+- des connaissances disponibles $F$
+
+---
+
+Quelques aspects de la statistique $D_n$ `r fontawesome::fa("map")`
+
+- Sous $\text{H}_0$ (c'est à dire si les $X_i \sim_{i.i.d} P$),
+la loi de $D_n$ est _libre_, elle ne dépend pas de $P$ (pourvu que $P$ ait
+une densité), elle ne dépend que de $n$.
+
+- La calcul de $D_n$ se réduit à un tri de l'échantillon, à
+l'évaluation de $F$ sur les points de l'échantillon et à la recherche
+d'un maximum dans un tableau de $2 n + 1$ valeurs.
+
+- Si l'hypothèse nulle n'est pas vérifiée,
+par exemple si les $X_i \sim_{i.i.d} P'$ avec $P' \neq P$ alors pour tout $M > 0$
+
+$$P' \left\{ D_n > M \right\} \rightarrow_n 1$$
+
+.tr[Le test est donc consistant `r fontawesome::fa("glass-cheers")` ]
+
+- Nous donnerons quelques résultats qui suggèreront
+(mais ne montreront pas) que sous l'hypothèse nulle,
+
+$$D_n \rightsquigarrow D$$
+
+où $D$ suit une loi bien connue  (la loi du _supremum du pont brownien réfléchi_)
+
+???
+
+Cette convergence en loi, qui peut être vue comme une conséquence d'un
+théorème central limite généralisé, permet une calibration
+asymptotique  du test:
+
+si $d_{1 - \alpha}$ désigne le $1 - \alpha$ quantile de la loi de $D$
+
+alors
+
+le test qui rejette l'hypothèse nulle si $D_n > d_{1 - \alpha}$
+est asymptotiquement de niveau $\alpha$
+
+
+
+---
+
+<!-- %\begin{figure}[h]
+ \resizebox{12cm}{!}{\epsfig{file=ecdftrurdf.eps}}
+ \begin{figure}[htbp]
+ \label{fig:fonction:repart:empirique}
+ \centering
+ \includegraphics[width=.9\textwidth]{TP-CM7_files/figure-latex/unnamed-chunk-3-1.pdf}
+ \caption{ -->
+
+Fonction de répartition empirique $F_n$ d'un échantillon de $100$
+points collectés indépendamment selon des tirages uniformes sur $[0,1]$.
+La courbe en tirets est la fonction de répartition de
+la loi uniforme.
+
+
+Fonction de répartition empirique d'un échantillon de $100$
+points collectés indépendament selon des tirages exponentiels de
+paramètre $1.$ La courbe continue est la fonction de répartition de la
+loi exponentielle de paramètre $1.$
+
+---
+exclude: true
+
+<!-- \begin{figure}[h]
+  %\resizebox{12cm}{!}{\epsfig{file=ecdftrurdftrans.eps}}
+  \caption{Graphe de la fonction $i / n \mapsto F (x_{(i)})$ pour $i \leq
+  n$ où $x_{(i)}$ est le ième élément d'un échantillon de
+  $100$points distribués exponentiellement, $F (x) = 1 - \mathrm{e}^{- x}$. La
+  courbe bleue représente la fonction $x \mapsto x.$ \ }
+\end{figure} -->
+
+---
+template: inter-slide
+name: transformation-quantile
+
+## La transformation quantile
+
+---
+
+### Fonction de répartition
+
+Une fonction de répartition $F$
+
+- est une fonction positive,
+
+- prend ses valeurs entre $0$ et $1$,
+
+- est croissante (au sens large, c'est-à-dire non-décroissante),
+
+- continue à droite, et
+
+- possède une limite à gauche en tout point
+
+Si la fonction de répartition correspond à une loi de
+probabilité qui ne charge aucun point (diffuse), elle est continue
+
+Dans tous les cas, on définit la _fonction quantile_ $F^{- 1}$ comme
+une pseudo-inverse de $F$
+
+???
+
+Dans cette section nous allons formuler quelques observations très
+importantes sur le comportement de la variable aléatoire $F (X)$
+lorsque $X \sim P$ de fonction de répartition $F$.
+
+Ces observations seront importantes
+pour nous, mais elles sont aussi très fécondes dans le domaine de la
+simulation de phénomènes aléatoires, elles permettent d'engendrer des
+variables aléatoires de fonction de répartition donnée $F$ à partir de
+variables aléatoires distribuées uniforméments sur $[0, 1].$
+
+---
+
+### Définition
+
+La fonction quantile $F^{- 1}$ d'une variable aléatoire $X$ distribuée
+selon $P$ (de fonction de répartition $F$) est définie par
+
+$$F^{- 1} (p):= \inf \left\{ x: P\{X \leq x\} \geq p \right\} = \inf \left\{ x: F (x) \geq p \right\}$$
+
+
+
+---
+
+La fonction quantile est croissante et continue à droite elle aussi. La
+proposition suivante résume quelques propriétés simples de la fonction
+quantile.
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Si $X$ a pour fonction de répartition $F$ et
+pour fonction quantile $F^{-1}$,
+
+alors
+
+on a les propriétés suivantes, pour $p \in ( 0, 1 )$:
+
+- $p \leq  F (x)$ si et seulement si $F^{- 1} (p) \leq  x$
+- $F \circ F^{- 1} (p) \geq p$
+- $F^{- 1} \circ F (x) \leq  x$
+- Si $F$ admet une densité $F \circ F^{- 1} (p) = p$
 
 ]
 
 
-.fl.w-two-thirds.pa2[
 
+---
+
+### Preuve
+
+D'après la définition de $F^{- 1}$ si
+$F (x) \geq p$ alors $F^{- 1} (p) \leq  x$
+
+Maintenant pour établir la réciproque,
+il suffit de vérifier que $F \circ F^{- 1} (p) \geq p$
+
+En effet, si $x \geq F^{- 1} (p),$ comme
+$F$ est croissante $F (x) \geq F \circ F^{- 1} (p)$.
+
+Si $y = F^{- 1} (p),$ par définition de $y = F^{- 1} (p),$ il existe une suite
+décroissante $(z_n)_{n \in \mathbb{N}}$ qui converge vers $y$ telle que
+$F (z_n) \geq p$
+
+Mais comme $F$ est continue à droite
+$\lim_n F (z_n) = F (\lim_n z_n) = F (y)$
+
+Donc $F (y) \geq p$.
+
+Remarquons que nous venons de prouver à la fois i) et ii).
+
+---
+
+### Preuve (suite)
+
+iii) est une conséquence immédiate de i).
+
+Notons $p \equiv F (x) .$
+
+Donc $p \leq  F (x),$ ce qui est équivalent d'après 1) à $F^{- 1} (p)
+\leq  x,$ soit $F^{- 1} \circ F (x) \leq  x.$
+
+iv) Si $F$ admet une densité $f$, $F$ est continue (même
+_absolument continue_).
+
+Pour toute valeur $p$ dans $] 0, 1 [,$ il
+existe au moins une valeur $x$ tel que $p = F (x)$ (Théorème des valeurs
+intermédiaires).
+
+Soit $y$ l'infimum des valeurs $x$
+telles que $F (x) = p$, évidemment $y = F^{- 1} (p)$
+
+D'après $1)$ $F (y) \geq p$.
+
+Maintenant si $(z_n)_{n \in \mathbb{N}}$ est une suite strictement
+croissante convergente vers $y$, on a pour tout $n$, $F (z_n) < p,$ et par
+continuité à gauche,
+$F (y) = F (\lim_n z_n) = \lim_n F (z_n) \leq p.$
+
+Donc $F (y) = p,$ soit $F \circ F^{- 1} (p) = p.$
+
+`r fontawesome::fa("square")`
+
+
+---
+
+A partir des propriétés de la fonction quantile, il est aisé de déduire le résultat
+suivant.
+
+
+
+### Corollaire
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Si $X$ est une variable aléatoire de loi $P$ dont la fonction de
+répartition $F$ est continue, alors les variables aléatoires $F (X)$ et
+$1 - F (X)$ sont uniformément réparties sur $[0, 1]$.
 
 ]
 
 ---
+
+Dans le contexte pour lequel nous voulons construire des tests, on peut donc
+affirmer que
+
+sous l'hypothèse nulle, l'échantillon
+
+$$F (X_1), \ldots, F (X_n) \sim U_1, \ldots, U_n$$
+
+où les $U_i \sim_{\text{i.i.d.}} \operatorname{Uniforme} [0, 1]$.
+
+Pour simuler un tirage selon la loi de fonction
+de répartition $F$, il suffit de disposer d'un générateur de nombres
+aléatoires uniformément répartis sur $[0, 1]$ et de leur appliquer la
+transformation $F^{- 1}$ `r fontawesome::fa("glass-cheers")`
+
+---
+template: inter-slide
+name: calcul-ks
+
+## Calcul de la statistique de Kolmogorov-Smirnov
+
+---
+
+###  $D_n$ est facile à calculer
+
+Cette vérification, combinée aux observations de la section précédente nous
+permettra de conclure que sous l'hypothèse nulle, la loi de $D_n$ est bien
+libre.
+
+#### Convention
+
+$$x_{(1)}, \ldots, x_{_{(n)}}$$
+désigne la version triée en ordre croissant de $(x_1, \ldots, x_n)$,
+
+Les variables aléatoires $X_{(i)}$ sont appelées les _statistiques d'ordre_ de l'échantillon
+
+---
+
+
+### Lemma
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Le supremum dans la définition de $D_n$ peut être calculé
+à partir de l'échantillon trié en ordre croissant $(x_{(1)}, \ldots, x_{(n)})$:
+
+$$D_n = \sqrt{n} \max_{0 \leq  i <  n} \max \left( \left| \frac{i}{n} - F (x_{(i)}) \right|, \left| \frac{i}{n} - F (x_{(i + 1)}) \right| \right)$$
+
+avec la convention $x_{(0)} = - \infty$
+]
+
+---
+
+### Preuve
+
+Soit $t : x_{(i)} \leq t < x_{(i + 1)}$
+
+On a
+
+$$F_n (t) = \frac{i}{n} = F_n \left( x_{(i)} \right) < F_n (x_{(i + 1)}) =\frac{i + 1}{n},$$
+
+et
+
+$$F (x_{(i)}) \leq  F (t) \leq  F (x_{(i + 1)})$$
+
+Donc
+
+$$F_n (x_{(i)}) - F \left( x_{(i + 1)} \right) \leq  F_n (t) - F (t) \leq  F_n \left( x_{(i)} \right) - F \left( x_{(i)} \right)$$
+
+et
+
+$$F (x_{(i)}) - F_n \left( x_{(i)} \right) \leq  F (t) - F_n (t) \leq  F \left( x_{(i + 1)} \right) - F_n \left( x_{(i)} \right)$$
+
+
+---
+
+### Preuve (suite)
+
+
+Ceci  nous conduit à
+
+$$\left| F (t) - F_n (t) \right| \leq  \max \left( \left| \frac{i}{n} - F (x_{(i)}) \right|, \left| \frac{i}{n} - F (x_{(i + 1)}) \right|\right)\qquad ∀ t \in [x_{(i)}, x_{(i + 1)})$$
+
+On peut par ailleurs vérifier avec le même genre d'arguments que pour
+tout $t < x_{(1)}$
+
+$$\left| F (t) - F_n (t) \right| \leq  F (x_{(1)})$$
+
+`r fontawesome::fa("square")`
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+Cette caractérisation de $D_n$ nous assure que $D_n$ est bien
+une variable aléatoire.
+
+Cela n'allait pas de soi avec la définition de départ qui considérait un _supremum sur un ensemble non-dénombrable_
+
+
+---
+
+
+
+### Théorème
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Si la fonction de répartition $F$ est absolument continue alors la
+statistique de Kolmogorov-Smirnov $D_n$ est distribuée comme
+
+$$\sqrt{n} \max_{i \leq  n} \max \left( \left| \frac{i}{n} - U_{(i)}
+\right|, \left| \frac{i}{n} - U_{(i + 1)}  \right| \right)$$
+
+ou $U_{(1)} \leq  U_{(2)} \leq  \ldots \leq  U_{(n)}$
+
+est le réarrangement croissant d'un échantillon i.i.d selon la loi uniforme sur $[0, 1]$
+
+]
+
+???
+
+Une conséquence importante du Lemme précédent est résumée dans le
+théorème
+
+---
+
+
+Si $t_{n, \alpha}$ désigne le $1 - \alpha$ quantile de la loi de $D_n$, le
+test $T_{n, \alpha}$ de Kolmogorov-Smirnov est défini par
+
+$$T_{n, \alpha} (S_n) = \left\{ \begin{array}{l} 1 \qquad \text{si} \quad  D_n \geq t_{n, \alpha}\\ 0 \qquad \text{sinon} \end{array} \right.$$
+
+
+---
+
+Devant un test de cette forme, on peut aborder le problème de calibration
+(détermination du seuil $t_{n, \alpha}$ en fonction du niveau de confiance
+recherché) de deux façons:
+
+- développer un algorithme de calcul de $t_{n, \alpha}$. Ceci est
+aujourd'hui envisageable en utilisant les possibilités de simulation des
+ordinateurs.
+
+- montrer que la suite $D_n$ converge en loi vers une variable
+aléatoire non-dégénérée et tabuler une fois pour toute la loi
+limite. Ceci permet de construire de suites de tests de niveau asymptotique
+donné.
+
+???
+
+ La démarche asymptotique (la seule raisonnable dans les années 1930) a
+soulevé des questions très intéressantes en théorie des
+probabilités. Elle a marquée le début de la théorie des \og  processus
+empiriques \fg\ , qui sous-tend la théorie de la reconnaissance des formes
+ainsi que la théorie statistique de l'apprentissage.
+
+---
+
+Nous n'avons pas les moyens techniques  et conceptuels pour traiter
+la démarche asymptotique.
+
+Mais nous allons tout de même vérifier que sous l'hypothèse
+nulle, $D_n$ ne grandit pas trop vite, en fait certainement pas plus vite que
+$\sqrt{n}$, car $D_n / \sqrt{n}$ tend en probabilité vers $0.$
+
+---
+template: inter-slide
+name: glivenko-cantelli
+
+## Une loi des grands nombres fonctionnelle  : le théorème de Glivenko-Cantelli
+
+---
+
+Convenons de la définition suivante
+
+$$Z_n \equiv \frac{D_n}{\sqrt{n}} = \text{sup}_{t \in \mathbb{R}}  \left|
+F_n (t) - F (t) \right|$$
+
+
+### Théorème (Glivenko-Cantelli)
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Pour toute probabilité $P$ sur
+$\mathbb{R}$, de fonction de répartition $F$ continue, la suite
+$(Z_n)_{n \in \mathbb{N}}$ converge en probabilité vers $0$:
+
+$$\forall \varepsilon > 0, \hspace{1em} \lim_n P \left\{ \sup_{t \in \mathbb{R}} \left| F_n (t) - F (t) \right| > \varepsilon \right\} = 0$$
+
+]
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+Pour chaque valeur particulière de $x$, on peut écrire
+
+$$F_n (t) - F (t) = \frac{1}{n}  \sum_{i \leq  n}  \left( \mathbf{1}_{x_i \leq  t} - \mathbb{E} \left[ \mathbf{1}_{X \leq  t} \right] \right)$$
+
+La différence $F_n (t) - F (t)$ est donc une somme de variables de
+Bernoulli indépendantes, normalisée par $1/n$. La loi des grands
+nombres habituelle nous indique alors
+
+$$\forall \varepsilon > 0, \forall t \in \mathbb{R}, \hspace{1em} P \left\{  \left| F_n (t) - F (t) \right| > \varepsilon \right\} \rightarrow_n 0$$
+
+Le théorème de Glivenko-Cantelli constitue une loi des grands nombres _uniforme_
+
+
+???
+
+Il s'agit d'un des premiers résultats de ce type. Une
+  large part des statistiques contemporaines est dédiée à ce type de
+  phénomènes.
+
+
+
+
+---
+
+### Preuve
+
+Soit $\epsilon$ une réel strictement positif.
+Pour $k \in \mathbb{N}$, $1 \leq  k \leq  \lfloor \frac{1}{\epsilon} \rfloor$, on définit
+
+$$\mathsf{y}^{\epsilon}_k \equiv F^{- 1} (k \epsilon)$$
+
+Etant donné un échantillon $x_1, \ldots, x_n$, et la fonction de
+répartition empirique $F_n$ associée,
+
+si
+
+$$\mathsf{y}^{\epsilon}_k\leq  x \leq  \mathsf{y}^{\epsilon}_{k + 1}$$
+
+alors
+
+$$\begin{array}{rl}F ( \mathsf{y}^{\epsilon}_k) & \leq   F (x_{}) \leq  F (\mathsf{y}^{\epsilon}_{k + 1})\\ F_n ( \mathsf{y}^{\epsilon}_k) & \leq   F_n (x_{}) \leq  F_n (\mathsf{y}^{\epsilon}_{k + 1})\end{array}$$
+
+---
+
+### Preuve (suite)
+
+Donc
+
+$$F ( \mathsf{y}^{\epsilon}_k) - F_n ( \mathsf{y}^{\epsilon}_{k + 1}) \leq  F (x) - F_n (x) \leq  F ( \mathsf{y}^{\epsilon}_{k + 1}) - F_n ( \mathsf{y}^{\epsilon}_k)$$
+
+--
+
+$$\left| F (x) - F_n (x) \right| \leq  \max \left( \left| F (\mathsf{y}^{\epsilon}_k) - F_n ( \mathsf{y}^{\epsilon}_k) \right|, \left|F ( \mathsf{y}^{\epsilon}_{k + 1}) - F_n ( \mathsf{y}^{\epsilon}_{k + 1}) \right| \right) + \epsilon$$
+
+--
+
+$$\sup_{\mathsf{y}^{\epsilon}_1 \leq  x \leq \mathsf{y}^{\epsilon}_{\lfloor 1 / \epsilon \rfloor}} \left| F (x) - F_n(x) \right| \leq  \max_{1 \leq  k \leq  \lfloor 1 / \epsilon \rfloor} \max \left( \left| F ( \mathsf{y}^{\epsilon}_k) - F_n (\mathsf{y}^{\epsilon}_k) \right| \right) + \epsilon$$
+
+
+---
+
+### Preuve (suite)
+
+
+Par ailleurs, pour $x \leq  \mathsf{y}^{\epsilon}_1$,
+
+$$\left| F (x) - F_n (x) \right| \leq  \left| F_n (\mathsf{y}^{\epsilon}_1) - F ( \mathsf{y}^{\epsilon}_1) \right| +\epsilon$$
+
+et de même pour $x \geq \mathsf{y}^{\epsilon}_{\lfloor 1 / \epsilon \rfloor}$
+
+$$\left| F (x) - F_n (x) \right| \leq  \left| F_n ( \mathsf{y}^{\epsilon}_{\lfloor 1 / \epsilon \rfloor}) - F (
+\mathsf{y}^{\epsilon}_{\lfloor 1 / \epsilon \rfloor}) \right| + \epsilon$$
+
+En récapitulant
+
+$$\frac{D_n}{\sqrt{n}} \leq  \max_{1 \leq  k \leq  \lfloor 1 /\epsilon \rfloor} \max \left( \left| F (\mathsf{y}^{\epsilon}_k) - F_n (\mathsf{y}^{\epsilon}_k) \right| \right) + \epsilon$$
+
+---
+
+### Preuve (suite)
+
+
+On peut maintenant observer que  $F ( \mathsf{y}^{\epsilon}_k) - F_n ( \mathsf{y}^{\epsilon}_k)$
+est un somme normalisée de variables
+aléatoires centrées d'espérance nulle et de variance  $k \epsilon (1 - k \epsilon)$
+Donc d'après l'inégalité de Bienaymée-Chebyshev
+
+$$P^n \left\{ \left| F ( \mathsf{y}^{\epsilon}_k) - F_n (\mathsf{y}^{\epsilon}_k) \right| \geq u \right\} \leq  \frac{k\epsilon (1 - k \epsilon)}{n u^2} \leq  \frac{1}{4 n u^2}$$
+
+Et
+
+$$P^n \left\{ \max_{k \leq  \lfloor 1 / \epsilon \rfloor} \left| F ( \mathsf{y}^{\epsilon}_k) - F_n ( \mathsf{y}^{\epsilon}_k) \right|\geq u \right\} \leq  \frac{\lfloor 1 / \epsilon \rfloor}{4 n u^2}$$
+
+En choisissant $u = \epsilon$, on peut en déduire que, lorque $n$ tend vers l'infini:
+
+$$\lim_n P^n \left\{ \left| \frac{D_n}{\sqrt{n}} \right| \geq 2 \epsilon \right\} = 0$$
+
+Comme on peut choisir $\epsilon$ arbitrairement petit, la convergence en
+probabilité est démontrée
+
+
+`r fontawesome::fa("square")`
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+Cette démonstration du théorème de Glivenko-Cantelli ne s'appuie que
+sur deux choses:
+
+- la loi des grands nombres pour des sommes de variables de
+Bernoulli, et
+
+- la possibilité d'encadrer chaque indicatrice de
+demi-droite, par deux indicatrices assez proches.
+
+Cette dernière idée est souvent utilisée sous une forme généralisée en théorie des
+processus empiriques: c'est la possibilité de couvrir la classe de
+fonctions intéressante $\mathcal{F}$ à l'aide d'un nombre fini
+d'intervalles ou braquets (_brackets_)
+
+
+---
+
+template: inter-slide
+name: consistance-ks
+
+## Consistance du test de Kolmogorov-Smirnov
+
+---
+
+
+### Théorème
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Si $(X_1, \ldots, X_n)$ est collecté par des tirages i.i.d. selon
+une loi $P'$ de fonction de répartition $F' \neq F$,
+
+alors
+
+$$D_n = \sqrt{n} \sup_x \left| F_n (x) - F (x) \right|$$
+
+converge en $P'$-probabilité vers l'infini
+
+]
+
+???
+
+Le théorème de Glivenko-Cantelli nous donne une intuition sur le
+comportement de la statistique de Kolmogorov-Smirnov
+
+
+---
+
+### Preuve
+
+Il existe $\epsilon > 0$, tel qu'il existe $x$ vérifiant
+$F' (x) - F (x)\geq \epsilon > 0$ ou
+$F (x) - F' (x) \geq \epsilon > 0$
+
+Sans perdre en généralité supposons que nous sommes dans la
+première situation.
+
+Comme
+
+$$\begin{array}{rl}\sqrt{n} \sup_t \left| F_n (t) - F (t) \right|  & \geq \sqrt{n} \left( F_n (x) - F (x) \right) \\ & = \sqrt{n} \left( F_n (x) - F' (x) \right) + \sqrt{n}  \left( F' (x) - F (x) \right)\end{array}$$
+
+on a donc
+
+$$D_n \geq \sqrt{n} \left( F_n (x) - F' (x) \right) + \sqrt{n} \epsilon$$
+
+---
+
+### Preuve (suite)
+
+La loi des grands nombres, indique que sous $P'$,
+
+$\left| F' (x) - F_n (x) \right| \rightarrow^{P'} 0$
+
+Donc
+
+$$P' \left\{ F_n (x) - F' (x) < - \epsilon / 2 \right\} \rightarrow_n 0$$
+
+soit pour tout $M > 0$
+
+$$P' \left\{ \sqrt{n} \sup_t \left| F_n (t) - F (t) \right| > M \right\} \rightarrow 1$$
+
+`r fontawesome::fa("square")`
+
+---
+
+`r fontawesome::fa("hand-point-right")` Quelque soit le choix d'un seuil $\tau > 0$,
+pour le test qui rejette l'hypothèse nulle lorsque $D_n \geq \tau,$ la probabilité de
+rejeter lorsque l'hypothèse nulle n'est pas vérifiée (sous une alternative fixe)
+tend vers $1$ lorsque la taille de l'échantillon tend vers l'infini
+
+---
+template: inter-slide
+name: sec-dkw
+
+## Inégalités pour la statistique de Kolmogorov-Smirnov
+
+---
+
+Historiquement, le théorème suivant a rendu possible l'usage pratique de la statistique
+de Kolmogorov-Smirnov avant la banalisation des ordinateurs
+
+Ce théorème a motivé les débuts de la _théorie des processus empiriques_
+
+### Théorème
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Sous l'hypothèse nulle, la statistique de Kolmogorov-Smirnov converge en loi.
+
+Pour $x>0$,
+
+$$\lim_{n\to \infty}  \mathbb{P} \left\{ D_n \geq x\right\} =  2 \sum_{k=1}^\infty (-1)^{k+1} \mathrm{e}^{-2 k^2 x^2}$$
+
+]
+
+???
+
+Nous ne sommes pas en mesure d'établir que sous l'hypothèse nulle la suite des lois de $(D_n)_n$ converge étroitement
+
+---
+
+Nous allons établir des inégalités de déviation pour $D_n$ sous l'hypothèse nulle.
+
+Ces inégalités sont _non-asymptotiques_ (valables pour tout $n$) et elles montrent que la suite des lois de $(D_n)_n$ est _uniformément tendue_
+
+Ces inégalités implique que sous $\text{H}_0$,
+ la suite des lois de $(D_n)_n$ est _relativement compacte_ pour la topologie de la convergence étroite
+
+---
+
+
+### Théorème (Dvoretsky-Kiefer-Wolfovitz-Massart)
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Pour tout entier $n>1$, tout $\epsilon>0$,
+
+$$\mathbb{P}  \left\{ D_n \geq \epsilon\right\} \leq 2 \mathrm{e}^{-2\epsilon^2}$$
+
+]
+
+--
+
+Si on choisit $x = F^{\leftarrow} (1/2)$, $n F_n(x) \sim \text{Binomiale}(n, 1/2)$
+
+L'inégalité de Hoeffding nous indique alors
+
+$$\mathbb{P}  \left\{ \sqrt{n}\left| F_n(x) -F(x)\right|\geq \epsilon\right\} \leq 2 \mathrm{e}^{-2
+\epsilon^2}$$
+
+Le théorème établit donc une inégalité de déviation de type Hoeffding pour le supremum.
+
+???
+
+Il s'agit d'un résultat difficile.
+
+---
+exclude: true
+
+<!-- \begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\textwidth]{TP-CM7_files/figure-latex/unnamed-chunk-4-1.pdf}
+\caption{Graphe de la fonction $s \mapsto  \sqrt{n} |F_n(s) -F(s)| $ pour un
+échantillon de taille $100$  de la loi uniforme. Le processus illustré est souvent appelé le pont empirique.
+La limite en loi du pont empirique est la loi du pont brownien (mouvement brownien conditionné à valoir $0$ au temps $1$.) La ligne pointillée est calculée à partir d'un échantillon de taille $10000$.}
+\label{fig:pont:empirique}
+\end{figure} -->
+
+---
+
+Ce résultat difficile ne peut être amélioré. Une version affaiblie peut être enseignée:
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Pour tout entier $n>0$, tout $\epsilon>0$
+
+$$\mathbb{P}  \left\{ D_n \geq \epsilon\right\} \leq 4 \mathrm{e}^{-\frac{\epsilon^2}{8}}$$
+
+]
+
+---
+
+La preuve de la Proposition est l'occasion d'introduire la technique dite de _symétrisation_, d'explorer les
+premières étapes de la preuve des _inégalités de Vapnik-Chervonenkis_,
+et d'appliquer en statistique des outils élégants issus de la théorie
+des marches aléatoires (_principe de réflexion_).
+
+La technique de symétrisation est une technique générale, simple et puissante de la théorie des processus empiriques.
+
+Elle permet de majorer élégamment des espérances de suprema de processus empiriques.
+
+---
+
+Pour formuler le Lemme de symétrisation, nous utiliserons des variables de Rademacher, autrement des signes aléatoires: une variable de Rademacher vaut $1$ ou $-1$ avec probabilité $1/2$.
+
+### Lemme de Symétrisation
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Soit $X_1, \ldots, X_n$ une suite de vecteurs aléatoires indépendants indexés par $\mathcal{T}$
+
+Soient $\epsilon_1, \ldots, \epsilon_n$
+une suite de variables de Rademacher indépendantes entre elles et indépendantes
+des $X_1, \ldots X_n$
+
+Si $\Psi:  \mathbb{R} \to \mathbb{R}$  est convexe et croissante,
+
+alors
+
+$$\mathbb{E} \left[ \Psi\left(\sup_{t \in \mathcal{T}} \left| \sum_{i=1}^n X_{i,t} - \mathbb{E} X_{i,t} \right| \right) \right]\leq \mathbb{E} \left[ \Psi\left(2 \sup_{t \in \mathcal{T}} \left| \sum_{i=1}^n \epsilon_i X_{i,t}  \right| \right) \right]$$
+
+]
+
+
+---
+
+
+### `r fontawesome::fa("hand-point-right")`
+
+Si on choisit $\Psi(x)=x$, on obtient l'inégalité
+
+$$\mathbb{E} \left[ \sup_{t \in \mathcal{T}} \left| \sum_{i=1}^n X_{i,t} - \mathbb{E} X_{i,t} \right| \right] \leq 2 \mathbb{E} \left[ \sup_{t \in \mathcal{T}} \left| \sum_{i=1}^n \epsilon_i X_{i,t}  \right|  \right]$$
+
+
+
+---
+
+Cette inégalité de symétrisation permet de se concentrer sur une quantité souvent plus simple à étudier
+
+$$\mathbb{E}\left[ \Psi\left(2 \sup_{t \in \mathcal{T}} \left| \sum_{i=1}^n \epsilon_i X_{i,t}  \right| \right) \mid X_1, \ldots, X_n \right]$$
+
+où  l'espérance conditionnelle n'est que l'espérance calculée par rapport aux variables de Rademacher (c'est une simple somme).
+
+---
+
+### Preuve (Lemme de symétrisation)
+
+Dans la suite les $Y_i$ sont i.i.d. uniformément
+sur $[0,1]$. On introduit par souci de commodité
+
+$$Z =  \sqrt{n} D_n  = \sup_{s \in [0,1]} \left| \sum_{i=1}^n X_{i,s} -\mathbb{E} X_{i,s} \right|$$
+
+où $X_{i,s}= 1$ si $Y_i\leq s$ et $X_{i,s}=0$ sinon
+
+Pour $i \leq n$, $Y'_i$ est une copie indépendante de $Y_i$, et
+$X'_{i,s}= \mathbb{I}_{Y'_i\leq s}$.
+
+---
+
+### Preuve (Lemme de symétrisation, suite)
+
+On peut réécrire $Z$ en
+
+$$Z = \sup_{s \in [0,1]} \left| \sum_{i=1}^n X_{i,s}-\mathbb{E} X'_{i,s} \right|$$
+
+Les $\epsilon_i$  sont des variables de Rademacher
+
+$$\mathbb{P}\{\epsilon_i=1\}=\mathbb{P}\{\epsilon_i=-1\}=1/2$$
+
+indépendantes des $Y_i, Y'_i$.
+
+On utilisera le fait que $\epsilon_i(X_{i}-X'_i)\sim (X_{i}-X'_i)$
+
+car la variable aléatoire fonctionnelle $X_i- X'_i$  est _symétrique_:
+
+elle a même loi que son opposé.
+
+---
+
+### Preuve (Lemme de symétrisation, suite)
+
+Les espérances sont prises par rapport à
+
+$$X_1,\ldots,X_n,X'_1,\ldots,X'_n,\epsilon_1,\ldots,\epsilon_n$$
+
+$$\begin{array}{rlr} \mathbb{E} \left[ \Psi\left(  Z\right) \right]  & =   \mathbb{E} \left[ \sup_{s \in [0,1]} \Psi\left(  \left| \sum_{i=1}^n X_{i,s} -\mathbb{E} X'_{i,s} \right| \right) \right]  & \\ & \leq \mathbb{E} \left[ \sup_{s \in [0,1]} \Psi\left(  \left| \sum_{i=1}^n X_{i,s} - X'_{i,s} \right| \right) \right] & \text{(Jensen)}  \\  & =   \mathbb{E} \left[ \sup_{s \in [0,1]} \Psi\left( \left| \sum_{i=1}^n \epsilon_i (X_{i,s} - X'_{i,s}) \right| \right) \right] & (X_i-X'_i  \text{est symétrique}) \\ & \leq    \mathbb{E} \left[ \sup_{s \in [0,1]} \frac{1}{2} \left( \Psi\left(2 \left| \sum_{i=1}^n \epsilon_i X_{i,s} \right|\right) \right. \right. & \\ & \phantom{ \mathbb{E}  \sup_{s \in [0,1]} \frac{1}{2} \frac{1}{2} } \left. \left. +  \Psi\left(2 \left| -\sum_{i=1}^n \epsilon_i X'_{i,s} \right| \right) \right) \right] & \text{(Jensen)} \\  & \leq  \mathbb{E} \left[ \sup_{s \in [0,1]} \Psi\left(2 \left| \sum_{i=1}^n \epsilon_i X_{i,s} \right|\right) \right] & \end{array}$$
+
+
+`r fontawesome::fa("square")`
+
+---
+
+### Inégalité de symétrisation pratique
+
+En choisissant $\Psi(x)=\mathrm{e}^{\lambda x}$ pour $\lambda>0$, nous venons d'établir l'inégalité de symétrisation qui sera l'élément clé de la preuve de la proposition (version facile du théorème Dvoretsky _et al._  qui n'est pas fondée sur un argument de symétrisation):
+
+$$\mathbb{E} \left[ \sup_{s \in [0,1]} \mathrm{e}^{\lambda \left| \sum_{i=1}^n X_{i,s} -\mathbb{E} X'_{i,s} \right|} \right] \leq  \mathbb{E} \left[ \sup_{s \in [0,1]} \mathrm{e}^{2\lambda \left| \sum_{i=1}^n \epsilon_i X_{i,s} \right|} \right]$$
+
+
+---
+
+### `r fontawesome::fa("hand-point-right")`
+
+Cette inégalité est valable pour des _suprema de processus empiriques_ beaucoup plus généraux.
+
+Si les $X_{i,s}$ étaient des indicatrices d'ensembles plus compliqués que des demi-droites, elle resterait valable.
+
+De fait cette inégalité peut constituer la première étape d'une preuve des inégalités de Vapnik-Chervonenkis.
+
+
+
+---
+
+Nous allons maintenant exploiter le fait que nous avons affaire à des indicatrices de demi-droites.
+
+### Preuve
+
+Presque sûrement,  les $Y_i$ sont deux à deux distincts. Pour une réalisation des $\epsilon_i$ et des $Y_i$, on a
+
+$$\begin{array}{rl} \sup_{s \in [0,1]} \mathrm{e}^{2\lambda \left| \sum_{i=1}^n \epsilon_i X_{i,s} \right|} & = \sup_{s \in [0,1]} \mathrm{e}^{2\lambda \left| \sum_{i=1}^n \epsilon_i \mathbb{I}_{Y_i \leq s} \right|} \\
+& =  \max_{k \leq n} \mathrm{e}^{2\lambda \left| \sum_{i=1}^n \epsilon_i \mathbb{I}_{Y_i \leq Y_{(k)}} \right|} \\
+& =  \max_{k \leq n} \mathrm{e}^{2\lambda \left| \sum_{i=1}^k \epsilon_i  \right|}    \qquad\text{(en loi).} \end{array}$$
+
+Donc
+
+---
+
+### Preuve (suite)
+
+$$\mathbb{E} \left[ \sup_{s \in [0,1]} \mathrm{e}^{2\lambda \left| \sum_{i=1}^n \epsilon_i X_{i,s} \right|} \mid Y_1, \ldots, Y_n\right]   =   \mathbb{E} \Bigg[ \max_{k \leq n} \mathrm{e}^{2\lambda\left| \sum_{i\leq k} \epsilon_i \right|} \Bigg]$$
+
+Le membre droit est un moment exponentiel de la marche aléatoire
+symétrique réfléchie. Comme pour toute variable aléatoire positive, l'espérance peut s'écrire comme l'intégrale des probabilités de déviation.
+
+$$\mathbb{E} \Bigg[ \max_{k \leq n}\mathrm{e}^{2\lambda \left| \sum_{i\leq k} \epsilon_i \right|} \Bigg]  = \int_{0}^\infty \mathbb{P} \left\{ \max_{k \leq n} \mathrm{e}^{2\lambda\left| \sum_{i\leq k} \epsilon_i \right|}  \geq a\right\}\mathrm{d}a$$
+
+---
+
+### Preuve (suite)
+
+On note
+
+$$A_k= \left\{ \mathrm{e}^{2 \lambda \left| \sum_{i\leq k} \epsilon_i \right|} \geq a, \text{ et } \mathrm{e}^{2 \lambda \left|\sum_{i\leq j} \epsilon_i \right|} < a \text{ pour } j<k \right\}$$
+
+Les $A_k$  forment une famille d'événements deux à deux disjoints.
+
+D'une part,
+
+$$\left\{ \max_{k \leq n} \mathrm{e}^{2\lambda \left| \sum_{i\leq k}\epsilon_i \right|} \geq a\right\} = \bigcup_{k\leq n} A_k$$
+
+et d'autre part,  pour chaque $k \in \{ 1, \ldots, n\}$,
+
+$$\begin{array}{rcl}\mathbb{P} \left\{\mathrm{e}^{2\lambda \left| \sum_{i\leq n} \epsilon_i \right|}  \geq a \mid A_k \right\} & \geq & \frac{1}{2}\end{array}$$
+
+en effet, avec probabilité supérieure ou égale à $1/2$, $\sum_{k < i \leq n} \epsilon_i$  est du même
+signe que $\sum_{i\leq k} \epsilon_i$
+
+Nous utilisons ici le _principe de réflexion de Désiré André_
+
+---
+
+### Preuve (suite)
+
+On peut déduire une inégalité maximale:
+
+$$\begin{array}{rcl} \mathbb{P} \left\{ \max_{k \leq n} \mathrm{e}^{2\lambda \left| \sum_{i\leq k} \epsilon_i \right|}  \geq a\right\} & \leq & 2 \sum_{k\leq n} \mathbb{P}\{ A_k\} \mathbb{P} \times \left\{ \mathrm{e}^{2\lambda \left| \sum_{i\leq n} \epsilon_i \right|}  \geq a \mid A_k \right\} \\ & = & 2 \mathbb{P}
+\left\{ \mathrm{e}^{2\lambda \left| \sum_{i\leq n} \epsilon_i \right|}  \geq a \right\}\end{array}$$
+
+D'où
+
+$$\begin{array}{rl} \mathbb{E} \left[ \max_{k \leq n} \mathrm{e}^{2\lambda \left| \sum_{i\leq k} \epsilon_i \right| } \right] & \leq   2 \mathbb{E} \left[ \mathrm{e}^{2\lambda \left| \sum_{i\leq n} \epsilon_i \right|} \right]  \\ & \leq   2 \mathbb{E} \left[\mathrm{e}^{2\lambda  \sum_{i\leq n} \epsilon_i } + \mathrm{e}^{- 2\lambda  \sum_{i\leq n} \epsilon_i }\right]  \\ & \leq   4 \mathbb{E} \left[ \mathrm{e}^{2\lambda  \sum_{i\leq n} \epsilon_i } \right] \qquad \text{(symétrie)} \\ & \leq  4 \, \mathrm{e} ^{n\frac{(2\lambda)^2}{2}} \qquad \text{ (Lemme de Hoeffding).}  \end{array}$$
+
+---
+
+### Preuve (fin)
+
+On aboutit à
+
+$$\mathbb{E} \left[ \mathrm{e}^{\lambda Z} \right] \leq 4 \mathrm{e} ^{2 n \lambda^2}$$
+
+et la proposition s'obtient en choisissant $\lambda=\epsilon/(4\sqrt{n})$ et invoquant le Lemme de Markov.
+
+`r fontawesome::fa("square")`
+
+---
+template: inter-slide
+
+## Quelques développements
+
+---
+
+Si au lieu de considérer un processus empirique indexé par les
+demi-droites de $\mathbb{R}$, on considère des processus indexés par
+des classes plus générales de parties, on ne peut plus utiliser une
+identité comme \eqref{eq:identite}. On peut cependant, exploiter la
+symétrisation en adoptant la démarche de Vapnik et Chervonenkis \citep{Mas06} .
+
+Cette démarche permet même d'obtenir des résultats fins et applicables
+comme cette inégalité issue de \cite{Pan03} qui s'affranchit des
+contraintes habituelles de bornitude.
+
+Soient  $X'_1,\ldots,X'_n$ des copies i.i.d. des vecteurs indépendants
+ $X_1,\ldots,X_n$.
+Soit
+
+$$W= \mathbb{E}\left[ \sup_{s\in\mathcal{T}} \sum_{i=1}^n  (X_{i,s}-X'_{i,s})^2 \bigg \vert \bigg. X_1,\ldots,X_n\right]$$
+
+Alors pour tout  $t\geq  0$,
+$$\mathbb{P}\left\{ Z \geq \mathbb{E} Z + 2 \sqrt{tW}\right\} \leq 4  e^{-t/4}$$
+et
+$$\mathbb{P}\left\{ Z \leq \mathbb{E} Z - 2 \sqrt{tW }\right\}
+\leq  4 e^{-t/4}$$
+
+---
+name: adequation-famille
+template: inter-slide
+
+## Adéquation à une famille de lois
+
+
+
+---
+
+De même qu'on peut utiliser les statistiques du $\chi^2$ pour tester l'ajustement à une famille de lois, on peut utiliser les statistiques de Kolmogorov-Smirnov pour tester l'adéquation à une famille de lois.
+
+
+Prenons le cas de la famille des lois exponentielles
+dont les densités sont de la forme $1/{\sigma} \, {\exp(- x/\sigma)}$, pour $x>0, \sigma>0$.
+
+On peut chercher à modifier la statistique de Kolmogorov-Smirnov, en substituant à la fonction de répartition inconnue, une fonction de répartition estimée, par exemple via la méthode du maximum de vraisemblance
+
+$$\sqrt{n}  \sup_{x \in \mathbb{R}}  \left| F_n(x) - \left(1-  \mathrm{e}^{-x/\widehat{\sigma}   } \right)\right|$$
+
+où $\widehat{\sigma}=\overline{X}_n$.
+
+---
+
+On peut vérifier que sous l'hypothèse nulle, la loi de cette statistique est libre  du paramètre  $\sigma$ (la loi de $(X_i/\overline{X}_n)$ est libre  de $\sigma$,
+
+Il n'y a là rien de spécifique à la famille des lois exponentielles.
+
+Cette construction fonctionne pour les familles définies par un paramètre d'échelle).
+
+La statistique de test devient
+
+$$\sqrt{n} \sup_{x \in \mathbb{R}}  \left| \frac{1}{n}\sum_{i=1}^n \mathbb{1}_{\frac{X_i}{\widehat{\sigma}}\leq x} - \left(1-  \mathrm{e}^{-x} \right)\right|$$
+
+Elle n'est pas distribuée de la même façon que la statistique de Kolmogorov-Smirnov calculée sous l'hypothèse nulle sur un $n$-échantillon. La distribution sous l'hypothèse nulle dépend de la famille de lois considérée.
+
+
+
+---
+
+Le lemme suivant nous fournit une autre voie
+
+### Lemma
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+
+Soient $Y_1, \ldots, Y_n$ des variables aléatoires positives i.i.d.
+
+On note $S_n:= \sum_{i=1}^n Y_i$.
+
+La loi commune des $Y_i$ est exponentielle
+
+si et seulement si
+
+conditionnellement à $S_n$,   $Y_1, \ldots, Y_{n-1}$ est distribuée comme les écarts  d'un $n-1$-échantillon de la loi uniforme sur $[0,S_n]$
+
+]
+
+---
+
+### Preuve
+
+Une suite de calculs astucieux mais élémentaires montre que la densité de la loi commune des $Y_i$ est une solution mesurable de l'équation fonctionnelle de Cauchy
+
+$$f(x+y) = f(x)f(y) \text{ pour } x,y \geq  0$$
+
+Les seules solutions mesurables de cette équation sont de la forme
+$f (x) = b \exp(ax)$ pour $b > 0, a \in \mathbb{R}$
+
+La densité de la loi commune des $Y_i$  est une solution mesurable de l'équation fonctionnelle  de Cauchy
+
+`r fontawesome::fa("square")`
+
+---
+
+
+
+### Corollaire
+
+Soient $Y_1, \ldots, Y_n$ des variables aléatoires positives i.i.d., On note $S_n:= \sum_{i=1}^n Y_i$.
+
+La loi commune des $Y_i$ est exponentielle  si et seulement si
+la suite $(Z_j)_{j <n}$ définie par $Z_j =\sum_{k=1}^j Y_j /S_n$
+est distribuée comme les statistiques d'ordre d'un $n-1$-échantillon de la loi uniforme sur $[0,1]$.
+
+
+
+---
+
+Tester l'adéquation à la famille des lois exponentielles revient donc à calculer la statistique de Kolmogorov-Smirnov d'ajustement à la loi uniforme sur la suite $Z_1, \ldots, Z_{n-1}$
+et à comparer cette statistique aux quantiles de la loi
+de la statistique de Kolmogorov-Smirnov pour les échantillons de taille $n-1$.
+
+Cette démarche peut sembler inattaquable. Elle présente pourtant quelques défauts.
+
+---
+template: inter-slide
+exclude: true
+name: biblio
+
+## Remarques bibliographiques
+
+---
+exclude: true
+
+
+La symétrisation, consiste (entre autres choses) à réduire l'étude d'une suite de variables aléatoires vectorielles centrées $(X_i)_i$ à celle d'une suite de variables alétoires $(X_i')_i$ \emph{symétriques}.
+Une variable aléatoire $X$ est dite symétrique si $X$ et $-X$ ont même loi. Ledoux et Talagrand \cite{LeTa91} utilisent ce type de techniques pour caractériser la convergence presque sûre de sommes de vecteurs aléatoires indépendants (en particulier pour les vecteurs aléatoires à valeur dans des espaces de Banach). Ils renvoient aux travaux de Paul Lévy. L'utilisation des arguments de symétrisation est centrale dans les travaux de Vapnik et Chervonenkis \cite{VaCh71,VaCh81,Vap82}, sous la forme présentée ici, elle a été popularisée par Giné et Zinn \cite{GiZi84}.
+
+En statistique, la symétrisation est utilisée sans être toujours mentionnée. En apprentissage, les moyennes de Rademacher, conditionnelles ou non, sont une variante du _bootstrap_ à poids qui repose sur la symétrisation \cite{Kol06}. Les tests de permutation peuvent aussi être considérés comme des techniques de symétrisation.
+
+La résolution de l'équation fonctionnelle de Cauchy est étudiée dans \citep{BiGoTe87}.
 
 
 ---
@@ -132,5 +1426,3 @@ background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
-
----

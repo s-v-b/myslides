@@ -98,15 +98,18 @@ class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Problèmes
+### [Notations](#notations)
 
-### Chi-deux d'adéquation
 
-### Puissance du Chi-deux d'adéquation
+### [Problèmes](#problemes)
 
-### Hypothèse nulle composite
+### [Chi-deux d'adéquation](#adequation)
 
-### Test d'indépendance
+### [Puissance du Chi-deux d'adéquation](#)
+
+### [Hypothèse nulle composite](#h0composite)
+
+### [Test d'indépendance](#independance)
 
 
 ---
@@ -118,6 +121,7 @@ est garanti. Leur construction passe par la construction d'une suite de vecteurs
 
 ---
 class: center, middle, inverse
+name: notations
 
 ## Notations
 
@@ -244,6 +248,8 @@ $$I(\theta)^{-1} =  \frac{1}{n}\operatorname{cov}\left( \left(N^n(\alpha)\right)
 
 ---
 class: center, middle, inverse
+name: problemes
+
 
 ## Problèmes
 
@@ -262,7 +268,7 @@ class: center, middle, inverse
 ---
 ### Définition : Problème d'_adéquation à une hypothèse simple_
 
-Soientt
+Soient
 
 - $P$ une loi de probabilités sur un ensemble fini $\Omega$ et
 
@@ -301,6 +307,7 @@ Saxe et nota  le nombre  de garçons dans $6115$ familles de $12$ enfants
 
 
 ---
+exclude: true 
 
 ```{r}
 
@@ -395,8 +402,7 @@ selon une loi    $P$ sur $\Omega \times \Omega$,
 telle que $P\{A \times B\}= P\{B \times A\}$ pour tous $A, B \subseteq \Omega$ ?
 
 ---
-
-
+name: adequation
 class: center, middle, inverse
 
 ## Test du $\chi^2$ d'adéquation
@@ -512,6 +518,7 @@ Comme la matrice $\Gamma(\theta)$  est la matrice de projection sur le sous-espa
 à la droite engendrée par $(\sqrt{ \mathbf{p}_ \theta(\alpha)})_{0 \leq \alpha \leq p}$, on peut conclure avec
 
 - le théorème de Cochran
+
 - le principe de l'image continue
 
 que
@@ -602,12 +609,16 @@ _fonction de répartition de la loi de la statistique_ $S$ _sous l'hypothèse nu
 
 ### Proposition
 
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Sous une hypothèse nulle simple,  si la loi de la statistique $S$ est diffuse,
 
 alors,
 
 la loi de la $p$-valeur  est  uniforme sur $[0,1]$
 
+]
 
 
 
@@ -695,6 +706,7 @@ $$\chi^2(P_{\theta_n}\mid P_  \theta) =  \frac{1}{n}\sum_{\alpha=0}^p \frac{h[ \
 Dans la dernière expression nous abusons des notations:
 
 - $I(\theta)$ est une matrice de dimension $p$ par $p$,
+
 - $h$ est introduit comme un vecteur colonne indicé entre $0$ et $p$
 
 Il faut comprendre
@@ -735,6 +747,9 @@ $n \chi^2(P_{\theta_n} \mid P_ \theta)$ se détermine.
 
 ### Proposition
 
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Sous $(P^{\otimes n}_{\theta_n})_n$,  la limite des lois de la statistique de Pearson $C_n(\theta)$
 est la loi du $\chi^2$ à $p$ degrés de liberté décentrée,  de paramètre de décentrage
 
@@ -742,6 +757,7 @@ $$h^t I(\theta) h =  \sum_{\alpha=0}^{p} h^2_\alpha/\theta_\alpha = n \chi^2(P_{
 
 Cette loi est notée $\chi^2_p(h^t I(\theta)h)$
 
+]
 
 ---
 
@@ -779,29 +795,25 @@ dont la somme centrée et normalisée donne $S_n$  dépend de $n.$ On dit qu'on 
 
 Le théorème Central Limite de Lindeberg-Feller est justement valable pour les tableaux triangulaires.
 
+---
+
+### Preuve (suite)
+
+
 On  vérifie facilement que les conditions sont remplies dans le cas des vecteurs multinomiaux
 
 
-% Par le théorème de Berry-Esseen:
-$$
-%   \sup_{x \in \mathbb{R}} \left| \mathbb{P} \left\{S_n/\sigma_n \leq x \right\} - \Phi(x)\right| \leq \frac{\mathbb{E}[|X_1|^3]}{\sqrt{n} \sigma_n^3}
-% $$
-% ou encore
-%
-$$
-%   \sup_{x \in \mathbb{R}} \left| \mathbb{P} \left\{S_n \leq x \right\} - \Phi(x/\sigma_n)\right| \leq \frac{\mathbb{E}[|X_1|^3]}{\sqrt{n} \sigma_n^3} \, .
-% $$
+Par le théorème de Berry-Esseen:
+$$\sup_{x \in \mathbb{R}} \left| \mathbb{P} \left\{S_n/\sigma_n \leq x \right\} - \Phi(x)\right| \leq \frac{\mathbb{E}[|X_1|^3]}{\sqrt{n} \sigma_n^3}$$
+ou encore
 
-% Comme
-%
-$$
-%   \sup_{x \in \mathbb{R}} \left| \Phi(x/\sigma) - \Phi(x/\sigma_n)\right| \leq \left(\frac{\sigma\vee \sigma_n}{\sigma \wedge \sigma_n} -1\right) M
-% $$
-% pour une constante universelle $M \leq \sup_{x>0} x \phi(x)$, on peut conclure que
-%
-$$
-%  \lim_n  \sup_{x \in \mathbb{R}} \left| \mathbb{P} \left\{S_n \leq x \right\} - \Phi(x/\sigma)\right| =0 \,
-% \] soit la convergence en loi désirée.
+$$\sup_{x \in \mathbb{R}} \left| \mathbb{P} \left\{S_n \leq x \right\} - \Phi(x/\sigma_n)\right| \leq \frac{\mathbb{E}[|X_1|^3]}{\sqrt{n} \sigma_n^3}$$
+
+Comme
+$$\sup_{x \in \mathbb{R}} \left| \Phi(x/\sigma) - \Phi(x/\sigma_n)\right| \leq \left(\frac{\sigma\vee \sigma_n}{\sigma \wedge \sigma_n} -1\right) M$$
+pour une constante universelle $M \leq \sup_{x>0} x \phi(x)$, on peut conclure que
+$$\lim_n  \sup_{x \in \mathbb{R}} \left| \mathbb{P} \left\{S_n \leq x \right\} - \Phi(x/\sigma)\right| =0$$
+soit la convergence en loi désirée.
 
 `r fontawesome::fa("square")`
 
@@ -809,7 +821,7 @@ $$
 ---
 
 Lors de l'étude du test de Fisher en régression linéaire gaussienne, nous avons vu que la loi du $\chi^2$  décentrée domine stochastiquement la loi du $\chi^2$ centrée. Nous pouvons donc conclure que sous la suite $P_{\theta_n}$
-le test du $\chi^2$ de niveau $\alpha$  est sous la suite d'alternatives contigue $(\theta_n)_n$,  de puissance asymptotique supérieure ou égale à $\alpha$ (on dit que le test est __sans biais}).
+le test du $\chi^2$ de niveau $\alpha$  est sous la suite d'alternatives contigue $(\theta_n)_n$,  de puissance asymptotique supérieure ou égale à $\alpha$ (on dit que le test est _sans biais_).
 
 On peut regarder cette étude de la puissance asymptotique du test du $\chi^2$ sur une suite l'alternatives contigue dans la perspective du théorème.
 
@@ -817,6 +829,7 @@ Ce théorème nous indique que pour tout seuil $\tau>0$
 
 $$\max\left(P_ \theta^{\otimes n}\{ C(n,\mathbf{p}_ \theta) \geq \tau\}, P_ {\theta_n}^{\otimes n}\{ C(n,\mathbf{p}_ \theta) < \tau\} \right) \geq \frac{1}{4} - \frac{1}{2} n H(P_ \theta, P_{\theta_n})^2$$
 
+---
 
 Si $F_p$ (resp. $F_{p,\delta}$) désigne la fonction de répartition de la loi $\chi^2_p$ (resp. $\chi^2_p(\delta)$), en choisissant
 
@@ -832,7 +845,7 @@ alors que celle du membre droit est $\tfrac{1}{4}-\tfrac{\delta}{8}$.
 
 Pour $\delta=1$, $p=12$, le minimum du membre gauche et atteint autour de $\eta\approx .45$  et il est proche de $.45$.
 
-L'écart avec la minoration ($1/8$) ne permet pas de déclarer que le test du $\chi^2$ est asymptotiquement optimal (la minoration basée sur la distance de Hellinger).
+L'écart avec la minoration ($1/8$) ne permet pas de déclarer que le test du $\chi^2$ est asymptotiquement optimal.
 
 Ce calcul suscite une question:  peut-on concevoir un test d'adéquation à $P_ \theta$
 qui soit asymptotiquement de niveau $\eta$ et pour toute suite $(\theta_n)_n$ d'alternatives contigue
@@ -845,6 +858,7 @@ de niveau asymptotique supérieur à $F_{p,\delta}(F_p^{\leftarrow}(1- \eta)))$ 
 
 ---
 class: center, middle, inverse
+name: h0composite
 
 ## Hypothèse nulle composite
 
@@ -884,7 +898,7 @@ aussi procéder de la façon suivante.
 
 On note $N^n(\alpha)$
 le nombre d'occurrences de $\alpha \in \{0, \ldots, p\}$ \ dans
-l'échantillon ($N^n_i \equiv \sum_{t = 1}^n \mathbb{1}_{x_t = i}$)
+l'échantillon ( $N^n_i \equiv \sum_{t = 1}^n \mathbb{1}_{x_t = i}$ )
 
 Le test du $\chi^2$ d'adéquation à $\Theta_0 \subset \mathbb{R}^r$ consiste
 à comparer la statistique de Pearson modifiée:
@@ -904,7 +918,7 @@ est supérieur à ce seuil.
 
 
 Le nombre moyen de garçons dans les familles de l'échantillon $0.519$ est à peine
-différent de celui qu'on apprend dans les livres ($.52$), l'écart
+différent de celui qu'on apprend dans les livres ( $.52$ ), l'écart
 est en tous cas plus petit que l'écart-type de la moyenne empirique de
 $73 380$ épreuves de Bernoulli de paramètre  $.52$.
 
@@ -1017,11 +1031,11 @@ Ce n'est pas un modèle exponentiel.
 Dans cette section, nous caractérisons la loi limite de
 $C (n,\mathbf {p}_{\widehat{\theta}})$ sous l'hypothèse nulle lorsque $\Theta_0$ est
 un modèle   régulier et $\widehat{\theta}$ un estimateur  du
-maximum de vraisemblance.
+maximum de vraisemblance
 
 Pour établir que cette loi limite est une loi du
 $\chi^2$ dont le nombre de degrés de liberté est égal à la
-différence entre $p$ et la \og  dimension \fg\  de $\Theta_0$ (soit $r$ si
+différence entre $p$ et la  _dimension_  de $\Theta_0$ (soit $r$ si
 $\Theta_0$ est un ouvert de $\mathbb{R}^r$),
 
 Nous allons rappelerquelques outils probabilistes
@@ -1047,11 +1061,10 @@ Elle est supposée inversible, donc  de rang $r$,  en tout $\theta \in \Theta_0$
 
 ---
 
-On peut définir une matrice $B (\theta)$  de dimensions $r \times (p+1) $ et
+On peut définir une matrice $B (\theta)$  de dimensions $r \times (p+1)$ et
 factoriser  la matrice d'information $I (\theta)$:
 
-$$B (\theta):=  \left(\begin{array}{c} \frac{\partial_j \mathbf {p}_{\theta} (\alpha)}{\sqrt{\mathbf {p}_{\theta}
-\{\alpha\}}} \end{array}\right)_{\scriptsize {\begin{array}{l}1 \leq  j \leq  r\\ 0 \leq  \alpha \leq  p \end{array}}}   \text{ et }  I (\theta):= B(\theta) \times B(\theta)^t$$
+$$B (\theta):=  \left(\begin{array}{c} \frac{\partial_j \mathbf {p}_{\theta} (\alpha)}{\sqrt{\mathbf {p}_{\theta} \{\alpha\}}} \end{array}\right)_{\scriptsize {\begin{array}{l}1 \leq  j \leq  r\\ 0 \leq  \alpha \leq  p \end{array}}}   \text{ et }  I (\theta):= B(\theta) \times B(\theta)^t$$
 
 La colonne de $B(\theta)$ indexée par $\alpha$
 est  $\tfrac{1}{\sqrt{\mathbf{p}_\theta(\alpha)}} \nabla \mathbf{p}_{\theta}(\alpha)$.
@@ -1069,10 +1082,11 @@ $$I (\theta) = \left(\begin{array}{c} - \mathbb{E}_{\theta} \left[ \partial_{j, 
 
 Les coefficients de la matrice d'information peuvent en effet  s'écrire
 
-$$ - \sum_{\alpha= 0}^p \frac{\partial_{j, j'} \mathbf{p}_{\theta} \{\alpha\} \times \mathbf{p}_{\theta} \{\alpha\}- \partial_j \mathbf{p}_{\theta} \{\alpha\} \times \partial_{j'} \mathbf{p}_{\theta}\{\alpha\}}{\mathbf{p}_{\theta} \{\alpha\}} \,   \quad \text{ pour } 1 \leq  j, j'\leq  r$$
+$$- \sum_{\alpha= 0}^p \frac{\partial_{j, j'} \mathbf{p}_{\theta} \{\alpha\} \times \mathbf{p}_{\theta} \{\alpha\}- \partial_j \mathbf{p}_{\theta} \{\alpha\} \times \partial_{j'} \mathbf{p}_{\theta}\{\alpha\}}{\mathbf{p}_{\theta} \{\alpha\}} \,   \quad \text{ pour } 1 \leq  j, j'\leq  r$$
 
 La possibilité d'écrire l'information de Fisher comme l'espérance du Hessien de la log-vraisemblance est
 une propriété de certains modèles statistiques, pas de tous, elle est notamment vérifiée dans les modèles exponentiels.
+
 L'information de Fisher est définie comme la covariance sous $P_ \theta$ du vecteur score évalué en $\theta$.
 
 
@@ -1109,6 +1123,8 @@ $$\nabla \ell_n (\theta') = (\partial_j \ell_n (\theta'))_{j \leq  r}$$
 
 c'est un vecteur colonne.
 
+---
+
 On définit la matrice symétrique $A(\theta)$  par
 
 $$A (\theta):= \left(\begin{array}{ccc}\Gamma (\theta) & \vdots & B(\theta)^{t } I^{- 1} (\theta)\\\ldots & \ldots & \ldots\\I^{- 1} (\theta) B (\theta) & \vdots & I^{- 1} (\theta)\end{array}\right)$$
@@ -1120,7 +1136,10 @@ On note la factorisation
 
 $$A(\theta) = \left(\begin{array}{c}\text{Id}_{p+1}\\\ldots\\I^{- 1} (\theta) B (\theta)\end{array}\right) \times \Gamma(\theta) \times \begin{pmatrix}\text{Id}_{p+1} &\vdots &B (\theta)^t I^{- 1} (\theta)\end{pmatrix}$$
 
-qui se vérifie en n'oubliant pas que $\Gamma(\theta) B(\theta)^t I^{-1}(\theta) = B(\theta)^t I^{-1}(\theta)$
+qui se vérifie en n'oubliant pas que 
+$\Gamma(\theta) B(\theta)^t I^{-1}(\theta) = B(\theta)^t I^{-1}(\theta)$
+
+---
 
 En effet
 
@@ -1130,7 +1149,10 @@ $$\begin{array}{rl}\Gamma(\theta) B(\theta)^t & = B(\theta)^t -  \begin{pmatrix}
 
 Le résultat essentiel sur le comportement asymptotique de la statistique
 de Pearson (étendue) est donné par
+
 ### Théorème
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si $\Theta_0 \subset \mathbb{R}^r$ définit un
 modèle multinomial régulier et si $\hat{\theta}$ est un estimateur
@@ -1140,9 +1162,9 @@ alors
 
 pour tout $\theta \in \Theta_0$, sous $\mathbf {p}_{\theta}$
 
-$$C (n, \text{$\mathbf {p}_{\hat{\theta}}$}) \rightsquigarrow X \hspace{1em}  \text{où $\hspace{1em} X \sim \chi^2_{p - r} .$}$$
+$$C (n, \mathbf {p}_{\hat{\theta}}) \rightsquigarrow X \hspace{1em}  \text{où}\quad  X \sim \chi^2_{p - r}$$
 
-
+]
 
 ---
 
@@ -1155,11 +1177,14 @@ vraisemblance dans le modèle $\Theta_0$.
 
 ### Lemme
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Sous les conditions du théorème \ref{the:lim:chi2},
 pour tout $\theta \in \Theta_0$, sous $\mathbf {p}_{\theta}$,
 
 $$I (\theta) \sqrt{n} ( \widehat{\theta}_n - \theta) - \frac{1}{\sqrt{n}} \nabla \ell_n (\theta) \stackrel{\mathbf{p}_{\theta}}{\longrightarrow}0$$
 
+]
 
 ---
 
@@ -1177,6 +1202,8 @@ $$I (\theta) \sqrt{n} ( \widehat{\theta}_n - \theta) - \frac{1}{\sqrt{n}} \nabla
 
 ### Lemme
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Sous les conditions du théorème ...
 pour tout $\theta \in \Theta_0$, sous $\mathbf {p}_{\theta}$,
 la suite de vecteurs aléatoires de dimension $p +  1 + r$
@@ -1184,6 +1211,8 @@ la suite de vecteurs aléatoires de dimension $p +  1 + r$
 $$X^n:= \begin{pmatrix} Z^n  \\  \ldots \\  \sqrt{n}  \left(\hat{\theta}_n - \theta \right)\end{pmatrix}$$
 
 converge en loi vers un vecteur gaussien centré de matrice de covariance  $A(\theta)$.
+
+]
 
 ---
 
@@ -1298,17 +1327,20 @@ $$\theta' \mapsto \left(\frac{\mathbf {p}_{\theta'} \{\alpha\}}{\sqrt{\mathbf {p
 
 vaut exactement $B (\theta)$
 
-En invoquant à nouveau le principe du Delta et le lemme \ref{lem:intermed}
+---
+
+.f6[
+En invoquant à nouveau le principe du Delta et le lemme 
 
 $$\sqrt{n} \left( \frac{\frac{N^n(\alpha)}{n} -\mathbf {p}_{\theta} \{\alpha\}}{\sqrt{\mathbf {p}_{\theta} \{\alpha\}}}, \frac{(\mathbf {p}_{\theta} \{\alpha\}-\mathbf {p}_{\widehat{\theta}_n} \{\alpha\})}{\sqrt{\mathbf {p}_{\theta} \{\alpha\}}} \right)_{\alpha \leq  p}$$
 
 converge en loi vers un vecteur Gaussien de matrice de covariance
 
-$$\left(\begin{array}{cccc} \Gamma (\theta) & \vdots & B^{t } (\theta) I^{- 1} (\theta) B^{} (\theta) & \\ \ldots &  & \ldots & \\
-B(\theta)^t I^{- 1} (\theta) B^{} (\theta) & \vdots & B(\theta)^t I^{- 1} (\theta) B^{} (\theta) & \end{array}\right) \\    = \left(\begin{array}{ccc} \text{Id}_k & \vdots & B^{t } (\theta) \end{array}\right) \left(\begin{array}{cccc} \Gamma (\theta) & \vdots & B(\theta)^t I^{- 1} (\theta) & \\ \ldots &  & \ldots & \\ I^{- 1} (\theta) B^{} (\theta) & \vdots & I^{- 1} (\theta) & \end{array}\right) \left(\begin{array}{c}\text{Id}_k\\  \ldots\\ B^{} (\theta)\end{array}\right)$$
-
+$$\left(\begin{array}{cccc} \Gamma (\theta) & \vdots & B^{t } (\theta) I^{- 1} (\theta) B^{} (\theta) & \\ \ldots &  & \ldots & \\ B(\theta)^t I^{- 1} (\theta) B^{} (\theta) & \vdots & B(\theta)^t I^{- 1} (\theta) B^{} (\theta) & \end{array}\right) \\    = \left(\begin{array}{ccc} \text{Id}_k & \vdots & B^{t } (\theta) \end{array}\right) \left(\begin{array}{cccc} \Gamma (\theta) & \vdots & B(\theta)^t I^{- 1} (\theta) & \\ \ldots &  & \ldots & \\ I^{- 1} (\theta) B^{} (\theta) & \vdots & I^{- 1} (\theta) & \end{array}\right) \left(\begin{array}{c}\text{Id}_k\\  \ldots\\ B^{} (\theta)\end{array}\right)$$
+]
 ---
 
+.f6[
 On déduit que la suite de vecteurs aléatoires $(Y^n)_{n \in \mathbb{N}}$
 
 $$Y^n:= \sqrt{n} \left( \frac{\frac{N^n(\alpha)}{n} -\mathbf{p}_{\theta} \{\alpha\}}{\sqrt{\mathbf{p}_{\theta} \{\alpha\}}} - \frac{(\mathbf{p}_{\theta} \{\alpha\}-\mathbf{p}_{\widehat{\theta}_n} \{\alpha\})}{\sqrt{\mathbf{p}_{\theta} \{\alpha\}}} \right)_{\alpha \leq p}$$
@@ -1316,6 +1348,8 @@ $$Y^n:= \sqrt{n} \left( \frac{\frac{N^n(\alpha)}{n} -\mathbf{p}_{\theta} \{\alph
 converge en loi vers un vecteur Gaussien de matrice de covariance
 
 $$\begin{array}{rl} \Gamma (\theta) - B(\theta)^t I^{- 1} (\theta) B^{} (\theta)& = \mathrm{Id} - \left(\begin{array}{c}\sqrt{p_1}\\\sqrt{p_2}\\\vdots\\ \sqrt{p_k}\end{array}\right) \left(\begin{array}{cccc} \sqrt{p_1} & \sqrt{p_2} & \ldots & \sqrt{p_k}\end{array}\right) - B(\theta)^t \left( B (\theta) \times B(\theta)^t \right)^{- 1} B^{} (\theta)\end{multline*}$$
+]
+
 
 ---
 
@@ -1367,6 +1401,7 @@ Les valeurs propres de $\Gamma(\theta) - D (\theta)$ sont $1$ (multiplicité $p 
 
 ---
 class: center, middle, inverse
+name: independance
 
 ## Le test d'indépendance
 
@@ -1382,7 +1417,7 @@ $( \omega'_1, \omega''_1), \ldots, ( \omega'_n, \omega''_n)$.
 Cet échantillon a été obtenu en réalisant $n$ tirages indépendants selon une loi $P$ inconnue sur $\Omega' \times \Omega''$. L'hypothèse d'indépendance s'écrit:  _la loi jointe est le produit de ses deux marginales_
 
 L'ensemble des lois qui sont le produit de leur marginales est un petit sous-ensemble de l'ensemble des lois sur
-$\text{$\Omega' \times \Omega''$}$. Ce sous-ensemble peut être paramétrisé par un sous-ensemble de dimension $k'+k''$ alors que pour décrire toutes les lois sur $\Omega' \times\Omega''$, on doit utiliser un ensemble de dimension $(k'+1)\times(k''+1) - 1$.
+$\Omega' \times \Omega''$. Ce sous-ensemble peut être paramétrisé par un sous-ensemble de dimension $k'+k''$ alors que pour décrire toutes les lois sur $\Omega' \times\Omega''$, on doit utiliser un ensemble de dimension $(k'+1)\times(k''+1) - 1$.
 
 On vérifie simplement que les conditions qui précèdent l'énoncé du Théorème \ref{the:lim:chi2} sont
 remplies.  Dans le cas du test d'indépendance,
