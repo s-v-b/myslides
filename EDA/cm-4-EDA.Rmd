@@ -97,23 +97,22 @@ class: inverse, middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Revisiting simple linear regression
+### [Revisiting simple linear regression](#rev-slr)
 
-### Simple linear regression per group
+### [Simple linear regression per group](#slr-group)
 
-### Formulae and model building
+### [Formulae and model building](#formulae)
 
-### `lm()`  as a statistical pipeline
+### [Higher order modeling](#polynomials)
 
-### Tidy approach to modeling
-
-### ANOVA
+### [ANOVA](#anova)
 
 
 
 
 ---
 class: center, middle, inverse
+name: rev-slr
 
 ## Revisiting simple linear regression
 
@@ -267,7 +266,12 @@ whiteside %>%
 ```
 
 ---
+class: center, inverse, middle
+name: slr-group
 
+## Simple linear regression per group
+
+---
 ### Simple linear regression per group
 
 SLR per group is equivalent to fitting
@@ -398,6 +402,7 @@ whiteside %>%
 
 ---
 class: inverse, middle, center
+name: formulae
 
 ## About formulae
 
@@ -521,6 +526,7 @@ The first question  is about programming, the second takes us in inferential sta
 
 ---
 class: center, middle, inverse
+name: polynomials
 
 ## Higher degree polynomials
 
@@ -724,6 +730,8 @@ autoplot(lm_2, which = 6)
 
 ---
 class: middle, center, inverse
+name: anova
+
 
 ## ANOVA
 
