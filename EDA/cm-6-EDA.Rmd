@@ -19,7 +19,7 @@ output:
           <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
           </div>
         </div>
-      highlightStyle: zenburn
+      highlightStyle: pygments
       highlightLines: true
       countIncrementalSlides: false
 ---
@@ -82,6 +82,16 @@ pacman::p_load(flipbookr)
 pacman::p_load(FactoMineR)
 pacman::p_load(FactoInvestigate)
 pacman::p_load(tidyverse)
+pacman::p_load(ggrepel)
+pacman::p_load(ggfortify)
+
+
+opts <- options()  # save old options
+
+options(ggplot2.discrete.colour="viridis")
+options(ggplot2.discrete.fill="viridis")
+options(ggplot2.continuous.fill="viridis")
+options(ggplot2.continuous.colour="viridis")
 ```
 
 ---
@@ -106,9 +116,9 @@ template: inter-slide
 
 ### [Eckart-Young Theorems](#eckart-young)
 
-### [PCA and SVD](#pca-svd)
-
 ### [Computing SVD](#computing-svd)
+
+### [PCA and SVD](#pca-svd)
 
 ### [Visualizing PCA](#vis-pca)
 
@@ -136,10 +146,12 @@ Principal Component Analysis (PCA) is an ancient dimension reduction technique f
 - minimizing reconstruction error
 
 ---
+name: big-picture
+
 
 #### The big picture
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 The central idea of principal component analysis (PCA) is to reduce the
 dimensionality of a data set which consists of a large number of interrelated
@@ -193,7 +205,7 @@ another name for Singular Value Decomposition (SVD)
 
 ### Théorème: Singular Value Decomposition Theorem
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Let $X$ be a $n \times p$ real matrix.
 
@@ -236,7 +248,7 @@ knitr::kable(data.frame(list("sing values"=svd(M)$d, "eigenvalues"= eigen(M)$val
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 The number of positive (non-zero) singular values equals the rank of $X$
 
@@ -433,7 +445,7 @@ The second norm is the _Hilbert-Schmidt-Frobenius norm_
 ### Definition: Hilbert-Schmidt inner product and norm
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 $$\langle \mathbf{A}, \mathbf{B} \rangle_{\text{HS}} :=  \operatorname{Trace}(\mathbf{A} \mathbf{B}^T) \qquad \| \mathbf{A} \|_{\text{HS}}^2 :=  \langle \mathbf{A}, \mathbf{A} \rangle_{\text{HS}} = \sum_{i=1}^n\sum_{j=1}^p \mathbf{A}_{i,j}^2$$
 
@@ -447,7 +459,7 @@ $$\langle \mathbf{A}, \mathbf{B} \rangle_{\text{HS}} :=  \operatorname{Trace}(\m
 
 ### Theorem (Optimality of Truncated SVD)
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 The _truncated SVD_ leads to the best rank- $k$ approximation
 with respect to the Hilbert-Schmidt norm and the operator norm
@@ -463,7 +475,7 @@ with respect to the Hilbert-Schmidt norm and the operator norm
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Let $u_1, \ldots, u_n$ and $v_1,\ldots,v_p$
 form two orthonormal bases of $\mathbb{R}^n$ and $\mathbb{R}^p$,
@@ -486,7 +498,7 @@ $$\begin{array}{rcl}\langle u_i v_j^T, u_k v_\ell^T\rangle_{HS} & = &  \operator
 
 ### Corollary
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 The left and right singular vectors in the full SVD of an $n\times p$ matrix form an orthonormal basis of $\mathbb{R}^{n\times p}$ endowed with Hilbert-Schmidt norm
 
@@ -592,192 +604,6 @@ This means maximizing
 $$\operatorname{var}\left(X \times \Pi_E\right)$$
 
 ]
----
-
-From the `r fontawesome::fa("r-project")` documentation of  `prcomp`:
-
-> The calculation is done by a singular value decomposition of the (centered and possibly scaled) data matrix, not by using `eigen` on the covariance matrix. This is generally the preferred method for numerical accuracy. The `print` method for these objects prints the results in a nice format and the plot method produces a _scree plot_.
-
-
-At first glance, performing Principal Component Analysis
-consists in applying SVD to the $n  \times p$ data matrix.
-
----
-
-### Conventions
-
-| PCA vocabulary | SVD vocabulary |
-|:---------------:|:----------------:|
-| Principal axis | Left singular vector |
-| Principal component |                  |
-| Factorial axis | Right singular vector |
-|                 | Singular value |
-
----
-
-### Modus operandi
-
-1. Read the data.
-
-2. Choose the active individuals and variables (cherrypick amongs numeric variables)
-
-3. Choose if the variables need to be standardised
-
-4. Choose the number of dimensions you want to keep
-
-5. Analyse the results
-
-6. Automatically describe the dimensions of variability
-
-7. Back to raw data.
-
----
-exclude: true
-
-### `dplyr` programming
-
-.panelset[
-
-.panel[.panel-name[Challenge]
-
-Our goal is to write tidy functions for standardizing datasets
-
-Standardizing consists in transforming numerical columns in a systematic way
-
-Standardizing may consist in mapping the numerical columns on a specific range, says `[0,1]`
-or centering and scaling so that the empirical variance is `1`
-
-Standardizing in an interactive way is easy
-
-```{r, eval=FALSE}
-df %>%
-  mutate(across(where(is.numeric), standardization formula))
-```
-where standardization formula may be something like
-```{r, eval=FALSE}
-~ (. - min(.))/(max(.)-min(.))
-```
-
-`r fontawesome::fa("frown")` this construct does not work well inside our own functions
-
-]
-
-
-
-.panel[.panel-name[Data masking and tidy selection challenge]
-
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[[
-
-Data masking and tidy selection make interactive data exploration fast and fluid, but they add some new challenges when you attempt to use them indirectly such as in a for loop or a function. This vignette shows you how to overcome those challenges. We’ll first go over the basics of data masking and tidy selection, talk about how to use them indirectly, and then show you a number of recipes to solve common problems. .tr[https://dplyr.tidyverse.org/articles/programming.html]
-
-]
-]
-
-.panel[.panel-name[Code]
-```{r}
-standardize <- function(df)
-  mutate(df, across(where(is.numeric),  ~ .x /sd(.x)))
-
-standardize_classic <- function(df)
-  sweep(df,
-        2,
-        STATS = apply(df, 2, sd),
-        FUN = "/")
-
-center <- function(df)
-  mutate(df, across(where(is.numeric), ~ .x - mean(.x)))
-
-scale <- function(df)
-  mutate(df, across(where(is.numeric), ~ (.x - mean(.x))/sd(.x)))
-
-scale(iris) %>%
-    DT::datatable()
-```
-]
-]
----
-
-### Microbenchmarking  and standardization
-
-
-.panelset[
-
-.panel[.panel-name[Benchmarking]
-
-Thanks to `microbenchmark`, we can figure out the computational efficiency
-of both approaches to standardization
-
-]
-.panel[.panel-name[Code]
-
-```{r}
-pacman::p_load(microbenchmark)
-
-microbenchmark(sweep(iris[,-5], 2, STATS = apply(iris[,-5], 2, sd), FUN = "/")) # sweep based
-
-microbenchmark(mutate(iris, across(where(is.numeric), ~ (. - mean(.))/ sd(.))))  # dplyr based
-
-microbenchmark(scale(iris))
-```
-
-]
-
-]
-
-On the `iris` dataset, the  `sweep` approach is  faster
-
-
----
-
-### Impact of standardization and centering
-
-When performing PCA, once the _active variables_ have been chosen,
-we wonder whether we should centre and/or standardize the columns
-
---
-
-Centering does not modify the spectrum
-
-Centering shifts the data and hence the components
-
---
-
-`r fontawesome::fa("hand-point-right")` PCA investigates the spread of the data not their location
-
-`r fontawesome::fa("question-circle")` To standardize or not to standardize?
-
-There is no universal answer
-
-Centering is performed by default when using `prcomp`
-
----
-
-### Scaling: back to IRIS
-
-Standardizing the columns slightly spreads out the eigenvalues
-
-.fl.w-50.pa2[
-
-```{r}
-iris %>%
-  scale()  %>%
-  select(-Species) %>%
-  prcomp() %>%
-  broom::tidy(matrix="pcs")
-```
-
-]
-
-.fl.w-50.pa2[
-
-```{r}
-iris %>%
-  select(-Species) %>%
-  prcomp() %>%
-  broom::tidy(matrix="pcs")
-```
-
-]
 
 
 ---
@@ -790,7 +616,7 @@ name: computing-svd
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Computing the SVD is as hard as computing the spectral decomposition of a symmetric matrix
 
@@ -838,11 +664,30 @@ exclude: true
 
 ### Rearrangement methods
 
+
 ---
 template: inter-slide
-name: vis-pca
+name: pca-up-running
 
-## Visualizing PCA
+##  PCA up and running
+
+
+---
+
+We will walk through Principal Component Analysis using historical datasets
+
+- `USArrests`: crime data across states (individuals) in USA
+- `iris`: morphological data of 150 flowers (individuals) from genus _iris_
+- `decathlon`: scores of athletes at the ten events making a decathlon
+- Life tables for a collection of Western European countries  and the USA
+
+Some datasets have non-numerical columns. Such columns are not used when computing the SVD that underpins PCA. But non-numerical columns may be incorporated into PCA visualization
+
+???
+
+When PCA is used as a feature engineering device to prepare the dataset for regression, supervised classification, clustering or any other statistical/machine learning treatment, visualizing the interplay between non-numerical columns and the numerical columns
+constructed by PCA is crucial
+
 
 ---
 
@@ -852,15 +697,464 @@ A showcase for Principal Component Analysis
 
 .f6[
 
-> The Iris flower data set or Fisher's Iris data set is a multivariate data set introduced by the British statistician and biologist Ronald Fisher in his 1936 paper The use of multiple measurements in taxonomic problems as an example of linear discriminant analysis. It is sometimes called Anderson's Iris data set because Edgar Anderson collected the data to quantify the morphologic variation of Iris flowers of three related species. Two of the three species were collected in the Gaspé Peninsula "all from the same pasture, and picked on the same day and measured at the same time by the same person with the same apparatus".
+> The Iris flower data set or Fisher's Iris data set is a multivariate data set introduced by Ronald Fisher in 1936. Edgar Anderson collected the data to quantify the morphologic variation of Iris flowers of three related species. Two of the three species were collected in the Gaspé Peninsula "all from the same pasture, and picked on the same day and measured at the same time by the same person with the same apparatus"
 
-> The data set consists of 50 samples from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor). Four features were measured from each sample: the length and the width of the sepals and petals, in centimeters. Based on the combination of these four features, Fisher developed a linear discriminant model to distinguish the species from each other.
+> The data set consists of 50 samples from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor). Four features were measured from each sample: the length and the width of the sepals and petals, in centimeters
 
 .tr[[Wikipedia](https://en.wikipedia.org/wiki/Iris_flower_data_set)]
 
 ]
 
 `r fontawesome::fa("pagelines")`
+
+
+---
+
+### `USArrests`
+
+.fl.w-60.f6[
+
+```{r, echo=FALSE}
+data(USArrests)
+
+USArrests %>%
+  sample_n(10) %>%
+  knitr::kable()
+```
+
+4 numerical columns, questionable scalings
+]
+
+
+.fl.w-40[
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+USArrests %>%
+  rownames_to_column() %>%
+  ggplot() +
+  aes(x = Assault, y = Murder) +
+  aes(colour = UrbanPop, label=rowname) +
+  geom_point(size = 5) +
+  geom_text_repel(box.padding = unit(0.75, "lines"))
+```
+]
+
+
+---
+
+### Decathlon
+
+
+.fl.w-60.f6[
+
+```{r, echo=FALSE}
+data(decathlon)
+
+decathlon %>%
+  rownames_to_column() %>%
+  dplyr::select(-c(`400m`, `110m.hurdle`, `Shot.put`,`Javeline`, `1500m`, `Rank`, `Competition`, `Points`)) %>%
+  sample_n(10) %>%
+  knitr::kable()
+```
+
+10 numerical columns, questionable scalings
+]
+
+
+.fl.w-40[
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+decathlon %>%
+  rownames_to_column() %>%
+  ggplot() +
+  aes(x = `100m`, y = Long.jump) +
+  aes(colour = Points, label=rowname) +
+  geom_point(size = 5) +
+  geom_smooth(se = FALSE) +
+  geom_smooth(method="lm", se=FALSE) +
+  geom_text_repel(box.padding = unit(0.75, "lines"))
+```
+]
+---
+
+
+
+### Using `prcomp` from base `r fontawesome::fa("r-project")`
+
+> The calculation is done by a singular value decomposition of the (centered and possibly scaled) data matrix, not by using `eigen` on the covariance matrix.
+
+> This is generally the preferred method for numerical accuracy.
+
+> The `print` method for these objects prints the results in a nice format and the plot method produces a _scree plot_
+
+At first glance, performing Principal Component Analysis
+consists in applying SVD to the $n  \times p$ data matrix.
+
+---
+
+### Raw PCA on `iris` dataset
+
+.fl.w-50.pa2[
+```{r pca_iris_1, echo=TRUE, eval=TRUE}
+pca_iris <- iris %>%
+  select(- Species) %>%
+  prcomp(x = .,          #<<
+         center = FALSE, #<<
+         scale. = FALSE) #<<
+
+class(pca_iris) ; is.list(pca_iris)
+
+names(pca_iris)
+```
+]
+
+.fl.w-50.pa2[
+
+Result has 5 components:
+
+- `sdev`: singular values
+
+- `rotation`: orthogonal matrix $V$ in SVD
+
+- `center`: `FALSE` or centering row  vector
+
+- `scale`: FALSE of scaling row vector
+
+- `x`: matrix $U \times D$ from SVD
+
+]
+
+---
+
+### From data to PCA and back
+
+Let
+
+- $Z$ be the $n \times p$ matrix fed to `prcomp`
+- $X$ be the $n \times p$ matrix forming component `x` of the result
+- $V$ be the $p \times p$ matrix forming component `rotation` of the result
+- $\mu$ be the centering vector, $\mathbf{0}$ if `center=FALSE`
+- $\sigma$ be the scaling vector, $\mathbf{1}$ is `scale.=FALSE`
+
+then
+
+$$\text{diag}(\sigma) \times (Z - \mathbf{1} \times \mu^T) =  X \times V^T$$
+
+or
+
+$$ Z  =  \text{diag}(\sigma)^{-1} \times  X \times V^T +  \mathbf{1} \times \mu^T$$
+
+
+???
+
+PCA can be pictured as follows
+
+- optional centering and scaling
+- performing SVD
+- gathering the byproducts of SVD  so as to please statisticians
+- possibly truncating the result so as to obtain a truncated SVD
+
+---
+
+### Glossary
+
+The columns of components `x`  are called the _principal components_ of the dataset
+
+`r fontawesome::fa("exclamation-triangle")` Note that the precise connection between the principal components and the dataset depend on centering and scaling
+
+
+
+---
+
+### Conventions
+
+| PCA vocabulary | SVD vocabulary |
+|:---------------|:----------------|
+| Principal axis | Left singular vector |
+| Principal component | Scaled  left singular vector |
+| Factorial axis | Right singular vector |
+| Component of inertia | Squared singular value |
+
+---
+
+### Modus operandi
+
+1. Read the data.
+
+2. Choose the active individuals and variables (cherrypick amongs numeric variables)
+
+3. Choose if the variables need to be standardised
+
+4. Choose the number of dimensions you want to keep (the _rank_)
+
+5. Analyse the results
+
+6. Automatically describe the dimensions of variability
+
+7. Back to raw data.
+
+---
+exclude: true
+
+### `dplyr` programming
+
+.panelset[
+
+.panel[.panel-name[Challenge]
+
+Our goal is to write tidy functions for standardizing datasets
+
+Standardizing consists in transforming numerical columns in a systematic way
+
+Standardizing may consist in mapping the numerical columns on a specific range, says `[0,1]`
+or centering and scaling so that the empirical variance is `1`
+
+Standardizing in an interactive way is easy
+
+```{r, eval=FALSE}
+df %>%
+  mutate(across(where(is.numeric), standardization formula))
+```
+where standardization formula may be something like
+```{r, eval=FALSE}
+~ (. - min(.))/(max(.)-min(.))
+```
+
+`r fontawesome::fa("frown")` this construct does not work well inside our own functions
+
+]
+
+
+
+.panel[.panel-name[Data masking and tidy selection challenge]
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[[
+
+Data masking and tidy selection make interactive data exploration fast and fluid, but they add some new challenges when you attempt to use them indirectly such as in a for loop or a function. This vignette shows you how to overcome those challenges. We’ll first go over the basics of data masking and tidy selection, talk about how to use them indirectly, and then show you a number of recipes to solve common problems. .tr[https://dplyr.tidyverse.org/articles/programming.html]
+
+]
+]
+
+.panel[.panel-name[Code]
+```{r}
+standardize <- function(df)
+  mutate(df, across(where(is_numeric),
+                    ~ .x /sd(.x)))
+
+center <- function(df)
+  mutate(df, across(where(is_numeric), ~ .x - mean(.x)))
+
+scale_verse <- function(df)
+  mutate(df, across(where(is_numeric), ~ (.x - mean(.x))/sd(.x)))
+```
+]
+]
+---
+exclude: true
+
+### Microbenchmarking  and standardization
+
+
+.panelset[
+
+.panel[.panel-name[Benchmarking]
+
+Thanks to `microbenchmark`, we can figure out the computational efficiency
+of both approaches to standardization
+
+]
+.panel[.panel-name[Code]
+
+```{r}
+pacman::p_load(microbenchmark)
+
+microbenchmark(sweep(iris[,-5], 2, STATS = apply(iris[,-5], 2, sd), FUN = "/"))
+
+microbenchmark(mutate(iris, across(where(is.numeric),
+                                   ~ (. - mean(.))/ sd(.))))  #<< dplyr based
+
+microbenchmark(scale(iris[, -5]))
+```
+
+]
+
+]
+
+On the `iris` dataset, the  `sweep` approach is  faster
+
+
+---
+
+### Impact of standardization and centering
+
+When performing PCA, once the _active variables_ have been chosen,
+we wonder whether we should centre and/or standardize the columns
+
+
+--
+
+`r fontawesome::fa("hand-point-right")` PCA investigates the spread of the data not their location
+
+`r fontawesome::fa("question-circle")` To standardize or not to standardize?
+
+There is no universal answer
+
+`r fontawesome::fa("hand-point-right")` Centering is performed by default when using `prcomp`
+
+---
+
+### Centering/Scaling: iris dataset
+
+On iris dataset Centering and standardizing the columns slightly spreads out the eigenvalues
+
+.fl.w-50.pa2.f6[
+
+```{r}
+iris_num <- dplyr::select(iris, -Species)
+
+list_pca_iris <-
+  map2(.x=rep(c(FALSE, TRUE), 2),
+       .y=rep(c(FALSE, TRUE), c(2,2)),
+       ~ prcomp(iris_num, center= .x, scale.=.y)
+)
+
+names(list_pca_iris) <- stringr::str_c("pca_iris",
+    c("", "c", "s", "c_s"),
+    sep="_")
+```
+
+]
+
+.fl.w-50.pa2[
+
+```{r, echo=FALSE}
+config_param <- as.vector(outer(c("_", "center"),
+                          c("_", "scale"), FUN=paste)) %>%
+                rep( c(4,4,4,4))
+
+list_pca_iris %>%
+  purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
+  mutate(Parameter=config_param) -> df_pca_iris_c_s
+
+p_pca_c_s <- df_pca_iris_c_s %>%
+  ggplot() +
+  aes(x=PC, y=percent, fill=Parameter) +
+  geom_col(position="dodge")
+
+p_pca_c_s +
+  labs(title="Iris : share of inertia per PC",
+       subtitle = "Centering, scaling or not")
+```
+
+]
+
+
+---
+
+### More on the centering/scaling dilemma
+
+```{r , echo=FALSE}
+
+usarrests_num <- USArrests
+data(decathlon)
+
+list_pca_usarrests <-
+  map2(.x=rep(c(FALSE, TRUE), 2),
+       .y=rep(c(FALSE, TRUE), c(2,2)),
+       ~ prcomp(USArrests, center= .x, scale.=.y)
+)
+
+list_pca_decathlon <-
+  map2(.x=rep(c(FALSE, TRUE), 2),
+       .y=rep(c(FALSE, TRUE), c(2,2)),
+       ~ prcomp(decathlon[, 1:10], center= .x, scale.=.y)
+)
+
+names(list_pca_usarrests) <- c("pca_usarrests", "pca_usarrests_c", "pca_usarrests_s", "pca_usarrests_c_s")
+
+names(list_pca_decathlon) <- c("pca_decathlon", "pca_decathlon_c", "pca_decathlon_s", "pca_decathlon_c_s")
+
+```
+
+
+.fl.w-50.pa2[
+
+For `USArrests`, scaling is mandatory
+
+
+```{r, echo=FALSE}
+list_pca_usarrests %>%
+  purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
+  mutate(Parameter=config_param) -> df_pca_usarrests_c_s
+
+p_pca_c_s %+%
+  df_pca_usarrests_c_s  +
+  labs(title="USArrests : share of inertia per PC",
+       subtitle = "Centering, scaling or not")
+```
+
+]
+
+.fl.w-50.pa2[
+
+For `decathlon`, centering is mandatory, scaling
+is recommended
+
+
+```{r, echo=FALSE}
+
+config_param_deca <- as.vector(outer(c("_", "center"),
+                          c("_", "scale"), FUN=paste)) %>%
+                rep(rep(10,4))
+
+list_pca_decathlon %>%
+  purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
+  mutate(Parameter=config_param_deca) -> df_pca_decathlon_c_s
+
+p_pca_c_s %+%
+  df_pca_decathlon_c_s  +
+  labs(title="Decathlon : share of inertia per PC",
+       subtitle = "Centering, scaling or not")
+```
+
+]
+
+
+???
+
+In order to investigate the columns means, there is no need to use PCA.
+Centering is almost always relevant.
+
+The goal of PCA is to understand the fluctuations of the data and, when
+possible, to show that most  fluctuations can be found in a few priviledged
+directions
+
+Scaling is often convenient: it does not alter correlations. Second,
+high variance columns artificially capture an excessive amount of inertia,
+without telling us much about the correlations between variables
+
+
+
+---
+template: inter-slide
+name: vis-pca
+
+## Visualizing PCA
+
+---
+
+Recall [Joliffe's big picture](#big-picture)
+
+- Visualize the correlation plot
+
+- Visualize the share of inertia per principal component (screeplot)
+
+- Visualize the individuals in the factorial planes generated by the leading principal axes
+
+- Visualize the (scaled) orginal variables in the basis defined by the factorial axes
+(correlation circle)
+
+- Visualize simultaneously individuals and variables (biplot)
+
+???
 
 
 ---
@@ -912,6 +1206,46 @@ tb %>%
 
 ---
 
+### Correlation plot for `decathlon`
+
+
+.fl.w-60[
+```{r DecathlonR_Cor, echo=FALSE}
+decathlon  %>%
+  rownames_to_column("Name") %>%     #<< tidyverse does not like rownames
+  mutate(across(-c(Name, Rank, Points, Competition),
+                ~ (.x -mean(.x))/sd(.x))) -> decathlonR2
+
+decathlonR2 %>%
+  dplyr::select(-c(Name, Rank, Points, Competition)) %>%
+  corrr::correlate(quiet = TRUE, method="pearson") %>%
+  mutate(across(where(is_numeric), abs)) %>%
+  corrr::rearrange() -> df_corr_decathlon
+
+
+df_corr_decathlon %>%
+  corrr::rplot() +
+  coord_fixed() +
+  ggtitle("Absolute correlation plot for Decathlon data") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+```
+]
+
+
+.fl.w-40[
+
+If our goal is to partitition the set of columns into tightly connected groups, this
+correlation plot already tells us a story:
+
+- short running races  `100m`, ..., `400m` along `long jump` form a cluster,
+
+- `shot.put`, `discus`, and to a lesser extent `high jump`  form another cluster
+
+- `pole.vault`, `1500m` and `javeline` look pretty isolated
+]
+---
+
+
 ### PCA Visualization : first goals
 
 
@@ -929,19 +1263,13 @@ tb %>%
 .f6[
 
 ```{r, results='asis'}
-svd(iris[, 1:4])$d %>% round(3)
-
-iris_pca <- iris %>%
-  select( -Species ) %>%
-  prcomp()
+iris_pca <- list_pca_iris[[4]]
 
 iris_pca %>%
   broom::tidy(matrix="pcs") %>%
   knitr::kable(format="markdown", digits=2)
 
-iris_plus_pca <- cbind(iris, iris_pca$x)
-
-round((100*cumsum(iris_pca$sdev^2)/sum(iris_pca$sdev^2))[1], 2)
+iris_plus_pca <- broom::augment(iris_pca, iris)
 ```
 ]
 ---
@@ -956,16 +1284,20 @@ round((100*cumsum(iris_pca$sdev^2)/sum(iris_pca$sdev^2))[1], 2)
 share_variance <- round((100*(iris_pca$sdev^2)/sum(iris_pca$sdev^2)), 2)
 
 iris_plus_pca %>%
-  ggplot(aes(x=PC1, y=PC2, colour=Species)) +
+  ggplot() +
+  aes(x=.fittedPC1, y=.fittedPC2) +
+  aes(colour=Species) +
   geom_point() +
   ggtitle("Iris data projected on first two principal axes") +
   xlab(paste("PC1 (", share_variance[1], "%)", sep="")) +
   ylab(paste("PC2 (", share_variance[2], "%)", sep="")) -> p
 
 iris_plus_pca %>%
-  ggplot(aes(x=Sepal.Length, y=Petal.Length, colour=Species)) +
+  ggplot() +
+  aes(y=Sepal.Width, x=Petal.Length) +
+  aes(colour=Species) +
   geom_point() +
-  ggtitle("Iris data projected on Petal and Sepal length") -> q
+  ggtitle("Iris data projected on Petal length and Sepal width") -> q
 ```
 ]
 
@@ -987,23 +1319,19 @@ p ; q
 .panelset[
 
 
-.panel[.panel-name[Use `ggfortify`]
+.panel[.panel-name[With labels]
 
 .fl.w-third.pa2[
 
 .f6[
-```{r  autopca-iris-plot, eval=TRUE, fig.show="hide", fig.height=3.5}
-library(ggfortify)  #<<
-iris %>%
-  select(where(is.numeric)) %>%
-  prcomp() %>%
-  autoplot(  #<<
-    data = iris,
-    colour = 'Species',
-    label = TRUE,
-    loadings = FALSE
-  ) +
-  ggtitle("Iris data on factorial plane")
+```{r  autopca-iris-plot, eval=TRUE, message=FALSE, warning=FALSE, fig.show="hide", fig.height=3.5}
+total_inertia <- sum(pca_iris$sdev^2)
+
+p +
+  aes(label=.rownames) +
+  geom_text_repel(verbose = FALSE) +
+  coord_fixed()
+
 ```
 ]
 
@@ -1030,12 +1358,12 @@ by the two leading principal components
 ```{r autopca-iris-biplot, eval=TRUE,  fig.show="hide", fig.height=3.5}
 iris %>%
   select(where(is.numeric)) %>%
-  prcomp() %>%
-  autoplot(
+  prcomp(.scale=TRUE) %>%
+  autoplot(                 #<<
    data = iris,
    colour = 'Species',
-   label = TRUE,
-   loadings = TRUE,  #<<
+   label = TRUE,            #<<
+   loadings = TRUE,         #<<
    loadings.colour = 'blue',
    loadings.label = TRUE
   ) +
@@ -1075,8 +1403,75 @@ autoplot(prcomp(iris[,-5]),
 
 ]
 
+
 ---
 
+### Official plots for PCA on iris dataset
+
+
+```{r, out.width="50%", fig.show='hold'}
+plot(list_pca_iris[[4]])
+biplot(list_pca_iris[[4]])
+```
+---
+
+### Plotting PCA on decathlon data
+
+
+.fl.w-50[
+```{r decathlon_pcs_plots, fig.show='hide'}
+decathlon_pca <- list_pca_decathlon[[4]]
+inertias <- decathlon_pca$sdev^2
+share_variance <- round((100*(inertias)/
+                         sum(inertias)), 2)
+
+p %+% broom::augment(decathlon_pca, decathlon) +
+  aes(colour=Points) +
+  ggtitle("Decathlon data") +
+  xlab(paste("PC1 (", share_variance[1], "%)", sep="")) +
+  ylab(paste("PC2 (", share_variance[2], "%)", sep="")) +
+  aes(label=.rownames) +
+  geom_text_repel(verbose = FALSE) +
+  coord_fixed()
+```
+]
+
+.fl.w-50[
+
+![](`r knitr::fig_chunk('decathlon_pcs_plots', 'png')`)
+
+]
+
+---
+
+### Decathlon correlation circle
+
+.fl.w-50[
+```{r decathlon_cor, fig.show='hide'}
+decathlon_pca$rotation %>%
+  as_tibble(rownames="Name") %>%
+  ggplot() +
+  aes(x=PC1, y=PC2, label=Name) +
+  geom_segment(xend=0, yend=0, arrow = grid::arrow(ends = "first") ) +
+  geom_text_repel() +
+  coord_fixed() +
+  xlim(-.7, .7) +
+  ylim(-.7, .7) +
+  stat_function(fun = ~  sqrt(.7^2 - .^2), alpha=.5, color="grey") +
+  stat_function(fun = ~ - sqrt(.7^2 - .^2), alpha=.5, color="grey") +
+  geom_segment(x = 0, y = -1, xend = 0, yend = 1, linetype = "dashed", color = "grey") +
+  geom_segment(x = -1, y = 0, xend = 1, yend = 0, linetype = "dashed", color = "grey") +
+  ggtitle("Decathlon correlation circle")
+```
+]
+
+.fl.w-50[
+
+![](`r knitr::fig_chunk('decathlon_cor', 'png')`)
+
+]
+---
+exclude: true
 ### Using `broom::augment`
 
 .panelset[
@@ -1114,12 +1509,12 @@ exclude: true
 .panel[.panel-name[Code]
 
 ```{r ns-scree}
-zpca <- prcomp(iris[, -5], center = FALSE, scale. = FALSE)
+zpca <- list_pca_iris[[4]]
 
 qplot(x=1:4, y=zpca$sdev^2, geom="col") +
   xlab("Principal components") +
   ylab("Variance") +
-  ggtitle("Screeplot of non-standardized Iris dataset") -> p
+  ggtitle("Screeplot of standardized/centered Iris dataset") -> p
 ```
 
 ]
@@ -1143,23 +1538,17 @@ exclude: false
 
 .f6[
 ```{r, out.width="50%", fig.show='hold'}
-
 zetitle <-  "PCA on Iris: Projected variance on the first PCs"
 
-(iris[, -5] %>%
-  prcomp(retx= TRUE, center=FALSE, scale. = FALSE))[["x"]] %>%
-  as.data.frame(
-                make.names = paste("PC", 1:4 ,sep=""))  %>%
-    rownames_to_column() %>%
-    tidyr::pivot_longer(cols = paste("PC", 1:4 ,sep=""),
-                        names_to="Axis", values_to = "Coord") -> ir_pca
-
-p <-ir_pca %>%
-  ggplot(mapping=aes(x= Axis, y= Coord)) +
+p <-list_pca_iris[[4]] %>% 
+  broom::tidy() %>%
+  ggplot() +
+  aes(x= as_factor(PC), y= value) +
+  labs(xlab="PC", ylab="Coord") +
   ggtitle(zetitle)
 ```
 
-`r fontawesome::fa("hand-point-right")` We do not center and standardize the columns, we are just performing a change of basis
+`r fontawesome::fa("hand-point-right")` We center and standardize columns, and then perform a change of basis
 
 ]
 ]
@@ -1229,6 +1618,46 @@ iris %>%
   plot(graph.type="ggplot",
        title="Iris data with FactoMineR")
 ```
+
+---
+
+### Revisiting Decathlon data
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+Ad hoc transformation of running scores: average speed matters
+
+```{r, out.width="50%", fig.show='hide'}
+decathlonTime <- decathlon[,1:10]
+  
+decathlonTime <- mutate(decathlonTime,
+                        `100m` = 100/`100m`,
+                        `400m` = 400/`400m`,
+                        `110m.hurdle` = 110/`110m.hurdle`,
+                        `1500m` = 1500/`1500m`)
+
+rownames(decathlonTime)  <- rownames(decathlon)
+
+PCAdecathlontime <- PCA(decathlonTime, graph = FALSE)
+```
+]
+
+.panel[.panel-name[Plot]
+
+```{r, out.width="50%", fig.show='hold', fig.height=4}
+factoextra::fviz_pca_ind(PCAdecathlontime, repel = TRUE)
+factoextra::fviz_pca_var(PCAdecathlontime, repel = TRUE)
+```
+]
+
+
+
+]
+
+???
+
 
 ---
 exclude: true
