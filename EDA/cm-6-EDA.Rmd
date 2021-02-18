@@ -677,8 +677,11 @@ name: pca-up-running
 We will walk through Principal Component Analysis using historical datasets
 
 - `USArrests`: crime data across states (individuals) in USA
+
 - `iris`: morphological data of 150 flowers (individuals) from genus _iris_
+
 - `decathlon`: scores of athletes at the ten events making a decathlon
+
 - Life tables for a collection of Western European countries  and the USA
 
 Some datasets have non-numerical columns. Such columns are not used when computing the SVD that underpins PCA. But non-numerical columns may be incorporated into PCA visualization
@@ -840,7 +843,7 @@ $$\text{diag}(\sigma) \times (Z - \mathbf{1} \times \mu^T) =  X \times V^T$$
 
 or
 
-$$ Z  =  \text{diag}(\sigma)^{-1} \times  X \times V^T +  \mathbf{1} \times \mu^T$$
+$$Z  =  \text{diag}(\sigma)^{-1} \times  X \times V^T +  \mathbf{1} \times \mu^T$$
 
 
 ???
@@ -1220,7 +1223,8 @@ decathlonR2 %>%
   dplyr::select(-c(Name, Rank, Points, Competition)) %>%
   corrr::correlate(quiet = TRUE, method="pearson") %>%
   mutate(across(where(is_numeric), abs)) %>%
-  corrr::rearrange() -> df_corr_decathlon
+  corrr::rearrange() %>%
+  corrr::shave() -> df_corr_decathlon
 
 
 df_corr_decathlon %>%
@@ -1281,7 +1285,7 @@ iris_plus_pca <- broom::augment(iris_pca, iris)
 .panel[.panel-name[Code]
 
 ```{r, out.width="50%"}
-share_variance <- round((100*(iris_pca$sdev^2)/sum(iris_pca$sdev^2)), 2)
+share_variance <- broom::tidy(iris_pca, "pcs")[["percent"]]
 
 iris_plus_pca %>%
   ggplot() +
@@ -1325,7 +1329,7 @@ p ; q
 
 .f6[
 ```{r  autopca-iris-plot, eval=TRUE, message=FALSE, warning=FALSE, fig.show="hide", fig.height=3.5}
-total_inertia <- sum(pca_iris$sdev^2)
+total_inertia <- sum(share_variance)
 
 p +
   aes(label=.rownames) +
@@ -1540,7 +1544,7 @@ exclude: false
 ```{r, out.width="50%", fig.show='hold'}
 zetitle <-  "PCA on Iris: Projected variance on the first PCs"
 
-p <-list_pca_iris[[4]] %>% 
+p <-list_pca_iris[[4]] %>%
   broom::tidy() %>%
   ggplot() +
   aes(x= as_factor(PC), y= value) +
@@ -1630,17 +1634,15 @@ iris %>%
 Ad hoc transformation of running scores: average speed matters
 
 ```{r, out.width="50%", fig.show='hide'}
-decathlonTime <- decathlon[,1:10]
-  
-decathlonTime <- mutate(decathlonTime,
+decathlonTime <- mutate(decathlon,
                         `100m` = 100/`100m`,
                         `400m` = 400/`400m`,
                         `110m.hurdle` = 110/`110m.hurdle`,
                         `1500m` = 1500/`1500m`)
 
-rownames(decathlonTime)  <- rownames(decathlon)
+# rownames(decathlonTime)  <- rownames(decathlon)
 
-PCAdecathlontime <- PCA(decathlonTime, graph = FALSE)
+PCAdecathlontime <- PCA(decathlonTime[,1:10],  graph = FALSE)
 ```
 ]
 
@@ -1658,21 +1660,434 @@ factoextra::fviz_pca_var(PCAdecathlontime, repel = TRUE)
 
 ???
 
+When inspecting `decathlon` some columns are positively correlated with column `Points`,
+others are not. The negatively correlated columns contain running races times. In order
+to handle all scores in an homogenous  way, running races scores are converted
+into average speeds. The larger, the better.
+
+The correlation circle becomes more transparent: columns can be clustered into three subsets:
+- running races and long jump, p
+- puts, javeline and high jump
+- 1500m and pole vault which are poorly correlated with first two principal components 
+
+
+
+
+We can do it with `tidyverse`
+
+```{r, out.width="50%", fig.show='hold', fig.height=4}
+decathlonTime[, 1:10] %>%
+  prcomp(scale.=TRUE) -> pc_decathlonTime
+
+share_variance <-  round(broom::tidy(pc_decathlonTime, matrix="pcs")[["percent"]], 2)
+
+pc_decathlonTime  %>%
+  broom::augment(data=decathlonTime) %>%
+  ggplot() +
+  aes(x=.fittedPC1, y=.fittedPC2) +
+  aes(color=Points, label=.rownames) +
+  geom_point() +
+  geom_text_repel() +
+  xlab(paste("Dim1 (", share_variance[1]  ,"%)", sep="")) +
+  ylab(paste("Dim2 (", share_variance[2]  ,"%)", sep=""))
+
+radius <-  sqrt(broom::tidy(pc_decathlonTime, matrix="pcs")[["cumulative"]][2])
+
+pc_decathlonTime[["rotation"]] %>%
+  as_tibble(rownames="Name") %>%
+  ggplot() +
+  aes(x=PC1, y=PC2, label=Name) +
+  geom_segment(xend=0, yend=0, arrow = grid::arrow(ends = "first") ) +
+  geom_text_repel() +
+  coord_fixed() +
+  xlim(-radius, radius) +
+  ylim(-radius, radius) +
+  stat_function(fun = ~  sqrt(radius^2 - .^2), alpha=.5, color="grey") +
+  stat_function(fun = ~ - sqrt(radius^2 - .^2), alpha=.5, color="grey") +
+  geom_segment(x = 0, y = -1, xend = 0, yend = 1, linetype = "dashed", color = "grey") +
+  geom_segment(x = -1, y = 0, xend = 1, yend = 0, linetype = "dashed", color = "grey") +
+  ggtitle("Decathlon correlation circle (bis)") +
+  xlab(paste("Dim1 (", share_variance[1]  ,"%)", sep="")) +
+  ylab(paste("Dim2 (", share_variance[2]  ,"%)", sep=""))
+```
+
 
 ---
-exclude: true
+
+template: inter-slide
+name: pca-dataviz
+
+## PCA visualization in perspective
+
+
+---
+
+### PCA and the tidy approach
+
+
+The output of `prcomp` (or of any contender) is complex object represented by a
+list with five named elements: `x`, `sdev`, `rotation`, `center` `scale`
+
+In `r fontawesome::fa("r-project")`, the list is assigned a dedicated `S3` class: `prcomp`
+
+The `prcomp` class is not `ggplot2` friendly
+
+--
+
+In the `tidyverse` framework, visualization abides to the _grammar of graphics_ framework:
+plots are built on dataframes (usually a single dataframe)
+
+The different plots that serve to understand the output of PCA (screeplot, correlation circle, biplot, ...)
+have to be built on  dataframes  that themselves have to be built from the output of PCA and
+possibly also from the original dataframe
+
+--
+
+Package `broom` (`r fontawesome::fa("broom")`) offers off-the-shelf components for building PCA graphical pipelines (and many other things)
+
+.f6[
+> `broom` is an attempt to bridge the gap from untidy outputs of predictions and estimations to the tidy data we want to work with. It centers around three `S3` methods, each of which take common objects produced by `r fontawesome::fa("r-project")` statistical functions (`lm`, `t.test`, `nls`, `prcomp`, etc) and convert them into a `tibble`
+]
+
+???
+
+> `broom` is particularly designed to work with Hadley’s `dplyr` package
+>  (see the broom+dplyr vignette for more)
+
+---
+
+### `r fontawesome::fa("broom")` Three (generic) functions
+
+
+`tidy`:
+constructs a tibble that summarizes the model’s statistical findings. This includes coefficients and p-values for each term in a regression, per-cluster information in clustering applications, or per-test information for multtest functions
+
+`augment`:
+add columns to the original data that was modeled. This includes predictions, residuals, and cluster assignments
+
+`glance`:
+construct a concise one-row summary of the model. There is no such method
+for class `prcomp`
+
+
+???
+
+
+
+
+---
+
+
+### `r fontawesome::fa("broom")` `tidy` for class `prcomp`
+
+.fl.w-50[
+
+```{r, echo=FALSE}
+require(broom)
+```
 
 ```{r}
+pc <- prcomp(USArrests, scale = TRUE)
 
-min_max_scaler <- function(df, cols){
-  mutate(df, across(cols, .funs = ~ (. - min(.))/(max(.)-min(.))))
-}
+# information about samples  (U x D matrix)
+# Default behaviour
 
-iris <- datasets::iris
+tidy(pc, matrix="samples") %>%
+  head(5) %>%
+  knitr::kable()
 
-min_max_scaler(iris, names(iris)[-5]) %>%
-  DT::datatable()
 ```
+]
+
+.fl.w-50[
+
+The output of `tidy.prcomp` is always a `tibble`
+
+Depending on argument `matrix`, the output gathers
+information on different components of the SVD factorization
+
+`tidy(pc, "samples")` provide a long format tibble version of $U \times D$
+
+The tibble has three columns
+
+- `row`: rownames in the  dataframe that served as input to `prcomp`
+- `PC`: index of principal components
+- `value`: score of individual indexed by `row` on principal components `PC`, $(U \times D)[\text{row}, \text{PC}]$
+
+The `x` component of `pc` is a _wide format_ version of the output of `tidy(pc, "samples")`
+
+]
+
+???
+
+[Documentation](https://www.rdocumentation.org/packages/broom/versions/0.7.4/topics/tidy.prcomp)
+
+```{r}
+as_tibble(pc$x) %>%
+  add_column(row=rownames(pc$x)) %>%
+  pivot_longer(starts_with("PC"),
+               names_to="PC",
+               names_prefix="PC") %>%
+  head(5)
+```
+---
+
+`r fontawesome::fa("broom")` `tidy` for class `prcomp`
+
+
+.fl.w-50[
+```{r}
+pc <- prcomp(USArrests, scale = TRUE)
+
+# information about rotation (V matrix)
+tidy(pc, "rotation") %>%
+  head(5)
+
+```
+
+]
+
+
+.fl.w-50[
+
+With `matrix="rotation"`, the result is again a long format
+tibble version of the orthogonal matrix $V$ from the SVD
+factorization
+
+This tibble is convenient when plotting the correlation circles
+associated with different sets of components
+
+]
+
+
+???
+
+```{r}
+as_tibble(pc$rotation) %>%
+  add_column(column=rownames(pc$rotation)) %>%
+  pivot_longer(starts_with("PC"),
+               names_to="PC",
+               names_prefix="PC") %>%
+  head()
+```
+
+---
+
+### `r fontawesome::fa("broom")` `tidy` for class `prcomp`
+
+.fl.w-50[
+
+```{r tidyscreeplot, fig.height=4, fig.show='hide'}
+# information about singular values
+tidy(pc, "pcs") %>%
+  knitr::kable()
+
+tidy(pc, "pcs") %>%
+  ggplot() +
+  aes(x=as.integer(PC), y=percent) +
+  geom_col() +
+  xlab("PC") +ylab("Percentage of inertia") +
+  ggtitle("USArrests: screeplot")
+```
+
+
+]
+
+.fl.w-50[
+
+With `matrix="pcs"` or `matrix="eigen"`,
+we obtain a tibble that is convenient for generating a `screeplot`
+
+It contains the information returned by `summary(pc)`
+
+Indeed, column `percent` is obtained by squaring column
+`std.dev` and normalizing the column
+
+![](`r knitr::fig_chunk("tidyscreeplot", "png")`)
+
+]
+
+???
+
+See `sloop::s3_get_method(tidy.prcomp)`
+
+or
+
+```{r, eval=FALSE}
+as_tibble(pc$sdev) %>%
+  rename(std.dev=value) %>%
+  rownames_to_column("PC") %>%
+  mutate(PC=as.integer(PC),
+         percent=(std.dev^2/sum(std.dev^2)),
+         cumulative=cumsum(percent))
+
+# or
+t(summary(pc)$importance) %>%
+  data.frame() %>%
+  rownames_to_column()
+```
+
+
+---
+
+### Package `broom`  `r fontawesome::fa("broom")`
+
+.center[
+`r knitr::include_url("https://cran.r-project.org/web/packages/broom/vignettes/broom.html")`
+]
+
+[Vignette](https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
+
+???
+
+`broom`'s ambitions go far beyond tidying the output of `prcomp(...)`
+
+The vignette describes the goals of the package and the way they fit
+in the `tidverse`
+
+---
+
+### `r fontawesome::fa("broom")` `broom::tidy()`: a generic `S3` function
+
+Dispatching to ad hoc methods
+
+.fl.w-50[
+`broom::tidy()` is an `S3` generic function.
+
+When called, it invokes a dispatcher that calls
+a method tailored to the class of the object passed as argument
+
+```
+> broom::tidy
+function (x, ...)
+{
+    UseMethod("tidy")
+}
+```
+
+> When a function calling `UseMethod("fun")` is applied to an object
+with class attribute `c("first", "second")`, the system searches for a function
+called `fun.first` and, if it finds it, applies it to the object...
+
+
+]
+
+.fl.w-50[
+
+The hard work is performed by the `tidy.prcomp()` registered for
+class `prcomp`
+
+```{r}
+class(pc)
+
+# sloop::s3_get_method(tidy.prcomp)
+```
+
+See [S3 section in Advanced R Programmming](https://adv-r.hadley.nz/s3.html)
+
+]
+---
+
+### `r fontawesome::fa("broom")` `broom::augment()`
+
+
+.fl.w-60[
+
+An excerpt of the body of `augment.prcomp`
+
+.f6[
+```{r, eval=FALSE}
+function (x, data = NULL, newdata, ...)
+{
+    ret <- if (!missing(newdata)) {
+        # ...
+    }
+    else {
+        pred <- as.data.frame(predict(x))
+        names(pred) <- paste0(".fitted", names(pred))
+        if (!missing(data) && !is.null(data)) {
+            cbind(.rownames = rownames(as.data.frame(data)),
+                data, pred)
+        }
+        else {
+          # ...
+        }
+    as_tibble(ret)
+}
+```
+]
+
+]
+
+.fl.w-40[
+
+Function `augment` is also an `S3` generic function.
+
+The method relies on another generic function `predict`
+
+For `prcomp` `predict` returns the `x` component of the list
+
+The output combines the columns of the original dataframe and (`data`)
+with their names and the predictions
+
+
+]
+
+
+---
+
+### `r fontawesome::fa("broom")` Mixing PCA and geographical information
+
+.fl.w-50[
+
+```{r pc_arrests, fig.show='hide', fig.height=5, message=FALSE, warning=FALSE}
+require("maps")
+
+pc %>%
+  tidy(matrix = "samples") %>%
+  mutate(region = tolower(row)) %>%
+  inner_join(map_data("state"), by = "region") %>%
+  ggplot() +
+  aes(long, lat) +
+  aes(group = group, fill = value) +
+  geom_polygon() +
+  facet_wrap(~PC) +
+  scale_fill_viridis_c() +
+  ggtitle("Principal components of arrest data")
+```
+]
+
+.fl.w-50[
+
+![](`r knitr::fig_chunk("pc_arrests", "png")`)
+
+
+]
+
+---
+
+### `r fontawesome::fa("broom")` `augment` for `prcomp`
+
+.fl.w-50[
+```{r arrests-pca-geo, fig.show='hide'}
+au <- augment(pc, data = USArrests)
+au %>% head(3)
+
+ggplot(au) +
+  aes(.fittedPC1, .fittedPC2) +
+  geom_point() +
+  geom_text(aes(label = .rownames), vjust = 1, hjust = 1)
+# }
+```
+]
+
+.fl.w-50[
+
+
+]
+???
+
+
 
 ---
 exclude: true
