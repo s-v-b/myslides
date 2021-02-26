@@ -1,12 +1,12 @@
 ---
-title: "EDA VII"
+title: "EDA VII  Correspondance Analysis"
 subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css", "custom-callout.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -85,8 +85,34 @@ library(flipbookr)
 
 ```
 
+
+```{r, echo=FALSE, message=FALSE}
+# %%
+pacman::p_load(tidyverse)
+pacman::p_load(vcd)
+pacman::p_load(FactoMineR)
+pacman::p_load(factoextra)
+pacman::p_load(data.table)
+pacman::p_load(ggmosaic)
+
+
+
+
+
+
+# old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
+# %%
+```
+
 ---
-class: middle, center, inverse
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+
+---
+template: inter-slide
 
 # Exploratory Data Analysis VII CA
 
@@ -97,9 +123,10 @@ class: middle, center, inverse
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: middle, inverse
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
+
 
 ### Bla 1
 
@@ -110,8 +137,914 @@ class: middle, inverse
 ### Bla 4
 
 ---
+name: motivca
+template: inter-slide
+
+## Motivations 
 
 ---
+
+In this lesson, we further explore the connection between two qualitative variables, that is,
+we attempt to go beyond Lesson [Bivariate statistics](#biv).
+
+Our starting point is a qualitative
+bivariate sample. 
+
+Consider the  celebrated `UCBAdmissions` dataset
+
+According to `R` documentation,
+this dataset is made of
+
+> Aggregate data on applicants to graduate school at Berkeley for the six largest departments in 1973 classified by admission and sex.
+
+This is a compilation of `r sum(datasets::UCBAdmissions)` application files. 
+
+For each application file,
+three variables have been reported: the `department`, the `gender` of the applicant and whether
+the applicant has been `admitted` 
+
+The dataset is a trivariate sample. In the sequel we make it
+a bivariate sample by focusing on `Gender`  and `Admit`. 
+
+???
+
+The dataset was gathered because
+the admission process at UCB graduate schools was suspected to be biased against women
+
+
+---
+
+### Plotting two-way contingency tables 
+
+As in Lesson [Bivariate statistics](#biv), we start by collecting the 2-way _contingency table_ and
+displaying a _mosaicplot_.
+
+```{r, echo=FALSE}
+UCBAdmissions <- datasets::UCBAdmissions
+
+apply(UCBAdmissions, MARGIN = c(1,2), sum) %>%
+  as_tibble(rownames = "Admit") -> ucb2
+```
+
+.panelset[
+
+.panel[.panel-name[`mosaicplot`]
+
+.fl.w-50.pa2[
+
+```{r mosaic1, fig.height=4, fig.show='hide'}
+mosaicplot(~ Gender + Admit,   #<<
+           UCBAdmissions)      #<<
+```
+
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("mosaic1", "png")`)
+
+]
+
+]
+
+.panel[.panel-name[`vcd::mosaic`]
+
+
+.fl.w-50.pa2[
+
+```{r mosaic2, fig.height=4, fig.show='hide'}
+apply(UCBAdmissions, 
+      MARGIN = c(1,2), 
+      sum) %>%
+  as.table() %>%
+  vcd::mosaic(formula=Admit~Gender,  #<<
+              data=.)                #<<
+```
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("mosaic2", "png")`)
+
+]
+
+]
+
+.panel[.panel-name[`ggmosaic`]
+
+.fl.w-50.pa2[
+
+```{r mosaic3, fig.height=4, fig.show='hide'}
+apply(UCBAdmissions, 
+      MARGIN = c(1,2), 
+      sum) %>%
+  as.table() %>%
+  vcd::mosaic(formula=Admit~Gender, #<<
+              data=.)  #<<
+```
+
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("mosaic3", "png")`)
+
+]
+
+]
+]
+
+???
+
+
+This mosaicplot suggests that Admission and Gender are associated.
+
+---
+template: inter-slide
+
+## Chi-square distance
+
+
+---
+name: chisqDist
+
+In order to assess the association between two qualitative variables, we use
+an _information divergence_ between the joint distribution and the product
+of the two marginal distributions. 
+
+In correspondence analysis, the relevant information
+divergence is the $\chi^2$ (khi-square) divergence.
+
+### Definition   Chi-square divergence
+
+Let $P$ and $Q$ be two probability distributions over the same measurable space.
+
+The $\chi^2$ (khi-square) divergence from $P$ to $Q$ is defined as
+
+- $\infty$ if $P$ is not absolutely continuous with respect to $Q$ and
+
+- $\chi^2(P, Q)  = \mathbb{E}_Q\Big[ \left(\frac{\mathrm{d}P}{\mathrm{d}Q} - 1\right)^2\Big]  \qquad \text{  otherwise}$
+
+
+---
+
+
+### $f$-divergences
+
+The $\chi^2$-divergence belongs to the family of _information divergences_ or  $f$-divergences
+that fits the next expression: if $P$ is absolutely continuous with respect to $Q$
+
+$$I_f(P, Q)  = \mathbb{E}_Q\Big[ f\left(\frac{\mathrm{d}P}{\mathrm{d}Q}\right)\Big]$$
+
+with $f$ convex and $f(1)=0$.
+
+- If we choose $f(x)= x \log (x)$, the information divergence is the _relative entropy_ or _Kullback-Leibler divergence_.
+
+- If we choose $f(x)= |x -1|$, the information divergence is the _total variation distance_.
+
+- If $f(x)= (x-1)^2$, the $f$-divergence is the _$\chi^2$ divergence_.
+
+---
+name: chisqassociation
+
+### Definition Chi-Square association index
+
+Let  $P$ be a probability distribution over $\mathcal{X} \times \mathcal{Y}$ (a bivariate distribution)
+with marginal distributions $P_X$ and $P_Y$. 
+
+The $\chi^2$-association index is defined as
+
+$$\chi^2(P, P_X \otimes P_Y)$$
+
+---
+
+### Application
+
+A 2-way contingency table like `ucb2` defines a joint distribution $P$ on couples  
+from $\mathcal{X} \times \mathcal{Y}$ as well as two marginal distributions:
+
+$$P\{(a,b)\} = \frac{N_{a,b}}{n} \qquad P_X\{a\} = \frac{N_{a, .}}{n} \qquad
+P_Y\{b\} = \frac{N_{.,b}}{n}$$
+
+In the sequel, $w_a = P_X\{a\} = \frac{N_{a, .}}{n}$ for every $a\in \mathcal{X}$.
+
+The $\chi^2$ divergence defined by the two-way contingency table is
+$$\begin{array}{rl}  \chi^2(P, P_X \otimes P_Y)  & = \sum_{a \in \mathcal{X}, b \in \mathcal{Y}}  \frac{N_{a,\cdot} N_{\cdot, b}}{n^2} \left( \frac{n N_{a,b}}{N_{a,\cdot} N_{\cdot, b}} - 1\right)^2 \\  & = \sum_{a \in \mathcal{X}} \frac{N_{a, .}}{n} \sum_{b \in \mathcal{Y}}   \frac{\left( \frac{N_{a,b}}{N_{a,\cdot}} - \frac{N_{\cdot, b}}{n} \right)^2}{N_{.,b}/n} \\   & = \sum_{a \in \mathcal{Y}} w_a \times \chi^2\left(P_Y (\cdot | X=a),  P_Y\right) \end{array}$$
+
+???
+
+The last expression shows that the _Pearson association_ statistic is a (convex) combination of
+the $\chi^2$ divergences between the conditional distributions of $Y$  given the values of $X$ and the
+marginal distribution of $Y$.
+
+
+---
+
+### Pearson association index
+
+Given a two-way contingency table, the Pearson association index is defined as
+
+$$n \times \chi^2(P, P_X \otimes P_Y) =  \sum_{a \in \mathcal{X},b \in \mathcal{Y}}  \frac{\left({N_{a,b}} - \frac{N_{a, .}}{n}N_{., b} \right)^2}{N_{a,.} N_{.,b}/n}$$
+
+
+
+---
+  
+Note the factor $n$. 
+
+It is motivated by testing theory. 
+
+Indeed, if we collect a bivariate sample of length $m$
+according to $P_X \otimes P_Y$ (that is if the two variables are stochastically independent), compute the contingency
+table defined by this random sample, then the Pearson association is a random variable. 
+
+If $m$ is large enough,
+the distribution of the Pearson association index is close (in the topology of weak convergence) to a
+$\chi^2$-distribution with $(|\mathcal{X}|-1)(|\mathcal{Y}|-1)$ degrees of freedom. 
+
+The fact that the distribution of the Pearson association index is close to a probability distribution that does not depend on the details of $P_X$ and $P_Y$ is important, both theoretically and practically.
+
+
+We may compare the computed Pearson association index to the quantiles of the $\chi^2$ distribution
+with the adequate number of degrees of freedom.
+
+---
+
+### Illustration UCB admission data
+
+For the UCB admission data, this leads to
+
+```{r, eval=FALSE}
+M <- apply(UCBAdmissions, MARGIN = c(1,2), sum)
+rowsums <- M %*% matrix(1, nrow=2, ncol=1)
+colsums <- matrix(1, nrow=1, ncol=2)  %*% M
+n <- sum(M)
+
+sum((M - rowsums %*% colsums/n)^2/(rowsums %*% colsums/n))
+# chisq.test(as.table(apply(UCBAdmissions, MARGIN = c(1,2), sum)), correct = FALSE)
+```
+
+---
+
+
+### Tentative interpretation
+
+This results suggests that admission and gender are associated. Further
+interpretation requires more visualization tools and modeling assumptions.
+
+We shall first extend the matrix analytic notions that underpins
+Principal Component Analysis, that is SVD and Hilbert-Schmidt-Frobenius norms.
+T
+Then, in Section [Recipes](#basicca) we construct _Correspondence Analysis_ as a pair of dual extended SVD known
+as row-profiles and column-profiles analyses. 
+
+In Section [Applications]{#visuca}, we illustrate recipes
+on several examples using two `R` packages `ade4` and `FactoMineR`.
+
+---
+name: revSVD
+template: inter-slide
+
+## Revisiting and extending SVD  
+
+---
+
+
+Just like PCA, correspondance analysis (CA) builds on Singular Value Decomposition.
+
+In words, CA  consists in computing the SVD of a transformation of the two-way contingency table.
+
+This transformation is best explained by extending the SVD definition.
+
+$\mathcal{M}(n,p)$ denotes the set of real matrices with $n$ rows and $p$ columns.
+
+We will use weighted versions of [Hilbert-Schmidt-Frobenius inner-product and norm](#eckartyoung).
+
+---
+name: weighted-HS-norm
+
+
+### Proposition Weighted Hilbert-Schmidt-Frobenius inner-product
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}_{p, p}, \Phi \in \mathcal{M}_{q,q}$ be symmetric and positive definite.
+
+Matrices $\Omega, \Phi$ define an _inner product_ on $\mathcal{M}_{p,q}$: 
+let $X, Y \in \mathcal{M}_{p,q}$
+
+$$\begin{array}{rl} \langle X, Y\rangle_{\Omega, \Phi}  & = \operatorname{Trace}\left(\Omega \times X \times \Phi \times Y^T\right)  \\  & =  \bigg\langle  \Omega^{1/2} \times X \times \Phi^{1/2}, \Omega^{1/2} \times Y \times \Phi^{1/2}  \bigg\rangle_{\text{HS}}\end{array}$$
+
+The weighted Hilbert-Schmidt-Frobenius norm of $X$ is defined by
+
+$$\Vert X \Vert_{\Omega, \Phi}^2 = \left\Vert   \Omega^{1/2} \times X \times \Phi^{1/2}\right\Vert_{\text{HS}}^2$$
+
+]
+
+---
+
+
+### Proof
+
+Linearity with respect to $X$ and $Y$ follows from distributivity of matrix multiplication with respect to matrix addition.
+
+Symmetry is a consequence of invariance of trace by similarity.
+
+Multiplying on the left by $\Omega^{-1/2}$  and on the right by $\Omega^{1/2}$,
+
+$$\begin{array}{rl}
+\langle X, Y\rangle_{\Omega, \Phi}
+ & = \operatorname{Trace}\left(\Omega \times X \times \Phi \times Y^T\right)  \\
+ & = \operatorname{Trace}\left(\Omega^{1/2} \times X \times \Phi \times Y^T \times \Omega^{1/2} \right) \\
+ & = \operatorname{Trace}\left(\big(\Omega^{1/2} \times X \times \Phi^{1/2}\big) \times\big(\Phi^{1/2} \times Y^T \times \Omega^{1/2}\big) \right) \\
+& = \operatorname{Trace}\left(\big(\Omega^{1/2} \times X \times \Phi^{1/2}\big) \times \big(\Omega^{1/2} \times Y \times \Phi^{1/2}  \big)^T \right)\\
+& = \left\langle \Omega^{1/2} \times X \times \Phi^{1/2}, \Omega^{1/2} \times Y \times \Phi^{1/2} \right\rangle_{\text{HS}} \\
+& = \left\langle \Omega^{1/2} \times Y \times \Phi^{1/2}, \Omega^{1/2} \times X \times \Phi^{1/2} \right\rangle_{\text{HS}} \\
+& = \langle Y, X\rangle_{\Omega, \Phi}\end{array}$$
+
+---
+
+Positivity is a by-product of the argument above:
+
+$$\begin{array}{rl}\langle X, X\rangle_{\Omega, \Phi}  & = \langle \Omega^{1/2} \times X \times \Phi^{1/2}, \Omega^{1/2} \times X \times \Phi^{1/2} \rangle \\  & \geq 0\end{array}$$
+  
+with equality only if $X=0$
+
+???
+
+We shall extend the notion of Singular Value Decomposition so as to adapt
+to weighted Hilbert-Schmidt-Frobenius norms.
+
+
+---
+name: extendedsvd
+
+
+### Theorem Extended SVD factorization
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}(p,p)$, $\Phi \in \mathcal{M}(q,q)$ be symmetric and Positive Definite.
+Let $X \in \mathcal{M}(n,p)$
+
+There exists $M, D, N$ such that
+
+$$X =  N \times D \times M^T$$
+
+with  $N \in \mathcal{M}(p,p)$, $M \in \mathcal{M}(q,q)$ and  $D \in \mathcal{M}(p, q)$ satisfying:
+
+- $N^T \times \Omega \times N = I_p$
+
+- $M^T \times \Phi \times M = I_q$
+
+- $D_{k,k} \geq D_{k+1, k+1} \geq 0$  for $0\leq k< \min (p,q)$  and $D_{j,k}=0$ for $j\neq k$.
+
+If $\Omega = I_p$ and $\Phi = I_q$, we recover the Singular Value Decomposition
+
+]
+
+---
+
+
+### Proof
+
+Because they are positive definite, by the spectral decomposition theorem, $\Omega$ and $\Phi$
+have invertible square roots: there exists symmetric invertible matrices $\Omega^{1/2}$ and $\Phi^{1/2}$
+such that $\Omega = (\Omega^{1/2})^2$ and $\Phi = (\Phi^{1/2})^2$.
+
+Let $U \times D \times V^T$  be the SVD factorization of $\Omega^{1/2} \times  X \times \Phi^{1/2}$, then
+
+$$X = \underbrace{\Omega^{-1/2} \times U}_{:=N} \times D \times   \underbrace{V^T \times \Phi^{-1/2}}_{:=M}$$
+
+Indeed:
+
+$$N^T \times \Omega \times N = (U^T \times \Omega^{-1/2}) \times \Omega \times (\Omega^{-1/2} \times U) = U^T \times  (\Omega^{-1/2} \times \Omega \times \Omega^{-1/2} ) \times U = \operatorname{Id}_p$$
+
+and similarly for $M$ and $\Phi$.
+
+`r fontawesome::fa("square")`
+
+---
+name: truncSVD
+
+The truncated generalized SVD factorization is defined in a way that parallels the truncated SVD.
+
+### Definition Truncated extended SVD factorization
+
+Let $k \leq \min(p,q)$. 
+
+The $k$-truncated extended SVD factorization of $X \in \mathcal{M}(p,q)$
+with respect to $\Omega, \Phi$
+is derived from the extended SVD factorization $X = N \times D \times M^T$
+by taking the first $k$ columns of $N$ ( $N_{[k]}$ ) and $M$ ( $M_{[k]}$ ) as well as the first $k$ rows and columns of $D$  ( $D_{[k]}$ ). 
+
+The matrix 
+
+$$N_{[k]} \times D_{[k]} \times M_{[k]}^T$$
+
+has rank not larger than $k$. It has rank $k$ if $D[k,k]>0$.
+
+---
+
+
+The $k$-truncated SVD of $X$ is known to be the best rank-$k$ approximation of $X$ in the least-square sense
+(that is according to the Hilbert-Schmidt norm). 
+
+The  $k$-truncated extended SVD factorization
+also enjoys optimal approximation properties under rank constraints. 
+
+Wheras the optimality
+property of the truncated SVD was assessed with respect to Hilbert-Schmidt-Frobenius norm,
+the property of the truncated SVD is assessed with respect to a weighted version of Hilbert-Schmidt-Frobenius norm.
+
+---
+name: weightedHSorthobasis
+
+
+### Proposition 
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}_{p, p}, \Phi \in \mathcal{M}_{q,q}$ be symmetric and positive definite.
+
+Let $X \in \mathcal{M}_{p,q}$ with extended SVD factorization $X = N \times D \times M^T$ with respect to $\Omega$
+and $\Phi$. 
+
+Let $(n_i)_{i \leq p}$ and $(m_{j})_{j\leq q}$  denote the columns of $N$ and $M$ 
+
+then
+
+$\left(n_i \times m_j^T \right)_{i\leq p, j \leq q}$ is an orthonormal basis of $\mathcal{M}_{q,q}$
+endowed with inner product $\langle X, Y\rangle_{\Omega, \Phi}$
+
+]
+
+
+??? 
+
+The straightforward proof parallels the proof of the statement for the ordinary SVD.
+
+---
+name: extendedEckartYoung
+
+### Theorem  Eckart-Young Theorem for extended SVD
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}_{p, p}, \Phi \in \mathcal{M}_{q,q}$ be symmetric and positive definite.
+
+Let $X \in \mathcal{M}_{p,q}$ with extended SVD factorization $X = N \times D \times M^T$. Let $X_{[k]}$
+denote the $k$-truncated extended SVD of $X$ with respect to $\Omega$ and $\Phi$.
+
+Then $X_{[k]}$ minimizes
+
+$$\Vert X-Y\Vert^2_{\Omega, \Phi} =  \langle X-Y, X-Y\rangle_{\Omega, \Phi} = \operatorname{Trace}\left(\Omega (X-Y) \Phi (X-Y)^T\right)$$
+
+among all matrices $Y \in \mathcal{M}_{p,q}$ with rank less or equal than $k$.
+
+]
+
+---
+
+### Proof 
+
+The argument parallels the proof of Eckart-Young's Theorem for SVD.
+
+`r fontawesome::fa("square")`
+
+---
+name: basicca
+template: inter-slide
+
+##  Correspondence analysis : recipes 
+
+---
+
+Correspondence analysis consists of computing the extended SVD of the normalized and recentered contingency table
+with carefully chosen matrices $\Omega$ and $\Phi$.
+
+---
+name: rowprofiles
+
+### Row profile analysis  
+
+Consider a 2-way contingency table $X \in \mathcal{M}_{p, q}$. 
+
+Let $n$ denote sum of coefficients of $X$: $n = \sum_{a \leq p, b \leq q} X_{a, b}$. 
+
+Let $P$ be thenormalization of $X$: 
+
+$$P = \frac{1}{n} X$$
+
+Let 
+
+- $D_r \in \mathcal{M}_{p,p}$ be the diagonal matrix of row sums of $P$ and 
+- $D_c \in \mathcal{M}_{q,q}$ be the diagonal matrix of column sums of $P$.
+
+The diagonal elements of $D_r$ define the weights of the different rows.
+
+The diagonal coefficients of $D_c$ define the so-called _centroid_, the
+marginal distribution of $Y$ is the weighted average of
+the conditional distributions of $Y$ given $X$.
+
+---
+
+The rows of matrix
+
+$$R = D_r^{-1} \times P \qquad  R_{a,b} = \frac{N_{a,b}}{N_{a,.}}$$
+
+are called _row profiles_. 
+
+Each _row profile_ defines a conditional probability of $Y$ given $X$
+
+In Correspondence Analysis, row profile analysis consists of factorizing
+the centered row profile matrix. 
+
+The recipe consists in choosing the couple of symmetric positive definitive matrices that define the extended SVD.
+
+---
+
+### Example 
+
+Consider the 2-way contingency table derived from the `Embarkment` and `Pclass` columns of the Titanic dataset.
+
+|   |   1|   2|   3|
+|:--|---:|---:|---:|
+|Queenstown  |   2|   3|  72|
+|Cherbourg  |  85|  17|  66|
+| Southampton  | 127| 164| 353|
+
+Once normalized by the table sum `n=4426`, we obtain matrix $P$ (up to rounding errors):
+
+$$\begin{bmatrix}
+ 0.002 & 0.003 & 0.081 \\
+ 0.096 & 0.019 & 0.074 \\
+ 0.143 & 0.184 & 0.397
+\end{bmatrix}$$
+
+Matices $D_r$ and $D_c$ are
+
+$$D_r \approx
+\begin{bmatrix} 0.086 & 0 & 0 \\
+                0 & 0.189 & 0 \\
+                0 & 0 & 0.724 \end{bmatrix} \qquad
+ D_c \approx
+\begin{bmatrix} 0.241 & 0 & 0 \\
+                0 & 0.206 & 0 \\
+                0 & 0 & 0.552 \end{bmatrix}$$
+                
+---
+
+The row profiles matrix $R$ is $D_r^{-1} \times P$
+
+$$R \approx \begin{bmatrix}
+  0.02 & 0.03 & 0.94 \\
+  0.51 & 0.10 & 0.39 \\
+  0.20 & 0.25 & 0.55 \end{bmatrix}$$
+
+The matrix which is fed to _extended SVD_  is obtained by centering
+$R$ around the weighted average of the rows
+
+$$R - 1 \times 1^T \times P \approx \begin{bmatrix}
+  -0.221 & -0.176 & 0.388 \\
+   0.269 & -0.106 & -0.162 \\
+  -0.041 & 0.044  & -0.002 \end{bmatrix}$$
+
+---
+
+Recall that the row vector $1^T \times P$ defines the marginal distribution of $Y$
+(the column-profile of matrix $P$).
+
+
+Note that all rows of $R - 1 \times 1^T \times P$
+sum up to $0$, they are orthogonal to $(1, 1, 1)^T$.
+
+
+```{r, echo=FALSE, eval=TRUE}
+readr::read_csv("DATA/TITANIC/train.csv",
+                col_types = cols(Embarked = col_factor(levels = c("Q", "C", "S")),
+                                 Pclass = col_factor(levels = c("1", "2", "3")),
+                                 Sex = col_factor(levels = c("male", "female")),
+                                 Survived = col_factor(levels = c("0", "1")))) %>%
+dplyr::select(Embarked, Pclass)  %>% table() -> X
+
+knitr::kable(X, format = "markdown")
+```
+
+
+---
+
+
+The space of row profiles (a subset of $\mathbb{R}^q$) is endowed
+with the  weighted $\ell_2$ metric (a Mahalanobis metric)
+induced by $D_c^{-1}$:
+
+$$(x -y)^T \times D_c^{-1} (x-y)$$
+
+---
+
+The extended SVD factorization is actually applied to 
+
+$$D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$$
+
+where $1 \times 1^T$ denotes the matrix from $\mathcal{M}_{p, q}$ with all entries equal to $1$.
+
+Matrices $\Omega$ and $\Phi$ are chosen as $D_r$ and $D_c$.
+
+The entry of $D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$ at indices $a,b$ are
+
+$$\frac{n N_{a,b}}{N_{a, .}N_{.,b}} - 1$$
+
+---
+
+Recall the definition of the Pearson association index:
+
+$$\begin{array}{rl}
+  n \chi^2(P, P_X \otimes P_Y)
+  & = n \sum_{a \in \mathcal{X}, b \in \mathcal{Y}}  \frac{N_{a,\cdot} N_{\cdot, b}}{n^2} \left( \frac{n N_{a,b}}{N_{a,\cdot} N_{\cdot, b}} - 1\right)^2 \\
+  & = n \sum_{a \in \mathcal{X}} \frac{N_{a, .}}{n} \sum_{b \in \mathcal{Y}}   \frac{\left( \frac{N_{a,b}}{N_{a,\cdot}} - \frac{N_{\cdot, b}}{n} \right)^2}{N_{.,b}/n} \\
+  & = n \sum_{a \in \mathcal{Y}} w_a \chi^2\left(P_Y (\cdot | X=a),  P_Y\right) \\
+  & = \sum_{a \in \mathcal{X},b \in \mathcal{Y}}  \frac{\left({N_{a,b}} - \frac{N_{a, .}}{n}N_{., b} \right)^2}{N_{a,.} N_{.,b}/n} \, .
+\end{array}$$
+
+where $P$ is the joint distribution defined by the contingency table, $P_X, P_Y$ the two marginal distributions. This is
+
+$$\big\Vert D_r^{1/2} \big(D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T \big)D_c^{1/2}\big\Vert^2_{\text{HS}} =
+\big\Vert  \big(D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T \big)\big\Vert^2_{D_r^{1/2},D_c^{1/2}}$$
+
+---
+
+As
+
+$$D_r^{1/2} \times
+\big(D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T \big) \times D_c^{1/2}
+  =  D_r^{1/2}  \times \big(R - 1 \times  1^T P \big) \times  D_c^{-1/2}$$
+
+we can also portray correspondence analysis as computing the extended SVD of
+the centered row profiles matrix $\big(R - 1\times  1^T P \big)$
+with respect to the symmetric positive definite matrices $\Omega = D_r, \Phi = D_c^{-1}$.
+
+---
+
+### Interpretation of singular values.
+
+The sum of squared singular values equals the $\chi^2$ Pearson index of association.
+
+It is also called the total inertia of the centered row profiles matrix.
+
+The number $k$ of positive singular values equals the rank of  the centered row profiles matrix.
+
+The latter is not larger than $q-1$. The sum of the squared $k-2$ smallest positive singular values
+equals the weighted squared Hilbert-Schmidt-Frobenius distance of the centered row profiles matrix
+to the set of  rank-2  matrices (extended Eckart-Young Theorem).
+
+Let $N \in \mathcal{M}_{p, k}$ (resp. $M \in \mathcal{M}_{q, k}$) denote the extended left (resp. right) singular vectors computed
+from the extended SVD of  $R - 1 \times 1^T \times P$ with respect
+to $D_r$ and $D^{-1}_c$. 
+
+We have 
+
+$$N^T \times D_r \times N = I_k$ and $M^T \times D^{-1}_c \times M = I_k$$
+
+Let $D_{s} \in \mathcal{M}_{k,k}$ be the diagonal matrix with non-increasing
+singular values as diagonal coefficients.
+
+---
+
+### Interpretation of left singular vectors
+
+The truncated versions of matrix $N \times D_s$ define the optimal subspaces onto which
+to project the row profiles.
+
+Turn back to the projected Titanic dataset.
+
+The 2 positive squared singular values are $0.103,  0.036$
+(if we sum these two values and multiply the result by the number $889$
+of rows of the Titanic sub-dataset, we recover the Pearson association statistic, $123.57$).
+
+$$F = N \times D_s =\begin{bmatrix} -0.573 & -0.515  \\ 0.604 & -0.165   \\ -0.089  & 0.105\end{bmatrix}$$
+
+???
+
+The graphical display of the row profiles consists in displaying the
+points defined by the rows of $F$. The percentage of inertia assiated
+with each axis is usually added to the plot. If possible
+`rownames`  are used to identify each point and facilitate interpretation.
+
+
+---
+
+```{r, echo=FALSE}
+P <- (1/sum(X)) * X
+Dr <- diag(rowSums(P))
+Dc <- diag(colSums(P))
+R <- diag(rowSums(P)^(-1)) %*% P - matrix(1, 3, 1) %*% colSums(P)
+
+svd_R_ext <- svd(diag(rowSums(P)^(1/2)) %*% R %*% diag(colSums(P)^(-1/2)))
+
+N <- diag(rowSums(P)^(-1/2)) %*% svd_R_ext$u
+M <- diag(colSums(P)^(1/2)) %*% svd_R_ext$v
+F <- N %*% diag(svd_R_ext$d)
+
+factorial_titanic <- data.frame(F[, 1:2])
+names(factorial_titanic) <- c("lambda1", "lambda2")
+row.names(factorial_titanic) <- c("Queensland", "Cherbourg", "Southampton")
+```
+
+Row profile correspondence analysis of `Embarked` and `Pclass` for subset of Titanic dataset. Not too surprisingly,  the class distribution conditioned on `Embarked=Southampton` is closest to the centroid, that is to the marginal distribution of Passenger class.
+
+
+---
+
+
+```{r CArowtitanic, echo=FALSE, message=FALSE, warning=FALSE,  fig.cap="(ref:CArowtitanic)"}
+factorial_titanic %>%
+  ggplot(mapping=aes(x=lambda1,
+                     y=lambda2,
+                     label=rownames(factorial_titanic))) +
+  geom_point() +
+  geom_text(vjust = 0, nudge_y = 0.05) +
+  geom_point() +
+  xlim(-1, 1) +
+  ylim(-1, 1) +
+  coord_fixed() +
+  geom_hline(yintercept = 0, linetype=2) +
+  geom_vline(xintercept = 0, linetype=2) +
+  ggtitle("CA row profiles") +
+  xlab(latex2exp::TeX("$\\lambda_1 = 74.1\\%$")) +
+  ylab(latex2exp::TeX("$\\lambda_2 = 25.9\\%$"))
+```
+
+---
+name: colprofiles
+
+### Column-profiles
+
+Whereas in Principal Component Analysis, rows and columns
+play different roles (observations and variables), in Correspondence Analysis, rows and  columns are both associated  with modalities
+of categorical variables. 
+
+It makes sense to perform a column analysis.
+
+This means to perform row analysis on the transposed matrix $P^T$.
+
+The matrix of centered column profiles is
+
+$$D_c^{-1} P^T - 1 \times 1^T \times P^T$$
+
+
+Recall that for row profile analyis, the extended SVD factorization is  applied to 
+
+$D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$,
+
+with matrices $\Omega$ and $\Phi$ chosen as $D_r$ and $D_c$. This leads
+to 
+
+$$D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T = \widetilde{N} \times D_s \times \widetilde{M}^T$$ 
+
+with
+
+$$R - 1 \times 1^T \times P = \widetilde{N} \times D_s \times \widetilde{M}^T \times D_c$$
+
+For column profile analyis, the extended SVD factorization is  applied to $D_c^{-1} \times P^T \times D_r^{-1} - 1 \times 1^T$,
+with matrices $\Omega$ and $\Phi$ chosen as $D_c$ and $D_r$.
+
+$$D_c^{-1} \times P^T \times D_r^{-1} - 1 \times 1^T = \widetilde{M} \times D_s \times \widetilde{N}^T$$
+
+This leads to
+
+$$C - 1 \times 1^T \times P^T = \widetilde{M} \times D_s \times \widetilde{N}^T D_r$$
+
+Exchanging rows and columns
+does not change the decomposition of inertia.
+
+Investigating the left singular vectors $\widetilde{M}$ of column profile analyis amounts to investigate the right singular vectors of row profile analysis $D_c \times \widetilde{M}$.
+
+```{r,  echo=FALSE}
+C <- diag(colSums(P)^(-1)) %*% t(P) - matrix(1, 3, 1) %*% rowSums(P)
+
+svd_C_ext <- svd(diag(colSums(P)^(1/2)) %*% C %*% diag(rowSums(P)^(-1/2)))
+
+Ndual <- diag(colSums(P)^(-1/2)) %*% svd_C_ext$u
+Mdual <- diag(rowSums(P)^(1/2)) %*% svd_C_ext$v
+G <- Ndual %*% diag(svd_C_ext$d)
+
+factorial_titanic_dual <- data.frame(-G[, 1:2])
+names(factorial_titanic_dual) <- c("lambda1", "lambda2")
+row.names(factorial_titanic_dual) <- c("1", "2", "3")
+```
+
+Column profile correspondence analysis of `Embarked` and `Pclass` for subset of Titanic dataset.
+
+
+---
+
+
+```{r CArowtitanicDual, echo=FALSE, message=FALSE, warning=FALSE,  fig.cap="(ref:CArowtitanicDual)"}
+factorial_titanic_dual %>%
+  ggplot(mapping=aes(x=lambda1,
+                     y=lambda2,
+                     label=rownames(factorial_titanic_dual))) +
+  geom_point() +
+  geom_text(vjust = 0, nudge_y = 0.05) +
+  geom_point() +
+  xlim(-1, 1) +
+  ylim(-1, 1) +
+  coord_fixed() +
+  geom_hline(yintercept = 0, linetype=2) +
+  geom_vline(xintercept = 0, linetype=2) +
+  ggtitle("CA column profiles") +
+  xlab(latex2exp::TeX("$\\lambda_1 = 74.1\\%$")) +
+  ylab(latex2exp::TeX("$\\lambda_2 = 25.9\\%$"))
+```
+
+
+---
+
+
+### Association between modalities {#assocmodalities}
+
+Correspondance analysis is used to compare row profiles and
+column profiles  as witnessed by Figures \@ref(fig:CArowtitanic) and \@ref(fig:CArowtitanicDual). 
+
+It is also and mainly used
+to investigate associations between modalities of the two variables.
+Function `CA` from `FactoMineR` delivers among other products
+a _biplot for correspondence analysis_.
+
+
+```{r, echo=TRUE, message=FALSE}
+X %>% FactoMineR::CA(ncp = 2, graph = FALSE) -> ca_titanic
+```
+
+
+|                 |      Dim.1  | Dim.2 |
+|:----------------|------------:|------:|
+|Variance         |     0.103   | 0.036 |
+| `% of var.`     |     74.123  | 25.877|
+| Cumulative `% of var.`|  74.123 |100.000 |
+
+---
+
+The inertia of the first dimensions shows if there are strong relationships between variables and suggests the number of dimensions that should be studied. The first two dimensions express $100\%$ of the total dataset inertia ; that means that $100\%$ of the rows (or columns) cloud total variability is explained by the plane (_this is trivial!_).
+
+```{r, decompInertia, echo=FALSE, fig.cap="(ref:decompInertia)"}
+q <- tibble(x=stringr::str_c("Dim.", 1:2, sep=" "), y=ca_titanic$eig[1:2]) %>%
+  ggplot(aes(x=x, y=y)) +
+  geom_col(width = .25) +
+  ylab("Share of inertia") +
+  xlab("Squared singular values") +
+  ggtitle("Screeplot for correspondance analysis",
+          subtitle="Titanic dataset, Embarkment versus PClass")
+
+q
+```
+
+---
+
+
+|Rows | $\text{Iner.} \times 1000$| Dim.1  | contribution   | $\cos^2$ |  Dim.2  | contribution   |    $\cos^2$  |
+|:-|:--------:|----:|----:|----:|----:|----:|----:|
+|Q |    51.381 | -0.573 | 27.516 | 0.553 | -0.515 | 63.823 | 0.447 |
+|C |    74.143 |  0.604 |66.897 | 0.931 | -0.165 |14.205 | 0.069 |
+|S |    13.679 | -0.089 | 5.587 | 0.421 |  0.105 |21.972 | 0.579 |
+
+According to rows analysis, Southampton contributes little to total inertia. Indeed,
+Southampton mostly contributes to the centroid.
+
+---
+
+|Rows | $\text{Iner.} \times 1000$| Dim.1  | contribution   | $\cos^2$ |  Dim.2  | contribution   |    $\cos^2$  |
+|:-|:--------:|----:|----:|----:|----:|----:|----:|
+|1 |    77.518 |  0.566 | 74.698 | 0.994 | -0.043 | 1.230 | 0.006 |
+|2 |    29.988 | -0.103 | 2.118 | 0.073 |  0.367 | 77.185 |  0.927 |
+|3 |    31.697 | -0.208 | 23.184 | 0.755 | -0.119 | 21.585 | 0.245 |
+
+Classes contribute more evenly to Inertia.
+
+---
+
+Simultaneous representation of row profiles and column profiles for projected Titanic dataset, as provided by `FactoMineR::CA`. Passengers who boarded at Cherbourg were disproportionately first class passengers while those who boarded at Queenstown were disproportionately third class passengers. Note that this biplot does not displays the weight of the different categories.
+
+```{r  fctmCATita, echo=FALSE, warning=FALSE, message=FALSE, fig.cap='(ref:fctmCATita)'}
+plot(ca_titanic)
+```
+
+---
+exclude: true
+
+## Bibliographic remarks {#bibca}
+
+
+@MR767260 is a lively and thorough presentation of correspondence
+analysis and related techniques.
+
+@holmes is a brief and spirited introduction to the duality diagrams framework that underlies package `ade4`.
+
+@husson2018r explains how to use `FactoMineR` to perform Correspondence Analysis.
 
 ---
 
