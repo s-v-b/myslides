@@ -1,0 +1,48 @@
+template: inter-slide
+name: chatterjee-ess
+
+## Efron-Stein-Steele inequalities: Chatterjee's proof
+
+---
+name: cov-identity
+
+
+### A covariance identity
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+bla
+
+]
+
+---
+
+### Proof of covariance identity
+
+
+
+---
+
+### Proof of covariance identity (continued)
+
+
+---
+
+### Proof of covariance identity (continued)
+
+
+`r fontawesome::fa("square")`
+
+---
+
+### Proof of Efron-Stein-Steele inequalities from covariance identity
+
+
+
+
+`r fontawesome::fa("square")`
+
+
+----
+

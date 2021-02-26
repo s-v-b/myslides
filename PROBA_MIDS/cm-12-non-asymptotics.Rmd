@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -23,9 +23,51 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+exclude: false
+name: inter-slide
+class: inverse, middle, left
+
+{{content}}
+
+---
 name: layout-general
 layout: true
 class: left, middle
+
+```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+xaringanExtra::use_animate_css()
+
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_tachyons(minified = FALSE)
+
+# xaringanExtra::use_animate_all(style=c("fade", "side_right"))
+
+#xaringanExtra::use_animate_css()
+
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m2-mids/",
+  exclude_class = c("hide_logo")
+)
+
+xaringanExtra::use_panelset()
+
+xaringanExtra::use_editable(expires = 1)
+
+source("./loaders_fixers.R")
+
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+#library(flipbookr)
+```
+
+
 
 <style>
 .remark-slide-number {
@@ -48,33 +90,10 @@ class: left, middle
 </style>
 
 
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
-```
 
-
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
-
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-```
 
 ---
-class: middle, center, inverse
-
-
+template: inter-slide
 
 # Non asymptotic results: concentration
 
@@ -84,51 +103,70 @@ class: middle, center, inverse
 
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
-
-
 ---
-class: middle, inverse
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
 
 ### Concentration
 
-### Variance bounds for functions of independent random variables
+### [Variance bounds for functions of independent random variables](#ess)
 
 ### Exponential inequalities
 
 ### Maximal inequalities
 
-
+### Concentration inequalities
 
 ---
 exclude: true
-class: inverse, center, middle
+template: inter-slide
 
 ## Motivation(s)
 
 ## `r fontawesome::fa("grin", fill = "white")`
 
 ---
-exclude: true
 ### Example of non-asymptotic results
 
 - Bounds on approximation error in limit theory
 
 $$\mathrm{d}_{\text{TV}}\left(\text{Poi}(\lambda), \text{Binom}\left(n, \frac{\lambda}{n}\right)\right) \leq \min\left(\frac{\lambda}{n}, \frac{1}{n}\right)$$
 
+--
 
-- Non-asymptotic tail bounds
+- Non-asymptotic tail or moment bounds
+  + Chebychev inequality 
+  + exponential tail bounds for (some) sums of independent random variables 
 
-.center[ ≈ Hoeffding's inequality]
+.center[ ≈ Hoeffding's inequality
+
+  Bernstein's inequality
+
+]
 
 
-
-???
 
 ---
-exclude: true
+
+### Quantitative approaches to limit theorems 
+
+- Bounds on the deviation between the cumulative distribution functions for normalized and centered sums of i.i.d. random variables and Gaussian cumulative distribution function .fr.f6[(Berry-Esseen)]
+
+- Bounds on total variation distance/transportation distance between distributions and Gaussian, Poisson, GEV, ... and other limit distributions .fr.f6[(Stein's method)]
+
+`r fontawesome::fa("frown")` May not fit very well with union bounds 
+
+
+---
+
+### Exponential bounds
+
+- 
+
+---
+
 
 ### Why?
 
@@ -139,11 +177,6 @@ exclude: true
 ???
 
 ---
-class: inverse, middle, center
-
-## Concentration
-
----
 
 ### Concentration in product spaces
 
@@ -152,7 +185,7 @@ In a nutshell:
 .cf[
 
 > A function of many independent random variables that does not depend too much
-> on any of them is approximately constant       .fr[Talagrand]
+> on any of them is approximately constant       .fr.f6[(Talagrand)]
 
 ]
 
@@ -161,12 +194,24 @@ _smooth_ functions (random variables) around their median/mean in some
 probability spaces
 
 - Product spaces
+
 - Gaussian spaces
+
 - High-dimensional spheres
+
 - Compact topological groups
+
 - ...
 
+
+
 ---
+template: inter-slide
+
+## Concentration
+
+---
+
 
 In Gaussian probability spaces, the Poincaré Inequality asserts:
 
@@ -285,8 +330,7 @@ We obtain the following analog of the additivity formula of the variance:
 
 $$\operatorname{var}\left(  Z\right)  =\mathbb{E}\left[  \left(  \sum_{i=1}^{n}\Delta_{i}\right)  ^{2}\right]  =\sum_{i=1}^{n}\mathbb{E}\left[ \Delta_{i}^{2}\right]$$
 
-`r fontawesome::fa("hand-point-right")`  Up to now, we have not made any use of the fact that $Z$ is a function of
- independent variables $X_{1},\ldots,X_{n}$
+`r fontawesome::fa("hand-point-right")`  Up to now, we have not made any use of the fact that $Z$ is a function of  independent variables $X_{1},\ldots,X_{n}$
 
 ---
 
@@ -314,18 +358,20 @@ $$\mathbb{E}^{(i)}Z  =\int_{\mathcal{X}} f\left(  X_{1},\ldots,X_{i-1},x_{i},X_{
 
 Again by the Tonelli-Fubini theorem:
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 $$\mathbb{E}_i\left[  \mathbb{E}^{\left(  i\right)  } Z \right] =\mathbb{E}_{i-1} Z$$
 
 ]
 
 ---
+name: thm-ess-1
 
-
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem:  Efron-Stein-Steele's inequalities (I)
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Let $X_1,\ldots,X_n$ be independent random variables and let $Z=f(X)$ be
 a square-integrable function of $X=\left(  X_{1},\ldots,X_{n}\right)$.
@@ -338,10 +384,12 @@ $$\operatorname{var}\left(  Z\right)  \leq \sum_{i=1}^n\mathbb{E}\left[
 ]
 
 ---
-
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+name: thm-ess-2
 
 ### Theorem:  Efron-Stein-Steele's inequalities (II)
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Let $X_1',\ldots,X_n'$ be independent copies of $X_1,\ldots,X_n$ and
 
@@ -371,7 +419,7 @@ and square-integrable variables $Z_{i}$, $i=1,\ldots,n$.
 Using
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 $$\mathbb{E}_i\left[\mathbb{E}^{\left(i\right)} Z \right] = \mathbb{E}_{i-1} Z$$
 
@@ -429,22 +477,25 @@ $$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\frac{1}{2}\mathbb{E
 =\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_i'\right)_+^2\right]
 =\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_i'\right)_-^2\right]$$
 
-where we used the fact that the conditional distributions of $Z$ and $Z_i'$
+where we used the fact that the conditional distributions of $Z$ and $Z_i^{\prime}$
 are identical
 
 ---
 
 ### Proof (continued)
 
-`r fontawesome::fa("syringe")` For any real-valued random variable $X$,
+For any real-valued random variable $X$ `r fontawesome::fa("syringe")`  
 
-$$\operatorname{var}(X) = \inf_{a\in \mathbb{R}} \mathbb{E}[(X-a)^2]$$
 
-Using this fact conditionally, for every $i=1,\ldots,n$,
+$$\operatorname{var}(X) = \inf_{a\in \mathbb{R}} \mathbb{E}\left[(X-a)^2\right]$$
 
-$$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\inf_{Z_{i}}\mathbb{E}^{\left(  i\right)  }\left[  \left(  Z-Z_{i}\right)^2\right]$$
+Using this fact conditionally, for every $i=1,\ldots, n$
 
-`r fontawesome::fa("hand-point-right")` the infimum is achieved whenever $Z_{i}=\mathbb{E}^{\left(i\right)}Z$.
+$$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\inf_{Z_{i}}\mathbb{E}^{\left(  i\right)  }\left[\left(  Z-Z_{i}\right)^2\right]$$
+
+`r fontawesome::fa("hand-point-right")` 
+
+The infimum is achieved whenever $Z_{i}=\mathbb{E}^{\left(i\right)}Z$
 
 `r fontawesome::fa("square")`
 
@@ -455,6 +506,13 @@ independent random variables (with finite variance) then
 the Efron-Stein-Steele inequality  becomes an equality.
 
 The bound in the Efron-Stein-Steele inequality is, _in a sense_, not improvable.
+
+---
+
+```{r, echo=FALSE, child='ess-Chatterjee.Rmd'}
+
+```
+
 
 ---
 class: inverse, center, middle
@@ -518,6 +576,51 @@ exclude: true
 
 ### Order statistics
 
+---
+
+```{r, echo=FALSE, child='poincare.Rmd'}
+
+```
+
+---
+class: inverse, center, middle
+name: expo-ineq
+
+## Exponential inequalities
+
+---
+
+### Mill's ratios (Gaussian tail bounds)
+
+For $x>0$ 
+
+$$\frac{\phi(x)}{x} \left(1 -\frac{1}{x^3}\right)\leq \overline{\Phi}(x) \leq \min\left(\frac{\phi(x)}{x}, \mathrm{e}^{-x^2/2}\right)$$
+
+???
+
+
+---
+
+### Gaussian quantiles 
+
+For $t>1$ 
+
+$$\Phi^{\leftarrow}\left(1 - \frac{1}{t}\right) \leq \sqrt{2 \log t}$$
+
+--
+
+This is both handy and reasonably tight `r fontawesome::fa("glass-cheers")` 
+
+$$\Phi^{\leftarrow}\left(1 - \frac{1}{t}\right)  \sim  \sqrt{2 \log t}\qquad \text{as} \quad {t\to\infty}$$
+
+---
+
+### Proof of Mill's ratios
+
+??? 
+
+This is essentially integration by parts
+
 
 ---
 class: inverse, center, middle
@@ -535,11 +638,13 @@ on the summands, it is possible and relatively easy to derive sharp tail
 bounds for sums of independent random variables.
 
 ---
+name: hoeffding-lemma
 
-
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma  Hoeffding Lemma
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Let $Y$ be a random variable  taking
 values in a bounded interval $[a,b]$ and
@@ -554,9 +659,9 @@ $$\operatorname{var}(Y) \leq \frac{(b-a)^2}{4}\qquad \text{and} \qquad \psi_Y(\l
 ---
 
 
-### Proof
+### Proof (Hoeffding's Lemma)
 
-The upper bound on the variance of $Y$ has been established.
+The upper bound on the variance of $Y$ has been established elsewhere
 
 Now let $P$ denote the distribution of $Y$ and let $P_{\lambda}$ be the
 probability distribution with density
@@ -571,7 +676,7 @@ variable $Z$ with distribution $P_{\lambda}$ is bounded by $(b-a)^2/4$
 
 ---
 
-### Proof (continued)
+### Proof (Hoeffding's Lemma continued)
 
 Note that $P_0 = P$.
 
@@ -589,7 +694,7 @@ $$\psi^{\prime\prime}_Y(\lambda) = \frac{\mathbb{E}\Big[ (Y- \mathbb{E}{Y})^2 e^
 
 ---
 
-### Proof (continued)
+### Proof (Hoeffding's Lemma continued)
 
 Hence,  thanks to the variance upper bound:
 \begin{align*}
@@ -608,6 +713,7 @@ $$\psi_Y(\lambda) = \psi_Y(0) + \lambda\psi_Y'(0)  + \frac{\lambda^2}{2}\psi_Y''
 
 ---
 
+`r fontawesome::fa("hand-point-right")`
 
 The upper bound on the variance is sharp in the
 special case of a _Rademacher_ random variable
@@ -623,11 +729,13 @@ We can now build on Hoeffding's Lemma to derive  very practical tail bounds
 for sums of bounded independent random variables.
 
 ---
+name: hoeffding-theorem
 
-
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Hoeffding's inequality
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 
 Let $X_1,\ldots,X_n$ be
 independent random variables such that $X_i$
@@ -650,22 +758,22 @@ $$\forall t>0, \qquad P\left\{  S \geq t \right\}  \le
 
 ---
 
-The proof is based on the so-called Cramer-Chernoff bounding technique and on Hoeffding's Lemma.
+The proof is based on the so-called Cramer-Chernoff bounding technique and on [Hoeffding's Lemma](#hoeffding-lemma)
 
-### Proof
+### Proof (Hoeffding's inequality)
 
-The upper bound on variance follows from $\operatorname{var}(S) = \sum_{i=1}^n \operatorname{var}(X_i)$ and from the first part of Hoeffding's Lemma.
+The upper bound on variance follows from $\operatorname{var}(S) = \sum_{i=1}^n \operatorname{var}(X_i)$ and from the first part of [Hoeffding's Lemma](#hoeffding-lemma)
 
 For the upper-bound on $\log \mathbb{E} \mathrm{e}^{\lambda S}$,
 
 $$\begin{array}{rl}\log \mathbb{E} \mathrm{e}^{\lambda S} & = \log \mathbb{E} \mathrm{e}^{\sum_{i=1}^n \lambda (X_i - \mathbb{E} X_i)} \\ & = \log \mathbb{E} \Big[\prod_{i=1}^n  \mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big]  \\ & = \log \Big(\prod_{i=1}^n  \mathbb{E} \Big[\mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big]\Big)  \\ & = \sum_{i=1}^n \log \mathbb{E} \Big[\mathrm{e}^{\lambda (X_i - \mathbb{E} X_i)}\Big] \\ & \leq  \sum_{i=1}^n \frac{\lambda^2 (b_i-a_i)^2}{8} \\ & = \frac{\lambda^2 v}{2}\end{array}$$
 
 where the third equality comes from independence of the $X_i$'s and the  inequality follows from
-invoking  Hoeffding's Lemma for each summand.
+invoking  [Hoeffding's Lemma](#hoeffding-lemma) for each summand.
 
 ---
 
-### Proof (continued)
+### Proof (Hoeffding's inequality continued)
 
 The Cramer-Chernoff technique consists of using Markov's inequality with exponential moments.
 
@@ -686,28 +794,32 @@ the variance upper-bound obtained from the boundedness assumption is $n$ while t
 
 
 ---
-class: inverse, center, middle
+template: interslide
 name: mcdiarmid
 
 ## Bounded differences inequality
 
 ---
 
-In this section we combine Hoeffding's inequality and conditioning
+In this section we combine [Hoeffding's inequality](#) and conditioning
 to establish the so-called _Bounded differences inequality_ (also known
-as McDiarmid's inequality). This inequality is a first example of the
-_concentration of measure phenomenon_. This phenomenon is best portrayed by the
-following say:
+as McDiarmid's inequality). 
+
+This inequality is a first example of the
+_concentration of measure phenomenon_. 
+
+Recall this phenomenon is best portrayed by the following say:
 
 > A function of many independent random variables that does not depend too
 much on any of them is concentrated around its mean or median value.
 
 ---
+name: bdd
 
-
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem: Bounded Differences Inequality
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Let $X_1, \ldots, X_n$ be independent with values in $\mathcal{X}_1, \mathcal{X}_2, \ldots, \mathcal{X}_n$.
 
@@ -763,7 +875,7 @@ $$\mathbb{E}_{n-1}Z = \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, u) \mathrm{d}P_
 and
 
 $$\begin{array}{rl}
-& \mathbb{E}_{n-1}\big[\mathrm{e}^{\lambda (Z - \mathbb{E}_{n-1}Z)}\big] \\
+& \mathbb{E}_{n-1} \mathrm{e}^{\lambda(Z - \mathbb{E}_{n-1}Z)} \\
   & = \int_{\mathcal{X}_n}  \exp\Big(\lambda  \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, v) -f(x_1,\ldots,x_{n-1}, u) \mathrm{d}P_{X_n}(u)  \Big) \mathrm{d}P_{X_n}(v)\end{array}$$
 
 For every $x_1, \ldots, x_{n-1} \in \mathcal{X_1} \times \ldots \times \mathcal{X}_{n-1}$,
@@ -779,7 +891,7 @@ $$\begin{array}{rl}
 
 ### Proof (continued)
 
-By Hoeffding's Lemma
+By [Hoeffding's Lemma](#hoefffding-lemma)
 
 $$\mathbb{E}_{n-1}\big[\mathrm{e}^{\lambda (Z - \mathbb{E}_{n-1}Z)}\big] \leq \mathrm{e}^{\frac{\lambda^2 c_n^2}{8}}$$
 
@@ -790,7 +902,7 @@ $$\begin{array}{rl}
 
 But, if $X_1=x_1, \ldots X_{n-1}=x_{n-1}$,
 
-$$\mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}
+$$\mathbb{E}_{n-1}Z - \mathbb{E}Z
 = \int_{\mathcal{X}_n} f(x_1,\ldots,x_{n-1}, v) \mathrm{d}P_{X_n}(v) - \mathbb{E}Z \,,$$
 
 it is a function of $n-1$ independent random variables that satisfies the bounded differences conditions
@@ -802,6 +914,13 @@ $$\mathbb{E}\Big[  \mathrm{e}^{\lambda (\mathbb{E}_{n-1}Z - \mathbb{E}Z)}  \Big]
 \leq \mathrm{e}^{\frac{\lambda^2}{2} \sum_{i=1}^{n-1} \frac{c_i^2}{4}}$$
 
 `r fontawesome::fa("square")`
+
+---
+
+```{r, echo=FALSE, child='bernstein-ineq.Rmd'}
+
+```
+
 
 ---
 exclude: true
@@ -820,7 +939,7 @@ It became popular in (Theoretical) computer science during the 1990's.
 
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Maximal inequalities
 
@@ -833,7 +952,7 @@ $X_1, \ldots, X_n \sim_{\text{i.i.d.}} P$
 
 --
 
-Goal:
+__Goal:__
 
 $$\mathbb{E} Z \leq \text{something that depends on }n \text{ and on }P$$
 
@@ -848,13 +967,14 @@ can be used to bound the expected maximum of these random variables.
 
 ---
 
-The main idea is perhaps most transparent if we consider _sub-Gaussian_ random variables.
+The main idea is most transparent if we consider _sub-Gaussian_ random variables.
 
 Let $Z_1,\ldots,Z_N$ be real-valued
-random variables such that there exists a $v>0$ such that for every
-$i=1,\ldots,N$, the logarithm of the moment generating function
+random variables such that there exists a $v>0$ such that 
+
+for every $i=1,\ldots,N$, the logarithm of the moment generating function
 of $Z_i$ satisfies
-$\psi_{Z_i}(\lambda)  \leq \lambda^2v/2$ for all $\lambda >0$.
+$$\psi_{Z_i}(\lambda)  \leq \lambda^2v/2 \qquad \forall \lambda >0$$
 
 Then by Jensen's inequality,
 
@@ -864,43 +984,48 @@ $$\begin{array}{rcl} \exp \left(\lambda\,\mathbb{E} \max_{i=1,\ldots,N} Z_i \rig
 
 Taking logarithms on both sides, we have
 
-$$\mathbb{E} \max_{i=1,\ldots,N} Z_i \le \frac{\log N}{\lambda}    + \frac{\lambda v}{2}$$
+$$\mathbb{E} \max_{i=1,\ldots,N} Z_i \le \frac{\log N}{\lambda} + \frac{\lambda v}{2}$$
 
 The upper bound is minimized for  $\lambda = \sqrt{2\log N/v}$ which yields
 
 $$\mathbb{E} \max_{i=1,\ldots,N}Z_i\le \sqrt {2v\log N}$$
 
-This simple bound is (asymptotically) sharp if the $Z_i$ are i.i.d. normal random variables,
+This simple bound is (asymptotically) sharp if the $Z_i$ are i.i.d. normal random variables
 
 ---
 
+### Generalizing the argument 
 
-The argument above may be generalized beyond sub-Gaussian
-variables.
 
-Next we formalize such a general inequality but
 
-We start with a technical result that establishes a useful
-formula for the inverse of the Fenchel-Legendre dual of a smooth convex
-function.
+We formalize such a general inequality 
+
+but
+
+We start with a _technical result_ that establishes a useful
+connection between the inverse of the Fenchel-Legendre dual of a smooth convex
+function
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma
 
-Let $\psi$ be a convex and continuously differentiable
-function defined on  $\left[  0,b\right)$ where $0<b\leq\infty$.
 
-Assume that $\psi\left(  0\right)  =\psi'\left(  0\right)  =0$ and set, for every
-$t\geq0$,
+Let $\psi$ be a convex and continuously differentiable
+function defined on  $\left[  0,b\right)$ where $0<b\leq\infty$
+
+Assume that $\psi\left(  0\right)  =\psi^{\prime}\left(  0\right)  =0$ and set for every
+$t\geq0$
 
 $$\psi^*(t)  =\sup_{\lambda\in (0,b)} \left( \lambda t-\psi(\lambda)\right)$$
 
-Then $\psi^*$ is a nonnegative convex and nondecreasing function on $[0,\infty)$.
+Then $\psi^*$ is a non-negative convex and non-decreasing function on $[0,\infty)$
 
-For every $y\geq 0$,  $\left\{  t \ge 0: \psi^*(t)  >y\right\}\neq \emptyset$
+For every $y\geq 0$
+
+$$\left\{  t \ge 0: \psi^*(t)  >y\right\}\neq \emptyset$$
+
 and  the generalized inverse of $\psi^*$, defined by
 
 $$\psi^{*\leftarrow}(y)  =\inf\left\{  t\ge 0:\psi^*(t)  >y \right\}$$
@@ -909,7 +1034,7 @@ can also be written as
 
 $$\psi^{*\leftarrow}(y)  =\inf_{\lambda\in (0,b)  } \left[ \frac{y +\psi(\lambda)}{\lambda}\right]$$
 
-]
+
 
 ---
 
@@ -927,6 +1052,10 @@ $\psi^*$ is unbounded which shows that
 
 $$\forall y\geq 0, \qquad \left\{  t\geq 0:\psi^*(t)  >y\right\} \neq \emptyset$$
 
+---
+
+### Proof (continued)
+
 Defining
 
 $$u=\inf_{\lambda\in (0,b)} \left[  \frac{y+\psi(\lambda)  }{\lambda}\right]$$
@@ -935,7 +1064,9 @@ For every $t \ge 0$, we have $u\geq t$ iff
 
 $$\forall  \lambda \in (0,b), \qquad \frac{y+\psi(\lambda)  }{\lambda}\geq t$$
 
-As this implies $y\ge \psi^*(t)$, we have $\left\{ t\ge 0:\psi^*(t)> y\right\} = (u,\infty)$
+As this implies $y\ge \psi^*(t)$, we have 
+
+$$\left\{ t\ge 0:\psi^*(t)> y\right\} = (u,\infty)$$
 
 This proves that $u=\psi^{*-1}(y)$ by definition of $\psi^{*-1}$.
 
@@ -952,13 +1083,18 @@ suprema of Gaussian or empirical processes
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 
 
 ### Theorem
 
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 Let $Z_1,\ldots,Z_N$ be real-valued random variables
-such that for every $\lambda\in (0,b)$ and
+
+such that 
+
+for every $\lambda\in (0,b)$ and
 $i=1,\ldots,N$, the logarithm of the moment generating function
 of $Z_i$ satisfies
 
@@ -1013,7 +1149,7 @@ and the result follows from Lemma
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -1035,7 +1171,7 @@ If $p$ is a positive integer, a gamma random variable with parameters
 $a=p/2$ and $b=2$ is said to have chi-square distribution with
 $p$ _degrees of freedom_ ( $\chi^2_p$ )
 
-`r fontawesome::fa("point-hand-right")` If $Y_1,\ldots,Y_p \sim_{\tetx{i.i.d.}} \mathcal{N}(0,1)$ then $\sum_{i=1}^p Y_i^2  \sim \chi^2_p$
+`r fontawesome::fa("point-hand-right")` If $Y_1,\ldots,Y_p \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$ then $\sum_{i=1}^p Y_i^2  \sim \chi^2_p$
 
 If $X_1,\ldots,X_N$ have chi-square distribution with $p$ degrees of freedom,
 
@@ -1046,7 +1182,7 @@ $$\mathbb{E}\left[  \max_{i=1,\ldots,N} X_i - p\right] \leq 2\sqrt{p\log N }+ 2\
 
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
 background-size: 112%

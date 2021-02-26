@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/11/13 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -30,25 +30,6 @@ background-image: url('./img/Universite_Paris_logo_horizontal.jpg')
 background-size: 10%
 background-position: 97% 3%
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
 
 
 ```{r xaringanExtra, echo=FALSE}
@@ -73,6 +54,58 @@ xaringanExtra::use_logo(
   exclude_class = c("hide_logo")
 )
 ```
+
+
+```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+xaringanExtra::use_animate_css()
+
+xaringanExtra::use_tile_view()
+
+xaringanExtra::use_tachyons(minified = FALSE)
+
+xaringanExtra::use_logo(
+  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+
+xaringanExtra::use_panelset()
+
+xaringanExtra::use_editable(expires = 1)
+
+source("./loaders_fixers.R")
+
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+# library(flipbookr)
+```
+
+
+
+<style>
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: red;
+}
+</style>
 
 ---
 class: middle, center, inverse
@@ -656,6 +689,8 @@ $u \mapsto \widetilde{F}(u) = F(u_-) + \frac{1}{2} P\{u\}$, is not a CDF
 
 
 ---
+name: simple-inversion
+
 
 When the distribution function is absolutely continuous, Fourier inversion is simpler `r fontawesome::fa("smile")`
 
@@ -774,6 +809,105 @@ with conditions $\mathbb{E} \cos(0X)=1$ and $\mathbb{E} \sin(0X) =0$.
 $X \sim \mathcal{N}(0,1)$
 
 `r fontawesome::fa("square")`
+
+---
+name: laplace-distrib
+
+### Application : exponential and Cauchy distributions
+
+Let $X = \epsilon \times Y$ with 
+$$\epsilon \quad \bot\!\!\!\bot \quad Y \sim \text{Exp}$$
+with $P\{\epsilon=1\}=P\{\epsilon=-1\}=1/2$
+
+The distribution $Y$ is called the Laplace distribution
+
+`r fontawesome::fa("hand-point-right")` $Y \sim -Y$, in words,  $Y$ is a _symmetric_ random variable
+
+$$\begin{array}{rl}\widehat{F}_Y(t) & = \int_{\mathbb{R}} \frac{1}{2}\mathrm{e}^{-|x|} \cos(tx)\mathrm{d}x \qquad\text{(symmetry)}\\ &= \int_{[0, \infty)} \mathrm{e}^{-x} \cos(tx)\mathrm{d}x\\&=[-\mathrm{e}^{-x}\cos(tx)]_0^\infty - t \int_0^\infty \mathrm{e}^{-x}\sin(tx)\mathrm{d}x\qquad\text{(IBP)}\\ & = 1 +t [\mathrm{e}^{-x}\sin(tx)]_0^\infty - t^2 \int_0^\infty \mathrm{e}^{-x}\cos(tx)\mathrm{d}x\qquad\text{(IBP bis)}\\ & = 1 -t^2 \widehat{F}_Y(t)\end{array}$$
+
+The characteristic function of the Laplace distribution is 
+
+$$\widehat{F}_Y(t) = \frac{1}{1+ t^2}$$
+
+
+???
+
+IPP stands for Integration By Parts
+
+---
+name: exp-distrib
+
+### Application : exponential and Cauchy distributions (continued)
+
+
+IF we turn back to the characteristic function of the Exponential distribution 
+
+$$\begin{array}{rl}\widehat{F}_Y(t) & = \frac{1}{2} \widehat{F}_X(t) + \frac{1}{2} \widehat{F}_X(-t)\end{array}$$
+
+$$\widehat{F}_X(-t) = \overline{\widehat{F}_X(t)}$$
+
+$$\Re\left(\widehat{F}_X(t)\right) = \widehat{F}_Y(t) = \frac{1}{1+ t^2}$$
+
+By integration by parts again 
+
+$$\Im\left(\widehat{F}_X(t)\right) = t \Re\left(\widehat{F}_X(t)\right)$$
+
+The exponential distribution has characteristic function
+
+$$\widehat{F}_X(t) = \frac{1}{1+t^2} (1 + it) = \frac{1}{1-it}$$
+
+???
+
+No need to perform complex integration here
+
+---
+name: cauchy-distrib
+
+### Application : exponential and Cauchy distributions (continued)
+
+
+Let $V$ be uniformly distributed on $]-\pi/2, \pi/2[$ 
+
+Let $U = \tan(V)$ 
+
+$U$ is a symmetric random variable with absolutely continuous distribution and density 
+
+$$x \mapsto \frac{1}{\pi} \frac{1}{1+x^2}$$ 
+over $\mathbb{R}$
+
+Up to factor $1/\pi$ the density of the Cauchy distribution is the characteristic function of the Laplace distribution 
+
+By the [inversion formula](#simple-inversion)
+
+$$\begin{array}{rl}\widehat{F}_U(t) & = \int_{\mathbb{R}} \mathrm{e}^{it x} \frac{1}{\pi} \frac{1}{1+x^2} \mathrm{d} x\\ & = \frac{1}{\pi} \int_{\mathbb{R}} \mathrm{e}^{it x}  \widehat{F}_Y(x) \mathrm{d} x\\ & = \frac{1}{\pi} \int_{\mathbb{R}} \mathrm{e}^{- it x}  \widehat{F}_Y(x) \mathrm{d} x \\& = \mathrm{e}^{-|t|}\end{array}$$
+
+
+???
+
+pay attention to normalizations
+
+---
+name: cauchy-stable
+
+### Application : exponential and Cauchy distributions (continued)
+
+Let $U_1, \ldots, U_n \sim_{\text{i.i.d.}} \text{Cauchy}$
+
+Let $Z = \frac{1}{n}\sum_{i=1}^n U_i$ 
+
+Then 
+
+$$\widehat{F}_Z(t) = \prod_{i=1}^n \widehat{F}_U(t/n) = \mathrm{e}^{-|t|} = \widehat{F}_U(t)$$
+
+By the injectivity theorem, $Z \sim U$
+
+--
+
+The Cauchy distribution has no expectation, it does not satisfy the conditions of the strong law of large numbers. 
+
+The Cauchy distribution (along with the Normal distribution) is an example of _stable_ distribution
+
+
 
 ---
 name: secdifferentiabilityintegrability

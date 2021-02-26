@@ -1,0 +1,55 @@
+template: inter-slide
+name: bernstein-ineq
+
+## Bernstein's inequality
+
+---
+name: bernstein-theorem
+
+
+### Bernstein's inequality
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+  
+  bla
+  
+]
+
+---
+  
+### Proof of Bernstein's inequality
+  
+  
+  
+---
+  
+### Proof of Bernstein's inequality (continued)
+  
+  
+---
+  
+### Proof of Bernstein's inequality (continued)
+  
+  
+`r fontawesome::fa("square")`
+
+---
+  
+### Applications of Bernstein's inequality : unbalanced binomials
+
+
+
+---
+  
+### Applications of Bernstein's inequality : Gamma distributions
+  
+  
+  
+  
+
+
+
+
+  
+  

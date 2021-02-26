@@ -1,0 +1,57 @@
+template: inter-slide
+name: poincare-gaussian
+
+## Poincaré's inequality
+
+---
+name: poincare-1
+
+### Poincaré's inequality in dimension 1
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+bla
+
+]
+
+---
+name: stein-gaussian
+
+
+### Stein's Gaussian identity
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+bla
+
+]
+
+---
+
+### Proof of Poincaré's inequality from Stein's identity
+
+bla
+
+`r fontawesome::fa("square")`
+
+---
+
+name: poincare-2
+
+### Poincaré's inequality (dimension-free)
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+bla
+
+]
+
+---
+
+### Proof of the dimension-free  Poincaré inequality
+
+bla 
+
+`r fontawesome::fa("square")`
