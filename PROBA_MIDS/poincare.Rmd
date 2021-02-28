@@ -11,7 +11,11 @@ name: poincare-1
 
 .bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-bla
+Let $X \sim \mathcal{N}(0,1)$ and $g$ be a differentiable function with square-integrable 
+derivative (under Gaussian distributions):
+
+$$\operatorname{Var}(g(X)) \leq \mathbb{E}\left[ g'(X)^2 \right]$$
+
 
 ]
 
@@ -23,7 +27,11 @@ name: stein-gaussian
 
 .bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-bla
+Let $X \sim \mathcal{N}(0,1)$ and $f$ be a  smooth functions for
+which both sides are finite: 
+
+$$\mathbb{E} f'(X) =\mathbb{E}[X f(X)]$$
+
 
 ]
 
@@ -31,9 +39,29 @@ bla
 
 ### Proof of Poincaré's inequality from Stein's identity
 
-bla
+
+
+The derivation
+$$\begin{array}{rl}\operatorname{Var}(g(X))& \leq \mathbb{E}\left[\left(g(X) - g(0)\right)^2\right] \\ & = \mathbb{E}\left[\left(\int_0^X g'(y) \mathrm{d}y\right)^2\right] \\& \leq \mathbb{E}\left[X \int_0^X g'(y)^2 \mathrm{d}y\right]\\ & = \mathbb{E}\left[ g'(X)^2 \right]\end{array}$$
+where
+- the first inequality comes from $\operatorname{var}(Z) = \inf_a \mathbb{E}\left[(Z-a)^2\right]$
+- the second inequality comes from the Cauchy-Schwarz Inequality
+- the last equality comes from Stein's identity and the fact
+$$x \mapsto \int_0^x g'(y)^2 \mathrm{d}y$$
+is differentiable with derivative $g'(x)^2$.
+
 
 `r fontawesome::fa("square")`
+
+???
+
+
+The one-dimensional Gaussian Poincaré inequality
+$$\operatorname{Var}(g(X)) \leq \mathbb{E}\left[ g'(X)^2 \right]$$
+follows from Stein's identity
+$$\mathbb{E} f'(X) =\mathbb{E}[X f(X)]$$
+where $X \sim \mathcal{N}(0,1)$ and $g, f$ are smooth functions for
+which all expectations are finite.
 
 ---
 
@@ -44,7 +72,11 @@ name: poincare-2
 
 .bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-bla
+Let $X \sim \mathcal{N}(0, \text{Id}_n)$ and $f : \mathbb{R}^n \to \mathbb{R}$ be 
+differentiable and such that $\| \nabla f(X)\|^2$ is integrable:
+
+$$\operatorname{var}(f(X)) \leq \mathbb{E}\left[\| \nabla f(X)\|^2 \right]$$ 
+
 
 ]
 
@@ -52,6 +84,8 @@ bla
 
 ### Proof of the dimension-free  Poincaré inequality
 
-bla 
+It follows immediately from a combination of the Efron-Stein-Steele's inequality
+and of the one-dimensional Poincaré inequality
+
 
 `r fontawesome::fa("square")`

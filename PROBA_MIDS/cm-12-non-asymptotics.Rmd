@@ -109,23 +109,21 @@ template: inter-slide
 ## `r fontawesome::fa("map", fill="white")`
 
 
-### Concentration
+### [Concentration](#concentration)
 
 ### [Variance bounds for functions of independent random variables](#ess)
 
-### Exponential inequalities
+### [Exponential inequalities](#expo-ineq)
 
-### Maximal inequalities
+### [Maximal inequalities](#max-ineq)
 
-### Concentration inequalities
+
 
 ---
-exclude: true
 template: inter-slide
+name: concentration
 
-## Motivation(s)
-
-## `r fontawesome::fa("grin", fill = "white")`
+## Concentration
 
 ---
 ### Example of non-asymptotic results
@@ -163,7 +161,9 @@ $$\mathrm{d}_{\text{TV}}\left(\text{Poi}(\lambda), \text{Binom}\left(n, \frac{\l
 
 ### Exponential bounds
 
-- 
+- Hoeffding, Bernstein: for sums of independent random variables 
+
+- Bounded-differences inequality : for _smooth_ functions of independent random variables 
 
 ---
 
@@ -205,10 +205,6 @@ probability spaces
 
 
 
----
-template: inter-slide
-
-## Concentration
 
 ---
 
@@ -508,8 +504,9 @@ the Efron-Stein-Steele inequality  becomes an equality.
 The bound in the Efron-Stein-Steele inequality is, _in a sense_, not improvable.
 
 ---
+exclude: true
 
-```{r, echo=FALSE, child='ess-Chatterjee.Rmd'}
+```{r, echo=FALSE, eval=FALSE, child='ess-Chatterjee.Rmd'}
 
 ```
 
@@ -794,7 +791,7 @@ the variance upper-bound obtained from the boundedness assumption is $n$ while t
 
 
 ---
-template: interslide
+template: inter-slide
 name: mcdiarmid
 
 ## Bounded differences inequality
@@ -940,6 +937,8 @@ It became popular in (Theoretical) computer science during the 1990's.
 
 ---
 template: inter-slide
+name: max-ineq
+
 
 ## Maximal inequalities
 
