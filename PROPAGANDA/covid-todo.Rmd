@@ -1,0 +1,132 @@
+
+---
+class: inverse, middle, center
+
+
+## Covid et mesures sanitaires
+
+
+---
+
+### Mesures élémentaires
+
+- `r emo::ji("mask")` Port du masque obligatoire
+
+- `r emo::ji("shower")` Nettoyage des mains (avant et après chaque séance)
+
+- `r emo::ji("face_with_thermometer")` Vérifiez votre température chaque matin,
+__si fièvre__,
+  + `r emo::ji("house_with_garden")` restez chez vous
+
+  + `r emo::ji("syringe")` contactez votre médecin traitant `r emo::ji("woman_health_worker")`
+
+  + `r emo::ji("footprints")` si besoin et possible, passez un test PCR (présence du virus dans les voies respiratoires supérieures). Si le diagnostic est positif, prévenez le [responsable administratif](), mettez vous en quatorzaine (même si vous ne présentez pas de symptômes).
+
+[Mesures sanitaires à l'Université de Paris](https://u-paris.fr/les-mesures-sanitaires-pour-une-rentree-en-toute-securite/)
+
+`r emo::ji("studio_microphone")` `r emo::ji("de")` [Corona podcasts NDR](https://www.ndr.de/nachrichten/info/podcast4684.html)
+
+???
+
+---
+
+### Si l'un d'entre vous est testé positif au COVID (PCR) `r emo::ji("footprints")`
+
+- vos condisciples seront (en principe) prévenus `r emo::ji("incoming_envelope")`
+
+- `r emo::ji("microbe")` vos condisciples seront prioritaires pour un test PCR (ordonance délivrée par la médecine universitaire `r emo::ji("hospital")`)
+
+???
+
+Un contact d'un positif ne peut pas venir tant qu'il n'a pas le résultat de son test. Et plus généralement : contact d'un positif implique isolement
+
+
+---
+
+### Mesures supplémentaires `r emo::ji("footprints")`
+
+Si un de vos _contacts_ (hors de l'université) depuis moins de deux semaines, vous prévient qu'il est _positif_ au test PCR,
+
+  + `r emo::ji("house_with_garden")` isolez vous (vous êtes peut-être contagieux)
+
+  + ne venez pas en cours
+
+  + faîtes vous tester (vous serez prioritaires, dixit l'ARS)
+
+ Si le diagnostic est positif, prévenez le responsable administratif, mettez vous en quatorzaine (même si vous ne présentez pas de symptômes).
+
+---
+
+### Caveat
+
+En Île de France, en ce début de septembre, la circulation du virus semble s'intensifier. Les mesures sanitaires peuvent évoluer.
+
+
+```{r, echo=FALSE, out.extra='style="border: none;"', out.width='80%'}
+knitr::include_url("https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6")
+```
+
+Si les mesures de protection évoluent, vous serez avertis via Moodle. Consultez quotidiennement la boîte courriel fournie par l'université `r emo::ji("mailbox_with_mail")`.
+
+---
+
+### Organisation des cours magistraux
+
+Chaque cours magistral est organisé de manière autonome en fonction de ses effectifs et des salles disponibles.
+
+- `r emo::ji("mask")` _Masque obligatoire_ dans les salles et le couloirs
+
+- `r emo::ji("shower")` Se laver régulièrement les mains avec du gel
+
+- N'utiliser qu'un siège sur deux sur chaque rang (si possible)
+
+- Essayez de conserver les mêmes voisins immédiats (mais distanciés) d'une séance à l'autre
+
+
+
+---
+
+### Organisation des travaux dirigés
+
+
+> Ce jour, le `r Sys.Date()`,  il est prévu que les Travaux Dirigés du Master 1 se déroulent en présentiel, sur le campus des  Grand Moulins, 75013
+
+
+- `r emo::ji("mask")` _Masque obligatoire_ dans les salles et le couloirs
+
+- `r emo::ji("shower")` Se laver régulièrement les mains avec du gel
+
+- N'utiliser qu'un siège sur deux sur chaque rang (si possible)
+
+- Essayez de conserver les mêmes voisins immédiats (mais distanciés) d'une séance à l'autre
+
+???
+
+> il est prévu que les TD du M1 se fassent en présentiel, sur le campus des  Grand Moulins, 75013 (près de  BNF). Le  port du masque sera  obligatoire en permanence dans le périmètre de l'université. Pour les cours magistraux, les consignes sont un peu moins claires, mais compte tenu des effectifs plus réduits qu'en licence, un enseignement en présentiel semble lui aussi possible. Ceci dit, des ressources en lignes (polycopié ou notes manuscrites avec description précise des notions abordées chaque semaine, éléments de correction des exercices de TD) seront disponibles via l'interface Moodle de l'université.
+
+---
+
+### Travaux pratiques
+
+.left-column[
+
+`r emo::ji("mask")` _Masque obligatoire_ dans les salles et le couloirs
+
+`r emo::ji("shower")` Se laver régulièrement les mains avec du gel
+
+`r emo::ji("broom")` Après chaque séance, nettoyer le clavier et la souris avec les lingettes mises à disposition
+
+]
+
+
+.right-column[
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("./img/house-cleaning.jpg")
+```
+
+]
+
+
+
+

@@ -1,0 +1,37 @@
+
+---
+class: inverse, top, center
+name: anglais
+background-image: url('./img/wallace.jpg')
+background-size: cover
+
+## Anglais de spécialité
+
+
+---
+
+- Coordinatrice : Mme Precious Brown
+
+- Agenda
+  + Ouverture des tests : début septembre 2020
+
+  + Inscription en ligne dans un TD : début septembre 2020
+
+  + Début des TD :mi septembre 2020
+
+  + Semaine de pause : du 25 octobre au 01 novembre 2020 inclus
+
+  + Fin des TD : vendredi 07 décembre2020
+
+  + Inscription pour les personnes souhaitant une dispense de contrôle continu  
+  Contacter en premier lieu la coordinatrice qui accompagnera votre demande à la direction du LANSAD
+
+---
+
+Tout étudiant souhaitant une dispense mais qui n'aura pas fait son inscription dans le groupe "salarié ou dispensé" (inscription en ligne ou à la scolarité LANSAD) avant la date limites _ne pourra être admis à composer_
+
+Il devra alors passer la session de rattrapage.
+
+> Toute inscription dans le régime salarié ou dispensé de TD devra être justifiée avant la clôture des inscriptions : photocopie de votre contrat de travail ou tout justificatif prouvant votre indisponibilité à suivre un TD (ex : emplois du temps signé de votre scolarité...).
+
+Consultez régulièrement le site : [http://www.lansad.eila.univ-paris-diderot.fr](http://www.lansad.eila.univ-paris-diderot.fr)

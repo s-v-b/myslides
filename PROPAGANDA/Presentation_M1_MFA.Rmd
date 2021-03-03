@@ -1,0 +1,1022 @@
+---
+title: "Master I Mathématiques Fondamentales et Appliquées (MFA)"
+subtitle: "Université de Paris (Paris-Diderot)"
+author: "DGV et SB"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: layout-general
+layout: true
+class: left, top
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE}
+```
+
+
+---
+class: middle, center, inverse
+
+
+# [Master Mathématiques et Applications](http://master.math.univ-paris-diderot.fr)
+
+## [Master I  Mathématiques Fondamentales et Appliquées](http://master.math.univ-paris-diderot.fr/annee/m1-math/)
+
+<br>
+<br>
+
+### Campus Grands Moulins (ex Paris-Diderot)
+
+### `r Sys.Date()`
+
+
+
+
+---
+class: middle, inverse
+
+### `r fontawesome::fa("map")`
+
+### [Le Master I et ses débouchés](#debouches)
+
+### [Organisation du Master 1 MFA](#organisation)
+
+### [Inscriptions](#inscriptions)
+
+### [Validation](#validation)
+
+<!-- - [Entretiens](#entretiens) -->
+
+<!-- - [Anglais de spécialité](#anglais) -->
+
+<!-- - [Covid et mesures sanitaires](#covid) -->
+
+### [Pour en savoir plus](#plus)
+
+---
+name: debouches
+class: top, left, inverse
+background-image: url('./img/idf.jpg')
+background-size: cover
+
+
+## Le Master I et ses débouchés 
+
+
+
+---
+
+### Master Mathématiques et Applications
+
+Un diplôme en deux ans organisé en _parcours_ .f3.fr[`r fontawesome::fa("sitemap")`]
+
+En première année (M1), un tronc
+commun: 
+
+.center[**M1 - Mathématiques Fondamentales et Appliquées**]
+
+- Mathématiques fondamentales .fr[`r fontawesome::fa("landmark")`]
+- M2MO   .fr[`r fontawesome::fa("hand-holding-usd")`]
+- LMFI .fr[`r fontawesome::fa("university")`]
+- PMA  .fr[`r fontawesome::fa("university")`]
+- Modélisation  .fr[`r fontawesome::fa("industry")`]
+- Mathématiques générales  .fr[`r fontawesome::fa("school")`]
+
+
+Ces parcours ont trois grands types de débouchés
+
+
+---
+name: bienvenue1
+
+### Master Mathématiques et Applications
+
+
+.left-column[
+
+### Entreprise
+
+]
+
+
+.right-column[
+
+### `r fontawesome::fa("industry")`
+
+
+Les industries (automobile, aéronautique), le bâtiment, les télécommunications, les start-ups,  les banques, les compagnies d'assurances
+et bien d'autres entreprises emploient des mathématiciens
+
+
+Exemples 
+
+- Quant. .fr[`r fontawesome::fa("landmark")`] 
+
+- Ingénieur R &amp; D  .fr[`r fontawesome::fa("car-battery")`]
+
+- Biostatisticien  .fr[`r fontawesome::fa("laptop-medical")`]
+
+- Consultant sécurité   .fr[`r fontawesome::fa("user-secret")`]
+
+- Analyste quantitatif  .fr[`r fontawesome::fa("chart-area")`]
+
+- ...
+
+.fr[_cf._  [Brochure de l'Onisep](http://www.onisep.fr/Publications/Zoom/Les-metiers-des-mathematiques-et-de-l-informatique)]
+
+]
+
+
+
+
+
+
+???
+
+Merci d'être venus. Bienvenue en Master I de Mathématiques.
+
+Nous sommes là aujourd'hui pour situer cette année de Master I au sein
+du Master et de ses parcours.
+
+Un master de mathématiques,
+c'est deux ans d'études qui débouchent en général
+sur trois grands types d'activité et une multitude de métiers.
+
+La mention Mathématiques et applications conduit à l'enseignement dans
+les Lycées (préparation à l'agrégation) mais aussi à une foule d'autres métiers.
+
+
+---
+name: bienvenue2
+
+
+### Master Mathématiques et Applications
+
+
+.left-column[
+
+
+### Entreprise
+
+### Enseignement
+
+]
+
+.right-column[
+
+### `r fontawesome::fa("chalkboard-teacher")`
+
+Le Master comporte une préparation à l'agrégation de Mathématiques.
+
+L'agrégation ouvre les portes de l'enseignement secondaire,
+et des classes préparatoires `r fontawesome::fa("school")`.
+
+Pour être nommé en classe préparatoire, il est bon d'être aussi titulaire
+d'un doctorat `r fontawesome::fa("graduation-cap")`
+
+
+]
+
+
+
+---
+name: bienvenue3
+
+### Master Mathématiques et Applications
+
+
+.left-column[
+
+### Entreprise
+
+### Enseignement
+
+### Recherche
+
+]
+
+.right-column[
+
+### `r fontawesome::fa("university")`
+
+Le Master de Mathématiques prépare à la recherche en Mathématiques 
+
+Les carrières de chercheurs se déroulent
+
++ à l'université, 
++ dans des organismes de recherche (INRIA, CEA, ...), 
++ au sein d'entreprises (EDF, Google, ...)
+
+Ces carrières passent par l'obtention d'un doctorat `r fontawesome::fa("graduation-cap")`  
+
+Le Master  fait partie de l'[École Doctorale Paris Centre](http://ed386.sorbonne-universite.fr/fr/index.html)  
+
+Etre docteur peut être un plus dans le monde de l'entreprise
+(en particulier à l'étranger `r fontawesome::fa("globe-americas")`)
+
+]
+
+
+---
+class: inverse, middle, center
+
+### Les parcours de Master
+
+---
+
+### Parcours issus du Master I  MFA
+
+
+|  **Titre**      | **Thèmes**        | **Laboratoire(s)** |
+|:----------------|:------------------|:------------------:|
+| [Maths Fondamentales](http://master-math-fonda.imj-prg.fr)    |                   |   [IMJ-PRG](https://www.imj-prg.fr)            |
+| [M2MO](https://masterfinance.math.univ-paris-diderot.fr)            |  Math-Fi/Dat. Sc. |  [LPSM](http://www.lpsm.paris)               |
+| [LMFI](http://master.math.univ-paris-diderot.fr/annee/m2-lmfi/)            |  Logique/Inform.  | [IMJ-PRG/IRIF](https://www.imj-prg.fr)       |
+| [Math. Géné.](http://master.math.univ-paris-diderot.fr/annee/m2-agreg/)     |  Prep. Agreg.     |                    |
+| [Modélisation]()  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         |
+| [Probabilités]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris)               |
+
+---
+
+### Parcours Professionnels
+
+|  **Titre**      | **Thèmes**        | **Apprentissage**     | **Laboratoire(s)** |
+|:----------------|:------------------|:---------------------:|:------------------:|
+| [ISIFAR](http://master.math.univ-paris-diderot.fr/parcours/isifar/)          |  Math-Fi/Risque   | Oui                   | [LPSM](http://www.lpsm.paris)               |
+| Math-Info  (1)  |  Sécurité/Dat. Sc.| Oui                   | [LPSM](http://www.lpsm.paris) / [IRIF](https://www.irif.fr)          |
+
+
+####  (1) : Double Master Mathématiques/Informatique
+
+- [Finalité *MIC* Sécurité](http://master.math.univ-paris-diderot.fr/parcours/mic/)
+- [Finalité *Science des données*](http://master.math.univ-paris-diderot.fr/parcours/data/)
+
+
+---
+exclude: true
+name: xkcd1
+class: middle, center
+
+
+### Échelle de pureté
+
+<img src="https://imgs.xkcd.com/comics/purity.png" alt="drawing" width="600"/>
+
+From https://imgs.xkcd.com
+
+
+---
+class: center, middle, inverse
+name: organisation
+
+## Organisation du Master 1 MFA
+
+---
+name: deroulement
+class: middle, left
+
+### Année académique
+
+
+```{r, echo=FALSE, out.width='80%'}
+knitr::include_graphics("./img/annee20_21.svg")
+```
+
+
+???
+
+![déroulement](annee19_20.svg)
+
+
+```{r, echo=FALSE, out.extra='style="border: none;"', out.width='100%'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
+```
+
+---
+
+
+### Semestre I
+
+.fl.w-50.pa2[
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+        </tr>
+    </thead>
+<tr>
+  <td>
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algebre/" class="plain">Algèbre</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-proba/" class="plain">Probabilités</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-logique/" class="plain">Logique</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s1-anglais-3/" class="plain">Anglais</a>
+  </td>
+  <td>3</td>
+</tr>
+
+</table>
+
+]
+
+
+.fl.w-50.pa2[
+
+### `r fontawesome::fa("compass")`
+
+Ce premier semestre est un semestre d'orientation 
+
+En fonction des parcours de M2 visés, vous devrez choisir trois UEs de Mathématiques parmi les cinq proposées
+
+
+]
+
+---
+
+### Exemple (semestre I)
+
+.pull-left[
+vous visez le parcours [M2MO: Modélisation Aléatoire, Finance et Data Science](https://masterfinance.math.univ-paris-diderot.fr)
+]
+
+.pull-right[
+
+Il est raisonnable de suivre:
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+
+        </tr>
+    </thead>
+
+
+<tr>
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-proba/" class="plain">Probabilités</a>
+  </td>
+  <td>9</td>
+</tr>
+
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s1-anglais-3/" class="plain">Anglais</a>
+  </td>
+  <td>3</td>
+</tr>
+</table>
+]
+
+---
+class: top
+
+### Semestre II
+
+.small[
+
+.pull-left[
+.small[
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Période I</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-galois/" class="plain">Théorie de Galois</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/" class="plain">Equations aux dérivées partielles</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-topo-alg/" class="plain">Topologie algébrique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-theorie-ensembles/" class="plain">Théorie des ensembles</a>
+              </td>
+              <td>6</td>
+        </tr>
+        </table>
+
+
+<br>
+
+.fullwidth[
+<table>
+                <thead>
+                    <tr>
+                        <th>Sur l'ensemble du semestre</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-recherche/" class="plain">Initiation à la recherche</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-projet/" class="plain">Projet</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ue-ouverture/" class="plain">UE d'ouverture</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+             <td>
+
+             <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/" class="plain">Analyse de données</a>
+             </td>
+             <td>6</td>
+        </tr>
+        </table>
+]
+]
+]
+]
+
+
+.small[
+.pull-right[
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Période II</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-arith/" class="plain">Arithmétique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-alg/" class="plain">Introduction à la géométrie algébrique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-incompletude/" class="plain">Incomplétude et indécidabilité</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-diff/" class="plain">Géométrie différentielle</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/" class="plain">Théorèmes linites en probabilités</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/" class="plain">Statistique bayésienne et tests</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-anal-num/" class="plain">Méthodes numériques pour les EDOs et les EDPs</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/" class="plain">Mathématiques financières</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        </table>
+
+
+<br>
+
+.f6[Deux ou trois cours durant chaque période de six semaines et éventuellement un cours s'étalant sur le semestre]
+
+]
+]
+
+
+---
+
+### Exemple (Semestre II)
+
+.pull-left[
+Vous visez le parcours 
+
+[M2MO](https://masterfinance.math.univ-paris-diderot.fr): 
++ Modélisation Aléatoire, 
++ Finance et 
++ Data Science
+
+Il est possible de suivre 4/5 modules parmi les cours listés à droite
+
+`r fontawesome::fa("exclamation-triangle")` Équilibrer la charge entre les deux périodes
+
+`r fontawesome::fa("pencil-alt")` Les projets/mémoires se déroulent sur l'ensemble du semestre
+]
+
+.pull-right[
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+
+        </tr>
+    </thead>
+
+<tbody>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Stochastic Processes: Martingales</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-anal-num/" class="plain">Méthodes numériques pour les EDOs et les EDPs</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/" class="plain">Mathématiques financières</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+</tbody>
+</table>
+
+.f6[Ce n'est pas le seul choix possible et raisonnable] `r fontawesome::fa("smile")`
+]
+
+---
+exclude: true
+
+### Emploi du temps
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/#infospratiques")
+```
+
+---
+class: middle
+
+.left-column[
+
+### Campus des Grands Moulins
+
+#### [Université de Paris](https://www.u-paris.fr)
+
+#### Campus des Grands Moulins
+
+]
+
+.right-colum[
+
+
+```{r, echo=FALSE, message=FALSE, fig.align='right', fig.width=8}
+require(magrittr)
+m <- leaflet::leaflet() %>%
+  leaflet::setView(lat=48.853646831055556,
+                      lng=2.3488426208496094, zoom=12) %>%
+  leaflet::addTiles() %>%  # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(lat=48.82717410837418,
+                      lng=2.380986213684082,
+                      popup="Bâtiment Sophie Germain") %>%
+  leaflet::addMarkers(lng=2.38004207611084,
+                      lat=48.8326901185081,
+                      popup="Barge du Crous")
+
+m
+```
+
+]
+
+
+---
+class: top, left, inverse
+background-size: cover
+background-image: url('./img/pano-gds-moulins.jpg')
+
+### Grands moulins et Halle aux farines
+
+
+???
+
+Petit panorama du campus des Grands Moulins
+
+---
+class: top, left
+background-size: cover
+background-image: url('./img/2017-03-17 09.39.09.jpg')
+
+### Bâtiment Sophie Germain
+
+
+
+???
+
+C'est là que les choses sérieuses se passent
+
+
+
+```{r inscriptions, child='inscriptions.Rmd', eval=FALSE}
+
+```
+
+
+
+---
+class: middle, center, inverse
+name: validation
+background-image: url('./img/graduation.jpg')
+background-size: cover
+
+## Validation
+
+
+---
+
+### MCC (Modalités de contrôle des connaissances)  .fr[`r fontawesome::fa("user-graduate")`]
+
+`r emo::ji("mortar_board")` La validation  de l'année de M1 nécessite la validation de chaque semestre (30 ECTS par semestre)
+
+Le semestre est acquis aux conditions suivantes:
+
+- L'étudiant a une moyenne génerale au semestre supérieure à 10
+
+- L'étudiant n'a aucune note inférieure à 7/20 
+
+Dans le cas où le semestre n'est pas validé au cours de la première session, toute note inférieure à 10 est perdue pour la seconde session  `r fontawesome::fa("frown")`
+
+---
+name: distance
+
+### Modalités de contrôle continu
+
+Il est possible de renoncer *sous conditions* au contrôle continu,
+et d'opter pour le Master I *à distance*.
+
+Suivre le *Master I à distance* revient à :
+
+- choisir le *contrôle terminal*  .fr[`r fontawesome::fa("toggle-on")`]
+
+
+- renoncer au *contrôle continu*   .fr[`r fontawesome::fa("toggle-off")`]
+
+Cette possibilité est offerte sous condition et sur justificatifs
+
+C'est un choix à faire lors des inscriptions pédagogiques _au début chaque semestre_
+
+
+???
+
+Que dire de plus ?
+
+On ne change pas les règles du jeu en cours de partie.
+
+
+---
+name: contacts-ra
+
+
+### Responsable administratif : [Christian Sénécal](mailto:senecal@math.univ-paris-diderot.fr)
+
+.fl.w-40.pa2[
+
+- Secrétariat de l'UFR de Mathématiques
+
+- Bâtiment Sophie Germain 
+
+- Salle 2008
+]
+
+.fl.w-60.pa2[
+```{r, trombi-csenec, out.width="80%", echo=FALSE}
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+```
+]
+
+- Inscriptions pédagogiques  .fr[`r fontawesome::fa("check-circle")`]
+
+- Modalités de contrôle continu .fr[`r fontawesome::fa("toggle-on")`]
+
+
+
+
+
+---
+
+###  Responsables pédagogiques
+
+.pull-left[
+#### [David Gérard-Varet](https://dgerardv.github.io)
+Analyse `r fontawesome::fa("database", fill = "black")`
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://dgerardv.github.io")
+```
+
+]
+
+.pull-right[
+#### [Stéphane Boucheron](https://stephane-v-boucheron.fr)
+Statistiques, Probabilités
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://stephane-v-boucheron.fr")
+```
+]
+
+
+---
+class: top,  center
+name: entretiens
+background-size: cover
+background-image: url("./img/entretien.jpg")
+
+## Entretiens
+
+
+---
+
+### Au début de chaque semestre
+
+.pull-left[
+
+Un entretien court avec un responsable pédagogique
+
+En face à face (ou à distance)
+
+Prendre rendez-vous via [Moodle](https://moodle.u-paris.fr/course/view.php?id=8568)
+
+]
+
+.pull-right[
+
+#### Objectifs `r fontawesome::fa("map")``
+
+- vérifier choix des cours
+
+- orientation future
+
+- signaler difficultés 
+
+]
+
+
+
+```{r anglais, child='anglais-specialite.Rmd', eval=FALSE}
+
+```
+
+
+
+
+```{r postuler, child='candidatures.Rmd'}
+
+```
+
+---
+name: covid
+exclude: true
+
+```{r covid, child='covid-todo.Rmd', eval=FALSE}
+
+```
+
+---
+class: middle, inverse
+name: plus
+
+## Pour en savoir plus
+
+```{r, echo=FALSE, out.extra='style="border: none;"', out.width='100%'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
+```
+
+[http://master.math.univ-paris-diderot.fr/annee/m1-math/](http://master.math.univ-paris-diderot.fr/annee/m1-math/)
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: cover
+
+
+# Merci

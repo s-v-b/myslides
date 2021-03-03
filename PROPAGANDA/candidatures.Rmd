@@ -1,0 +1,38 @@
+
+---
+class: inverse, top, center
+name: e-candidat
+background-image: url('./img/wallace.jpg')
+background-size: cover
+
+## Postuler
+
+
+---
+
+### Admission en Master I
+
+- Procédure : [e-candidat](https://ecandidat.app.u-paris.fr/sciences1/#!accueilView)
+  + CV  `r fontawesome::fa("file-upload")`
+  + Lettre de motivation `r fontawesome::fa("file-alt")`
+  + Relevé des notes 
+
+- Calendrier `r fontawesome::fa("calendar")`
+  - Ouverture : [À venir]()
+  - Date limite de dépot des dossiers : 14 juillet 
+  - Session 2: Campagne 2,  25 Août-5 Septembre (à préciser)
+  - *Il est possible de déposer un dossier avant l'obtention officielle du diplôme de Licence*
+
+- Peut-on postuler à plusieurs parcours au sein de Paris Diderot ?
+  - oui `r fontawesome::fa("glass-cheers")`
+  - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG/PMA/Modélisation
+
+
+???
+
+Conseils à donner oralement
+
+- délais
+- candidature après session II (envoyer un dossier avant)
+- capacités d'accueil
+- pour les parcours MF/PMA/Modélisation/MG/LMFI/M2MO

@@ -1,0 +1,48 @@
+
+<style>
+  .remark-slide-number {
+    position: inherit;
+  }
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: red;
+}
+</style>
+  
+  
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "tachyons", "logo"))
+
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+
+pacman::p_load("knitr")
+
+opts_chunk$set(warning = FALSE, 
+               message = FALSE, 
+               cache = TRUE, 
+               autodep = TRUE, 
+               tidy = FALSE, 
+               fig.retina = 4)
+````

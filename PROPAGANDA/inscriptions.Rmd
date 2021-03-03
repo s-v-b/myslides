@@ -1,0 +1,65 @@
+---
+class: top, left
+name: inscriptions 
+background-image: url('./img/inscriptions.jpg')
+background-size: cover
+
+## Inscriptions
+
+
+---
+
+
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://u-paris.fr/sinscrire-a-universite-de-paris/")
+```
+
+[https://u-paris.fr/sinscrire-a-universite-de-paris/](https://u-paris.fr/sinscrire-a-universite-de-paris/)
+
+---
+exclude: true
+
+### CEVC (CROUS)
+
+- En ligne (paiement en carte bancaire)
+
+  - Étape 1 : Se connecter au [site messervices.etudiant](https://www.messervices.etudiant.gouv.fr/) ou [site cvec](http://cvec.etudiant.gouv.fr/)
+  Rubrique : CONNEXION. Les autres étudiants devront créer leur compte ou le modifier s’ils n’y ont plus d’accès.
+
+  - Étape 2 : Renseigner ses informations personnelles et indiquer sa ville d’études
+
+  - Étape 3 : Payer la CVEC en ligne ou se faire exonérer du paiement en ligne.
+
+---
+exclude: true
+
+### Inscription administratives
+
+__En ligne__
+
+> Les étudiants étrangers, hors mobilité, doivent suivre une procédure d’inscription administrative spécifique.
+
+> Les étudiants en formation initiale (FI) peuvent s’inscrire en ligne à la condition d’avoir valider leur admission dans Ecandidat.
+
+---
+exclude:true
+
+### Redoublement
+
+
+
+
+---
+exclude: true
+
+### Inscriptions pédagogiques
+
+- Fiche à télécharger (bientôt) sur [Moodle](https://moodle.u-paris.fr)
+
+- Remettre fiche à Christian Sénécal ou à un responsable de cours
+
+- `r emo::ji("building_construction")` L'inscription pédagogique est nécessaire pour accéder au [site Moodle des cours](https://moodle.u-paris.fr/)
+
+- Dispense de contrôle continu cours par cours
+
