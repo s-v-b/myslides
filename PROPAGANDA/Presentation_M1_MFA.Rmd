@@ -76,7 +76,7 @@ background-image: url('./img/idf.jpg')
 background-size: cover
 
 
-## Le Master I et ses débouchés 
+## Le Master I et ses débouchés
 
 
 
@@ -87,7 +87,7 @@ background-size: cover
 Un diplôme en deux ans organisé en _parcours_ .f3.fr[`r fontawesome::fa("sitemap")`]
 
 En première année (M1), un tronc
-commun: 
+commun:
 
 .center[**M1 - Mathématiques Fondamentales et Appliquées**]
 
@@ -117,16 +117,13 @@ name: bienvenue1
 
 .right-column[
 
-### `r fontawesome::fa("industry")`
-
-
-Les industries (automobile, aéronautique), le bâtiment, les télécommunications, les start-ups,  les banques, les compagnies d'assurances
+.f3[`r fontawesome::fa("industry")`] Les industries (automobile, aéronautique), le bâtiment, les télécommunications, les start-ups,  les banques, les compagnies d'assurances
 et bien d'autres entreprises emploient des mathématiciens
 
 
-Exemples 
+Exemples
 
-- Quant. .fr[`r fontawesome::fa("landmark")`] 
+- Quant. .fr[`r fontawesome::fa("landmark")`]
 
 - Ingénieur R &amp; D  .fr[`r fontawesome::fa("car-battery")`]
 
@@ -180,9 +177,7 @@ name: bienvenue2
 
 .right-column[
 
-### `r fontawesome::fa("chalkboard-teacher")`
-
-Le Master comporte une préparation à l'agrégation de Mathématiques.
+.f3[`r fontawesome::fa("chalkboard-teacher")`] Le Master comporte une préparation à l'agrégation de Mathématiques
 
 L'agrégation ouvre les portes de l'enseignement secondaire,
 et des classes préparatoires `r fontawesome::fa("school")`.
@@ -213,19 +208,17 @@ name: bienvenue3
 
 .right-column[
 
-### `r fontawesome::fa("university")`
-
-Le Master de Mathématiques prépare à la recherche en Mathématiques 
+.f3[`r fontawesome::fa("university")`] Le Master de Mathématiques prépare à la recherche en Mathématiques
 
 Les carrières de chercheurs se déroulent
 
-+ à l'université, 
-+ dans des organismes de recherche (INRIA, CEA, ...), 
++ à l'université,
++ dans des organismes de recherche (INRIA, CEA, ...),
 + au sein d'entreprises (EDF, Google, ...)
 
-Ces carrières passent par l'obtention d'un doctorat `r fontawesome::fa("graduation-cap")`  
+Ces carrières passent par l'obtention d'un doctorat `r fontawesome::fa("user-graduate")`
 
-Le Master  fait partie de l'[École Doctorale Paris Centre](http://ed386.sorbonne-universite.fr/fr/index.html)  
+`r fontawesome::fa("graduation-cap")` Le Master  fait partie de l'[École Doctorale Paris Centre](http://ed386.sorbonne-universite.fr/fr/index.html)
 
 Etre docteur peut être un plus dans le monde de l'entreprise
 (en particulier à l'étranger `r fontawesome::fa("globe-americas")`)
@@ -243,29 +236,29 @@ class: inverse, middle, center
 ### Parcours issus du Master I  MFA
 
 
-|  **Titre**      | **Thèmes**        | **Laboratoire(s)** |
-|:----------------|:------------------|:------------------:|
-| [Maths Fondamentales](http://master-math-fonda.imj-prg.fr)    |                   |   [IMJ-PRG](https://www.imj-prg.fr)            |
-| [M2MO](https://masterfinance.math.univ-paris-diderot.fr)            |  Math-Fi/Dat. Sc. |  [LPSM](http://www.lpsm.paris)               |
-| [LMFI](http://master.math.univ-paris-diderot.fr/annee/m2-lmfi/)            |  Logique/Inform.  | [IMJ-PRG/IRIF](https://www.imj-prg.fr)       |
-| [Math. Géné.](http://master.math.univ-paris-diderot.fr/annee/m2-agreg/)     |  Prep. Agreg.     |                    |
-| [Modélisation]()  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         |
-| [Probabilités]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris)               |
+|  **Titre**      | **Thèmes**        | **Laboratoire(s)** | |
+|:----------------|:------------------|:------------------:|:---:|
+| [Maths Fondamentales](http://master-math-fonda.imj-prg.fr)    |                   |   [IMJ-PRG](https://www.imj-prg.fr)            | `r fontawesome::fa("university")`|
+| [M2MO](https://masterfinance.math.univ-paris-diderot.fr)            |  Math-Fi/Dat. Sc. |  [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("university")` `r fontawesome::fa("industry")` |
+| [LMFI](http://master.math.univ-paris-diderot.fr/annee/m2-lmfi/)            |  Logique/Inform.  | [IMJ-PRG/IRIF](https://www.imj-prg.fr)       |`r fontawesome::fa("university")` `r fontawesome::fa("industry")` |
+| [Math. Géné.](http://master.math.univ-paris-diderot.fr/annee/m2-agreg/)     |  Prep. Agreg.     |                    | `r fontawesome::fa("school")`|
+| [Modélisation]()  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         | `r fontawesome::fa("university")` `r fontawesome::fa("industry")`|
+| [Probabilités]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("university")` |
 
 ---
 
 ### Parcours Professionnels
 
-|  **Titre**      | **Thèmes**        | **Apprentissage**     | **Laboratoire(s)** |
-|:----------------|:------------------|:---------------------:|:------------------:|
-| [ISIFAR](http://master.math.univ-paris-diderot.fr/parcours/isifar/)          |  Math-Fi/Risque   | Oui                   | [LPSM](http://www.lpsm.paris)               |
-| Math-Info  (1)  |  Sécurité/Dat. Sc.| Oui                   | [LPSM](http://www.lpsm.paris) / [IRIF](https://www.irif.fr)          |
+|  **Titre**      | **Thèmes**        | **Apprentissage**     | **Laboratoire(s)** | |
+|:----------------|:------------------|:---------------------:|:------------------:|:--:|
+| [ISIFAR](http://master.math.univ-paris-diderot.fr/parcours/isifar/)          |  Math-Fi/Risque   | Oui                   | [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("industry")` |
+| Math-Info  (1)  |  Sécurité/Dat. Sc.| Oui                   | [LPSM](http://www.lpsm.paris) / [IRIF](https://www.irif.fr)          | `r fontawesome::fa("industry")` |
 
 
 ####  (1) : Double Master Mathématiques/Informatique
 
-- [Finalité *MIC* Sécurité](http://master.math.univ-paris-diderot.fr/parcours/mic/)
-- [Finalité *Science des données*](http://master.math.univ-paris-diderot.fr/parcours/data/)
+- [Finalité *MIC* Sécurité](http://master.math.univ-paris-diderot.fr/parcours/mic/)  `r fontawesome::fa("user-secret")`
+- [Finalité *Science des données*](http://master.math.univ-paris-diderot.fr/parcours/data/) `r fontawesome::fa("database")` `r fontawesome::fa("chart-area")`
 
 
 ---
@@ -383,7 +376,7 @@ knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
 
 ### `r fontawesome::fa("compass")`
 
-Ce premier semestre est un semestre d'orientation 
+Ce premier semestre est un semestre d'orientation
 
 En fonction des parcours de M2 visés, vous devrez choisir trois UEs de Mathématiques parmi les cinq proposées
 
@@ -395,7 +388,12 @@ En fonction des parcours de M2 visés, vous devrez choisir trois UEs de Mathéma
 ### Exemple (semestre I)
 
 .pull-left[
-vous visez le parcours [M2MO: Modélisation Aléatoire, Finance et Data Science](https://masterfinance.math.univ-paris-diderot.fr)
+vous visez le parcours [M2MO](https://masterfinance.math.univ-paris-diderot.fr)
+
++ Modélisation Aléatoire `r fontawesome::fa("chart-line")`
++ Finance `r fontawesome::fa("piggy-bank")`
++ Data Science `r fontawesome::fa("chart-area")`
+
 ]
 
 .pull-right[
@@ -448,6 +446,17 @@ Il est raisonnable de suivre:
   <td>3</td>
 </tr>
 </table>
+
+.f6[
+
+Les trois cours de mathématiques comportent chacun
+
+- 3 heures de cours magistral hebdomadaires
+
+- 4 heures TDs/TPs hebdomadaires 
+
+
+]
 ]
 
 ---
@@ -684,11 +693,12 @@ class: top
 ### Exemple (Semestre II)
 
 .pull-left[
-Vous visez le parcours 
+Vous visez le parcours
 
-[M2MO](https://masterfinance.math.univ-paris-diderot.fr): 
-+ Modélisation Aléatoire, 
-+ Finance et 
+[M2MO](https://masterfinance.math.univ-paris-diderot.fr):
+
++ Modélisation Aléatoire,
++ Finance et
 + Data Science
 
 Il est possible de suivre 4/5 modules parmi les cours listés à droite
@@ -761,6 +771,7 @@ Il est possible de suivre 4/5 modules parmi les cours listés à droite
 </table>
 
 .f6[Ce n'est pas le seul choix possible et raisonnable] `r fontawesome::fa("smile")`
+
 ]
 
 ---
@@ -859,7 +870,7 @@ Le semestre est acquis aux conditions suivantes:
 
 - L'étudiant a une moyenne génerale au semestre supérieure à 10
 
-- L'étudiant n'a aucune note inférieure à 7/20 
+- L'étudiant n'a aucune note inférieure à 7/20
 
 Dans le cas où le semestre n'est pas validé au cours de la première session, toute note inférieure à 10 est perdue pour la seconde session  `r fontawesome::fa("frown")`
 
@@ -900,7 +911,7 @@ name: contacts-ra
 
 - Secrétariat de l'UFR de Mathématiques
 
-- Bâtiment Sophie Germain 
+- Bâtiment Sophie Germain
 
 - Salle 2008
 ]
@@ -974,7 +985,7 @@ Prendre rendez-vous via [Moodle](https://moodle.u-paris.fr/course/view.php?id=85
 
 - orientation future
 
-- signaler difficultés 
+- signaler difficultés
 
 ]
 
