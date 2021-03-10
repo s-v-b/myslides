@@ -1200,7 +1200,7 @@ $$I (\theta) \sqrt{n} ( \widehat{\theta}_n - \theta) - \frac{1}{\sqrt{n}} \nabla
  dans des conditions beaucoup moins exigeantes que celles énoncées ici.
 ---
 
-### Lemme
+### Lemme (intermédiaire)
 
 .bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
@@ -1223,7 +1223,7 @@ transformation linéaire de $Z^n$.
 
 ---
 
-### Preuve
+### Preuve (lemme intermédiaire)
 
 Le théorème central limite vectoriel  nous assure que la suite des vecteurs $(Z_n)$
 converge en loi vers
@@ -1236,7 +1236,9 @@ n\mathbf {p}_{\theta} \{\alpha\})}{\sqrt{\mathbf {p}_{\theta} \{\alpha\}}} \time
 
 ---
 
-Passons au  _couplage_   (\ref{eq:couplage}).
+### Preuve  (lemme intermédiaire)
+
+Passons au  _couplage_   
 
 Par définition du maximum de
 vraisemblance
@@ -1248,6 +1250,7 @@ de la log-vraisemblance et un développement autour de $\theta$ par la formule d
 
 ---
 
+### Preuve  (lemme intermédiaire)
 Pour tout $i \leq  r$,
 
 $$\begin{array}{rl} 0 & =  \partial_i \ell_n ( \widehat{\theta}_n) = \partial_i \ell_n (\theta) +
@@ -1255,6 +1258,7 @@ $$\begin{array}{rl} 0 & =  \partial_i \ell_n ( \widehat{\theta}_n) = \partial_i 
 
 ---
 
+### Preuve  (lemme intermédiaire)
 Vérifions maintenant que la matrice aléatoire de terme général
 
 $$\left( \frac{1}{n} \int_0^1 \,  \,  \,  \partial_{i, j}\ell_n (\theta + u ( \widehat{\theta}_n - \theta)) \mathrm{d} u \right)$$
@@ -1269,7 +1273,7 @@ Nous voulons établir
 $$\frac{1}{n} \int_0^1 \,  \,  \,  \left[ \partial_{i, j} \ell_n (\theta + u ( \widehat{\theta}_n - \theta)) - \partial_{i, j} \ell_n (\theta) \right] \mathrm{d} u \stackrel{P}{\longrightarrow}0$$
 
 ---
-
+### Preuve  (lemme intermédiaire)
 Notons
 
 $$w (\delta) \equiv \sup_{\theta': \theta - \theta' \| \leq \delta} \sup_{i, j \leq  r} \sup_{\alpha} | \partial_{i, j} \log \mathbf {p}_{\theta'} \{\alpha\}- \partial_{i, j} \log \mathbf {p}_{\theta} \{\alpha\}|.$$
@@ -1282,6 +1286,8 @@ On a par ailleurs
 $$\left| \frac{1}{n} \int_0^1 \,  \,  \,  \left[\partial_{i, j} \ell_n (\theta + u ( \widehat{\theta}_n - \theta)) - \partial_{i, j} \ell_n (\theta) \right] \mathrm{d} u \right| \leq  w\left( \| \theta - \widehat{\theta}_n \| \right)$$
 
 ---
+
+### Preuve  (lemme intermédiaire)
 
 L'hypothèse de consistance de l'estimateur $\widehat{\theta}_n$
 et l'hypothèse de continuité de la matrice d'information de Fisher  permettent  alors
@@ -1300,7 +1306,8 @@ $$\frac{1}{n} \partial_{i, j} \ell_n (\theta) \begin{array}{c} P\\ \longrightarr
 
 ### Preuve
 
-D'après le lemme \ref{lem:intermed:0}, la limite en loi de la suite $(X^n)_{n \in \mathbb{N}}$ coïncide  avec la limite en loi
+D'après le lemme intermédiaire, la limite en loi de 
+la suite $(X^n)_{n \in \mathbb{N}}$ coïncide  avec la limite en loi
 des images des vecteurs $Z^n$ par la transformation linéaire définie par
 
 $$\left(\begin{array}{c} \text{Id}_{p+1}\\\ldots\\ I^{- 1} (\theta) B (\theta) \end{array}\right)$$
@@ -1329,6 +1336,8 @@ vaut exactement $B (\theta)$
 
 ---
 
+### Preuve (suite)
+
 .f6[
 En invoquant à nouveau le principe du Delta et le lemme 
 
@@ -1340,6 +1349,8 @@ $$\left(\begin{array}{cccc} \Gamma (\theta) & \vdots & B^{t } (\theta) I^{- 1} (
 ]
 ---
 
+### Preuve (suite)
+
 .f6[
 On déduit que la suite de vecteurs aléatoires $(Y^n)_{n \in \mathbb{N}}$
 
@@ -1347,11 +1358,13 @@ $$Y^n:= \sqrt{n} \left( \frac{\frac{N^n(\alpha)}{n} -\mathbf{p}_{\theta} \{\alph
 
 converge en loi vers un vecteur Gaussien de matrice de covariance
 
-$$\begin{array}{rl} \Gamma (\theta) - B(\theta)^t I^{- 1} (\theta) B^{} (\theta)& = \mathrm{Id} - \left(\begin{array}{c}\sqrt{p_1}\\\sqrt{p_2}\\\vdots\\ \sqrt{p_k}\end{array}\right) \left(\begin{array}{cccc} \sqrt{p_1} & \sqrt{p_2} & \ldots & \sqrt{p_k}\end{array}\right) - B(\theta)^t \left( B (\theta) \times B(\theta)^t \right)^{- 1} B^{} (\theta)\end{multline*}$$
+$$\begin{array}{rl} & \Gamma (\theta) - B(\theta)^t I^{- 1} (\theta) B^{} (\theta)\\ & = \mathrm{Id} - \left(\begin{array}{c}\sqrt{p_1}\\\sqrt{p_2}\\\vdots\\ \sqrt{p_k}\end{array}\right) \left(\begin{array}{cccc} \sqrt{p_1} & \sqrt{p_2} & \ldots & \sqrt{p_k}\end{array}\right) - B(\theta)^t \left( B (\theta) \times B(\theta)^t \right)^{- 1} B^{} (\theta)\end{array}$$
 ]
 
 
 ---
+
+### Preuve (suite)
 
 La matrice symétrique
 
@@ -1369,6 +1382,7 @@ appartient à son noyau.
 
 ---
 
+### Preuve (suite)
 
 Sous $\mathbf{p}_{\theta}$, les limites en loi de
 
@@ -1385,6 +1399,11 @@ La dernière quantité s'écrit
 $$\sum_{\alpha = 0}^p \,  \left( \frac{\sqrt{n} (N^n(\alpha) / n -\mathbf{p}_{\theta} \{\alpha\})}{\sqrt{\mathbf{p}_{\theta} \{\alpha\}}} \,  - \frac{\sqrt{n} (\mathbf{p}_{\theta}\{\alpha\}-\mathbf{p}_{\widehat{\theta}_n} \{\alpha\})}{\sqrt{\mathbf{p}_{\theta}\{\alpha\}}} \right)^2,$$
 
 c'est le carré de la norme euclidienne de $Y^n$.
+
+---
+
+### Preuve (suite)
+
 
 Du principe de l'image continue, on déduit que la suite $(\left\| Y^n \right\|_2^2)_n$ converge
 en loi vers la loi du carré de la norme du vecteur Gaussien de matrice de
