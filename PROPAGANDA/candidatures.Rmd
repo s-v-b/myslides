@@ -15,12 +15,12 @@ background-size: cover
 - Procédure : [e-candidat](https://ecandidat.app.u-paris.fr/sciences1/#!accueilView)
   + CV  `r fontawesome::fa("file-upload")`
   + Lettre de motivation `r fontawesome::fa("file-alt")`
-  + Relevé des notes 
+  + Relevé des notes
 
 - Calendrier `r fontawesome::fa("calendar")`
   - Ouverture : [À venir]()
-  - Date limite de dépot des dossiers : 14 juillet 
-  - Session 2: Campagne 2,  25 Août-5 Septembre (à préciser)
+  - Date limite de dépot des dossiers : $\approx$ 14 juillet
+  - Session 2: Campagne 2,  23 Août-3 Septembre (à préciser)
   - *Il est possible de déposer un dossier avant l'obtention officielle du diplôme de Licence*
 
 - Peut-on postuler à plusieurs parcours au sein de Paris Diderot ?
