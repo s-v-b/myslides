@@ -25,64 +25,9 @@ output:
 ---
 name: layout-general
 layout: true
-class: left, middle
+class: left, top
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
-```
-
-
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
-
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
-
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE}
 ```
 
 ---
@@ -90,12 +35,13 @@ class: middle, center, inverse
 
 
 
-# Exploratory Data Analysis VIII Hierarchical Clustering
+# Exploratory Data Analysis VIII k-Means
 
 ### `r Sys.Date()`
 
-#### EDA Master I MIDS et MFA
+#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
 
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: middle, inverse
@@ -112,9 +58,707 @@ class: middle, inverse
 
 ---
 
----
+### Introduction
+
+
+In words, _clustering_ consists in partitioning  points collections
+from some metric space  in such a way
+that points in the same group are close enough while points from different groups
+are distant.
 
 ---
+
+### Clustering in ML applications
+
+Clustering shows up in many Machine Learning applications, for example:
+
+-   __Marketing__: finding groups of customers with similar
+    behavior given a large database of customer data containing their
+    properties and past buying records;
+-   __Biology__: classification of plants and animals given their
+    features;
+-   __Bookshops__: book ordering (recommendation)
+-   __Insurance__: identifying groups of motor insurance policy
+    holders with a high average claim cost; identifying frauds;
+-   __City-planning__: identifying groups of houses according to
+    their type, value and geographical location;
+-   __Internet__: document classification; clustering weblog data
+    to discover groups of similar access patterns; topic modeling
+
+---
+
+###
+
+Note that a clustering application relies on  the elaboration of
+a metric/dissimilarity over some input space. This tasks is entangled
+with _feature engineering_.
+
+Let us focus on one specific context: market segmentation
+
+-   __Data__: Base of customer data containing their properties
+    and past buying records
+-   __Goal__: Use the customers *similarities* to find groups
+-   __Possible directions:__
+    + Dimension reduction (PCA, CA, MCA, ...)
+    + __Clustering__ $\approx$ _non-supervised classification_
+
+
+---
+
+### Dimension reduction
+
+Dimension reduction technologies start form:
+
+-   Training data
+    $\mathcal{D}=\{\vec{X}_1,\ldots,\vec{X}_n\} \in \mathcal{X}^n$ (i.i.d.
+    $\sim \Pr$)
+-   Space $\mathcal{X}$ of possibly high dimension.
+
+and elaborate a  _Dimension Reduction Map_, that is, dimension reduction
+techniques construct a map $\Phi$ from the space $\mathcal{X}$
+into a space $\mathcal{X}'$ of __smaller dimension__
+
+---
+
+###
+
+Meanwhile,  clustering techniques start from  Training data:
+
+$$\mathcal{D}=\{\vec{X}_1,\ldots,\vec{X}_n\} \in \mathcal{X}^n$$
+
+(i.i.d. $\sim \Pr$) and partition the data into (latent?) groups,
+
+Clustering techniques construct a map $f$ from $\mathcal{D}$ to $\{1,\ldots,K\}$ where $K$
+is a number of classes to be fixed: $f: \quad \vec{X}_i \mapsto k_i$
+
+---
+
+### Dimension reduction and clustering may be combined.
+
+For example, it is
+commonplace to first perform PCA, project the data on the leading principal components
+and then perform $k$-means clustering on the projected data.
+
+Clustering tasks may be motivated along different directions:
+
+-   The search for an interpretation of groups
+-   Use of groups in further processing (prediction, ...)
+
+---
+
+### Good clustering
+
+we need to define the __quality of a cluster__.
+Unfortunately, no obvious quality measure exists!
+
+Clustering quality may be assessed by scrutinizing
+
+-   _Inner homogeneity_: samples in the same group should be similar.
+-   _Outer inhomogeneity_: samples in two different groups should be
+    different.
+
+---
+
+### Shades of similarity
+
+Note that there are many possible definitions of _similar_ and _different_.
+Often, they are  based on the distance between the samples.
+
+Examples based on the euclidean distance:
+
+-   Inner homogeneity $\approx$ intra class variance,
+
+-   Outer inhomogeneity $\approx$ inter class variance.
+
+Finally, remember that, in flat clustering,
+the choice of the number $K$ of clusters is often delicate.
+
+---
+
+## Kleinberg's theorem
+
+---
+
+###
+
+- Clustering is not a single method
+
+- Clustering methods address a large range of   problems.
+
+Turning this informal statement into a formal definition proves challenging.
+
+---
+
+### Definition Clustering function
+
+Define a _clustering function_ $F$ as a function that takes as input any finite domain $\mathcal{X}$ with a dissimilarity function $d$ over its pairs and returns a partition of $\mathcal{X}$
+
+
+---
+
+### Three desirable properties
+
+1. _Scale Invariance_. For any domain set $\mathcal{X}$, dissimilarity function $d$, and any
+$\alpha>0$, the following should hold: $F(\mathcal{X},d) = F(\mathcal{X},\alpha d)$.
+1. _Richness_ For any finite $\mathcal{X}$ and every partition $C = (C_1,\ldots,C_k)$ of $\mathcal{X}$ (into
+nonempty subsets) there exists some dissimilarity function $d$ over $\mathcal{X}$ such that
+$F(\mathcal{X},d)=C$.
+1.  _Consistency_ If $d$ and $d'$ are dissimilarity functions over $\mathcal{X}$, such that
+for all $x, y \in \mathcal{X}$,
+    -  if $x,y$ belong to the same cluster in $F(\mathcal{X},d)$ then $d'(x,y) \leq d(x,y)$,
+    - if $x,y$ belong to different clusters in $F(\mathcal{X},d)$ then $d'(x,y) \geq d(x,y)$,
+then $F(\mathcal{X},d) = F(\mathcal{X},d')$.
+
+---
+
+Designing clustering functions meeting simultaneously _any two_
+of the _three_ properties is doable.
+But the three reasonable goals are _conflicting_. J. Kleinberg proved:
+
+### Kleinberg's impossibility theorem
+
+**No** clustering function $F$ satisfies simultaneously all  three properties: _Scale Invariance_, _Richness_, and _Consistency_
+
+---
+
+## Flavors of clustering
+
+---
+
+A wide variety of clustering methods have been used in Statistics and Machine Learning.
+
+- __Flat clustering (for example $k$-means)__ partitions  sample into a fixed
+number of classes (usually denoted by $k$). The partition is determined by
+some algorithms. The ultimate objective is to optimize some cost function.
+Whether the objective is achieved or even approximately achieved using
+a reasonable amount of computational resources is not settled.
+
+- __Model based clustering__ is based on a generative model: data are assumed
+to be sampled from a specific model (usually finite mixtures of Gaussians).
+Clustering consists in fitting such a mixture model and then assigning sample
+points to mixture components.
+- Hierarchical clustering is the topic of next chapter.
+
+---
+
+In Machine Learning, $k$-means and hierarchical clustering   belong to a range of tasks called _non-supervised learning_.
+This contrasts with regression which belongs to the realm of _supervised learning_
+
+---
+
+## $k$-means  {#kmeans}
+
+---
+
+
+The $k$-means algorithm is an iterative method that constructs a sequence
+of Voronoï partitions.
+
+A Voronoï diagram draws the nearest neighbor regions around a set of points.
+
+### Voronoï partitions
+
+
+- Assume sample $X_1, \ldots, X_n$ from $\mathbb{R}^p$
+- $\mathbb{R}^p$ is endowed with a metric $d$ (usually $\ell_2$, sometimes
+a weighted $\ell_2$ distance or $\ell_1$ )
+
+Each cluster is defined by a _centroid_.
+
+The collection of centroids is (sometimes)  called the _codebook_ $\mathcal{C}=c_1, \ldots, c_k$
+
+Each centroid $c_j$ defines a class:
+
+$$C_j = \bigg\{ X_i : d(X_i, c_j) = \min_{j' \leq k} d(X_i, c_{j'})\bigg\}$$
+
+and more generally a _Voronoï cell_ in $\mathbb{R}^p$
+
+$$C_j = \bigg\{ x :  x \in \mathbb{R}^p, d(x, c_j) = \min_{j' \leq k} d(x, c_{j'})\bigg\}$$
+
+---
+
+.fl.w-30.pa2[
+The black points marked with a cross define three centroids.
+
+The straight lines delimit the Voronoï cells defined by the three centroids.
+
+The colored points come from the Iris dataset: each point is colored according to the the cell it belongs to.
+]
+
+.fl.w-70.pa2[```{r voronoi}
+data(iris)
+
+kms <- kmeans(iris[,1:2], 3)
+
+ggplot(data=broom::augment(kms, iris)) +
+  aes(x=Sepal.Length, y=Sepal.Width, colour=.cluster) +
+  geom_point() +
+  stat_voronoi(data = as.data.frame(kms$centers),
+               geom="path",
+               outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5))) +
+  geom_point(data = as.data.frame(kms$centers),
+             shape="+",
+             size=5) +
+  labs(col="Voronoï cells")
+```
+]
+---
+
+The $k$-means algorithm aims at building a codebook that minimizes
+$$\mathcal{C} \mapsto \sum_{i=1}^n \min_{c \in \mathcal{C}}  \Vert X_i - c\Vert_2^2$$
+over all codebooks with given cardinality.
+
+If $c \in \mathcal{C}$ is the closest centroid to $X \in \mathbb{R}^p$,
+$$\|c - X\|^2$$ is the _quantization/reconstruction error_ suffered when using codebook $\mathcal{C}$ to approximate $X$.
+
+If there are no restrictions on the dimension of the input space, on the number
+of centroids, or on sample size, computing an optimal codebook is a NP-hard problem.
+
+---
+
+We may figure out what an optimized Voronoï partition  looks like on the Iris dataset
+
+`kmeans` with $k=3$ on the Iris dataset. Function `kmeans` is run with default arguments.  We chose the `Sepal` plane for clustering and visualization. This is arbitrary. We could have chosen a `Petal`  plane, a `Width` plane, or a plane defined by principal axes.
+
+```{r iriskmeans3, fig.cap='(ref:iriskmeans3)'}
+kms <- kmeans(select(iris, Sepal.Length, Sepal.Width), 3)
+
+
+broom::augment(kms, iris) %>%
+ ggplot() +
+ geom_point(aes(x=Sepal.Length, y=Sepal.Width,
+            shape=Species, col=.cluster)) +
+ geom_point(data=data.frame(kms$centers),
+            aes(x=Sepal.Length, y=Sepal.Width),
+            shape='+',
+            size=5) +
+ stat_voronoi(data = as.data.frame(kms$centers),
+               aes(x=Sepal.Length,y=Sepal.Width),
+               geom="path",
+               outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5))) -> p
+
+p +
+  ggtitle("K-means with k=3", "Iris data") +
+  labs(col="Clusters")
+```
+
+
+---
+
+A $k$-means clustering is completely characterized by the $k$ centroids
+
+Once centroids are known, clusters can be recovered by searching the closest
+centroid for each sample point (that is by delimiting the Voronoï cells).
+
+- How can we assess the quality of a $k$-means clustering?
+- Can we compare the clusterings achieved by picking different values of $k$?
+
+There is no obvious assessment criterion!
+
+---
+
+When visualizing $k$-means clustering on `Iris` data, we are cheating. We have a gold standard classification delivered by botanists.
+
+The botanists classification can be challenged. We can compare classification originating from phenotypes (appearance) and classification based on phylogeny (comparing DNAs)
+
+
+- Centroids
+- Size of clusters
+- Within clusters sum of squares
+
+---
+
+
+```{r}
+broom::tidy(select(iris, Sepal.Length, Sepal.Width), 3) %>%
+  mutate_if(is.numeric, round, digits=2) %>%
+  knitr::kable(format = "markdown")
+```
+
+---
+
+
+(ref:iriskmeans2) We pursue the exploration of `kmeans` by building another clustering for Iris dataset, this times  with $k=2$.
+
+```{r iriskmeans2, fig.cap='(ref:iriskmeans2)'}
+kms <- kmeans(select(iris, Sepal.Length, Sepal.Width), 2)
+iris2 <- broom::augment(kms, iris)
+
+broom::augment(kms, iris) %>%
+ ggplot() +
+ geom_point(aes(x=Sepal.Length, y=Sepal.Width,
+            shape=Species, col=.cluster)) +
+ geom_point(data=data.frame(kms$centers),
+            aes(x=Sepal.Length, y=Sepal.Width),
+            shape='+',
+            size=5) +
+ stat_voronoi(data = as.data.frame(kms$centers),
+               aes(x=Sepal.Length,y=Sepal.Width),
+               geom="path",
+               outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5)))  +
+  ggtitle(label="Kmeans Iris data",
+          subtitle="k=2") +
+  labs(col="Clusters")
+```
+---
+
+How should we pick $k$?
+Even if we could compute a provably  optimal codebook for each $k$,
+choosing $k$ would not be obvious. A frequently used recipe consists of
+plotting within clusters sum of squares (`withinss`) against $k$. This is done
+in figure \@ref(fig:iriswithinss).
+
+
+```{r, echo=FALSE}
+foreach (k=2:10, .combine = rbind) %do% {
+  select(iris, Sepal.Length, Sepal.Width) %>%
+  kmeans(centers = k,   nstart=32L) %>%
+  broom::glance() %>% force()
+} %>%
+  rownames_to_column() %>%
+  mutate(k=as.integer(rowname)+1) %>%
+  select(-rowname) -> tmp
+
+tmp %>%
+  knitr::kable(format="markdown")
+```
+
+---
+
+Elbow plot. We have run  `kmeans` over the Iris dataset, for $k$ in range $2, \ldots, 10$. For each value of $k$,  we performed $32$ randomized initializations, and chose the partition that minimizes within clusters sum of squares. Within clusters sum of squares decreases sharply between $k=2$ and $k=3$. For larger values of $k$, the decay is much smaller. The elbow rule of thumb suggests to choose $k=3$.
+
+```{r iriswithinss, fig.cap='(ref:withinss)'}
+tmp %>%
+  ggplot(aes(x=forcats::as_factor(k), y=tot.withinss/totss)) +
+  geom_col(width=.25) +
+  ggtitle("Iris data", "WithinSS/Total Sum of Squares as a function of k") +
+  xlab("k") +
+  ylab("Within Clusters Sum of Squares (relative)") +
+  scale_x_discrete(breaks=as.character(2:10), labels=as.character(2:10))
+```
+
+---
+
+Incentive to choose $k=4$
+
+Depending on initialization, taking $k=4$ creates a cluster at the boundary between `versicolor` and `virginica` or it may split the `setosa` cluster
+
+
+```{r iriskmeans4, fig.cap='(ref:iriskmeans4)'}
+kms <- kmeans(select(iris, Sepal.Length, Sepal.Width), 4)
+iris4 <- broom::augment(kms, iris)
+
+ggplot(iris4) +
+geom_point(aes(x=Sepal.Length, y=Sepal.Width,
+           shape=Species, col=.cluster)) +
+geom_point(data=data.frame(kms$centers),
+           aes(x=Sepal.Length, y=Sepal.Width),
+           shape='+',
+           size=5) +
+stat_voronoi(data = as.data.frame(kms$centers),
+              aes(x=Sepal.Length,y=Sepal.Width),
+              geom="path",
+              outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5)))  +
+ ggtitle(label="Kmeans Iris data",
+         subtitle="k=4") +
+ labs(col="Clusters")
+```
+
+---
+
+```{r}
+tidy(kmeans(select(iris, Sepal.Length, Sepal.Width), 4)) %>%
+  mutate_if(is.numeric, round, digits=2) %>%
+  knitr::kable(format = "markdown")
+```
+
+---
+
+### Initialization matters!
+
+- Initialize by samples.
+- `k-Mean++`  try to take them as separated as possible.
+- No guarantee to converge to a global optimum! Trial and error. Repeat and keep the best result.
+
+TODO:
+  one dimensional example with animation (plotly)
+
+---
+
+### Lloyd's Algorithm (detailed) for fixed $k$
+
+1. Initialize
+1. Iterations: Two phases
+   1. For each cluster compute centroids
+   1. Assign each sample point to the closests centroid
+
+---
+
+Iterations
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+iris_numeric <- select(iris, Sepal.Length, Sepal.Width)
+km <- list(centers=iris_numeric[1:3, ]) # stupid initialization
+
+sequence <- list()
+for (i in 1:20) {
+  km <- kmeans(iris_numeric,
+               km$centers,
+               algorithm = "Lloyd",
+               iter.max = 1)
+  sequence[[length(sequence)+1]] <- force(km)
+}
+
+add_voronoi <- function(p, kmscenters, marker){
+  p + geom_point(data=data.frame(kmscenters),
+                 mapping=aes(x=Sepal.Length, y=Sepal.Width),
+                 shape=marker, col="black",size=5) +
+      stat_voronoi(data = as.data.frame(kmscenters),
+                   aes(x=Sepal.Length,y=Sepal.Width),
+                   geom="path",
+                   outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5)))
+}
+```
+
+---
+
+
+```{r lloyd1, echo=FALSE, fig.cap="After 1 step", fig.width=12, fig.height=8}
+i <- 2
+
+p <- broom::augment(sequence[[i]], iris) %>%
+  ggplot() +
+  coord_fixed(ratio=1) +
+  geom_point(aes(x=Sepal.Length, y=Sepal.Width, shape=Species, col=.cluster)) +
+  ggtitle("Kmeans Lloyd's algorithm", "Iris data") +
+  theme_bw()
+
+p %>% add_voronoi(sequence[[i]]$centers, marker="o") +
+    labs(col=paste("Cluster, step ", i- 1))
+```
+
+---
+
+```{r lloyd5, echo=FALSE, fig.cap="After 2 steps", fig.width=12, fig.height=8}
+i <- 3
+
+(p %+%
+  broom::augment(sequence[[i]], iris)) %>%
+  add_voronoi(sequence[[i]]$centers, marker='+') +
+  geom_point(data=data.frame(sequence[[2]]$centers),
+               mapping=aes(x=Sepal.Length, y=Sepal.Width),
+               shape="o", col="black",size=5) +
+  labs(shape=paste("Cluster, step ", i- 1))
+```
+
+---
+
+```{r lloyd00, echo=FALSE, fig.cap="After 4 steps", fig.width=12, fig.height=8}
+i <- 5
+
+(p %+%
+  broom::augment(sequence[[i]], iris)) %>%
+  add_voronoi(sequence[[i]]$centers, marker='*') +
+  geom_point(data=data.frame(sequence[[2]]$centers),
+               mapping=aes(x=Sepal.Length, y=Sepal.Width),
+               shape="o", col="black",size=5) +
+  labs(shape=paste("Cluster, step ", i- 1))
+```
+
+---
+
+### Analysis
+
+Given codebook $\mathcal{C} =\big\{c_1, \ldots, c_k\big\}$
+and clusters $C_1, \ldots C_k$, the  _within-clusters sum of squares_
+is defined as
+$$\sum_{j=1}^k  \sum_{i: X_i \in C_j} \bigg\Vert c_j - X_i \bigg\Vert^2$$
+this is also the kmeans cost.
+
+
+
+### Lemma
+At each stage, the _within clusters sums of squares_ does not increase
+
+
+---
+
+### Proof
+
+Let $\mathcal{C}^{(t)} =\big\{ c^{(t)}_1, \ldots, c_k^{(t)}\big\}$ be the codebook after $t$ steps
+
+Let $\big({C}^{(t)}_j\big)_{j \leq k}$ be the clusters after $t$ steps
+
+- Centroids at step $t+1$ as the barycenters of clusters $\big({C}^{(t)}_j\big)_{j \leq k}$
+$$c^{(t+1)}_j = \frac{1}{|C_j^{(t)}|} \sum_{X_i \in C^{(t)}_j} X_i$$
+- Clusters $C^{(t+1)}_j$ are defined by
+$$C^{(t+1)}_j = \bigg\{ X_i : \Vert X_i -  c^{(t+1)}_j\Vert
+= \min_{c \in \mathcal{C}^{(t+1)}} \Vert X_i -  c\Vert \bigg\}$$
+
+Each sample point is assigned to the closest centroid
+
+---
+
+$$\sum_{j=1}^k \sum_{X_i \in C^{(t)}_j} \bigg\Vert c^{(t)}_j  - X_i\bigg\Vert^2  \geq \sum_{j=1}^k \sum_{X_i \in C^{(t)}_j} \bigg\Vert c^{(t+1)}_j  - X_i\bigg\Vert^2$$
+
+since for each $j$, the mean $c^{(t+1)}_j$ minimizes the average square distance to points in $C^{(t)}_j$
+
+$$\sum_{j=1}^k \sum_{X_i \in C^{(t)}_j} \bigg\Vert c^{(t+1)}_j  - X_i\bigg\Vert^2 \geq \sum_{j=1}^k \sum_{X_i \in C^{(t)}_j} \min_{c \in \mathcal{C}^{(t+1)}}\bigg\Vert c  - X_i\bigg\Vert^2$$
+
+$$\sum_{j=1}^k \sum_{X_i \in C^{(t)}_j} \min_{c \in \mathcal{C}^{(t+1)}}\bigg\Vert c  - X_i\bigg\Vert^2 = \sum_{j=1}^k \sum_{X_i \in C^{(t+1)}_j} \bigg\Vert c^{(t+1)}_j  - X_i\bigg\Vert^2$$
+
+`r fontawesome::fa("square")`
+
+---
+
+## Combining PCA and $k$-means {#pcaandkmeans}
+
+---
+
+The result of a clustering procedure like `kmeans` can be visualized by projecting the dataset on a pair of native variables and  using some aesthetics to emphasize the clusters. This is not always the best way. First choosing a pair of native variables may not be straightforward. The projected pairwise distances may not faithfully reflect the pairwise distances that serve for clustering. It makes sense to project the dataset
+of the $2$-dimensional subspace that maximizes the projected inertia, that is on the space generated
+by the first two principal components.
+
+In Figure \@ref(fig:pcakmeans), the kmeans clustering of the Iris dataset is visualized on the first two principal components. Function `augment` from package `broom` facilitates the elaboration of the plot.
+The generic function `augment` add parts of the result of statistical procedures to the original dataset.
+Here, `augment` adds clusters labels and principal components to the Iris dataset.
+
+---
+
+```{r, echo=TRUE}
+iris_a <- broom::augment(prcomp(x = iris[, -5],
+                         center = FALSE,
+                         scale.=FALSE,
+                         rank. = 4), iris)
+
+km3 <- iris_a %>%
+  select(starts_with(".fitted")) %>%
+  kmeans(3, nstart = 20)
+
+iris_a <- broom::augment(km3, iris_a)
+```
+
+---
+
+The kmeans clustering of the Iris dataset is projected on the first two principal components: `prcomp` is used to perform PCA with neither centering nor scaling ; `kmeans` is applied to the rotated data. The straight lines are the not the projections of the boundaries of the (4-dimensional) Voronoï cells defined by the clusters centroids, but the boundaries of the 2-dimensional Voronoï celles defined by the projections of the cluster centroids.
+
+
+```{r pcakmeans, fig.cap='(ref:pcakmeans)'}
+ggplot(data=iris_a,
+       aes(x=.fittedPC1, y=.fittedPC2)) +
+    coord_fixed(ratio=1) +
+    stat_voronoi(data=data.frame(km3$centers),
+                     geom="path",
+               outline = data.frame(x=c(-12, -4, -4 , -12),
+                                    y=c(-3, -3, 4, 4))) +
+  geom_point(aes(shape=Species, col=.cluster)) +
+  geom_point(data=data.frame(km3$centers),
+             aes(x=.fittedPC1, y=.fittedPC2),
+             shape='+', size=5) +
+  xlab("PC1") +
+  ylab("PC2") +
+  labs(col="Cluster") +
+  ggtitle('Kmeans clustering of Iris dataset projected on first principal components.')
+```
+
+---
+
+## Different brands of $k$-kmeans
+
+---
+
+In base `R`, `kmeans` is a wrapper for different but related algorithms. Lloyd's algorithm is the first and simplest versions of a series of heuristic methods designed  to minimize the k-means cost.
+
+- `MacQueen`  modify the mean each time a sample is assigned to a new cluster
+- `Hartigan-Wong` is the default method. It modifies the mean by removing the considered
+sample point, assign it to the nearby center and recompute the new mean after assignment.
+- `Forgy`
+
+---
+
+## Computational cost
+
+---
+
+```{r}
+foo <- select_if(iris, is.numeric) %>%
+  kmeans(centers = 3)  %>% broom::augment(data=iris)
+```
+
+---
+
+## $k$-means and _quantization_
+
+---
+
+Quantization plays an important role in signal processing and information theory (lossy coding with quadratic distortion)
+
+Given a probability distribution $P$ over
+a metric space $(\mathcal{X},d)$, a $k$-quantizer is defined by a $k$-element subset of
+$\mathcal{X}$, $\mathbf{c} :=  \{x_1,\ldots, x_k\}$ called a codebook.
+
+The codebook defines a quantization by mapping every $x \in \mathcal{X}$ to its nearest neighbor in codebook $\mathbf{c}$
+
+The quality of a codebook is assessed by its mean distortion measured as the mean quadratic distance to the nearest neighbor:
+
+$$\mathsf{R}(\mathbf{c}) := \mathbb{E}\left[\min_{x \in \mathbf{c}}d(X,x)^2\right]$$
+
+where $X \sim P$
+
+---
+
+When the  $P$ is known,  designing an optimal codebook  may  be a difficult optimization problem
+
+When $P$ is unknown, if the statistician is left with an i.i.d. sample $X_1,\ldots,X_n \sim P$, the first reasonable thing to do is minimizing the empirical distortion, the $k$-means cost:
+
+$$\mathsf{R}_n(\mathbf{c}) :=  \frac{1}{n} \sum_{i=1}^n \min_{x \in \mathbf{c}} d(X_i,x)^2$$
+
+Sanjoy Dasgupta proved that if $\mathsf{P} \neq \mathsf{NP}$, minimizing
+the $k$-means cost (sum of within clusters sum of squares) is __computationally intractable__
+
+### Theorem NP-hardness of k-means cost minimization
+
+Mininizing the $k$-means cost (sum of within clusters sum of squares) is NP-hard.
+
+---
+
+Even though minimizing the $k$-means cost is hard,
+one may investigate the statistical problem raised by minimizing the $k$-means cost.
+
+Showcase for empirical process theory.
+
+Initiated by David Pollard  [@Pol84], significant progress during recent years [@MR3080408], [@MR3316191].
+
+The $k$-means cost provides a concrete illustration of a recurrent situation. If the sampling distribution
+is square integrable and has a density with respect to Lebesgue measure, the mapping  $\mathsf{R}(\mathbf{c})$
+is differentiable, its gradient can be explicitly computed.
+
+---
+
+Whereas the local behavior of the $k$-means cost is simple, the global behavior remains elusive.
+Bounding the number of global minima, local minima, local extrema and saddlepoints   is difficult.
+
+Observation: under fairly general assumptions,
+the $k$-means cost function is twice differentiable in the neighborhood of optimal codebooks [@Pol84].
+
+Even though the $k$-means cost function is not convex, recent advances tell us that if sample size tends to infinity,  an empirical cost functions will also share local minima, local maxima, and local saddlepoints with the  theoretical population cost function [@MR3851754]
+
+---
+
+Pollard's regularity conditions may be summarized as follows:
+
+- The sampling distribution is absolutely continuous with respect to Lebesgue measure on $\mathbb{R}^p$.
+- The Hessian matrix of the mapping $\mathbf{c} \mapsto \mathsf{R}(\mathbf{c})$ is positive definite for all optimal codebooks
+
+Under Pollard's conditions, let $\mathbf{c}^*$ denote the optimal codebook, and $\widehat{\mathbf{c}}_n$ denote the optimal empirical codebook
+
+Large sample  behavior of the empirically optimal codebook: $\sqrt{n}\|\widehat{\mathbf{c}}_n - \mathbf{c}^*\|$ is asymptotically normal
+and $n \left( \mathsf{R}(\widehat{\mathbf{c}}_n) - \mathsf{R}(\mathbf{c}^*)\right)$ is stochastically bounded.
+
+Key observation:  Pollard's condition entails that for some constant $\kappa_0>0$,
+$$\mathsf{R}(\mathbf{c}) - \mathsf{R}(\mathbf{c}^*) \geq \kappa_0 \|\mathbf{c}- \mathbf{c}^*\|^2$$
+
+
 
 ---
 class: middle, center, inverse
