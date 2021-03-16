@@ -1,6 +1,6 @@
 ---
-title: "EDA VIII"
-subtitle: "⚔<br/>Statistiques Master I, MFA et MIDS"
+title: "EDA VIII: k-means"
+subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
@@ -22,6 +22,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
 ---
 name: inter-slide
 class: left, middle, inverse
@@ -35,6 +36,18 @@ class: left, middle
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
+```
+
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
 ---
@@ -54,23 +67,31 @@ class: middle, inverse
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla 1
+### [Clustering problem]()
 
-### Bla 2
+### [Kleinberg's Theorem]()
 
-### Bla 3
+### [Flavors of clustering]()
 
-### Bla 4
+### [_k_-Means]()
+
+### [_k_-Means and Quantization]()
 
 ---
 
 ### In words
 
 
-Clustering consists in partitioning  points collections
-from some metric space  in such a way
-that points in the same group are close enough while points from different groups
-are distant
+Clustering consists in _partitioning_  points collections
+from some metric space  
+
+in such a way that 
+
+- points within the same group are close enough 
+
+while 
+
+- points from different groups are distant
 
 ---
 
@@ -78,42 +99,43 @@ are distant
 
 Clustering shows up in many Machine Learning applications, for example:
 
--   __Marketing__: finding groups of customers with similar
+-   `r fontawesome::fa("ad")` __Marketing__: finding groups of customers with similar
     behavior given a large database of customer data containing their
     properties and past buying records
     
--   __Biology__: classification of plants and animals given their
+-   `r fontawesome::fa("hippo")` __Biology__: classification of plants and animals given their
     features
     
--   __Bookshops__: book ordering (recommendation)
+-   `r fontawesome::fa("book")` __Bookshops__: book ordering (recommendation)
 
--   __Insurance__: identifying groups of motor insurance policy
+-   `r fontawesome::fa("car-crash")` __Insurance__: identifying groups of motor insurance policy
     holders with a high average claim cost; identifying frauds
     
--   __City-planning__: identifying groups of houses according to
+-  `r fontawesome::fa("city")` __City-planning__: identifying groups of houses according to
     their type, value and geographical location
     
--   __Internet__: document classification; clustering weblog data
+-   `r fontawesome::fa("network-wired")` __Internet__: document classification; clustering weblog data
     to discover groups of similar access patterns; topic modeling
 
 ---
 
-###
 
-Note that a clustering application relies on  the elaboration of
-a metric/dissimilarity over some input space. 
+A clustering application relies on  the elaboration of
+a _metric/dissimilarity_ over some input space
 
-This tasks is entangled  with _feature engineering_.
+This tasks is entangled  with _feature engineering_ 
 
-Let us focus on one specific context: market segmentation
+Focus on one specific context: _market segmentation_  `r fontawesome::fa("chart-pie")`
 
--   __Data__: Base of customer data containing their properties
+-   `r fontawesome::fa("database")` __Data__: Base of customer data containing their properties
     and past buying records
     
--   __Goal__: Use the customers *similarities* to find groups
+-   `r fontawesome::fa("bullseye")` __Goal__: Use the customers *similarities* to find groups
 
 -   __Possible directions:__
+
     + Dimension reduction (PCA, CA, MCA, ...)
+
     + __Clustering__ $\approx$ _non-supervised classification_
 
 
@@ -238,24 +260,32 @@ $F(\mathcal{X},d)=C$.
 
 3.  _Consistency_ If $d$ and $d'$ are dissimilarity functions over $\mathcal{X}$, such that
 for all $x, y \in \mathcal{X}$,
-    -  if $x,y$ belong to the same cluster in $F(\mathcal{X},d)$ then $d'(x,y) \leq d(x,y)$,
-    - if $x,y$ belong to different clusters in $F(\mathcal{X},d)$ then $d'(x,y) \geq d(x,y)$,
+    +  if $x,y$ belong to the same cluster in $F(\mathcal{X},d)$ then $d'(x,y) \leq d(x,y)$,
+    + if $x,y$ belong to different clusters in $F(\mathcal{X},d)$ then $d'(x,y) \geq d(x,y)$,
+    
 then $F(\mathcal{X},d) = F(\mathcal{X},d')$.
 
 ---
 
-Designing clustering functions meeting simultaneously _any two_
-of the _three_ properties is doable.
+`r fontawesome::fa("smile")` Designing clustering functions meeting simultaneously _any two_ of the _three_ properties is doable
 
-But the three reasonable goals are _conflicting_
+but 
+
+`r fontawesome::fa("frown")`  The three reasonable goals are _conflicting_
 
 ### Kleinberg's impossibility theorem
 
-**No** clustering function $F$ satisfies simultaneously all  three properties: 
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+**No** clustering function $F$ satisfies simultaneously all  three properties:
 
 - _Scale Invariance_, 
+
 - _Richness_, and 
+
 - _Consistency_
+
+]
 
 
 ---
@@ -269,20 +299,23 @@ A wide variety of clustering methods have been used in Statistics and Machine Le
 
 - __Flat clustering (for example $k$-means)__ partitions  sample into a fixed
 number of classes (usually denoted by $k$). The partition is determined by
-some algorithms. The ultimate objective is to optimize some cost function.
+some algorithm. 
+
+.f6[The ultimate objective is to optimize some cost function.
 Whether the objective is achieved or even approximately achieved using
-a reasonable amount of computational resources is not settled.
+a reasonable amount of computational resources is not settled.]
 
 - __Model based clustering__ is based on a generative model: data are assumed
 to be sampled from a specific model (usually finite mixtures of Gaussians).
-Clustering consists in fitting such a mixture model and then assigning sample
-points to mixture components.
 
-- Hierarchical clustering is the topic of next lesson 
+.f6[Clustering consists in fitting such a mixture model and then assigning sample points to mixture components.]
+
+- _Hierarchical clustering_ is the topic of next lesson 
 
 ---
 
 In Machine Learning, $k$-means and hierarchical clustering   belong to a range of tasks called _non-supervised learning_.
+
 This contrasts with regression which belongs to the realm of _supervised learning_
 
 ---
@@ -295,7 +328,7 @@ name:  kmeans
 
 
 The $k$-means algorithm is an iterative method that constructs a sequence
-of Voronoï partitions.
+of Voronoï partitions
 
 A Voronoï diagram draws the nearest neighbor regions around a set of points.
 
@@ -352,11 +385,11 @@ broom::augment(kms, iris) %>%
   ggplot() +
   aes(x=Sepal.Length, y=Sepal.Width, colour=.cluster) +
   geom_point(aes()) +
-  stat_voronoi(data = df_centers,
+  stat_voronoi(data = df_centers,   #<<
                geom="path",
                outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5))
                ) +
-  geom_point(data = df_centers,
+  geom_point(data = df_centers,   #<<
              colour = "black",
              shape="+",
              size=5) +
@@ -414,11 +447,11 @@ broom::augment(kms, iris) %>%
  ggplot() +
  geom_point(aes(x=Sepal.Length, y=Sepal.Width,
             shape=Species, col=.cluster)) +
- geom_point(data=data.frame(kms$centers),
+ geom_point(data=data.frame(kms$centers),        #<<
             aes(x=Sepal.Length, y=Sepal.Width),
             shape='+',
             size=5) +
- stat_voronoi(data = as.data.frame(kms$centers),
+ stat_voronoi(data = as.data.frame(kms$centers),  #<<
                aes(x=Sepal.Length,y=Sepal.Width),
                geom="path",
                outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5))) -> p
@@ -453,15 +486,16 @@ There is no obvious assessment criterion!
 
 ### Caveat
 
-When visualizing $k$-means clustering on `Iris` data, we are cheating. 
+When visualizing $k$-means clustering on `Iris` data, we are cheating.  `r fontawesome::fa("theater-masks")`
 
-We have a gold standard classification delivered by botanists.
+We have a gold standard classification delivered by botanists 
 
 The botanists classification can be challenged
 
-We can compare classification originating from _phenotypes_ (appearance) and classification based on _phylogeny_ (comparing DNAs)
+We can compare classification originating from _phenotypes_ (appearance) and classification based on _phylogeny_ (comparing DNAs)  `r fontawesome::fa("dna")`
 
 ---
+exclude: true
 
 - Centroids
 
@@ -499,6 +533,7 @@ t
 
 ---
 
+### $k$-means with $k=2$ 
 
 .fl.w-30.pa2[
 We pursue the exploration of `kmeans` by building another clustering for Iris dataset.
@@ -521,11 +556,11 @@ broom::augment(kms, iris) %>%
  ggplot() +
  geom_point(aes(x=Sepal.Length, y=Sepal.Width,
             shape=Species, col=.cluster)) +
- geom_point(data=data.frame(kms$centers),
+ geom_point(data=data.frame(kms$centers),   #<<
             aes(x=Sepal.Length, y=Sepal.Width),
             shape='+',
             size=5) +
- stat_voronoi(data = as.data.frame(kms$centers),
+ stat_voronoi(data = as.data.frame(kms$centers),   #<<
                aes(x=Sepal.Length,y=Sepal.Width),
                geom="path",
                outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5)))  +
@@ -634,9 +669,11 @@ tmp %>%
 
 ### Incentive to choose $k=4$
 
+.fl.w-30.pa2[
 Depending on initialization, taking $k=4$ creates a cluster at the boundary between `versicolor` and `virginica` or it may split the `setosa` cluster
+]
 
-
+.fl.w-70.pa2[
 ```{r iriskmeans4, echo=FALSE, fig.cap='(ref:iriskmeans4)'}
 kms <- kmeans(select(iris, Sepal.Length, Sepal.Width), 4)
 iris4 <- broom::augment(kms, iris)
@@ -644,11 +681,11 @@ iris4 <- broom::augment(kms, iris)
 ggplot(iris4) +
 geom_point(aes(x=Sepal.Length, y=Sepal.Width,
            shape=Species, col=.cluster)) +
-geom_point(data=data.frame(kms$centers),
+geom_point(data=data.frame(kms$centers),          #<<
            aes(x=Sepal.Length, y=Sepal.Width),
            shape='+',
            size=5) +
-stat_voronoi(data = as.data.frame(kms$centers),
+stat_voronoi(data = as.data.frame(kms$centers),   #<<
               aes(x=Sepal.Length,y=Sepal.Width),
               geom="path",
               outline=data.frame(x=c(4, 8, 8, 4), y=c(2, 2, 4.5, 4.5)))  +
@@ -656,7 +693,7 @@ stat_voronoi(data = as.data.frame(kms$centers),
          subtitle="k=4") +
  labs(col="Clusters")
 ```
-
+]
 ---
 
 ```{r}
@@ -709,12 +746,12 @@ for (i in 1:20) {
 
 add_voronoi <- function(p, kmscenters, marker){
   p + 
-    geom_point(data=data.frame(kmscenters),
+    geom_point(data=data.frame(kmscenters),         #<<
                mapping=aes(x=Sepal.Length, y=Sepal.Width),
                shape=marker, 
                col="black",
                size=5) +
-    stat_voronoi(data = as.data.frame(kmscenters),
+    stat_voronoi(data = as.data.frame(kmscenters),  #<<
                  aes(x=Sepal.Length,y=Sepal.Width),
                  geom="path",
                  outline=data.frame(x=c(4, 8, 8, 4), 
@@ -733,7 +770,7 @@ p <- broom::augment(sequence[[i]], iris) %>%
   ggtitle("Kmeans Lloyd's algorithm", "Iris data") 
 
 p %>% 
-  add_voronoi(sequence[[i]]$centers, marker="o") +
+  add_voronoi(sequence[[i]]$centers, marker="o") +   #<<
   labs(colour=paste("Cluster, step ", i- 1))
 ```
 
@@ -746,10 +783,10 @@ i <- 3
 
 (p %+%
   broom::augment(sequence[[i]], iris)) %>%
-  add_voronoi(sequence[[i]]$centers, marker='+') +
-  geom_point(data=data.frame(sequence[[2]]$centers),
-               mapping=aes(x=Sepal.Length, y=Sepal.Width),
-               shape="o", col="black",size=5) +
+  add_voronoi(sequence[[i]]$centers, marker='+') +   #<<
+  geom_point(data=data.frame(sequence[[2]]$centers),   #<<
+             mapping=aes(x=Sepal.Length, y=Sepal.Width),
+             shape="o", col="black", size=5) +
   labs(colour=paste("Cluster, step ", i- 1))
 ```
 
@@ -762,10 +799,10 @@ i <- 5
 
 (p %+%
   broom::augment(sequence[[i]], iris)) %>%
-  add_voronoi(sequence[[i]]$centers, marker='*') +
-  geom_point(data=data.frame(sequence[[2]]$centers),
-               mapping=aes(x=Sepal.Length, y=Sepal.Width),
-               shape="o", col="black",size=5) +
+  add_voronoi(sequence[[i]]$centers, marker='*') +   #<<
+  geom_point(data=data.frame(sequence[[2]]$centers),   #<<
+             mapping=aes(x=Sepal.Length, y=Sepal.Width),
+             shape="o", col="black",size=5) +
   labs(colour=paste("Cluster, step ", i- 1))
 ```
 
@@ -785,7 +822,11 @@ $$\sum_{j=1}^k  \sum_{i: X_i \in C_j} \bigg\Vert c_j - X_i \bigg\Vert^2$$
 
 ### Lemma
 
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 At each stage, the _within clusters sums of squares_ does not increase
+
+]
 
 
 ---
@@ -796,7 +837,7 @@ Let $\mathcal{C}^{(t)} =\big\{ c^{(t)}_1, \ldots, c_k^{(t)}\big\}$ be the codebo
 
 Let $\big({C}^{(t)}_j\big)_{j \leq k}$ be the clusters after $t$ steps
 
-- Centroids at step $t+1$ as the barycenters of clusters $\big({C}^{(t)}_j\big)_{j \leq k}$
+- Centroids at step $t+1$ are the barycenters of clusters $\big({C}^{(t)}_j\big)_{j \leq k}$
 
 $$c^{(t+1)}_j = \frac{1}{|C_j^{(t)}|} \sum_{X_i \in C^{(t)}_j} X_i$$
 
@@ -847,7 +888,7 @@ by the first two principal components
 
 ### PCA, projection, $k$-means
 
-.fl.w-30.pa2[
+.fl.w-30.pa2.f6[
 The kmeans clustering of the Iris dataset is projected on the first two principal components: `prcomp` is used to perform PCA with neither centering nor scaling
 
 `kmeans` is applied to the rotated data 
@@ -882,12 +923,12 @@ iris_a <- broom::augment(km3, iris_a)
 ggplot(data=iris_a,
        aes(x=.fittedPC1, y=.fittedPC2)) +
     coord_fixed(ratio=1) +
-    stat_voronoi(data=data.frame(km3$centers),
+    stat_voronoi(data=data.frame(km3$centers),    #<<
                      geom="path",
                outline = data.frame(x=c(-12, -4, -4 , -12),
                                     y=c(-3, -3, 4, 4))) +
   geom_point(aes(shape=Species, col=.cluster)) +
-  geom_point(data=data.frame(km3$centers),
+  geom_point(data=data.frame(km3$centers),   #<<
              aes(x=.fittedPC1, y=.fittedPC2),
              shape='+', size=5) +
   xlab("PC1") +
@@ -972,16 +1013,22 @@ the $k$-means cost (sum of within clusters sum of squares) is __computationally 
 
 ### Theorem NP-hardness of k-means cost minimization
 
-Mininizing the $k$-means cost (sum of within clusters sum of squares) is NP-hard.
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Mininizing the $k$-means cost (sum of within clusters sum of squares) is $\mathsf{NP}$ -hard.
+
+]
 
 ---
+
+### Statistical/information-theoretical issues
 
 Even though minimizing the $k$-means cost is hard,
 one may investigate the statistical problem raised by minimizing the $k$-means cost.
 
 Showcase for empirical process theory.
 
-Initiated by David Pollard  [@Pol84], significant progress during recent years [@MR3080408], [@MR3316191].
+Initiated by David Pollard `r Citet(myBib, "Pol84")`, significant progress during recent years `r Citet(myBib, "MR3080408")`, `r Citet(myBib, "MR3316191")`
 
 The $k$-means cost provides a concrete illustration of a recurrent situation. If the sampling distribution
 is square integrable and has a density with respect to Lebesgue measure, the mapping  $\mathsf{R}(\mathbf{c})$
@@ -989,13 +1036,16 @@ is differentiable, its gradient can be explicitly computed.
 
 ---
 
+### Smoothness of _k_-means cost
+
 Whereas the local behavior of the $k$-means cost is simple, the global behavior remains elusive.
+
 Bounding the number of global minima, local minima, local extrema and saddlepoints   is difficult.
 
 Observation: under fairly general assumptions,
-the $k$-means cost function is twice differentiable in the neighborhood of optimal codebooks [@Pol84].
+the $k$-means cost function is twice differentiable in the neighborhood of optimal codebooks `r Cite(myBib, "Pol84")`
 
-Even though the $k$-means cost function is not convex, recent advances tell us that if sample size tends to infinity,  an empirical cost functions will also share local minima, local maxima, and local saddlepoints with the  theoretical population cost function [@MR3851754]
+Even though the $k$-means cost function is not convex, recent advances tell us that if sample size tends to infinity,  an empirical cost functions will also share local minima, local maxima, and local saddlepoints with the  theoretical population cost function `r Cite(myBib, "MR3851754")`
 
 ---
 
@@ -1005,12 +1055,17 @@ Even though the $k$-means cost function is not convex, recent advances tell us t
 
 - The Hessian matrix of the mapping $\mathbf{c} \mapsto \mathsf{R}(\mathbf{c})$ is positive definite for all optimal codebooks
 
----
+--
 
 Under Pollard's regularity conditions, let $\mathbf{c}^*$ denote the optimal codebook, and $\widehat{\mathbf{c}}_n$ denote the optimal empirical codebook
 
-Large sample  behavior of the empirically optimal codebook: $\sqrt{n}\|\widehat{\mathbf{c}}_n - \mathbf{c}^*\|$ is asymptotically normal
-and $n \left( \mathsf{R}(\widehat{\mathbf{c}}_n) - \mathsf{R}(\mathbf{c}^*)\right)$ is stochastically bounded.
+Large sample  behavior of the empirically optimal codebook: 
+
+- $\sqrt{n}\|\widehat{\mathbf{c}}_n - \mathbf{c}^*\|$ is asymptotically normal
+
+and 
+
+- $n \left( \mathsf{R}(\widehat{\mathbf{c}}_n) - \mathsf{R}(\mathbf{c}^*)\right)$ is stochastically bounded
 
 ---
 
@@ -1022,7 +1077,36 @@ Pollard's condition entails
 that 
 
 for some constant $\kappa_0>0$,
+
 $$\mathsf{R}(\mathbf{c}) - \mathsf{R}(\mathbf{c}^*) \geq \kappa_0 \|\mathbf{c}- \mathbf{c}^*\|^2$$
+
+---
+
+### References 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+NoCite(myBib, "MR3851754")
+NoCite(myBib, "MR3080408")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "zbMATH06322139")
+# NoCitet(myBib, "boucheronlugosimassart2013")
+```
+
+.f6[
+
+```{r, 'references', results='asis', echo=FALSE, message=FALSE, warning=FALSE}
+PrintBibliography(myBib, start=1, end=10)
+```
+]
+
+
+
+
+
+
+
+
 
 
 ---
