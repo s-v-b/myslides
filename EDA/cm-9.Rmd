@@ -1,12 +1,12 @@
 ---
-title: "EDA IX"
-subtitle: "⚔<br/>Statistiques Master I, MFA et MIDS"
+title: "EDA IX: Hierarchical Clusterin"
+subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,99 +22,583 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
 ---
 name: layout-general
 layout: true
 class: left, middle
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
 ```
 
 
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
 
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
 
-xaringanExtra::use_panelset()
 
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
-
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+NoCite(myBib, "MR3851754")
+NoCite(myBib, "MR3080408")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "zbMATH06322139")
+NoCite(myBib, "Har75")
+NoCite(myBib, "MR2677125")
+NoCite(myBib, "HaTiFr01")
+NoCite(myBib, "Mur12")
 ```
 
 ---
-class: middle, center, inverse
+class: middle, left, inverse
 
 
 
-# Exploratory Data Analysis IX MCA
+# Exploratory Data Analysis IX Hierarchical Clustering
 
 ### `r Sys.Date()`
 
 #### EDA Master I MIDS et MFA
 
+#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: middle, inverse
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla 1
+### [bla](#bla)
 
-### Bla 2
+### [bla](#bla)
 
-### Bla 3
+### [bla](#bla)
 
-### Bla 4
+### [bla](#bla)
+
+### [bla](#bla)
+
+---
+
+
+# Hierarchical clustering   {#hclust}
+
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+pacman::p_load("ggdendro")
+pacman::p_load("fastcluster")
+data("iris")
+```
+
 
 ---
 
----
+### Iris illustration
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r PlotClusters, echo=FALSE}
+PlotClusters <- function(CoordPoints, Col = NULL) {
+  if (is.null(Col)) {
+    Col = sample(1:nrow(CoordPoints))
+  }
+  ggplot(data.frame(X = CoordPoints[, 1, drop = TRUE],
+                    Y = CoordPoints[, 2, drop = TRUE],
+                    Col = Col),
+         aes(x = X, y = Y)) +
+    geom_point(aes(colour = Col), size = 2) +
+    guides(color = FALSE) +
+    coord_fixed()
+}
+```
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+  fig.height = 4
+)
+```
+
+]
+
+.panel[.panel-name[Code 2]
+```{r iris-hclust-dendro, echo=TRUE, fig.show="hide"}
+iris %>%
+  select_if(is.numeric) %>%
+  dist() %>% 
+  hclust() ->
+  iris_hclust
+
+iris_3 <- cutree(iris_hclust, 
+                 k=3)
+
+{{ggdendrogram(iris_hclust)}}
+```
+]
+
+
+
+
+.panel[.panel-name[Plot]
+![](`r knitr::fig_chunk("iris-hclust-dendro", "png")`)
+]
+
+
+]
+
 
 ---
+
+
+### Iris illustration
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r iris-hclust-1, echo=TRUE, fig.show="hide"}
+p <- iris %>%
+  ggplot() + 
+  aes(x=Petal.Length, y=Petal.Width)
+
+p + 
+  geom_point(aes(shape=Species)) +
+  labs(shape= "Species") +
+  ggtitle(label= "Iris data", 
+          subtitle = "Species")
+```
+]
+
+
+.panel[.panel-name[Plot]
+
+![](`r knitr::fig_chunk("iris-hclust-1", "png")`)
+
+]
+
+]
+---
+
+### Iris illustration
+
+.panelset[
+
+.panel[.panel-name[Code] 
+
+```{r iris-hclust-2, fig.show="hide"}
+p +
+  geom_point(aes(shape=Species,
+                 colour=factor(iris_3))) +
+  labs(colour= "Clusters") +
+  ggtitle("Iris data", 
+          "Hierarchical clustering")
+```
+
+]
+
+.panel[.panel-name[Dendrogram]
+
+![](`r knitr::fig_chunk("iris-hclust-2", "png")`)
+
+]
+]
+---
+
+### Iris illustration
+
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r iris-hclust-3, fig.show="hide"}
+p +
+  geom_point(aes(shape=Species,
+                 colour=factor(iris_3))) +
+  labs(colour= "Clusters") +
+  labs(shape="Species") +
+  ggtitle("Iris data", 
+          "Hierarchical clustering and Species")
+```
+]
+
+.panel[.panel-name[Plot]
+
+![](`r knitr::fig_chunk("iris-hclust-3", "png")`)
+
+]
+
+]
+
+---
+
+### Iris illustration
+
+.panelset[
+
+.panel[.panel-name[Code]
+```{r iris-hclust-4, fig.show="hide"}
+{{iris_2 <- cutree(iris_hclust, 2)}}
+
+p +
+  geom_point(aes(shape=Species,
+                 colour=factor(iris_2))) +
+  labs(colour= "Clusters") +
+  labs(shape="Species") +
+  ggtitle("Iris data", 
+          "Clustering in 2 classes and Species")
+```
+]
+
+.panel[.panel-name[Plot]
+
+
+![](`r knitr::fig_chunk("iris-hclust-4", "png")`)
+
+]
+
+]
+
+---
+
+### Iris illustration
+
+.panelset[
+
+.panel[.panel-name[Code]
+```{r iris-hclust-5, fig.show="hide"}
+{{iris_4 <- cutree(iris_hclust, 4)}}
+
+p +
+  geom_point(aes(shape=Species,
+                 colour=factor(iris_4))) +
+  labs(colour= "Clusters") +
+  labs(shape="Species") +
+  ggtitle("Iris data", 
+          "Clustering in 4 classes and Species")
+```
+]
+
+.panel[.panel-name[Plot]
+![](`r knitr::fig_chunk("iris-hclust-5", "png")`)
+
+]
+
+]
+
+
+---
+
+### Questions 
+
+- How to build the dendrogram? 
+
+- How to choose the cut?
+
+
+---
+
+### All [hierarchical agglomerative clustering methods (HACMs)](https://en.wikipedia.org/wiki/Hierarchical_clustering) can be described by the following general algorithm.
+
+1. At each stage distances between clusters are recomputed by the _Lance-Williams dissimilarity update formula_ according to the particular clustering method being used.
+
+1. Identify the 2 closest _points_ and combine them into a cluster (treating existing clusters as points too)
+
+1. If more than one cluster remains, return to step 1.
+
+---
+
+
+- hierarchical agglomerative clustering methods are examples of _greedy algorithms_
+
+- Greedy algorithms sometimes compute _optimal solutions_
+
+  + Huffmann coding (Information Theory)
+
+  + Minimum spanning tree (Graph algorithms)
+  
+- Greedy algorithms sometimes compute _sub-optimal solutions_ 
+
+  + Set cover (NP-hard problem)
+  
+  + ... 
+
+- Efficient greedy algorithms rely on ad hoc data structures 
+
+  + Priority queues 
+  
+  + Union-Find 
+
+---
+
+### Algorithm (detailed)
+
+- Start with $(\mathcal{C}_{i}^{(0)})= (\{ \vec{X}_i \})$ the collection
+  of all singletons.
+
+- At step $s$, we have $n-s$ clusters $(\mathcal{C}_{i}^{(s)})$:
+
+  -   Find the two most similar clusters according to a criterion
+        $\Delta$: $$(i,i') = \operatorname{argmin}_{(j,j')} \Delta(\mathcal{C}_{j}^{(s)},\mathcal{C}_{j'}^{(s)})$$
+
+  -   Merge $\mathcal{C}_{i}^{(s)}$ and $\mathcal{C}_{i'}^{(s)}$ into
+        $\mathcal{C}_{i}^{(s+1)}$
+
+  -   Keep the $n-s-2$ other clusters
+        $\mathcal{C}_{i''}^{(s+1)} = \mathcal{C}_{i''}^{(s)}$
+
+-   Repeat until there is only one cluster left
+
+---
+
+### Analysis
+
+-   Complexity: $O(n^3)$ in general.
+
+-   Can be reduced to $O(n^2)$ (sometimes to $O(n \log n)$)
+
+    -   if the number of possible mergers for a given cluster is  bounded.
+
+    -   for the most classical distances by maintaining a nearest
+        neighbors list.
+
+---
+
+
+### Merging criterion based on the distance between points
+
+-   .red[Minimum linkage]: 
+$$\Delta(\mathcal{C}_i, \mathcal{C}_j) =\min_{\vec{X}_i \in \mathcal{C}_i} \min_{\vec{X}_j \in    \mathcal{C}_j} d(\vec{X}_i, \vec{X}_j)$$
+
+-   .red[Maximum linkage]: 
+$$\Delta(\mathcal{C}_i, \mathcal{C}_j) = \max_{\vec{X}_i \in \mathcal{C}_i} \max_{\vec{X}_j \in    \mathcal{C}_j} d(\vec{X}_i, \vec{X}_j)$$
+
+-   .red[Average linkage]: 
+$$\Delta(\mathcal{C}_i, \mathcal{C}_j) =\frac{1}{|\mathcal{C}_i||\mathcal{C}_j|} \sum_{\vec{X}_i \in    \mathcal{C}_i}\sum_{\vec{X}_j \in \mathcal{C}_j} d(\vec{X}_i, \vec{X}_j)$$
+
+---
+
+###  Clustering based on the proximity
+
+Merging criterion based on the inertia (distance to the mean)
+
+-   Ward's criterion:
+
+
+$\Delta(\mathcal{C}_i, \mathcal{C}_j) = \sum_{\vec{X}_i \in \mathcal{C}_i} \left( d^2(\vec{X}_i, \mu_{\mathcal{C}_i \cup \mathcal{C}_j} ) - d^2(\vec{X}_i, \mu_{\mathcal{C}_i}) \right) +$ 
+
+$\qquad\qquad \qquad \sum_{\vec{X}_j \in \mathcal{C}_j} \left( d^2(\vec{X}_j, \mu_{\mathcal{C}_i \cup \mathcal{C}_j} ) - d^2(\vec{X}_j, \mu_{\mathcal{C}_j}) \right)$
+
+
+-   If $d$ is the euclidean distance:
+$$\Delta(\mathcal{C}_i, \mathcal{C}_j) = \frac{2 |\mathcal{C}_i||\mathcal{C}_j|}{|\mathcal{C}_i|+ |\mathcal{C}_j|} d^2(\mu_{\mathcal{C}_i}, \mu_{\mathcal{C}_j})$$
+
+
+---
+
+
+### Views on Inertia:
+
++ $$I   = \frac{1}{n} \sum_{i=1}^n \|\vec{X}_i - m \|^2$$
+
++ $$I = \frac{1}{2n^2} \sum_{i,j} \|\vec{X}_i - \vec{X}_j\|^2$$
+
+
+Twice the  mean squared distance to the mean equals the  mean squared distance between sample points
+
+
+---
+
+
+### Decompositions of inertia (Huyghens formula)
+
+- Sample  $x_1,\ldots, x_{n+m}$ with mean $\bar{X}_{n+m}$  and  variance $V$
+
+- Partition  $\{1,\ldots,n+m\} = A \cup B$  with   $|A|=n, |B|=m$, $A \cap B =\emptyset$
+
+- Let $\bar{X}_n = \frac{1}{n}\sum_{i \in A} X_i$ and $\bar{X}_m=\frac{1}{m}\sum_{i \in B}X_i$
+$$\bar{X}_{n+m} =  \frac{n}{n+m} \bar{X}_{n}  +\frac{m}{n+m} \bar{X}_{m}$$
+
+- Let $V_A$  be the variance of $(x_i)_{i\in A}$, $V_B$ be the  variance of $(x_i)_{i\in B}$
+
+---
+
+### Decompositions of inertia (Huyghens formula)
+
+- Let $V_{\text{between}}$ be the  variance of a ghost sample with   $n$ copies of $\bar{X}_n$ and $m$ copies of $\bar{X}_m$
+$$V_{\text{between}} =  \frac{n}{n+m} (\bar{X}_n -\bar{X}_{n+m})^2 + \frac{m}{n+m} (\bar{X}_m -\bar{X}_{n+m})^2$$
+
+- Let $V_{\text{within}}$ be the weighted mean of variances within classes $A$ and $B$
+$$V_{\text{within}}  = \frac{n}{n+m}  V_A + \frac{m}{n+m} V_B$$
+
+---
+
+### Decompositions of inertia (Huyghens formula)
+
+
+
+**Proposition** (Huyghens i)
+$$V = V_{\text{within}} +  V_{\text{between}}$$
+
+
+---
+
+
+### Huyghens formula can be extended to any number of classes
+
+
+**Proposition** (Huyghens ii)
+
+- Sample  $\vec{x}_1, \ldots,\vec{x}_n$  from $\mathbb{R}^p$ with mean $\bar{X}_n$, inertia  $I$.
+Let $A_1, A_2\ldots, A_k$ be a partition of
+$\{1,\ldots,n\}$.
+
+- Let $I_\ell$ (resp. $\bar{X}^\ell$) be the inertia (resp. the mean) of sub-sample $\vec{x}_i, i\in A_\ell$
+
+- Let $I_{\text{between}}$ be the inertia of the ghost sample, formed by  $|A_1|$ copies of $\bar{X}^1$,  $|A_2|$ copies of $\bar{X}^2$,  ...
+ $|A_k|$ copies of $\bar{X}^k$ 
+ 
+- Let $I_{\text{within}} =  \sum_{\ell=1}^k \frac{|A_\ell|}{n}  I_\ell$
+
+$$I =   I_{\text{within}} +  I_{\text{between}}$$  
+
+---
+
+### How to apply general algorithm?
+
+- Lance-Williams dissimilarity update formula calculates dissimilarities between a new cluster and existing points, based on the dissimilarities prior to forming the new cluster.
+
+- This formula has 3 parameters,
+
+- Each HACM is characterized by its own set of Lance-Williams parameters.
+
+---
+
+### Implementations of the general algorithm:
+
++ .red[Stored matrix approach]: Use matrix, and then apply Lance-Williams to recalculate dissimilarities between cluster centers. Storage  $O(N^2)$ and time at least $O(N^2)$, but is $\Theta(N^3)$ if matrix is scanned linearly.
+
++ .red[Stored data approach]: $O(N)$ space for data but recompute pairwise dissimilarities, needs $\Theta(N^3)$ time
+
++ .red[Sorted matrix approach]: $O(N^2)$ to calculate dissimilarity matrix, $O(N^2 \log N)$ to sort it, $O(N^2)$ to construct hierarchy, but one need not store the data set, and the matrix can be processed linearly, which reduces disk accesses.
+
+
+
+---
+
+
+### Agglomerative Clustering Heuristic
+
+
+-   Start with very small clusters (a sample point by cluster?)
+
+-   Merge iteratively the most similar clusters according to some *greedy* criterion $\Delta$.
+
+-   Generates a _hierarchy of clusterings_ instead of a single one.
+
+-   Need to select the number of cluster afterwards.
+
+-   Several choice for the merging criterion
+
+-   Examples:
+
+    -   _Minimum Linkage_: merge the closest cluster in term of the usual
+        distance
+
+    -   _Ward's criterion_: merge the two clusters yielding the less inner
+        inertia loss (minimum variance criterion)
+
+---
+
+
+
+##  Scalability
+
+---
+
+### Large dataset issue
+
+-   When $n$ is large, a $O(n^\alpha \log n)$ with $\alpha>1$ is not
+    acceptable!
+
+-   .red[Beware:] Computing all the pairwise distance requires
+    $O(n^2)$ operations!
+
+---
+
+## Other Approaches
+
+---
+
+### Grid based heuristic
+
+-   Split the space in pieces
+
+-   Group those of high density according to their proximity
+
+
+
+- Similar to density based estimate (with partition based initial
+    clustering)
+
+- Space splitting can be fixed or adaptive to the data.
+
+- Linked to Divisive clustering (DIANA)
+
+---
+
+## Building a tree  {#treebuilding}
+
+## Single-linkage  {#singlelinkage}
+
+---
+
+## Ward  {#ward}
+
+---
+ 
+## Cutting a tree  {#cuttingtree}
+
+---
+
+## Visualizations {#vizhclust}
+
+---
+
+## Recent developments {#devhclust}
+
+---
+
+## Bibliographic remarks {#bibhclust}
+
+.f6[
+
+```{r, 'references', results='asis', echo=FALSE, message=FALSE, warning=FALSE}
+PrintBibliography(myBib)
+```
+
+]
+
+
+
 
 ---
 class: middle, center, inverse

@@ -55,8 +55,5 @@ opts_chunk$set(warning = FALSE,
                tidy = FALSE,
                fig.retina = 4)
 
-pacman::p_load(data.table, quietly = TRUE, warn.conflicts = FALSE)
-
-
-
+pacman::p_load(data.table)
 ```
