@@ -39,6 +39,13 @@ class: left, middle
 ```
 
 
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+pacman::p_load("ggdendro")
+pacman::p_load("fastcluster")
+data("iris")
+```
+
+
 ```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
 require(RefManageR, quietly = TRUE)
 BibOptions(check.entries = FALSE,
@@ -85,7 +92,7 @@ class: middle, inverse
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [bla](#bla)
+### [Hierarchical Clustering: the idea](#bigpic)
 
 ### [bla](#bla)
 
@@ -96,16 +103,26 @@ class: middle, inverse
 ### [bla](#bla)
 
 ---
+template: inter-slide
+name: bigpic
+
+## Hierarchical clustering   
 
 
-# Hierarchical clustering   {#hclust}
+???
 
+- Dendrogram : what is it?
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-pacman::p_load("ggdendro")
-pacman::p_load("fastcluster")
-data("iris")
-```
+- From dendrogram to clusterings: cutting a dendrogram
+
+- Grow a dendrogram
+
+- Displaying a dendrogram
+
+- Validation and assesment 
+
+---
+
 
 
 ---
@@ -164,6 +181,12 @@ iris_3 <- cutree(iris_hclust,
 
 ]
 
+
+??? 
+
+- Using `broom::augment` 
+- There is no `augment.hclust` method: `No augment method for objects of class hclust`
+- 
 
 ---
 

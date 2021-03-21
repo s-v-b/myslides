@@ -1,0 +1,116 @@
+---
+title: "EDA X: Model-based Clustering"
+subtitle: "Statistiques Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/12/11 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+pacman::p_load("ggdendro")
+pacman::p_load("fastcluster")
+data("iris")
+```
+
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
+```
+
+
+
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+NoCite(myBib, "MR3851754")
+NoCite(myBib, "MR3080408")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "zbMATH06322139")
+NoCite(myBib, "Har75")
+NoCite(myBib, "MR2677125")
+NoCite(myBib, "HaTiFr01")
+NoCite(myBib, "Mur12")
+```
+
+---
+class: middle, left, inverse
+
+
+
+# Exploratory Data Analysis X Model-Based Clustering
+
+### `r Sys.Date()`
+
+#### EDA Master I MIDS et MFA
+
+#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+
+---
+class: middle, inverse
+
+## `r fontawesome::fa("map", fill="white")`
+
+### [Hierarchical Clustering: the idea](#bigpic)
+
+### [bla](#bla)
+
+### [bla](#bla)
+
+### [bla](#bla)
+
+### [bla](#bla)
+
+---
+
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: cover
+
+
+# The End
