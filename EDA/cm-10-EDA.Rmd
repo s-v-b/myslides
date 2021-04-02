@@ -42,7 +42,10 @@ class: left, middle
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 pacman::p_load("ggdendro")
 pacman::p_load("fastcluster")
+pacman::p_load("mixdist")
+pacman::p_load("factoextra")
 data("iris")
+data("pearson")
 ```
 
 
@@ -70,6 +73,7 @@ NoCite(myBib, "Har75")
 NoCite(myBib, "MR2677125")
 NoCite(myBib, "HaTiFr01")
 NoCite(myBib, "Mur12")
+NoCite(myBib, "moitra2018algorithmic")
 ```
 
 ---
@@ -92,18 +96,1013 @@ class: middle, inverse
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [Hierarchical Clustering: the idea](#bigpic)
+### [Model Based Clustering: the idea](#bigpic)
 
-### [bla](#bla)
+### [Gaussian Mixture Models](#gmm)
 
-### [bla](#bla)
+### [EM Algorithm](#em)
 
-### [bla](#bla)
+### [Mclust](#mclust)
 
-### [bla](#bla)
+???
+
+
+### [DBscan](#dbscan)
+
+
+---
+template: inter-slide
+name: bigpic
+
+## Model based clustering: the idea
 
 ---
 
+### Mixture models
+
+Many natural statistics, such as the distribution of people’s heights, can be
+modeled as a _mixture of Gaussians_
+
+The _components of the mixture_ represent
+the parts of the distribution coming from different subpopulations
+
+If we
+don’t know about the subpopulations in advance, can we figure out what they
+are and estimate their parameters?
+
+Can we  classify samples based on
+which subpopulation they are likely to have come from?
+
+???
+
+
+The first provable guarantees for his method.
+
+Building on this, we will solve the highdimensional
+learning problem too. Along the way, we will develop insights
+about systems of polynomial equations and how they can be used for parameter
+learning.
+
+
+---
+
+
+The one-dimensional case was introduced by
+Karl Pearson
+
+
+Karl Pearson introduced
+
+- The _method of moments_ for estimating the parameters of a distribution
+
+- _Mixture models_ for modeling the presence of subpopulations
+
+.f6[
+> Pearson, K. (1894). _Contributions to the mathematical theory of evolution_. Phil. Trans. Roy. Soc. London A 185, 71-110.
+]
+
+---
+
+### Histogram for Naples crabs data
+
+.fl.w-40.f6.pa2[
+```{r histo_crab, message=FALSE, warning=FALSE, out.width="100%", fig.show='hide'}
+data("pearson")
+
+p <- pearson %>%
+  mutate(dens=250*freq/sum(freq)) %>%
+  ggplot() +
+  aes(x=c(.58, ratio[1:28]),
+      y=dens) +
+  geom_step(direction = 'hv') +
+  xlab("") +
+  ylab("density") +
+  ggtitle("Naples crabs")
+
+p
+```
+
+> Mrs and Mr Weldon collected 1,000 Naples crabs
+and measured 23 different physical attributes of each of them.
+
+
+
+]
+
+.fl.w-60.pa2[
+
+![](`r knitr::fig_chunk("histo_crab", "png")`)
+
+.f6[
+
+> All but one of these statistics was approximately
+Gaussian.
+
+> So why weren’t they all Gaussian?
+
+]
+]
+
+???
+
+
+---
+
+### Crabs modeling
+
+Heuristic 1 `r fontawesome::fa("lightbulb")`: Naples crabs do not form a single population but mixture of two subpopulations
+
+Heuristic 2 `r fontawesome::fa("lightbulb")`: Each subpopulation is approximately Gaussian
+
+$$\pi_1 \times \frac{1}{\sigma_1}\phi\left(\frac{\cdot - \mu_1}{\sigma_1}\right) + (1- \pi_1) \times \frac{1}{\sigma_2}\phi\left(\frac{\cdot - \mu_2}{\sigma_2}\right)$$
+
+$\theta= (\pi_1, \mu_1, \sigma_1, \mu_2, \sigma_2) \in [0,1] \times \left(\mathbb{R} \times ]0, \infty)\right)^2$
+
+`r fontawesome::fa("exclamation-triangle")` this mixture model is not _identifiable_
+
+
+???
+
+.f6[
+
+> Although not as good a fit as a mixture of two normals, a single Weibull component is an acceptable fit at the 1% level of significance. Since there was no independent biological evidence that the population was a mixture, the fact that a mixture of normals fits well does not prove that there are two species of crabs.
+
+.fr[
+[http://ms.mcmaster.ca/peter/mix/demex/excrabs.html](http://ms.mcmaster.ca/peter/mix/demex/excrabs.html)]
+
+]
+
+---
+
+### A system of polynomial equations
+
+If $X \sim \mathcal{N}(0,1)$,
+
+$$M_k := \mathbb{E} X^k =  \begin{cases} 0 & \text{if } k\equiv 1 \mod 2\\  \frac{k!}{2^{k/2} (k/2)!}&\text{otherwise}\end{cases}$$
+
+$Y \sim \mathcal{N}(\mu,\sigma^2) \sim \mu + \sigma X$
+
+$$\mathbb{E} Y^k = \sum_{r=0}^k  \binom{k}{r} \mu^{r-k} \sigma^k M_k$$
+
+Moments of mixtures of Gaussians are convex combinations of Gaussian moments
+
+Matching empirical moments $\widehat{M}_k$ with Gaussian Mixtures moments lead to
+a collection of polynomial equations
+
+$$\widehat{M}_k = \pi_1 \sum_{r=0}^k  \binom{k}{r} \mu_1^{r-k} \sigma_1^k M_k +(1-\pi_1)\sum_{r=0}^k  \binom{k}{r} \mu_2^{r-k} \sigma_2^k M_k \qquad\text{for } k \leq 5$$
+
+
+---
+
+### `r fontawesome::fa("baby")` The birth of the method of moments
+
+Pearson solved the system of polynomial equations by hand, and he
+found a number of candidate solutions.
+
+Each solution corresponds to a way to
+set all five unknown parameters so that the _moments of the mixture_ match the
+_empirical moments_
+
+Some of the solutions were clearly not right; some had negative values for
+the variance, or a value for the mixing weight $\pi_1$ that was not between zero and
+one
+
+After eliminating these solutions, Pearson was still left with
+more than one candidate solution.
+
+His approach was to choose the candidate
+whose prediction was closest to the empirical sixth moment.
+
+This is called the _sixth moment test_
+
+---
+
+### Naples crabs and Gaussian mixtures
+
+.fl.w-70.pa2[
+```{r crabs-gmm, echo=FALSE}
+pi1 <- .5; mu1 <- .6343;  mu2 <-.6551; sigma1 <- .0190 ; sigma2 <- .0121
+
+foo <- function(x){
+   (1-pi1) * dnorm(x, mean = mu2, sd = sigma2)
+}
+
+bar <- function(x){
+  pi1 * dnorm(x, mean = mu1, sd = sigma1)
+}
+
+
+p +
+  stat_function(fun=foo, xlim = c(.58,.7), linetype=2) +
+  stat_function(fun=bar, linetype=3) +
+  stat_function(fun= ~ foo(.) + bar (.), linetype=4) +
+  ggtitle("Naples crabs, GMM fitting")
+
+```
+]
+
+
+.fl.w-30.pa2.f6[
+
+- $\pi_1 =.5$
+
+- $\mu_1 = .6343$
+
+- $\sigma_1=.0190$
+
+- $\mu_2 = .0190$
+
+- $\sigma_2 = .0121$
+
+
+`r fontawesome::fa("exclamation")` This is not the Pearson fit
+]
+
+???
+
+Pearson (1894) analysed this histogram by the method of moments. The calculation was formidable and done without the aid of computing machinery of any kind. He found two solutions, one with 41.45% of the population in the first component and 58.55% in the second, the other with 53.28% in the first component and 46.72% in the second. He preferred the first solution on the basis of agreement with the sixth moment. MIX does not converge to a unique solution if all parameters are unconstrained. The iterations wander between a 6:4 and 4:6 ratio for the two components, with no fit being significantly better than any other. The standard errors of the proportions are quite large. The fit shown here resolves this uncertainty by constraining the proportions to be equal. The presence of two components was interpreted by Pearson as evidence that there were two species of crabs. I know of no biological justification for constraining the proportions to be equal, but the fit obtained is excellent. Constraining the standard deviations to be equal does not give an acceptable fit.
+
+[From mixdist](http://ms.mcmaster.ca/peter/mix/demex/excrabs.html)
+
+---
+
+### `r fontawesome::fa("binoculars")` Mixture distributions
+
+In model-based clustering, one assumes that observed  data $x_1, \ldots, x_n$ are i.i.d. from some _mixture_ distribution
+
+Assume we have a parametric model, that is $\Theta \subseteq \mathbb{R}^p$, and a collection $(P_\theta)_{\theta \in \Theta}$ of probability distributions over the space of observations
+
+The model is assumed to be dominated and equipped with a density $p( \cdot \mid \theta)$ for each $P_\theta$
+
+We also have a finite latent state space $\mathcal{Z}$ ( $|\mathcal{Z}|=K$ )
+
+We denote by $\mathcal{M}(\mathcal{Z})$ the set of probability distributions over $\mathcal{Z}$ (multinomial distribution).
+
+A $K$-mixture distribution, is defined by a _mixing_ distribution $\pi \in \mathcal{M}(\mathcal{Z})$ and $K$ parameters $(\theta_z)_{z\in \mathcal{Z}}$ each belonging to $\Theta$
+
+The mixture distribution over _observation space_ has density
+$$p(\cdot \mid \pi, \theta) =\sum_{z \in \mathcal{Z}} \pi(z) \times p(\cdot | \theta_z )$$
+
+The parameter space for mixture distributions is $\mathcal{M}(\mathcal{Z}) \times \Theta^{|\mathcal{Z}|}$
+
+`r fontawesome::fa("exclamation-triangle")` with these conventions, mixture distributions are not _identifiable_
+
+
+---
+
+### Sampling from a mixture distribution
+
+Sampling from $\sum_{z \in \mathcal{Z}} \pi(z) \times p(\cdot | \theta_z )$
+can be done in two steps
+
+1. Generate the _latent_ variable $Z$ from the mixing distribution $\pi$
+
+2. Generate the _observed_ variable $X$ according to $p(\cdot | \theta_Z)$
+
+The couple $(Z, X)$ defines the _complete_ datum
+
+The mixture distribution defines joint distribution for $(Z, X)$ with density $\pi(z)\times p(x \mid \theta_z)$
+
+---
+
+### Conditional distributions
+
+$p(\cdot | \theta_Z)$ also denoted $p(\cdot \mid \theta, Z)$ may be viewed as the conditional density of the observed variable $X$ given the latent variable $Z$ (and in Bayesian perspective as the conditional density of $X$ with respect to $Z$ and $\theta$)
+
+Analogously,
+$$p(z \mid x, \pi, \theta) = \frac{\pi(z)\times p(x \mid \theta_z)}{\sum_{z' \in \mathcal{Z}} \pi(z') \times p(\cdot | \theta_{z'} )}$$
+is the posterior density/probability of latent state/variable $z$ given observation $x$
+
+
+---
+exclude: true
+
+
+With each sample point comes a latent or hidden variable that tells which mixture component the sample point comes from
+
+Clusters ideally correspond to _mixture components_
+
+Distributional assumptions on the sampling mechanism allow to analyze the performance of  clustering methods
+
+???
+
+This is another interplay between algorithm analysis and the concentration of measure phenomenon
+
+Back the traditional justification that heuristic methods practically work
+
+
+---
+
+### `r fontawesome::fa("lightbulb")` (Mixture) Model based clustering
+
+
+- Assume the observations $x_1, \ldots, x_n$ come from  i.i.d. sampling from some mixture distribution (from some mixture model)
+
+- Estimate the mixture distribution parameters
+  - $\widehat{\pi} \in \mathcal{M}(\mathcal{Z})$
+  - $\widehat{\theta} = (\widehat{\theta}_z)_{z \in \mathcal{Z}} \in \Theta^{|\mathcal{Z}|}$
+
+- Classify the observations using the estimated mixture distribution parameters
+
+$$\widehat{z}_i =  \arg\max_{z \in \mathcal{Z}} \widehat{\pi}(z) \times p(x_i \mid \widehat{\theta}_z) = \arg\max_{z \in \mathcal{Z}} p(z \mid x_i, \widehat{\pi}, \widehat{\theta})$$
+
+Parameter estimation relies on a likelihood method:
+
+- Maximum Likelihood estimation
+- Bayesion method
+- _Others_ if ML is not computationally feasible
+
+???
+
+- Use a _generative model_ of the data:
+
+$$\Pr{\vec{X}} = \sum_{k=1}^{K} \pi_k \Pr_{\theta_k}\bigg\{\vec{X}| k\bigg\}$$
+
+where $\pi_k$ are proportions and $\Pr_{\theta_k}\bigg\{\vec{X}|k\bigg\}$
+are parametric probability models.
+
+- Estimate parameters (often using a _Maximum Likelihood_ principle)
+
+- Assign each observations to the class maximizing the
+_posterior probability_ (obtained by _Bayes formula_)
+
+$$\frac{\widehat{\pi_k}  \Pr_{\widehat{\theta_k}}\bigg\{\vec{X}| k\bigg\}}{\sum_{k'=1}^K \widehat{\pi_{k'}} \Pr_{\widehat{\theta_{k'}}} \bigg\{\vec{X}| k'\bigg\}}$$
+
+---
+exclude: true
+
+### A two classes example
+
+- A mixture $\pi_1 f_1(\vec{X}) + \pi_2 f_2(\vec{X})$
+
+- and the posterior probability $\pi_i f_i(\vec{X})/(\pi_1 f_1(\vec{X}) + \pi_2 f_2(\vec{X}))$
+
+- Natural class assignment!
+
+- A mixture $\pi_1 f_1(\vec{X}) + \pi_ 2 f_2(\vec{X})$
+
+- Two populations with a parametric distribution $f_i$.
+
+???
+
+- Most classical choice: Gaussian distribution (GMM)
+
+---
+exclude: true
+
+### A two classes example: Gaussian setting again
+
+
+- $\vec{X}_1,\ldots,\vec{X}_n$ i.i.d.
+
+- $\vec{X}_i \sim \mathcal{N}(\mu_1,\sigma_1^2)$ with probability
+$\pi_1$ or $\vec{X}_i \sim \mathcal{N}(\mu_2,\sigma_2^2)$ with probability $\pi_2$
+
+- We don't know the parameters $\mu_i$, $\sigma_i$, $\pi_i$
+
+- We don't know from which distribution each $\vec{X}_i$ has been
+drawn
+
+???
+
+Convolution viewpoint when we deal with a location mixture
+
+---
+
+### `r fontawesome::fa("snowplow")` Maximum Likelihood
+
+Log-likelihood with respect to observed data
+
+$$\ell(\theta) = \sum_{i=1}^n \log \left( \sum_{z \in \mathcal{Z}} \pi(z) \times p(x_i | \theta_z )\right)$$
+
+`r fontawesome::fa("frown")` No straightforward way to optimize the parameters!
+
+
+---
+
+### `r fontawesome::fa("ambulance")` What if we knew the latent states?
+
+
+Log-likelihood with respect to complete data
+
+
+$$\begin{array}{rl}\ell_c(\theta) & = \sum_{i=1}^n \log \left( \prod_{z \in \mathcal{Z}} \left(\pi(z) \times p(x_i | \theta_z )\right)^{\mathbb{I}_{z=z_i}}\right)\\ & = \sum_{z\in \mathcal{Z}} \sum_{i=1}^n\mathbb{I}_{z=z_i} \left(\log \pi(z) + \log p(x_i | \theta_z )\right)\end{array}$$
+
+Optimizing Log-likelihood with respect to complete data is as easy as maximizing the likelihood in model $(P_\theta)_{\theta \in \Theta}$
+
+???
+
+- Density:
+$$\pi_1  \Phi(\vec{X},\mu_1,\sigma_1^2) + \pi_2
+\Phi(\vec{X},\mu_2,\sigma_2^2)$$
+
+- $\log$-likelihood:
+$$\mathcal{L}(\theta) = \sum_{i=1}^n \log\left( \pi_1
+\Phi(\vec{X}_i,\mu_1,\sigma_1^2) + \pi_2
+\Phi(\vec{X}_i,\mu_2,\sigma_2^2)
+\right)$$
+
+- No straightforward way to optimize the parameters!
+
+---
+exclude: true
+
+### `r fontawesome::fa("ambulance")` What if?
+
+
+- Assume we know from which distribution each  point has
+been sampled from (we know the latent variables): $Z_i=1$ if from $f_1$ and $Z_i=0$ otherwise
+
+- Complete $\log$-likelihood:
+$$\sum_{i=1}^n  Z_i \log
+\phi(\vec{X}_i -\mu_1,\sigma_1^2)  + (1-Z_i) \log
+\phi(\vec{X}_i -\mu_2,\sigma_2^2)$$
+
+- Easy optimization (at least for Gaussian mixtures)
+
+- `r fontawesome::fa("frown")` But $Z_i$'s are unknown...
+
+---
+
+### `r fontawesome::fa("lightbulb")` Bootstrapping Idea
+
+- Replace each $Z_i$ by its _expectation_ given  current estimate of $\pi, \theta$
+
+- $\mathbb{E}_{\pi, \theta}{Z_i}=\Pr\{Z_i=z| x_i, \pi, \theta\}$ (posterior probability)
+
+- Restimate $\theta$ using a proxy for the complete log-likelihood
+
+- and iterate...
+
+- Can be proved to be a good idea!
+
+
+???
+
+
+---
+template: inter-slide
+name: em
+
+## EM algorithm
+
+
+---
+
+### EM Algorithm
+
+Dempster–Laird–Rubin (1977) after several others.
+
+- (Random) initialization: $\pi^0$, $\theta^0_z, z \in \mathcal{Z}$,
+
+
+- Repeat (until ?):
+  - __Expectation__ (with respect to current posterior probability):
+
+  + Compute _responsibilities_:  $r^i_z = \Pr\{Z_i=z|\pi^t \theta^t\}$
+  + This defines
+       $$(\pi, \theta) \mapsto \sum_{z\in \mathcal{Z}} \sum_{i=1}^n r^i_z \left(\log \pi(z) + \log p(x_i | \theta_z )\right)$$
+  - __Maximization__  with respect to $\pi, \theta$ of
+$$\sum_{z\in \mathcal{Z}} \sum_{i=1}^n r^i_z \left(\log \pi(z) + \log p(x_i | \theta_z )\right)$$
+
+
+See [Expectation-Maximinization](https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm)
+
+???
+
+$\sum_{z\in \mathcal{Z}} \sum_{i=1}^n r^i_z \left(\log \pi(z) + \log p(x_i | \theta_z )\right)$
+
+
+---
+
+### Why EM?
+
+Because, like _k_-means, EM is a heuristic attempt to solve a difficult computational problem, EM needs to be motivated
+
+We will just check, that like for _k_-means, each iteration of EM increases the log-likelihood
+
+EM converges towards a local maximum (or a saddlepoint) of the log-likelihood
+
+This result is proved without too many assumptions on the component model
+
+As for _k_-means, initialization matters
+
+
+Establishing that under further assumptions, EM does with high probability converge towards a global maximum, and that it provides a consistent estimation procedure has attracted a lot of work during the last 15 years
+
+
+---
+exclude: true
+
+### Comparison with _k_-means
+
+
+Soft assignment (whereas $k$-means proceeds by hard assignment)
+
+
+---
+
+### About the proxy for log-likelihood maximinization
+
+- Log-likelihood with respect to observed data
+
+$$\ell_n(\pi, \theta) = \sum_{i=1}^n \log \left(\sum_{z \in \{1, \ldots, k\}} p(x_i, z \mid \pi, \theta)\right)$$
+
+Latent variables $(z_i)_{i \leq n}$ make computations expensive. In some mixture models, computing $\ell_n(\theta)$ for a spectific $\theta$ may be costly. Optimizing $\ell_n(\theta)$ with respect to $\theta$ is usually costly
+
+- Log-likelihood with respect to _complete data_
+
+$$\ell_c(\theta) = \sum_{i=1}^n \log \left( p(x_i, z_i \mid \pi, \theta)\right)$$
+
+may be easy to compute and even to optimize (for example for Gaussian mixtures)
+
+---
+
+### A lower bound for log-likelihood with respect to observed data
+
+
+For each $i\leq n$,  let $q_i$ be any positive probability mass function over $\mathcal{Z}$
+
+$$\begin{array}{rl}\ell(\pi, \theta) & = \sum_{i=1}^n \log \left(\sum_{z_i \in \mathcal{Z}} p(x_i, z_i \mid \pi, \theta)\right)\\ & = \sum_{i=1}^n \log \left(\sum_{z_i \in \mathcal{Z}} q_i(z_i) \frac{p(x_i, z_i \mid \pi, \theta)}{q_i(z_i)}\right)\\ & \geq \sum_{i=1}^n \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( \frac{p(x_i, z_i \mid pi, \theta)}{q_i(z_i)}\right)\end{array}$$
+
+Let us denote the right-hand-side of the inequality by $Q(\pi, \theta, q)$
+where $q$ stands for the sequence $q_1, \ldots q_n$
+
+---
+
+### Reshaping the lower bound
+
+$$\begin{array}{rl} Q(\pi, \theta, q) & = \sum_{i=1}^n \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( \frac{p(x_i, z_i \mid \pi,\theta)}{q_i(z_i)}\right)\\ & = \sum_{i=1}^n \left[\mathbb{E}_{q_i} \log \left( p(x_i, Z \mid \pi,\theta)\right) + H(q_i)\right]\end{array}$$
+
+where $H(q_i) = - \sum_{z \in \mathcal{Z}} q_i(z) \log q_i(z)$
+is the Shannon entropy of the probability distribution defined by probability mass function $q_i$.
+
+`r fontawesome::fa("hand-point-right")` tuning the pmfs $q_i$ leaves room for optimization
+
+---
+
+### Picking a good $q_i$
+
+$$\begin{array}{rl}\sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( \frac{p(x_i, z_i \mid \pi,\theta)}{q_i(z_i)}\right) & =  \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( \frac{p(z_i \mid x_i, \pi, \theta)p(x_i\mid \pi, \theta)}{q_i(z_i)}\right)\\ & = \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( \frac{p(z_i \mid x_i, \pi, \theta)}{q_i(z_i)}\right)+ \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( p(x_i\mid \pi,\theta)\right)\\ & = - D\left( q_i\Vert p(\cdot\mid x_i, \pi,\theta)\right) + \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( p(x_i\mid \pi,\theta)\right)\\ & = - D\left( q_i\Vert p(\cdot\mid x_i, \pi,\theta)\right) +  \log \left( p(x_i\mid \pi,\theta)\right)\end{array}$$
+
+where $D(P \Vert Q)$ denotes the relative entropy or Kullback-Leibler divergence between probability distributions $P$ and $Q$
+
+The expression is maximized by choosing $q_i(\cdot) =  p(\cdot\mid x_i, \pi,\theta)$ which is also called the posterior probability of state ($z_i$) given observed datum $z_i$ and parameter $\theta$
+
+
+`r fontawesome::fa("bullhorn")` This is the _E_-step
+
+---
+
+
+### Picking a good $q_i$ (continued)
+
+
+Given current estimate $\pi^t, \theta^t$ for the _true value_ of the parameter,  for each $i \leq n$, we choose
+
+$$q^t_i = p(\cdot\mid x_i, \pi^t,\theta^t)$$
+
+Let $q^t$ denote the sequence $q^t_1, \ldots, q^t_n$
+
+The lower bound on the log-likelihood with respect to observed data turns to
+
+$$Q(\pi,\theta, q^t) = \sum_{i=1}^n \mathbb{E}_{q^t_i} \log \left( p(x_i, Z \mid \pi, \theta)\right) + \sum_{i=1}^n H(q^t_i)$$
+
+`r fontawesome::fa("hand-point-right")` The first term is an expected complete data log-likelihood
+
+`r fontawesome::fa("smile")` The second term does not depend on $\pi,\theta$
+
+---
+
+### Revisiting the _M_-step
+
+$$\theta^{t+1} = \arg\max_{\theta} \sum_{i=1}^n \mathbb{E}_{q^t_i} \log \left( p(x_i, Z \mid \pi, \theta)\right)=  \arg\max_{\theta} Q(\pi, \theta, q^t)$$
+
+
+---
+
+### `r fontawesome::fa("hand-point-right")` `r fontawesome::fa("hand-point-right")`
+
+Because of the peculiar choice of $q_i^t$,
+
+$$Q(\pi^t,\theta^t, q^t) = \sum_{i=1}^n \log p(x_i \mid \pi^t,\theta^t) = \ell(\theta^t)$$
+
+
+
+---
+
+### Proposition
+
+The EM iteration monotonically increases the likelihood with respect to observed data:
+
+$$\ell(\pi^{t+1},\theta^{t+1}) \geq Q(\pi^{t+1}, \theta^{t+1}, q^t) \geq Q(\pi^{t},\theta^{t}, q^t) = \ell(\pi^{t}, \theta^t)$$
+
+for $t >0$
+
+---
+exclude: true
+
+Expected complete data Log-Likelihood
+
+$$Q(θ, θ^{t-1}) = \mathbb{E}[\ell_c(θ) \mid\text{Data},  θ^{t-1}]$$
+
+$Q$ is called the _auxiliary function_
+
+The E step consists in computing $Q(θ, θ^{t-1})$
+
+The terms which define the auxiliary function are known as the _expected sufficient statistics_ (ESS).
+
+The E steps optimizes _responsibilities_
+
+The M step consists in optimizing $Q$ with respect to $theta$
+
+$$θ^t = \arg \max_{θ}  Q(θ, θ^{t-1})$$
+
+This can be tweaked in order to perform MAP estimation.
+
+
+---
+exclude: true
+
+### Properties of EM algorithm
+
+The log-likelihood of the sequence of estimates delivered by the EM algorithm is non decreasing
+
+
+???
+
+---
+exclude: true
+### Proof
+
+
+`r fontawesome::fa("square")`
+
+???
+
+
+---
+exclude: true
+### Importance of initialization
+
+
+
+
+---
+
+### About EM
+
+Besides convergence toward a _local extremum_ of the likelihood function, and
+rates of convergence in the vicinity of such an extremum, it is hard to come up with  guarantees about the behavior of  the EM algorithm
+
+
+---
+
+With high probability, a variant of the EM algorithm clusters  correctly a sample of a mixture of _well separated_ high dimensional Gaussian distributions.
+
+Key observation : _the Gaussian concentration phenomenon_
+
+> if we consider two independent points drawn from two (possibly identical) high dimensional Gaussian distributions, their mutual distance (the Euclidean norm of their difference)  is highly concentrated around its mean value.
+
+Reading mutual distances is almost enough to perform correct clustering
+
+???
+
+[@MR3290441], [@MR2276533], [@MR3150710].
+
+---
+exclude: true
+template: inter-slide
+name: gmm
+
+## Gaussian mixture models
+
+---
+exclude: true
+### Gaussian Mixture Model
+
+
+- Use
+
+$$\Pr_{\theta_k}\{\vec{X} \mid k\}  \sim \mathcal{N}(\mu_k, \Sigma_k)$$
+
+with $\mathcal{N}(\mu,\Sigma)$ the Gaussian distribution with mean $\mu$ and covariance matrix $\Sigma$.
+
+
+- Efficient iterative optimization algorithm (EM)
+
+- Frequent constraints on the covariance matrices
+
+- Connection with $k$-means when covariance matrices are
+assumed to be the same multiple of the identity.
+
+---
+exclude: true
+### Probabilistic latent semantic analysis (PLSA)
+
+
+- Documents described by their word counts $w$
+
+- Model:
+$$\Pr\{w\} = \sum_{k=1}^K \Pr\{k\} \Pr_{\theta_k}\{w \mid k\}$$
+
+with $k$ the (hidden) topic, $\Pr\{k\}$ a topic probability and
+$\Pr_{\theta_k}\{w \mid | k\}$ a multinomial law for a given topic.
+
+- Clustering according to
+$$\Pr\{k | w\} = \frac{\widehat{\Pr\{k\}} \Pr_{\widehat{\theta_k}} \{w\mid k\}}{ \sum_{k'}\widehat{\Pr\{k'\}} \Pr_{\widehat{\theta_{k'}}} \{w \mid k'\}}$$
+
+
+---
+template: inter-slide
+name: mclust
+
+## mclust package
+
+---
+
+### Iris data with `Mclust`
+
+
+.panelset[
+
+.panel[ .panel-name[Code]
+
+```{r}
+data(iris) ; require(mclust)
+
+xem <- mclust::Mclust(iris[,-5],   #<<
+                      G = 1:9,
+                      modelNames = )     #<<
+```
+
+
+Creates an object of class `r class(xem)`
+
+- `G`
+- `modelNames`
+-
+
+]
+
+.panel[ .panel-name[]
+
+```{r}
+xem %>% broom::glance()
+
+xem %>% broom::tidy()
+```
+
+
+]
+
+.panel[ .panel-name[]
+
+```{r}
+broom::augment(xem, iris) %>%
+  ggplot() +
+  aes(x=Petal.Length, y= Petal.Width, color=.class, shape=Species) +
+  geom_point()
+```
+
+
+]
+
+
+
+]
+
+
+---
+
+### With `fviz_mclust` from `factoextra`
+
+`Mclust` trains many models with different number of clusters
+
+Different models are compared using a penalized criterion (default is BIC)
+
+`Mclust` selects model VEV with two clusters (setosa is separated from the two other species)
+
+```{r}
+fviz_mclust(xem,          #<<
+            what = "BIC") #<<
+```
+
+---
+
+### Plotting "uncertainty"
+
+- Uncertainty concerning ...
+
+- In the first factorial plane
+
+```{r}
+fviz_mclust(xem,                #<<
+            what="uncertainty") #<<
+```
+
+---
+
+### Plotting classification
+
+
+```{r}
+fviz_mclust(xem,          #<<
+            what="classification", ) #<<
+```
+
+
+
+---
+exclude:true
+
+### Model-based clustering and dimension reduction: `MclustDR`
+
+
+
+
+---
+exclude:true
+template: inter-slide
+name: rmixmod
+
+## Rmixmod package
+
+---
+exclude:true
+```{r}
+require(Rmixmod)
+```
+> Rmixmod is a package based on the existing MIXMOD software. MIXMOD is a tool for fitting a mixture model of multivariate Gaussian or multinomial components to a given data set with either a clustering, a density estimation or a discriminant analysis point of view
+
+```{r}
+
+```
+
+???
+
+---
+exclude:true
+
+Estimation of the mixture parameters is performed either through maximum likelihood via the EM (Expectation Maximization, Dempster et al. 1977), the SEM (Stochastic EM, Celeux and Diebolt 1985) algorithm or through classification maximum likelihood via the CEM algorithm (Clustering EM, Celeux and Govaert 1992).
+
+---
+exclude: true
+
+
+These three algorithms can be chained to obtain original fitting strategies (e.g. CEM then EM with results of CEM) to use advantages of each of them in the estimation process. As mixture problems usually have multiple local maxima, the program will produce different results, depending on the initial estimates supplied by the user. If the user does not input his own initial estimates, some initial estimates procedures are proposed (random centers for instance).
+
+
+---
+exclude:true
+
+In the Gaussian case, fourteen models are implemented.
+
+The models may depend on constraints on the covariance matrix
+
+The models and the number of clusters can be selected by different criteria :
+
+- BIC (Bayesian Information Criterion),
+- ICL (Integrated Completed Likelihood, a classification version of BIC),
+- NEC (Entropy Criterion), or
+- Cross-Validation (CV).
+
+---
+
+### Geyser data
+
+.panelset[
+
+.panel[.panel-name[Mixture modelling]
+
+.fl.w-50.pa2[
+```{r geyser-scatter, fig.height=4, fig.show='hide'}
+data(geyser)
+xem1<-mixmodCluster(geyser,3)   #<<
+
+geyser %>%
+  ggplot() +
+  aes(x=Duration, y=Waiting.Time) +
+  geom_point() +
+  ggtitle("Geyser data")
+
+```
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("geyser-scatter","png")`)
+
+]
+]
+
+
+.panel[.panel-name[Summary]
+.f6[
+```{r, echo=FALSE}
+summary(xem1)  #<<
+```
+]
+]
+
+.panel[.panel-name[Plot]
+
+
+```{r, echo=FALSE}
+plot(xem1)
+```
+
+]
+]
+
+---
+exclude: true
+### Iris dataset
+
+
+.panelset[
+
+.panel[ .panel-name[]
+
+```{r}
+data(iris)
+
+xem <- mixmodCluster(iris[,-5], 3) #<<
+```
+
+Creates an object of class `r class(xem)`
+
+]
+
+.panel[ .panel-name[]
+
+
+
+]
+
+.panel[ .panel-name[]
+
+```{r}
+plot(xem)
+```
+
+
+]
+
+
+
+]
+
+
+---
+exclude: true
+
+
+---
+exclude:true
+
+### Diving deeper
+
+
+```{r}
+class(xem)
+```
+
+
+
+---
+exclude:true
+
+
+
+---
+exclude:true
+
+template: inter-slide
+name: dbscan
+
+## dbscan package
+
+
+---
+exclude: true
+
+### References
+
+.f6[
+
+```{r, 'references', results='asis', echo=FALSE, message=FALSE, warning=FALSE}
+PrintBibliography(myBib)
+```
+
+]
+
+---
+exclude: true
+
+- [An introduction on GMM](https://www.r-bloggers.com/2017/02/an-intro-to-gaussian-mixture-modeling/)
+- [Towards Data Science](https://towardsdatascience.com/mixture-modelling-from-scratch-in-r-5ab7bfc83eef)
+- [RmixMod](https://www.rdocumentation.org/packages/Rmixmod/versions/2.1.5)
 
 
 ---
