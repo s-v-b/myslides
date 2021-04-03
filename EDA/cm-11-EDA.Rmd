@@ -96,11 +96,10 @@ class: middle, inverse
 
 ### [Motivation](#bigpic)
 
-### [](#gmm)
+### [MCA](#mca)
 
-### [](#em)
+### [CCA](#cca)
 
-### [](#mclust)
 
 ???
 
@@ -122,20 +121,32 @@ require(FactoInvestigate)
 ---
 
 The aim of multiple correspondence analysis (MCA) is to summarise and visualise
-a data table where individuals are described by qualitative variables.
+a data table where individuals are described by _qualitative_ variables.
 
 MCA is used to study the similarities between individuals from the point of
-view of all the variables and identify individuals' profiles.
+view of all the variables and identify individuals' profiles
 
-MCA is also used to assess relationships between variables and study the associations between categories.
+MCA is also used to assess relationships between variables and study the associations between categories 
 
 As with PCA and CA, the individuals or groups of individuals
-(rows) can be connected with categories of  variables (columns).
+(rows) can be connected with categories of  variables (columns)
+
+.fr[From _R for statistics_, Cornillon et al. Chapman & Hall. Pub.]
+
+
+---
+
+### FactoMineR
+
+<iframe src="http://factominer.free.fr/factomethods/multiple-correspondence-analysis.html"  width="750px" height="400px"></iframe>
 
 ---
 
 ### Handling more than 2 qualitative variables
 
+```{r}
+
+```
 
 
 ---
@@ -145,138 +156,183 @@ As with PCA and CA, the individuals or groups of individuals
 
 
 ---
-
-## Visualization     {#visualizations}
-
-We use the `MCA` function from the `FactoMineR` package.
-
-```{r}
-credit <- readr::read_csv2("./DATA/credit.csv")
-
-credit %>%
-  dplyr::mutate_if(is.character, .funs = factor) -> credit
+name: visualizations
 
 
-credit$Age %>%
-  forcats::as_factor() %>%
-  forcats::fct_inseq() -> credit$Age
+### Visualization     
 
-credit %>% glimpse()
-```
-
-Columns 1 to 5 are concerned with attitudes. Column 6 to 11 are concerned
-with demographics.
 
 ---
+
+### `credit` dataset
+
+- A survey
+
+- Demographic variables
+
+- Attitudinal variables
+
+---
+
+### `MCA` from the `FactoMineR` package.
+
+.fl.w-40.pa2[
+```{r, message=FALSE}
+fpath <- "./DATA/credit.csv"
+
+credit <- read_csv2(fpath) %>%
+  mutate(across(where(is.character), 
+                factor)
+         )
+
+credit$Age <- credit$Age %>%
+  as_factor() %>%
+  fct_inseq()  
+```
+]
+
+.fl.w-60.pa2.f6[
+
+```{r, echo=FALSE}
+credit %>% glimpse(width = 40)
+```
+
+
+]
+
+- Columns 1 to 5 `Marche`, ..., `Endettement` are concerned with _attitudes_
+- Column 6 to 11 are concerned with _demographics_
+
+
+---
+exclude: true 
+
+### Handling rare categories 
+
+
+
+---
+exclude: true 
 
 ### Spotting rare categories.
 
 ```{r, eval=FALSE, echo=FALSE}
-credit %>%
-  purrr::map(table) %>%
-  purrr::map(~ which(. <= 3)) -> rare_categories
+rare_categories <- credit %>%
+  map(table) %>%
+  map(~ which(. <= 10)) 
 
-credit %>%
-  purrr::map(forcats::fct_count) %>%
-  purrr::map(~ dplyr::filter(., n<=3)) %>%
-  purrr::map_if(~ nrow(.) > 0 , ~ dplyr::select(. , f), .else = NULL)
-
-rare_categories[which(rare_categories %>% purrr::map(length) >0)]
+ rare_categories <- rare_categories[which(rare_categories %>% 
+                        map(length) >0)] 
 ```
 
 ---
 
-We collapse rare categories for columns `Marche`, `Enfants`, `Logement`
-```{r, echo=FALSE}
-# forcats::fct_count(credit$Marche)
+### Handling rare categories for `Marche`, `Enfants`, `Logement`
 
-forcats::fct_collapse(credit$Marche,
-                      "Mobilier / Ameublement" = "Mobilier / Ameublement",
-                      "Renovation" = "Renovation",
-                      "Moto" = c ("Moto", "Scooter", "Side-car"),
-                      "Voiture" = "Voiture")  -> credit$Marche
+.panelset[
+
+.panel[ .panel-name[`Marche`]
+```{r, echo=TRUE}
+
+credit$Marche <- fct_collapse(credit$Marche,
+  "Mobilier / Ameublement" = "Mobilier / Ameublement",
+  "Renovation" = "Renovation",
+  "Moto" = c ("Moto", "Scooter", "Side-car"),
+  "Voiture" = "Voiture")  
 ```
+]
 
----
+.panel[ .panel-name[`Enfants`]
+```{r}
+credit$Enfants <- credit$Enfants %>%
+  fct_lump(n = 3, other_level = "Enf>2") 
+```
+]
+
+.panel[ .panel-name[`Logement`]
 
 ```{r}
-#forcats::fct_count(credit$Enfants)
-
-credit$Enfants %>%
-  forcats::fct_lump(n = 3, other_level = "Enf>2") -> credit$Enfants
-
-#forcats::fct_count(credit$Enfants)
+credit$Logement <- credit$Logement %>%
+  fct_collapse(
+    "Accedant a la propriete"="Accedant a la propriete",
+    "Locataire"="Locataire",
+    "Loge par ..." = c("Loge par l'employeur", 
+                       "Loge par la famille"),
+    "Proprietaire"="Proprietaire") 
 ```
+]
+
+]
 
 ---
 
-```{r, echo=FALSE}
-# forcats::fct_count(credit$Logement)
-
-credit$Logement %>%
-  fct_collapse("Accedant a la propriete"="Accedant a la propriete",
-               "Locataire"="Locataire",
-               "Loge par ..." = c("Loge par l'employeur", "Loge par la famille"),
-               "Proprietaire"="Proprietaire") -> credit$Logement
-```
-
-
----
+### MCA over attitude variables 
 
 ```{r}
-credit %>%
-  FactoMineR::MCA(graph = FALSE, quali.sup = 6:11) -> res.mca
+res.mca <- credit %>%
+  FactoMineR::MCA(graph = FALSE, 
+                  quali.sup = 6:11) 
 ```
 
 ---
 
 ### Screeplot
 
-```{r}
-qplot(x=seq_along(res.mca$eig[, 2]), y=res.mca$eig[, 2]) +
+.fl.w-60.pa2[
+
+```{r, echo=FALSE}
+qplot(x=as_factor(seq_along(res.mca$eig[, 2])), y=res.mca$eig[, 2]) +
   geom_col() +
-  scale_x_continuous(breaks=1:12, labels=as.character(1:12)) +
   ylab("Eigenvalues") +
   xlab("") +
   ggtitle("MCA screeplot", "credit data, attitudinal variables")
 ```
 
----
+The first two dimensions express $\approx 30\%$ of the total variance,
+which is relatively high in MCA  `r fontawesome::fa("smile")`
+
+]
+
+.fl.w-40.pa2.f6[
 
 ```{r, results='markup', eval=FALSE, echo=FALSE}
-round(res.mca$eig,2) %>%
-  knitr::kable(format="markdown")
+res.mca$eig%>%
+  knitr::kable(format="markdown", digits = 2)
 ```
 
+|Dim.   | Eigenvalue| `%` of inertia | cumul. `%` of inertia|
+|:-----:|----------:|---------------:|---------------------:|
+| 1  |       0.39|           16.26|                  16.26|
+| 2  |       0.32|           13.37|                  29.63|
+| 3  |       0.29|           12.15|                  41.79|
+| 4  |       0.27|           11.33|                  53.12|
+| 5  |       0.23|            9.38|                  62.50|
+| 6  |       0.18|            7.68|                  70.19|
+| 7  |       0.17|            7.09|                  77.27|
+| 8  |       0.16|            6.73|                  84.00|
+| $\vdots$ | $\vdots$ | $\vdots$ | $\vdots$ |
 
-|       | eigenvalue| percentage of variance| cumulative percentage of variance|
-|:------|----------:|----------------------:|---------------------------------:|
-|dim 1  |       0.39|                  16.26|                             16.26|
-|dim 2  |       0.32|                  13.37|                             29.63|
-|dim 3  |       0.29|                  12.15|                             41.79|
-|dim 4  |       0.27|                  11.33|                             53.12|
-|dim 5  |       0.23|                   9.38|                             62.50|
-|dim 6  |       0.18|                   7.68|                             70.19|
-|dim 7  |       0.17|                   7.09|                             77.27|
-|dim 8  |       0.16|                   6.73|                             84.00|
-|dim 9  |       0.12|                   4.80|                             88.80|
-|dim 10 |       0.11|                   4.52|                             93.32|
-|dim 11 |       0.09|                   3.80|                             97.12|
-|dim 12 |       0.07|                   2.88|                            100.00|
+]
 
-The first two dimensions express $28\%$ of the total variance,
-which is relatively high in MCA.
 
 ---
 
 ### Graphics
 
-Object `res.mca` belongs to class `MCA`. Class `MCA`  has its own `plot` method.
+Object `res.mca` belongs to class `MCA` 
+
+Class `MCA`  has its own `plot` method
 
 The MCA function yields a graph simultaneously representing individuals and
-categories (active and illustrative) on the first two dimensions. This representation quickly becomes messy.
+categories (active and illustrative) on the first two dimensions. 
 
-We first plot individuals, making variables whether active or not, _invisible_.
+This representation quickly becomes messy.
+
+---
+
+### Plotting individuals 
+
+Making variables whether active or not, _invisible_
 
 ```{r}
 plot(res.mca, invisible=c("var","quali.sup"))
@@ -286,7 +342,7 @@ plot(res.mca, invisible=c("var","quali.sup"))
 
 ### Clustering individuals
 
-Even though we are not in the tidyverse framework, we can use
+We can use
 the colour aesthetic to check whether some pattern emerges.
 
 ```{r}
@@ -297,12 +353,16 @@ Does it?
 
 ---
 
+### Colouring according to profession 
+
 ```{r}
 plot(res.mca, invisible=c("var","quali.sup"), habillage="Profession")
 ```
 
 
 ---
+
+### Colouring according to Age 
 
 ```{r}
 plot(res.mca, invisible=c("var","quali.sup"), habillage="Age")
@@ -311,10 +371,11 @@ plot(res.mca, invisible=c("var","quali.sup"), habillage="Age")
 
 ---
 
+### Colouring according to Impaye 
+
 ```{r}
 plot(res.mca, invisible=c("var","quali.sup"), habillage="Impaye")
 ```
-
 
 ---
 
@@ -322,11 +383,6 @@ plot(res.mca, invisible=c("var","quali.sup"), habillage="Impaye")
 the others (above). We can therefore identify people who have difficulty paying
 back their loan (three or more payments missed) and those who have taken
 out TPD insurance. This dimension can thus be qualified as the dimension of financial difficulty.
-
-
-```{r}
-
-```
 
 
 ---
@@ -352,6 +408,8 @@ plot(res.mca, invisible=c("ind", "quali.sup"))
 
 ---
 
+### AUtomatic report 
+
 ```{r, eval=FALSE}
 FactoInvestigate::Investigate(res.mca, keepRmd = TRUE)
 ```
@@ -371,7 +429,7 @@ qualitative variable.
 
 ---
 
-The p-value of the overall test (F-test) is calculated as
+The _p-value_ of the overall test (F-test) is calculated as
 well as the p-values of the tests of each category.  The p-values
 associated with the F-tests are sorted in ascending order. Thus, the qualitative
 variables are sorted from most to least characteristic. In the same way,
@@ -384,370 +442,6 @@ will identify the most characteristic categories.
 ```{r}
 FactoMineR::dimdesc(res.mca)
 ```
-
----
-template: inter-slide
-name: cca
-
-## Canonical Correlation Analysis
-
----
-
-[Canonical Correlation Analysis](https://en.wikipedia.org/wiki/Canonical_correlation) goes back to Hotteling  (1936)
-
-
-Consider a setting where we have to views/perspectives on the same data.
-
-For example,
-suppose we record meteorological data from a range of locations. Each location defines a sample point.
-
-For each location, we have temperature data on one side, and wind speed, wind direction,
-atmospheric pressure on the other side.
-
-How can we decribe relationships between the two perspectives?
-
-
-This is the question tackled by CCA
-
----
-
-### Definition (CCA)
-
-Given a real matrix $Z$ with $n$ rows and $J_1 + J_2$ columns.
-$$Z = \left[ \quad {\underbrace{\Huge Z_1 }_{J_1 \text{ col. }}}\quad  {\Large\vdots}\quad { \underbrace{\Huge Z_2 }_{J_2 \text{ col. }} } \quad\right]$$
-
-
-
-Canonical Correlation Analyis (CCA) consists of finding vectors $a \in \mathbb{R}^{J_1}$
- and $b \in \mathbb{R}^{J_2}$ that maximize correlation between
- $Z_1 a$  and  $Z_2 b$
-
-
-
----
-
-
-Let $S_{1,1}, S_{2,2}, S_{1,2}$ denote the covariance matrices defined by $Z_1, Z_2$
-
-$$S_{1,1} = \frac{1}{n} \left( Z_1^T \times Z_1 - Z_1^T \times 1\times 1^T \times Z_1\right)$$
-
-$$S_{1,2} = \frac{1}{n} \left( Z_1^T \times Z_2 - Z_1^T \times 1\times 1^T \times Z_2\right)$$
-
-$$S_{2,2} = \frac{1}{n} \left( Z_2^T \times Z_2 - Z_2^T \times 1\times 1^T \times Z_2\right)$$
-
-We look for $a$ and $b$ that maximize
-
-$$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$$
-
-
-
-
----
-
-### Proposition
-
-The vectors $a \in \mathbb{R}^{J_1}$ and $b \in \mathbb{R}^{J_2}$ that maximize
-$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$
-are the first left and right extended singular vectors of
-$$S_{1,2}$$
-with respect to matrices $S_{1,1}$ and $S_{2,2}$
-
-
----
-
-The extended singular value decomposition of $S_{1,2}$
-with respect to matrices $S_{1,1}$ and $S_{2,2}$ is a triple  $U \in \mathcal{M}_{J_1, k}$,
-$D \in \mathcal{M}_{k,k}$,
-$V \in \mathcal{M}_{J_2, k}$ such that
-$$S_{1,2} = U \times D \times V^T$$
-
-- $D$ is non-negative, diagonal, with non-increasing diagonal entries
-
-- $U^T \times S_{1,1} \times U =  \text{Id}_{k}$
-
-- $V^T \times S_{2,2} \times V =  \text{Id}_{k}$
-
----
-### Proof
-
-We first assume $S_{1,1}$ and $S_{2,2}$ to be Positive Definite.
-
-- $S_{1,1}$ and $S_{2,2}$ have invertible square roots  $S_{1,1}^{-1/2}$ and $S_{2,2}^{-1/2}$
-
-- For $a \in \mathbb{R}^{J_1}$ and $b \in \mathbb{R}^{J_2}$,  let  $u, v$
-be defined as $u = S_{1,1}^{1/2}a$  and $v = S_{2,2}^{1/2}b$
-
-
-- $$\frac{a^T S_{1,2} b}{\sqrt{a^TS_{1,1}a}\sqrt{b^T S_{2,2}b}}= \frac{u^T S_{1,1}^{-1/2} S_{1,2} S_{2,2}^{-1/2}v}{\|u\|\|v\|}$$
-
----
-
-### Proof (continued)
-
--
-
-The unit vectors $u,v$ that maximize the right-hand-side are the
-leading  left and right  singular vectors of
-
-$$S_{1,1}^{-1/2} S_{1,2} S_{2,2}^{-1/2}$$
-
-
----
-
-### Proof (continued)
-
-Let us handle the case where either $S_{1,1}$ or $S_{2,2}$, or both are not Positive Definite
-
-
-- $S_{1,1}$ or $S_{2,2}$ still have square roots, and the square roots have symmetric Semi Positive Definite pseudo-inverses (Moore-Penrose pseudo-inverses derived from spectral decomposition) denoted by
-$S_{1,1}^{-1/2}$ and $S_{2,2}^{-1/2}$ that satisfy:
-$$S_{1,1}^{1/2}  \times S_{1,1}^{-1/2} \times S_{1,1}=  S^{1/2}_{1,1} \qquad S_{1,1}^{-1/2} \times S_{1,1}^{1/2}  \times S_{1,1}^{-1/2} = S_{1,1}^{-1/2}$$
-
-
-- The unit vectors $u,v$ that maximize $\frac{u^T S_{1,1}^{-1/2} S_{1,2} S_{2,2}^{-1/2}v}{\|u\|\|v\|}$  are again the leading  left and right  singular vectors of
-
-$$S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$$
-
-$\Box$
-
----
-
-
-The leading left and right singular vectors of $S_{1,2}$ with respect to the metrics defined by $S_{1,1}$ and $S_{2,2}$ define the first stage of _canonical correlation analysis_
-
-The full canonical correlation analysis of $Z = [ Z_1 \; \vdots\; Z_2]$ is made of the whole sequence of extended left and right singular vectors corresponding to positive singular values.
-
-The $j^{\text{th}}$ step
-
-
----
-
-Canonical Correlation Analysis builds on Singular Value Decomposition just
-as Principal Component Analyis, Correspondence Analyis, but also Multiple Linear
-Regression at least implicitly
-
-Before proceeding to Multiple Correspondence Analyis, we point out the tight connection
-between Canonical Correlation Analysis and methods we have already encountered
-
----
-
-We can recover a Correspondence Analyis
-from the result of a Canonical Correlation
-Analysis
-
-
----
-
-We shall work on a qualitative data frame : `credit`
-
-
-```{r, warning=FALSE, echo=FALSE, message=FALSE}
-require(tidyverse)
-require(FactoMineR)
-require(factoextra)
-require(FactoInvestigate)
-```
-
-```{r, echo=FALSE}
-hook_source <- knitr::knit_hooks$get('source')
-knitr::knit_hooks$set(source = function(x, options) {
-  x <- stringr::str_replace(x, "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$", "*\\1")
-  hook_source(x, options)
-})
-```
-
-
----
-
-```{r, warning=FALSE, message=FALSE}
-readr::read_csv2("./DATA/credit.csv") %>%
-  dplyr::mutate_all(factor) -> credit
-```
-
-In order to smooth CCA, MCA and CA, some factors
-require collapsing some rare levels
-
-We use functions from `forcats` to tidy the data
-
-We focus on CCA and CA for variables `Marche` and `Logement`
-
-
----
-
-```{r}
-credit[['Marche']] <- fct_collapse(credit[['Marche']],
-  "Mobilier / Ameublement" = "Mobilier / Ameublement",
-  "Renovation" = "Renovation",
-  "Moto" = c ("Moto", "Scooter", "Side-car"),
-  "Voiture" = "Voiture")
-
-credit$Enfants <- fct_lump(credit$Enfants,
-  n = 3,
-  other_level = "Enf>2")
-
-credit$Logement <- fct_collapse(credit$Logement,
-  "Accedant a la propriete"="Accedant a la propriete",
-  "Locataire"="Locataire",
-  "Loge par ..." = c("Loge par l'employeur",
-  "Loge par la famille"),
-  "Proprietaire"="Proprietaire")
-```
-
----
-
-
-TODO: description of credit dataset
-
-Columns `Marche` and `Logement`
-
-
-### Bivariate indicator matrix
-
-- A 2-way contingency table $T$ with $J_1$ rows and $J_2$ columns. $T[a,b]$
-denotes the number of number of co-occurrences  of modalities $a \in \{1, J_1\}$
-and $b \in \{1, \ldots J_2\}$.
-
-- The 2-way contingency table is _usually_ collected from a data frame `DT` with two
-qualitative columns and $n$ rows.
-
-
-- We can also proceed by _pivoting_ the bivariate table, making it a dataframe $Z$
-with $n$ rows and $J_1 + J_2$ columns.
-If $j_1 \leq J_1$, $Z[i, j_1] =1$ if for
-observation/row $i$, the modality of first variable is $j_1$, $0$ otherwise.
-
-- Table $Z$ is called the _complete disjunctive table_ derived from DT
-
-
-
-$$Z = \bigg[  \underbrace{Z_1 }_{J_1 \text{ col. }} {\Large\vdots} \underbrace{Z_2 }_{J_2 \text{ col. }} \bigg]$$
-
-$$T = Z_1^T \times Z_2$$
-
----
-
-Packages dedicated to Correspondence Analyis export functions that return disjunctive
-tables.
-
-The construction of disjunctive tables can be performed using verbs from `dplyr` and `tidyverse`
-
-```{r, echo=TRUE, eval=FALSE}
-dplyr::select(credit, Marche, Impaye) %>%
-  tibble::rowid_to_column("id") %>%
-  tidyr::pivot_wider(id_cols = - Marche,
-                     names_from = Marche,
-                     values_from = Marche)  %>%
-  tidyr::pivot_wider(id_cols = -Impaye,
-                     names_from = Impaye,
-                     values_from = Impaye) %>%
-  dplyr::select(-id) %>%
-  dplyr::mutate_all(~ ! is.na(.)) %>%
-  dplyr::mutate_all(as.integer)  -> Z
-```
-
-```{r, eval=FALSE, echo=FALSE}
-Y <- as.matrix(Z)
-t(Y[, 1:4]) %*% Y[, 5:7]
-```
-
----
-
-As the disjunctive table contains as much information as the contingency table,
-Correspondence Analyis can be performed on the disjunctive table.
-
-$P = \frac{1}{n} Z_1^T \times Z_2$
-
-$S_{1,1} = \frac{1}{n} Z_1^T \times Z_1 - \frac{1}{n^2} Z_1^T\times 1 \times 1^T \times Z_1$
-
-$S_{1,2} = \frac{1}{n} Z_1^T \times Z_2 - \frac{1}{n^2} Z_1^T\times 1 \times 1^T \times Z_2$
-
-$D_r = \frac{1}{n} Z_1^T \times Z_1$  $D_c = \frac{1}{n} Z_2^T \times Z_2$
-
----
-
-### CA
-
-SVD of   $D_r^{-1} \times P \times  D_r^{-1}  - 1 \times 1^T$
-
-
----
-
-## CCA
-
-SVD of  $S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$
-
----
-
-## Multiple Linear Regression as Canonical Correlation Analysis
-
-
-Message: We can recover Multiple Linear Regression from the result of a Canonical Correlation Analysis
-
-
----
-
-### MLR
-
-
-
-- In Multiple Linear  Regression, we are given a response vector $Y \in \mathbb{R}^n$
-and a design $Z \in \mathcal{M}_{n,p}$
-- We are looking for $\beta \in \mathbb{R}^p$
-that minimizes $\Vert Y - Z \beta\Vert^2$
-- The optimum is achieved at $\color{red}{\widehat{\beta} = (Z^T\times Z)^{-1}\times Z^T \times Y}$<sup>*</sup>
-
-
-
-[*] In case $Z^T \times Z$ is not invertible,
-$(Z^T\times Z)^{-1}$ denotes the Moore-Penrose pseudo-inverse
-
-
-
-
----
-
-Message: We can recover Multiple Linear Regression from the result of a Canonical Correlation Analysis
-
-
-- In Multiple Linear  Regression, we are given a response vector $Y \in \mathbb{R}^n$
-and a design $Z \in \mathcal{M}_{n,p}$
-- We are looking for $\beta \in \mathbb{R}^p$
-that minimizes $\Vert Y - Z \beta\Vert^2$
-- The optimum is achieved at $\widehat{\beta} = (Z^T\times Z)^{-1}\times Z^T \times Y$<sup>*</sup>
-
-
-- For CCA, the optimum correlation is  the cosine of the angle between $Y$ and its projection $\widehat{Y}$ on the linear space  spanned  by the columns of $Z$, $$\widehat{Y} = Z \widehat{\beta}$$
-- We may choose $\color{red}{a=1}$   and $\color{red}{b=\widehat{\beta}}$ (or any vectors
-in these two directions)
-
-
-
-
-[*] In case $Z^T \times Z$ is not invertible,
-$(Z^T\times Z)^{-1}$ denotes the Moore-Penrose pseudo-inverse
-
-
----
-
-## CCA of Complete Disjunctive Table
-
-
-
-
-
-```{r plot-label-fc, fig.show="hide"}
-# code chunk here
-data(iris)
-ggplot(iris) +
-  aes(Sepal.Length,
-      Sepal.Width,
-      color = Species) +
-  geom_point()
-```
-
-
-![](`r knitr::fig_chunk("plot-label-fc", "png")`)
-
 
 
 ---

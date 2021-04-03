@@ -1,12 +1,12 @@
 ---
-title: "EDA XII"
-subtitle: "⚔<br/>Statistiques Master I, MFA et MIDS"
+title: "EDA XII Canonical Correlation Analysis"
+subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -23,92 +23,443 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
 name: layout-general
 layout: true
 class: left, middle
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
 ```
 
 
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+pacman::p_load("ggdendro")
+pacman::p_load("fastcluster")
+pacman::p_load("mixdist")
+pacman::p_load("factoextra")
+data("iris")
+data("pearson")
 ```
 
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
 
-xaringanExtra::use_panelset()
 
-xaringanExtra::use_editable(expires = 1)
 
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
-
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+NoCite(myBib, "MR3851754")
+NoCite(myBib, "MR3080408")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "zbMATH06322139")
+NoCite(myBib, "Har75")
+NoCite(myBib, "MR2677125")
+NoCite(myBib, "HaTiFr01")
+NoCite(myBib, "Mur12")
+NoCite(myBib, "moitra2018algorithmic")
 ```
 
 ---
-class: middle, center, inverse
+class: middle, left, inverse
 
 
 
-# Exploratory Data Analysis XII
+# Exploratory Data Analysis XII Canonical Correlation Analysis (CCA)
 
 ### `r Sys.Date()`
 
-#### EDA Master I MIDS et MFA
 
+#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 class: middle, inverse
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### Bla 1
+### [Motivation](#bigpic)
 
-### Bla 2
+### [CCA](#cca)
 
-### Bla 3
 
-### Bla 4
+---
+
+[Canonical Correlation Analysis](https://en.wikipedia.org/wiki/Canonical_correlation) goes back to Hotteling  (1936)
+
+Consider a setting where we have to views/perspectives on the same data
+
+For example, suppose we record meteorological data from a range of locations
+
+Each location defines a sample point
+
+For each location, we have temperature data on one side, and wind speed, wind direction, atmospheric pressure on the other side
+
+How can we decribe relationships between the two perspectives?
+
+
+This is the question tackled by CCA
+
+---
+
+### Definition (CCA)
+
+Given a real matrix $Z$ with $n$ rows and $J_1 + J_2$ columns.
+$$Z = \left[ \quad {\underbrace{\Huge Z_1 }_{J_1 \text{ col. }}}\quad  {\Large\vdots}\quad { \underbrace{\Huge Z_2 }_{J_2 \text{ col. }} } \quad\right]$$
+
+
+
+Canonical Correlation Analyis (CCA) consists of finding vectors $a \in \mathbb{R}^{J_1}$
+ and $b \in \mathbb{R}^{J_2}$ that maximize correlation between
+ $Z_1 a$  and  $Z_2 b$
+
+
+
+---
+
+
+Let $S_{1,1}, S_{2,2}, S_{1,2}$ denote the covariance matrices defined by $Z_1, Z_2$
+
+$$S_{1,1} = \frac{1}{n} \left( Z_1^T \times Z_1 - Z_1^T \times 1\times 1^T \times Z_1\right)$$
+
+$$S_{1,2} = \frac{1}{n} \left( Z_1^T \times Z_2 - Z_1^T \times 1\times 1^T \times Z_2\right)$$
+
+$$S_{2,2} = \frac{1}{n} \left( Z_2^T \times Z_2 - Z_2^T \times 1\times 1^T \times Z_2\right)$$
+
+We look for $a$ and $b$ that maximize
+
+$$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$$
+
+
+
+
+---
+
+### Proposition
+
+The vectors $a \in \mathbb{R}^{J_1}$ and $b \in \mathbb{R}^{J_2}$ that maximize
+$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$
+are the first left and right extended singular vectors of
+$$S_{1,2}$$
+with respect to matrices $S_{1,1}$ and $S_{2,2}$
+
+
+---
+
+The extended singular value decomposition of $S_{1,2}$
+with respect to matrices $S_{1,1}$ and $S_{2,2}$ is a triple  $U \in \mathcal{M}_{J_1, k}$,
+$D \in \mathcal{M}_{k,k}$,
+$V \in \mathcal{M}_{J_2, k}$ such that
+$$S_{1,2} = U \times D \times V^T$$
+
+- $D$ is non-negative, diagonal, with non-increasing diagonal entries
+
+- $U^T \times S_{1,1} \times U =  \text{Id}_{k}$
+
+- $V^T \times S_{2,2} \times V =  \text{Id}_{k}$
+
+---
+
+### Proof
+
+We first assume $S_{1,1}$ and $S_{2,2}$ to be Positive Definite.
+
+- $S_{1,1}$ and $S_{2,2}$ have invertible square roots  $S_{1,1}^{-1/2}$ and $S_{2,2}^{-1/2}$
+
+- For $a \in \mathbb{R}^{J_1}$ and $b \in \mathbb{R}^{J_2}$,  let  $u, v$
+be defined as $u = S_{1,1}^{1/2}a$  and $v = S_{2,2}^{1/2}b$
+
+
+- $$\frac{a^T S_{1,2} b}{\sqrt{a^TS_{1,1}a}\sqrt{b^T S_{2,2}b}}= \frac{u^T S_{1,1}^{-1/2} S_{1,2} S_{2,2}^{-1/2}v}{\|u\|\|v\|}$$
+
+---
+
+### Proof (continued)
+
+The unit vectors $u,v$ that maximize the right-hand-side are the
+leading  left and right  singular vectors of
+
+$$S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$$
+
+
+---
+
+### Proof (continued)
+
+Let us handle the case where either $S_{1,1}$ or $S_{2,2}$, or both are not Positive Definite
+
+
+- $S_{1,1}$ or $S_{2,2}$ still have square roots, and the square roots have symmetric Semi Positive Definite pseudo-inverses (Moore-Penrose pseudo-inverses derived from spectral decomposition) denoted by
+$S_{1,1}^{-1/2}$ and $S_{2,2}^{-1/2}$ that satisfy:
+$$S_{1,1}^{1/2}  \times S_{1,1}^{-1/2} \times S_{1,1}=  S^{1/2}_{1,1} \qquad S_{1,1}^{-1/2} \times S_{1,1}^{1/2}  \times S_{1,1}^{-1/2} = S_{1,1}^{-1/2}$$
+
+
+- The unit vectors $u,v$ that maximize $\frac{u^T S_{1,1}^{-1/2} S_{1,2} S_{2,2}^{-1/2}v}{\|u\|\|v\|}$  are again the leading  left and right  singular vectors of
+
+$$S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+The leading left and right singular vectors of $S_{1,2}$ with respect to the metrics defined by $S_{1,1}$ and $S_{2,2}$ define the first stage of _canonical correlation analysis_
+
+The full canonical correlation analysis of $Z = [ Z_1 \; \vdots\; Z_2]$ is made of the whole sequence of extended left and right singular vectors corresponding to positive singular values.
+
+The $j^{\text{th}}$ step
+
+
+---
+
+Canonical Correlation Analysis builds on Singular Value Decomposition just
+as Principal Component Analyis, Correspondence Analyis, but also Multiple Linear
+Regression at least implicitly
+
+Before proceeding to Multiple Correspondence Analyis, we point out the tight connection
+between Canonical Correlation Analysis and methods we have already encountered
+
+---
+
+We can recover a Correspondence Analyis
+from the result of a Canonical Correlation
+Analysis
+
+
+---
+
+We shall work on a qualitative data frame : `credit`
+
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+require(tidyverse)
+require(FactoMineR)
+require(factoextra)
+require(FactoInvestigate)
+```
+
+```{r, echo=FALSE}
+hook_source <- knitr::knit_hooks$get('source')
+knitr::knit_hooks$set(source = function(x, options) {
+  x <- stringr::str_replace(x, "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$", "*\\1")
+  hook_source(x, options)
+})
+```
+
+
+---
+
+```{r, warning=FALSE, message=FALSE}
+readr::read_csv2("./DATA/credit.csv") %>%
+  dplyr::mutate_all(factor) -> credit
+```
+
+In order to smooth CCA, MCA and CA, some factors
+require collapsing some rare levels
+
+We use functions from `forcats` to tidy the data
+
+We focus on CCA and CA for variables `Marche` and `Logement`
+
+
+---
+
+```{r}
+credit[['Marche']] <- fct_collapse(credit[['Marche']],
+  "Mobilier / Ameublement" = "Mobilier / Ameublement",
+  "Renovation" = "Renovation",
+  "Moto" = c ("Moto", "Scooter", "Side-car"),
+  "Voiture" = "Voiture")
+
+credit$Enfants <- fct_lump(credit$Enfants,
+  n = 3,
+  other_level = "Enf>2")
+
+credit$Logement <- fct_collapse(credit$Logement,
+  "Accedant a la propriete"="Accedant a la propriete",
+  "Locataire"="Locataire",
+  "Loge par ..." = c("Loge par l'employeur",
+  "Loge par la famille"),
+  "Proprietaire"="Proprietaire")
+```
+
+---
+
+
+TODO: description of credit dataset
+
+Columns `Marche` and `Logement`
+
+
+### Bivariate indicator matrix
+
+- A 2-way contingency table $T$ with $J_1$ rows and $J_2$ columns. $T[a,b]$
+denotes the number of number of co-occurrences  of modalities $a \in \{1, J_1\}$
+and $b \in \{1, \ldots J_2\}$.
+
+- The 2-way contingency table is _usually_ collected from a data frame `DT` with two
+qualitative columns and $n$ rows.
+
+
+- We can also proceed by _pivoting_ the bivariate table, making it a dataframe $Z$
+with $n$ rows and $J_1 + J_2$ columns.
+If $j_1 \leq J_1$, $Z[i, j_1] =1$ if for
+observation/row $i$, the modality of first variable is $j_1$, $0$ otherwise.
+
+- Table $Z$ is called the _complete disjunctive table_ derived from DT
+
+
+
+$$Z = \bigg[  \underbrace{Z_1 }_{J_1 \text{ col. }} {\Large\vdots} \underbrace{Z_2 }_{J_2 \text{ col. }} \bigg]$$
+
+$$T = Z_1^T \times Z_2$$
+
+---
+
+Packages dedicated to Correspondence Analyis export functions that return disjunctive
+tables.
+
+The construction of disjunctive tables can be performed using verbs from `dplyr` and `tidyverse`
+
+```{r, echo=TRUE, eval=FALSE}
+dplyr::select(credit, Marche, Impaye) %>%
+  tibble::rowid_to_column("id") %>%
+  tidyr::pivot_wider(id_cols = - Marche,
+                     names_from = Marche,
+                     values_from = Marche)  %>%
+  tidyr::pivot_wider(id_cols = -Impaye,
+                     names_from = Impaye,
+                     values_from = Impaye) %>%
+  dplyr::select(-id) %>%
+  dplyr::mutate_all(~ ! is.na(.)) %>%
+  dplyr::mutate_all(as.integer)  -> Z
+```
+
+```{r, eval=FALSE, echo=FALSE}
+Y <- as.matrix(Z)
+t(Y[, 1:4]) %*% Y[, 5:7]
+```
+
+---
+
+As the disjunctive table contains as much information as the contingency table,
+Correspondence Analyis can be performed on the disjunctive table.
+
+$P = \frac{1}{n} Z_1^T \times Z_2$
+
+$S_{1,1} = \frac{1}{n} Z_1^T \times Z_1 - \frac{1}{n^2} Z_1^T\times 1 \times 1^T \times Z_1$
+
+$S_{1,2} = \frac{1}{n} Z_1^T \times Z_2 - \frac{1}{n^2} Z_1^T\times 1 \times 1^T \times Z_2$
+
+$D_r = \frac{1}{n} Z_1^T \times Z_1$  $D_c = \frac{1}{n} Z_2^T \times Z_2$
+
+---
+
+### CA
+
+SVD of   $D_r^{-1} \times P \times  D_r^{-1}  - 1 \times 1^T$
+
+
+---
+
+## CCA
+
+SVD of  $S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$
+
+---
+
+## Multiple Linear Regression as Canonical Correlation Analysis
+
+
+Message: We can recover Multiple Linear Regression from the result of a Canonical Correlation Analysis
+
+
+---
+
+### MLR
+
+
+
+- In Multiple Linear  Regression, we are given a response vector $Y \in \mathbb{R}^n$
+and a design $Z \in \mathcal{M}_{n,p}$
+- We are looking for $\beta \in \mathbb{R}^p$
+that minimizes $\Vert Y - Z \beta\Vert^2$
+- The optimum is achieved at $\color{red}{\widehat{\beta} = (Z^T\times Z)^{-1}\times Z^T \times Y}$<sup>*</sup>
+
+
+
+[*] In case $Z^T \times Z$ is not invertible,
+$(Z^T\times Z)^{-1}$ denotes the Moore-Penrose pseudo-inverse
+
+
+
+
+---
+
+Message: We can recover Multiple Linear Regression from the result of a Canonical Correlation Analysis
+
+
+- In Multiple Linear  Regression, we are given a response vector $Y \in \mathbb{R}^n$
+and a design $Z \in \mathcal{M}_{n,p}$
+- We are looking for $\beta \in \mathbb{R}^p$
+that minimizes $\Vert Y - Z \beta\Vert^2$
+- The optimum is achieved at $\widehat{\beta} = (Z^T\times Z)^{-1}\times Z^T \times Y$<sup>*</sup>
+
+
+- For CCA, the optimum correlation is  the cosine of the angle between $Y$ and its projection $\widehat{Y}$ on the linear space  spanned  by the columns of $Z$, $$\widehat{Y} = Z \widehat{\beta}$$
+- We may choose $\color{red}{a=1}$   and $\color{red}{b=\widehat{\beta}}$ (or any vectors
+in these two directions)
+
+
+
+
+[*] In case $Z^T \times Z$ is not invertible,
+$(Z^T\times Z)^{-1}$ denotes the Moore-Penrose pseudo-inverse
+
+
+---
+
+## CCA of Complete Disjunctive Table
+
+
+
+
+
+```{r plot-label-fc, fig.show="hide"}
+# code chunk here
+data(iris)
+ggplot(iris) +
+  aes(Sepal.Length,
+      Sepal.Width,
+      color = Species) +
+  geom_point()
+```
+
+
+![](`r knitr::fig_chunk("plot-label-fc", "png")`)
+
+
+
+
+
+???
+
 
 ---
 
