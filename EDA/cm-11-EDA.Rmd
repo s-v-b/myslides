@@ -48,8 +48,8 @@ data("pearson")
 ```
 
 
-```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
-require(RefManageR, quietly = TRUE)
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
+pacman::p_load(RefManageR, quietly = TRUE)
 BibOptions(check.entries = FALSE,
            bib.style = "authoryear",
            cite.style = 'authoryear',
@@ -59,17 +59,7 @@ BibOptions(check.entries = FALSE,
 myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
-
-
-
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-NoCite(myBib, "MR3851754")
-NoCite(myBib, "MR3080408")
-NoCite(myBib, "MR3316191")
-NoCite(myBib, "MR3316191")
-NoCite(myBib, "zbMATH06322139")
-NoCite(myBib, "Har75")
-NoCite(myBib, "MR2677125")
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
 NoCite(myBib, "HaTiFr01")
 NoCite(myBib, "Mur12")
 NoCite(myBib, "moitra2018algorithmic")
@@ -78,12 +68,9 @@ NoCite(myBib, "moitra2018algorithmic")
 ---
 class: middle, left, inverse
 
-
-
-# Exploratory Data Analysis XI Multiple Correspondance Analysis
+# Exploratory Data Analysis XI: Multiple Correspondance Analysis
 
 ### `r Sys.Date()`
-
 
 #### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
 
@@ -106,9 +93,9 @@ class: middle, inverse
 
 ---
 name: bigpic
-template: interslide
+template: inter-slide
 
-# Motivation
+## Motivation
 
 
 ```{r, warning=FALSE, echo=FALSE, message=FALSE}
@@ -126,17 +113,63 @@ a data table where individuals are described by _qualitative_ variables.
 MCA is used to study the similarities between individuals from the point of
 view of all the variables and identify individuals' profiles
 
-MCA is also used to assess relationships between variables and study the associations between categories 
+MCA is also used to assess relationships between variables and study the associations between categories
 
 As with PCA and CA, the individuals or groups of individuals
 (rows) can be connected with categories of  variables (columns)
 
-.fr[From _R for statistics_, Cornillon et al. Chapman & Hall. Pub.]
+.fr.f6[From _R for statistics_, Cornillon et al. Chapman & Hall. Pub.]
 
+
+`mca` is a Multiple Correspondence Analysis (MCA) package for `r fontawesome::fa("python")`, intended to be used with `pandas`. MCA is a feature extraction method; essentially PCA for categorical variables.
+
+.fr.f6[[mca homepage](https://github.com/esafak/mca)]
+
+???
+
+Take-home message: MCA is a matrix factorization based method for exploring samples of categorical variables
+
+Questions:
+
+- Transforming samples of categorical variables into matrices
+- SVD Factorization
+- Relating the factors to the original data
 
 ---
 
-### FactoMineR
+### Questionnaires
+
+
+
+[](https://en.wikipedia.org/wiki/Questionnaire)
+
+
+???
+
+Questionnaires:
+
+- Definition
+- Usage
+- Example
+- Interpretation
+
+---
+
+### Example: Questionnaire based on fictitious case reports
+
+
+[Case report on Wikipedia](https://en.wikipedia.org/wiki/Case_report)
+
+
+???
+
+- Definition of  case report
+- Usage of fictitious case report
+- 
+
+---
+
+### `r fontawesome::fa("coffee")` FactoMineR
 
 <iframe src="http://factominer.free.fr/factomethods/multiple-correspondence-analysis.html"  width="750px" height="400px"></iframe>
 
@@ -159,7 +192,7 @@ As with PCA and CA, the individuals or groups of individuals
 name: visualizations
 
 
-### Visualization     
+### Visualization
 
 
 ---
@@ -181,13 +214,13 @@ name: visualizations
 fpath <- "./DATA/credit.csv"
 
 credit <- read_csv2(fpath) %>%
-  mutate(across(where(is.character), 
+  mutate(across(where(is.character),
                 factor)
          )
 
 credit$Age <- credit$Age %>%
   as_factor() %>%
-  fct_inseq()  
+  fct_inseq()
 ```
 ]
 
@@ -205,24 +238,24 @@ credit %>% glimpse(width = 40)
 
 
 ---
-exclude: true 
+exclude: true
 
-### Handling rare categories 
+### Handling rare categories
 
 
 
 ---
-exclude: true 
+exclude: true
 
 ### Spotting rare categories.
 
 ```{r, eval=FALSE, echo=FALSE}
 rare_categories <- credit %>%
   map(table) %>%
-  map(~ which(. <= 10)) 
+  map(~ which(. <= 10))
 
- rare_categories <- rare_categories[which(rare_categories %>% 
-                        map(length) >0)] 
+ rare_categories <- rare_categories[which(rare_categories %>%
+                        map(length) >0)]
 ```
 
 ---
@@ -238,14 +271,14 @@ credit$Marche <- fct_collapse(credit$Marche,
   "Mobilier / Ameublement" = "Mobilier / Ameublement",
   "Renovation" = "Renovation",
   "Moto" = c ("Moto", "Scooter", "Side-car"),
-  "Voiture" = "Voiture")  
+  "Voiture" = "Voiture")
 ```
 ]
 
 .panel[ .panel-name[`Enfants`]
 ```{r}
 credit$Enfants <- credit$Enfants %>%
-  fct_lump(n = 3, other_level = "Enf>2") 
+  fct_lump(n = 3, other_level = "Enf>2")
 ```
 ]
 
@@ -256,9 +289,9 @@ credit$Logement <- credit$Logement %>%
   fct_collapse(
     "Accedant a la propriete"="Accedant a la propriete",
     "Locataire"="Locataire",
-    "Loge par ..." = c("Loge par l'employeur", 
+    "Loge par ..." = c("Loge par l'employeur",
                        "Loge par la famille"),
-    "Proprietaire"="Proprietaire") 
+    "Proprietaire"="Proprietaire")
 ```
 ]
 
@@ -266,12 +299,12 @@ credit$Logement <- credit$Logement %>%
 
 ---
 
-### MCA over attitude variables 
+### MCA over attitude variables
 
 ```{r}
 res.mca <- credit %>%
-  FactoMineR::MCA(graph = FALSE, 
-                  quali.sup = 6:11) 
+  FactoMineR::MCA(graph = FALSE,
+                  quali.sup = 6:11)
 ```
 
 ---
@@ -319,18 +352,18 @@ res.mca$eig%>%
 
 ### Graphics
 
-Object `res.mca` belongs to class `MCA` 
+Object `res.mca` belongs to class `MCA`
 
 Class `MCA`  has its own `plot` method
 
 The MCA function yields a graph simultaneously representing individuals and
-categories (active and illustrative) on the first two dimensions. 
+categories (active and illustrative) on the first two dimensions.
 
 This representation quickly becomes messy.
 
 ---
 
-### Plotting individuals 
+### Plotting individuals
 
 Making variables whether active or not, _invisible_
 
@@ -353,7 +386,7 @@ Does it?
 
 ---
 
-### Colouring according to profession 
+### Colouring according to profession
 
 ```{r}
 plot(res.mca, invisible=c("var","quali.sup"), habillage="Profession")
@@ -362,7 +395,7 @@ plot(res.mca, invisible=c("var","quali.sup"), habillage="Profession")
 
 ---
 
-### Colouring according to Age 
+### Colouring according to Age
 
 ```{r}
 plot(res.mca, invisible=c("var","quali.sup"), habillage="Age")
@@ -371,7 +404,7 @@ plot(res.mca, invisible=c("var","quali.sup"), habillage="Age")
 
 ---
 
-### Colouring according to Impaye 
+### Colouring according to Impaye
 
 ```{r}
 plot(res.mca, invisible=c("var","quali.sup"), habillage="Impaye")
@@ -408,7 +441,7 @@ plot(res.mca, invisible=c("ind", "quali.sup"))
 
 ---
 
-### AUtomatic report 
+### AUtomatic report
 
 ```{r, eval=FALSE}
 FactoInvestigate::Investigate(res.mca, keepRmd = TRUE)
