@@ -63,6 +63,8 @@ myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 NoCite(myBib, "HaTiFr01")
 NoCite(myBib, "Mur12")
 NoCite(myBib, "moitra2018algorithmic")
+NoCite(myBib, "MR767260")
+NoCite(myBib, "MR2445017")
 ```
 
 ---
@@ -83,12 +85,9 @@ class: middle, inverse
 
 ### [Motivation](#bigpic)
 
-### [MCA](#mca)
+???
 
 ### [CCA](#cca)
-
-
-???
 
 
 ---
@@ -165,7 +164,7 @@ Questionnaires:
 
 - Definition of  case report
 - Usage of fictitious case report
-- 
+-
 
 ---
 
@@ -177,14 +176,203 @@ Questionnaires:
 
 ### Handling more than 2 qualitative variables
 
-```{r}
+Example `r fontawesome::fa("ship")` Titanic data set
 
+$$\begin{array}{ll}\text{Demographic} & = \begin{cases}\text{Embarked} \\
+\text{Sex} \\ \text{Passenger class} \\
+\text{Age (Child/Adult)} \end{cases} \\ \text{Attitudinal} & =  \text{Survived}\end{array}$$
+
+???
+
+When handling a collection of qualitative variables, we may face several kinds of situations.
+
+- we may investigate attitudinal variables with respect to  demographic variables
+- we may investigate collections of  attitudinal variables
+- we may investigate collections of demographic variables
+
+MCA is geared towards investigating collections of variables of similar status
+
+---
+
+```{r, echo=FALSE}
+
+tit_col_types = cols(
+
+  PassengerId = col_integer(),
+
+  Survived = col_factor(levels=c("0", "1"),   #<<
+                        include_na = TRUE),   #<<
+
+  Pclass = col_factor(levels=c("1", "2", "3"),  #<<
+                      ordered = TRUE,           #<<
+                      include_na = TRUE),       #<<
+
+  Sex = col_factor(levels = c("female", "male")),
+  Age = col_double(),
+  SibSp = col_integer(),
+  Parch = col_integer(),
+
+  Embarked = col_factor(levels = c("S", "C", "Q"),
+                        include_na = TRUE)
+)
+train <- read_csv("DATA/titanic/train.csv",
+          col_types=tit_col_types)
+test <- read_csv("DATA/titanic/test.csv",
+          col_types=tit_col_types)
+
+test <- mutate(test, #<<
+               Survived=NA)  #<<
+
+tit <- union(train,
+             test)
+
+tit$Survived <- forcats::fct_recode(tit$Survived,      #<<
+                                    "Deceased"="0",    #<<
+                                    "Survived"="1") %>%   #<<
+                          forcats::fct_relevel(c("Survived", "Deceased")) #<<
+
+tit$Age <-
+  cut(tit$Age,
+      breaks = c(0, 18, 100),
+      labels=c("Child", "Adult")) %>%
+  fct_explicit_na("NA.A")
+
+
+tit %>%
+  select(Sex, Age, Embarked, Pclass) %>%
+  head()
+
+```
+
+---
+
+### Mosaicplots for `n`-ways contingency tables
+
+
+```{r, echo=FALSE}
+# mosaicplot(Titanic, color = TRUE)
+vcd::mosaic(x=Titanic)
+```
+
+???
+
+
+```{r, eval=FALSE}
+tit %>%
+  dplyr::select(Pclass, Embarked) %>%
+  drop_na() %>%
+  ggplot() +
+  geom_mosaic(aes(x = product(Embarked, Pclass), fill=Embarked)) +
+  labs(x= "Passenger class", y="Embarked") +
+  scale_fill_viridis_d() +
+  ggtitle("Titanic mosaic with tidyverse flavor")
 ```
 
 
 ---
 
-### Indicator matrix
+### A glimpse at the indicator matrix
+
+.f6[
+
+```{r}
+Z <- tit %>%
+  select(Sex, Age, Embarked, Pclass) %>%
+  tab.disjonctif() #<<
+
+Z %>% head() %>% knitr::kable()
+```
+
+]
+
+???
+
+
+```{r, echo=TRUE}
+mca.tit <- tit %>%
+  select(Sex, Age, Embarked, Pclass, Survived) %>%
+  FactoMineR::MCA(quali.sup= c(5), graph = FALSE)  #<<
+
+Z <- mca.tit$call$Xtot      #<<
+
+# Z %>%  head() %>% knitr::kable()
+```
+
+
+Comment on "quali.sup" and other optional arguments to `MCA`
+
+---
+
+### A glimpse at Burt matrix
+
+
+```{r}
+B <- t(Z) %*% as.matrix(Z)
+
+B[1:5, 1:5] %>% knitr::kable()
+```
+
+
+---
+
+### `r fontawesome::fa("binoculars")` Two perspectives
+
+MCA can be viewed along two perspectives:
+
+- Analyzing the dataset after performing _one-hot_ encoding of categorical variables.
+The
+
+- Analyzing all two-way contingency tables derived from the dataset
+
+???
+
+The two perspective define different pipelines
+
+
+---
+
+### MCA
+
+MCA consists of performing CA (correspondance analysis)  on the indicator matrix
+
+
+```{r}
+mca.tit.mano <- FactoMineR::CA(Z) #<< 
+```
+
+
+```{r}
+U <- mca.tit.mano$svd$U   # orthogonal columns
+V <- mca.tit.mano$svd$V   # orthogonal w.r.t.  
+D <- diag(mca.tit.mano$svd$vs[1:5])
+
+colSums(U %*% D %*% t(V))
+
+norm(scale(Z, scale=FALSE) - (U %*% D %*% t(V)),type = "F" )
+
+t(V) %*% V 
+```
+
+???
+
+- centering $Z$
+- extended SVD with respect to two diagonal matrices 
+- all row sums of $Z$ are equal to the number of categorical variables in the initial dataset
+- column sums count number of occurrences of categories in the initial dataset
+
+
+---
+
+
+
+---
+
+### CA executive summary
+
+
+
+
+???
 
 
 
@@ -193,6 +381,86 @@ name: visualizations
 
 
 ### Visualization
+
+
+
+---
+
+### Burt matrix
+
+All pairwise contingency tables
+
+$$B =  Z^T \times Z$$
+
+---
+
+### MCA
+
+
+> Multiple Correspondence Analysis (MCA)
+
+> Performs Multiple Correspondence Analysis (MCA) with supplementary individuals, supplementary quantitative variables and supplementary categorical variables.
+
+> Performs also Specific Multiple Correspondence Analysis with supplementary categories and supplementary categorical variables.
+
+> Missing values are treated as an additional level, categories which are rare can be ventilated
+
+???
+
+- supplementary categories and
+
+- supplementary categorical variables
+
+- ventilated:
+
+---
+
+### Result of `MCA`
+
+
+Returns a list including:
+
+`eig`
+a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance
+
+`var`
+a list of matrices containing all the results for the active variables (coordinates, square cosine, contributions, v.test, square correlation ratio)
+
+`ind`
+a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)
+
+`ind.sup`
+a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)
+
+`quanti.sup`
+a matrix containing the coordinates of the supplementary quantitative variables (the correlation between a variable and an axis is equal to the variable coordinate on the axis)
+
+`quali.sup`
+a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, square cosine and v.test which is a criterion with a Normal distribution, square correlation ratio)
+
+`call`
+a list with some statistics
+
+---
+
+### Zooming on `call`
+
+- "X" : original dataset
+- "marge.col" :
+- "marge.row"
+- "ncp" : number of components to retain
+- "row.w": row weights
+- "excl"
+- "call"
+- "Xtot":  (possibly augmented) indicator matrix
+- "N":
+- "col.sup":
+- "quali"
+- "quali.sup"
+
+???
+
+Leaving aside
 
 
 ---
@@ -476,6 +744,17 @@ will identify the most characteristic categories.
 FactoMineR::dimdesc(res.mca)
 ```
 
+
+---
+
+### Packages
+
+- `r fontawesome::fa("r-project")` [FactoMineR]()
+- `r fontawesome::fa("r-project")` [ade4]()
+
+
+- `r fontawesome::fa("python")` [prince](https://github.com/MaxHalford/prince)
+- `r fontawesome::fa("python")` []()
 
 ---
 
