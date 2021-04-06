@@ -590,13 +590,13 @@ Given $X$, $\Omega$ and $\Phi$, computing the extended SVD of $X$ with respect t
 
 $\Omega^{1/2}$ and $\Phi^{1/2}$ can be obtained from the SVD of $\Omega, \Phi$
 
-Indeed, from the proof of the existence of the extended SVD, the extended SVD of $X$ can be obtained in a three steps approach
+Indeed, from the proof of the existence of the extended SVD, the extended SVD of $X$ can be obtained in a three-steps approach:
 
-- Compute $\Omega^{1/2}$ and $\Phi^{1/2}$ can be obtained from the SVD of $\Omega, \Phi$
+- Compute $\Omega^{1/2}$ and $\Phi^{1/2}$  from the SVDs of $\Omega, \Phi$
 
 - Compute the ordinary SVD $U \times D \times V^T$ of $\Omega^{1/2} \times X \times \Phi^{1/2}$
 
-- Return $\Omega^{-1/2} \times U$, $D$  $\Phi^{-1/2}\times V$
+- Return $\Omega^{-1/2} \times U$, $D$,  $\Phi^{-1/2}\times V$
 
 
 ???
@@ -684,7 +684,7 @@ The fact that $N$ (resp. $M$) is $\Omega$ (resp. $\Phi$) orthogonal allows to co
 
 ???
 
-We just take advantage of the observation 
+We just take advantage of the observation
 
 $$m_j^T \times \Phi \times m_\ell = \operatorname{Tr}\left(\Phi \times m_\ell \times m_j^T \right)$$
 
@@ -1025,7 +1025,7 @@ with each axis is usually added to the plot. If possible
 
 ---
 
-### `r fontawesome::fa("ship")` Titanic illustrated : row profiles 
+### `r fontawesome::fa("ship")` Titanic illustrated : row profiles
 
 .panelset[
 
@@ -1064,7 +1064,7 @@ p <-  res_ca %>%
   geom_vline(xintercept = 0, linetype=2) +
   xlab(latex2exp::TeX("$\\lambda_1 = 74.1\\%$")) +
   ylab(latex2exp::TeX("$\\lambda_2 = 25.9\\%$")) +
-  ggtitle("Titanic CA row profiles") 
+  ggtitle("Titanic CA row profiles")
 
 p
 ```
@@ -1166,9 +1166,9 @@ res_ca_dual$rownames_ <- c("1", "2", "3")
 
 .panel[.panel-name[Plot preparation]
 ```{r CArowtitanicDual, echo=TRUE, message=FALSE, warning=FALSE,  fig.show='hide', fig.height=3}
-p %+% 
+p %+%
   res_ca_dual +
-  ggtitle("Titanic CA column profiles") 
+  ggtitle("Titanic CA column profiles")
 ```
 ]
 
@@ -1181,9 +1181,9 @@ p %+%
 
 .panel[.panel-name[Discussion]
 
-- Passenger Class 3 makes the bulk of passengers (it accounts for more than half of the passengers). The conditional Embarkment distribution for that class is closed to the centroid. Should it be a surprise ? 
+- Passenger Class 3 makes the bulk of passengers (it accounts for more than half of the passengers). The conditional Embarkment distribution for that class is closed to the centroid. Should it be a surprise ?
 
-- Passengers with  Class 2 tickets almost exclusively boarded at Southampton 
+- Passengers with  Class 2 tickets almost exclusively boarded at Southampton
 
 - Passengers with Class 1 tickets almost exclusively boarded at Southampton and Cherbourg
 
@@ -1208,7 +1208,7 @@ a _biplot for correspondence analysis_.
 
 
 ```{r, echo=TRUE, message=FALSE}
-res_ca <- X %>% 
+res_ca <- X %>%
   FactoMineR::CA(ncp = 2, graph = FALSE)   #<<
 ```
 
@@ -1259,7 +1259,7 @@ Component `eig` paves the way for building a `screeplot` for CA
 - `X` is the contingency table that was fed to `CA`
 - `marge.col` is the marginal distribution for columns
 - `marge.row` is the marginal distribution for rows
-- `row.w`:  a constant vector `1` here 
+- `row.w`:  a constant vector `1` here
 - `excl`:  irrelevant here
 - `Xtot`: irrelevant here
 - `N` sum of coefficients of `X`
@@ -1321,11 +1321,11 @@ $$D_r^{-1} \times P \times D_c^{-1} - \mathbf{1} \times \mathbf{1}^T$$
 
 The $\Omega$ matrix is
 
-`diag(res_ca$call$marge.row)` 
+`diag(res_ca$call$marge.row)`
 
 The $\Phi$ matrix is
 
-`diag(res_ca$call$marge.col)` 
+`diag(res_ca$call$marge.col)`
 
 
 ```{r, echo=FALSE, eval=FALSE}
@@ -1362,7 +1362,7 @@ exclude: true
 
 ---
 
-### Inertia analysis 
+### Inertia analysis
 
 
 .fl.w-40.pa2[
@@ -1414,11 +1414,11 @@ Classes contribute more evenly to Inertia.
 
 ---
 
-### Biplots for CA 
+### Biplots for CA
 
 .fl.w-40[
 
-Passengers who boarded at Cherbourg were disproportionately first class passengers 
+Passengers who boarded at Cherbourg were disproportionately first class passengers
 
 Passengers who boarded at Queenstown were disproportionately third class passengers
 
@@ -1439,7 +1439,7 @@ plot(res_ca)
 ---
 exclude: true
 
-### Questionnaire 
+### Questionnaire
 
 ```{r}
 require(FactoMineR)
@@ -1453,7 +1453,7 @@ res.ca <- CA (children, row.sup = 15:18, col.sup = 6:8)
 template: inter-slide
 name: factoshowcase
 
-## Another FactoMineR showcase 
+## Another FactoMineR showcase
 
 ---
 
@@ -1479,13 +1479,13 @@ In a 1974 survey, 1724 women  answered several questions about women'work among 
 .panel[.panel-name[Get the data]
 ```{r}
 facto_url <- "http://factominer.free.fr"
-url <- paste(facto_url, 
-             "factomethods", 
-             "datasets", 
+url <- paste(facto_url,
+             "factomethods",
+             "datasets",
              "women_work.txt", sep = "/")
-women_work <- read.table(url, 
-                      header=TRUE, 
-                      row.names=1, 
+women_work <- read.table(url,
+                      header=TRUE,
+                      row.names=1,
                       sep="\t")
 
 tab <- women_work[, 1:3]
@@ -1534,8 +1534,8 @@ Another question was asked th 1724 women
 .panel[.panel-name[The data]
 ```{r}
 pattern_ <- "housewives.cut.from.world."
-women_work <- women_work %>% 
-  rename_with(.fn= ~ str_replace(., pattern_, ""), 
+women_work <- women_work %>%
+  rename_with(.fn= ~ str_replace(., pattern_, ""),
               starts_with(pattern_))
 
 head(women_work[, 4:ncol(women_work)])
