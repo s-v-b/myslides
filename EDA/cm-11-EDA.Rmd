@@ -624,11 +624,29 @@ t(V) %*% V
 
 ### CA executive summary
 
+- Start from a 2-way contingency table $X$ with $\sum_{i,j} X_{i,j}=N$
+- Normalize $P = \frac{1}{N}X$ 
+- Let $D_r$ denote the diagonal matrix with row sums of $P$ as coefficients
+- Let $D_c$ denote the diagonal matrix with column sums of $P$ as coefficients
+
+The matrix of interest is the row profiles matrix
+$$D_r^{-1} \times P$$
+
+CA consists in computing the extended SVD of 
+$$D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mathbf{I}^T $$
+with respect to $D_r$ and $D_c$
+
+When calling `svd(.)`, the argument should be 
+$$D_r^{1/2}\times \left(D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mathbf{I}^T  \right)\times D_c^{1/2}$$
 
 
+---
 
-???
+### CA on incidence matrix
 
+The row sums of an incidence matrix are equal to the number of variables of the data matrix
+
+The column sums of an incidence matrix are equal to the numbers of occurrences of the corresponding levels
 
 
 ---
