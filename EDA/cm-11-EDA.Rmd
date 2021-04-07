@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "xaringan-themer.css"]
+    css: ["header-...ter.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -85,6 +85,14 @@ class: middle, inverse
 
 ### [Motivation](#bigpic)
 
+### [Variants on mosaicplot](#variant-mosaic)
+
+### [Indicator matrix](#indic-matrix)
+
+### [MCA as CA on indicator matrix](#mca-in-words)
+
+### [Illustrations](#)
+
 ???
 
 ### [CCA](#cca)
@@ -153,6 +161,7 @@ Questionnaires:
 - Interpretation
 
 ---
+exclude: true
 
 ### Example: Questionnaire based on fictitious case reports
 
@@ -268,6 +277,189 @@ tit %>%
   ggtitle("Titanic mosaic with tidyverse flavor")
 ```
 
+---
+name: variant-mosaic
+template: inter-slide
+
+
+## Variations on Mosaicplot
+
+---
+
+### Mosaic plots versus Association plots
+
+
+> In order to explain multi-dimensional categorical data, statisticians typically look for (conditional) independence structures
+
+> Whether the task is purely exploratory or model-based, techniques such as _mosaic_ and _association_ plots offer good support for visualization
+
+.fr.f6[Structplot vignette]
+
+???
+
+> Both _mosaic_ and _association_ plots visualize aspects of (possibly higher-dimensional) contingency tables, with several extensions
+
+
+---
+
+### Extensions
+
+- double-decker plots
+
+- spine plots
+
+- spinograms
+
+- conditional association plots
+
+
+---
+
+### `r fontawesome::fa("university")` Order matters
+
+
+```{r, out.width="50%", fig.show='hold'}
+
+aperm(UCBAdmissions, c(3, 2, 1)) %>% mosaicplot(shade=TRUE)
+
+aperm(UCBAdmissions, c(3, 2, 1)) %>% vcd::mosaic(shade=TRUE)
+```
+
+---
+
+### Double decker plot for  `UCBAdmissions`
+
+.fl.w-60.pa2[
+
+```{r}
+aperm(UCBAdmissions, c(3, 2, 1)) %>%
+  vcd::doubledecker()
+```
+.f6[
+- Per department admissions exhibit no clear bias against
+women
+- Men tend to fill more applications to less selective departments
+]
+]
+
+.fl.w-40.pa2.f6[
+
+[Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox)
+
+> A trend appears in several different groups of data but disappears or reverses when these groups are combined
+
+> This result is often encountered in social-science and medical-science statistics and is particularly problematic when frequency data is unduly given causal interpretations.
+
+> The paradox is also referred to as Simpson's reversal, Yule–Simpson effect, amalgamation paradox, or reversal paradox
+
+.fr[Wikipedia]
+
+]
+
+
+???
+
+A double decker plot is a collection of stacked column/bar plots: For each
+department, we have a column plot where `Gender` is mapped to `x` and `Admit`
+to `y`. Columns are stacked. Width is proportional to number of applicants
+with given Gender for the department. Height is proportional to fraction
+of successful/failing applicants for given  Department and Gender
+
+---
+
+### Flattening Titanic table
+
+
+```{r, eval=FALSE}
+pacman::p_load(xtable)
+vcd::structable(~ Class + Age + Sex, aperm(Titanic, c(1,3,2, 4))) %>%
+  xtable::xtableFtable()
+```
+
+
+
+
+
+|  Class | Sex    |     |  Child|  Adult|
+|:------:|:-------|-----|------:|------:|
+|1st     |Male   |      |     5 |   175 |
+|        | Female |     |     1 |   144 |
+|  2nd   | Male   |     |    11 |   168 |
+|        | Female |     |    13 |    93 |
+|  3rd   | Male   |     |    48 |   462 |
+|        | Female |     |    31 |   165 |
+|  Crew  | Male   |     |     0 |   862 |
+|        | Female |     |     0 |    23 |
+
+---
+
+Double-decker plot for the Titanic data
+
+```{r}
+vcd::doubledecker(Titanic)
+```
+
+---
+
+
+```{r}
+knitr::include_url("https://rdrr.io/cran/vcd/")
+```
+---
+###  Strucplot framework
+
+- low-level grapcon functions
+  - created by generating functions (grapcon generators)
+  - `group_...`, `struc_...`, `labelling_...`, `legend_...`, `spacing_...`
+- a suitable combination of the low-level grapcon
+functions is passed as “hyperparameters” to strucplot()
+- convenience functions such as
+mosaic(), sieve(), assoc(), and doubledecker() which interface strucplot()
+
+???
+
+
+> The strucplot framework is highly modularized: Figure 5 shows the hierarchical relationship between the various components. On the lowest level, there are several groups of
+workhorse and parameter functions that directly or indirectly influence the final appearance of the plot (see Table 2 for an overview). These are examples of grapcon functions.
+They are created by generating functions (grapcon generators), allowing flexible parameterization and extensibility (Figure 5 only shows the generators). The generator names follow the
+naming convention group_... (), where group reflects the group the generators belong to
+(strucplot core, labeling, legend, shading, or spacing). The workhorse functions (created by
+struc_... (), labeling_... (), and legend_... ()) directly produce graphical output (i.e.,
+“add ink to the canvas”), whereas the parameter functions (created by spacing_... () and
+shading_... ()) compute graphical parameters used by the others. The grapcon functions
+returned by struc_... () implement the core functionality, creating the tiles and their content. On the second level of the framework, a suitable combination of the low-level grapcon
+functions (or, alternatively, corresponding generating functions) is passed as “hyperparameters” to strucplot(). This central function sets up the graphical layout using grid viewports
+(see Figure 6), and coordinates the specified core, labeling, shading, and spacing functions
+to produce the plot. On the third level, we provide several convenience functions such as
+mosaic(), sieve(), assoc(), and doubledecker() which interface strucplot() through
+sensible parameter defaults and support for model formulae. Finally, on the fourth level,
+there are “related” vcd functions (such as cotabplot() and the pairs() methods for table
+objects) arranging collections of plots of the strucplot framework into more complex displays
+(e.g., by means of panel functions)
+
+
+---
+name: indic-matrix
+template: inter-slide
+
+## Indicator matrix
+
+
+---
+
+### `r fontawesome::fa("binoculars")` Two perspectives
+
+MCA can be viewed along two perspectives:
+
+- Analyzing the dataset after performing _one-hot_ encoding of categorical variables.
+The
+
+- Analyzing all two-way contingency tables derived from the dataset
+
+???
+
+The two perspective define different pipelines
+
 
 ---
 
@@ -303,31 +495,57 @@ Comment on "quali.sup" and other optional arguments to `MCA`
 
 ---
 
-### A glimpse at Burt matrix
+### Construction of indicator matrix
+
+- A categorical variable $V_j$ (factor) with $q$ levels is mapped to $q$ $\{0,1\}$ -valued variables $V_{j,r}$ for $r \leq q$
+
+- If levels are indexed by $\{1, \ldots, q\}$, if the value of the categorical variable $V_j$ from row $i$  is $k \in \{1, \ldots, q\}$, the binary variables $V_{j,r}$ on that row take values 
+$$k \mapsto \underbrace{0,\ldots, 0}_{k-1}, 1, \underbrace{0, \ldots, 0}_{q-k}$$
+
+- In Machine Learning parlance building  the indicator matrix consists of performing _one-hot encoding_ for each categorical variable
+
+- The indicator matrix has as many rows as the data matrix
+
+- The number of columns of the indicator matrix is the sum of the number of levels of the categorical variables/columns of the data matrix
+
+- The indicator matrix is a numerical matrix. It is suitable for factorial methods `r fontawesome::fa("smile")` 
 
 
-```{r}
-B <- t(Z) %*% as.matrix(Z)
-
-B[1:5, 1:5] %>% knitr::kable()
-```
+???
 
 
 ---
 
-### `r fontawesome::fa("binoculars")` Two perspectives
+### The Burt matrix
 
-MCA can be viewed along two perspectives:
+.fl.w-40.pa2.f6[
 
-- Analyzing the dataset after performing _one-hot_ encoding of categorical variables.
-The
+- Multiple Correspondance Analysis may be based on the Burt matrix
 
-- Analyzing all two-way contingency tables derived from the dataset
+- The Burt matrix is a symmetric integer-valued matrix made of blocks consisting 
+of 2-ways contingency tables
 
-???
+- Each block is the contingency table defined by two categorical variables from the data matrix
 
-The two perspective define different pipelines
+- Diagonal blocks are diagonal sub-matrices
 
+]
+
+.fl.w-60.pa2.f6[
+
+```{r}
+B <- t(Z) %*% as.matrix(Z)
+
+B[1:6, 1:6] %>% knitr::kable()
+```
+
+]
+
+---
+class: inter-slide
+name: mca-in-words
+
+## MCA in words
 
 ---
 
@@ -337,26 +555,26 @@ MCA consists of performing CA (correspondance analysis)  on the indicator matrix
 
 
 ```{r}
-mca.tit.mano <- FactoMineR::CA(Z) #<< 
+mca.tit.mano <- FactoMineR::CA(Z) #<<
 ```
 
 
 ```{r}
 U <- mca.tit.mano$svd$U   # orthogonal columns
-V <- mca.tit.mano$svd$V   # orthogonal w.r.t.  
+V <- mca.tit.mano$svd$V   # orthogonal w.r.t.
 D <- diag(mca.tit.mano$svd$vs[1:5])
 
 colSums(U %*% D %*% t(V))
 
 norm(scale(Z, scale=FALSE) - (U %*% D %*% t(V)),type = "F" )
 
-t(V) %*% V 
+t(V) %*% V
 ```
 
 ???
 
 - centering $Z$
-- extended SVD with respect to two diagonal matrices 
+- extended SVD with respect to two diagonal matrices
 - all row sums of $Z$ are equal to the number of categorical variables in the initial dataset
 - column sums count number of occurrences of categories in the initial dataset
 
