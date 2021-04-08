@@ -97,7 +97,7 @@ class: middle, inverse
 name: bigpic
 template: inter-slide
 
-## Motivation
+## Motivation: analyzing more than 2 categorical variables
 
 
 ```{r, warning=FALSE, echo=FALSE, message=FALSE}
@@ -111,21 +111,50 @@ require(ggrepel)
 
 ---
 
-The aim of multiple correspondence analysis (MCA) is to summarise and visualise
-a data table where individuals are described by _qualitative_ variables.
+### Different perspectives
 
-MCA is used to study the similarities between individuals from the point of
-view of all the variables and identify individuals' profiles
+When handling two random variables, questions revolve around one topic: are they independent?
 
-MCA is also used to assess relationships between variables and study the associations between categories
+From a numerical viewpoint, the chi-square divergence quantifies possible departure from independence
 
-As with PCA and CA, the individuals or groups of individuals
-(rows) can be connected with categories of  variables (columns)
+A mosaicplot helps spotting   associations between categories. Coloring tiles using
+Pearson residuals makes the pictures even more convenient
+
+Correspondance Analysis (CA) and the associated plots (screeplot, biplot, correlation circle plot) provide
+a geometric toolkit that complements the chi-square divergence and the different flavors of mosaicplots:
+the total inertia of CA is the chi-square divergence computed from the contingency table
+
+---
+
+### Different perspectives (continued)
+
+When handling more than two variables, several settings are possible
+
+- Some variables may be called explanatory, one variable may be considered as a response variable. Is the response variable
+dependent on the explanatory variables? If yes, we may wonder whether, conditionally on some explanatory variabless, the response variable is independent on the other explanatory variables
+
+- All variables share a similar status (explanatory or response),  we may explore the relations between the variables, between categories and try to reduce dimension in some way
+
+In this session, we will adress the different settings
+
+
+---
+
+### MCA (from documentations)
+
+> The aim of multiple correspondence analysis (MCA) is to summarise and visualise a data table where individuals are described by _qualitative_ variables with similar status
+
+> MCA is used to study the similarities between individuals from the point of view of all the variables and identify individuals' profiles
+
+> MCA is also used to assess relationships between variables and study the associations between categories
+
+> As with PCA and CA, the individuals or groups of individuals (rows) can be connected with categories of  variables (columns)
 
 .fr.f6[From _R for statistics_, Cornillon et al. Chapman & Hall. Pub.]
 
+--
 
-`mca` is a Multiple Correspondence Analysis (MCA) package for `r fontawesome::fa("python")`, intended to be used with `pandas`. MCA is a feature extraction method; essentially PCA for categorical variables.
+> `mca` is a Multiple Correspondence Analysis (MCA) package for `r fontawesome::fa("python")`, intended to be used with `pandas`. MCA is a feature extraction method; essentially PCA for categorical variables.
 
 .fr.f6[[mca homepage](https://github.com/esafak/mca)]
 
@@ -140,6 +169,8 @@ Questions:
 - Relating the factors to the original data
 
 ---
+exclude: true
+
 
 ### Questionnaires
 
@@ -172,11 +203,6 @@ exclude: true
 - Usage of fictitious case report
 -
 
----
-
-### `r fontawesome::fa("coffee")` FactoMineR
-
-<iframe src="http://factominer.free.fr/factomethods/multiple-correspondence-analysis.html"  width="750px" height="400px"></iframe>
 
 ---
 
@@ -192,13 +218,13 @@ $$\begin{array}{ll}\text{Demographic} & = \begin{cases}\text{Embarked} \\
 
 When handling a collection of qualitative variables, we may face several kinds of situations.
 
-- we may investigate attitudinal variables with respect to  demographic variables
-- we may investigate collections of  attitudinal variables
-- we may investigate collections of demographic variables
+- we may investigate response/attitudinal variables with respect to  explanatory/demographic variables
+- we may investigate collections of  response/attitudinal variables
+- we may investigate collections of explanatory/demographic variables
 
 MCA is geared towards investigating collections of variables of similar status
 
----
+
 
 ```{r, echo=FALSE}
 
@@ -388,7 +414,7 @@ vcd::structable(~ Class + Age + Sex, aperm(Titanic, c(1,3,2, 4))) %>%
 
 |  Class | Sex    |     |  Child|  Adult|
 |:------:|:-------|-----|------:|------:|
-|1st     |Male   |      |     5 |   175 |
+|1st     | Male   |      |     5 |   175 |
 |        | Female |     |     1 |   144 |
 |  2nd   | Male   |     |    11 |   168 |
 |        | Female |     |    13 |    93 |
@@ -399,12 +425,25 @@ vcd::structable(~ Class + Age + Sex, aperm(Titanic, c(1,3,2, 4))) %>%
 
 ---
 
-### `r fontawesome::fa("ship")` Double-decker plot for the Titanic data
+### `r fontawesome::fa("ship")` Double-decker plots for the Titanic data
 
-```{r}
+```{r, out.width="50%", fig.show='hold'}
 vcd::doubledecker(Titanic)
+
+tit %>%
+  filter(Survived %in% c('Survived', 'Deceased')) %>%
+  filter(Age %in% c('Adult', 'Child')) %>%
+  mutate(Age=fct_drop(Age)) %>%
+  ggplot() +
+  geom_mosaic(aes(x=product(Survived, Age, Sex, Pclass), fill=Survived), divider=ddecker()) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5)) +
+  scale_fill_viridis_d()
 ```
 
+
+???
+
+`Titanic` is a base `r fontawesome::fa("r-project")` contingency table where surn
 ---
 exclude: true
 
@@ -554,7 +593,15 @@ name: mca-in-words
 
 ## MCA in words
 
+
 ---
+
+### `r fontawesome::fa("coffee")` FactoMineR
+
+<iframe src="http://factominer.free.fr/factomethods/multiple-correspondence-analysis.html"  width="750px" height="400px"></iframe>
+
+---
+
 
 ### MCA on `r fontawesome::fa("ship")`
 
@@ -672,19 +719,25 @@ t(V) %*% V
 ### CA executive summary
 
 - Start from a 2-way contingency table $X$ with $\sum_{i,j} X_{i,j}=N$
-- Normalize $P = \frac{1}{N}X$
-- Let $D_r$ denote the diagonal matrix with row sums of $P$ as coefficients
-- Let $D_c$ denote the diagonal matrix with column sums of $P$ as coefficients
+- Normalize $P = \frac{1}{N}X$ (_correspondance matrix_)
+- Let $r$ (resp. $c$) be the row (resp. column) wise sums vector
+- Let $D_r=\text{diag}(r)$ denote the diagonal matrix with row sums of $P$ as coefficients
+- Let $D_c=\text{diag}(c)$ denote the diagonal matrix with column sums of $P$ as coefficients
 
-The matrix of interest is the row profiles matrix
-$$D_r^{-1} \times P$$
 
-CA consists in either
++ The _row profiles matrix_ is $D_r^{-1} \times P$
++ The _standardized residuals matrix_ is  $S = D_r^{-1/2} \times \left(P - r c^T\right) \times D_c^{-1/2}$
 
-- computing the extended SVD of
-$$D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mathbf{I}^T $$
-with respect to $D_r$ and $D_c$
-- computing the SVD of the Pearson's residuals matrix and perform some post-processing
+CA consists in computing the SVD of the standardized residuals matrix $S =  U  \times D \times V^T$
+
+From the SVD, we get
+- $D_r^{-1/2} \times U$ standardized coordinates of rows
+- $D_r^{-1/2} \times V$ standardized coordinates of columns
+- $D_r^{-1/2} \times U \times D$ principal coordinates of rows
+- $D_c^{-1/2} \times V \times D$ principal coordinates of columns
+- Squarer singular values: the principal inertia
+
+???
 
 
 When calling `svd(.)`, the argument should be
@@ -692,6 +745,16 @@ $$D_r^{1/2}\times \left(D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mat
 
 
 ---
+
+### CA and extended SVD
+
+$$D_r^{-1} \times P \times D_c^{-1} - \mathbf{I}\mathbf{I}^T = (D_r^{-1/2} \times U)\times D \times (D_c^{-1/2}\times V)^T$$
+
+$(D_r^{-1/2} \times U)\times D \times (D_c^{-1/2}\times V)^T$ is the _extended SVD_ of $D_r^{-1} \times P \times D_c^{-1} - \mathbf{I}\mathbf{I}^T$ with respect to $D_r$ and $D_c$
+
+
+---
+
 
 ### CA on incidence matrix
 
@@ -826,7 +889,9 @@ What's different ?
 ```{r}
 knitr::kable(get_eigenvalue(mca.tit), digits=2)
 
-```]
+```
+
+]
 
 .fl.w-60.pa2.f6[
 ```{r}
@@ -863,12 +928,12 @@ gg_mca_screeplot(mca.tit)
 
 
 ```{r}
-fviz_mca_biplot(mca.tit, repel=TRUE, ggtheme=theme_minimal())
-fviz_mca_var(mca.tit)
+# fviz_mca_biplot(mca.tit, repel=TRUE, ggtheme=theme_minimal())
+# fviz_mca_var(mca.tit)
 
-res.mca <- as.data.frame(tit)  %>%
- select(Sex, Pclass, Embarked, Age) %>%
- MCA(graph=FALSE)
+# res.mca <- as.data.frame(tit)  %>%
+#  select(Sex, Pclass, Embarked, Age) %>%
+#  MCA(graph=FALSE)
 
 # res.mca$var$coord %>% glimpse()
 # fviz_mca_biplot(res.mca, geom="point")
