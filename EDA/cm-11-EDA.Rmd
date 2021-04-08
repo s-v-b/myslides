@@ -34,17 +34,12 @@ layout: true
 class: left, middle
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
-
+# require(tidyverse)
 ```
 
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-pacman::p_load("ggdendro")
-pacman::p_load("fastcluster")
-pacman::p_load("mixdist")
 pacman::p_load("factoextra")
-data("iris")
-data("pearson")
 ```
 
 
@@ -110,6 +105,8 @@ require(tidyverse)
 require(FactoMineR)
 require(factoextra)
 require(FactoInvestigate)
+require(ggmosaic)
+require(ggrepel)
 ```
 
 ---
@@ -283,7 +280,7 @@ In the Titanic table the four variables do have the same status:
 - Class, Age, Sex may be considered as "demographic", or "explanatory"
 - Survived is a "response" variable
 
-When using variants of mosaicplot to investigate the Titanic dataset 
+When using variants of mosaicplot to investigate the Titanic dataset
 
 
 ---
@@ -412,7 +409,7 @@ vcd::doubledecker(Titanic)
 exclude: true
 
 ```{r}
-knitr::include_url("https://rdrr.io/cran/vcd/")
+# knitr::include_url("https://rdrr.io/cran/vcd/")
 ```
 
 ---
@@ -499,7 +496,7 @@ Z %>% head() %>% knitr::kable()
 
 - A categorical variable $V_j$ (factor) with $q$ levels is mapped to $q$ $\{0,1\}$ -valued variables $V_{j,r}$ for $r \leq q$
 
-- If levels are indexed by $\{1, \ldots, q\}$, if the value of the categorical variable $V_j$ from row $i$  is $k \in \{1, \ldots, q\}$, the binary variables $V_{j,r}$ on that row take values 
+- If levels are indexed by $\{1, \ldots, q\}$, if the value of the categorical variable $V_j$ from row $i$  is $k \in \{1, \ldots, q\}$, the binary variables $V_{j,r}$ on that row take values
 $$k \mapsto \underbrace{0,\ldots, 0}_{k-1}, 1, \underbrace{0, \ldots, 0}_{q-k}$$
 
 - In Machine Learning parlance building  the indicator matrix consists of performing _one-hot encoding_ for each categorical variable
@@ -508,7 +505,7 @@ $$k \mapsto \underbrace{0,\ldots, 0}_{k-1}, 1, \underbrace{0, \ldots, 0}_{q-k}$$
 
 - The number of columns of the indicator matrix is the sum of the number of levels of the categorical variables/columns of the data matrix
 
-- The indicator matrix is a numerical matrix. It is suitable for factorial methods `r fontawesome::fa("smile")` 
+- The indicator matrix is a numerical matrix. It is suitable for factorial methods `r fontawesome::fa("smile")`
 
 
 ???
@@ -522,7 +519,7 @@ $$k \mapsto \underbrace{0,\ldots, 0}_{k-1}, 1, \underbrace{0, \ldots, 0}_{q-k}$$
 
 - Multiple Correspondance Analysis may be based on the Burt matrix
 
-- The Burt matrix is a symmetric integer-valued matrix made of blocks consisting 
+- The Burt matrix is a symmetric integer-valued matrix made of blocks consisting
 of all pairwise 2-ways contingency tables
 
 - Each block is the contingency table defined by two categorical variables from the data matrix
@@ -538,6 +535,9 @@ B <- t(Z) %*% as.matrix(Z)
 
 B[1:6, 1:6] %>% knitr::kable()
 ```
+
+A glimpse at stacked 2-ways contingency tables: rows 3,..., 5 and columns
+1,2 contain the contingency table defined by variables `Age` and `Sex`
 
 ]
 
@@ -556,16 +556,21 @@ name: mca-in-words
 
 ---
 
-### MCA
+### MCA on `r fontawesome::fa("ship")`
 
-MCA consists of performing CA (correspondance analysis)  on the indicator matrix
+`r fontawesome::fa("bullhorn")` MCA consists of performing CA (correspondance analysis)  on the _indicator matrix_
 
 .fl.w-40.pa2[
 
 ```{r, echo=TRUE}
 mca.tit <- tit %>%
-  select(Sex, Age, Embarked, Pclass, Survived) %>%
-  FactoMineR::MCA(quali.sup= c(5), graph = FALSE)  #<<
+  select(Sex,
+         Age,
+         Embarked,
+         Pclass,
+         Survived) %>%
+  MCA(quali.sup= c(5),    #<<
+      graph = FALSE)      #<<
 ```
 
 ]
@@ -574,9 +579,11 @@ mca.tit <- tit %>%
 
 We perform MCA on the data matrix made from four similar qualitative  columns: `Sex`, `Age`, `Embarked`, `Pclass`
 
-`Survived` is considered as a _supplementary_ variable: it may projected on the factorial subspaces 
-defined by the four columns `Sex`, `Age`, `Embarked`, `Pclass`. `Survived` plays no role in the definition 
-of the factorial subspaces
+`Survived` is considered as a _supplementary_ variable: it may projected on the factorial subspaces
+defined by the four columns `Sex`, `Age`, `Embarked`, `Pclass`.
+
+`Survived` plays no role in the definition
+of the factorial sub-spaces (while computing the svd)
 
 ]
 
@@ -586,9 +593,49 @@ Comment on "quali.sup" and other optional arguments to `MCA`
 
 ---
 
-### The output of `MCA`
+### The output of  ` MCA ` : `print(mca.tit)`
 
-`mca.tit$call$Xtot` is the _supplemented_ indicator matrix
+.f7[
+|   | Name   |             Description                                          |
+|:-:|:------------------------|:----------------------------------------------------|
+|1  |   "$eig"                |"eigenvalues"                                        |
+|2  |   "$var"                |"results for the variables"                          |
+|3  |   "$var$coord"          |"coord. of the categories"                           |
+|4  |   "$var$cos2"           |"cos2 for the categories"                           |
+|5  |   "$var$contrib"        |"contributions of the categories"                    |
+|6  |   "$var$v.test"         |"v-test for the categories"                          |
+|7  |   "$ind"                |"results for the individuals"                        |
+|8  |   "$ind$coord"          |"coord. for the individuals"                         |
+|9  |   "$ind$cos2"          |"cos2 for the individuals"                          |
+|10 |   "$ind$contrib"        |"contributions of the individuals"                   |
+|11 |  "$quali.sup"          |"results for the supplementary categorical variables"|
+|12 |  "$quali.sup$coord"    |"coord. for the supplementary categories"            |
+|13 |  "$quali.sup$cos2"     |"cos2 for the supplementary categories"              |
+|14 |  "$quali.sup$v.test"   |"v-test for the supplementary categories"            |
+|15 |  "$call"               |"intermediate results"                               |
+|16 |  "$call$marge.col"     |"weights of columns"                                 |
+|17 |  "$call$marge.li"      |"weights of rows"                                    |
+
+]
+
+---
+
+### The output of `MCA`: examining `$call` (intermediate results)
+
+- `mca.tit$call$Xtot` is the _supplemented_ indicator matrix
+- `mca.tit$call$Xtot$marge.row` is a constant vector
+- `mca.tit$call$Xtot$marge.row` is proportional to the means of the columns of the indicator matrix
+-
+
+???
+
+
+---
+
+###
+
+`print(mca.tit)` bypasses an important part of the list: `mca.tit$svd`
+
 
 ```{r}
 U <- mca.tit$svd$U   # orthogonal columns
@@ -625,18 +672,22 @@ t(V) %*% V
 ### CA executive summary
 
 - Start from a 2-way contingency table $X$ with $\sum_{i,j} X_{i,j}=N$
-- Normalize $P = \frac{1}{N}X$ 
+- Normalize $P = \frac{1}{N}X$
 - Let $D_r$ denote the diagonal matrix with row sums of $P$ as coefficients
 - Let $D_c$ denote the diagonal matrix with column sums of $P$ as coefficients
 
 The matrix of interest is the row profiles matrix
 $$D_r^{-1} \times P$$
 
-CA consists in computing the extended SVD of 
+CA consists in either
+
+- computing the extended SVD of
 $$D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mathbf{I}^T $$
 with respect to $D_r$ and $D_c$
+- computing the SVD of the Pearson's residuals matrix and perform some post-processing
 
-When calling `svd(.)`, the argument should be 
+
+When calling `svd(.)`, the argument should be
 $$D_r^{1/2}\times \left(D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mathbf{I}^T  \right)\times D_c^{1/2}$$
 
 
@@ -644,9 +695,11 @@ $$D_r^{1/2}\times \left(D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mat
 
 ### CA on incidence matrix
 
-The row sums of an incidence matrix are equal to the number of variables of the data matrix
+`r fontawesome::fa("hand-point-right")`
 
-The column sums of an incidence matrix are equal to the numbers of occurrences of the corresponding levels
+- The row wise  sums of an incidence matrix are equal to the number of variables of the data matrix
+
+- The column wise  sums of an incidence matrix are equal to the numbers of occurrences of the corresponding levels
 
 
 ---
@@ -731,6 +784,32 @@ Leaving aside
 
 ---
 
+### MCA versus CA
+
+
+???
+
+What's different ?
+
+- CA
+
+
+---
+
+### Factor map: categories representation
+
+
+---
+
+### Factor map:
+
+---
+
+### Variables representation
+
+
+---
+
 ### `credit` dataset
 
 - A survey
@@ -741,7 +820,95 @@ Leaving aside
 
 ---
 
-### `MCA` from the `FactoMineR` package.
+### Inspecting Titanic using `factoextra`: screeplot
+
+.fl.w-40.pa2.f6[
+```{r}
+knitr::kable(get_eigenvalue(mca.tit), digits=2)
+
+```]
+
+.fl.w-60.pa2.f6[
+```{r}
+fviz_screeplot(mca.tit, addlabels=TRUE)
+```
+]
+
+???
+
+compare with `broom::tidy()` etc  for objects of class  `pca`
+
+
+---
+
+```{r}
+gg_mca_screeplot <- function(res.mca){
+  p <- get_eigenvalue(res.mca) %>%
+    as_tibble() %>%
+    rownames_to_column(var="Dimensions") %>%
+    ggplot() +
+    aes(x=Dimensions, y = variance.percent, label=round(cumulative.variance.percent,2)) +
+    geom_col() +
+    scale_x_discrete() +
+    geom_text(nudge_y=.5)
+  p
+}
+
+gg_mca_screeplot(mca.tit)
+```
+
+---
+
+###  Biplot of individuals and variables categories
+
+
+```{r}
+fviz_mca_biplot(mca.tit, repel=TRUE, ggtheme=theme_minimal())
+fviz_mca_var(mca.tit)
+
+res.mca <- as.data.frame(tit)  %>%
+ select(Sex, Pclass, Embarked, Age) %>%
+ MCA(graph=FALSE)
+
+# res.mca$var$coord %>% glimpse()
+# fviz_mca_biplot(res.mca, geom="point")
+
+poison.active <- poison[1:55, 5:15]
+res.mca <- MCA(poison.active, graph = FALSE)
+fviz_mca_var(res.mca)
+```
+---
+
+```{r}
+rownames(mca.tit$call$X)
+```
+
+
+---
+
+### MCA results for variables
+
+
+```{r}
+var <- get_mca_var(res.mca)
+
+
+
+var$coord %>% as.data.frame() %>%
+  rownames_to_column(var="category") %>%
+  ggplot() +
+  aes(x=`Dim 1`, y=`Dim 2`, label=category) +
+  geom_point() +
+  coord_fixed() +
+  geom_text_repel()
+
+
+
+```
+
+---
+
+### Analyzing  `credit` dataset
 
 .fl.w-40.pa2[
 ```{r, message=FALSE}
