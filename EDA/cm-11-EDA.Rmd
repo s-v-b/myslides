@@ -107,6 +107,7 @@ require(factoextra)
 require(FactoInvestigate)
 require(ggmosaic)
 require(ggrepel)
+require(assertthat)
 ```
 
 ---
@@ -490,8 +491,7 @@ objects) arranging collections of plots of the strucplot framework into more com
 name: indic-matrix
 template: inter-slide
 
-## Indicator matrix
-
+##  `r fontawesome::fa("fingerprint")` Indicator and Burt matrices
 
 ---
 
@@ -499,10 +499,10 @@ template: inter-slide
 
 MCA can be viewed along two perspectives:
 
-- Analyzing the dataset after performing _one-hot_ encoding of categorical variables.
-The
+- Analyzing the dataset after performing _one-hot_ encoding of categorical variables: investigating the so-called _indicator_ matrix
 
-- Analyzing all two-way contingency tables derived from the dataset
+
+- Analyzing all pairwise two-way contingency tables derived from the dataset: : investigating the so-called _Burt_ matrix
 
 ???
 
@@ -514,6 +514,9 @@ The two perspective define different pipelines
 ### A glimpse at the indicator matrix
 
 .f6[
+
+Function `tab.disjonctif()` from `FactoMineR` builds an _indicator_ matrix starting
+from  a dataframe with categorical columns
 
 ```{r}
 Z <- tit %>%
@@ -527,7 +530,8 @@ Z %>% head() %>% knitr::kable()
 
 ???
 
-
+`tab.disjonctif` is a shorthand for _tableau disjonctif complet_, the French name
+of indicator matrix
 
 ---
 
@@ -588,61 +592,74 @@ All pairwise contingency tables
 $$B =  Z^T \times Z$$
 
 ---
-class: inter-slide
+template: inter-slide
 name: mca-in-words
 
 ## MCA in words
 
-
 ---
 
-### `r fontawesome::fa("coffee")` FactoMineR
+### `r fontawesome::fa("coffee")` Acknowledgments
+
+.fl.w-40.pa2[
+
+`r fontawesome::fa("book")` Expositions of MCA is taken from 
+
+![](./img/greenacre.jpg)
+
+]
+
+.fr.w-60.pa2[
+
+`r fontawesome::fa("laptop-code")` Our favorite CA and MCA package is 
 
 <iframe src="http://factominer.free.fr/factomethods/multiple-correspondence-analysis.html"  width="750px" height="400px"></iframe>
 
+]
+
 ---
 
 
-### MCA on `r fontawesome::fa("ship")`
+### MCA on `r fontawesome::fa("ship")` Titanic
 
 `r fontawesome::fa("bullhorn")` MCA consists of performing CA (correspondance analysis)  on the _indicator matrix_
 
 .fl.w-40.pa2[
 
 ```{r, echo=TRUE}
-mca.tit <- tit %>%
+res.mca <- tit %>%
   select(Sex,
          Age,
          Embarked,
-         Pclass,
-         Survived) %>%
-  MCA(quali.sup= c(5),    #<<
-      graph = FALSE)      #<<
+         Pclass) %>%
+  MCA(graph = FALSE)      #<<
 ```
+
+We perform MCA on the data matrix made from four similar qualitative  columns: `Sex`, `Age`, `Embarked`, `Pclass`
 
 ]
 
 .fl.w-60.pa2[
 
-We perform MCA on the data matrix made from four similar qualitative  columns: `Sex`, `Age`, `Embarked`, `Pclass`
+`res.mca` is a list with class attributes `MCA`  and `list`. It contains many related components
 
-`Survived` is considered as a _supplementary_ variable: it may projected on the factorial subspaces
-defined by the four columns `Sex`, `Age`, `Embarked`, `Pclass`.
+`r fontawesome::fa("hand-point-right")` Component `svd` of `res.mca$svd` can righteously be considered 
+as the most important part of the result
 
-`Survived` plays no role in the definition
-of the factorial sub-spaces (while computing the svd)
+Other components are either byproducts of the computation of `res.mca$svd`
+or derived from `res.mca$svd` so as to facilitate 
+reporting either numerical or graphical
 
 ]
 
 ???
 
-Comment on "quali.sup" and other optional arguments to `MCA`
-
 ---
 
-### The output of  ` MCA ` : `print(mca.tit)`
+### Output of  `print(res.mca)`
 
 .f7[
+
 |   | Name   |             Description                                          |
 |:-:|:------------------------|:----------------------------------------------------|
 |1  |   "$eig"                |"eigenvalues"                                        |
@@ -667,51 +684,42 @@ Comment on "quali.sup" and other optional arguments to `MCA`
 
 ---
 
-### The output of `MCA`: examining `$call` (intermediate results)
+### Comment on output of  `print(res.mca)`
 
-- `mca.tit$call$Xtot` is the _supplemented_ indicator matrix
-- `mca.tit$call$Xtot$marge.row` is a constant vector
-- `mca.tit$call$Xtot$marge.row` is proportional to the means of the columns of the indicator matrix
--
+`r fontawesome::fa("exclamation-triangle")`  `res.mca$svd` is not part of the output
+
+- `eig` is computed from the singular values in `res.mca$svd`
+
+- `var` contains material for plotting information about categories and variables on factorial planes
+
+- `ind` conatins material for plotting information about individuals on on factorial planes
 
 ???
+
 
 
 ---
 
-###
+### `r fontawesome::fa("brain")` 
 
-`print(mca.tit)` bypasses an important part of the list: `mca.tit$svd`
+Understanding MCA, the way it works, the ways it can be used amounts to understand the steps 
+that lead to the computation of `res.mca$svd`
 
+Asserting that, by default, MCA consists of performing Correspondance Analysis (CA)  on the indicator matrix 
+deserves some explanation
 
-```{r}
-U <- mca.tit$svd$U   # orthogonal columns
-V <- mca.tit$svd$V   # orthogonal w.r.t.
-D <- diag(mca.tit$svd$vs[1:5])
+In order to make the argument self-contained, we first skech what CA is and how it relates to (extensions of) SVD
 
-dim(U)
-(U %*% D %*% t(V)) - scale(mca.tit$call$Xtot[,-c(13, 14, 15)], center = TRUE, scale=FALSE)
+Then, we explain what it means to perform CA on the indicator matrix
 
-mca.tit$svd$vs
-
-colnames(mca.tit$call$Xtot)
-colSums(U %*% D %*% t(V))
-
-norm(scale(Z, scale=FALSE) - (U %*% D %*% t(V)),type = "F" )
-
-t(V) %*% V
-```
-
-???
-
-- centering $Z$
-- extended SVD with respect to two diagonal matrices
-- all row sums of $Z$ are equal to the number of categorical variables in the initial dataset
-- column sums count number of occurrences of categories in the initial dataset
+Finally we relate `res.mca$svd` with the extended SVD of the residual matrix of the indicator matrix
 
 
 ---
+template: inter-slide
+name: brush-up-CA
 
+## Brush up your CA
 
 
 ---
@@ -732,10 +740,10 @@ CA consists in computing the SVD of the standardized residuals matrix $S =  U  \
 
 From the SVD, we get
 - $D_r^{-1/2} \times U$ standardized coordinates of rows
-- $D_r^{-1/2} \times V$ standardized coordinates of columns
+- $D_c^{-1/2} \times V$ standardized coordinates of columns
 - $D_r^{-1/2} \times U \times D$ principal coordinates of rows
 - $D_c^{-1/2} \times V \times D$ principal coordinates of columns
-- Squarer singular values: the principal inertia
+- Squared singular values: the principal inertia
 
 ???
 
@@ -748,44 +756,261 @@ $$D_r^{1/2}\times \left(D_r^{-1} \times P \times D_c^{-1}- \mathbf{I}\times \mat
 
 ### CA and extended SVD
 
+As
 $$D_r^{-1} \times P \times D_c^{-1} - \mathbf{I}\mathbf{I}^T = (D_r^{-1/2} \times U)\times D \times (D_c^{-1/2}\times V)^T$$
 
-$(D_r^{-1/2} \times U)\times D \times (D_c^{-1/2}\times V)^T$ is the _extended SVD_ of $D_r^{-1} \times P \times D_c^{-1} - \mathbf{I}\mathbf{I}^T$ with respect to $D_r$ and $D_c$
-
+$(D_r^{-1/2} \times U)\times D \times (D_c^{-1/2}\times V)^T$ is the _extended SVD_ of
+$$D_r^{-1} \times P \times D_c^{-1} - \mathbf{I}\mathbf{I}^T$$
+with respect to $D_r$ and $D_c$
 
 ---
 
+### CA and reconstructions formulae
 
-### CA on incidence matrix
+
+---
+template: inter-slide
+
+## Performing CA on indicator matrix
+
+---
+
+### MCA: CA on indicator matrix
+
+Let $X$ be the data matrix with $n$ rows (individuals) and $p$ categorical columns (variables)
+
+For $j \in \{1, \ldots, p\}$, let $J_j$ denote the number of levels(categories) of variable $j$
+
+Let $q = \sum_{j\leq p} J_j$ be the sum of the number of levels throughout the variables
+
+Let $Z$ be the incidence matrix with $n$ rows and $q$ columns
+
+For $j\leq p$ and $k \leq J_j$, let $\langle j, k\rangle = \sum_{j'<j} J_{j'}+k$
+
+Let $N = n \times p = \sum_{i\leq n} \sum_{j \leq p} X_{i,j}$ and $P = \frac{1}{N} Z$ (the _correspondence matrix_ for MCA)
+
+`r fontawesome::fa("hand-point-right")` The row wise  sums of correspondence matrix $P$ are all equal to $1/n=p/N$
+
+The column wise sum of the correspondence matrix $P$ for the $k$th level of the $j$th variable of $X$ ( $j \leq p$ ) is $N_{\langle j,k\rangle}/N = f_{\langle j,k\rangle}/p$ where $f_{\langle j,k\rangle}$ stands for the relative frequency of level $k$ of the $j$th variable
+
+$$D_r = \frac{1}{n}\text{Id}_n\qquad D_c =\text{diag}\left(\frac{f_{\langle j,k\rangle}}{p}\right)_{j \leq p, k\leq J_j}$$
+
+---
+
+### MCA: CA on incidence matrix (continued)
+
+Let $r= D_r \times \mathbb{I}_n = \frac{1}{n} \mathbb{I}_p$  and $c = D_c \times \mathbb{I}_q$
+
+In MCA, we compute the SVD $U \times D \times V^T$ of the standardized residuals matrix:
+
+$$S = D_r^{-1/2}\times \left(P - r\times c^T\right) \times D_c^{-1/2} = \sqrt{n}\left(P - r\times c^T\right) \times D_c^{-1/2}$$
+
+Coefficient $i, \langle j, k\rangle$  of $S$ is
+$$\frac{\mathbb{I}_{i, \langle j, k\rangle}- f_{\langle j,k\rangle}}{\sqrt{n f_{\langle j,k\rangle}/p}}$$
+
 
 `r fontawesome::fa("hand-point-right")`
 
-- The row wise  sums of an incidence matrix are equal to the number of variables of the data matrix
+---
 
-- The column wise  sums of an incidence matrix are equal to the numbers of occurrences of the corresponding levels
+### `r fontawesome::fa("ship")` Hand-made MCA on Titanic data
+
+.f6[
+
+```{r, results='hide'}
+tol <- 1e-10
+X <- select(tit, Pclass, Sex, Embarked, Age)
+p <- ncol(X)
+Z <- tab.disjonctif(X)  #<< indicator matrix
+
+n <- nrow(Z)
+N <- sum(Z)
+assert_that(N == n * p)
+P <- Z/N   #<< correspondence matrix
+
+r <- rowSums(P)
+Dr <- diag(r)
+assert_that(all(r == 1/n))
+c <- colSums(P)
+Dc <- diag(c)
+S <- (P - r %o% c)  #<< residuals
+
+assert_that(abs(sum(S))<= 2 * tol)
+SS <- diag(sqrt(r^(-1))) %*% S %*% diag(sqrt(c^(-1)))  #<< standardized residuals
+
+svd.SS <- svd(SS)  #<< bare MCA
+```
+]
+
+---
+
+### `r fontawesome::fa("ship")` Hand-made MCA on Titanic data (continued)
+
+.f6[
+We may now compare `svd.SS`,  the SVD of the standardized residuals `SS`
+with member `res.mca$svd` of `res.mca <- MCA(X)`
+
+```{r, echo=FALSE}
+res.mca <- FactoMineR::MCA(X, ncp=8, graph = FALSE)
+```
+
+The singular values coincide `r fontawesome::fa("glass-cheers")`
+
+```{r, results='hide'}
+assert_that(all(abs(res.mca$svd$vs - svd.SS$d)  <= 10 * tol))
+```
+
+Matrix `res.mca$svd$U`  is orthogonal with respect to $D_r$:
+
+Matrix `res.mca$svd$U` equals $D_r^{-1/2} \times U$ (up to sign changes and numerical errors)
+
+```{r, results='hide'}
+assert_that(norm(abs(t(svd.SS$u[,1:8]) %*% diag(sqrt(r)) %*%  res.mca$svd$U) - diag(1, 8), "F") <= tol)
+```
+
+Matrix `res.mca$svd$V`  is orthogonal with respect to $D_c$:
+
+```{r, results='hide'}
+assert_that(norm((t(res.mca$svd$V) %*% Dc  %*% res.mca$svd$V) - diag(1, 8), "F") <= tol)
+```
+
+Matrix `res.mca$svd$V` equals $D_c^{-1/2} \times V$ (up to sign changes and numerical errors)
+
+```{r, results='hide'}
+assert_that(norm(abs(t(svd.SS$v[, 1:8]) %*% diag(sqrt(c)) %*% res.mca$svd$V) - diag(1, 8), "F") <= 1e-10)
+```
+]
+
+`r fontawesome::fa("bullhorn")` `MCA(X)$svd` contains the _extended SVD_ of $D_r^{-1} \times P \times D_c^{-1} - \mathbf{I}\mathbf{I}^T$
+
+---
+template: inter-slide
+
+
+## Zooming on other components of `res.mca`
 
 
 ---
-name: visualizations
+
+### Component `res.mca$eig`
+
+.fl.w-50.pa2.f6[
+```{r}
+eigv <- res.mca$svd$vs^2
+
+tibble(eigenvalue=eigv, 
+       `% variance`=eigv/sum(eigv), 
+       `cum. % variance`= cumsum(eigv)/sum(eigv)) %>% 
+  rownames_to_column(var="Dimension") %>% 
+  head() %>% 
+  knitr::kable(digits=2)
+```
+]
+
+.fr.w-50.pa2[
+
+The table on the left contains the first rows of `res.mca$eig`
+
+Thanks to the Eckhart-Young Theorem  for extended SVD, component `$eig` 
+tells us how well the  matrix 
+$$D_r^{-1} \times(P -r \times c^T) \times D_c^{-1}$$
+can be approximated by low
+rank matrices according to the Hilbert-Schmidt norm with respect to $D_r$ and $D_c$
+
+]
+---
+
+### Component `res.mca$var`
 
 
-### Visualization
+.fl.w-50.pa2.f6[
+```{r, eval=FALSE}
+coord <-  res.mca$var$coord
+contrib <- res.mca$var$contrib
+cos2 <- res.mca$var$cos2
 
+assert_that(norm(res.mca$svd$V %*% diag(res.mca$svd$vs[1:8]) 
+                 - coord, "F") <= tol)
+
+tmp <- t(t(coord^2) %*% Dc) %*% diag(1/res.mca$svd$vs[1:8]^2) 
+assert_that(norm(100 * tmp - contrib, "F") <= tol)
+    
+assert_that(norm(cos2 - coord^2/rowSums(coord^2), "F") <= tol)
+```
+]
+
+.fl.w-50.pa2[
+
+`res.mca$var` is a list of 3 matrices with the same dimensions $q$ (sum of level numbers)  and $q-p$ 
+
+`$coord` is made of the principal coordinates of columns $D_c^{-1/2} \times V \times D$. Each row corresponds to one column of the indicator matrix
+
+`$contrib` ... 
+
+`$cos2`  is derived from `$coord`. For each row (column of the indicator matrix) $\langle j, k\rangle$, for each
+dimension $i$, the  $\langle j, k\rangle, i$ coefficient of `$cos2` is the squared cosine 
+of the angle between the row of $\langle j, k\rangle$ row of `$coord`  and the $i$th right singular vector
+
+]
+
+???
+
+---
+
+### Component `res.mca$ind`
+
+.fl.w-50.pa2.f6[
+
+
+```{r, eval=FALSE}
+coord <-  res.mca$ind$coord
+contrib <- res.mca$ind$contrib
+cos2 <- res.mca$ind$cos2
+
+assert_that(norm(res.mca$svd$U %*% diag(res.mca$svd$vs[1:8]) 
+                 - coord, "F") <= tol)
+
+tmp <- 100 * t(t(coord^2) %*% Dr) %*% diag(1/res.mca$svd$vs[1:8]^2) 
+assert_that(norm(tmp - contrib, "F") <= tol)
+    
+assert_that(norm(cos2 - coord^2/rowSums(coord^2), "F") <= tol)
+
+```
+]
+
+.fl.w-50.pa2[
+
+`res.mca$ind` is a list of 3 matrices with the same dimensions $n$ (sum of level numbers)  and $q-p$ 
+
+`$coord` is made of the principal coordinates of columns: $D_r^{-1/2} \times U \times D$. Each row corresponds to one row of the indicator matrix
+
+`$contrib` ... 
+
+`$cos2`  is derived from `$coord`. For each row (row of the indicator matrix) $j$, for each
+dimension $i$, the  $j, i$ coefficient of `$cos2` is the squared cosine 
+of the angle between the $j$th row of `$coord`  and the $i$th left singular vector
+
+]
 
 
 
 ---
 
-### MCA
+### More about MCA  (from `FactoMineR`)
 
+`FactoMineR::MCA` does much more than computing an  SVD on a standardized residuals matrix
 
-> Multiple Correspondence Analysis (MCA)
+In real life MCA is performed on a subset of categorical columns of some data frame (the so-called 
+_active_ columns). The result 
+may help understanding the interplay between the active variables and the other variables 
 
-> Performs Multiple Correspondence Analysis (MCA) with supplementary individuals, supplementary quantitative variables and supplementary categorical variables.
+> MCA performs Multiple Correspondence Analysis (MCA) with supplementary individuals, supplementary quantitative variables and supplementary categorical variables.
 
 > Performs also Specific Multiple Correspondence Analysis with supplementary categories and supplementary categorical variables.
 
-> Missing values are treated as an additional level, categories which are rare can be ventilated
+> Missing values are treated as an additional level, categories which are rare can be ventilated ...
+
+.fr.f6[From FactomineR documentation]
 
 ???
 
@@ -800,77 +1025,120 @@ name: visualizations
 ### Result of `MCA`
 
 
-Returns a list including:
+Beyond `$var`, `$ind`, `$eig`, `res.mca` contains further elements, including:
 
-`eig`
-a matrix containing all the eigenvalues, the percentage of variance and the cumulative percentage of variance
-
-`var`
-a list of matrices containing all the results for the active variables (coordinates, square cosine, contributions, v.test, square correlation ratio)
-
-`ind`
-a list of matrices containing all the results for the active individuals (coordinates, square cosine, contributions)
-
-`ind.sup`
+- `ind.sup`
 a list of matrices containing all the results for the supplementary individuals (coordinates, square cosine)
 
-`quanti.sup`
+- `quanti.sup`
 a matrix containing the coordinates of the supplementary quantitative variables (the correlation between a variable and an axis is equal to the variable coordinate on the axis)
 
-`quali.sup`
+- `quali.sup`
 a list of matrices with all the results for the supplementary categorical variables (coordinates of each categories of each variables, square cosine and v.test which is a criterion with a Normal distribution, square correlation ratio)
 
-`call`
+- `call`
 a list with some statistics
 
 ---
 
-### Zooming on `call`
+### `r fontawesome::fa("binoculars")`
 
-- "X" : original dataset
-- "marge.col" :
-- "marge.row"
-- "ncp" : number of components to retain
-- "row.w": row weights
-- "excl"
-- "call"
-- "Xtot":  (possibly augmented) indicator matrix
-- "N":
-- "col.sup":
-- "quali"
-- "quali.sup"
+In a [tidy universe](http::tidyverse.org), there would exist  `tidy`, `augment` and `glance` methods for class `MCA` just as there are such methods for class `prcomp` (used to perform PCA)
+
+Many components of `res.mca` could be computed by methods like `tidy`, `augment` and `glance` and 
+`MCA` would just return the extended SVD, matrices $D_r$, $D_c$ and some information from the call, like 
+the names of the active variables, the levels of each active variables, a vector recording the active individuals 
+
+---
+template: inter-slide
+name: mca-viz
+
+## Visualization
+
+---
+
+### Inspecting Titanic using `factoextra`: screeplot
+
+.fl.w-40.pa2.f6[
+
+```{r}
+knitr::kable(get_eigenvalue(res.mca), digits=2)
+```
+
+]
+
+.fl.w-60.pa2.f6[
+```{r}
+fviz_screeplot(res.mca, addlabels=TRUE)
+```
+]
 
 ???
 
-Leaving aside
-
-
----
-
-### MCA versus CA
-
-
-???
-
-What's different ?
-
-- CA
-
+compare with `broom::tidy()` etc  for objects of class  `pca`
 
 ---
 
-### Factor map: categories representation
+### Plotting colums from data matrix
 
+.fl.w-40.pa2[
+```{r tita_var, fig.show='hide', width=8}
+fviz_mca_var(res.mca, 
+             choice = "var", ) + 
+  coord_fixed() +
+  ggtitle("MCA Titanic, variables")
+```
+]
+
+.fl.w-60.pa2[
+
+![](`r knitr::fig_chunk("tita_var", "png")`)
+
+]
 
 ---
 
-### Factor map:
-
----
-
-### Variables representation
+###
 
 
+.fl.w-40.pa2[
+
+```{r}
+res.mca.2 <- tit %>%
+  select(Sex, Age, Embarked, Pclass, Survived) %>% 
+  MCA(quali.sup = c(5), graph = FALSE)
+
+fviz_mca_ind(res.mca.2, 
+             geom= "point", habillage = 'Survived') +
+  coord_fixed() +
+  ggtitle("MCA Titanic")
+
+
+fviz_mca_biplot(res.mca.2,
+                geom.ind="point", 
+                repel=TRUE)
+plot(res.mca, choix = "ind", col.ind.sup = "none", invisible = "ind")
+
+res.mca.2$ind$coord %>%
+  as.data.frame() %>% 
+  bind_cols(Survived =tit$Survived) %>% 
+  drop_na() %>% 
+  ggplot() +
+  aes(x=`Dim 1`, y=`Dim 2`, colour=Survived) +
+  geom_jitter(alpha=.2, width=.1, height = .1) +
+  scale_color_viridis_d() +
+  coord_fixed()
+```
+
+
+]
+
+
+.fl.w-60.pa2[
+
+
+
+]
 ---
 
 ### `credit` dataset
@@ -880,28 +1148,6 @@ What's different ?
 - Demographic variables
 
 - Attitudinal variables
-
----
-
-### Inspecting Titanic using `factoextra`: screeplot
-
-.fl.w-40.pa2.f6[
-```{r}
-knitr::kable(get_eigenvalue(mca.tit), digits=2)
-
-```
-
-]
-
-.fl.w-60.pa2.f6[
-```{r}
-fviz_screeplot(mca.tit, addlabels=TRUE)
-```
-]
-
-???
-
-compare with `broom::tidy()` etc  for objects of class  `pca`
 
 
 ---
@@ -919,7 +1165,7 @@ gg_mca_screeplot <- function(res.mca){
   p
 }
 
-gg_mca_screeplot(mca.tit)
+gg_mca_screeplot(res.mca)
 ```
 
 ---
@@ -928,8 +1174,8 @@ gg_mca_screeplot(mca.tit)
 
 
 ```{r}
-# fviz_mca_biplot(mca.tit, repel=TRUE, ggtheme=theme_minimal())
-# fviz_mca_var(mca.tit)
+# fviz_mca_biplot(res.mca, repel=TRUE, ggtheme=theme_minimal())
+# fviz_mca_var(res.mca)
 
 # res.mca <- as.data.frame(tit)  %>%
 #  select(Sex, Pclass, Embarked, Age) %>%
@@ -945,7 +1191,7 @@ fviz_mca_var(res.mca)
 ---
 
 ```{r}
-rownames(mca.tit$call$X)
+rownames(res.mca$call$X)
 ```
 
 
