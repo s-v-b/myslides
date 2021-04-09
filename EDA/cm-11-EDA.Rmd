@@ -153,13 +153,11 @@ In this session, we will adress the different settings
 
 .fr.f6[From _R for statistics_, Cornillon et al. Chapman & Hall. Pub.]
 
---
+???
 
 > `mca` is a Multiple Correspondence Analysis (MCA) package for `r fontawesome::fa("python")`, intended to be used with `pandas`. MCA is a feature extraction method; essentially PCA for categorical variables.
 
 .fr.f6[[mca homepage](https://github.com/esafak/mca)]
-
-???
 
 Take-home message: MCA is a matrix factorization based method for exploring samples of categorical variables
 
@@ -209,19 +207,19 @@ exclude: true
 
 ### Handling more than 2 qualitative variables
 
-Example `r fontawesome::fa("ship")` Titanic data set
+Example `r fontawesome::fa("ship")` Titanic data set  (called `tit` in the sequel)
 
-$$\begin{array}{ll}\text{Demographic} & = \begin{cases}\text{Embarked} \\
+$$\begin{array}{ll}\text{Demographic/Explanatory} & \leftrightarrow \begin{cases}\text{Embarked} \\
 \text{Sex} \\ \text{Passenger class} \\
-\text{Age (Child/Adult)} \end{cases} \\ \text{Attitudinal} & =  \text{Survived}\end{array}$$
+\text{Age (Child/Adult)} \end{cases} \\ \phantom{\text{Demographic/Explanatory} } & \phantom{\text{Demographic/Explanatory}} \\ \text{Attitudinal/Response} &  \leftrightarrow \text{Survived}\end{array}$$
 
 ???
 
-When handling a collection of qualitative variables, we may face several kinds of situations.
+When handling a collection of qualitative variables, we may face several kinds of situations: we may investigate 
 
-- we may investigate response/attitudinal variables with respect to  explanatory/demographic variables
-- we may investigate collections of  response/attitudinal variables
-- we may investigate collections of explanatory/demographic variables
+- response/attitudinal variables with respect to  explanatory/demographic variables
+- collections of  response/attitudinal variables
+- collections of explanatory/demographic variables
 
 MCA is geared towards investigating collections of variables of similar status
 
@@ -279,13 +277,24 @@ tit %>%
 
 ---
 
-### Mosaicplots for `n`-ways contingency tables
+### `r fontawesome::fa("ship")` Mosaicplots for `n`-ways contingency tables
 
-
+.fl.w-50.pa2[
 ```{r, echo=FALSE}
-# mosaicplot(Titanic, color = TRUE)
 vcd::mosaic(x=Titanic)
 ```
+]
+
+.fl.w-50.pa2[
+
+The interplay between the response variable `Survived` and the four explanatory variables  using
+a naive mosaicplot is hard to spot
+
+The global arrangement of tiles has a huge impact on the interpretability of multi-dimensional mosaicplots
+
+Variants of mosaicplots like _double decker_ plots make the task easier
+
+]
 
 ???
 
@@ -324,9 +333,14 @@ template: inter-slide
 
 > In order to explain multi-dimensional categorical data, statisticians typically look for (conditional) independence structures
 
-> Whether the task is purely exploratory or model-based, techniques such as _mosaic_ and _association_ plots offer good support for visualization
+> Whether the task is purely exploratory or model-based, techniques such as _mosaic_ and _association_ plots offer good support for visualization    .fr.f6[Structplot vignette]
 
-.fr.f6[Structplot vignette]
+Before turning back to Titanic dataset, let us revisit the `UCBAdmissions` dataset
+
+Remember that 
+the `UCBAdmissions` dataset was elaborated in the 1970's to assess whether the admission process at the different departments of UC Berkeley   suffered from a gender bias
+
+Such a possibility was suggested by looking at the global admission rate for female and male candidates
 
 ???
 
@@ -334,6 +348,7 @@ template: inter-slide
 
 
 ---
+exclude: true
 
 ### Extensions
 
@@ -358,6 +373,13 @@ aperm(UCBAdmissions, c(3, 2, 1)) %>% mosaicplot(shade=TRUE)
 aperm(UCBAdmissions, c(3, 2, 1)) %>% vcd::mosaic(shade=TRUE)
 ```
 
+.f6[
+Both diagrams are mosaicplots
+
+The diagram on the right is easier to interpret: it provides a picture 
+of admission rates per department and then gender
+
+]
 ---
 
 ### `r fontawesome::fa("university")` Double decker plot for  `UCBAdmissions`
@@ -369,6 +391,8 @@ aperm(UCBAdmissions, c(3, 2, 1)) %>%
   vcd::doubledecker()
 ```
 .f6[
+Double decker plots are special kinds of mosaicplots
+
 - Per department admissions exhibit no clear bias against
 women
 - Men tend to fill more applications to less selective departments
@@ -400,7 +424,7 @@ of successful/failing applicants for given  Department and Gender
 
 ---
 
-### `r fontawesome::fa("ship")` Flattening Titanic table
+### `r fontawesome::fa("ship")` Flattening the Titanic table
 
 
 ```{r, eval=FALSE}
@@ -410,20 +434,28 @@ vcd::structable(~ Class + Age + Sex, aperm(Titanic, c(1,3,2, 4))) %>%
 ```
 
 
+.fl.w-50.pa2.f6[
+
+|  Class | Sex    |       Child|  Adult|
+|:------:|:-------|------:|------:|
+|1st     | Male   |          5 |   175 |
+|        | Female |         1 |   144 |
+|  2nd   | Male   |         11 |   168 |
+|        | Female |         13 |    93 |
+|  3rd   | Male   |         48 |   462 |
+|        | Female |         31 |   165 |
+|  Crew  | Male   |          0 |   862 |
+|        | Female |          0 |    23 |
+]
 
 
+.fl.w-50.pa2.f6[
 
-|  Class | Sex    |     |  Child|  Adult|
-|:------:|:-------|-----|------:|------:|
-|1st     | Male   |      |     5 |   175 |
-|        | Female |     |     1 |   144 |
-|  2nd   | Male   |     |    11 |   168 |
-|        | Female |     |    13 |    93 |
-|  3rd   | Male   |     |    48 |   462 |
-|        | Female |     |    31 |   165 |
-|  Crew  | Male   |     |     0 |   862 |
-|        | Female |     |     0 |    23 |
+Flattenig allows to organize information
 
+Double decker plots allow to do this graphically
+
+]
 ---
 
 ### `r fontawesome::fa("ship")` Double-decker plots for the Titanic data
@@ -444,7 +476,8 @@ tit %>%
 
 ???
 
-`Titanic` is a base `r fontawesome::fa("r-project")` contingency table where surn
+`Titanic` is a base `r fontawesome::fa("r-project")` contingency table where `Pclass, Sex, Age, Survived` were cross-tabulated
+
 ---
 exclude: true
 
@@ -1079,7 +1112,7 @@ compare with `broom::tidy()` etc  for objects of class  `pca`
 
 ---
 
-### Plotting colums from data matrix
+### `r fontawesome::fa("ship")` Plotting colums from data matrix
 
 .fl.w-40.pa2[
 ```{r tita_var, fig.show='hide', width=8}
@@ -1098,412 +1131,145 @@ fviz_mca_var(res.mca,
 
 ---
 
-###
+### Hand-made plots
+
+The `plot` method for class `MCA` and the functions in `factoextra` provide off-the-shelf 
+constructions for classical MCA plots
+
+There is nothing special about MCA plots 
+
+- the screeplot is a column plot
+- the other plots are (sometimes decorated) scatter plots after some coordinate change 
+
+In the sequel, we build plots for categories, individuals and biplots using 
+the constructs from `ggplot2`
+
+---
+
+### `r fontawesome::fa("ship")` Plotting individuals on first factorial plane 
 
 
-.fl.w-40.pa2[
+.fl.w-40.pa2.f6[
 
-```{r}
+```{r  tita_ind, fig.show='hide'}
 res.mca.2 <- tit %>%
   select(Sex, Age, Embarked, Pclass, Survived) %>% 
   MCA(quali.sup = c(5), graph = FALSE)
 
-fviz_mca_ind(res.mca.2, 
-             geom= "point", habillage = 'Survived') +
-  coord_fixed() +
-  ggtitle("MCA Titanic")
-
-
-fviz_mca_biplot(res.mca.2,
-                geom.ind="point", 
-                repel=TRUE)
-plot(res.mca, choix = "ind", col.ind.sup = "none", invisible = "ind")
-
-res.mca.2$ind$coord %>%
+df_ind <- res.mca.2$ind$coord %>%
   as.data.frame() %>% 
   bind_cols(Survived =tit$Survived) %>% 
-  drop_na() %>% 
+  drop_na() 
+
+df_ind %>% 
   ggplot() +
-  aes(x=`Dim 1`, y=`Dim 2`, colour=Survived) +
-  geom_jitter(alpha=.2, width=.1, height = .1) +
+  aes(x=`Dim 1`, 
+      y=`Dim 2`, 
+      colour=Survived) +
+  geom_jitter(alpha=.2, 
+              width=.1, 
+              height = .1) +
   scale_color_viridis_d() +
-  coord_fixed()
-```
-
-
-]
-
-
-.fl.w-60.pa2[
-
-
-
-]
----
-
-### `credit` dataset
-
-- A survey
-
-- Demographic variables
-
-- Attitudinal variables
-
-
----
-
-```{r}
-gg_mca_screeplot <- function(res.mca){
-  p <- get_eigenvalue(res.mca) %>%
-    as_tibble() %>%
-    rownames_to_column(var="Dimensions") %>%
-    ggplot() +
-    aes(x=Dimensions, y = variance.percent, label=round(cumulative.variance.percent,2)) +
-    geom_col() +
-    scale_x_discrete() +
-    geom_text(nudge_y=.5)
-  p
-}
-
-gg_mca_screeplot(res.mca)
-```
-
----
-
-###  Biplot of individuals and variables categories
-
-
-```{r}
-# fviz_mca_biplot(res.mca, repel=TRUE, ggtheme=theme_minimal())
-# fviz_mca_var(res.mca)
-
-# res.mca <- as.data.frame(tit)  %>%
-#  select(Sex, Pclass, Embarked, Age) %>%
-#  MCA(graph=FALSE)
-
-# res.mca$var$coord %>% glimpse()
-# fviz_mca_biplot(res.mca, geom="point")
-
-poison.active <- poison[1:55, 5:15]
-res.mca <- MCA(poison.active, graph = FALSE)
-fviz_mca_var(res.mca)
-```
----
-
-```{r}
-rownames(res.mca$call$X)
-```
-
-
----
-
-### MCA results for variables
-
-
-```{r}
-var <- get_mca_var(res.mca)
-
-
-
-var$coord %>% as.data.frame() %>%
-  rownames_to_column(var="category") %>%
-  ggplot() +
-  aes(x=`Dim 1`, y=`Dim 2`, label=category) +
-  geom_point() +
   coord_fixed() +
-  geom_text_repel()
-
-
-
-```
-
----
-
-### Analyzing  `credit` dataset
-
-.fl.w-40.pa2[
-```{r, message=FALSE}
-fpath <- "./DATA/credit.csv"
-
-credit <- read_csv2(fpath) %>%
-  mutate(across(where(is.character),
-                factor)
-         )
-
-credit$Age <- credit$Age %>%
-  as_factor() %>%
-  fct_inseq()
-```
-]
-
-.fl.w-60.pa2.f6[
-
-```{r, echo=FALSE}
-credit %>% glimpse(width = 40)
+  ggtitle("Titanic: indivudals in principal coordinates ")
 ```
 
 
 ]
 
-- Columns 1 to 5 `Marche`, ..., `Endettement` are concerned with _attitudes_
-- Column 6 to 11 are concerned with _demographics_
-
-
----
-exclude: true
-
-### Handling rare categories
-
-
-
----
-exclude: true
-
-### Spotting rare categories.
-
-```{r, eval=FALSE, echo=FALSE}
-rare_categories <- credit %>%
-  map(table) %>%
-  map(~ which(. <= 10))
-
- rare_categories <- rare_categories[which(rare_categories %>%
-                        map(length) >0)]
-```
-
----
-
-### Handling rare categories for `Marche`, `Enfants`, `Logement`
-
-.panelset[
-
-.panel[ .panel-name[`Marche`]
-```{r, echo=TRUE}
-
-credit$Marche <- fct_collapse(credit$Marche,
-  "Mobilier / Ameublement" = "Mobilier / Ameublement",
-  "Renovation" = "Renovation",
-  "Moto" = c ("Moto", "Scooter", "Side-car"),
-  "Voiture" = "Voiture")
-```
-]
-
-.panel[ .panel-name[`Enfants`]
-```{r}
-credit$Enfants <- credit$Enfants %>%
-  fct_lump(n = 3, other_level = "Enf>2")
-```
-]
-
-.panel[ .panel-name[`Logement`]
-
-```{r}
-credit$Logement <- credit$Logement %>%
-  fct_collapse(
-    "Accedant a la propriete"="Accedant a la propriete",
-    "Locataire"="Locataire",
-    "Loge par ..." = c("Loge par l'employeur",
-                       "Loge par la famille"),
-    "Proprietaire"="Proprietaire")
-```
-]
-
-]
-
----
-
-### MCA over attitude variables
-
-```{r}
-res.mca <- credit %>%
-  FactoMineR::MCA(graph = FALSE,
-                  quali.sup = 6:11)
-```
-
----
-
-### Screeplot
 
 .fl.w-60.pa2[
 
-```{r, echo=FALSE}
-qplot(x=as_factor(seq_along(res.mca$eig[, 2])), y=res.mca$eig[, 2]) +
-  geom_col() +
-  ylab("Eigenvalues") +
-  xlab("") +
-  ggtitle("MCA screeplot", "credit data, attitudinal variables")
-```
-
-The first two dimensions express $\approx 30\%$ of the total variance,
-which is relatively high in MCA  `r fontawesome::fa("smile")`
+![](`r knitr::fig_chunk("tita_ind", "png")`)
 
 ]
+
+
+---
+
+### `r fontawesome::fa("ship")` Plotting categories on first factorial plane 
+
 
 .fl.w-40.pa2.f6[
 
-```{r, results='markup', eval=FALSE, echo=FALSE}
-res.mca$eig%>%
-  knitr::kable(format="markdown", digits = 2)
+```{r  tita_cat, fig.show='hide'}
+res.mca.2$var$coord %>%
+  as.data.frame() %>% 
+  rownames_to_column(var="Category") %>% 
+  ggplot() +
+  aes(x=`Dim 1`, 
+      y=`Dim 2`, 
+      label=Category
+      ) +
+  geom_point() +
+  geom_text_repel() +
+  coord_fixed() +
+  ggtitle("Titanic: categories in principal coordinates ")
 ```
 
-|Dim.   | Eigenvalue| `%` of inertia | cumul. `%` of inertia|
-|:-----:|----------:|---------------:|---------------------:|
-| 1  |       0.39|           16.26|                  16.26|
-| 2  |       0.32|           13.37|                  29.63|
-| 3  |       0.29|           12.15|                  41.79|
-| 4  |       0.27|           11.33|                  53.12|
-| 5  |       0.23|            9.38|                  62.50|
-| 6  |       0.18|            7.68|                  70.19|
-| 7  |       0.17|            7.09|                  77.27|
-| 8  |       0.16|            6.73|                  84.00|
-| $\vdots$ | $\vdots$ | $\vdots$ | $\vdots$ |
+]
+
+
+.fl.w-60.pa2[
+
+![](`r knitr::fig_chunk("tita_cat", "png")`)
 
 ]
 
 
 ---
 
-### Graphics
 
-Object `res.mca` belongs to class `MCA`
+### `r fontawesome::fa("ship")` MCA biplot
 
-Class `MCA`  has its own `plot` method
+.fl.w-40.pa2.f6[
 
-The MCA function yields a graph simultaneously representing individuals and
-categories (active and illustrative) on the first two dimensions.
-
-This representation quickly becomes messy.
-
----
-
-### Plotting individuals
-
-Making variables whether active or not, _invisible_
-
-```{r}
-plot(res.mca, invisible=c("var","quali.sup"))
+```{r  tita_biplot, fig.show='hide'}
+res.mca.2$var$coord %>%
+  as.data.frame() %>% 
+  rownames_to_column(var="Category") %>% 
+  ggplot() +
+  geom_point(aes(x=`Dim 1`, 
+      y=`Dim 2`)) +
+  geom_text_repel(aes(x=`Dim 1`, 
+      y=`Dim 2`, 
+      label=Category)) +
+  geom_jitter(data=df_ind, 
+              aes(x=`Dim 1`, 
+                  y=`Dim 2`, 
+                  colour=Survived),
+              alpha=.2, 
+              width=.1, 
+              height = .1
+              ) +
+  scale_color_viridis_d() +
+  coord_fixed() +
+  ggtitle("Titanic: biplot")
 ```
+]
+
+
+.fl.w-60.pa2[
+
+![](`r knitr::fig_chunk("tita_biplot", "png")`)
+
+]
 
 ---
+template: inter-slide
 
-### Clustering individuals
-
-We can use
-the colour aesthetic to check whether some pattern emerges.
-
-```{r}
-plot(res.mca, invisible=c("var","quali.sup"), habillage="Marche")
-```
-
-Does it?
-
----
-
-### Colouring according to profession
-
-```{r}
-plot(res.mca, invisible=c("var","quali.sup"), habillage="Profession")
-```
-
-
----
-
-### Colouring according to Age
-
-```{r}
-plot(res.mca, invisible=c("var","quali.sup"), habillage="Age")
-```
-
-
----
-
-### Colouring according to Impaye
-
-```{r}
-plot(res.mca, invisible=c("var","quali.sup"), habillage="Impaye")
-```
-
----
-
-> Dimension 2 mainly opposes people in great financial difficulty (below) with
-the others (above). We can therefore identify people who have difficulty paying
-back their loan (three or more payments missed) and those who have taken
-out TPD insurance. This dimension can thus be qualified as the dimension of financial difficulty.
-
-
----
-
-### Plotting variables
-
-```{r}
-plot(res.mca, choix="var", invisible = "quali.sup")
-```
+## References
 
 ---
 
 
-```{r}
-plot(res.mca, choix="var")
-```
-
----
-
-```{r}
-plot(res.mca, invisible=c("ind", "quali.sup"))
-```
-
----
-
-### AUtomatic report
-
-```{r, eval=FALSE}
-FactoInvestigate::Investigate(res.mca, keepRmd = TRUE)
-```
-
----
-
-### Dimension description
-
-Automatically describing the dimensions of variability.
-
-This function also sorts the qualitative
-variables as well as the categories of the qualitative variables. In order to do
-so, a one-way analysis of variance model is constructed for
-each qualitative variable: variable Y corresponds to the principal component
-(the coordinates of the individuals or scores) and is explained according to a
-qualitative variable.
-
----
-
-The _p-value_ of the overall test (F-test) is calculated as
-well as the p-values of the tests of each category.  The p-values
-associated with the F-tests are sorted in ascending order. Thus, the qualitative
-variables are sorted from most to least characteristic. In the same way,
-the p-values of the t-tests by categories are sorted (in ascending order when
-the coefficient is positive, and in descending order when it is negative). This
-will identify the most characteristic categories.
-
----
-
-```{r}
-FactoMineR::dimdesc(res.mca)
-```
-
-
----
 
 ### Packages
 
 - `r fontawesome::fa("r-project")` [FactoMineR]()
 - `r fontawesome::fa("r-project")` [ade4]()
-
-
+- `r fontawesome::fa("r-project")` [ca]()
 - `r fontawesome::fa("python")` [prince](https://github.com/MaxHalford/prince)
-- `r fontawesome::fa("python")` []()
-
----
-
-## Bibliographical remarks
-
 
 ---
 class: middle, center, inverse
