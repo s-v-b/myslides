@@ -94,12 +94,6 @@ pacman::p_load(FactoMineR)
 pacman::p_load(factoextra)
 pacman::p_load(data.table)
 pacman::p_load(ggmosaic)
-
-
-
-
-
-
 # old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
 # %%
 ```

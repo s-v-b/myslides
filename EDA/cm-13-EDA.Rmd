@@ -1,0 +1,403 @@
+---
+title: "EDA XIII Spatial data"
+subtitle: "Statistiques Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2021/04/10 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+options("rgdal_show_exportToProj4_warnings"="none")
+pacman::p_load(rgdal)
+pacman::p_load("spdep")
+pacman::p_load("gstat")
+pacman::p_load("geosphere")
+pacman::p_load("raster")
+pacman::p_load("stars")
+pacman::p_load("sf")
+pacman::p_load("RPostgreSQL")
+pacman::p_load("osmdata")
+pacman::p_load("leaflet")
+pacman::p_load("mapview")
+pacman::p_load("cubeview")
+```
+
+
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
+```
+
+
+
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+NoCite(myBib, "MR3851754")
+NoCite(myBib, "MR3080408")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "MR3316191")
+NoCite(myBib, "zbMATH06322139")
+NoCite(myBib, "Har75")
+NoCite(myBib, "MR2677125")
+NoCite(myBib, "HaTiFr01")
+NoCite(myBib, "Mur12")
+NoCite(myBib, "moitra2018algorithmic")
+```
+
+---
+class: middle, left, inverse
+
+
+
+# Exploratory Data Analysis XIII Spatial Data
+
+### `r Sys.Date()`
+
+
+#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+
+---
+class: middle, inverse
+
+## `r fontawesome::fa("map", fill="white")`
+
+### [Motivation](#bigpic)
+
+### [](#)
+
+
+---
+template: inter-slide
+name: bigpic
+
+## Why spatial data? 
+
+---
+
+```{r}
+q = opq(bbox = "Paris, France")
+q = add_osm_feature(q, key = "highway")
+dat = osmdata_sf(q)
+lines = dat$osm_lines
+pol = dat$osm_polygons
+pol = st_cast(pol, "MULTILINESTRING")
+pol = st_cast(pol, "LINESTRING")
+lines = rbind(lines, pol)
+lines = lines[, "highway"]
+lines = st_transform(lines, 32636)
+plot(lines, key.pos = 4, key.width = lcm(4), main = "")
+```
+
+---
+
+
+```{r, eval=FALSE}
+states <- st_read("DATA/geo_data/USA_2_GADM_fips.shp")
+mapview(states, zcol = "NAME_1")
+```
+
+---
+
+
+
+```{r}
+# knitr::include_url("http://spatial.ly/2012/02/great-maps-ggplot2/")
+```
+
+
+
+---
+template: inter-slide
+
+
+## Rasters
+
+---
+
+###  `stars`
+
+- spatial data structure  for single band and multi-band rasters  (`class stars`)
+- access the cell values and other properties of rasters
+- read and write raster data
+
+---
+
+###  Definition
+
+> A raster  is  a matrix or an array, representing a rectangular area on the surface of the earth. 
+
+> To associate the matrix or the array with the particular area it represents, the raster has some additional spatial properties, on top of the non-spatial properties that any ordinary matrix or array has:
+
+- Non-spatial properties
+    + Values
+    + Dimensions (rows, columns, layers)
+- Spatial properties
+    + Extent
+    + Coordinate Reference System (CRS)
+    + (Resolution)
+
+> a matrix is used to store single-band raster values in a stars raster object
+
+[What is raster data?](https://desktop.arcgis.com/en/arcmap/10.3/manage-data/raster-and-images/what-is-raster-data.htm)
+
+---
+
+### Coordinate Reference System (CRS)
+
+> The Coordinate Reference System (CRS) is the particular system that “associates” the raster coordinates (which are just pairs of x/y values) to geographic locations. Raster resolution is the size of a raster cell, in the x and y directions. The resolution is listed in parentheses because it can be calculated given the extent and the number of rows and columns
+
+---
+
+### Raster File Formats
+
+Commonly used raster file formats can be divided in two groups. 
+
+- “Simple” raster file formats, such as GeoTIFF, are single-band or multi-band rasters with a geo-referenced extent, as discussed above. 
+
+- “Complex” raster file formats, such as HDF, contain additional complexity, such as more than three dimensions, and/or metadata, such as band names, time stamps, units of measurement, and so on.
+
+
+---
+
+### 
+
+
+- [An example of an HDF file structure](http://matthewrocklin.com/blog/work/2018/02/06/hdf-in-the-cloud)
+
+- 
+
+---
+
+### Volcano contour plot
+
+```{r, fig.cap=" Volcano image with contours"}
+image(volcano, col = terrain.colors(30), asp = ncol(volcano) / nrow(volcano))
+
+contour(volcano, add = TRUE)
+```
+
+--
+
+### Topographic Information on Auckland's Maunga Whau Volcano
+
+#### Description:
+
+Maunga Whau (Mt Eden) is one of about 50 volcanos in the Auckland volcanic field. This data set gives topographic information for Maunga Whau on a  10m by 10m grid.
+
+Usage: `volcano`
+
+Format: A `matrix` with 87 rows and 61 columns, rows corresponding to grid lines running east to west and columns to grid lines running south to north.
+
+Source: Digitized from a topographic map by Ross Ihaka. 
+.fr[From the documentation `?volcano`]
+
+---
+
+### Loading rasters 
+
+```{r}
+s <- stars::read_stars("DATA/geo_data/dem.tif")
+
+r <- stars::read_stars("DATA/geo_data/MOD13A3_2000_2019.tif")
+
+names(r) <- "NDVI"
+```
+
+---
+
+### About `stars`
+
+
+[`stars` vignettes](https://r-spatial.github.io/stars/articles/)
+
+Package stars provides infrastructure for data cubes, array data with labeled dimensions, with emphasis on arrays where some of the dimensions relate to time and/or space.
+
+Spatial data cubes are arrays with one or more spatial dimensions. Raster data cubes have at least two spatial dimensions that form the raster tesselation. Vector data cubes have at least one spatial dimension that may for instance reflect a polygon tesselation, or a set of point locations. Conversions between the two (rasterization, polygonization) are provided. Vector data are represented by simple feature geometries (packages sf). Tidyverse methods are provided.
+
+
+---
+
+```{r}
+attributes(r)
+```
+
+
+---
+
+```{r, outwidth="50%"}
+plot(r[,,,2])
+library(mapview)
+mapview::mapview(r[,,,2])
+```
+
+
+---
+
+```{r}
+cubeview(r)
+```
+
+
+---
+
+```{r}
+st_crs(r)
+st_bbox(r)
+```
+
+---
+
+### Subsetting raster objects
+
+The stars subset operator `[` works as follows:
+
+- The 1st index selects attributes
+- The 2nd index selects the first dimension, typically `[x]`, i.e., raster **columns**
+- The 3rd index selects the second dimension, typically `[y]`, i.e., raster **rows**
+- The 4th index selects the _thirds_ dimension (if there is one), typically band, i.e., _raster layers_
+(Subsequent indices, if any, select the remaining dimensions)
+
+
+```{r}
+attributes(r[,1,1,1])
+str(r[,10,100,1])
+```
+
+---
+template: inter-slide
+
+## Vectors
+
+---
+
+
+### Data structures for vector layers: 
+
+- points, 
+- lines and 
+- polygons
+
+#### Spatial and non-spatial properties of vector layers
+
+#### Transform a layer from one Coordinate Reference System (CRS) to another
+
+???
+
+We will use the following R packages:
+
+sf
+mapview
+stars
+
+---
+
+### Definition: Vector layers
+
+
+Vector layers are essentially sets of _geometries_ associated with non-spatial attributes 
+
+The geometries are sequences of one or more _point coordinates_, possibly connected to form _lines_ or _polygons_ 
+
+The non-spatial attributes come in the form of a table.
+
+---
+template: inter-slide
+
+## 
+
+---
+
+
+
+---
+template: inter-slide
+
+## References
+
+---
+
+### `r fontawesome::fa("laptop-code", fill="code")` Packages 
+
+- rgeos
+- sp
+- rgdal
+- raster
+- sf
+- gstat
+- geosphere
+- spdep
+- osmdata
+
+---
+
+### `r fontawesome::fa("book", fill="code")` Books 
+
+- [Introduction to Spatial Data Programming with R](http://132.72.155.230:3838/r/)
+- [rspatial.org](https://rspatial.org)
+- [Spatial Data Science](https://spatialanalysis.github.io/tutorials/)
+- [Using Spatial Data with R](https://cengel.github.io/R-spatial/)
+- [Geocomputation with R](https://geocompr.robinlovelace.net/)
+- [Spatial Data Science](https://www.r-spatial.org/book/)
+
+
+See extended bibliography at [Introduction to Spatial Data Programming with R
+ by M. Dorman](http://132.72.155.230:3838/r/)
+ 
+---
+
+### Tutorials 
+
+See [Tutorials list from M. Dorman](http://132.72.155.230:3838/r/#courses)
+
+
+
+ 
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: cover
+
+
+# The End
+
