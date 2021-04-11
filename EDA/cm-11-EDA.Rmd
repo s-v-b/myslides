@@ -1193,18 +1193,19 @@ df_ind %>%
 .fl.w-40.pa2.f6[
 
 ```{r  tita_cat, fig.show='hide'}
-res.mca.2$var$coord %>%
+df_cat <- res.mca.2$var$coord %>%
   as.data.frame() %>% 
-  rownames_to_column(var="Category") %>% 
+  rownames_to_column(var="Category") 
+
+p <- df_cat %>%  
   ggplot() +
   aes(x=`Dim 1`, 
-      y=`Dim 2`, 
-      label=Category
-      ) +
+      y=`Dim 2`) +
   geom_point() +
-  geom_text_repel() +
-  coord_fixed() +
-  ggtitle("Titanic: categories in principal coordinates ")
+  geom_text_repel(aes(label=Category)) +
+  coord_fixed() 
+  
+p +  ggtitle("Titanic: categories in principal coordinates ")
 ```
 
 ]
@@ -1225,15 +1226,7 @@ res.mca.2$var$coord %>%
 .fl.w-40.pa2.f6[
 
 ```{r  tita_biplot, fig.show='hide'}
-res.mca.2$var$coord %>%
-  as.data.frame() %>% 
-  rownames_to_column(var="Category") %>% 
-  ggplot() +
-  geom_point(aes(x=`Dim 1`, 
-      y=`Dim 2`)) +
-  geom_text_repel(aes(x=`Dim 1`, 
-      y=`Dim 2`, 
-      label=Category)) +
+p +
   geom_jitter(data=df_ind, 
               aes(x=`Dim 1`, 
                   y=`Dim 2`, 
@@ -1243,7 +1236,6 @@ res.mca.2$var$coord %>%
               height = .1
               ) +
   scale_color_viridis_d() +
-  coord_fixed() +
   ggtitle("Titanic: biplot")
 ```
 ]
@@ -1267,8 +1259,11 @@ template: inter-slide
 ### Packages
 
 - `r fontawesome::fa("r-project")` [FactoMineR]()
+
 - `r fontawesome::fa("r-project")` [ade4]()
+
 - `r fontawesome::fa("r-project")` [ca]()
+
 - `r fontawesome::fa("python")` [prince](https://github.com/MaxHalford/prince)
 
 ---
