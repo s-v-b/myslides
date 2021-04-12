@@ -40,18 +40,18 @@ class: left, middle
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 options("rgdal_show_exportToProj4_warnings"="none")
-pacman::p_load(rgdal)
-pacman::p_load("spdep")
-pacman::p_load("gstat")
-pacman::p_load("geosphere")
-pacman::p_load("raster")
-pacman::p_load("stars")
-pacman::p_load("sf")
-pacman::p_load("RPostgreSQL")
-pacman::p_load("osmdata")
-pacman::p_load("leaflet")
-pacman::p_load("mapview")
-pacman::p_load("cubeview")
+require(rgdal)
+require("spdep")
+require("gstat")
+require("geosphere")
+require("raster")
+require("stars")
+require("sf")
+require("RPostgreSQL")
+require("osmdata")
+require("leaflet")
+require("mapview")
+require("cubeview")
 ```
 
 
@@ -114,8 +114,10 @@ name: bigpic
 
 ---
 
-```{r}
-q = opq(bbox = "Paris, France")
+### 
+
+```{r, eval=FALSE}
+q = opq(bbox = "Gueret, France")
 q = add_osm_feature(q, key = "highway")
 dat = osmdata_sf(q)
 lines = dat$osm_lines
@@ -130,14 +132,15 @@ plot(lines, key.pos = 4, key.width = lcm(4), main = "")
 
 ---
 
+### Mapview
 
-```{r, eval=FALSE}
+```{r, eval=TRUE, message=FALSE, warning==TRUE}
 states <- st_read("DATA/geo_data/USA_2_GADM_fips.shp")
 mapview(states, zcol = "NAME_1")
 ```
 
 ---
-
+exclude: true
 
 
 ```{r}
@@ -258,7 +261,7 @@ Spatial data cubes are arrays with one or more spatial dimensions. Raster data c
 ---
 
 ```{r}
-attributes(r)
+attributes(r)[[2]]
 ```
 
 
@@ -266,15 +269,14 @@ attributes(r)
 
 ```{r, outwidth="50%"}
 plot(r[,,,2])
-library(mapview)
-mapview::mapview(r[,,,2])
+# mapview::mapview(r[,,,2])
 ```
 
 
 ---
 
 ```{r}
-cubeview(r)
+# cubeview(r)
 ```
 
 
@@ -339,6 +341,77 @@ Vector layers are essentially sets of _geometries_ associated with non-spatial a
 The geometries are sequences of one or more _point coordinates_, possibly connected to form _lines_ or _polygons_ 
 
 The non-spatial attributes come in the form of a table.
+
+
+---
+
+### Commonly used vector layer file formats
+
+- binary formats, such as the ESRI Shapefile (.shp)
+
+- plain text formats, such as 
+  + .GeoJSON (.json or .geojson)
+  + GPS Exchange Format (.gpx)
+
+Vector layers are also frequently kept in a spatial database, such as PostgreSQL/PostGIS.
+
+---
+
+### `sp` Classes for vector layers  (legacy)
+
+The `sp` package defines 6 main classes for vector layers 
+
+One for each geometry type (points, lines, polygons)
+
+One for geometry only and one for geometry with attributes
+
+| Class	| Geometry type |	Attributes
+|---------------|--------|------|
+| SpatialPoints	| Points |	-   |
+| SpatialPointsDataFrame	| Points  |	data.frame|
+| SpatialLines |	Lines	| - |
+| SpatialLinesDataFrame |	Lines	| data.frame |
+| SpatialPolygons	| Polygons |	- |
+| SpatialPolygonsDataFrame	| Polygons |	data.frame |
+
+
+---
+
+###  `sf`
+
+`sf` has become the standard package for working with vector data in R, practically replacing `sp`, `rgdal`, and `rgeos`
+
+> The Simple Features standard defines several types of geometries, of which seven are most commonly used in the world of GIS and spatial data analysis
+
+> When working with spatial databases, Simple Features are commonly specified as Well Known Text (WKT). A subset of simple features forms the GeoJSON standard
+
+---
+
+### 
+
+a hierarchical class system with three classes (Table 7.3):
+
+- Class `sfg` —a single geometry
+
+- Class `sfc` —a geometry column, which is a set of `sfg` geometries + CRS information
+
+- Class `sf` —a layer, which is an `sfc` geometry column inside a `data.frame` with non-spatial attributes
+
+---
+
+###
+
+
+```{r}
+a <- st_polygon(list(cbind(c(0,0,7.5,7.5,0),
+                           c(0,-1,-1,0,0))
+                     )
+                )
+
+a
+
+# plot(a, col="yellow", border = "blue", lwd = .5)
+```
 
 ---
 template: inter-slide

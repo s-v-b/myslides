@@ -90,7 +90,8 @@ class: middle, left, inverse
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: middle, inverse
+class: inter-slide
+exclude: true
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -229,15 +230,22 @@ The $j^{\text{th}}$ step
 ---
 
 Canonical Correlation Analysis builds on Singular Value Decomposition just
-as Principal Component Analyis, Correspondence Analyis, but also Multiple Linear
-Regression at least implicitly
+as 
 
-Before proceeding to Multiple Correspondence Analyis, we point out the tight connection
+- Principal Component Analyis, 
+
+- Correspondence Analyis,  
+
+- Multiple Linear Regression (at least implicitly)
+
+- ...
+
+???
+
+We point out the tight connection
 between Canonical Correlation Analysis and methods we have already encountered
 
----
-
-We can recover a Correspondence Analyis
+`r fontawesome::fa("hand-point-right")` We can recover Correspondence Analysis
 from the result of a Canonical Correlation
 Analysis
 
@@ -262,16 +270,12 @@ knitr::knit_hooks$set(source = function(x, options) {
 })
 ```
 
-
----
-
 ```{r, warning=FALSE, message=FALSE}
 readr::read_csv2("./DATA/credit.csv") %>%
   dplyr::mutate_all(factor) -> credit
 ```
 
-In order to smooth CCA, MCA and CA, some factors
-require collapsing some rare levels
+`r fontawesome::fa("exclamation-triangle")` In order to smooth CCA, MCA and CA, some factors require collapsing some rare levels
 
 We use functions from `forcats` to tidy the data
 
@@ -280,21 +284,24 @@ We focus on CCA and CA for variables `Marche` and `Logement`
 
 ---
 
+### Handling rare levels
+
 ```{r}
-credit[['Marche']] <- fct_collapse(credit[['Marche']],
+credit[['Marche']] <- fct_collapse(     #<<
+  credit[['Marche']],
   "Mobilier / Ameublement" = "Mobilier / Ameublement",
   "Renovation" = "Renovation",
-  "Moto" = c ("Moto", "Scooter", "Side-car"),
+  "Moto" = c ("Moto", "Scooter", "Side-car"),  #<<
   "Voiture" = "Voiture")
 
-credit$Enfants <- fct_lump(credit$Enfants,
+credit$Enfants <- fct_lump(credit$Enfants,  #<<
   n = 3,
   other_level = "Enf>2")
 
-credit$Logement <- fct_collapse(credit$Logement,
+credit$Logement <- fct_collapse(credit$Logement,  #<<
   "Accedant a la propriete"="Accedant a la propriete",
   "Locataire"="Locataire",
-  "Loge par ..." = c("Loge par l'employeur",
+  "Loge par ..." = c("Loge par l'employeur",  #<<
   "Loge par la famille"),
   "Proprietaire"="Proprietaire")
 ```
@@ -302,7 +309,7 @@ credit$Logement <- fct_collapse(credit$Logement,
 ---
 
 
-TODO: description of credit dataset
+### Description of `credit` dataset
 
 Columns `Marche` and `Logement`
 
@@ -332,18 +339,19 @@ $$T = Z_1^T \times Z_2$$
 
 ---
 
-Packages dedicated to Correspondence Analyis export functions that return disjunctive
-tables.
+### Building disjunctive table
 
-The construction of disjunctive tables can be performed using verbs from `dplyr` and `tidyverse`
+Packages dedicated to Correspondence Analyis export functions that return disjunctive tables `tab.disjonctif()` in `FactoMineR`.
+
+The construction of disjunctive tables can (also) be performed using verbs from `dplyr` and `tidyverse`
 
 ```{r, echo=TRUE, eval=FALSE}
 dplyr::select(credit, Marche, Impaye) %>%
   tibble::rowid_to_column("id") %>%
-  tidyr::pivot_wider(id_cols = - Marche,
-                     names_from = Marche,
-                     values_from = Marche)  %>%
-  tidyr::pivot_wider(id_cols = -Impaye,
+  tidyr::pivot_wider(id_cols = - Marche,     #<<
+                     names_from = Marche,    #<<
+                     values_from = Marche)  %>%   #<<
+  tidyr::pivot_wider(id_cols = -Impaye,      
                      names_from = Impaye,
                      values_from = Impaye) %>%
   dplyr::select(-id) %>%
@@ -358,8 +366,7 @@ t(Y[, 1:4]) %*% Y[, 5:7]
 
 ---
 
-As the disjunctive table contains as much information as the contingency table,
-Correspondence Analyis can be performed on the disjunctive table.
+`r fontawesome::fa("hand-point-right")`  As the disjunctive table contains as much information as the contingency table, Correspondence Analyis can be performed on the disjunctive table (indicator matrix)
 
 $P = \frac{1}{n} Z_1^T \times Z_2$
 
@@ -367,78 +374,60 @@ $S_{1,1} = \frac{1}{n} Z_1^T \times Z_1 - \frac{1}{n^2} Z_1^T\times 1 \times 1^T
 
 $S_{1,2} = \frac{1}{n} Z_1^T \times Z_2 - \frac{1}{n^2} Z_1^T\times 1 \times 1^T \times Z_2$
 
-$D_r = \frac{1}{n} Z_1^T \times Z_1$  $D_c = \frac{1}{n} Z_2^T \times Z_2$
+$D_r = \frac{1}{n} Z_1^T \times Z_1$  
+
+$D_c = \frac{1}{n} Z_2^T \times Z_2$
 
 ---
 
 ### CA
 
-SVD of   $D_r^{-1} \times P \times  D_r^{-1}  - 1 \times 1^T$
+SVD of   $D_r^{-1} \times P \times  D_r^{-1}  - \mathbb{I} \times \mathbb{I}^T$
 
+`r fontawesome::fa("glass-cheers")`
+
+### CCA
+
+SVD of  $S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$ 
+`r fontawesome::fa("glass-cheers")`
 
 ---
-
-## CCA
-
-SVD of  $S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$
-
----
+template: inter-slide
+name: mlr 
 
 ## Multiple Linear Regression as Canonical Correlation Analysis
 
-
-Message: We can recover Multiple Linear Regression from the result of a Canonical Correlation Analysis
-
-
 ---
 
-### MLR
 
+`r fontawesome::fa("bullhorn")` We can recover Multiple Linear Regression from the result of a Canonical Correlation Analysis
 
+--
 
 - In Multiple Linear  Regression, we are given a response vector $Y \in \mathbb{R}^n$
 and a design $Z \in \mathcal{M}_{n,p}$
+
 - We are looking for $\beta \in \mathbb{R}^p$
 that minimizes $\Vert Y - Z \beta\Vert^2$
+
 - The optimum is achieved at $\color{red}{\widehat{\beta} = (Z^T\times Z)^{-1}\times Z^T \times Y}$<sup>*</sup>
 
-
-
-[*] In case $Z^T \times Z$ is not invertible,
-$(Z^T\times Z)^{-1}$ denotes the Moore-Penrose pseudo-inverse
-
-
-
-
----
-
-Message: We can recover Multiple Linear Regression from the result of a Canonical Correlation Analysis
-
-
-- In Multiple Linear  Regression, we are given a response vector $Y \in \mathbb{R}^n$
-and a design $Z \in \mathcal{M}_{n,p}$
-- We are looking for $\beta \in \mathbb{R}^p$
-that minimizes $\Vert Y - Z \beta\Vert^2$
-- The optimum is achieved at $\widehat{\beta} = (Z^T\times Z)^{-1}\times Z^T \times Y$<sup>*</sup>
-
+--
 
 - For CCA, the optimum correlation is  the cosine of the angle between $Y$ and its projection $\widehat{Y}$ on the linear space  spanned  by the columns of $Z$, $$\widehat{Y} = Z \widehat{\beta}$$
+
 - We may choose $\color{red}{a=1}$   and $\color{red}{b=\widehat{\beta}}$ (or any vectors
 in these two directions)
 
 
-
-
 [*] In case $Z^T \times Z$ is not invertible,
 $(Z^T\times Z)^{-1}$ denotes the Moore-Penrose pseudo-inverse
 
 
 ---
+exclude: true
 
 ## CCA of Complete Disjunctive Table
-
-
-
 
 
 ```{r plot-label-fc, fig.show="hide"}
@@ -459,13 +448,6 @@ ggplot(iris) +
 
 
 ???
-
-
----
-
----
-
----
 
 ---
 class: middle, center, inverse
