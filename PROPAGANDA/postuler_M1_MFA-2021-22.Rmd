@@ -1,0 +1,210 @@
+---
+title: "Postuler en Master I Mathématiques Fondamentales et Appliquées (MFA)"
+subtitle: "Université de Paris (Paris-Diderot)"
+author: "DGV et SB"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+params:
+  year: 2021
+  parcours_bref: 
+    label: "Parcours:"
+    value: 'Master I MFA'
+    input: select
+    choices: ['Master I MFA', 'Master I MIDS', 'Master I MIC', 'Master I ISIFAR']
+---
+name: layout-general
+layout: true
+class: left, top
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE}
+```
+
+```{css, echo = F}
+.bg_karl {
+  position: relative;
+  z-index: 1;
+}
+
+.bg_karl::before {    
+      content: "";
+      background-image: url('./img/pano-gds-moulins.jpg');
+      background-size: cover;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+      opacity: 0.1;
+      z-index: -1;
+}
+```
+
+```{r, echo=FALSE}
+parcours_long <- list(
+  'Master I MFA' = 'Master I Mathématiques Fondamentales et Appliquées',
+  'Master I MIDS' = 'Double Master I Mathématiques-Informatique Science des Données',
+  'Master I MIC' = 'Double Master I Mathématiques-Informatique Sécurité Cryptologie',
+  'Master I ISIFAR' = 'Master I Informatique Statistique Finance Risque (ISIFAR)'
+)
+
+parcours_loc <- list(
+  'Master I MFA' = './img/tartampion_m1_mfa.png',
+  'Master I MIDS' = './img/tartampion_m1_mids.png',
+  'Master I MIC' = './img/tartampion_m1_mic_dm.png',
+  'Master I ISIFAR' = './img/tartampion_m1_isifar.png'
+)
+
+```
+
+---
+class: middle, left, bg_karl
+
+
+# `r fontawesome::fa("graduation-cap")` [Comment postuler au `r parcours_long[params$parcours_bref]`?](http://master.math.univ-paris-diderot.fr//annee/m1-math/)
+
+### [Master Mathématiques et Applications](http://master.math.univ-paris-diderot.fr)
+
+<br>
+<br>
+
+### `r fontawesome::fa("university")` [UFR de Mathématiques-Campus Grands Moulins (ex Paris-Diderot)](#grandsmoulins)
+
+### `r Sys.Date()`
+
+
+---
+
+### Pourquoi une aide à la candidature ?
+
+.fl.w-60.pa2[
+
+```{r, echo=FALSE}
+#XKCDdata::print_xkcd(773)
+knitr::include_graphics("./img/xkcd_university.png")
+```
+
+
+]
+
+.fl.w-40.pa2.f6[
+
+`r fontawesome::fa("surprise")` Postuler au `r params$parcours_bref` de 
+l'UFR de Mathématiques(Grands Moulins) n'est pas plus difficile 
+que de remplir l'attestation dérogatoire de déplacement pendant les périodes de confinements  
+
+```{r, echo=FALSE}
+#XKCDdata::print_xkcd(773)
+knitr::include_graphics("./img/que-sais-je-remplir-attestation-jean-enarque.jpeg")
+```
+]
+
+---
+
+### `r fontawesome::fa("map")`
+
+.fl.w-40.pa2[
+
+### Portail eCandidat
+
+### `r fontawesome::fa("map-signs")` [Offre de Formation](#odf)
+
+### `r fontawesome::fa("file-upload")` [Compléter le dossier](#dossier)
+
+### `r fontawesome::fa("paper-plane")` [Transmission](#transmission)
+
+
+]
+
+
+
+.fl.w-60.pa2[
+
+### `r fontawesome::fa("firefox")` Naviguer jusqu'au [portail eCandidat]((https://ecandidat.app.u-paris.fr/sciences1/#!accueilView) de l'Université de Paris
+
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/accueil_ecandidat.png")
+```
+
+[https://ecandidat.app.u-paris.fr/sciences1/#!accueilView](https://ecandidat.app.u-paris.fr/sciences1/#!accueilView)
+]
+
+
+---
+
+### Créer un compte de candidature
+
+```{r, echo=FALSE}
+knitr::include_graphics("img/creation_gauss.png")
+```
+
+Si vous ne disposez pas encore d'un compte de candidature, créer un compte 
+---
+
+### Ajourter informations personnelles
+
+- État-civil 
+- Adresse
+- ...
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/tartampion_perso.png")
+```
+
+Compléter (si besoin) les informations personnelles 
+
+---
+name: odf
+
+### `r fontawesome::fa("map-signs")` Trouver le `r params$parcours_bref` dans l'offre de formation
+
+![](`r parcours_loc[params$parcours_bref]`)
+
+`r fontawesome::fa("map")` Il faut s'orienter dans l'offre de formation et atteindre la ligne du [`r params$parcours_bref` du Master Mathématiques et Applications](https://master.math.univ-paris-diderot.fr/annee/m1-math/) de l'**UFR de Mathématiques** (Grands Moulins)
+
+---
+name: dossier
+
+### `r fontawesome::fa("file-upload")` Construire le dossier
+
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/tartampion_construction_dossier.png")
+```
+
+---
+name: transmission
+
+### `r fontawesome::fa("paper-plane")` Transmettre le dossier !
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/tartampion_transmission.png")
+```
+
+Lorsque vous estimez que votre dossier est complet, pour postuler, il faut _transmettre le dossier_
+
+---
+name: grandsmoulins
+class: top, left, inverse
+background-size: cover
+background-image: url('./img/pano-gds-moulins.jpg')
+
+### Les Grands Moulins et la Halle aux Farines
+
