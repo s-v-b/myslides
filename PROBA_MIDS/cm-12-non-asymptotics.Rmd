@@ -1,12 +1,12 @@
 ---
-title: "Non Asymptotic results"
-subtitle: "⚔<br/>Probabilités Master I, MIDS"
+title: "Probability XII: Non Asymptotic results"
+subtitle: "Probabilités Master I, MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,73 +22,34 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
 ---
-exclude: false
 name: inter-slide
-class: inverse, middle, left
+class: left, middle, inverse
 
-{{content}}
+{{ content }}
+
 
 ---
 name: layout-general
 layout: true
 class: left, middle
 
-```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-xaringanExtra::use_animate_css()
 
-xaringanExtra::use_tile_view()
-
-xaringanExtra::use_tachyons(minified = FALSE)
-
-# xaringanExtra::use_animate_all(style=c("fade", "side_right"))
-
-#xaringanExtra::use_animate_css()
-
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m2-mids/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-#library(flipbookr)
+```{r setup2, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
 
 
-
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
+```
 
 
 
@@ -135,8 +96,8 @@ $$\mathrm{d}_{\text{TV}}\left(\text{Poi}(\lambda), \text{Binom}\left(n, \frac{\l
 --
 
 - Non-asymptotic tail or moment bounds
-  + Chebychev inequality 
-  + exponential tail bounds for (some) sums of independent random variables 
+  + Chebychev inequality
+  + exponential tail bounds for (some) sums of independent random variables
 
 .center[ ≈ Hoeffding's inequality
 
@@ -148,22 +109,22 @@ $$\mathrm{d}_{\text{TV}}\left(\text{Poi}(\lambda), \text{Binom}\left(n, \frac{\l
 
 ---
 
-### Quantitative approaches to limit theorems 
+### Quantitative approaches to limit theorems
 
 - Bounds on the deviation between the cumulative distribution functions for normalized and centered sums of i.i.d. random variables and Gaussian cumulative distribution function .fr.f6[(Berry-Esseen)]
 
 - Bounds on total variation distance/transportation distance between distributions and Gaussian, Poisson, GEV, ... and other limit distributions .fr.f6[(Stein's method)]
 
-`r fontawesome::fa("frown")` May not fit very well with union bounds 
+`r fontawesome::fa("frown")` May not fit very well with union bounds
 
 
 ---
 
 ### Exponential bounds
 
-- Hoeffding, Bernstein: for sums of independent random variables 
+- Hoeffding, Bernstein: for sums of independent random variables
 
-- Bounded-differences inequality : for _smooth_ functions of independent random variables 
+- Bounded-differences inequality : for _smooth_ functions of independent random variables
 
 ---
 
@@ -480,7 +441,7 @@ are identical
 
 ### Proof (continued)
 
-For any real-valued random variable $X$ `r fontawesome::fa("syringe")`  
+For any real-valued random variable $X$ `r fontawesome::fa("syringe")`
 
 
 $$\operatorname{var}(X) = \inf_{a\in \mathbb{R}} \mathbb{E}\left[(X-a)^2\right]$$
@@ -489,7 +450,7 @@ Using this fact conditionally, for every $i=1,\ldots, n$
 
 $$\operatorname{var}^{\left(  i\right)  }\left(  Z\right)  =\inf_{Z_{i}}\mathbb{E}^{\left(  i\right)  }\left[\left(  Z-Z_{i}\right)^2\right]$$
 
-`r fontawesome::fa("hand-point-right")` 
+`r fontawesome::fa("hand-point-right")`
 
 The infimum is achieved whenever $Z_{i}=\mathbb{E}^{\left(i\right)}Z$
 
@@ -589,7 +550,7 @@ name: expo-ineq
 
 ### Mill's ratios (Gaussian tail bounds)
 
-For $x>0$ 
+For $x>0$
 
 $$\frac{\phi(x)}{x} \left(1 -\frac{1}{x^3}\right)\leq \overline{\Phi}(x) \leq \min\left(\frac{\phi(x)}{x}, \mathrm{e}^{-x^2/2}\right)$$
 
@@ -598,15 +559,15 @@ $$\frac{\phi(x)}{x} \left(1 -\frac{1}{x^3}\right)\leq \overline{\Phi}(x) \leq \m
 
 ---
 
-### Gaussian quantiles 
+### Gaussian quantiles
 
-For $t>1$ 
+For $t>1$
 
 $$\Phi^{\leftarrow}\left(1 - \frac{1}{t}\right) \leq \sqrt{2 \log t}$$
 
 --
 
-This is both handy and reasonably tight `r fontawesome::fa("glass-cheers")` 
+This is both handy and reasonably tight `r fontawesome::fa("glass-cheers")`
 
 $$\Phi^{\leftarrow}\left(1 - \frac{1}{t}\right)  \sim  \sqrt{2 \log t}\qquad \text{as} \quad {t\to\infty}$$
 
@@ -614,7 +575,7 @@ $$\Phi^{\leftarrow}\left(1 - \frac{1}{t}\right)  \sim  \sqrt{2 \log t}\qquad \te
 
 ### Proof of Mill's ratios
 
-??? 
+???
 
 This is essentially integration by parts
 
@@ -800,10 +761,10 @@ name: mcdiarmid
 
 In this section we combine [Hoeffding's inequality](#) and conditioning
 to establish the so-called _Bounded differences inequality_ (also known
-as McDiarmid's inequality). 
+as McDiarmid's inequality).
 
 This inequality is a first example of the
-_concentration of measure phenomenon_. 
+_concentration of measure phenomenon_.
 
 Recall this phenomenon is best portrayed by the following say:
 
@@ -969,7 +930,7 @@ can be used to bound the expected maximum of these random variables.
 The main idea is most transparent if we consider _sub-Gaussian_ random variables.
 
 Let $Z_1,\ldots,Z_N$ be real-valued
-random variables such that there exists a $v>0$ such that 
+random variables such that there exists a $v>0$ such that
 
 for every $i=1,\ldots,N$, the logarithm of the moment generating function
 of $Z_i$ satisfies
@@ -993,11 +954,11 @@ This simple bound is (asymptotically) sharp if the $Z_i$ are i.i.d. normal rando
 
 ---
 
-### Generalizing the argument 
+### Generalizing the argument
 
 
 
-We formalize such a general inequality 
+We formalize such a general inequality
 
 but
 
@@ -1063,7 +1024,7 @@ For every $t \ge 0$, we have $u\geq t$ iff
 
 $$\forall  \lambda \in (0,b), \qquad \frac{y+\psi(\lambda)  }{\lambda}\geq t$$
 
-As this implies $y\ge \psi^*(t)$, we have 
+As this implies $y\ge \psi^*(t)$, we have
 
 $$\left\{ t\ge 0:\psi^*(t)> y\right\} = (u,\infty)$$
 
@@ -1091,7 +1052,7 @@ suprema of Gaussian or empirical processes
 
 Let $Z_1,\ldots,Z_N$ be real-valued random variables
 
-such that 
+such that
 
 for every $\lambda\in (0,b)$ and
 $i=1,\ldots,N$, the logarithm of the moment generating function

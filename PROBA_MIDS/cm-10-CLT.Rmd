@@ -1,12 +1,12 @@
 ---
-title: "Convergences"
-subtitle: "⚔<br/>Probabilités Master I, MIDS"
+title: "Probability X: Convergences"
+subtitle: "Probabilités Master I, MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,54 +22,37 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+
 ---
 name: layout-general
 layout: true
 class: left, middle
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
 
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```{r setup2, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
 
 
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
 ---
-class: middle, center, inverse
-
+template: inter-slide
 
 
 # Convergences in distribution
@@ -95,7 +78,7 @@ old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
 ```
 
 ---
-class: inverse, middle
+template: inter-slide
 
 ## Weak convergence, vague convergence
 ## Convergence in distribution
@@ -106,7 +89,7 @@ class: inverse, middle
 ## Weak convergence and transforms
 
 ---
-class: inverse, center, middle
+template: inter-slide
 
 ## Motivation
 
@@ -306,7 +289,7 @@ Weak convergence of probability measures assesses the proximity of probability m
 comparing their action on a _collection of test functions_
 
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Weak convergence
 
@@ -338,7 +321,7 @@ $$\lim_n \mathbb{E}_{P_n} [f] =  \mathbb{E}_P [f]$$
 ---
 name: vagueconv
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition  Vague convergence
 
@@ -383,7 +366,7 @@ name: secConvDistribution
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition
 
@@ -419,7 +402,7 @@ name: portemanteau
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Portemanteau Theorem `r fontawesome::fa("luggage-cart")`
 
@@ -563,7 +546,7 @@ but $P(O) = 0 \leq \liminf_n P_n(O)=1$
 
 > For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is determined by cumulative distribution functions. This is sometimes taken as a definition of weak convergence in elementary books.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -590,7 +573,7 @@ name: weakconvquantiles
 
 For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is also determined by quantile functions
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -609,7 +592,7 @@ at every $x$ which is a  continuity point of $F^\leftarrow$
 ---
 name: asrepweakconv
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition   Almost sure representation
 
@@ -672,7 +655,7 @@ $$\text{This translates to }\quad P \Big\{\omega :  \lim_n Y_n(\omega) =Y(\omega
 ---
 
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -706,7 +689,7 @@ knitr::include_url("https://en.wikipedia.org/wiki/Paul_Lévy_(mathematician)")
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem  Lévy's continuity theorem
 
@@ -736,7 +719,7 @@ These functions are bounded and infinitely many times differentiable.
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma
 
@@ -796,7 +779,7 @@ $$\limsup_n \Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| \leq 2\epsilon$$
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Scheffé's Lemma
 
@@ -881,7 +864,7 @@ any probability measure: it is not continuous at $0$.
 
 The next Theorem settles the question.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem  Lévy's continuity theorem, second form
 
@@ -899,7 +882,7 @@ The limit function is the characteristic function of some probability distributi
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition Uniform tightness
 
@@ -926,7 +909,7 @@ $$\forall n \geq n_0(\epsilon), \qquad P_n(K) \geq 1 - ϵ$$
 
 We admit the (important) next Theorem
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Prokhorov-Le Cam
 
@@ -959,7 +942,7 @@ knitr::include_url("https://en.wikipedia.org/wiki/Yuri_Prokhorov")
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Uniform tightness Lemma
 
@@ -1013,7 +996,7 @@ ggplot(data=tibble(x=seq(-15,15,by=.001)),
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Truncation Lemma
 
@@ -1133,7 +1116,7 @@ proof of the next Proposition.
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1200,7 +1183,7 @@ tends to be of order $1/\sqrt{n}$ and, once rescaled, to be normally distributed
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem  (Central Limit Theorem)
 
@@ -1347,7 +1330,7 @@ in the  next device which proof is left to the reader.
 It consists in the adapting the
 proof of the injectivity Theorem
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Cramer-Wold device
 
@@ -1361,7 +1344,7 @@ $$\langle t, X\rangle =\sum_{i=1}^n t_i X_i  \text{ where } (t_1, \ldots, t_n)^T
 
 The Cramer-Wold device  provides a short path to the Multivariate Central Limit Theorem
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1405,7 +1388,7 @@ some (implicit) probability space.
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1420,7 +1403,7 @@ The proof parallels the derivation of the continuity Theorem
 
 As probability generating functions allows us to recover Laplace transforms, the next theorem is a special case of the statement concerning Laplace transforms.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 

@@ -1,12 +1,12 @@
 ---
-title: "Stochastic convergences"
-subtitle: "⚔<br/>Probabilités Master I, MIDS"
+title: "Probability IX: Stochastic convergences"
+subtitle: "Probabilités Master I, MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,59 +22,37 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+
 ---
 name: layout-general
 layout: true
 class: left, middle
-background-image: url('./img/Universite_Paris_logo_horizontal.jpg')
-background-size: 10%
-background-position: 97% 3%
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
 
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```{r setup2, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
 
 
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
-
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 
 
@@ -89,15 +67,17 @@ class: middle, center, inverse
 
 
 ---
-class: inverse, middle
+template: inter-slide
 
-## [Almost sure convergence](#secasconv)
+### [Motivation](#motivation)
 
-## [$L_p$ convergence](#seclpconv)
+### [Almost sure convergence](#secasconv)
 
-## [Convergence in probability](#secconvinp)
+### [$L_p$ convergence](#seclpconv)
 
-## [Law of large numbers](#seclln)
+### [Convergence in probability](#secconvinp)
+
+### [Law of large numbers](#seclln)
 
 
 ---
@@ -202,11 +182,13 @@ Convergence in $L_p$ means convergence for this pseudo-norm.
 
 `r fontawesome::fa("syringe")` Recall that $L_p$ spaces are nested (by Holder's inequality) and complete.
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
 Convergence in $L_q, q\geq 1$  implies convergence in $L_p, 1\leq p \leq q$.
 
+]
 
 ---
 
@@ -218,9 +200,13 @@ But we can ask whether  $L_p$ convergence implies almost sure convergence.
 
 The next statement is  a by-product  of the proof  of the completeness of $L_p$ spaces,
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Theorem
 
 Convergence in $L_p$ implies almost sure convergence along a subsequence.
+
+]
 
 
 `r fontawesome::fa("triangle-exclamation")` A counter-example  shows that convergence in $L_p$
@@ -257,20 +243,27 @@ $$\forall \epsilon >0, \qquad \lim_n P \{ |X_n -X| \geq \epsilon\}  = 0$$
 
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Proposition
 
 Convergence in $L_p, p\geq 1$ implies convergence in probability.
 
+]
 
 `r fontawesome::fa("smile")` This is an immediate consequence of Markov's inequality
 
 ---
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition A criterion for convergence in probability
 
 The sequence $(X_n)_n$ converges in probability towards $X$ iff
 
 $$\lim_n \mathbb{E} \Big[ 1 \wedge |X_n -X|\Big] = 0$$
+
+]
 
 
 ---
@@ -304,9 +297,13 @@ entails convergence in Probability
 
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 
 ### Proposition
 Almost sure convergence implies convergence in probability.
+
+]
 
 
 ### Proof
@@ -339,10 +336,12 @@ $$\mathrm{d}_{\mathrm{KF}}(X, Y) = \inf_{\epsilon\geq 0} P\Big\{ |X-Y| >\epsilon
 
 This is the content of Proposition below
 
-
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 ### Proposition
 
 In the definition of  the Ky-Fan distance, the infimum is attained.
+
+]
 
 ---
 
@@ -363,7 +362,7 @@ $$P\Big(\cap_n A_{\epsilon + 1/n}\Big)=  \lim_{n} \uparrow P\Big(A_{\epsilon + 1
 
 ---
 
-
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 ### Proposition
 
 Ky-Fan distance satisfies:
@@ -374,7 +373,7 @@ Ky-Fan distance satisfies:
 
 1. $\mathrm{d}_{\mathrm{KF}}(X, Z) \leq  \mathrm{d}_{\mathrm{KF}}(X, Y) + \mathrm{d}_{\mathrm{KF}}(Y, Z)$
 
-
+]
 ---
 
 ### Proof
@@ -460,7 +459,8 @@ $$\forall \epsilon>0, \quad \lim_{n \to \infty} {P} \{ \Vert X_n -X\Vert > \epsi
 
 ---
 name: seclln
-class: middle, center, inverse
+template: inter-slide
+
 
 
 ## Law(s) of large numbers
@@ -473,6 +473,8 @@ name: wlln
 The weak and the strong law of large numbers are concerned with
 the convergence of empirical means of independent, identically distributed,
 integrable random variables  towards their common expectation.
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Weak  law of large numbers
 If $X_1, \ldots, X_n, \ldots$  are
@@ -487,7 +489,7 @@ then
 
 the sequence $(\overline{X}_n)$ defined by $\overline{X}_n := \frac{1}{n} \sum_{i=1}^n X_i$ converges in $P$-probability towards $\mu$
 
-
+]
 ---
 
 ### Proof
@@ -560,9 +562,12 @@ This completes the proof of the WLLN.  `r fontawesome::fa("glass-cheers")`
 
 ---
 name: secstronglln
+template: inter-slide
 
 ## Strong law of large numbers {#secslln}
 
+
+---
 
 
 Infinite product space endowed with cylinders $\sigma$-algebra, and
@@ -570,7 +575,7 @@ infinite product distribution.
 
 
 
-
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Strong  law of large numbers (direct part)
 
@@ -580,8 +585,11 @@ then $P$-a.s.
 
 $$\lim_{n \to \infty}    \overline{X}_n =   \mu \qquad\text{with} \quad \overline{X}_n := \frac{1}{n} \sum_{i=1}^n X_i$$
 
+]
+
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma  Borel-Cantelli I  `r fontawesome::fa("syringe")`
 
@@ -593,6 +601,8 @@ $$\sum_{n} P(A_n) < \infty$$
 then with probability $1$, only finitely many events among $A_1, A_2, \ldots, A_n$ occur:
 
 $$P \Big\{ \omega : \sum_{n} \mathbb{I}_{A_n}(\omega) < \infty\Big\} = 1$$
+
+]
 
 ---
 
@@ -635,7 +645,7 @@ that depend on the limiting behavior of sequences of independent random variable
 The $0-1$-law asserts that under independence,  tail events
 have trivial probabilities.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem "0-1-Law"
 
@@ -877,6 +887,7 @@ The converse Theorem  shows that, under independence assumption, the conditions 
 ---
 
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma  Borel-Cantelli II `r fontawesome::fa("syringe")`
 
@@ -890,6 +901,7 @@ then with probability $1$, infinitely many events among $A_1, A_2, \ldots, A_n$ 
 
 $$P \Big\{ \omega : \sum_{n} \mathbb{I}_{A_n}(\omega) = \infty \Big\} = 1$$
 
+]
 
 ---
 exclude:true
@@ -914,6 +926,9 @@ $$\begin{array}{rl}
 
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+
 ### Theorem Strong  law of large numbers, converse part
 
 Let $X_1, \ldots, X_n, \ldots$  be independently, identically distributed  $\mathbb{R}$-valued random variables over some $(\Omega, \mathcal{F}, P)$.
@@ -926,6 +941,7 @@ then
 
 all $X_i$ are integrable and $\mathbb{E}X_i = \mu.$
 
+]
 
 ---
 
@@ -976,6 +992,8 @@ bounds for sums of independent random variables.
 
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Lemma  Hoeffding Lemma
 
 Let $Y$ be a random variable  taking
@@ -986,6 +1004,7 @@ Then
 
 $$\operatorname{var}(Y) \leq \frac{(b-a)^2}{4}\qquad \text{and} \qquad \psi_Y(\lambda) \leq \frac{1}{2} \frac{(b-a)^2}{4}$$
 
+]
 
 ---
 
@@ -1054,6 +1073,8 @@ for sums of bounded independent random variables.
 
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Theorem Hoeffding's inequality
 
 Let $X_1,\ldots,X_n$ be
@@ -1072,6 +1093,9 @@ $$\forall \lambda \in \mathbb{R}, \qquad \log \mathbb{E} \mathrm{e}^{\lambda S} 
 
 $$\forall t>0, \qquad P\left\{  S \geq t \right\}  \le
 \exp\left( -\frac{t^2}{2 v}\right)$$
+
+]
+
 
 ---
 
@@ -1113,6 +1137,8 @@ This motivates the next two exponential inequalities stated in Theorem \@ref(thm
 
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Theorem Bennett's inequality
 
 Let $X_1,\ldots,X_n$ be independent  random variables with finite
@@ -1135,6 +1161,8 @@ and  for any $t>0$,
 $$P\{  S\geq t\}  \leq \exp\left(  -\frac{v}{b^2}h\left(\frac{bt}{v}\right) \right)$$
 
 where $h(u)=\phi^*(u) = (1+u)\log(1+u) -u$ for $u>0$.
+
+]
 
 ---
 
@@ -1181,6 +1209,8 @@ one of the pillars of statistical learning theory.
 
 ---
 
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Theorem Bernstein's inequality
 
 Let $X_1,\ldots,X_n$ be independent
@@ -1201,6 +1231,8 @@ For $t>0$,
 $$P \big\{ S > t \big\} \leq \exp\Big( - \frac{v}{c^2} h_1\big(\frac{ct}{v}\big)\Big)$$
 
 with $h_1(x)= 1+x - \sqrt{1+2x}$
+
+]
 
 ---
 

@@ -1,12 +1,12 @@
 ---
-title: "Characterizing Probability Distributions"
-subtitle: "⚔<br/>Probabilités Master I, MIDS"
+title: "Probability VIII: Characterizing Probability Distributions"
+subtitle: "Probabilités Master I, MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
-date: "2020/11/13 (updated: `r Sys.Date()`)"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,93 +22,37 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+
 ---
 name: layout-general
 layout: true
 class: left, middle
-background-image: url('./img/Universite_Paris_logo_horizontal.jpg')
-background-size: 10%
-background-position: 97% 3%
 
 
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```{r setup2, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
 
 
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
-
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-```
-
-
-```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-xaringanExtra::use_animate_css()
-
-xaringanExtra::use_tile_view()
-
-xaringanExtra::use_tachyons(minified = FALSE)
-
-xaringanExtra::use_logo(
-  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-# library(flipbookr)
-```
-
-
-
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Characterizing Probability Distributions
 
@@ -120,8 +64,9 @@ class: middle, center, inverse
 
 
 ---
+template: inter-slide
 name: roadmap
-class: inverse, middle
+
 
 
 ##  [Characteristic functions](#characteristic-functions)
@@ -187,7 +132,7 @@ class: inverse, middle, center
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Characteristic functions
 
@@ -222,7 +167,7 @@ exclude: true
 
 ### Properties fo characteristic functions
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -274,7 +219,7 @@ $$\lim_{\delta \to 0} \Big| \widehat{F}(t+\delta) - \widehat{F}(t)\Big| = 0\qqua
 
 ### Characteristic functions of sums of independent random variables
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -541,7 +486,7 @@ The characteristic function maps probability measures to $\mathbb{C}$-valued fun
 
 `r fontawesome::fa("exclamation-triangle")` Characteristic functions/Fourier transforms define is an injective operator on the set of Probability measures on the real line
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Injectivity Theorem
 
@@ -644,7 +589,7 @@ name: generalInvFormula
 Now we have to show that an inversion formula works for all probability distributions,
 not only for the smooth probability distributions obtained by adding Gaussian noise.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -694,7 +639,7 @@ name: simple-inversion
 
 When the distribution function is absolutely continuous, Fourier inversion is simpler `r fontawesome::fa("smile")`
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -748,7 +693,7 @@ $$\lim_{T \to \infty} \frac{1}{2\pi} \int_{-T}^T \frac{\mathrm{e}^{-it a} - \mat
 
 The proof of the alternative inversion formula can be found in textbooks like [Durrett 2010]
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 Let $\widehat{F}$ denote the characteristic function of the probability distribution $P$.
@@ -757,7 +702,7 @@ $$\widehat{F}(t) = \mathrm{e}^{-\frac{t^2}{2}} \Rightarrow  P = \mathcal{N}(0,1)
 
 ]
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -775,7 +720,7 @@ name: steinsidentity
 Another important byproduct of the proof of injectivity of the characteristic function
 is Stein's identity, an important property of the standard Gaussian distribution.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Stein's identity
 
@@ -815,7 +760,7 @@ name: laplace-distrib
 
 ### Application : exponential and Cauchy distributions
 
-Let $X = \epsilon \times Y$ with 
+Let $X = \epsilon \times Y$ with
 $$\epsilon \quad \bot\!\!\!\bot \quad Y \sim \text{Exp}$$
 with $P\{\epsilon=1\}=P\{\epsilon=-1\}=1/2$
 
@@ -825,7 +770,7 @@ The distribution $Y$ is called the Laplace distribution
 
 $$\begin{array}{rl}\widehat{F}_Y(t) & = \int_{\mathbb{R}} \frac{1}{2}\mathrm{e}^{-|x|} \cos(tx)\mathrm{d}x \qquad\text{(symmetry)}\\ &= \int_{[0, \infty)} \mathrm{e}^{-x} \cos(tx)\mathrm{d}x\\&=[-\mathrm{e}^{-x}\cos(tx)]_0^\infty - t \int_0^\infty \mathrm{e}^{-x}\sin(tx)\mathrm{d}x\qquad\text{(IBP)}\\ & = 1 +t [\mathrm{e}^{-x}\sin(tx)]_0^\infty - t^2 \int_0^\infty \mathrm{e}^{-x}\cos(tx)\mathrm{d}x\qquad\text{(IBP bis)}\\ & = 1 -t^2 \widehat{F}_Y(t)\end{array}$$
 
-The characteristic function of the Laplace distribution is 
+The characteristic function of the Laplace distribution is
 
 $$\widehat{F}_Y(t) = \frac{1}{1+ t^2}$$
 
@@ -840,7 +785,7 @@ name: exp-distrib
 ### Application : exponential and Cauchy distributions (continued)
 
 
-IF we turn back to the characteristic function of the Exponential distribution 
+IF we turn back to the characteristic function of the Exponential distribution
 
 $$\begin{array}{rl}\widehat{F}_Y(t) & = \frac{1}{2} \widehat{F}_X(t) + \frac{1}{2} \widehat{F}_X(-t)\end{array}$$
 
@@ -848,7 +793,7 @@ $$\widehat{F}_X(-t) = \overline{\widehat{F}_X(t)}$$
 
 $$\Re\left(\widehat{F}_X(t)\right) = \widehat{F}_Y(t) = \frac{1}{1+ t^2}$$
 
-By integration by parts again 
+By integration by parts again
 
 $$\Im\left(\widehat{F}_X(t)\right) = t \Re\left(\widehat{F}_X(t)\right)$$
 
@@ -866,16 +811,16 @@ name: cauchy-distrib
 ### Application : exponential and Cauchy distributions (continued)
 
 
-Let $V$ be uniformly distributed on $]-\pi/2, \pi/2[$ 
+Let $V$ be uniformly distributed on $]-\pi/2, \pi/2[$
 
-Let $U = \tan(V)$ 
+Let $U = \tan(V)$
 
-$U$ is a symmetric random variable with absolutely continuous distribution and density 
+$U$ is a symmetric random variable with absolutely continuous distribution and density
 
-$$x \mapsto \frac{1}{\pi} \frac{1}{1+x^2}$$ 
+$$x \mapsto \frac{1}{\pi} \frac{1}{1+x^2}$$
 over $\mathbb{R}$
 
-Up to factor $1/\pi$ the density of the Cauchy distribution is the characteristic function of the Laplace distribution 
+Up to factor $1/\pi$ the density of the Cauchy distribution is the characteristic function of the Laplace distribution
 
 By the [inversion formula](#simple-inversion)
 
@@ -893,9 +838,9 @@ name: cauchy-stable
 
 Let $U_1, \ldots, U_n \sim_{\text{i.i.d.}} \text{Cauchy}$
 
-Let $Z = \frac{1}{n}\sum_{i=1}^n U_i$ 
+Let $Z = \frac{1}{n}\sum_{i=1}^n U_i$
 
-Then 
+Then
 
 $$\widehat{F}_Z(t) = \prod_{i=1}^n \widehat{F}_U(t/n) = \mathrm{e}^{-|t|} = \widehat{F}_U(t)$$
 
@@ -903,7 +848,7 @@ By the injectivity theorem, $Z \sim U$
 
 --
 
-The Cauchy distribution has no expectation, it does not satisfy the conditions of the strong law of large numbers. 
+The Cauchy distribution has no expectation, it does not satisfy the conditions of the strong law of large numbers.
 
 The Cauchy distribution (along with the Normal distribution) is an example of _stable_ distribution
 
@@ -922,7 +867,7 @@ name:differentiabilitytehorem
 Differentiability of the Fourier transform at $0$ and  integrability
 are intimately related
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1004,7 +949,7 @@ of the Fourier transform does not imply integrability.
 
 But ...
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1314,7 +1259,7 @@ A cumulative distribution function $F$ is
 The quantile function $F^{\leftarrow}$ is defined as an _extended inverse_
 of the cumulative distribution function $F$.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition
 
@@ -1492,7 +1437,7 @@ Let us conclude this section with an important observation  concerning
 the behavior of $F(X)$ when $X \sim P$  with cumulative distribution function
 $F$.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 

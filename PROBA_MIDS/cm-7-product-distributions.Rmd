@@ -1,12 +1,12 @@
 ---
-title: "Product spaces and product distributions"
-subtitle: "⚔<br/>Probabilités Master I, MIDS"
+title: "Probability VII: Product spaces and product distributions"
+subtitle: "Probabilités Master I, MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
-date: "2020/11/05 (updated: `r Sys.Date()`)"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "default", "rutgers-fonts", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,60 +22,37 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+
 ---
 name: layout-general
 layout: true
 class: left, middle
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
 
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
+```{r setup2, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
 
 
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
-
-```{r xaringan-logo, echo=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+require(RefManageR, quietly = TRUE)
+BibOptions(check.entries = FALSE,
+           bib.style = "authoryear",
+           cite.style = 'authoryear',
+           style = "markdown",
+           hyperlink = FALSE,
+           dashed = FALSE)
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
 ---
-class: middle, center, inverse
-background-size: 4%
-background-position: 97% 3%
-
+template: inter-slide
 
 
 # Product distributions
@@ -88,7 +65,7 @@ background-position: 97% 3%
 
 
 ---
-class: inverse, center, middle
+template: inter-slide
 
 ## Motivation
 
@@ -158,7 +135,7 @@ of $\mathcal{X} \times \mathcal{Y}$: the _product $\sigma$-algebra_
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 ### Definition: Product sigma-algebra
 
 Let $(\mathcal{X}, \mathcal{F})$  and $(\mathcal{Y}, \mathcal{G})$ be two measurable spaces.
@@ -202,7 +179,9 @@ $$\mathcal{F} \otimes \mathcal{G} = \sigma\left(\mathcal{A}\right) \otimes \sigm
 
 ### Recall `r emo::ji("syringe")`
 
-.content-box-gray[
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 ### Definition:
 
 A measure $\mu$ on $(\Omega, \mathcal{F})$ is $\sigma$-finite iff
@@ -225,7 +204,7 @@ there exists $(A_n)_n$ with
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Product-measure Theorem
 
@@ -243,7 +222,7 @@ $$\alpha (A \times B) = \mu(A) \times \nu(B)\qquad \forall A \in \mathcal{F}, B 
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem  (continued)
 
@@ -367,7 +346,7 @@ class: center, middle, inverse
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 ### Theorem Tonelli-Fubini
 
 Let  $( \mathcal{X}, \mathcal{A})$ and $(\mathcal{Y}, \mathcal{B})$ ne two measurable spaces,  $\mu$ and $\nu$ two
@@ -400,7 +379,7 @@ $$\int_{\mathcal{X} \times \mathcal{Y}} f \mathrm{d} \mu \otimes \nu
 #### A simple consequence of the Tonelli-Fubini Theorem.
 
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 ### Proposition "IPP formula"
 
 Let $X$ be a non-negative real-valued random variable, then
@@ -446,7 +425,7 @@ $$Q( A \times B) = P\Big\{ \omega: X(\omega) \in A, Y(\omega) \in B \Big\}$$
 
 --
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 Then
 $$X \perp\!\!\!\perp Y \text{ under } P \Longleftrightarrow  Q = Q_X \otimes Q_Y \, ,$$
 
@@ -462,7 +441,7 @@ of their marginal distributions.
 Let $(\Omega, \mathcal{F}, P)$ be a probability space. Let $\mathcal{G_1}, \ldots, \mathcal{G}_n$
 be a  collection of sub- $\sigma$ -algebras
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition
 
@@ -486,7 +465,7 @@ We have to deal with a _countable collection of independent random variables_. I
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition
 
@@ -516,7 +495,7 @@ class: center, middle, inverse
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition Cylindrical $\sigma$-algebra
 
@@ -552,7 +531,7 @@ The answer is yes! `r emo::ji("champagne")`
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Kolmogorov's extension theorem
 Let $(\Omega_n, \mathcal{F}_n, P_n)_n$ be a countable collection of probability spaces. Then there exists a unique probability
@@ -586,7 +565,7 @@ class: center, middle, inverse
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma
 
@@ -650,7 +629,7 @@ This encompasses  the distributions of the so-called _continuous random variable
 
 --
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition Absolute continuity
 
@@ -723,7 +702,7 @@ with respect to the counting measure.
 ---
 
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ###  Chain rule
 
@@ -906,7 +885,7 @@ p
 
 Gaussian distributions play a central role in Probability theory, Statistics, Information theory, and Analysis
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition
 
@@ -1022,7 +1001,7 @@ has density $\frac{1}{\phi'\circ \phi^\leftarrow}$  on $\phi([0,1])$.
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1059,7 +1038,7 @@ $$P \Big\{ Y \leq y \Big\} = \int_{(-\infty, y] \cap \phi(\text{supp}(P))} \frac
 
 ---
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -1080,7 +1059,7 @@ an open set, it is invertible and its inverse is continuous and increasing
 
 The Global Inversion Theorem extends the preceding  observation to the multivariate setting `r fontawesome::fa("running")`
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Global Inversion Theorem
 
@@ -1108,7 +1087,7 @@ The multidimensional version of the change of variable formula
 is stated under the same assumptions as the Global Inversion Theorem.
 We admit the next Theorem.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Geometric change of variable formula
 
@@ -1135,7 +1114,7 @@ is easy thanks to an non-trivial application of the Geometricchange of variable 
 
 The Image density formula is a corollary of the geometric change of variable formula.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Image density formula
 
@@ -1186,7 +1165,7 @@ the density of $P \circ \phi^{-1}$ with respect to Lebesgue measure over $\phi(U
 The image density formula is applied to show a remarkable connexion between
 Gamma  and Beta distributions.
 
-.content-box-gray[
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
