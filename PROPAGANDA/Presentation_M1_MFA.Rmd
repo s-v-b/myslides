@@ -69,6 +69,76 @@ class: middle, inverse
 
 ### [Pour en savoir plus](#plus)
 
+
+---
+class: middle
+
+.left-column[
+
+### Campus des Grands Moulins
+
+#### [Université de Paris](https://www.u-paris.fr)
+
+#### Campus des Grands Moulins
+
+]
+
+.right-colum[
+
+
+```{r, echo=FALSE, message=FALSE, fig.align='right', fig.width=8}
+require(magrittr)
+m <- leaflet::leaflet() %>%
+  leaflet::setView(lat=48.853646831055556,
+                      lng=2.3488426208496094, zoom=12) %>%
+  leaflet::addTiles() %>%  # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(lat=48.82717410837418,
+                      lng=2.380986213684082,
+                      popup="Bâtiment Sophie Germain") %>%
+  leaflet::addMarkers(lng=2.38004207611084,
+                      lat=48.8326901185081,
+                      popup="Barge du Crous")
+
+m
+```
+
+]
+
+
+---
+class: top, left, inverse
+background-size: cover
+background-image: url('./img/pano-gds-moulins.jpg')
+
+### Grands moulins et Halle aux farines
+
+
+???
+
+Petit panorama du campus des Grands Moulins
+
+---
+class: top, left
+background-size: cover
+background-image: url('./img/2017-03-17 09.39.09.jpg')
+
+### Bâtiment Sophie Germain
+
+
+
+???
+
+C'est là que les choses sérieuses se passent
+
+
+
+```{r inscriptions, child='inscriptions.Rmd', eval=FALSE}
+
+```
+
+
+
+
 ---
 name: debouches
 class: top, left, inverse
@@ -453,7 +523,7 @@ Les trois cours de mathématiques comportent chacun
 
 - 3 heures de cours magistral hebdomadaires
 
-- 4 heures TDs/TPs hebdomadaires 
+- 4 heures TDs/TPs hebdomadaires
 
 
 ]
@@ -782,74 +852,6 @@ exclude: true
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
 knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/#infospratiques")
 ```
-
----
-class: middle
-
-.left-column[
-
-### Campus des Grands Moulins
-
-#### [Université de Paris](https://www.u-paris.fr)
-
-#### Campus des Grands Moulins
-
-]
-
-.right-colum[
-
-
-```{r, echo=FALSE, message=FALSE, fig.align='right', fig.width=8}
-require(magrittr)
-m <- leaflet::leaflet() %>%
-  leaflet::setView(lat=48.853646831055556,
-                      lng=2.3488426208496094, zoom=12) %>%
-  leaflet::addTiles() %>%  # Add default OpenStreetMap map tiles
-  leaflet::addMarkers(lat=48.82717410837418,
-                      lng=2.380986213684082,
-                      popup="Bâtiment Sophie Germain") %>%
-  leaflet::addMarkers(lng=2.38004207611084,
-                      lat=48.8326901185081,
-                      popup="Barge du Crous")
-
-m
-```
-
-]
-
-
----
-class: top, left, inverse
-background-size: cover
-background-image: url('./img/pano-gds-moulins.jpg')
-
-### Grands moulins et Halle aux farines
-
-
-???
-
-Petit panorama du campus des Grands Moulins
-
----
-class: top, left
-background-size: cover
-background-image: url('./img/2017-03-17 09.39.09.jpg')
-
-### Bâtiment Sophie Germain
-
-
-
-???
-
-C'est là que les choses sérieuses se passent
-
-
-
-```{r inscriptions, child='inscriptions.Rmd', eval=FALSE}
-
-```
-
-
 
 ---
 class: middle, center, inverse
