@@ -76,6 +76,12 @@ class: middle
 ### [...](#mclust)
 
 ???
+
+---
+template: inter-slide
+
+## Motivation
+
 ---
 
 class: middle, center, inverse

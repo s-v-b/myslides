@@ -52,7 +52,7 @@ myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Probability V: A modicum of Integration
 
@@ -63,7 +63,8 @@ class: middle, center, inverse
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: inter-slide
+template: inter-slide
+
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -79,10 +80,1684 @@ class: inter-slide
 
 
 ---
-class: inter-slide
+template: inter-slide
+
 
 ## Motivation
 
+
+---
+name: roadmapintegration
+
+### Roadmap
+
+We start by reviewing basic definitions and results from integration theory.
+We follow the measure-theoretic approach.  First, we define _simple functions,_
+a subclass of piecewise measurable functions in Section \@ref(simplefunctions). Defining the integral of a simple function
+with respect to a measure in Section \@ref(integration) is straightforward. Some more work allows us to derive
+useful properties: linearity, monotonicity, to name a few. In section \@ref(integration), we define
+the integral of a non-negative measurable function as a supremum
+of integrals of simple functions. This definition is theoretically
+sound and it lends itself to computations.
+Section \@ref(biglimittheorems) states three convergence theorems
+culminating with the _dominated convergence theorem_.
+
+In Section \@ref(expectation), we relate the notion of _expectation_
+of a random variable and the notion of integral. The _Transfer Theorem_
+(Theorem \@ref(thm:transfertheorem)) is a key instrument in the
+characterization of image distributions.
+
+---
+name: simplefunctions
+
+### Simple functions
+
+The integral of a $\{0,1\}$-valued measurable function $f$ with respect to a measure $\mu$
+is defined
+
+$$\int_{\Omega} f \mathrm{d}\mu = \mu\Big(f^{-1}(\{1\})\Big) \, ,$$
+
+
+
+alternatively
+
+$$\int_{\Omega} \mathbb{I}_A \mathrm{d}\mu = \mu(A) \qquad \text{for any measurable set } A \, .$$
+
+
+
+The next step consists in defining the integral of finite linear combinations of
+$\{0,1\}$-valued measurable function $f$.
+
+---
+
+### Definition
+simplefun, name="Simple function"}
+
+Let $(\Omega, \mathcal{F})$ be a measurable space.
+The  function $f : \Omega \to \mathbb{R}$  is said to be _simple_ iff
+
+- $f$ takes finitely many values: $\Big|\big\{ f(x) : x \in \Omega\big\} \Big|<\infty$
+- For each $y \in f(\Omega) \subset \mathbb{R}$, $f^{-1}(\{y\}) \in \mathcal{F}$.
+
+
+
+---
+
+A simple function defines a partition of $\Omega$ into finitely many measurable classes. The simple function is  constant on each class.
+
+If $f$ is a simple function, then the $\sigma$-algebra $f^{-1}(\mathcal{B}(\mathbb{R}))$
+is finite.
+
+---
+
+### Example
+
+Simple functions are finite linear combinations of set characteristic (indicator) functions.
+
+- For each $A \in \mathcal{F}$, $\mathbb{I}_A$ is simple
+- For any finite collection $A_1, \ldots, A_n$  of measurable subsets of $\Omega$,
+any sequence $c_1, \ldots, c_n$  of real numbers, $\sum_{i \leq n} c_i \mathbb{I}_{A_i}$
+is a simple function
+- For any measurable function $f: \Omega \to \mathbb{R}$, and $n \in \mathbb{N}$,
+the function $g_n$ defined by
+$$g_n(\omega) =  n \wedge (-n \vee \lfloor f(\omega) \rfloor)$$
+
+
+is simple.
+
+
+
+---
+
+
+The definition of the integral of a simple function with respect to a measure
+is straightforward: it is a finite sum.
+
+
+### Definition
+intsimplefun, name="Integral of a simple function"}
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measured space. Let $f : \Omega \to \mathbb{R}$
+be a non-negative simple function which is defined by a finite partition of $\Omega$
+into measurable sets $A_1, A_2, \ldots, A_n$ and numbers $f_1, \ldots, f_n$:
+$$f(\omega) = \sum_{i \leq n} f_i \mathbb{I}_{A_i}(\omega) \,.$$
+
+
+The integral of $f$ with respect to  $\mu$ is defined by
+$$\int_\Omega f \mathrm{d}\mu = \sum_{i \leq n} f_i \mu(A_i) \, .$$
+
+
+
+
+---
+
+
+
+### Remark
+Note that if measure $\mu$ is not finite, the integral of a simple non-negative function
+may be infinite.
+
+If $\mu(A_i)=\infty$ and $f_i=0$, we agree on $f_i \mu(A_i) =0$.
+
+
+---
+
+If we turn to signed simple functions, it is enough to notice than if $f$ is simple,
+so are $(f)_+$ and $(f)_-$ and to define  $\int_\Omega f \mathrm{d}\mu$
+as $$\int_\Omega (f)_+ \mathrm{d}\mu - \int_\Omega (f)_- \mathrm{d}\mu$$
+
+
+provided at leat one of the two summands is finite.
+
+---
+
+Although they are simple, simple functions have interesting approximation capabilities.
+Any non-negative measurable function can be approximated from below by
+non-negative simple functions.
+
+---
+
+### Proposition
+ limsimplefun, name="Approximation of measurable functions"}
+
+Let $(\Omega, \mathcal{F})$ be a measurable space. Any non-negative measurable function
+$f: \Omega \to \mathbb{R}$ is the monotone pointwise limit of simple functions:
+there exists a sequence of simple function $f_1, \ldots, f_n, \ldots$ such that
+for each $\omega \in \Omega$, the following holds:$$f_1(\omega) \leq f_2(\omega) \leq \ldots \leq f_n(\omega) \leq \ldots \leq f(\omega)$$
+
+
+and
+$$\lim_n f_n(\omega) = f(\omega) \, .$$
+
+
+
+
+---
+
+
+### Proof
+
+Define $f_n$ as
+$$  f_n(\omega) = n  \wedge \Big(2^{-n} \big\lfloor 2^n f(\omega) \big\rfloor \Big) \, .$$
+
+
+As
+$$\big\lfloor 2^n f(\omega) \big\rfloor \leq 2^n f(\omega)$$
+
+
+we have $f_n(\omega)\leq f(\omega)$ for all $\omega$.
+
+The range of function $f_n$ is $i \times 2^{-n}$ for $i=0, \ldots, n \times 2^n$.
+For each $i \in 0, \ldots, (n-1) \times 2^n$
+$$f_n^{-1}\Big(\{i \times 2^{-n}\}\Big) =f^{-1}\Big(\Big[\frac{i}{2^n}, \frac{i+1}{2^n}\Big)\Big)$$
+
+
+which is in $\mathcal{F}$ because $f$ is measurable and $\Big[\frac{i}{2^n}, \frac{i+1}{2^n}\Big) \in \mathcal{B}(\mathbb{R})$.
+Likewise $f_n^{-1}\Big(\{n\}\Big) =f^{-1}\big(\big[n, \infty\big)\big)$ belongs to $\mathcal{F}$.
+
+To check that $f_n \leq f_{n+1}$, we consider two cases.
+
+1. $f_{n+1}(\omega)\geq n$. This entails $f(\omega)\geq n$ and thus $f_n(\omega)=n <f_{n+1}(\omega)$
+1. $f_{n+1}(\omega) = k + i 2^{-n-1}$ for $k<n$ and $i<2^{n+1}$. This entails $f_{n}(\omega) = k + \lfloor i/2\rfloor  2^{-n} \leq f_{n+1}(\omega)$.
+
+Finally if $f(\omega) \leq n$, $0 \leq f(\omega) - f_n(\omega) \leq 2^{-n}$. This implies that $\lim_n f_n(\omega)=f(\omega)$ for all $\omega$.
+`r fontawesome::fa("square")`
+
+---
+
+Figure \@ref(fig:approxexpsimple) illustrates the approximation capabilities of simple functions.
+
+
+(ref:approxexpsimple) Approximation of the exponential function by simple functions $n \wedge \Big(2^{-n} \big\lfloor 2^n \exp(\omega) \big\rfloor \Big)$ for $n=2, 3, 4$.
+
+
+```{r approxexpsimple, echo=FALSE, fig.cap='(ref:approxexpsimple)'}
+# %%
+simple <- function(.fun=exp, n=10){
+  function(x){
+    (2^(-n) * floor(2^n * .fun(x))) %>%
+      purrr::map_dbl( ~ min(n, .))
+  }
+}
+
+as_tibble(list(x=seq(0, 2, by=.001))) %>%
+  ggplot() +
+  xlim(0, 1.5) +
+  xlab("x") +
+  stat_function(fun=exp, aes(linetype="exp")) +
+  stat_function(fun=simple(exp,2), n=1000, aes(linetype="n=2")) +
+  stat_function(fun=simple(exp,3), n=1000, aes(linetype="n=3")) +
+  stat_function(fun=simple(exp,4), n=1000, aes(linetype="n=4")) +
+  guides(linetype=guide_legend(title=NULL))
+# %%
+```
+
+---
+
+### Proposition
+
+
+If $f,g$ are two non-negative simple functions on $(\Omega, \mathcal{F})$, then for all $a, b\in [0,\infty)$,
+$a f + b g$ and $fg$ are non-negative simple functions.
+
+
+---
+
+
+### Exercise
+
+Check  the proposition.
+
+
+---
+
+### Proposition (Monotonicity of integration of simple functions)
+
+
+If $f,g$ are two non-negative simple functions
+and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$ such that
+$$\mu\Big\{ \omega: f(\omega)> g(\omega)\Big\} = 0 \, .$$ ($f$ is less of equal than $g$ $\mu$-almost everywhere), then
+
+
+$$\int  f  \, \mathrm{d}\mu \leq \int  g  \, \mathrm{d}\mu \, .$$
+
+
+### Exercise
+
+Check Proposition
+
+
+---
+
+### Proposition (Linearity of integration of simple functions)
+
+If $f,g$ are two non-negative simple functions
+and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$, then for all $a, b\in [0,\infty)$,
+
+$$\int a f + b g \, \mathrm{d}\mu = a \int  f  \, \mathrm{d}\mu + b \int  g \, \mathrm{d}\mu \, .$$
+
+
+### Exercise
+
+Check Proposition
+
+
+---
+name: integration
+template: inter-slide
+
+
+## Integration
+
+---
+
+
+Let $\mathcal{S}_+$ denote the set of non-negative simple functions on $(\Omega, \mathcal{F})$.
+
+### Definition (Integration with respect to a measure)
+
+Let $f$ be a non-negative measurable function on $(\Omega, \mathcal{F}, \mu)$,
+then for any $A \in \mathcal{F}$, the integral of $f$ over $A$ with respect to
+measure $\mu$ is defined by:
+
+$$\int_A f \, \mathrm{d}\mu = \sup_{s \in \mathcal{S}_+: s \leq f} \int_A s \, \mathrm{d}\mu$$
+
+
+---
+
+### Remark
+If the supremum  is finite, the function is said to be _integrable_ with respect to $\mu$,
+or to be $\mu$-integrable.
+
+
+---
+
+
+
+
+
+### Proposition (Monotonicity of integration)
+
+
+If $f,g$ are two non-negative measurable  functions
+and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$ such that
+$$\mu\Big\{ \omega: f(\omega)> g(\omega)\Big\} = 0 \, .$$ ($f$ is less of equal than $g$ $\mu$-almost everywhere), then
+
+
+$$\int  f \,  \mathrm{d}\mu \leq \int  g  \, \mathrm{d}\mu \, .$$
+
+### Exercise
+
+Prove Proposition
+
+
+---
+
+
+### Proposition (Linearity of integration)
+
+If $f,g$ are two non-negative measurable  functions
+and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$, then for all $a, b\in [0,\infty)$,
+
+$$\int a f + b g \, \mathrm{d}\mu = a \int  f \,  \mathrm{d}\mu + b \int  g \, \mathrm{d}\mu \, .$$
+
+
+### Exercise
+
+Prove Proposition
+
+
+---
+
+
+The integral of a signed measurable functions is defined by a decomposition argument.
+
+Let $f$ be a measurable function and $f= (f)_+ - (f)_-$,
+
+then
+
+$$\int_{\Omega} f \mathrm{d}\mu = \int_{\Omega} (f)_+ \mathrm{d}\mu - \int_{\Omega} (f)_- \mathrm{d}\mu$$
+
+
+provided at least one of $\int_{\Omega} (f)_+ \mathrm{d}\mu$ and $\int_{\Omega} (f)_- \mathrm{d}\mu$
+is finite.
+
+
+---
+name: biglimittheorems
+template: inter-slide
+
+
+## Limit theorems
+
+
+---
+
+In this section, measurable functions are meant to be real-valued,
+and $\mathbb{R}$ is endowed with the Borel $\sigma$-algebra ($\mathcal{B}(\mathbb{R})$).
+
+Theorems \@ref(thm:thmConvMonInt), \@ref(thm:thmfatou), \@ref(thm:thmdominatedConv) below
+are the three pillars of  integral calculus.
+
+### Theorem (Monotone convergence theorem)
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measured space.
+
+Let $(f_n)_n$  be  a non-decreasing sequence of non-negative measurable functions converging towards $f$.
+
+Then
+
+$$\int \lim_n \uparrow f_n \, \mathrm{d}\mu = \lim_n \uparrow \int f_n \, \mathrm{d}\mu.$$
+
+---
+The proof of the monotone convergence theorem boils down to the
+definition of positive measure and property $\mu(\lim_n \uparrow A_n)= \lim_n \uparrow \mu(A_n)$.
+
+
+### Proof
+
+Let function $f$ be defined by $f(\omega)=\lim_n \uparrow f_n(\omega)$ for all $\omega \in \Omega$.
+Note that if $f(\omega)=0$, then $f_n(\omega)=0$  for all $n\in \mathbb{N}$.
+
+The function  $f$ is  positive measurable.  In order to prove the monotone convergence theorem it is enough to check that for
+every non-negative simple function $g$ such that $g \leq f$ everywhere, for any $a\in [0, 1)$, the following holds:
+
+$$a \int g \, \mathrm{d} \mu \leq \lim_n \uparrow \int f_n \, \mathrm{d}\mu \,.$$
+
+For each $n \in \mathbb{N}$, define $$E_n = \Big\{ \omega : f_n(\omega) \geq a g(\omega)\Big\}.$$
+
+---
+
+### Proof (continued)
+
+Note that as $(f_n)_n$ is non-decreasing, the sequence $(E_n)$ is non-decreasing.
+Moreover, if $f(\omega)>0$ as $\lim_n \uparrow f_n(\omega)=f(\omega) > a f(\omega) \geq a g(\omega)$.
+Hence for all $\omega \in \Omega$, $\mathbb{I}_{E_n}(\omega)=1$ for all sufficiently large $n$
+(beware there is no uniformity guarantee). We have $$\lim_n \uparrow E_n = \Omega\, .$$
+
+Combining the different remarks, we have for all $n$,
+$\mathbb{I}_{E_n} a g \leq f_n$ everywhere. Monotonicity of integration entails, for all $n$
+$$\int \mathbb{I}_{E_n} a g \,\mathrm{d}\mu \leq \int f_n \,\mathrm{d}\mu \qquad\forall n\, .$$
+
+
+Now, for each $n$,  $\mathbb{I}_{E_n} a g$ is a non-negative simple function, and the sequence
+$(\mathbb{I}_{E_n} a g)_n$ is a non-decreasing sequence of non-negative simple functions converging
+towards simple function $ag$.
+
+---
+
+### Proof (continued)
+
+Let $g = \sum_{i \leq k} c_i \mathbb{I}_{A_i}$ where $(A_i)_{i\leq k}$ is a finite partition of $\Omega$ into measurable subsets. $$\mathbb{I}_{E_n}  g =  \sum_{i \leq k} c_i \mathbb{I}_{A_i \cap E_n} \, .$$
+
+
+Hence
+$$\begin{array}{rl}
+  \int \mathbb{I}_{E_n} a g\, \mathrm{d}\mu & = \sum_{i \leq k} c_i \int \mathbb{I}_{A_i \cap E_n}\, \mathrm{d}\mu \\
+    & = \sum_{i \leq k} c_i  \mu(A_i \cap E_n) \, .
+\end{array}$$
+
+For each $i \leq k$, we have $\lim_n \uparrow c_i  \mu(A_i \cap E_n)  = c_i \mu(A_i)$.
+
+We have:
+
+$$\int \lim_n \uparrow \mathbb{I}_{E_n} a g \,\mathrm{d}\mu = \lim_n \uparrow \int \mathbb{I}_{E_n} a g \, \mathrm{d}\mu \, .$$
+
+
+This proves that \@ref(eq:monotone1) holds for all $a\in [0,1)$ and $g \in \mathcal{S}_+$ with $g \leq f$:
+$$\forall g \in \mathcal{S}_+ \text{ with } \forall a \in [0,1),$$
+
+
+
+`r fontawesome::fa("square")`
+---
+
+
+
+### Exercise
+
+The non-negativity assumptiom on $f_n$ is not necessary. It is enough to assume
+$\int f_1 \mathrm{d}\mu > - \infty$. Prove this.
+
+### Exercise
+
+Let $(f_n)_n$ be a monotone decreasing sequence of non-negative measurable functions.
+Let $f = \lim_n \downarrow f_n$ (check the existence of $f$).
+
+Is it true that $\int \lim_n \downarrow f_n \mathrm{d}\mu = \lim_n \downarrow \int f_n \mathrm{d}\mu$?.
+
+Answer the same question assuming $\int f_1 \mathrm{d}\mu < \infty$.
+
+Answer the same question if $\mu$ is assumed to be a probability measure.
+
+
+---
+
+
+
+### Theorem (Fatou's Lemma)
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measured space.
+
+Let $(f_n)_n$  be  a sequence of non-negative measurable functions.
+
+Then
+
+$$\int \liminf_n  f_n \mathrm{d}\mu \leq  \liminf_n  \int f_n \mathrm{d}\mu.$$
+
+---
+
+### Proof
+
+Define $h_n(\omega) = \inf_{m\geq n} f_n(\omega)$. Each $h_n$ is also non-negative and measurable.
+
+By monotonicity,
+$$\int h_n \mathrm{d}\mu \leq \inf_{m\geq n} \int f_m \mathrm{d}\mu \, .$$
+
+
+The sequence $h_n$ is non-decreasing.
+
+And $\lim \uparrow h_n(\omega) = \liminf f_n(\omega)$ for all $\omega \in \Omega$.
+
+For each $n$, by the monotone convergence theorem
+
+$$\int \lim_n \uparrow h_n \mathrm{d}\mu = \lim_n \uparrow \int h_n \mathrm{d}\mu$$
+
+
+so that
+
+$$\int \liminf_n f_n \mathrm{d}\mu = \lim_n \uparrow \int h_n \mathrm{d}\mu$$
+
+and
+
+$$\int \liminf_n f_n \mathrm{d}\mu \leq \lim_n \inf_{m\geq n} \int f_m \mathrm{d}\mu = \liminf_{n} \int f_n \mathrm{d}\mu$$
+
+
+`r fontawesome::fa("square")`
+
+---
+
+### Theorem (Dominated convergence theorem)
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measured space.
+
+Let $(f_n)_n$  be  a sequence of measurable functions that converges pointwise towards function $f$.
+
+Assume that there exists a integrable function $g$ that
+dominates $(f_n)_n$: for all $n$, all $\omega \in \Omega$,
+$|f_n(\omega)|\leq g(\omega)$.  Then $f$ is integrable and
+
+$$\int f \mathrm{d}\mu = \int \lim_n  f_n \mathrm{d}\mu =  \lim_n  \int f_n \mathrm{d}\mu.$$
+
+
+
+
+---
+
+### Proof
+
+Let us first check that $f$ is integrable.
+
+Observe that $\lim_n |f_n| = |f|$ and thus $\liminf |f_n| = |f|$.
+
+By Fatou's Lemma,
+
+$$\int |f| \mathrm{d}\mu = \int \liminf_n |f_n| \mathrm{d}\mu  \leq \liminf_n \int |f_n| \mathrm{d}\mu  = \int |g| \mathrm{d}\mu < \infty \,.$$
+
+Now define $h_n = \inf_{m\geq n} f_m$ and $j_n = \sup_{m \geq n}f_m$.
+
+We have $\lim_n \uparrow h_n = f$ and $\lim_n \downarrow j_n=f.$
+
+Note also that
+
+$$\int h_n \mathrm{d}\mu \leq \int f \mathrm{d}\mu \leq \int j_n \mathrm{d}\mu \, .$$
+
+By monotone convergence
+
+$$\int h_n \mathrm{d}\mu \uparrow \int f\mathrm{d}\mu$ and $\int j_n \mathrm{d}\mu \downarrow \int f\mathrm{d}\mu$$
+
+This entails $\lim \int f_n \mathrm{d}\mu$.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Exercise
+
+Let $g: \Omega \times \mathbb{R} \to \mathbb{R}$ be a function of two variables such that for each $t \in \mathbb{R}$,
+$g(\cdot, t)$ is measurable. Assume that for  each $t \in \mathbb{R}$, $g(\cdot, t)$ is $\mu$-integrable and that for each
+$\omega \in \Omega$, $g(\omega, \cdot)$ is differentiable. Define $G(t)= \int_{\Omega} g(\omega, t) \mathrm{d}\mu(\omega)$.
+
+Is it always true that $G$ is differentiable at every $t$?
+
+Provide sufficient conditions for $G$ to be differentiable and
+$$G'(t) = \int \frac{\partial g}{\partial s}(\omega, s)_{|s=t} \mathrm{d}\mu(\omega) \, .$$
+
+
+---
+name: densities
+template: inter-slide
+
+
+## Probability distributions defined by a density
+
+---
+
+### Proposition
+
+Let $(\Omega, \mathcal{F})$ be a measurable space
+and $\mu$ be a $\sigma$-finite measure over $(\Omega, \mathcal{F})$.
+
+Let $f$ be a non-negative measurable  real function over $(\Omega, \mathcal{F})$.
+
+Let $\nu : \mathcal{F} \to [0, \infty)$ be defined by
+
+$$\nu(A) = \int \mathbb{I}_A f \, \mathrm{d}\mu = \int_A f\, \mathrm{d}\mu \,.$$
+
+$\nu$ is a measure over $(\Omega, \mathcal{F})$. The function
+$f$ is said to be a density of $\nu$ with respect to $\mu$.
+
+
+---
+
+### Proof
+
+The fact that $\nu(\emptyset)=0$ is immediate.
+
+The fact that $\nu$ is $\sigma$-additive follows from the
+monotone convergence theorem.
+
+If $A_1, \ldots, A_n, \ldots$ is a collection or pairwise disjoint
+measurable sets,
+$$\begin{array}{rl}
+\nu(\cup_n A_n)
+& = \int \mathbb{I}_{\cup_n A} f \, \mathrm{d}\mu \\
+& = \int \Big(\lim_n \sum_{k\leq n}\mathbb{I}_{A_k}\Big) f \, \mathrm{d}\mu  \\
+& = \int \Big(\lim_n \sum_{k\leq n}\mathbb{I}_{A_k} f \Big)  \, \mathrm{d}\mu \\
+& = \lim_n  \sum_{k\leq n} \int \mathbb{I}_{A_k} f   \, \mathrm{d}\mu \\
+& = \lim_n  \sum_{k\leq n} \int \mathbb{I}_{A_k} f   \, \mathrm{d}\mu \\
+& = \lim_n  \sum_{k\leq n} \nu(A_k) \\
+& = \sum_{k=1}^\infty \nu(A_k) \, .
+\end{array}$$
+The fourth equality is justified by the monotone convergence theorem, others
+equalities follow from the fact that we are handling non-negative series.
+
+
+
+`r fontawesome::fa("square")`
+
+---
+
+Let $(A_n)_n$  be such that $A_n \in \mathcal{F}, \mu(A_n)<\infty$ for each $n$ and
+$\cup_n A_n = \Omega$.
+
+For each $n$, we have
+
+$$\nu(A_n) = \int_{A_n}  f \,\mathrm{d}\mu \leq  \int_{\Omega}  f \,\mathrm{d}\mu < \infty$$
+
+This proves that if $\mu$ is $\sigma$-finite, so is $\nu$.
+
+
+
+
+### Exercise
+
+Check that if $\mu(A)=0$, then $\nu(A)=0$ for every $A \in \mathcal{F}$.
+
+
+---
+name: expectation
+template: inter-slide
+
+
+## Expectation
+
+---
+
+The expectation of a real random variable is a (Lebesgue) integral
+with respect to a probability measure. We have to get familiar
+with probabilistic notation.
+
+### Definition
+
+Let $(\Omega, \mathcal{F}, P)$ be a probability space. The random variable $X$
+defined on $(\Omega, \mathcal{F})$ is $P$-integrable if the measurable
+function $|X|: \omega \mapsto |X(\omega)|$ is $P$-integrable: we agree on
+
+$$\mathbb{E} X = \mathbb{E}_P X = \int_{\mathcal{X}} X(\omega) \mathrm{d}P(\omega) =\int X \mathrm{d}P \, .$$.
+
+
+
+
+---
+
+
+### Exercise
+
+Check the consistency of this definition with the definition used in the discrete setting.
+
+
+---
+
+The next statement called the _transfer formula_ can be used to compute the density
+of an image distribution or to simplify the computation of an expectation.
+
+
+
+### Theorem (Transfer formula)
+
+Let $(\mathcal{X}, \mathcal{F}, P)$ be a probability space,
+$(\mathcal{Y}, \mathcal{G})$  a measurable space,
+$f$ a measurable function from $(\mathcal{X}, \mathcal{F})$ to $(\mathcal{Y}, \mathcal{G})$.
+Let $Q$ denote the probability distribution that is the image of $P$ by $f$: $Q = P \circ f^{-1}$.
+
+Then for all measurable functions $h$ from $(\mathcal{Y}, \mathcal{G})$ to $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$
+
+$$\mathbb{E}[h(Y)] = \int_{\mathcal{Y}} h(y) \mathrm{d}Q(y)  = \int_{\mathcal{X}} h\circ f(x) \mathrm{d}P(x) = \mathbb{E} h\circ f(X) \,$$
+
+if either integral is defined.
+
+
+---
+
+### Proof
+
+Assume first that $h= \mathbb{I}_B$ where $C \in \mathcal{G}$. Then
+
+$$\begin{array}{rl}
+\mathbb{E} h(Y)
+& = \int_{\mathcal{Y}} \mathbb{I}_B(y) \, \mathrm{d}Q(y) \\
+& = Q(B) \\
+& = P \circ f^{-1}(B) \\
+& = P \Big\{ x : f(x) \in B \Big\} \\
+& = P \Big\{ x : h \circ f(x) =1 \Big\}  \\
+& = \int_{\mathcal{X}}  h \circ f(x) \mathrm{d}P(x) \\
+& = \mathbb{E} h\circ f(X) \, .
+\end{array}$$
+
+Then, by linearity, the transfer formula holds for all simple functions from $\mathcal{Y}$ to $\mathbb{R}$.
+By the definition of the Lebesgue integral, the transfer formula holds for non-negative measurable functions.
+The usual decomposition argument completes the proof.
+
+`r fontawesome::fa("square")`
+
+???
+
+
+It is clear that the expectation of a random variable only depends on the probability distribution of the random variable.
+
+---
+name: jensen
+template: inter-slide
+
+
+## Jensen's inequality
+
+
+---
+The tools from integration theory we have reviewed so far serve to compute or approximate
+integrals and expectations. The next theorem circumvents computations and allows us to compare expectations.
+
+Jensen's inequality is a workhorse of Information Theory, Statistics and large parts of Probability Theory.
+It embodies the interaction between convexity and expectation.
+
+We first introduce a modicum of convexity theory and notation.
+
+### Definition (Lower semi-continuity)
+
+
+A function $f$ from some metric space $\mathcal{X}$ to $\mathbb{R}$ is lower semi-continuous
+at $x \in \mathcal{X}$,
+
+if
+
+$$\liminf_{x_n \to x} f(x_n) \geq f(x) \, .$$
+
+
+
+
+---
+
+
+### Remark
+
+A continuous function is lower semi-continuous. But the converse is not true. If $A \subseteq \mathcal{X}$
+is an open set, then $\mathbb{I}_A$ is lower semi-continuous but, unless it is constant, it is not
+continuous  at the boundary of $A.$
+
+
+
+---
+
+### Definition (Convex subset)
+
+
+Let $\mathcal{X}$  be a vector space, a subset $C \subseteq \mathcal{X}$ is said to be convex
+if for all $x,y \in C$,  all $\lambda \in [0,1]$:
+
+$$\lambda x + (1-\lambda) y \in C \, .$$
+
+
+
+
+---
+
+
+### Exercise
+
+Let $C$ be a convex subset of some (topological real) vector space, let $\overline{C}$ be
+the closure of $C$.  Prove that  $\overline{C}$ and $\overline{C} \setminus C$ are convex.
+
+A convex set may be neither closed nor open. Provide examples.
+
+
+---
+
+In the next definition, we  consider functions from some vector space to $\mathbb{R} \cup \{+\infty\}$.
+
+### Definition (Convex functions)
+
+
+Let $\mathcal{X}$ be a (topological) vector space.  Let $C \subseteq \mathcal{X}$
+be a convex subset. A function $f$ from $\mathcal{C}$ to $\mathbb{R} \cup \{\infty\}$
+is convex if for $x,y \in C$,  all $\lambda \in [0,1]$,
+
+$$f(\lambda x + (1-\lambda) y) \leq \lambda f(x) + (1-\lambda) f(y) \, .$$
+
+
+The _domain_ of $f$ $\operatorname{Dom}(f)$ is the subset of $C$ where $f$ is finite.
+
+
+---
+
+The function $f : x \mapsto \mathbb{I}_{x<0}|x| + \mathbb{I}_{x\geq 0} x^2$ is convex, continuous.
+
+It is differentiable everywhere except at $x=0$.
+
+The dotted lines define affine functions that are below the cruve $y=f(x)$.
+
+The dotted lines define supporting hyperplanes for the epigraph of $f$.
+
+
+
+```{r convexfunfig, echo=FALSE, fig.cap='(ref:convexfunfig)'}
+# %%
+foo <- function(x){
+  ifelse(x < 0, -x, x^2)
+}
+
+data <- tibble::enframe(x=seq(-1, 2, 0.01), name=NULL, value="x")
+
+data %>%
+  ggplot(aes(x=x)) +
+  geom_abline(slope = 2, intercept = -1, color="red", linetype="dotted") +
+  geom_hline(yintercept = 0, linetype="dotted", color="red") +
+  geom_abline(intercept = 0, slope=-0.5, linetype="dotted", color="red") +
+  stat_function(fun=foo, xlim=c(-1,2)) +
+  ylim(-2,4)
+# %%
+```
+
+
+---
+
+
+### Exercise
+
+Check that a convex function $f$ is lower semi-continuous iff sets $\{ x : f(x) \leq t\}$ are closed intervals for all $t \in \mathbb{R}$.
+
+
+The  next result warrants that any convex lower semi-continuous has a dual representation.
+This dual representation is a precious tool when comparing expectation of random variables.
+
+---
+
+
+### Theorem (Fenchel-Legendre duality)
+
+Let $f$ be a convex lower-semi-continuous function on $\mathbb{R}$ with  a closed domain.
+
+The dual function $f^*$ of $f$ is defined over $\mathbb{R}$ by
+
+$$f^*(y) = \sup_{x \in \text{Dom}(f)} xy - f(x) \, .$$
+
+
+Then
+
+- $f^*$ is convex
+- $f^*$ is lower-semi-continuous
+- If $f^*(y)= xy - f(x)$ then $y$ is a sub-gradient of $f$ at $x$.
+- If $y$ is a sub-gradient of $f$ at $x$, $f^*(y) = xy -f(x)$.
+- $f= (f^{*})^*$, the dual function of the dual function equals the original function: $f(x) = \sup_{y} xy -f^*(y).$
+
+
+
+
+---
+
+
+### Example
+
+The next  dual pairs will be used in several places.
+
+- if $f(x) = \frac{|x|^p}{p}$ ($p> 1$), then $f^*(y)= \frac{|y|^q}{q}$ where $q=p/(p-1)$.
+- if $f(x) = |x|$, then  $f^*(y)= 0$  for $y \in [-1,1]$ and $\infty$ for $|y|>1$.
+- if $f(x) = \exp(x)$  then $f^*(y) = y \log y - y$ for $y>0$, $f^*(y)=\infty$ for $y<0$
+
+
+
+---
+
+### Proof
+
+The fact that $f^*$ is $\mathbb{R} \cup \{\infty\}$-valued and convex is immediate.
+
+To check lower semi-continuity, assume $y_n \to y$, with $y_n \in \operatorname{Dom}(f^*)$
+and $f^*(y) > \liminf_n f^*(y_n)$.
+
+Assume first that $y \in \operatorname{Dom}(f^*)$.
+Then for some sufficiently large $m$ and some $x \in \operatorname{Dom}(f)$
+$$f^*(y) \geq xy - f(x) -\frac{1}{m} > \liminf_n f^*(y_n) \geq \liminf_n y_n x -f(x) = yx -f(x)$$
+
+which is contradictory.
+
+Assume now that $y \not\in \operatorname{Dom}(f^*)$ and $\liminf_n f^*(y_n) < \infty$.
+Extract a subsequence $(y_{m_n})_n$ such  that $\lim_n f^*(y_{m_n}) = \liminf_n f^*(y_n)$.
+There exists $x \in \operatorname{Dom}(f)$ such that $$f^*(y) > xy -f(x) > \liminf_n f^*(y_n) = \lim_n f^*(y_{m_n}) \geq \lim_n xy_{m_n} -f (x) = xy - f(x)$$
+
+which is again contradictory.
+
+
+
+
+---
+
+### Proof (continued)
+
+
+The fact that $y$ is a sub-gradient of $f$ at $x$ if
+$f^*(y)= xy - f(x)$ is a rephrasing of the definition of sub-gradients.
+
+Note that if $x \in \operatorname{Dom}(f)$ and $y\in \operatorname{Dom}(f^*)$ then $f(x)+f^*(y)\geq xy$.
+
+This observation entails that $(f^*)^*(x)\leq f(x)$ for all $x \in \operatorname{Dom}(f)$. If there existed some
+$x \in \operatorname{Dom}(f)$ with $(f^*)^*(x)>x$, there would exist some $y \in \operatorname{Dom}(f^*)$
+with $xy - f^*(y) > f(x)$ which is not possible.
+
+In order to prove that that $(f^*)^*(x)\geq f(x)$ for all $x \in \operatorname{Dom}(f)$, we rely on the
+convexity, lower semi-continuity of $f$ and $f^*$ and the closure of $\operatorname{Dom}(f)$. Under these
+conditions, every point $x$ in $\operatorname{Dom}(f)$ has a sub-gradient $y$ and
+this entails $f(x) + f^*(y)= xy$.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Exercise
+
+Extend the notion of Fenchel-Legendre duality to lower-semi-continuous convex functions over $\mathbb{R}^k$.
+
+### Exercise
+
+Are all convex functions lower-semi-continuous? measurable?
+
+Are all convex  lower-semi-continuous functions measurable?
+
+
+---
+
+
+### Remark
+
+It is possible to define $f^*$ as $f^*(y) =\sup_x xy -f(x)$ even if $f$ is not convex
+and lower semi-continuous. The function $f^*$ retains the convexity and lower semi-continuity
+properties. But $f \neq (f^{*})^*$, we only get $f \geq (f^{*})^*$. Indeed
+$(f^{*})^*$ is the largest convex minorant of $f$.
+
+
+
+---
+
+### Theorem (Jensen's inequality)
+
+Let $X$ be a real-valued random variable and $f: \mathbb{R} \to \mathbb{R}$ be
+_convex, lower-semi-continuous_ such that the closed set  $\text{Dom}(f) \subseteq \text{supp}(\mathcal{L}(X))$
+and $\mathbb{E} |f(X)|< \infty$, then
+
+$$f(\mathbb{E} X) \leq \mathbb{E} f(X) \, .$$
+
+
+
+---
+
+
+### Remark
+
+In view of the definition of convexity and of the fact that taking expectation
+extends the idea of taking a convex combination, Jensen's inequality is not a surprise.
+
+
+---
+
+
+### Proof
+
+$$\begin{array}{rl}
+\mathbb{E} f(X) & = \mathbb{E} (f^*)^*(X) \\
+& = \mathbb{E} \Big[ \sup_y \Big( yX - f^*(y)\Big)\Big] \\
+ & \geq   \sup_y  \Big( y \mathbb{E} X - f^*(y)\Big) \\
+& =  (f^*)^*\Big( \mathbb{E} X \Big) \\
+ & = f\Big( \mathbb{E} X \Big)  \, .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+
+---
+
+
+### Exercise
+
+In the argument above, it is not _a priori_ obvious that $\sup_y \Big( yX - f^*(y)\Big)$ is measurable,
+since the supremum is taken over a non-countable collection. Check that this is not an issue.
+
+We will see many applications of Jensen's inequality:
+
+- comparison of sampling with replacement with sampling without replacement (comparison of binomial and hypergeometric tails)
+- Cauchy-Schwarz and Hölder's inequalities
+- Derivation of maximal inequalities
+- Non-negativity of relative entropy
+- Derivation of Efron-Stein-Steele's inequalities
+- ...
+
+---
+name: variance
+template: inter-slide
+
+
+## Variance
+
+---
+
+The variance (when it is defined) is an index of dispersion of the distribution of
+a random variable.
+
+### Proposition (Characterizations of variance)
+
+
+Let $X$ be a random variable over some probability space.
+The variance of $X$ is finite iff $\mathbb{E}X^2 <\infty$ and it may
+be defined using the netx three equalities:
+
+$$\begin{array}{rl}
+\operatorname{var}(X) & =  \mathbb{E}\left[(X - \mathbb{E}X)^2\right] \\
+ & = \inf_{a \in \mathbb{R}} \mathbb{E}\left[(X - a)^2\right] \\
+ & = \mathbb{E}X^2 - (\mathbb{E}X)^2 \,.
+\end{array}$$
+
+---
+
+We need to check that three right-hand-side are finite if one of them is, and
+that when they are finite, they are all equal.
+
+### Proof
+
+Assume $\mathbb{E}X^2 < \infty$, as $|X| \leq \frac{X^2}{2} + \frac{1}{2}$, this entails $\mathbb{E} |X|<\infty$.
+
+If $\mathbb{E}X^2 < \infty$ then so is $\mathbb{E}|X|$.
+
+The right-hand-side on the third line is finite if $\mathbb{E}X^2 < \infty$.
+
+
+As $(x-b)^2 \leq 2 x^2 + 2 b^2$ for all $x,b$,
+
+The right-hand-side on the first line, the infimum on the second line are finite when $\mathbb{E} X^2 <\infty.$
+
+As $X^2 \leq 2 (X- \mathbb{E}X)^2 + 2 (\mathbb{E}X)^2$, $\mathbb{E}X^2<\infty$ if $\mathbb{E}\left[(X - \mathbb{E}X)^2\right] <\infty.$
+
+Assume now that $\mathbb{E}X^2 < \infty$.
+$$\begin{array}{rl}
+  \mathbb{E}\left[(X - a)^2\right]
+  & = \mathbb{E}\left[(X - \mathbb{E}X - (a-\mathbb{E}X))^2\right] \\
+  & = \mathbb{E}\left[(X- \mathbb{E}X)^2 - 2 \mathbb{E}[(X-\mathbb{E}X)](a-\mathbb{E}X) + (a-\mathbb{E}X)^2 \right]\\
+  & = \mathbb{E}\left[(X- \mathbb{E}X)^2\right] + (a-\mathbb{E}X)^2   \, .
+\end{array}$$
+
+As $(a- \mathbb{E}X)^2\geq 0$, we have established that
+$\mathbb{E}\left[(X - \mathbb{E}X)^2\right]   = \inf_{a \in \mathbb{R}} \mathbb{E}\left[(X - a)^2\right]$.
+Moreover, the infimum is a minimum, it is achieved at a single point $\mathbb{E}X$.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+
+### Remark
+
+The first and second characterizations of variance assert that the expectation minimizes the average quadratic error. A fact of great importance in Statistics.
+
+
+---
+
+
+### Exercise
+
+Check that if $P\left\{ X \in [a,b]\right\} =1$, then $\operatorname{var}(X)\leq \frac{(b-a)^2}{4}$ \, .
+
+
+---
+name: highermoments
+template: inter-slide
+
+## Higher moments
+
+---
+
+In this Section we relate $\mathbb{E} |X|^p$ with $\mathbb{E} |X|^q$ for
+different values of $p, q \in \mathbb{R}_+$. Our starting point is
+small technical result in real analysis.
+
+### Proposition (Young's inequality)
+
+
+Let $p, q>1$ be _conjugate_ ($1/p + 1/q =1$), and $x, y>0$, then
+
+$$xy \leq \frac{x^p}{p} + \frac{y^q}{q} \,.$$
+
+
+---
+
+### Proof
+
+Note that if $p$ and $q$ are conjugate, then $q= p/(p-1)$ and  $(p-1)(q-1)=1$.
+
+It suffices to check that for all $x,y>0$, $$\frac{x^p}{p} \geq xy - \frac{y^q}{q} \, .$$
+
+
+Fix $x>0$, consider the function over $[0,\infty)$ defined by $$z \mapsto xz - \frac{z^q}{q} \,.$$ This function is differentiable with derivative $x - z^{q-1} = x - z^{1/(p-1)}$.
+
+
+It achieves its maximum at $z=x^{p-1}$ and the maximum is equal to $$x x^{p-1} - \frac{x^{q(p-1)}}{q} = x^p - \frac{x^p}{q} = \frac{x^p}{p} \, .$$
+
+
+`r fontawesome::fa("square")`
+
+---
+
+```{r, echo=FALSE}
+# %%
+p <- 3/2
+q <- p/(p-1)
+
+x <- 1.5
+y <- 1
+# %%
+```
+
+
+### Graphic proof of Young's inequality.
+
+We choose $p=`r p`$ and $q= `r q`$, $x = `r x`$ and $y= `r y`$. The black point is located at $(x,y)^T$. The product $xy$ equals the area of the rectangle located between the origin and $(x,y)^T$ (delimited by the dashed segments). The dotted line represents function $s \mapsto s^{p-1}$, and interchanging  the axes, the function $t \mapsto t^{q-1} = t^{1/(p-1)}$. The area of the light grey surface under the dotted line equals $\frac{x^p}{p} = \int_0^x s^{p-1} \mathrm{d}s$, while the area of the darker grey surface below line $y=1$ and above the dotted line, equals  $\frac{y^q}{q} = \int_0^y t^{q-1} \mathrm{d}t$. The union of the two disjoint surfaces covers the rectangle  located between the origin and $(x,y)^T$. Equality occurs when the dotted line passes though $(x,y)^T$, that is when $y=x^{p-1}$.
+
+
+```{r graphyoung, echo=FALSE, fig.cap='(ref:graphyoung)'}
+# %%
+data1 <- as_tibble(list(s=seq(0, 2, by=.001))) %>%
+  mutate(t = s^(p-1))
+
+data2 <- data1 %>%
+  filter(s <= 1)
+
+data1 %>%
+  ggplot() +
+  xlim(0, 2) +
+  xlab("s") +
+  ylab("t") +
+  stat_function(fun= ~ .^(p-1), linetype="dotted")  +
+  geom_point(mapping=aes(x=x, y=y)) +
+  stat_function(fun= ~ .^(p-1), xlim=c(0, x), linetype="dotted", geom="area", alpha=.1) +
+  geom_segment(x=0, y=y, xend=x, yend=y, linetype="dashed", size=.5) +
+  geom_segment(x=x, y=0, xend=x, yend=y, linetype="dashed", size=.5) +
+  geom_ribbon(data=data2, aes(x=s, ymin=t, ymax=1), alpha=.3)
+# %%
+```
+
+
+---
+
+
+### Remark
+
+A special case of Young inequality is obtained by taking $p=q=2$.
+
+
+We are now in a position to prove three fundamental inequalities: Cauchy-Schwarz, Hölder
+and Minkowski.
+
+
+### Theorem (Cauchy-Schwarz)
+
+
+Let $X$ and $Y$ be two random variables on the same probability space.
+Assume both $\mathbb{E}X^2$ and $\mathbb{E}Y^2$ are finite. Then
+
+$$\mathbb{E} [XY] \leq  \sqrt{\mathbb{E}X^2} \times  \sqrt{\mathbb{E}Y^2} \,.$$
+
+
+---
+
+### Proof
+
+If either $\sqrt{\mathbb{E}X^2}=0$ or
+$\sqrt{\mathbb{E}Y^2}=0$, the inequality is trivially satisfied.
+
+So, without loss of generality, assume $\sqrt{\mathbb{E}X^2}>0$ and
+$\sqrt{\mathbb{E}Y^2}>0$. Then, because $ab \leq a^2/2 + b^2/2$, for all
+real $a,b$,  everywhere,
+
+$$\frac{|XY|}{\sqrt{\mathbb{E}X^2}\sqrt{\mathbb{E}Y^2}} \leq \frac{|X|^2}{2\mathbb{E}X^2} + \frac{|Y|^2}{2\mathbb{E}Y^2} \,.$$
+
+Taking expectation on both sides leads to the desired result.
+
+`r fontawesome::fa("square")`
+
+
+
+---
+
+### Exercise
+
+Why is the inequality trivially satisfied if  $\sqrt{\mathbb{E}X^2}=0$?
+
+
+---
+
+Theorem \@ref(thm:thmcauchyschwartz) tells us that if $X$ and $Y$ are
+square-integrable, then $XY$ is integrable.
+
+---
+
+Hölder's inequality generalizes Cauchy-Schwarz inequality.
+Indeed, Cauchy-Schwarz inequality is just Hölder's inequality
+for $p=q=2$ ($2$ is its own conjugate).
+
+### Theorem (Hölder's inequality)
+
+Let $X$ and $Y$ be two random variables on the same probability space.
+Let $p, q>1$ be _conjugate_ ($1/p + 1/q =1$),
+assume both $\mathbb{E}|X|^p$ and $\mathbb{E}|Y|^q$ are finite.
+
+Then we have
+
+$$\mathbb{E} [XY] \leq  \left(\mathbb{E}|X|^p\right)^{1/p} \times  \left(\mathbb{E}|Y|^q\right)^{1/q} \,.$$
+
+
+---
+
+### Proof
+
+If either $\mathbb{E}|X|^p=0$ or
+$\mathbb{E}|Y|^q=0$, the inequality is trivially satisfied.
+
+Assume that $\mathbb{E}|X|^p > 0$ and  $\mathbb{E}|Y|^q > 0$.
+
+Follow the proof of Cauchy-Schwarz inequality, but replace $2 ab \leq a^2 +b^2$ by
+Young's inequality:
+
+$$ab \leq \frac{|a|^p}{p} + \frac{|b|^q}{q}\qquad  \forall a,b \in \mathbb{R}$$
+
+if $1/p+ 1/q=1$.
+
+---
+
+### Proof (continued)
+
+The inequality  below is a consequence of Young's inequality and of the monotonicity of expectation:
+
+$$\begin{array}{rl}
+\frac{\mathbb{E}|XY|}{\mathbb{E}[|X|^p]^{1/p}\mathbb{E}[|Y|^q]^{1/q}}
+& =  \mathbb{E}\Big[\frac{|X|}{\mathbb{E}[|X|^p]^{1/p}} \frac{|Y|}{\mathbb{E}[|Y|^q]^{1/q}} \Big] \\
+& \leq \mathbb{E}\Big[\frac{|X|^p}{p \mathbb{E}[|X|^p]} + \frac{|Y|^q}{q \mathbb{E}[|Y|^q]} \\
+& = \frac{1}{p} + \frac{1}{q} \\
+& = 1 \, .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+
+
+---
+
+### Corollary
+
+For $1\leq p < q$,
+
+$$\mathbb{E}\Big[|X|^p\Big]^{1/p} \leq \mathbb{E}\Big[|X|^q\Big]^{1/q} \, .$$
+
+
+---
+
+For $p \in [0, \infty)$ $X \mapsto (\mathbb{E}|X|^p)^{1/p}$
+defines a semi-norm on the set of random variables for which $(\mathbb{E}|X|^p)^{1/p}$
+is finite. Minkowski's inequality asserts that  $X \mapsto (\mathbb{E}|X|^p)^{1/p}$
+satisfies the triangle inequality.
+
+### Theorem (Minkowski's inequality)
+
+Let $X, Y$ be two real-valued random variables defined on the same probability space. Let $p \in [1, \infty)$.
+
+Assume that $\mathbb{E}|X|^p <\infty$  and $\mathbb{E}|Y|^p<\infty.$ Then we have:
+
+$$\left(\mathbb{E} [| X + Y|^p]\right)^{1/p} \leq \left(\mathbb{E} [| X|^p]\right)^{1/p} + \left(\mathbb{E} [|Y|^p]\right)^{1/p}$$
+
+which entails $\mathbb{E}|X+Y|^p <\infty.$
+
+---
+
+The proof of Minkowski's inequality follows from Hölder's inequality
+
+### Proof
+
+
+The inequality below also
+follows from triangle inequality on $\mathbb{R}$, monotonicity.
+
+
+The last equality follows from linearity of expectation:
+
+$$\begin{array}{rl}
+\mathbb{E} \Big[ |X+Y|^p\Big]
+& \leq \mathbb{E} \Big[ (|X|+|Y|) \times |X+Y|^{p-1}\Big] \\
+& = \mathbb{E} \Big[ |X| \times |X+Y|^{p-1}\Big] + \mathbb{E} \Big[ |Y| \times |X+Y|^{p-1}\Big] \, .
+\end{array}$$
+
+This is enough to handle the case $p=1$.
+
+---
+
+### Proof (continued)
+
+From now on, assume $p>1$.
+
+Hölder's inequality entails the next
+inequality and a similar upper bound for $\mathbb{E} \Big[ |Y| \times |X+Y|^{p-1}\Big]$.
+
+$$\begin{array}{rl}
+\mathbb{E} \Big[ |X| \times |X+Y|^{p-1}\Big]
+& \leq \mathbb{E} \Big[ |X|^p\Big]^{1/p} \times  \mathbb{E} \Big[ |X+Y|^{p}\Big]^{(p-1)/p} \,
+\end{array}$$
+
+Summing the  two upper bounds, we obtain
+
+$$\begin{array}{rl}
+  \mathbb{E} \Big[ |X+Y|^p\Big]
+  & \leq \left(\mathbb{E} \Big[ |X|^p\Big]^{1/p} + \mathbb{E} \Big[ |Y|^p\Big]^{1/p}\right) \times \mathbb{E} \Big[ |X+Y|^{p}\Big]^{(p-1)/p} \, .
+\end{array}$$
+
+This prove's Minkowski's inequality for $p>1$.
+
+`r fontawesome::fa("square")`
+
+---
+name: medianiqr
+template: inter-slide
+
+
+## Median and interquartile range
+
+---
+
+Robust and non-robust indices of location.
+
+
+### Definition
+
+Let $X$ be a real random variable over some probability space. Let $F$
+be the cumulative distribution function of $X$. The median of the distribution of $X$
+is $F^{\leftarrow}(1/2)$.
+
+---
+
+The median minimizes the mean absolute deviation.
+
+### Proposition
+
+If $m$  is such that $P\{ X > m\} = P\{ X<m\}$
+
+then  $m$ is median of the distribution of $X$,
+
+and if $X$ is integrable:
+
+$$\mathbb{E}\Big| X - m \Big| = \min_{a \in \mathbb{R}} \mathbb{E}\Big| X - a \Big|$$
+
+
+
+
+---
+
+
+### Proof
+
+Assume $a<m$,
+$$\begin{array}{rl}
+  \mathbb{E} \left[\Big| X - a \Big| - \Big| X - m \Big| \right]
+  & = - (m-a) P(-\infty, a] + \int_{(a, m]} (2 X - (a+m)) \mathrm{d}P(x) + (m-a)P(m,\infty) \\
+  & \geq  - (m-a) P(-\infty, a] - (m-a) P(a,m] + (m-a)P(m,\infty) \\
+  & = (m-a) \Big(P(m,\infty) - P(-\infty, m]\Big) \\
+  & = 0 \, .
+\end{array}$$
+
+The same line of reasoning allows to handle the case $a>m$ and to conclude.
+
+`r fontawesome::fa("square")`
+
+---
+
+Combining three of the inequalities we have just proved, allows us
+to establish an interesting connection between expectation, median
+and standard deviation.
+
+### Theorem (Lévy's inequality)
+
+Let $m$ be the median of the distribution of $X$, a square-integrable random
+variable over some probability space. Then
+
+$$\Big| m - \mathbb{E} X\Big| \leq \sqrt{\operatorname{var}(X)} \, .$$
+
+
+
+
+---
+
+The robust and non-robust indices of location differ by at most
+the standard deviation, which may be infinite.
+
+---
+
+
+### Proof
+
+By convexity of $x \mapsto |x|$, we have
+$$\begin{array}{rl}
+\Big| m - \mathbb{E} X\Big| & \leq \mathbb{E} \Big| m - X\Big| \\
+& \text{by Jensen's inequality} \\
+& \leq \mathbb{E} \Big| \mathbb{E}X - X\Big| \\
+& \text{the median minimizes the mean absolute error} \\
+& \leq \left(\mathbb{E} \Big| \mathbb{E}X - X\Big|^2\right)^{1/2}  \\
+& \text{by Cauchy-Schwarz inequality.}
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+### Remark
+
+The mean and the median may differ. First the median is always defined, while the mean may not.
+Think for example of the standard Cauchy distribution which has density $\frac{1}{\pi}\frac{1}{1+x^2}$
+over $\mathbb{R}$. If $X$ is Cauchy distributed, then $\mathbb{E}|X|=\infty$. The mean is not defined.
+But as the density is a pair function, $X$ is symmetric ($X$ and $-X$ are distributed the same way),
+and this implies that the median of (the distribution) of $X$ is $0$.
+
+Consider the exponential distribution with density $\exp(-x)$ over $[0, \infty)$, it has mean $1$, median $\log(2)$, and
+variance $1$. If we turn to exponential distribution with density $\lambda \exp(-\lambda x)$, it has mean $1/\lambda$, median
+$\log(2)/\lambda$, and variance $1/\lambda^2$. Lévy's inequality does not tell more that what we can
+compute with bare hands.
+
+Finally consider Gamma distributions with shape parameter $p$  and intensity parameter $\lambda$.
+It has mean $p/\lambda$, variance $p/\lambda^2$. The  median  is not easily computed
+though we can easily check that it is equal to $g(p)/\lambda$ where $g(p)$ is the median
+of the Gamma distribution with parameters $p$ and $1$. Lévy's inequality tells us that $|g(p) - p|\leq \sqrt{p}$.
+
+
+---
+template: inter-slide
+name: lpspaces
+
+## $\mathcal{L}_p$ and $L_p$ spaces
+
+
+
+---
+
+
+Let $p \in [1, \infty)$. Let $(\Omega, \mathcal{F}, P)$ be a probability space. Define $\mathcal{L}_p(\Omega, \mathcal{F}, P)$
+(often abbreviated to $\mathcal{L}_p(P)$ or even $\mathcal{L}_p$ when there is no ambiguity) as
+
+$$\mathcal{L}_p(\Omega, \mathcal{F}, P) = \Big\{ X : X \text{ is a real random variable over } (\Omega, \mathcal{F}, P), \quad \mathbb{E}|X|^p < \infty \Big\} \, .$$
+
+
+Let $\| X \|_p$ be defined by $\| X\|_p = \Big(\mathbb{E} |X|^p\Big)^{1/p}$.
+
+Let $\mathcal{L}_0(\Omega, \mathcal{F}, P)$ denote the vector space of random variables over $(\Omega, \mathcal{F}, P)$.
+
+We first notice that sets $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ form a nested sequence.
+
+---
+
+### Proposition
+
+
+Let $(\Omega, \mathcal{F}, P)$ be a probability space, then for $1 \leq p \leq q <\infty$:
+
+1. $\|X\|_p < \| X\|_q$.
+2. $\mathcal{L}_q(\Omega, \mathcal{F}, P) \leq \mathcal{L}_p(\Omega, \mathcal{F}, P)$.
+
+
+
+---
+
+### Proof
+
+
+Assume $1 \leq p \leq q <\infty$,
+as $x \mapsto x^{q/p}$ is convex on $[0, \infty)$
+by Jensen's inequality  (Theorem \@ref(thm:thmjensen)), we have
+
+$$\begin{array}{rl}
+  \mathbb{E} [|X|^p]^{q/p} & \leq \mathbb{E} [|X|^q] \,.
+\end{array}$$
+
+This establishes 1.) And 2.) is an immediate consequence of $1$.
+
+`r fontawesome::fa("square")`
+
+---
+
+Proposition \@ref(prp:nestinglp) is a about inclusion of sets. The next theorem
+summarizes several points: that sets $\mathcal{L}_p$ are linear subspaces of $\mathcal{L}_0$,
+and that they are complete as pseudo-metric (pseudo-normed) spaces.
+
+### Theorem  (completeness of $\mathcal{L}_p$)
+
+For $p \in [1, \infty)$, let $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ and $\|\cdot\|_p$ be defined as above. Then,
+
+1. $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ is a linear subspace  of the space of real random variables.
+1. $\| \cdot\|_p$ is a pseudo-norm on $\mathcal{L}_p(\Omega, \mathcal{F}, P)$.
+1. If $(X_n)_n$ is a sequence in $\mathcal{L}_p(\Omega, \mathcal{F}, P)$  that satisfies
+$$\lim_n \sup_{m\geq n} \Big| X_n - X_m \Big|_p = 0$$
+
+
+then there exists $X \in \mathcal{L}_p(\Omega, \mathcal{F}, P)$ such that $\lim_n \| X_n - X\|_p=0$.
+1. There exists a subsequence $(X_{m_n})_{n}$ such that $X_{m_n} \to X$ $P$-almost surely.
+
+
+
+---
+
+
+### Remark
+
+In a pseudo-metric space, to prove that a Cauchy sequence converges, it is enough to check convergence of a subsequence.
+Picking a convenient subsequence, and possibly relabeling elements, we may assume   $\Big\| X_n - X_m \Big\|_p \leq 2^{- n \wedge m}$ for all $n,m$.
+
+
+---
+name:  borelCant1
+
+### First Borell-Cantelli Lemma
+
+Let $(A_n)_n$ be a sequence of events from some probability space $(\Omega, \mathcal{F}, P)$.
+
+Assume $\sum_{n} P(A_n) < \infty$
+
+then,
+
+with probability $1$, only finetely many events $A_n$  are realized:
+
+$$P \left\{ \omega : \sum_n \mathbb{I}_{A_n}(\omega) < \infty \right\} = 1 \,.$$
+
+
+
+
+---
+
+### Proof (Borell-Cantelli Lemma)
+
+The event $\left\{ \omega : \sum_n \mathbb{I}_{A_n}(\omega) = \infty \right\}$ coincides with $\cap_n \cup_{m\geq n} A_n$:
+$$P \left\{ \sum_n \mathbb{I}_{A_n}(\omega) = \infty\right\} = P(\cap_n \cup_{m\geq n} A_n) \, .$$
+
+
+Now, the sequence $(\cup_{m\geq n} A_n)_n$ is monotone decreasing: $\lim_n \downarrow \cup_{m\geq n} A_n = \cap_n \cup_{m\geq n} A_n \,.$$
+
+By Fatou's Lemma,
+$$\begin{array}{rl}
+\mathbb{E} \lim_m \mathbb{I}_{\cup_{m\geq n} A_m}
+  & = \mathbb{E} \liminf_n\mathbb{I}_{\cup_{m\geq n} A_m}  \\
+  & \leq  \liminf_n  \mathbb{E} \mathbb{I}_{\cup_{m\geq n} A_m} \\
+  & \leq  \liminf_n  \sum_{m\geq n} P(A_m) \\
+  & =   0 \, .
+\end{array}$$
+The last equation comes from the fact that the remainders of a convergent series are vanishing.
+
+`r fontawesome::fa("square")`
+
+---
+
+### Proof (completeness of $\mathcal{L}_p$)
+
+Points 1) and 2) follow from Minkowski's inequality. This entails that $\|\cdot\|_p$ defines a pseudo-norm
+on $\mathcal{L}_p$. If two random variables $X,Y$ from $\mathcal{L}_p$ satisfy $\| X- Y\|_p=0$, then $X=Y$ $P$-a.s.
+
+To establish 3), we need to check that the sequence converges almost surely, and that an
+almost sure limit belongs to $\mathcal{L}_p$.
+
+
+
+Define event $A_n$ by $$A_n = \Big\{ \omega : \Big| X_n(\omega) - X_{n+1}(\omega) \Big| > \frac{1}{n^2}\Big\} \, .$$
+
+
+By Markov inequality, $$P(A_n) \leq \mathbb{E}\Big[n^{2p} \Big| X_n - X_m \Big|^p \Big] \leq n^{2p} 2^{-np} \, .$$
+
+
+Hence, $\sum_{n\geq 1} P(A_n) < \infty.$
+
+By the first Borel-Cantelli Lemma, on some event $E$ with probability $1$, only finitely many $A_n$ are realized.
+
+
+---
+
+### Proof (continued)
+
+If $\omega \in E$, the condition $\Big| X_n(\omega) - X_{n+1}(\omega) \Big| > \frac{1}{n^2}$ is realized for
+only finitely many indices $n$. Thus the real-valued  sequence $(X_n(\omega))_n$ is a Cauchy sequence. It has a
+limit we denote $X(\omega)$. If $\omega \not\in E$, we agree on $X(\omega)=0.$ On $\Omega$, we have
+
+$$X(\omega) = \lim_n \mathbb{I}_E(\omega) X(\omega) \, .$$
+
+
+A limit of random variables is a random variable. Hence $X$ is a random variable.
+
+It remains to check that $X \in \mathcal{L}_p$.
+
+Note first that
+
+$$\Big| \big\| X_m \big\|_p - \big\|X_n \big\|_p \Big| \leq \big\| X_m - X_n \big\|_p \,.$$
+
+Hence $\big(\big\|X_n \big\|_p \big)_n$ is a Cauchy sequence and converges to some finite limit.
+
+As
+
+$$|X(\omega)|  \leq  \liminf |X_n(\omega)|$$
+
+by Fatou's Lemma
+
+$$\mathbb{E} |X|^p  \leq \liminf \mathbb{E} |X_n|^p < \infty\, .$$
+
+---
+
+### Proof (continued)
+
+Hence $X \in \mathcal{L}_p$.
+
+Finally we check that $\lim_m \|X_n - X\|_p =0$.
+By Fatou's lemma again,
+$$\mathbb{E} \Big| X - X_m \Big|^p \leq \liminf_n \mathbb{E} \Big| X_n - X_m \Big|^p$$
+
+
+Hence $$\lim_m \mathbb{E} \Big| X - X_m \Big|^p \leq \lim_m \liminf_n \mathbb{E} \Big| X_n - X_m \Big|^p = 0 \, .$$
+
+
+`r fontawesome::fa("square")`
+
+---
+
+### Remark
+
+Can we extend the almost sure convergence to the whole sequence?
+
+
+This is not the case.
+
+Consider $([0,1], \mathcal{B}([0,1]), P)$ where $P$ is the uniform
+distribution. For $k= j+ n(n-1)/2$, $1\leq j\leq n$, let $X_n = \mathbb{I}_{[(j-1)/n, j/n]}$.
+
+The sequence $X_n$ converges to $0$ in $\mathcal{L}_p$ for all $p \in [1, \infty)$.
+
+Indeed $\|X_k\|_p = n^{-p}$ for $k= j+ n(n-1)/2$, $1\leq j\leq n$. For any $\omega \in [0,1]$,
+the sequence $X_n(\omega)$ oscillates between $0$ and $1$ infinitely many times.
+
+
+
+---
+
+$\mathcal{L}_p$ provide us with a bridge between probability and analysis.
+
+In analysis, the fact that $\|\cdot \|_p$ is just a pseudo-norm leads to
+consider $L_p$ spaces. $L_p$  spaces are defined from $\mathcal{L}_p$ spaces
+by taking equivalence classes of random variables. Indeed, define relation $\equiv$
+over $\mathcal{L}_p(\Omega, \mathcal{F}, P)$  by $X \equiv X'$ iff $P\{X=X'\}=1$.
+
+This relation is an equivalence relation (reflexive, symmetric and transitive).
+
+If $X \equiv X'$ and $Y \equiv Y'$, then $\|X -Y\|_p = \|X' -Y\|_p = \|X' - Y'\|_p$.
+$L_p(\Omega, \mathcal{F}, P)$ is the quotient space of $\mathcal{L}_p$ by relation $\equiv$.
+
+We have the fundamental result.
+
+### Theorem
+
+For $p \in [1, \infty)$, $L_p(\Omega, \mathcal{F}, P)$ equiped with
+$\| \cdot\|_p$ is a complete normed space (Banach space).
+
+
+This eventually allows us to invoke theorems from functional analysis.
+
+---
+template: inter-slide
+
+
+## Bibliographic remarks {#bibmoments}
+
+---
+
+@MR1932358 gives a self-contained and thorough treatment of
+measure and integration theory with probability theory in mind.
+
+@MR1261420 is an excellent and accessible reference on convexity.
 
 
 ---

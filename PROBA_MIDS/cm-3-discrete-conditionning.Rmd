@@ -67,19 +67,666 @@ class: middle
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [...](#bigpic)
+### [With respect to an event](#condevent)
 
-### [...](#gmm)
+### [With respect to an algebra](#conddiscretealgebra)
 
-### [...](#em)
-
-### [...](#mclust)
+### [Conditional expectation  and prediction](#condpred)
 
 ---
-class: inter-slide
+template: inter-slide
+name: motivation
 
 ## Motivation
 
+???
+
+Conditioning is central to probabilistic reasoning. In this lesson, we
+investigate discrete conditioning. In this setting, the definition
+of conditional probability is not an issue. The definition
+of conditional expectation can be deceptively simple. Nevertheless
+the discrete setting lends itself to intuitive definitions and manipulations.
+
+
+The simplest notion we meet is conditional probability with respect
+to a specific event with positive probability (Section \@ref(condevent)).
+Conditional probability offers an intuitive interpretation of independence.
+
+In Section \@ref(bayesformula) we state, check and discuss
+Bayes formula.
+
+In Section \@ref(conddiscretealgebra), we define conditional expectation with respect to an
+atomic $\sigma$-algebra. This  defines conditional expectation  with respect to a discrete
+random variables.
+
+In Section \@ref(condpred), we characterize conditional expectation as
+an optimal predictor. This characterization is very helpful when
+defining conditional expectation in the general setting.
+
+---
+template: inter-slide
+name: condevent
+
+## Conditioning with respect to an event
+
+
+---
+
+
+### Definition
+
+Let  $P$ be a  probability distribution on $(\Omega, \mathcal{F})$
+
+Let $A \in \mathcal{F}$ be such that  $P\{A\} > 0$
+
+Let  $B$ be another event ( $B \in \mathcal{F}$ )
+
+The  _probability of $B$ given  $A$_ is defined as:
+
+$$P\{B \mid A\}= \frac{P\{A \cap B\}}{P\{A\}}$$
+
+
+
+
+---
+
+### Example
+
+If
+
+- $X$ is  a standard Gaussian random  variable on $(\Omega, \mathcal{F})$, and
+
+- event $A$ is defined by  $\{ \omega : X(\omega) \geq t\}$ for some $t\geq 0$,
+
+we may condition on event  $A$ and define  $P\{B \mid A\}$ for $B = \{ \omega : |X(\omega)|\geq 2t\}$
+
+We get
+
+$$P\{ B \mid A \} =  \frac{P\{ X \geq 2 t\}}{P\{ X \geq t\}}$$
+
+
+---
+
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let   $P$ be a probability distribution  on $(\Omega, \mathcal{F})$
+
+Let  $A  \in \mathcal{F})$ be such that  $P\{A\} > 0$
+
+then
+
+$P\{\cdot \mid A\}$ ( $P$ given $A$ ) defines a probability distribution over  $(\Omega, \mathcal{F})$
+
+]
+
+
+???
+
+We may check the proposition by considering once again the definition of probability distributions.
+
+
+---
+
+### Proof
+
+$P(\cdot \mid A)$ maps $\mathcal{F}$ to $[0,1]$.
+
+We have $P(\Omega \mid A)= P(A \cap \Omega)/ P(A) = P(A) /P(A)= 1$
+
+Let $(B_n)_n$ be a monotone increasing sequence of events, then
+
+$$\begin{array}{rl}
+  P (\cup_n B_n \mid A) & = \frac{P((\cup_n B_n) \cap A)}{P(A)} \\
+  & = \frac{P(\cup_n (B_n \cap A))}{P(A)} \\
+  & = \frac{\lim_n P(B_n \cap A)}{P(A)} \\
+  & = \lim_n P(B_n \mid A) \, .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+We may consider the distribution of random variables on  $(\Omega, \mathcal{F})$ under  $P\{\cdot \mid A\}$.
+
+We compute the expectation of $X$ under  $P\{ \cdot \mid A\}$:
+
+$$\mathbb{E}_{P\{\cdot \mid A\}} X =  \frac{\mathbb{E} [\mathbb{I}_A\, X]}{P\{A\}}$$
+
+This is often denoted by $\mathbb{E}[X \mid A]$, we will try to avoid this possibly misleading  notation.
+
+
+
+---
+
+### Example
+
+Assume $X$ is standard normally distributed.
+
+One may investigate the distribution of $X^2$ conditionnally on event  $A = \{ \omega : X(\omega)\geq t\}$
+
+For  $t>1$, we have
+
+$$\begin{array}{rl}
+\mathbb{E}_{P\{\cdot \mid X \geq t\}} X^2
+& = \frac{\int_t^\infty x^2 \phi(x) \mathrm{d}x}{\int_t^\infty \phi(x) \mathrm{d}x}\\
+& \leq \frac{t^2}{1-1/t} + 1 \, .
+\end{array}$$
+
+where the upper bound is obtained by repeated integration by parts.
+
+The distribution of $X$ given  $A$ is not Gaussian.
+
+Under $A$, $X$ is very concentrated in the neighborhood of $t,$ and tends to be more concentrated as $t$ goes to infinity.
+
+---
+
+Knowing the probability distribution given event  $A$
+enables to investigate  independence of events with respect to $A$
+
+
+The next trivial proposition is worth reminding.
+
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+If  $A$ and  $B \in \mathcal{F}$ satisfy $P\{A\}> 0$,
+
+then
+
+$A$ and $B$ are independent under $P$
+
+iff
+
+$$P\{B\mid A\}= P\{B\}$$
+
+]
+
+
+---
+template: inter-slide
+name: bayesformula
+
+## Bayes formula
+
+---
+
+
+Bayes formula is sometimes used in probabilistic causation theory.
+
+This is a difficult matter.
+
+Causality is a subtle notion and we will refrain from making causal interpretations.
+
+---
+
+### Proposition: Bayes formula
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let $P$ be a  probability distribution on $(\Omega, \mathcal{F})$,
+
+Let  $(A_i)_{i \in \mathcal{I} \subseteq \mathbb{N}}$ be a collection of pairwise disjoint events, with non-zero probability
+such that  $\cup_{i \in \mathcal{I}} A_i = \Omega$  ( $(A_i)_i$ form a complete system of events)
+
+Let  $B$ be an event with non-zero probability,
+
+then
+
+for all $i \in \mathcal{I}$
+
+$$P\{A_i \mid B\} = \frac{P\{A_i \} \times P\{B \mid A_i \}}{\sum_{j \in \mathcal{I}} P\{A_j \} \times P\{B \mid A_j \}}$$
+
+]
+
+---
+
+
+### Proof
+
+By definition,
+
+$$P\{A_i \mid B\}= P\{A_i \cap B\}/ P\{B\}= P\{A_i \} \times P\{B \mid A_i \}/ P\{B\}$$
+
+Morever
+
+$$\begin{array}{rl}
+P \{ B\} & = P\{B \cap (\cup_{j \in \mathcal{I}} A_j)\}\\
+& = P\{\cup_{j \in \mathcal{I}} (B \cap A_j)\}  \\
+& = \sum_{j \in \mathcal{I}} P\{B \cap A_j \} \\
+& = \sum_{j \in \mathcal{I}} P\{A_j \} \times P\{B \mid A_j \}.
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+In the preceding proposition,
+
+- $P\{A_i \}$ is called the  _prior probability_
+of  $A_i$ and
+
+- $P\{A_i \mid B\}$ is called  the _posterior  probability_
+
+---
+template: inter-slide
+name: conddiscretealgebra
+
+## Conditional expectation with respect to a discrete $\sigma$-algebra
+
+???
+
+While the general notion of conditional expectation requires some abstraction,
+we can introduce conditioning with respect to a discrete $\sigma$-algebra
+starting from the elementary notion of conditional probability
+with respect to an event with positive probability.
+
+---
+
+### Definition
+
+Let  $\Omega$ be a universe, $\mathcal{F}$ a
+$\sigma$-algebra of events on
+$\Omega$,  $P$ a probability distribution on  $(\Omega, \mathcal{F})$,
+
+Let $(A_i)_{i \in \mathcal{I} \subseteq \mathbb{N}}$ be pairwise disjoint
+events, with non-zero probability such that $\cup_i A_i = \Omega .$
+
+Let  $\mathcal{G}$ be the atomic $\sigma$-algebra
+generated by $(A_i)_{i \in \mathcal{I}}$.
+
+Let  $X$ be a random variable from  $(\Omega, \mathcal{F})$ to $(\mathcal{X}, \mathcal{H})$, the  _conditional  expectation of $X$ with respect to $\mathcal{G}$_ is the random variable defined as
+
+$$\mathbb{E} [X \mid \mathcal{G}] = \sum_{i \in  \mathcal{I}}  \mathbb{E}_{P_{\{\cdot |A_i \}}} [X] \times \mathbf{1}_{A_i}$$
+
+
+---
+
+
+While $\mathbb{E}_{P_{\{\cdot |A_i \}}} [X]$ is a real number,
+$\mathbb{E} [X \mid \mathcal{G}]$ is a $\mathcal{G}$-measurable function from  $\Omega$ to $\mathcal{X}$:
+
+$$\mathbb{E} [X \mid \mathcal{G}](\omega) =  \sum_{i \in  \mathcal{I}}  \mathbb{E}_{P_{\{\cdot |A_i \}}} [X] \times \mathbf{1}_{A_i}(\omega) \qquad \forall \omega \in \Omega$$
+
+
+These two kinds of objects should not be confused.
+
+We will refrain from using notation $\mathbb{E}[X \mid A_i]$ since it may be confusing:
+$\mathbb{E}[X \mid A_i]$ might denote either
+- $\mathbb{E}_{P_{\{\cdot | A_i     \}}} [X]$ or
+- $\mathbb{E} [X \mid \sigma(A_i)]$  where  $\sigma(A_i)$ is the sigma-algebra generated by $A_i$: $\{ A_i, A_i^c, \Omega, \emptyset\}$
+
+---
+
+
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let   $P$ be a probability distribution on  $(\Omega, \mathcal{F})$.
+
+Let   $(A_i)_{i \in \mathcal{I} \subseteq \mathbb{N}}$ be a collection of pairwise disjoint events, with non-zero probability satisfying $\cup_{i \in \mathcal{I}} A_i = \Omega$
+
+Let $\mathcal{G}=\sigma\Big((A_i)_{i \in \mathcal{I}}\Big)$ denote the sigma-algebra generated by $(A_i)_{i \in \mathcal{I}}$.
+
+The random variable $X$ is assumed to be $P$-integrable.
+
+The conditional expectation $\mathbb{E} [X \mid \mathcal{G}]$ is a $\mathcal{G}$-measurable random variable, that satisfies the next property:
+
+$$\mathbb{E} \left[ YX \right] = \mathbb{E} \left[ Y \mathbb{E} [X \mid \mathcal{G}] \right] \qquad \forall Y \in \sigma(\mathcal{G}), Y \text{ bounded.}$$
+
+If two $\mathcal{G}$-measurable random variables $Z, T$  satisfy
+
+$$\mathbb{E} \left[ YX \right] = \mathbb{E} \left[ Y Z \right] = \mathbb{E}[YT] \qquad \forall Y \in \sigma(\mathcal{G}), Y \text{ bounded}$$
+
+then $Z=T$ almost surely
+
+]
+
+---
+
+
+### Proof
+
+We need to ckeck two points:
+
+i. $\mathbb{E} \left[ X \mid \mathcal{G} \right]$ satisfies Property in [Proposition](prp:espercond)
+
+i. if $Z$ satisfies  Property in [Proposition](prp:espercond), then  $Z = \mathbb{E}\left[ X \mid \mathcal{G} \right]$ $P$-almost-surely.
+
+
+Checking i.)
+
+If  $Y$ is  $\mathcal{G}$-measurable,
+
+then
+
+$Y = \sum_{i \in \mathcal{I}} \lambda_i \mathbf{1}_{A_i}$ for some real-valued sequence  $(\lambda_i)_{i \in \mathcal{I}}$ .
+
+
+---
+
+### Proof (continued)
+
+
+Then
+$$\begin{array}{rl}
+\mathbb{E} [Y \mathbb{E} \left[ X \mid \mathcal{G} \right]] & =
+\mathbb{E} \left[ \left( \sum_{i \in \mathcal{I}}   \lambda_i
+\mathbf{1}_{A_i} \right)    \left( \sum_{j \in \mathcal{I}}
+\mathbf{1}_{A_j}  \frac{\mathbb{E} [ \mathbf{1}_{A_j} X]}{P\{A_j \}}
+\right) \right]\\
+& =  \left.  \mathbb{E} \left[ \sum_{i \in \mathcal{I}}
+\lambda_i  \mathbf{1}_{A_i}     \frac{\mathbb{E} [
+\mathbf{1}_{A_i} X]}{P\{A_i \}} \right) \right]\\
+& =  \sum_{i \in \mathcal{I}}   \lambda_i  \mathbb{E} [
+\mathbf{1}_{A_i} X] \frac{\mathbb{E} \left[ \mathbf{1}_{A_i}
+\right]}{P\{A_i \}} \quad \text{linearity of expectation}\\
+& =  \sum_{i \in \mathcal{I}}   \lambda_i  \mathbb{E} [
+\mathbf{1}_{A_i} X]\\
+& =  \mathbb{E} \left[ \left( \sum_{i \in \mathcal{I}} \lambda_i
+\mathbf{1}_{A_i} \right) X   \right]\\
+& =  \mathbb{E} \left[ YX \right] .
+\end{array}$$
+
+---
+
+### Proof (continued)
+
+Checking  ii.)
+
+Assume $Z$ satisfies  Property in [Proposition](prp:espercond)
+
+Define  $Y$ using $Y = \mathbf{1}_{A_i}$, for some index $i \in \mathcal{I}$.
+
+As $Z$ is $\mathcal{G}$-measurable, there  exists a real-valued sequence
+$\left( \mu_j \right)_{j \in \mathcal{I}}$, such that  $Z = \sum_{j \in \mathcal{I}} \mu_j \mathbf{1}_{A_j}$
+
+Thus, relying on the fact that events $A_j$ are pairwise disjoint:
+
+$$\mathbb{E} \left[ ZY \right]  =  \mathbb{E} \left[ \sum_{j \in
+\mathcal{I}} \mu_j  \mathbf{1}_{A_j}  \mathbf{1}_{A_i}
+\right] = \mu_i P\{A_i \}$$
+
+
+According to Property in [Proposition](prp:espercond), we have :
+
+$$\mathbb{E} [ZY] = \mathbb{E} [XY] = \mathbb{E} [X \mathbf{1}_{A_i}]$$
+
+Finally for all $i \in \mathcal{I}$, $\mu_i = \mathbb{E} [X \mathbf{1}_{A_i}] / P\{A_i \}.$
+
+We can conclude  $Z = \mathbb{E} [X \mid \mathcal{G}]$.
+
+`r fontawesome::fa("square")`
+
+---
+template: inter-slide
+name: condpred
+
+## Conditional expectation as prediction
+
+---
+
+The next  proposition reveals the role of conditional expectation
+in prediction/approximation problems.
+
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let $Y$ be a square-integrable random variable on  $(\Omega, \mathcal{F}, P)$ and $\mathcal{G}$ a discrete sub- $\sigma$ -algebra  of $\mathcal{F}$
+
+The conditional expectation of $Y$  with respect to $\mathcal{G}$ minimizes
+
+$$\mathbb{E}\left[\big(Y - Z\big)^2\right]$$
+
+amongst  $\mathcal{G}$-measurable square-integrable random variables
+]
+
+???
+
+This proposition is a strategic asset in the elaboration of conditional expectation with
+respect to general sigma-algebras
+
+
+---
+
+
+Recall that a $\mathcal{G}$-measurable random variable is a
+function that remains constant on each  $A_i, i \in \mathcal{I}$.
+
+### Proof
+
+If $Y$ is a random variable on $(\Omega,\mathcal{F}),$ and
+if we are trying to predict at best $Y$ from a $\mathcal{G}$-measurable random variable,
+we are looking for a sequence of coefficients
+$(b_i)_{i\in \mathcal{I}}$ that minimizes:
+
+$$\begin{array}{rl}
+\mathbb{E}_P \left[ \Big( Y -  \sum_{i\in \mathcal{I}} b_i \mathbf{I}_{A_i} \Big)^2 \right]
+& = \mathbb{E}_P \left[ \Big(  \sum_{i\in \mathcal{I}} (Y-b_i)
+\mathbf{I}_{A_i} \Big)^2 \right] \\
+& =
+\sum_{i\in \mathcal{I}}
+\mathbb{E}_P \left[ \left( Y-b_i\right)^2
+\mathbf{I}_{A_i} \right]
+\\
+& = \sum_{i\in \mathcal{I}} P\{A_i\}\,
+\mathbb{E}_{P\{\cdot \mid A_i\}} \left[ \left( Y-b_i\right)^2  \right]
+\end{array}$$
+
+Thus for each $i$, $b_i$ must coincide with the expectation of $Y$
+under $P\{\cdot \mid A_i\}.$ The best prediction of $Y$, in the sense of the quadratic error,
+among the  $\mathcal{G}$-measurable functions is the conditional expectation of $Y$
+with respect to $\mathcal{G}$.
+
+`r fontawesome::fa("square")`
+
+???
+
+The properties identified by  propositions \@ref(prp:espercond) and \@ref(prp:espercondpred)
+serve as a definition for the conditional expectation with respect to a general $\sigma$-algebra.
+
+---
+template: inter-slide
+name: easypropcondexp
+
+## Properties of conditional expectation
+
+
+---
+
+We state without proof a number of useful properties of conditional expectation with respect to  discrete $\sigma$-algebras.
+We shall prove them in full generality later.
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+If $X \leq Y$,  $P$-a.s., then
+
+$$  \mathbb{E}[X \mid \mathcal{G}] \leq \mathbb{E}[Y \mid \mathcal{G}] \qquad P \text{-p.s.}$$
+
+]
+
+---
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+
+$$\mathbb{E}[ aX + bY \mid \mathcal{G}] = a \mathbb{E}[X \mid \mathcal{G}] + b \mathbb{E}[Y \mid \mathcal{G}]$$
+
+]
+
+---
+
+### Proposition
+
+If $\mathcal{H} \subseteq \mathcal{G} \subseteq \mathcal{F}$
+
+$$\mathbb{E}\left[\mathbb{E}\left[ X \mid \mathcal{G}\right] \mid \mathcal{H} \right]  = \mathbb{E}\left[ X \mid \mathcal{H} \right]$$
+
+$$\mathbb{E}\left[\mathbb{E}\left[ X \mid \mathcal{H}\right] \mid \mathcal{G} \right]  = \mathbb{E}\left[ X \mid \mathcal{H} \right]$$
+
+
+
+---
+
+### Exercise `r fontawesome::fa("brain")`
+
+Prove the proposition.
+
+
+---
+
+### Corollary
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+$$\mathbb{E} X = \mathbb{E}[\mathbb{E}[X \mid \mathcal{G}]]$$
+
+]
+
+---
+template: inter-slide
+name: gw1
+
+## Application:  Galton-Watson processes I
+
+
+---
+
+The size of generation $k\geq 0$ is defined recursively by
+
+$$Z_0 = 1, \qquad Z_{k+1} = \sum_{i=1}^{Z_k} X^k_{i} \, .$$
+
+
+The $\sigma$-algebra $\sigma(Z_k)$ is discrete/atomic, it is generated by the pairwise disjoint events
+$\Big\{ Z_k = a\Big\}$ for $a \in \mathbb{N}$.
+
+---
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+$$\mathbb{E}\Big[Z_{k+1} \mid \sigma(Z_k)\Big] = \mathbb{E}X^0_1 \times Z_k$$
+
+]
+
+
+---
+
+### Proof
+
+On the event $\Big\{ Z_k = a\Big\}$, we can determine the conditional distribution of $Z_{k+1}$.
+
+$$\begin{array}{rl}
+\{ Z_{k+1} = b \wedge Z_k = a\Big\}
+  & = \Big\{ \sum_{i=1}^a X^k_i = b \wedge Z_k = a\Big\} \\
+  & = \Big\{ \sum_{i=1}^a X^k_i  = b\Big\} \cap \Big\{ Z_k = a \Big\}
+\end{array}$$
+
+As $\sum_{i=1}^a X^k_i$ and $Z_k$ are independent random variables, we have
+
+$$\begin{array}{rl}
+P \Big\{ Z_{k+1} = b \mid Z_k = a\Big\} = P \Big\{ \sum_{i=1}^a X^k_i  = b \mid Z_k = a\Big\} = P \Big\{ \sum_{i=1}^a X^k_i  = b \Big\}
+\end{array}$$
+
+
+---
+
+### Proof (continued)
+
+Note that the right-hand-side has nothing to do with $Z_k$.
+On the event $\{Z_k = a\}$, $Z_{k+1}$ is distributed like the sum of $a$ independent copies of $X^0_1$:
+
+$$\begin{array}{rl}
+\mathbb{E} \Big[ Z_{k+1}\mid \sigma(Z_k)\Big]
+  & = \sum_{a=0}^\infty \mathbb{E}_{P(\mid Z_k=a)}\Big[Z_{k+1}\Big] \times \mathbb{I}_{Z_k=a} \\
+  & = \sum_{a=0}^\infty \mathbb{E}_{P(\mid Z_k=a)}\Big[ \sum_{i=1}^a X^k_i \Big] \times \mathbb{I}_{Z_k=a} \\
+  & = \sum_{a=0}^\infty \mathbb{E}\Big[ \sum_{i=1}^a X^k_i \Big] \times \mathbb{I}_{Z_k=a} \\
+  & = \sum_{a=0}^\infty \sum_{i=1}^a  \mathbb{E}\Big[ X^k_i \Big] \times \mathbb{I}_{Z_k=a} \\
+  & = \sum_{a=0}^\infty a  \mathbb{E} X^0_1 \times \mathbb{I}_{Z_k=a}  \\
+  & = \mathbb{E} X^0_1 \times Z_k \, .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+An immediate corollary is:
+
+$$\mathbb{E}Z_k = (\mathbb{E} X^0_1)^k  \qquad\text{forall } k\geq 0\,.$$
+
+The sequence of expected sizes of generations forms a geometric sequence.
+
+A Galton-Watson process is said to be _sub-critical_
+if the expectation of the offspring distribution is smaller than $1$.
+
+---
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+
+The extinction probability of a sub-critical branching process is equal to $1$.
+
+]
+
+
+---
+
+### Proof
+
+Denote by $E_k$ the event $\{ Z_k = 0\}$.
+
+Observe
+that the sequence $(E_k)_k$ is increasing.
+
+Denote by  $E_{\infty} = \cup_{k=0}^\infty E_k$.
+
+$$P \{ E_k^c \} = P\{ Z_k \geq 1 \} \leq \mathbb{E} Z_k$$
+
+Hence $P\{E_k^c\} \downarrow 0$ and $P\{ E_k\} \uparrow 1$
+
+By monotone convergence $P(E_\infty) = 1$.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+The expected size of the total progeny of subcritical branching process is equal to
+
+
+$$\sum_{k=0}^\infty \mathbb{E} Z_k  = \sum_{k=0}^\infty (\mathbb{E} X^0_1)^k = \frac{1}{1 - \mathbb{E} X^0_1}$$
+
+
+
+---
+
+### Remark
+
+Working with discrete conditioning allows us to derive non-trivial statements about the
+Galton-Watson process without  knowing  much about the offspring distribution
+beyond the fact that its expectation is smaller than $1$. We still ignore the
+the details of the distribution of $Z_k$, let alone of the distribution of $\sum_{k=0}^\infty Z_k$.
 
 
 ---

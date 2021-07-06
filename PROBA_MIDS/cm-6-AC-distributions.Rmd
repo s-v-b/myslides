@@ -75,12 +75,687 @@ class: inter-slide
 
 ### [...](#mclust)
 
-
 ---
 class: inter-slide
 
 ## Motivation
 
+
+```{r loads, echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
+# %%
+require(tidyverse)
+require(kableExtra)
+old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
+# %%
+```
+
+---
+name: acontinuity
+
+
+## Densities and absolute continuity
+
+---
+
+Beyond discrete distributions, the simplest probability distributions are
+defined by a density function with respect to a ($\sigma$-finite) measure.
+This encompasses  the distributions of the so-called _continuous random variables_.
+
+
+### Definition (absolute continuity)
+
+Let   $\mu, \nu$ be
+two $\sigma$-additive measures on measurable space $(\Omega, \mathcal{F})$,
+$\mu$ is said to be absolutely continuous with respect to $\nu$ (denoted by
+$\mu \trianglelefteq \nu$) iff for every  $A \in \mathcal{F}$ with $\nu(A)=0$,
+we also have $\mu(A)=0$.
+
+
+If $\mu, \nu$ are two probability distributions, and  $\mu \trianglelefteq \nu$,
+then any event which is impossible under $\nu$ is also impossible under $\mu$.
+
+---
+
+### Exercise
+
+Answer the two questions:
+
+- Is the counting measure on $\mathbb{R}$ absolutely continuous with respect
+to Lebesgue measure?
+
+- Is the converse true?
+
+
+### Exercise
+
+Check that absolute continuity is a transitive relationship.
+
+---
+
+
+
+
+
+### Theorem (Radon-Nikodym)
+
+
+Let   $\mu, \nu$ be two $\sigma$ -additive measures on measurable space $(\Omega, \mathcal{F})$
+
+Assume $\nu$ is $\sigma$ -finite
+
+If $\mu \trianglelefteq \nu$, then  there exists a measurable function $f$ from $\Omega$ to $[0, \infty)$ such that
+
+$$\forall A \in \mathcal{F}, \qquad \mu(A) =  \int_A f(\omega) \mathrm{d}\nu(\omega) =  \int \mathbb{I}_A f \mathrm{d}\nu$$
+
+The function $f$ is called a _version_ of the _density_ of $\mu$ with respect to $\nu$.
+
+
+
+???
+
+The density is also called the _Radon-Nikodym derivative_ of $\mu$ with respect to $\nu$.
+
+It is sometimes denoted by $\frac{\mathrm{d}\mu}{\mathrm{d}\nu}$.
+
+---
+
+
+### Remark
+
+The sigma-finiteness assumption is crucial.
+
+If we choose $\mu$ as Lebesgue measure and $\nu$ as the counting measure, $\nu$ is not $\sigma$-finite, $\mu(A)>0$ implies $\nu(A)=\infty$ which we may consider as larger than $0$
+
+Nevertheless, Lebesgue measure has no density with respect to the counting measure.
+
+---
+
+In the next sections, we investigate probability distributions
+over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$
+that are absolutely continuous with respect to Lebesgue measure.
+
+---
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+If $\rho \trianglelefteq \mu \trianglelefteq  \nu$, $f$ is a density of $\rho$ with repsect to $\mu$ while $g$ is a density of $\mu$ with respect to $\nu$, then $fg$ is a density of $\rho$ with respect to $\nu$.
+
+]
+
+---
+
+### Exercise
+
+Prove proposition \@ref(prp:chainrule).
+
+
+---
+name: expos
+
+## Exponential distribution
+
+
+
+---
+
+The exponential distribution shows up in several areas of probability
+and statistics. In reliability theory, its memoryless property
+make it a borderline case. In the theory of point processes,
+the exponential distribution is connected with Poisson Point Processes.
+It is also important in extreme value theory.
+
+---
+
+### Definition
+
+The exponential distribution with intensity parameter $\lambda>0$ is defined by its density with respect to Lebesgue measure on $[0,\infty)$:
+
+$$x \mapsto \lambda \mathrm{e}^{-\lambda x} \, .$$
+The reciprocal of the intensity parameter is called the scale parameter.
+
+
+---
+
+
+Note that geometric and exponential distributions are connected: if $X$
+is exponentially distributed, then $\lceil X\rceil$ is geometrically distributed. For $k\geq 1$:
+
+
+$$P \Big\{ \lceil X \rceil \geq k \Big\} = P \Big\{  X  > k - 1 \Big\}
+= \mathrm{e}^{- \lambda (k-1)} \, .$$
+
+---
+
+### Exercise
+
+Check that $x \mapsto \lambda \mathrm{e}^{-\lambda x}$ is a density probability
+over $[0, \infty)$.
+
+### Exercise
+
+Compute the tail function and the cumulative distribution function of the exponential distribution function with parameter $\lambda$.
+
+
+### Exercise
+
+Let $X_1, \ldots, X_n$ be i.i.d. exponentially distributed. Characterize the
+distribution of $\min(X_1, \ldots, X_n)$.
+
+
+
+
+### Exercise
+
+If $X$ is exponentially distributed  with scale parameter $\sigma$, what is the
+distribution of $a X$?
+
+
+---
+
+
+### Exponential densities
+
+with different parameters: scales $1, 2, 1/2$ or equivalently intensities $1, 1/2, 2$. Expectation equals scale,  variance equals squared scale.
+
+
+```{r witgetexponential, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="(ref:witgetexponential)"}
+# %%
+
+p <- ggplot2::ggplot(data = tibble::tibble(x=seq(0, 5,by=0.01)),
+                mapping= ggplot2::aes(x=x)) +
+  ggplot2::scale_linetype_manual(values = c("solid", "dashed", "dotted"),
+                                 guide = ggplot2::guide_legend(override.aes = list(
+                        linetype = c("solid", "dashed", "dotted"),
+                        title = "Parameters"))) +
+  ggplot2::labs(linetype="Parameters") +
+  ggplot2::xlab("x") +
+  ggplot2::ylab("density") +
+  ggplot2::xlim(xlim = c(0, 5)) +
+  ggplot2::stat_function(fun=dexp, args = c(1),
+                         ggplot2::aes(linetype="a. standard")) +
+  ggplot2::stat_function(fun=dexp, args = c(2),  ggplot2::aes(linetype="b. scale=1/2")) +
+  ggplot2::stat_function(fun=dexp, args = c(.5),
+                         ggplot2::aes(linetype="c. scale=2"))
+
+
+p
+# %%
+```
+
+---
+name: gammas
+
+## Gamma distribution
+
+
+---
+
+
+Sums of independent exponentially distributed random variables are not exponentially distributed.
+The family of Gamma distributions encompasses the family of exponential distributions.
+It is stable under addition and satisfies
+
+
+Recall Euler's Gamma function:
+
+$$\Gamma(t) = \int_0^\infty x^{t-1}\mathrm{e}^{-x} \mathrm{d}x \qquad \text{for } t>0\, .$$
+
+
+---
+
+
+### Definition
+
+The Gamma distribution with _shape_ parameter $p>0$ and _intensity_ parameter $\lambda>0$ is defined by its density with respect to Lebesgue measure on $[0,\infty)$:
+
+$$x \mapsto \lambda^p \frac{x^{p-1}}{\Gamma(p)} \mathrm{e}^{-\lambda x} \, .$$
+
+The reciprocal of the _intensity_ parameter is called the _scale_ parameter.
+
+
+---
+
+### Exercise
+
+Check that $x \mapsto \lambda^p \frac{x^{p-1}}{\Gamma(p)} \mathrm{e}^{-\lambda x}$ is a density probability over $[0, \infty)$.
+
+
+### Exercise
+
+If $X$ is Gamma distributed  with shape parameter $p$ and scale parameter $\sigma$, what is the distribution of $a X$?
+
+
+---
+
+### Gamma densities
+
+With different parameters: scales $1, 1, 1/3, 1, 2$ and shapes  $1, 2, 3, 5, 5/2$.
+
+Expectation equals shape times scale,  variance equals shape times squared scale.
+
+
+```{r witgetgamma, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="(ref:witgetgamma)"}
+# %%
+
+p <- ggplot2::ggplot(data = tibble::tibble(x=seq(0, 10, by=0.01)),
+                mapping= ggplot2::aes(x=x)) +
+  ggplot2::scale_linetype_manual(values = c("solid", "dashed", "dotted", "dotdash", "81"),
+                                 guide = ggplot2::guide_legend(override.aes = list(
+                        linetype = c("solid", "dashed", "dotted", "dotdash", "81"),
+                        title = "Parameters"))) +
+  ggplot2::labs(linetype="Parameters") +
+  ggplot2::xlab("x") +
+  ggplot2::ylab("density") +
+  ggplot2::xlim(xlim = c(0, 10)) +
+  ggplot2::stat_function(fun=dgamma, args = c(1, 1),
+                         ggplot2::aes(linetype="a. standard")) +
+  ggplot2::stat_function(fun=dgamma, args = c(2, 1),  ggplot2::aes(linetype="b. shape=2, scale=1")) +
+  ggplot2::stat_function(fun=dgamma, args = c(3, 3),
+                         ggplot2::aes(linetype="c. shape=3 scale=1/3")) +
+  ggplot2::stat_function(fun=dgamma, args = c(5, 1),
+                                                ggplot2::aes(linetype="c. shape=5 scale=1")) +
+  ggplot2::stat_function(fun=dgamma, args = c(2.5,.5),
+                         ggplot2::aes(linetype="d. shape=5/2 scale=2"))
+
+p
+# %%
+```
+
+---
+name: gauss
+
+
+## Univariate Gaussian distributions
+
+---
+
+Gaussian distributions play a central role in Probability theory, Statistics, Information theory, and Analysis.
+
+### Definition
+
+The Gaussian or normal distribution with mean $\mu \in \mathbb{R}$ and variance $\sigma^2, \sigma>0$ has density
+
+$$x \mapsto \frac{1}{\sqrt{2 \pi} \sigma} \mathrm{e}^{- \frac{(x-\mu)^2}{2 \sigma^2}} \qquad\text{for } x \in \mathbb{R} \, .$$
+
+The standard Gaussian density is defined by $\mu=0, \sigma=1$.
+
+
+---
+
+### Exercise
+
+Check that $x \mapsto \frac{\mathrm{e}^{-x^2/2}}{\sqrt{2\pi}}$ is a probability density over $\mathbb{R}$.
+
+### Exercise
+
+If $X$ is distributed according to a standard Gaussian density, what is the distribution of $\mu + \sigma X$?
+
+
+### Exercise
+
+If $X$ is distributed according to a standard Gaussian density, show that
+
+$$\Pr \{ X > t \} \leq \frac{1}{t} \frac{\mathrm{e}^{-t^2/2}}{\sqrt{2\pi}} \qquad\text{for } t>0\,.$$
+
+
+---
+
+###  Gaussian densities.
+
+The location parameter $\mu$ coincides with the mean and the median. The scale parameter is the standard deviation. The Inter-Quartile-Range (IQR) is proportional to the standard deviation. If $\Phi^{\leftarrow}$ denotes the quantile function of $\mathcal{N}(0,1)$ then the interquartile range of $\mathcal{N}(\mu, \sigma^2)$ is $\sigma \Big(\Phi^{\leftarrow}(3/4) - \Phi^{\leftarrow}(1/4)\Big)=2 \sigma \Phi^{\leftarrow}(3/4)$.
+
+```{r witgetgauss, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="(ref:witgetgauss)"}
+# %%
+
+p <- ggplot2::ggplot(data = tibble::tibble(x=seq(-5, 5,by=0.01)),
+                mapping= ggplot2::aes(x=x)) +
+  ggplot2::scale_linetype_manual(values = c("solid", "dashed", "dotted"),
+                                 guide = ggplot2::guide_legend(override.aes = list(
+                        linetype = c("solid", "dashed", "dotted"),
+                        title = "Parameters"))) +
+  ggplot2::labs(linetype="Parameters") +
+  ggplot2::xlab("x") +
+  ggplot2::ylab("density") +
+  ggplot2::xlim(xlim = c(-2, 2)) +
+  ggplot2::stat_function(fun=dnorm, args = c(0, 1),
+                         ggplot2::aes(linetype="a. standard")) +
+  ggplot2::stat_function(fun=dnorm, args = c(1, 1),  ggplot2::aes(linetype="b. mean=1")) +
+  ggplot2::stat_function(fun=dnorm, args = c(0, sqrt(1/2)),
+                         ggplot2::aes(linetype="c. var=.5"))
+
+p
+# %%
+```
+
+---
+
+## Computing the density of an image probability distribution {#imgdens}
+
+
+---
+
+### Univariate change of variable formula
+
+Recall the change of variable formula in elementary calculus.
+If $\phi$ is monotone increasing and différentiable from open $A$ to $B$
+and $f$ is Riemann integrable over $B$, then
+
+$$\int_B f(y) \, \mathrm{d}y = \int_A f(\phi(x)) \, \phi^{\prime}(x) \, \mathrm{d}x \,$$
+
+### Exercise
+
+Check the elementary change of variable formula
+
+
+
+---
+
+
+The goal of this section is state a multi-dimensional generalization of this
+elementary formula. This is the content of Theorem \@ref(thm:geomchange).
+This extension is then used to establish an off-the-shelf formula for computing
+the density of an image distribution in Theorem \@ref(thm:imagedensityformula).
+
+Let us start with a uni-dimensional warm-up.  When starting from the uniform distribution on $[0,1]$ and
+applying a monotone differentiable transformation,  the density of the image measure
+is easily computed.
+
+
+---
+
+### Exercise
+
+Let $\phi$ be differentiable and increasing on $[0,1]$, and
+let $P$ be the uniform distribution on $[0,1]$.
+
+Check  that $P \circ \phi^{-1}$
+has density $\frac{1}{\phi'\circ \phi^\leftarrow}$  on $\phi([0,1])$.
+
+
+
+---
+
+The next proposition extends this observation.
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+If the real valued random variable $X$  is distributed according to $P$
+with density $f$, and $\phi$ is monotone increasing and differentiable
+over $\operatorname{supp}(P)$, then the probability distribution of
+$Y = \phi(X)$ has density
+
+$$g = \frac{f \circ \phi^{\leftarrow}}{\phi^{\prime}\circ \phi^{\leftarrow}}$$
+
+over $\phi\big(\operatorname{supp}(P)\big)$.
+
+]
+
+
+---
+
+
+### Proof
+
+By the fundamental theorem of calculus, the density $f$ is a.e. the derivative of the cumulative distribution function $F$
+of $P$.
+
+The cumulative distribution function of $Y=\phi(X)$ satisfies:
+$$\begin{array}{rl}
+P \Big\{ Y \leq y \Big\}
+  & = P \Big\{ \phi(X) \leq y \Big\} \\
+  & = P \Big\{ X \leq \phi^{\leftarrow} (y) \Big\} \\
+  & = F \circ \phi^{\leftarrow}(y)
+\end{array}$$
+Almost everywhere, $F \circ \phi^{\leftarrow}$ is differentiable, and has derivative $\frac{f \circ \phi^{\leftarrow}}{\phi' \circ  \phi^{\leftarrow}}$
+in $\phi(\text{supp}(P))$, $0$ elsewhere.
+and
+
+$$P \Big\{ Y \leq y \Big\} = \int_{(-\infty, y] \cap \phi(\text{supp}(P))} \frac{f \circ \phi^{\leftarrow}(u)}{\phi' \circ  \phi^{\leftarrow}(u)} \mathrm{d}u$$
+
+
+`r fontawesome::fa("square")`
+
+
+---
+
+
+
+The next corollary is as useful as simple.
+
+### Corollary
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+If the distribution of the real valued random variable $X$
+has density $f$ then the distribution of  $\sigma X + \mu$ has
+density $\frac{1}{\sigma}f\Big(\frac{\cdot -\mu}{\sigma}\Big)$
+
+]
+
+---
+
+
+In univariate calculus, it is easy to establish that if a function is  continuous and increasing over
+an open set, it is invertible and its inverse is continuous and increasing.
+If the function is differentiable with positive derivative, its inverse is also differentiable. Moreover, the differential and the differential
+of the inverse are related in transparent way.
+
+The Global Inversion Theorem extends the preceding  observation to the multivariate setting.
+
+
+---
+name:  globalinversion
+
+### Theorem (Global Inversion Theorem)
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let $U$ and $V$ be two non-empty open subsets of $\mathbb{R}^d$. Let $\phi$ be a continuous bijective
+from $U$ to $V$. Assume furthermore that $\phi$ is continuously differentiable, and that
+$D\phi_x$ is non-singular at every $x \in U$.
+
+Then, the inverse function $\phi^{\leftarrow}$ is also continuously differentiable on $V$ and at every
+$y \in V$:
+
+$$D\phi^{\leftarrow}_y = \Big(D\phi_{\phi^{\leftarrow}(y)} \Big)^{-1} \, .$$
+
+]
+
+
+---
+
+The Jacobian determinant of $\phi$ is the determinant of the matrix that represents the differential.
+
+It is denoted by $J_\phi$.
+
+Recall that:
+
+$$J_{\phi^{\leftarrow}}(y) = \Big(J_{\phi}(\phi^{\leftarrow}(y)) \Big)^{-1} \, .$$
+
+The multidimensional version of the change of variable formula
+is stated under the same assumptions as the Global Inversion Theorem.
+We admit the next Theorem.
+
+---
+name: geomchange
+
+### Theorem (Geometric change of variable formula)
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let $U$ and $V$ be two non-empty open subsets of $\mathbb{R}^d$. Let $\phi$ be a continuous bijective
+from $U$ to $V$.
+
+Assume furthermore that $\phi$ is continuously differentiable, and that
+$D\phi_x$ is non-singular at every $x \in U$.
+
+Let $\ell$ denote the Lebesgue measure on $\mathbb{R}^d$.
+
+For any  a non-negative  Borel-measurable function $f$:
+
+$$\int_U f(x) \mathrm{d}\ell(x)   = \int  f(\phi^\leftarrow(y)) \Big|J_{\phi^\leftarrow}(y) \Big| \mathrm{d}\ell(y) \, .$$
+
+]
+
+---
+name: imagedensityformula
+
+Moving from cartesian coordinates to polar/spherical coordinates
+is easy thanks to an non-trivial application of the geometric change of variable formula.
+
+The Image density formula is a corollary of the geometric change of variable formula.
+
+### Theorem (Image density formula)
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let $P$ have  density $f$ over open $U \subseteq  \mathbb{R}^d$.
+
+Let $\phi$ be bijective fron $U$ to $\phi(U)$ and $\phi$ be  continuously differentiable over $U$ with non-singular differential.
+
+The density $g$ of the image distribution $P \circ \phi^{-1}$ over $\phi(U)$ is given by
+
+$$g(y) = f\big(\phi^\leftarrow(y)\big) \times \big|J_{\phi^\leftarrow}(y)\big|  =  f\big(\phi^\leftarrow(y)\big) \times \Big|J_{\phi}(\phi^\leftarrow(y))\Big|^{-1}$$
+
+]
+
+
+---
+
+The proof of Theorem \@ref(thm:imagedensityformula) from Theorem \@ref(thm:geomchange) is a routine
+application of the transfer formula.
+
+### Proof
+
+Let $B$ be a Borelian subset of $\phi(U)$.
+By the transfer formula:
+
+$$\begin{array}{rl}
+P\Big\{ Y \in B \Big\}
+  & =  P\Big\{ \phi(X) \in B \Big\} \\
+  & = \int_U \mathbb{I}_B(\phi(x)) f(x) \mathrm{d}\ell(x) \,.
+\end{array}$$
+
+Now, we invoke Theorem \@ref(thm:geomchange):
+
+$$\begin{array}{rl}
+\int_U \mathbb{I}_B(\phi(x)) f(x) \mathrm{d}\ell(x)
+ & = \int_{\phi(U)} \mathbb{I}_B(\phi(\phi^\leftarrow(y))) f(\phi^\leftarrow(y)) \Big|J_{\phi^\leftarrow}(y)\Big| \mathrm{d}\ell(y) \\
+ & = \int_{\phi(U)} \mathbb{I}_B(y) f(\phi^\leftarrow(y)) \Big|J_{\phi^\leftarrow}(y)\Big| \mathrm{d}\ell(y) \, .
+\end{array}$$
+
+This suffices to conclude that $f\circ \phi^\leftarrow \Big|J_{\phi^\leftarrow}\Big|$ is a version of
+the density of $P \circ \phi^{-1}$ with respect to Lebesgue measure over $\phi(U)$.
+
+`r fontawesome::fa("square")`
+
+
+---
+name: gammabeta
+
+## Application: Gamma-Beta calculus
+
+
+---
+name: gammabetaprop
+
+The image density formula is applied to show a remarkable connexion between
+Gamma  and Beta distributions.
+
+### Proposition
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+
+Let $X, Y$ be independent random variables distributed according to
+$\Gamma(p, \lambda)$ and $\Gamma(q, \lambda)$ (the intensity parameter are identical).
+Let $U = X+Y$ and  $V= X/(X+Y)$.
+
+The random variables $U$  and $V$ are independent. Random variable $U$ is distributed
+according to $\Gamma(p+q, \lambda)$ while $V$ is distributed according to
+$\operatorname{Beta}(p, q)$.
+
+]
+
+
+---
+
+
+### Proof
+
+The mapping $f: ]0, \infty)^2 \to ]0, \infty) \times ]0,1[$ defined by
+
+$$f(x,y) =  \Big(x+y, \frac{x}{x+y} \Big)$$
+
+is one-to-one with inverse $f^{\leftarrow}(u,v) = \Big(uv,u(1-v)\Big)$.
+
+The Jacobian matrix of $f^{\leftarrow}$ at $(u,v)$ is
+
+$$\begin{pmatrix}
+  v & u \\
+  (1-v) & -u
+\end{pmatrix}$$
+
+with determinant $-uv -u +uv=-u$.
+
+---
+
+### Proof (continued)
+
+The joint image density at $(u,v) \in ]0,\infty) \times ]0,1[$ is
+
+$$\begin{array}{rl}
+& = \lambda^{p+q}\frac{(uv)^{p-1}}{\Gamma(p)} \frac{(u(1-v))^{q-1}}{\Gamma(q)}
+\mathrm{e}^{-\lambda (uv + u(1-v))} u \\
+& = \Big(\lambda^{p+q} \frac{u^{p+q-1}}{\Gamma(p+q)} \mathrm{e}^{\lambda u}\Big)
+\times \Big(\frac{\Gamma(p+q)}{\Gamma(q)\Gamma(p)} v^{p-1} (1-v)^{q-1}\Big) \,.
+\end{array}$$
+
+The factorization of the joint density proves that
+the $U$ and $V$  are independent.
+
+We recognize that the density of (the distribution of) $U$
+is the Gamma density with shape parameter $p+q$, intensity parameter $\lambda$.
+
+The density of the distribution of $V$ is the Beta density with parameters
+$p$ and $q$.
+
+`r fontawesome::fa("square")`
+
+
+---
+
+
+### Exercise
+
+Assume $X_1, X_2, \ldots, X_n$ form an  independent family with each $X_i$
+distributed according to $\Gamma(p_i, \lambda)$.
+
+Determine  the joint distribution of
+
+$$\sum_{i=1}^n X_i, \frac{X_1}{\sum_{i=1}^n X_i}, \frac{X_2}{\sum_{i=1}^n X_i}, \ldots, \frac{X_{n-1}}{\sum_{i=1}^n X_i}$$
+
+
+
+---
+
+## Bibliographic remarks {#bibac}
+
+
+---
+
+
+@MR1932358 and @MR1873379 provide a full development of absolute continuity and self-contained proofs
+the Radon-Nikodym's Theorem.
 
 
 ---
