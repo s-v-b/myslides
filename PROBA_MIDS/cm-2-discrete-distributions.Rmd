@@ -52,7 +52,7 @@ myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
 ---
-class: middle, left, inverse
+template: inter-slide
 
 # Probability II: Discrete distributions
 
@@ -63,24 +63,369 @@ class: middle, left, inverse
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: middle
+template: inter-slide
+name: xxx
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [...](#bigpic)
+### [Motivation](#bigpic)
 
-### [...](#gmm)
+### [Binomial](#gmm)
 
-### [...](#em)
+### [Poisson](#em)
 
-### [...](#mclust)
+### [Geometric](#mclust)
 
 ???
 
 ---
+
 template: inter-slide
+name: motivation
 
 ## Motivation
+
+---
+
+
+The goal of this lesson is
+
+- getting acquainted with important families of distributions and
+- getting familiar with distributional calculus.
+
+Probability distributions will be presented through
+
+- distribution functions,
+- probability mass functions (discrete distribution)
+- ...
+
+
+---
+template: inter-slide
+name: bernoulli
+
+## Bernoulli and Binomial
+
+---
+
+### Definition
+
+A Bernoulli distribution is a probability distribution $P$  on $\Omega=\{0,1 \}$.
+
+The _success parameter_ of $P$ is $P\{1\} \in [0,1]$.
+
+A Bernoulli distribution is completely defined by its parameter.
+
+
+
+---
+
+### Definition  binomial}
+
+Assume $\Omega^{\prime} = \{0,1\}^n$.
+
+A binomial distribution with parameters $n \in \mathbb{N}, p \in [0,1]$ ( $n$ is _size_ and $p$ is _success_ )
+is a probability distribution $P$ on
+
+$$\Omega = \{0, 1, 2, \ldots, n\}$$,
+
+defined by
+
+$$P\{k\} = \binom{n}{k} p^k (1-p)^k$$
+
+
+---
+
+The connexion between Bernoulli and Binomial distributions is obvious: a Bernoulli distribution
+is a Binomial distribution with size parameter equal to $1$.
+
+This connexion goes further: the sum of _independent_ Bernoulli random  variables with _same_ success parameter is Binomially distributed
+
+### Proposition
+
+Let $X_1, X_2, \ldots, X_n$ be _independent_, identically distributed Bernoulli random variables with
+success parameter $p \in [0,1]$,
+
+then
+
+$$Y = \sum_{i=1}^n X_i$$
+
+is distributed according to a Binomial disctribution with size parameter $n$ and success probability $p$:
+
+$$Y \sim \operatorname{Bin}(n,p)$$
+
+
+---
+
+### Proof
+
+For $k \in 0, \ldots, n$
+$$\begin{array}{rl}
+P\Big\{ \sum_{i=1}^n  X_i = k \Big\}
+  & = \sum_{x_1, \ldots, x_n \in \{0,1 \}^p} \mathbb{I}_{\sum_{i=1}^n x_i=k} P \Big\{ \wedge_{i=1}^n X_i = x_i\Big\} \\
+  & = \sum_{x_1, \ldots, x_n \in \{0,1 \}^p} \mathbb{I}_{\sum_{i=1}^n x_i=k} \prod_{i=1}^n P \Big\{ X_i = x_i\Big\} \\
+  & = \sum_{x_1, \ldots, x_n \in \{0,1 \}^p} \mathbb{I}_{\sum_{i=1}^n x_i=k} \prod_{i=1}^n  p^{x_i} (1-p)^{1-x_i} \\
+  & = \sum_{x_1, \ldots, x_n \in \{0,1 \}^p} \mathbb{I}_{\sum_{i=1}^n x_i=k}\,   p^{k} (1-p)^{n-k} \\
+  & = \binom{n}{k} p^{k} (1-p)^{n-k}  \, .
+\end{array}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+
+This observation facilitates the computation of moments of Binomial distribution.
+
+The expected value of a Bernoulli distribution with parameter $p$ is $p$! Its variance is $p(1-p)$.
+
+By linearity of expectation, the expected value of the binomial distribution with parameters $n$ and $p$ is $np$.
+
+The variance of a sum of independent random variables  is the sum of the variances
+
+The variance of the binomial distribution with parameters $n$ and $p$ is $np(1-p)$.
+
+```{r loads, echo=FALSE, message=FALSE, warning=FALSE}
+# %%
+require(tidyverse)
+require(kableExtra)
+old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
+# %%
+```
+
+---
+
+
+### Binomial probability mass functions with $n=20$ and different values of $p$ : $.5, .7, .2$.
+
+```{r witbinom, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:witbinom)', fig.align="center"}
+# %%
+n <- 20
+x <-  as.integer(seq(0, 20, by=1))
+probs <-  c(.5, .7, .2)
+
+df <- as.data.frame(c(list("k"=x),
+                      probs %>% purrr::map(.f = function(p) dbinom(x, n, p))))
+
+names(df) <- c("k", format(probs, digits=2))
+
+df <- tidyr::gather(df, key="p", value="pmf", -k)
+
+p <- ggplot2::ggplot(data = df) +
+     ggplot2::geom_col(mapping=ggplot2::aes(x=k, y=pmf,  alpha=p, linetype=p), position="dodge2", color=1) +
+     ggplot2::scale_fill_discrete(guide=ggplot2::guide_legend(title="Parameter")) +
+     ggplot2::xlab("k") +
+     ggplot2::ylab("Probability Mass Function (pmf)") +
+     ggplot2::xlim(xlim = c(-1, 20))
+p
+
+rm(df, probs, x)
+# %%
+```
+
+More on [wikipedia](https://en.wikipedia.org/wiki/Binomial_distribution).
+
+---
+
+### Binomial distributions with the same success parameter
+
+### Proposition
+
+Let $X,Y$ be independent over probability space $(\Omega, \mathcal{F}, P)$
+and distributed according to $\text{Bin}(n_1, p)$ and $\text{Bin}(n_2, p)$.
+
+Then $X+Y$ is distributed according to $\text{Bin}(n_1+n_2, p)$.
+
+
+$$X ⊥\!\!\!\bot Y, \quad X \sim\operatorname{Bin}(n_1, p), \quad Y \sim\operatorname{Bin}(n_2, p) \Rightarrow X+ Y \sim\operatorname{Bin}(n_1+n_2, p)$$
+
+---
+
+### Exercise
+
+Check the preceding proposition.
+
+---
+template: inter-slide
+name: poisson
+
+## Poisson
+
+---
+
+The Poisson distribution appears as a limit of Binomial distributions in a variety
+of circumstances connected to rare events phenomena.
+
+### Definition
+
+A Poisson distribution with parameter $\lambda >0$ is a probability distribution $P$  on $\Omega=\mathbb{N}$ with
+
+$$P\{k\} = \mathrm{e}^{-\lambda} \frac{\lambda^k}{k!}$$
+
+
+---
+
+### Poisson probability mass functions with different values of parameter: $1, 5, 10$.
+
+Recall that the parameter of a Poisson distribution equals its expectation and its variance.
+
+The probability mass function of a Poisson distribution achieves its maximum (called the mode) close to its expectation.
+
+
+```{r witgetpoisson, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:witgetpoisson)'}
+# %%
+x = as.integer(seq(0, 20, by=1))
+lambdas =  c(1, 5, 10)
+
+df <- as.data.frame(c(list("x"=x),
+                      lambdas %>% purrr::map(.f = function(p) dpois(x, p))))
+
+names(df) <- c("k", format(lambdas, digits=2))
+
+df <- tidyr::gather(df, key="lambda", value="pmf", -k)
+
+p <- ggplot2::ggplot(data = df) +
+     ggplot2::geom_col(mapping=ggplot2::aes(x=k, y=pmf, alpha=lambda, linetype=lambda), position="dodge2", color=1) +
+     # ggplot2::ggtitle("Poisson pmf",subtitle = "variation on parameter") +
+     # ggplot2::scale_fill_discrete(guide=ggplot2::guide_legend(title="Parameter")) +
+     ggplot2::xlab("k") +
+     ggplot2::ylab("Probability Mass Function (pmf)") +
+     ggplot2::xlim(xlim = c(-1, 20))
+
+p
+
+# ggplotly(p)
+rm(df, lambdas, x)
+# %%
+```
+
+---
+
+The expected value of the Poisson distribution with  paramenter $\lambda$ is $\lambda$.
+The variance of a Poisson distribution is equal to its expected value.
+
+$$\begin{array}{rl}
+\mathbb{E} X
+& = \sum_{n=0}^\infty \mathrm{e}^{-\lambda} \frac{\lambda^n}{n!} \times n\\
+& = \lambda \times \sum_{n=1}^\infty \mathrm{e}^{-\lambda} \frac{\lambda^{n-1}}{(n-1)!}  \\
+& = \lambda \, .
+\end{array}$$
+
+---
+
+### Proposition
+
+Let $X,Y$ be independent and Poisson distributed over probability space $(\Omega, \mathcal{F}, P)$,
+then $X+Y$ is Poisson distributed.
+
+
+---
+
+### Proof
+
+We check the proposition in the simplest and   most tedious way.
+We compute the probability mass function of the distribution of $X+Y$.
+Assume $X \sim \operatorname{Po}(\lambda), Y \sim \operatorname{Po}(\mu)$.
+
+For each $k \in \mathbb{N}$:
+
+$$\begin{array}{rl}
+\Pr \{ X+Y =k\}
+& = \Pr \{ \bigvee_{m=0}^k (X =m \wedge Y =k-m) \} \\
+& = \sum_{m=0}^k \Pr \{ X =m \wedge Y =k-m \} \\
+& = \sum_{m=0}^k \Pr \{ X =m \} \times \Pr\{ Y =k-m \} \\
+& = \sum_{m=0}^k \mathrm{e}^{-\lambda} \frac{\lambda^m}{m!} \mathrm{e}^{-\mu} \frac{\mu^{k-m}}{(k-m)!} \\
+& = \mathrm{e}^{-\lambda - \mu}  \frac{(\lambda+\mu)^k}{k!} \sum_{m=0}^k \frac{k!}{m! (k-m)!}\left(\frac{\lambda}{\lambda+\mu}\right)^m \left(\frac{\mu}{\lambda+\mu}\right)^{k-m} \\
+& = \mathrm{e}^{-\lambda - \mu}  \frac{(\lambda+\mu)^k}{k!} \sum_{m=0}^k \binom{k}{m}\left(\frac{\lambda}{\lambda+\mu}\right)^m \left(\frac{\mu}{\lambda+\mu}\right)^{k-m} \\
+& = \mathrm{e}^{-\lambda - \mu}  \frac{(\lambda+\mu)^k}{k!} \left( \frac{\lambda}{\lambda+\mu} + \frac{\mu}{\lambda+\mu}\right)^k  \\
+& = \mathrm{e}^{-(\lambda + \mu)}  \frac{(\lambda+\mu)^k}{k!}
+\end{array}$$
+
+The last expression if the pmf of $\operatorname{Po}(\lambda + \mu)$ at $k$.
+
+`r fontawesome::fa("square")`
+
+---
+
+
+### Exercise
+
+Check that the _mode_ (maximum) of a Poisson probability mass function with parameter $\lambda$
+is achieved at $k= \lfloor \lambda \rfloor$. It is always unique?
+
+### Exercise
+
+Check that the median of a Poisson distribution with integer parameter $\lambda$ is not smaller than $\lambda$.
+
+---
+template: inter-slide
+name: geometric
+
+## Geometric
+
+---
+
+A geometric distribution is a probability distribution over $\mathbb{N} \subset \{0,1\}$. It depends
+on a parameter $p>0$.
+
+Assume we are allowed to toss a biased coin infinitely many times. The number of
+times we have to toss the coin _until_ we get a _head_ is geometrically distributed.
+
+Let $X$ be distributed according to a geometric distribution with parameter $p$.
+The geometric probability distribution is easily defined by its tail function.
+In the event $X>k$, the first $k$ outcomes have to be _tail_.
+
+$$P \{ X > k \} = (1-p)^k$$
+
+The probability mass function of the geometric distribution follows:
+
+$$P \{X = k \} = (1-p)^{k-1} - (1-p)^k = p \times (1-p)^{k-1} \qquad \text{for } k=1, 2, \ldots$$
+
+On average, we have to toss the coin $p$ times until we get a _head_:
+
+$$\mathbb{E}X = \sum_{k=0}^\infty P \{ X > k \} = \frac{1}{p}$$
+
+---
+
+### Remark
+
+It is also possible to define geometric random variables as
+the number of times we have to toss the coin __before__ we get a _head_.
+This requires modifying quantile function, probability mass function, expectation,
+and so on.  This is the convention `R` uses.
+
+
+---
+
+### Geometric probability mass functions
+
+with different values of parameter $p$: $1/2, 1/3, 1/5$. The probability mass function equals $p \times (1-p)^{k-1}$ at $k\geq 1$. The mode is achieved at $k=1$ whatever the value of $p$. The expectation equals $1/p$.
+
+
+```{r witgetgeometric, echo=FALSE, screenshot.force = TRUE, message=FALSE, warning=FALSE, fig.cap='(ref:witgetgeometric)'}
+# %%
+
+x <- as.integer(seq(0, 9, by=1))
+probs <-  c(1/2, 1/3, 1/5)
+
+df <- as.data.frame(c(list("x"=x+1),
+                      probs %>% purrr::map(.f = function(p) dgeom(x, p))))
+names(df) <- c("k", format(probs, digits = 2))
+df <- tidyr::gather(df, key="p", value="pmf", -k)
+
+p <- ggplot2::ggplot(data = df) +
+     ggplot2::geom_col(mapping=ggplot2::aes(x=k, y=pmf, linetype=p, alpha=p), color=1, position="dodge2") +
+     ggplot2::scale_fill_discrete(guide=ggplot2::guide_legend(title="Parameter p")) +
+     ggplot2::xlab("k") +
+     ggplot2::ylab("Probability Mass Function (pmf)") +
+     ggplot2::xlim(xlim = c(0, 10))
+
+p
+# %%
+```
+
+---
+
+Sums of independent geometric random variables are not distributed according to a geometric distribution.
 
 ---
 
