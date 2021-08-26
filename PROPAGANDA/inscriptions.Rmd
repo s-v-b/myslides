@@ -8,7 +8,7 @@ background-size: cover
 
 
 ---
-
+class: center, middle
 
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
@@ -59,7 +59,7 @@ exclude: true
 
 - Remettre fiche à Christian Sénécal ou à un responsable de cours
 
-- `r emo::ji("building_construction")` L'inscription pédagogique est nécessaire pour accéder au [site Moodle des cours](https://moodle.u-paris.fr/)
+- `r fontawesome::fa("hard-hat")` L'inscription pédagogique est nécessaire pour accéder au [site Moodle des cours](https://moodle.u-paris.fr/)
 
 - Dispense de contrôle continu cours par cours
 

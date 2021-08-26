@@ -1,61 +1,68 @@
 
 ---
-class: inverse, middle, center
+class: middle, center
+background-size: cover
+background-image: url('./img/pexels-anna-shvets-3844581.jpg')
 
 
-## Covid et mesures sanitaires
+# Covid et mesures sanitaires
 
 
 ---
+class: middle
 
 ### Mesures élémentaires
 
-- `r emo::ji("mask")` Port du masque obligatoire
+- `r fontawesome::fa("mask")` Port du masque obligatoire
 
-- `r emo::ji("shower")` Nettoyage des mains (avant et après chaque séance)
+- `r fontawesome::fa("shower")` Nettoyage des mains (avant et après chaque séance)
 
-- `r emo::ji("face_with_thermometer")` Vérifiez votre température chaque matin,
-__si fièvre__,
-  + `r emo::ji("house_with_garden")` restez chez vous
+- `r fontawesome::fa("thermometer-full")` Vérifiez votre température, si _fièvre_,
+  + `r fontawesome::fa("igloo")` restez chez vous
+  + `r fontawesome::fa("user-md")` contactez votre médecin traitant 
+  + `r fontawesome::fa("fingerprint")` si besoin et possible, passez un test. Si le diagnostic est positif, prévenez le [responsable administratif](), isolez vous (même si vous ne présentez pas de symptômes).
 
-  + `r emo::ji("syringe")` contactez votre médecin traitant `r emo::ji("woman_health_worker")`
+`r fontawesome::fa("link")` [Mesures sanitaires à l'Université de Paris](https://u-paris.fr/les-mesures-sanitaires-pour-une-rentree-en-toute-securite/)
 
-  + `r emo::ji("footprints")` si besoin et possible, passez un test PCR (présence du virus dans les voies respiratoires supérieures). Si le diagnostic est positif, prévenez le [responsable administratif](), mettez vous en quatorzaine (même si vous ne présentez pas de symptômes).
-
-[Mesures sanitaires à l'Université de Paris](https://u-paris.fr/les-mesures-sanitaires-pour-une-rentree-en-toute-securite/)
-
-`r emo::ji("studio_microphone")` `r emo::ji("de")` [Corona podcasts NDR](https://www.ndr.de/nachrichten/info/podcast4684.html)
+`r fontawesome::fa("microphone")`  [Corona podcasts NDR](https://www.ndr.de/nachrichten/info/podcast4684.html)
 
 ???
 
 ---
+exclude: true
 
 ### Si l'un d'entre vous est testé positif au COVID (PCR) `r emo::ji("footprints")`
 
 - vos condisciples seront (en principe) prévenus `r emo::ji("incoming_envelope")`
 
-- `r emo::ji("microbe")` vos condisciples seront prioritaires pour un test PCR (ordonance délivrée par la médecine universitaire `r emo::ji("hospital")`)
+- Un contact d'un positif ne peut pas venir tant qu'il n'a pas le résultat de son test. 
+
+Et plus généralement : contact d'un positif implique isolement
 
 ???
 
-Un contact d'un positif ne peut pas venir tant qu'il n'a pas le résultat de son test. Et plus généralement : contact d'un positif implique isolement
+- `r emo::ji("microbe")` vos condisciples seront prioritaires pour un test PCR (ordonance délivrée par la médecine universitaire `r emo::ji("hospital")`)
+
+
 
 
 ---
+exclude: true
 
 ### Mesures supplémentaires `r emo::ji("footprints")`
 
-Si un de vos _contacts_ (hors de l'université) depuis moins de deux semaines, vous prévient qu'il est _positif_ au test PCR,
+Si un de vos _contacts_ (hors de l'université) depuis moins de deux semaines, vous prévient qu'il est _positif_ au test PCR/antigénique,
 
   + `r emo::ji("house_with_garden")` isolez vous (vous êtes peut-être contagieux)
 
   + ne venez pas en cours
 
-  + faîtes vous tester (vous serez prioritaires, dixit l'ARS)
+  + faîtes vous tester
 
  Si le diagnostic est positif, prévenez le responsable administratif, mettez vous en quatorzaine (même si vous ne présentez pas de symptômes).
 
 ---
+exclude: true
 
 ### Caveat
 
@@ -69,6 +76,8 @@ knitr::include_url("https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594
 Si les mesures de protection évoluent, vous serez avertis via Moodle. Consultez quotidiennement la boîte courriel fournie par l'université `r emo::ji("mailbox_with_mail")`.
 
 ---
+exclude: true
+
 
 ### Organisation des cours magistraux
 
@@ -85,6 +94,7 @@ Chaque cours magistral est organisé de manière autonome en fonction de ses eff
 
 
 ---
+exclude: true
 
 ### Organisation des travaux dirigés
 
@@ -105,6 +115,7 @@ Chaque cours magistral est organisé de manière autonome en fonction de ses eff
 > il est prévu que les TD du M1 se fassent en présentiel, sur le campus des  Grand Moulins, 75013 (près de  BNF). Le  port du masque sera  obligatoire en permanence dans le périmètre de l'université. Pour les cours magistraux, les consignes sont un peu moins claires, mais compte tenu des effectifs plus réduits qu'en licence, un enseignement en présentiel semble lui aussi possible. Ceci dit, des ressources en lignes (polycopié ou notes manuscrites avec description précise des notions abordées chaque semaine, éléments de correction des exercices de TD) seront disponibles via l'interface Moodle de l'université.
 
 ---
+exclude: true
 
 ### Travaux pratiques
 
@@ -127,6 +138,13 @@ knitr::include_graphics("./img/house-cleaning.jpg")
 
 ]
 
+---
+
+### Pensez à la vaccination  `r fontawesome::fa("syringe")` `r fontawesome::fa("smile")`
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("./img/vaccination_ligne.jpeg")
+```
 
 
 

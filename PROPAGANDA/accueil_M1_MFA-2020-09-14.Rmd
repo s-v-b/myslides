@@ -253,6 +253,7 @@ class: inverse, middle, center
 | [Probabilités]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris)               |
 
 ---
+exclude: false
 
 ### Parcours Professionnels
 
@@ -295,7 +296,7 @@ class: middle, left
 
 
 ```{r, echo=FALSE, out.width='80%'}
-knitr::include_graphics("./img/annee20_21.svg")
+knitr::include_graphics("./img/annee21_22.svg")
 ```
 
 
@@ -832,9 +833,9 @@ background-image: url('./img/2017-03-17 09.39.09.jpg')
 
 C'est là que les choses sérieuses se passent
 
+---
 
-
-```{r inscriptions, child='inscriptions.Rmd', eval=FALSE}
+```{r inscriptions, child='inscriptions.Rmd', eval=TRUE}
 
 ```
 
@@ -850,10 +851,11 @@ background-size: cover
 
 
 ---
+class: middle
 
 ### MCC (Modalités de contrôle des connaissances)  .fr[`r fontawesome::fa("user-graduate")`]
 
-`r emo::ji("mortar_board")` La validation  de l'année de M1 nécessite la validation de chaque semestre (30 ECTS par semestre)
+La validation  de l'année de M1 nécessite la validation de chaque semestre (30 ECTS par semestre)
 
 Le semestre est acquis aux conditions suivantes:
 
@@ -894,7 +896,7 @@ On ne change pas les règles du jeu en cours de partie.
 name: contacts-ra
 
 
-### Responsable administratif : [Christian Sénécal](mailto:senecal@math.univ-paris-diderot.fr)
+### Responsable administratif : [Nathalie Naveau](mailto:naveau@math.univ-paris-diderot.fr)
 
 .fl.w-40.pa2[
 
@@ -902,12 +904,11 @@ name: contacts-ra
 
 - Bâtiment Sophie Germain 
 
-- Salle 2008
 ]
 
 .fl.w-60.pa2[
 ```{r, trombi-csenec, out.width="80%", echo=FALSE}
-knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/naveau_large.jpg")
 ```
 ]
 
@@ -924,18 +925,18 @@ knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/tr
 ###  Responsables pédagogiques
 
 .pull-left[
-#### [David Gérard-Varet](https://dgerardv.github.io)
-Analyse `r fontawesome::fa("database", fill = "black")`
+#### [Marie-Claude Arnaud](https://en.wikipedia.org/wiki/Marie-Claude_Arnaud?oldid=872935590)
+Systèmes dynamiques `r fontawesome::fa("database", fill = "black")`
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
-knitr::include_url("https://dgerardv.github.io")
+knitr::include_url("https://mcarnaudblog.wordpress.com")
 ```
 
 ]
 
 .pull-right[
 #### [Stéphane Boucheron](https://stephane-v-boucheron.fr)
-Statistiques, Probabilités
+Statistiques, Probabilités `r fontawesome::fa("dice", fill = "black")`
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
 knitr::include_url("https://stephane-v-boucheron.fr")
@@ -980,22 +981,33 @@ Prendre rendez-vous via [Moodle](https://moodle.u-paris.fr/course/view.php?id=85
 
 
 
-```{r anglais, child='anglais-specialite.Rmd', eval=FALSE}
+```{r anglais, child='anglais-specialite.Rmd', eval=TRUE}
 
 ```
 
 
 
 
-```{r postuler, child='candidatures.Rmd'}
+```{r postuler, child='candidatures.Rmd', eval=FALSE}
 
 ```
 
 ---
-name: covid
-exclude: true
+class: middle, center, inverse
+name: tutorats 
+background-image: url('./img/pexels-pavel-danilyuk-7521360.jpg')
+background-size: cover
 
-```{r covid, child='covid-todo.Rmd', eval=FALSE}
+## Tutorat
+
+
+```{r tutorat, child='tutorat.Rmd', eval=TRUE}
+
+```
+
+
+
+```{r covid, child='covid-todo.Rmd', eval=TRUE}
 
 ```
 
