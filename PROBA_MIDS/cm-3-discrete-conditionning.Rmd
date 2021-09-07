@@ -52,7 +52,7 @@ myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Probability III: Discrete conditioning
 
@@ -63,7 +63,7 @@ class: middle, center, inverse
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: middle
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -150,7 +150,7 @@ $$P\{ B \mid A \} =  \frac{P\{ X \geq 2 t\}}{P\{ X \geq t\}}$$
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 Let   $P$ be a probability distribution  on $(\Omega, \mathcal{F})$
 
@@ -232,7 +232,7 @@ The next trivial proposition is worth reminding.
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 If  $A$ and  $B \in \mathcal{F}$ satisfy $P\{A\}> 0$,
 
@@ -266,7 +266,7 @@ Causality is a subtle notion and we will refrain from making causal interpretati
 
 ### Proposition: Bayes formula
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 Let $P$ be a  probability distribution on $(\Omega, \mathcal{F})$,
 
@@ -366,7 +366,7 @@ $\mathbb{E}[X \mid A_i]$ might denote either
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 Let   $P$ be a probability distribution on  $(\Omega, \mathcal{F})$.
 
@@ -479,7 +479,7 @@ in prediction/approximation problems.
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 Let $Y$ be a square-integrable random variable on  $(\Omega, \mathcal{F}, P)$ and $\mathcal{G}$ a discrete sub- $\sigma$ -algebra  of $\mathcal{F}$
 
@@ -549,7 +549,7 @@ We shall prove them in full generality later.
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 If $X \leq Y$,  $P$-a.s., then
 
@@ -562,7 +562,7 @@ $$  \mathbb{E}[X \mid \mathcal{G}] \leq \mathbb{E}[Y \mid \mathcal{G}] \qquad P 
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 
 $$\mathbb{E}[ aX + bY \mid \mathcal{G}] = a \mathbb{E}[X \mid \mathcal{G}] + b \mathbb{E}[Y \mid \mathcal{G}]$$
@@ -593,7 +593,7 @@ Prove the proposition.
 ### Corollary
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 $$\mathbb{E} X = \mathbb{E}[\mathbb{E}[X \mid \mathcal{G}]]$$
 
@@ -621,7 +621,7 @@ $\Big\{ Z_k = a\Big\}$ for $a \in \mathbb{N}$.
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 $$\mathbb{E}\Big[Z_{k+1} \mid \sigma(Z_k)\Big] = \mathbb{E}X^0_1 \times Z_k$$
 
@@ -682,7 +682,7 @@ if the expectation of the offspring distribution is smaller than $1$.
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 
 The extinction probability of a sub-critical branching process is equal to $1$.
@@ -723,10 +723,9 @@ $$\sum_{k=0}^\infty \mathbb{E} Z_k  = \sum_{k=0}^\infty (\mathbb{E} X^0_1)^k = \
 
 ### Remark
 
-Working with discrete conditioning allows us to derive non-trivial statements about the
-Galton-Watson process without  knowing  much about the offspring distribution
-beyond the fact that its expectation is smaller than $1$. We still ignore the
-the details of the distribution of $Z_k$, let alone of the distribution of $\sum_{k=0}^\infty Z_k$.
+`r fontawesome::fa("smile")` Working with discrete conditioning allows us to derive non-trivial statements about the Galton-Watson process without  knowing  much about the offspring distribution beyond the fact that its expectation is smaller than $1$
+
+`r fontawesome::fa("frown")` We still ignore  the details of the distribution of $Z_k$, let alone of the distribution of $\sum_{k=0}^\infty Z_k$
 
 
 ---

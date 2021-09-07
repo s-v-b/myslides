@@ -107,7 +107,7 @@ name: hashing
 
 ## Hashing
 
----
+
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -120,35 +120,46 @@ old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
 # %%
 ```
 
+---
+
+### From hashing to random allocations
+
 Hashing is a computational technique that is used in almost every area of
 computing, from databases to compilers  through  (big) datawarehouses.
+
+
 Every book on algorithms contain a discussion of hashing, see for example
-[`Introduction to Hashing by Jeff Erickson`](http://jeffe.cs.illinois.edu/teaching/algorithms/notes/05-hashing.pdf).
+[`Introduction to Hashing by Jeff Erickson`](http://jeffe.cs.illinois.edu/teaching/algorithms/notes/05-hashing.pdf)
 
 ---
 
-Under idealized conditions, hashing $n$ items to $m$ values consists of applying
-a function picked uniformly at random among the $m^n$ functions from $1, \ldots, n$ to $1, \ldots, m$.
+### From hashing to random allocations (continued)
+
+Under _idealized conditions_, hashing $n$ items to $m$ values consists of applying
+a function picked _uniformly_ at random among the $m^n$ functions from $1, \ldots, n$ to $1, \ldots, m$
 
 
 The performance of a hashing method (how many cells have to be probed during a search operation?)
 depends on the typical properties of such a random function.
 
-It is convenient to think of the values in $1, \ldots, m$ as numbered bins and of the items
-as $n$ numbered balls.
+It is convenient to think of the values in $1, \ldots, m$ as numbered _bins_ and of the items
+as $n$ numbered _balls_
 
-Picking a random function amounts to throw independently the $n$ balls
-into the $m$ bins.
+Picking a random function amounts to throw independently the $n$ balls into the $m$ bins
 
-The probability that a given ball falls into a given bin is $1/m$.
+The probability that a given ball falls into a given bin is $1/m$
+
+???
+
+
 
 ---
 
-### Questions around the random functions can be rephrased.
+### Questions around the random functions `r fontawesome::fa("dice")`
 
-- How many empty bins on average?
+- How many _empty_ bins on _average_?
 
-- Distribution of the number of empty bins?
+- _Distribution_ of the number of empty bins?
 
 - How many bins with $r$ balls?
 
@@ -158,7 +169,7 @@ Have a look at the [http://stephane-v-boucheron.fr/post/2019-09-02-idealizedhash
 
 ---
 
-This toy yet useful model is an opportunity to recall basic notions of probability
+This toy model is an opportunity to recall basic notions of probability
 theory
 
 We call this framework the _random alllocations_ experiment
@@ -197,12 +208,11 @@ name: space
 
 ---
 
-### Universe $\Omega$
+###  `r fontawesome::fa("atlas")` Universe $\Omega$
 
 The set of outcomes is called the _universe_
 
-In the random allocations setting it is the
-set of $1, \ldots, m$-valued _sequences_ of length $n$
+In the random allocations setting it is the set of $1, \ldots, m$-valued _sequences_ of length $n$
 
 A sequence is also a function mapping $\{1, \ldots, n\}$ to $\{1, \ldots, m\}$
 
@@ -214,16 +224,18 @@ This universe is denoted by $\Omega$, here it is finite with cardinality $|\Omeg
 
 ---
 
+###   `r fontawesome::fa("globe-americas")`
+
 In this setting, the uniform probability distribution on the universe assigns to each subset $A$ of $\Omega$ the probability
 $$|A|/|\Omega|$$
 
-When the universe is finite or countable, all subsets of the universe are _events_
+When the universe is finite or countable, all subsets of the universe are _events_ `r fontawesome::fa("glass-cheers")`
 
 When the universe is finite or countable, assigning  a probability to every subset of the universe is not an issue
 
 ---
 
-### Definition: probability distribution
+### `r fontawesome::fa("dice-four")` Definition: probability distribution
 
 A _probability distribution_ $P$ maps a collection $\mathcal{F}$ of subsets of the universe $\Omega$ to $[0,1]$
 
@@ -242,7 +254,8 @@ See Section \@ref(distribution).
 
 ---
 
-This entails
+### Consequences
+
 $$P(A_1 \cup A_2 \cup \ldots \cup A_k) = \sum_{i=1}^k P(A_i)$$
 for all finite collection of pairwise disjoint subsets $A_1,  \ldots, A_k$
 
@@ -275,6 +288,8 @@ iff
 
 
 ---
+exclude: true
+
 
 ### Example: Balanced allocations
 
@@ -331,7 +346,7 @@ we have $X_{4,`r omega[4]`}(\omega)= `r as.integer(omega[4]==omega[4])`, X_{5,1}
 
 ---
 
-### Don't mess up with terminology
+### `r fontawesome::fa("book-dead")` Don't mess with terminology
 
 
 .fl.w-50.pa2[
@@ -416,8 +431,21 @@ is an independent collection of events under $\Pr$
 
 ---
 
-### Definition: Collection of independent random variables
+### Definition: independent collection of  random variables
 
+A collection of integer valued random variables $X_1, \ldots, X_n$ over some probability space $(\Omega, \mathcal{F}, P)$
+is independent ( with respect to $P$ )
+
+iff
+
+for all collections of subsets $A_1, \ldots, A_n$ from $\mathbb{N}$, the collection of events
+
+$$X_i^{-1}(A_i) = \{ \omega : X_i(\omega) \in A_i\}$$
+
+is an independent collection of events
+
+
+???
 
 
 ---
@@ -443,6 +471,9 @@ Observe that the outcome of the sequence $X_{i,j}$  for $i \in 1,\ldots,n$  is $
 only depends on $\sum_{i=1}^n b_i= Y_j$
 
 This greatly simplifies computations  `r fontawesome::fa("glass-cheers")`
+
+
+---
 
 We are interested in the number of elements from $1, \ldots, n$ that are mapped (allocated) to $j$ through the random function $\omega$.
 
@@ -561,20 +592,19 @@ the sequence $\Pr \Big\{ Y_j = r \Big\} = \binom{n}{r} (1/m)^r (1-1/m)^{n-r}$ te
 $$\mathrm{e}^{-c}	\frac{c^r}{r !}$$
 
 which is the probability that a Poisson distributed random variable with expectation $c$ equals $r$
-(see Section \@ref(poisson) for more on Poisson distributions).
 
 This is an instance of the _law of rare events_, a special case of _convergence in distribution_
 
 ---
 
-The ability to approximate a Poisson distribution using
-an appropriate Binomial distribution is illustrated in Figure \@ref(fig:binom-poisson).
+### Binomial/Poisson approximation illustrated
 
 The difference between the probability mass functions of the Binomial distributions
-with parameters $n=`r n`, m=`r 1/m`$, and $n=`r 10*n`, m=`r 1/(10*m)`$ and the Poisson distribution
-with parameter $`r n/m`$ is small.
+with parameters $n=`r n`, m=`r 1/m`$, and $n=`r 10*n`, m=`r 1/(10*m)`$ and the Poisson distribution with parameter $`r n/m`$ is small
 
-If we chose parameters $n=`r 10*n`, m=`r 1/(10*m)`$, the difference between Binomial and Poisson is barely visible.
+-- 
+
+If we chose parameters $n=`r 10*n`, m=`r 1/(10*m)`$, the difference between Binomial and Poisson is barely visible
 
 ```{r  binom-poisson, warning=FALSE, echo=FALSE, fig.cap="Probability mass functions of Binomial(250,0.02) (left), Binomial(2500,0.002) (middle) and Poisson(5) (right)", fig.show='hold', fig.align="center"}
 # %%
@@ -745,12 +775,14 @@ To perform the analysis, we introduced notation and notions from probability the
 Through numerical simulations, we got a feeling of several important phenomena:
 
 - Law of rare events: approximation of Poisson distribution by certain Binomial distributions.
+
 - Law of large numbers for normalized sums of identically distributed random variables that are not independent.
+
 - Central limit theorems for normalized and centered
 sums of identically distributed random variables that are not independent
 
 At that point, our elementary approach did not provide us with the notions and tools that
-make possible the rigorous analysis of these phenomena.
+make possible the rigorous analysis of these phenomena
 
 
 ---

@@ -40,7 +40,7 @@ class: left, middle
 ```
 
 
-```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
 require(RefManageR, quietly = TRUE)
 BibOptions(check.entries = FALSE,
            bib.style = "authoryear",
@@ -48,11 +48,11 @@ BibOptions(check.entries = FALSE,
            style = "markdown",
            hyperlink = FALSE,
            dashed = FALSE)
-myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE)
 ```
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Probability IV: A modicum of Measure Theory
 
@@ -63,21 +63,32 @@ class: middle, center, inverse
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: middle
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [...](#bigpic)
 
-### [...](#gmm)
+### [Motivation](#motivation)
 
-### [...](#em)
+### [Universe, powerset and $\sigma$-algebras](#tribe)
 
-### [...](#mclust)
+### [Probability distributions](#distributions)
+
+### [Measurable functions](#measurablefunctions)
+
+### [Lebesgue Measure](#lebesque)
+
+### [Monotone class theorem](#monotoneclass)
+
+### [Distributions on real line](#distributionsrealline)
+
+### [General random variables](#generalrv)
+
 
 
 ---
 template: inter-slide
+name: motivation
 
 
 ## Motivation
@@ -90,174 +101,238 @@ template: inter-slide
 
 ## Roadmap
 
+.f6[
+
 Performing stochastic modeling in a comfortable way requires
-consistent foundations and notation. In this chapter, we set the stage
-for further development. Probability theory started as the interaction
-between combinatorics and games of chance (XVIIth century). At that time,
-the set of outcomes was finite, and it was legitimate to think that
-any set of outcomes had a well-defined probability. When
-mathematicians started to perform stochastic modeling in different branches of
+consistent foundations and notation.
+
+In this chapter, we set the stage for further development.
+
+Probability theory started as the interaction between combinatorics and games of chance (XVIIth century).
+
+At that time, the set of outcomes was finite, and it was legitimate to think that
+any set of outcomes had a well-defined probability.
+
+When mathematicians started to perform stochastic modeling in different branches of
 sciences (astronomy, thermodynamics, genetics, ...), they had to handle uncountable sets of outcomes.
+
 Designing a sound definition of what a probability distribution is, took time.
-Progress in integration and measure theory during the XIXth century and
+
+Progress in _integration_ and _measure theory_ during the XIXth century and
 the early decades of the XXth century led to the modern, measure-theoretical
 foundation of probability theory.
+]
 
 
-```{r , echo=FALSE, message=FALSE, warning=FALSE}
-require(tidyverse)
-require(kableExtra)
-old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
-# %%
-```
+---
+template: inter-slide
+name: tribe
 
+## Universe, powerset and $\sigma$-algebras
 
-## Universe, powerset and $\sigma$-algebras  {#tribe}
+---
+
+### Definition: universe
 
 A _universe_ is a set (of possible _outcomes_) we decide to call a universe. The universe is often denoted by $\Omega$. Generic elements of $\Omega$  (outcomes) are denoted by $\omega$.
 
-<br><p></p>
 
-```{example universe}
+
+### Example `r fontawesome::fa("dice")`
+
 If we think of throwing a dice as a random phenomenon, the set of outcomes is the set of labels on the faces $\Omega = \{1, 2, 3, 4, 5, 6\}$.  If we are throwing two dices, the set of outcomes is made of
 couples of labels $\Omega' = \{(1,1), (1, 2), (1, 3), \ldots, (6,6)\} =\Omega^2$.
-```
 
-<br><p></p>
+---
 
 
-```{example unverse-hashing}
-In the idealized hashing problem (Section \@ref(hashing)), the universe is  the set of functions from $1, \ldots, n$ to $1, \ldots, m$. The size of the universe is $m^n$.
-```
+### Example:  universal hashing
 
-<br><p></p>
+In the idealized hashing problem, the universe is  the set of functions from $1, \ldots, n$ to $1, \ldots, m$. The size of the universe is $m^n$.
 
-A universe may or may not be finite or countable. If the universe is countable, all its subsets may be  called _events_. Events are assigned probabilities.
-If the universe is countable, it is possible to assign a probability  to each of its subsets.
-When the universe  is not countable (for example $\mathbb{R}$), Assigning a probability
-to all subsets is not possible. We have to  restrict  the  collection of subsets in order to assign probabilities to the collection members in a consistent way.
+
+---
+
+A universe may or may not be finite or countable. If the universe is countable, all its subsets may be  called _events_.
+
+Events are assigned probabilities.
+
+If the universe is countable, it is possible to assign a probability  to each of its subsets
+
+--
+
+When the universe  is not countable (for example $\mathbb{R}$), assigning a probability
+to all subsets is not possible without running into paradoxes
+
+--
+
+We have to  restrict  the  collection of subsets in order to assign probabilities to the collection members in a consistent way
+
+
+---
+
+### $\sigma$-algebras
 
 In the sequel $2^{\Omega}$ denotes the collection of all subsets of $\Omega$ (the powerset of $\Omega$).
 
-A sensible collection of events has to be a $\sigma$-algebra.
+A sensible collection of events has to be a $\sigma$-algebra
 
-<br><p></p>
 
-```{definition sigalgebra, name="$\\sigma$-algebra"}
+Definition $\sigma$-algebra
+
 Given a set $\Omega$, a collection $\mathcal{G}$ of subsets of $\Omega$ ($\mathcal{G} \subseteq 2^{\Omega}$) is called a  $\sigma$-algebra (a sigma  algebra) iff
 
 - $\mathcal{G}$ is closed under $countable$ union
 - $\emptyset \in \mathcal{G}$
 - $\mathcal{G}$ is closed under complementation ($A \in \mathcal{G} \Rightarrow A^c = \Omega \setminus A \in \mathcal{G}$)
 
-```
-
-<br><p></p>
+---
 
 
-```{exercise}
+### Exercise
+
 What the smallest $\sigma$-algebra (with respect to set inclusion)
 that contains subset $A$ of $\Omega$?
-```
 
-<br><p></p>
+---
 
 The next proposition shows that $\sigma$-algebras are stable
-under countable set-theoretical operations. We could have replaced
+under countable set-theoretical operations.
+
+We could have replaced
 countable union by countable intersection in the definition of $\sigma$-algebras.
-This is consequence of De Morgan's laws:
 
-\[
-(A \cup B)^c  = A^c \cap B^c \qquad \text{and} (A \cap B)^c  = A^c \cup B^c
-\]
 
-```{proposition}
+This is consequence of
+
+
+### De Morgan's laws:
+
+$$(A \cup B)^c  = A^c \cap B^c \qquad \text{and} \qquad  (A \cap B)^c  = A^c \cup B^c$$
+
+---
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 A $\sigma$-algebra of subsets is closed under countable intersections.
-```
 
-<br><p></p>
+]
+
+---
 
 
-```{proof}
+### Proof
+
 For $A \subseteq \Omega$, let $A^c = \Omega \setminus A$.
 Let $A_1, \ldots, A_n, \ldots$ belong to $\sigma$-algebra $\mathcal{G}$ of subsets
 of $\Omega$. For each $n$, $A_n^c \in \mathcal{G}$, by definition of $\sigma$-algebra,
-\begin{align*}
+\begin{array}
 \cap_n A_n
  & = \Big(\big(\cap_n A_n\big)^c\Big)^c \\
  & = \Big(\cup_n A_n^c\Big)^c  \qquad \text{De Morgan} \, .
-\end{align*}
+\end{array}
 By definition of a $\sigma$-algebra, $\cup_n A_n^c \in \mathcal{G}$, and
 for the same reason, $\Big(\cup_n A_n^c \Big)^c \in \mathcal{G}$.
-```
 
-<br><p></p>
+`r fontawesome::fa("square")`
 
-The next proposition allows us to talk about the smallest $\sigma$-algebra
+---
+
+The next proposition allows us to talk about the _smallest_ $\sigma$-algebra
 containing a collection of subsets, this leads to the notion
-of generated $\sigma$-algebra.
+of _generated_ $\sigma$-algebra.
 
-<br><p></p>
+---
 
 
-```{proposition}
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 The intersection of two $\sigma$-algebras of subsets of $\Omega$
 is a $\sigma$-algebra of subsets of $\Omega$.
-```
+
+]
 
 
-<br><p></p>
+---
 
+### Proof
 
-```{proof}
 Let $\mathcal{G}$ and $\mathcal{G}'$ be two $\sigma$-algebras of subsets
-of $\Omega$. The intersection of the two $\sigma$-algebras is
-\[
-\Big\{ A : A\subseteq \Omega, A \in \mathcal{G}, A \in \mathcal{G}' \Big\}\, .
-\]
-```
+of $\Omega$.
 
-<br><p></p>
+The intersection of the two $\sigma$-algebras is
 
-Indeed, the intersection of a possibly uncountable collection of $\sigma$-algebras
-is a $\sigma$-algebra (check this).
+$$\Big\{ A : A\subseteq \Omega, A \in \mathcal{G}, A \in \mathcal{G}' \Big\}$$
+
+`r fontawesome::fa("square")`
+
+---
+
+`r fontawesome::fa("brain")` the intersection of a possibly uncountable collection of $\sigma$-algebras
+is a $\sigma$-algebra (check this)
+
+
 Because of this property, the notion of a $\sigma$-algebra generated by a collection of subsets is well-founded.
 
-```{lemma gensigma}
+
+---
+
+
+### Lemma
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Given a collection $\mathcal{C}$ of subsets of $\Omega$, there exists a _unique smallest $\sigma$-algebra_ containing all subsets
 in $\mathcal{C}$, it is called the $\sigma$-algebra generated by $\mathcal{H}$ and denoted by $\sigma(\mathcal{C})$.
 
-```
+]
 
-<br><p></p>
 
-```{exercise}
-Check the preceding proposition.
-```
 
-<br><p></p>
+`r fontawesome::fa("brain")`  Check the Lemma
 
-```{example}
-Consider we are throwing a dice, $\Omega = \{1, \ldots, 6\}$, let $$\mathcal{H} = \Big\{\{1, 3, 5\}\Big\}\, .$$ This is a collection made of one event (the outcome  is odd). The algebra generated by $\mathcal{H}$ is $$\sigma(\mathcal{H}) = \Big\{ \{1, 3, 5\}, \{2, 4, 6\}, \emptyset, \Omega \Big\} \, .$$
-```
+---
 
-<p>
+### Example
+
+Consider we are throwing a dice, $\Omega = \{1, \ldots, 6\}$, let
+
+$$\mathcal{H} = \Big\{\{1, 3, 5\}\Big\}\, .$$
+
+This is a collection made of one event (the outcome  is odd).
+
+The algebra generated by $\mathcal{H}$ is
+
+$$\sigma(\mathcal{H}) = \Big\{ \{1, 3, 5\}, \{2, 4, 6\}, \emptyset, \Omega \Big\} \, .$$
+
+---
+
 Two kinds of $\sigma$-algebras play a prominent role in a basic probability course:
 
 1. the powerset of countable or finite sets.
-1. the Borel $\sigma$-algebras of  topological spaces.
 
-<p>
+2. the Borel $\sigma$-algebras of  topological spaces.
 
+---
 
-```{definition, name="Borel sigma-algebra"}
+### Definition: Borel sigma-algebra
+
 The Borel $\sigma$-algebra over $\mathbb{R}$ is the $\sigma$-algebra generated
-by _open_ sets. It is denoted by $\mathcal{B}(\mathbb{R})$.
-```
+by _open_ sets.
 
-<p>
-This definition works for every topological space. Recall that a topology
-on a set $E$ is defined by a collection $\mathcal{E}$ of _open sets_. This collection
+It is denoted by $\mathcal{B}(\mathbb{R})$.
+
+
+---
+
+`r fontawesome::fa("bullhorn")`  This definition works for every topological space. Recall that a topology
+on a set $E$ is defined by a collection $\mathcal{E}$ of _open sets_.
+
+This collection
 is defined by the following list of properties:
 
 - $\emptyset, E \in \mathcal{E}$
@@ -265,54 +340,58 @@ is defined by the following list of properties:
 belongs to $\mathcal{E}$ (is an open set)
 - A finite intersection of open sets is an open set.
 
+---
+
 In the usual topology on $\mathbb{R}$, a set $A$ is open if for any $x \in A$, there
 exists some $r>0$ such that $]x-r, x+r[ \subseteq A$. Any interval of the form $]a,b[$
 is open (these are the so-called open intervals).
 
 This topology can be generalized to any finite dimension $\mathbb{R}^d$.
-<p>
 
-```{exercise}
-Consider the $\sigma$-algebra generated by open-intervals of $\mathbb{R}$.
+---
+
+`r fontawesome::fa("brain")` Consider the $\sigma$-algebra generated by open-intervals of $\mathbb{R}$.
 Is it the Borel $\sigma$-algebra?
-```
 
-```{exercise}
-Consider the $\sigma$-algebra generated by open-intervals of $\mathbb{R}$ with rational bounds.
-Is it the Borel $\sigma$-algebra?
-```
+`r fontawesome::fa("brain")`  Consider the $\sigma$-algebra generated by open-intervals of $\mathbb{R}$ with rational bounds. Is it the Borel $\sigma$-algebra?
 
-```{exercise}
-Consider any metric space $(E,d)$. The metric $d$ defines a topology on $E$.
+
+`r fontawesome::fa("brain")`  Consider any metric space $(E,d)$. The metric $d$ defines a topology on $E$.
 Does the Borel $\sigma$-algebra on $(E, d)$ coincide with the
 $\sigma$-algebra generated by open balls $B(x,r) = \Big\{  y : y\in E, d(x,y)<r\Big\}$?
-```
+
+---
 
 We are now ready to set the stage of stochastic modeling. The playground
 always consists of a measurable space.
 
-```{definition,  measspace, name="Measurable space"}
+### Definition Measurable space
+
 A universe $\Omega$ endowed with a $\sigma$-algebra of subsets $\mathcal{F}$
 is called a measurable space. It is denoted by $(\Omega, \mathcal{F})$.
-```
 
-<p>
+---
 
-```{example}
+### Example
 
 - If $\Omega$ is a countable or finite set, then $(\Omega, 2^\Omega)$ is
 a measurable space.
+
 - If $\Omega=\mathbb{R}$, then $(\mathbb{R}, \mathcal{B}({\mathbb{R}}))$ is a measurable space.
 
-```
+---
 
 So far, we have not talked about probability theory, but,
 we are now equipped to define probability distributions and to manipulate them.
 
 
+---
+template: inter-slide
+name: distributions
 
-## Probability distributions  {#distribution}
+## Probability distributions
 
+---
 
 A _probability distribution_ maps a $\sigma$-algebra to $[0,1]$. It is
 an instance of a more general concept called a _measure_. We state or recall
@@ -325,32 +404,45 @@ $\sigma$-algebras of events, for example on Borel $\sigma$-algebras.
 
 This motivates the definition of $\sigma$-additivity.
 
-```{definition, sigadd, name="sigma-additivity"}
+---
+
+### Definition: $\sigma$-additivity
+
 Given  $\Omega$ and $\mathcal{A} \subseteq 2^\Omega$, a function $\mu$ mapping
-$\mathcal{A}$ to $[0,\infty)$ is said to be $\sigma$-_additive_  on $\mathcal{A}$ if for any countable collection of _pairwise disjoint_ subsets $(A_n)_{n \in \mathbb{N}} \in \mathcal{A}$,
-with $\cup_n A_n \in \mathcal{A}$ we have
+$\mathcal{A}$ to $[0,\infty)$ is said to be $\sigma$-_additive_  on $\mathcal{A}$
+
+if
+
+for any countable collection of _pairwise disjoint_ subsets $(A_n)_{n \in \mathbb{N}} \in \mathcal{A}$,
+with $\cup_n A_n \in \mathcal{A}$
+
+we have
+
 $$\mu (\cup_{n \in \mathbb{N}} A_n) = \sum_{n \in \mathbb{N}} \mu(A_n)  \, .$$
-```
+
+
+---
 
 Note that if $\mathcal{F}$ is a $\sigma$-algebra, $\Big(\cup_{n \in \mathbb{N}} A_n\Big) \in \mathcal{F}$.
 $\sigma$-additivity fits well  with $\sigma$-algebras, but it makes sense to
 define $\sigma$-additivity with respect to more general collections of subsets.
 
-<br><p></p>
 
+### Definition: Positive measure
 
-```{definition, pmeasure, name="Positive measure"}
 Given a measurable space $(\Omega, \mathcal{F})$, a $\sigma$-additive function $\mu$ mapping
 $\mathcal{F}$ to $[0,\infty)$ and satisfying $\mu(\emptyset)=0$
 is called a  _positive measure_ over $(\Omega, \mathcal{F})$.
 
 The tuple $(\Omega, \mathcal{F}, \mu)$ is called a measure space.
-```
-<p>
 
-```{exercise, fundspace}
+---
+
+`r fontawesome::fa("brain")`
+
 Let $\Omega = \{0,1\}^*$ the set of infinite sequences of $0$ and $1$ (indexed
   from $1$).
+
 Let $\mathcal{F}_n \subseteq 2^\Omega$ be the $\sigma$-algebra generated by
 events of the following form: $\{ \omega : \omega \in \Omega, \omega_i = 1\}$
 for $1\leq i\leq n$.
@@ -359,108 +451,175 @@ for $1\leq i\leq n$.
 - What is the $\sigma$-algebra generated by $\cup_{n\geq 1} \mathcal{F}_n$?
 - Can you define a $\sigma$-additive function on $(\Omega, \sigma(\cup_{n\geq 1} \mathcal{F}_n))$.
 
-```
-<p>
-A positive measure $\mu$ is not necessarily a probability distribution. For example,
-the _counting measure_ $\mu$ on $\mathbb{N}$  satisfies $\mu(A) = |A|$ for all $A \subseteq \mathbb{N}$, so we have $\mu(\mathbb{N})=\infty.$
+
+---
 
 
-<p>
+`r fontawesome::fa("hand-point-right")` A positive measure $\mu$ is not necessarily a probability distribution.
 
-```{definition, probmeasure, name="Probability distribution"}
+For example,
+the _counting measure_ $\mu$ on $\mathbb{N}$  satisfies
+
+$$\mu(A) = |A|$$
+
+for all $A \subseteq \mathbb{N}$,
+
+so we have $\mu(\mathbb{N})=\infty$
+
+
+---
+
+### Definition: Probability distribution
+
 Given a measurable space $(\Omega, \mathcal{F})$, a function $\mu$ mapping
-$\mathcal{F}$ to $[0,\infty)$ is a probability distribution over $(\Omega, \mathcal{F})$  if
+$\mathcal{F}$ to $[0,\infty)$ is a probability distribution over $(\Omega, \mathcal{F})$
+
+if
 
 1. $\mu$ is a positive measure on $(\Omega, \mathcal{F})$  and
-1. $\mu(\Omega)=1$.
 
-```
+2. $\mu(\Omega)=1$.
+
+---
 
 
-```{exercise}
+`r fontawesome::fa("brain")`
+
  If you think $(\mathbb{R}, 2^{\mathbb{R}})$ is a measurable space, define a $\sigma$-additive measure on it.
+
  Try even to define a probability measure.
-```
+
+---
 
 
-```{remark}
 The notion of $\sigma$-additivity is stronger than finite additivity.
+
 Assuming the \emph{Axiom of Choice} (as usual when working in Analysis or Probability), there exists a function $\mu$
 that map  $2^{\mathbb{N}}$ to $[0,1]$, that is  additive ($\mu(A \cup B)= \mu(A) + \mu(B)$ for all $A, B, A\cap B=\emptyset$),
-zero on all finite subsets of $\mathbb{N}$ and such that $\mu(\mathbb{N})=1$. Such a function is not $\sigma$-additive.
-```
+zero on all finite subsets of $\mathbb{N}$ and such that $\mu(\mathbb{N})=1$.
 
-## Lebesgue measure {#lebesgue}
+Such a function is not $\sigma$-additive.
+
+---
+template: inter-slide
+name: lebesque
 
 
-<p>
+## Lebesgue measure
 
-We take the existence of Lebesgue's measure for granted. This is the content of the next theorem.
+---
 
-<p>
 
-```{theorem lebesgue, name="Existence of Lebesgue's measure"}
-There exists a unique $\sigma$-additive measure $\ell$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$
-such that $\ell((a, b]) = b - a$ for all finite $a < b$.
-```
+We take the existence of the Lebesgue measure for granted. This is the content of the next theorem.
 
-<p>
-Theorem \@ref(thm:lebesgue) is typical of statements of measure theory. It defines a complex object
-(a measure) by its trace on a simple collection of sets (intervals).
 
-The proof of Theorem \@ref(thm:lebesgue) can be cut in several meaningful pieces. First define
-a length function on intervals. Show that this function can be extended to
-an additive function on finite union, finite intersection and complements of intervals.
-Then check that the extension is in fact $\sigma$-additive on the closure
+### Theorem:  Existence of the Lebesgue measure
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+There exists a unique $\sigma$-additive measure $\ell$
+on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ such that
+
+$$\ell((a, b)) = b - a$$
+
+for all finite $a < b$.
+
+]
+
+
+
+Lebesgue measure existence Theorem is typical of statements of measure theory.
+
+It defines a complex object (a measure) by its trace on a simple collection of sets (intervals).
+
+---
+
+The proof of Lebesgue measure existence Theorem  can be cut in several meaningful pieces.
+
+- First define a length function on intervals.
+
+- Show that this function can be extended to an additive function on finite unions, finite intersections and complements of intervals.
+
+- Then check that the extension is in fact $\sigma$-additive on the closure
 of  intervals under finite set-theoretical operations (which is not a $\sigma$-algebra).
 
-Once this additive extension is constructed, use Carathéodory's extension theorem below
+Once this additive extension is constructed, use Carathéodory s extension theorem below
 to prove that the length function can be extended to a $\sigma$-additive function
 on the $\sigma$-algebra generated by intervals (the Borel $\sigma$-algebra).
 
 Then it remains to check that the extension is unique. This can be done by a generating
-set argument, for example the _monotone class Lemma_ (Lemma \@ref(thm:monotoneclasslemma)).
+set argument, for example the _monotone class Lemma_.
 
-```{theorem caratheodory, name="Carathéodory's extension theorem"}
+---
+
+### Carathéodory  extension theorem
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $\mathcal{A} \subseteq 2^{\Omega}$. Assume $\mathcal{A}$ contains $\emptyset, \Omega$, and
 is closed  under finite unions, and complementation. Assume $\rho : \mathcal{A} \to [0, \infty]$
 is $\sigma$-additive on $\mathcal{A}$.
 
 Then there exists a measure $\mu$  on $\sigma(\mathcal{A})$ such that $\mu(A)=\rho(A)$
 for all $A \in \mathcal{A}$.
-```
+
+]
+
+---
 
 The Lebesque measure existence theorem guarantees that we can define
-the uniform probability distribution over a finite interval $[a,b]$. If
-we denote Lebesgue measure by $\ell$, the uniform probability distribution
-over $[a,b]$ assign probability \[
-P(A) = \frac{\ell(A)}{b-a} = \frac{\ell(A)}{\ell([a,b])}
-\] to any $A \in \mathcal{B}(\mathbb{R}) \cap [a,b]$.
+the uniform probability distribution over a finite interval $[a,b]$.
+
+If we denote Lebesgue measure by $\ell$, the uniform probability distribution
+over $[a,b]$ assign probability
+
+$$P(A) = \frac{\ell(A)}{b-a} = \frac{\ell(A)}{\ell([a,b])}$$
+
+to any $A \in \mathcal{B}(\mathbb{R}) \cap [a,b]$.
 
 
-<br><p></p>
+---
 
 The uniform distribution over $([0,1], \mathcal{B}([0,1]))$ looks like
 an academic curiosity with no practical utility. This superficial opinion should be dispelled.
+
 Using a generator for the uniform distribution, it is possible to build
 a generator for any probability distribution over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$.
-This can be done using a device called the _quantile transform_. In this sense,
-the uniform distribution is the mother of all distribution.
+
+This can be done using a device called the _quantile transform_.
+
+In this sense, the uniform distribution is the mother of all distribution.
+
+---
 
 An outcome $\omega$ of the uniform distribution is a real number. How does a
-typical outcome look? A real number $\omega \in [0,1]$ has binary expansions: $\omega = \sum_{i=1}^\infty b_i 2^{-1}$
-with $b_i \in \{0,1\}$. What is the probability there is a unique binary expansion?
+typical outcome look? A real number $\omega \in [0,1]$ has binary expansions:
+$\omega = \sum_{i=1}^\infty b_i 2^{-1}$
+with $b_i \in \{0,1\}$.
+
+What is the probability there is a unique binary expansion?
+
 First, check whether this probability is well-defined.
-Assuming  the binary expansion is unique, $\omega$ is said to be _normal_  if
-$\lim_n \frac{1}{n}\sum_{i=1}^n b_i(\omega) = 1/2$. Is the probability of obtaining a normal number
-well-defined? If yes, compute it.
 
-<br><p></p>
+Assuming  the binary expansion is unique, $\omega$ is said to be _normal_
 
-```{exercise}
+if
+
+$\lim_n \frac{1}{n}\sum_{i=1}^n b_i(\omega) = 1/2$.
+
+Is the probability of obtaining a normal number well-defined?
+
+If yes, compute it.
+
+---
+
+`r fontawesome::fa("brain")`
+
 Check that $\mathcal{B}(\mathbb{R}) \cap [a,b] =  \Big\{ A \cap [a,b] : A \in \mathcal{B}(\mathbb{R}) \Big\}$
 is the $\sigma$-algebra generated  by the trace of the usual topology if $\mathbb{R}$ on $[a,b]$.
-```
+
+
+---
 
 The Lebesgue existence theorem can be extended. Indeed, any sensible
 definition of the length of an interval can serve as a starting point.
@@ -471,57 +630,78 @@ and has left-limits everywhere.
 The next Theorem can be established in a way that parallels the construction
 of Lebesgue's measure.
 
-<br><p></p>
+---
 
-```{theorem dudley3-1-3}
+### Theorem
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Any non-decreasing CADLAG function $F$ on $\mathbb{R}$ defines a $\sigma$-additive
 measure $\mu$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ that satisfies:
-$$\mu((a, b]) = F(b) - F(a)$$.
-```
+
+$$\mu((a, b)) = F(b) - F(a)$$
+
+]
 
 
+---
 
-<br><p></p>
-
-We recover Lebesgue's existence Theorem by taking $F(x)=x$.
+We recover Lebesgue measure existence Theorem by taking $F(x)=x$.
 
 If we focus on functions $F$ that satisfy $\lim_{x \to -\infty} F(x)=0$
-and $\lim_{x \to \infty} F(x)=1$, Theorem \@ref(thm:dudley3-1-3) defines
+and $\lim_{x \to \infty} F(x)=1$, the Theorem  defines
 probability distributions through their _cumulative distribution functions_
+
+???
+
 (more on this topic in Section \@ref(distribfun)).
 
-<br><p></p>
+---
 
-```{exercise}
-Do we really to assume that the function $F$ has left-limits in Theorem \@ref(thm:dudley3-1-3)?
-```
-
-<br><p></p>
+`r fontawesome::fa("brain")` Do we really to assume that the function $F$ has left-limits in Theorem?
 
 
-## Measurable functions and random variables {#measurablefunctionsrv}
+---
+template: inter-slide
+name: measurablefunctions
+
+
+## Measurable functions and random variables
+
+???
+
+{#measurablefunctionsrv}
+
+---
 
 So far, we only talked probability and measure of sets (events). As
 stochastic modeling is at the root of quantitative analysis, we introduce
 the notion of measurable function.
+
 This allows us handle numerical functions that map outcomes to $\mathbb{R}$
 or $\mathbb{R}^d$.
 
 Not every numerical function is  measurable. To define what we call a measurable
 function, we need the notion of _inverse image_  or _preimage_.
 
-```{definition preimage, name="Preimage"}
+---
+
+
+### Definition
+
 Let $f$ be a function from $\mathcal{X}$ to $\mathcal{Y}$, we denote by $f^{-1}$
 the function that maps $2^{\mathcal{Y}}$ to $2^{\mathcal{X}}$ defined by
-\begin{align*}
+
+$$\begin{array}{rl}
 f^{-1}: \qquad 2^{\mathcal{Y}} & \rightarrow  2^{\mathcal{X}} \\
 B & \mapsto f^{-1}(B) = \Big\{ x : x \in \mathcal{X}, f(x) \in B \Big\} \, .
-\end{align*}
-The set $f^{-1}(B)$ is called the _preimage_ or _inverse image_ of $B$ under $f$.
-```
-<br><p></p>
+\end{array}$$
 
-```{block}
+The set $f^{-1}(B)$ is called the _preimage_ or _inverse image_ of $B$ under $f$.
+
+---
+
+
 Note that
 $f^{-1}$ does not denote the inverse of function $f$ which may not be injective.
 In this course,  $f^{-1}$ is a set function from the powerset of
@@ -529,366 +709,434 @@ the codomain of $f$ to the powerset of the domain of $f$. The inverse function
 if it exists (or the generalized inverse function) is denoted by $f^\leftarrow$.
 The inverse function, when it exists, maps $f(\mathcal{X})\subseteq \mathcal{Y}$ to
 $\mathcal{X}$.
-```
-
-<p>
 
 
-```{example}
-Recall the idealized hashing setting from Section \@ref(hashing).
+---
+
+
+### Example
+
+Recall the idealized hashing setting
+
 Let $\Omega$ denote the set of functions from $1, \ldots, n$  to $1, \ldots, m$
 (assume $n \leq m$). For $\omega \in \Omega$ ($\omega$ is function, but it
 is also a $1, \ldots, m$-valued sequence of length $n$), let $f(\omega)$ be the
 number of values in $1, \ldots, m$ that have no occurrence in $\omega$
-(the number of empty bins in the allocation defined by $\omega$).  The function
+(the number of empty bins in the allocation defined by $\omega$).
+
+The function
 $f$ is a numerical function that maps $\Omega=\{1, \ldots, m\}^n$ .
+
 For $B \in \mathbb{N}$, $f^{-1}(B)$ is the subset of allocations
 which have $k$ empty bins, $k \in B$.
-```
+
+---
 
 The preimage operation works well with set-theoretical operations.
 
 Elementary properties of measurable functions follow from properties of
 inverse images. Inverse image preserves set-theoretical operations.
 
-```{proposition  propinvimage}
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $f: E \mapsto F$, then for $A, B, A_1, \ldots,A_n , \ldots   \subseteq F$,
-\begin{align*}
+
+$$\begin{array}{lr}
 f^{-1}(A \cup B) & = f^{-1}(A) \cup f^{-1}(B) \\
 f^{-1}(A \cap B) & = f^{-1}(A) \cap f^{-1}(B) \\
 f^{-1}(\cup_{n \in \mathbb{N}}A_n ) & = \cup_{n \in \mathbb{N}} f^{-1}(A_n) \\
 f^{-1}(\cap_{n \in \mathbb{N}}A_n ) & = \cap_{n \in \mathbb{N}} f^{-1}(A_n) \\
 f^{-1}(F \setminus A) & =  f^{-1}(F) \setminus f^{-1}(A)
-\end{align*}
-```
+\end{array}$$
 
-<br><p></p>
+]
 
-```{exercise}
-Check Proposition \@ref(prp:propinvimage)
-```
-<br><p></p>
+`r fontawesome::fa("brain")` Check Proposition
 
-```{corollary}
+---
+
+### Corollary
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Taking the preimages of elements of a $\sigma$-algebra defines a
-$\sigma$-algebra.
-```
+$\sigma$-algebra
+
+]
+
+--
 
 
 
-```{exercise}
-Let $(\Omega, \mathcal{F})$ and $(\Omega', \mathcal{G})$ be two measurable spaces.
+`r fontawesome::fa("brain")` Let $(\Omega, \mathcal{F})$ and $(\Omega', \mathcal{G})$ be two measurable spaces.
+
 Let $f$ map $\Omega$ to $\Omega'$, prove that
 $$\mathcal{H} = \Big\{ f^{-1}(B) : B \in \mathcal{G}\Big\}$$
 is a $\sigma$-algebra of subsets of $f^{-1}(\Omega')$.
-```
 
-<p>
+---
 
 
-```{definition, measfunc, name="Measurable functions"}
+
+
+### Definition: Measurable functions
+
 Let $(\Omega, \mathcal{F})$ and $(\Omega', \mathcal{G})$ be two measurable spaces.
-A function $f: \Omega \to \Omega'$ is said to be $\mathcal{F}/\mathcal{G}$-measurable iff for $B \in \mathcal{G}$,
-$f^{-1}(B) \in \mathcal{F}$.
-```
 
-<p>
+A function $f: \Omega \to \Omega'$ is said to be $\mathcal{F}/\mathcal{G}$-measurable
 
+iff
 
-Under which condition on $\mathcal{H}$ is $f$ $\mathcal{F}/\mathcal{G}$-measurable?
+for $B \in \mathcal{G}$, $f^{-1}(B) \in \mathcal{F}$.
 
 
-```{example}
-Recall the idealized hashing scenario from Section \@ref(hashing).
-```
+`r fontawesome::fa("brain")` Under which condition on $\mathcal{H}$ is $f$ $\mathcal{F}/\mathcal{G}$-measurable?
 
-```{exercise}
-Check that if $\Omega$ is a topological space and $\mathcal{F}$ the associated
-Borelian $\sigma$-algebra,  then any continuous function from $\Omega$ to $\mathbb{R}$
-is measurable.
-```
+---
 
+`r fontawesome::fa("brain")` Recall the idealized hashing scenario
 
-```{exercise}
-If $\Omega=\mathbb{R}^d$ is the Borel $\sigma$-algebra the smallest
+`r fontawesome::fa("brain")`  Check that if $\Omega$ is a topological space and $\mathcal{F}$ the associated Borelian $\sigma$-algebra,  then any continuous function from $\Omega$ to $\mathbb{R}$ is measurable
+
+`r fontawesome::fa("brain")` If $\Omega=\mathbb{R}^d$ is the Borel $\sigma$-algebra the smallest
 $\sigma$-algebra that makes all continuous functions  measurable?
-```
 
-```{proposition limmeasurable}
+---
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 The pointwise limit of measurable functions is a measurable function:
 if $(f_n)_n$ is a sequence of measurable functions from $(\Omega, \mathcal{F})$
-to $(\mathcal{X}, \mathcal{G})$, and $f_n \to f$ pointwise, then $f$ is a measurable function.
-```
+to $(\mathcal{X}, \mathcal{G})$, and $f_n \to f$ pointwise, then $f$ is a measurable function
 
-<p>
-```{exercise}
-Prove Proposition \@ref(prp:limmeasurable)
-```
-
-<p>
+]
 
 
-```{proposition summeasurable}
+`r fontawesome::fa("brain")` Prove Proposition
+
+---
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 The sum of measurable functions is a measurable function:
+
 if $f, g$ are  measurable functions from $(\Omega, \mathcal{F})$
 to $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, then $a f + b g$ is a measurable function for all $a,b \in \mathbb{R}$.
-```
 
-<p>
-```{exercise}
-Prove Proposition \@ref(prp:summeasurable)
-```
+]
 
-<p>
+`r fontawesome::fa("brain")` Prove Proposition
+
+---
+
+### Proposition
 
 
-```{proposition compmeasurable}
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 The composition of measurable functions is a measurable function:
+
 if $f$ is a  measurable function from $(\Omega, \mathcal{F})$ to $(\mathcal{X}, \mathcal{G})$,
-and $g$ is a  measurable function from $(\mathcal{X}, \mathcal{G})$ to $(\mathcal{Y}, \mathcal{H})$, then $g \circ f$
-($g \circ f(\omega) = g(f(\omega))$ for all $\omega$)
+and $g$ is a  measurable function from $(\mathcal{X}, \mathcal{G})$ to $(\mathcal{Y}, \mathcal{H})$, then $g \circ f$ ( $g \circ f(\omega) = g(f(\omega))$ for all $\omega$ )
 is a measurable function from $(\Omega, \mathcal{F})$ to $(\mathcal{Y}, \mathcal{H})$.
-```
 
-<br><p>
+]
 
-```{exercise}
-Prove Proposition \@ref(prp:compmeasurable)
-```
+`r fontawesome::fa("brain")` Prove Proposition
 
-<br><p>
+---
+template: inter-slide
+name: monotoneclass
+
+## The Monotone class theorem
+
+---
+
+The monotone class theorem (or lemma) is a powerful example of the generating class arguments
+that can be used to prove that two probability measures or, maybe, two $\sigma$-finite measures are equal
 
 
-## The Monotone class theorem  {#dynkin}
+---
 
-The monotone class theorem or lemma is a powerful example of the generating class arguments
-that can be used to prove that two probability measures or maybe two
-$\sigma$-finite measures are equal.
+### Definition: $\pi$-class
 
-
-```{definition, name="pi-class"}
 A collection $\mathcal{G}$ of subsets of $\Omega$ is said to be a
 $\pi$-class if:
 
 - $\Omega \in \mathcal{G}$
+
 - it is stable/closed by finite intersection
-$$A, B \in \mathcal{G} \Rightarrow A \cap B \in \mathcal{G} \, .$$
+$$A, B \in \mathcal{G} \Rightarrow A \cap B \in \mathcal{G}$$
 
-```
+---
 
-<p>
+`r fontawesome::fa("hand-point-right")` A $\sigma$-algebra is a  $\pi$ class, but the converse is false.
 
-A $\sigma$-algebra is a  $\pi$ class, but the converse is false.
+---
 
-<p>
+### Definition: Monotone class
 
-```{definition, name="Monotone class"}
 A collection $\mathcal{M}$ of subsets of $\Omega$ is said to be
 a monotone class or a  $\lambda$-system if it satisfies the following properties:
 
-- $\Omega \in \mathcal{M}$
-- If $A, B \in \mathcal{M}$, and $A \subseteq B$ then $B \setminus A \in \mathcal{M}$
-- If $A_n \in \mathcal{M}$ and $A_n \subseteq A_{n+1}$ for every $n \in \mathbb{N}$
+1. $\Omega \in \mathcal{M}$
+
+2. If $A, B \in \mathcal{M}$, and $A \subseteq B$ then $B \setminus A \in \mathcal{M}$
+
+3. If $A_n \in \mathcal{M}$ and $A_n \subseteq A_{n+1}$ for every $n \in \mathbb{N}$
 then $\lim_n A_n = \cup_{n \in \mathbb{N}} A_n \in \mathcal{M}$.
 
-```
-
-<p>
-A $\sigma$-algebra is a $\lambda$-system.
-
-<p>
-
-The intersection of a collection of  $\lambda$-systems is a $\lambda$-system.
-Hence, it makes sense to talk about the smallest $\lambda$-system
-containing a collection of sets.
-
-<p>
-
-The next easy proposition makes $\lambda$-system very useful when
-we want to check that two probability distributions are equal.
+---
 
 
-```{proposition keyobservation}
-The class of sets over which two probability distributions coincide is a
-$\lambda$-system.
-```
+`r fontawesome::fa("hand-point-right")` A $\sigma$-algebra is a $\lambda$-system.
 
 
-<p></p>
+`r fontawesome::fa("hand-point-right")` The intersection of a collection of  $\lambda$-systems is a $\lambda$-system.
 
 
-```{proof}
-Let $(\Omega, \mathcal{F})$ be a measurable space. Let $P, Q$ be two probability
-distributions over $(\Omega, \mathcal{F})$. Let $\mathcal{C} \subseteq \mathcal{F}$ be defined by
-\[
-\mathcal{C} = \Big\{ A : A \in \mathcal{F},  P(A)=Q(A) \Big\} \, .
-\]
+Hence, it makes sense to talk about the smallest $\lambda$-system containing a collection of sets.
+
+---
+
+The next easy proposition makes $\lambda$-system very useful when we want to check that two probability distributions are equal.
+
+
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+The class of sets over which two probability distributions coincide is a $\lambda$-system.
+
+]
+
+---
+
+
+### Proof
+
+Let $(\Omega, \mathcal{F})$ be a measurable space. Let $P, Q$ be two probability distributions over $(\Omega, \mathcal{F})$. Let $\mathcal{C} \subseteq \mathcal{F}$ be defined by
+
+$$\mathcal{C} = \Big\{ A : A \in \mathcal{F},  P(A)=Q(A) \Big\}$$
+
 By the very definition of measures we have $P(\Omega)=Q(\Omega)$, hence $\Omega \in \mathcal{C}$.
 
 If $A \subseteq B$ both belong to $\mathcal{C}$, again by the very definition of measures,
-\[
-P (B \setminus A) = P(B) - P(A) = Q(B) - Q(A) = Q(B \setminus A) \, ,
-\]
+
+$$P (B \setminus A) = P(B) - P(A) = Q(B) - Q(A) = Q(B \setminus A)$$
+
 hence, $B\setminus A \subseteq \mathcal{C}$.
 
-Let $A_1 \subseteq A_2 \subseteq A_n \subseteq \ldots$ be a non-decreasing sequence of elements of $\mathcal{C}$,
-again by the very definition of measures,
-\[
-P(\cup_n A_n) = \lim_n \uparrow P(A_n) = \lim_n \uparrow Q(A_n) = Q(\cup_n A_n) \, .
-\]
+Let $A_1 \subseteq A_2 \subseteq A_n \subseteq \ldots$ be a non-decreasing sequence of elements of $\mathcal{C}$, again by the very definition of measures,
+
+$$P(\cup_n A_n) = \lim_n \uparrow P(A_n) = \lim_n \uparrow Q(A_n) = Q(\cup_n A_n)$$
+
 Hence $\mathcal{C}$ is closed by monotone limits.
-```
 
-<p></p>
+`r fontawesome::fa("square")`
 
-
-
-```{remark}
-What happens if we consider the collections of measurable sets over which two measures
-are equal? What happens if we assume that the two measures are finite?
-```
+---
 
 
-```{definition sigfinite, name="sigma-finite measures"}
-A measure $\mu$
-on $(\Omega, \mathcal{F})$ is $\sigma$-finite iff there exists $(A_n)_n$ with $\Omega \subseteq \cup_n A_n$
-and $\mu(A_n) < \infty$ for each $n$. Finite measures (this encompasses  probability measures) are $\sigma$-finite.
-Lebesgue measure is $\sigma$-finite. The counting measure on $\mathbb{R}$ is not $\sigma$-finite.
-```
-<p></p>
-
-What happens
-if we only assume that the two measures are $\sigma$-finite?
-
-<br><p></p>
 
 
-```{theorem  monotoneclasslemma, name="Monotone class lemma"}
-If $\mathcal{A}$ is a $\pi$-systen in $\Omega$ and $\mathcal{M}$ a $\lambda$-system
-in $\Omega$ such that $\mathcal{A} \subseteq \mathcal{M}$, then
-the  $\sigma$-algebra generated by $\mathcal{A}$, $\sigma(A)$, is the smallest $\lambda$-system
-larger than $\mathcal{A}$:
-$$\sigma(\mathcal{A}) \subseteq \mathcal{M} \,.$$
+`r fontawesome::fa("brain")` What happens if we consider the collections of measurable sets over which two measures are equal? What happens if we assume that the two measures are finite?
 
-```
 
-<p></p>
+---
 
-```{proof}
+
+### Definition: sigma-finite measures
+
+A measure $\mu$ on $(\Omega, \mathcal{F})$ is $\sigma$-finite
+
+iff
+
+there exists $(A_n)_n$ with $\Omega \subseteq \cup_n A_n$ and $\mu(A_n) < \infty$ for each $n$.
+
+- Finite measures (this encompasses  probability measures) are $\sigma$-finite.
+
+- Lebesgue measure is $\sigma$-finite.
+
+- The counting measure on $\mathbb{R}$ is not $\sigma$-finite.
+
+---
+
+What happens if we only assume that the two measures are $\sigma$-finite?
+
+### Theorem (Monotone class lemma)
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+If $\mathcal{A}$ is a $\pi$-systen in $\Omega$ and $\mathcal{M}$ a $\lambda$-system in $\Omega$ such that $\mathcal{A} \subseteq \mathcal{M}$,
+
+then
+
+the  $\sigma$-algebra generated by $\mathcal{A}$, $\sigma(A)$, is the _smallest_ $\lambda$-system larger than $\mathcal{A}$:
+
+$$\sigma(\mathcal{A}) \subseteq \mathcal{M}$$
+
+]
+
+---
+
+### Proof
+
 Let $\mathcal{M}$ denote the intersection of all monotone classes that contain
 tyhe $\pi$-system $\mathcal{A}$.
+
 As a $\sigma$-algebra is a monotone class (a $\lambda$-system), we have $\mathcal{M} \subseteq \sigma(\mathcal{A})$, the only point that
-has to be checked is $\sigma(\mathcal{A}) \subseteq \mathcal{M}$. It is enough to check
+has to be checked is $\sigma(\mathcal{A}) \subseteq \mathcal{M}$.
+
+It is enough to check
 that $\mathcal{M}$ is indeed a $\sigma$-algebra.
+
+
+---
+
+### Proof (continued)
 
 In order to check that $\mathcal{M}$ is a $\sigma$-algebra, it is enough to check that
 it is closed under finite union or equivalently under finite intersection.
 
-For each $A \in \mathcal{A}$, let $\mathcal{M}_A$ be defined by \[
-\mathcal{M}_A = \Big\{ B : B \in \mathcal{M}, A \cap B \in \mathcal{M}\Big\} \, .
-\]
+For each $A \in \mathcal{A}$, let $\mathcal{M}_A$ be defined by
+
+$$\mathcal{M}_A = \Big\{ B : B \in \mathcal{M}, A \cap B \in \mathcal{M}\Big\}$$
+
 Remember that $\mathcal{A}$ is a $\pi$-system, and $\mathcal{A} \subseteq \mathcal{M}$,
-we have $\mathcal{A} \subseteq \mathcal{M}_A$. To show that $\mathcal{M} = \mathcal{M}_A$,
-it suffices to show that $\mathcal{M}_A$ is a monotone class.
+we have $\mathcal{A} \subseteq \mathcal{M}_A$.
+
+To show that $\mathcal{M} = \mathcal{M}_A$, it suffices to show that $\mathcal{M}_A$ is a monotone class.
 
 If $(B_n)_n$ is an increasing sequence of elements of $\mathcal{M}_A$, then
-\[
-(\cup_n B_n) \cap A = \cup_n \Big(\underbrace{B_n \cap A }_{\in \mathcal{M}}\Big) \, ,
-\]
+
+$$(\cup_n B_n) \cap A = \cup_n \Big(\underbrace{B_n \cap A }_{\in \mathcal{M}}\Big)$$
+
 the right-hand-side belongs to $\mathcal{M}$ since $\mathcal{M}$ is monotone. Hence
 $\mathcal{M}_A$ is closed by monotone increasing limit.
 
+---
+
+### Proof (continued)
+
 
 To check closure by complementation, let $B \subseteq C$ with $B, C \in \mathcal{M}_A$. As
-\[
- A \cap (C \setminus B) = \Big(\underbrace{A \cap C}_{\in \mathcal{M}}\Big) \setminus \Big(\underbrace{A \cap B}_{\in \mathcal{M}}\Big)
- ) \,
-\] the closure of $\mathcal{M}$ under complementation entails $A \cap (C \setminus B) \in \mathcal{M}$
+
+$$A \cap (C \setminus B) = \Big(\underbrace{A \cap C}_{\in \mathcal{M}}\Big) \setminus \Big(\underbrace{A \cap B}_{\in \mathcal{M}}\Big))$$
+
+ the closure of $\mathcal{M}$ under complementation entails $A \cap (C \setminus B) \in \mathcal{M}$
 and $C \setminus B  \in \mathcal{M}_A.$
 
-Now, let $\mathcal{M}^{\circ}$ be defined as \[
-\mathcal{M}^\circ = \Big\{  A : A \in \mathcal{M}, \forall B \in \mathcal{M},   A \cap B \in \mathcal{M} \Big\} \,.
-\]
+Now, let $\mathcal{M}^{\circ}$ be defined as
+
+$$\mathcal{M}^\circ = \Big\{  A : A \in \mathcal{M}, \forall B \in \mathcal{M},   A \cap B \in \mathcal{M} \Big\}$$
+
 We just established that $\mathcal{A} \subseteq \mathcal{M}^{\circ}$.
 Using the same line of reasoning allows us to check that $\mathcal{M}^\circ$ is also a monotone class.
 This shows that $\mathcal{M}^\circ= \mathcal{M}$.
 
-We are done.
+`r fontawesome::fa("square")`
 
+---
 
-```
-
-
-<br><p></p>
-
-Combining Proposition \@ref(prp:keyobservation) and the Monotone Class Lemma (Theorem \@ref(thm:monotoneclasslemma))
+Combining Proposition and the Monotone Class Lemma
 leads to the next useful corollary.
 
-<br><p></p>
 
 
 
-```{corollary}
+
+### Corollary
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 If two probabilities $P, Q$ on $(\Omega, \mathcal{F})$
 coincide on a  $\pi$-system $\mathcal{A}$
 that generates $\mathcal{F}$:
-\[
-\mathcal{A} \subseteq \{ A : A \in \mathcal{F}  \text{ and } P(A)=Q(A)\} \qquad\text{and} \qquad \mathcal{F} \subseteq \sigma(\mathcal{A})
-\]
+
+$$\mathcal{A} \subseteq \{ A : A \in \mathcal{F}  \text{ and } P(A)=Q(A)\} \qquad\text{and} \qquad \mathcal{F} \subseteq \sigma(\mathcal{A})$$
+
 then $P, Q$ coincide on $\mathcal{F}$.
-```
 
-<p></p>
+]
 
-## Probability distributions on the real line  {#distribfun}
+---
+template: inter-slide
+name: distributionsrealline
+
+## Probability distributions on the real line
+
+
+---
 
 A probability distribution is a complex object: it maps a large collection of
-sets (a $\sigma$-algebra) to $[0,1]$. Fortunately, it is possible
-to characterize a probability distribution by simpler object. If we focus on
-probability distributions over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$,
-they can be characterized by real functions on $\mathbb{R}$.
+sets (a $\sigma$-algebra) to $[0,1]$.
 
+`r fontawesome::fa("glass-cheers")` Fortunately, it is possible
+to characterize a probability distribution by a simpler object.
 
-```{definition distrib-fun, name="Distribution function"}
+If we focus on probability distributions over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, they can be characterized by real functions on $\mathbb{R}$.
+
+---
+
+### Definition: Distribution function
+
 Given a probability distribution $P$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$,
 the distribution function
 $F$ of $P$ maps $\mathbb{R}$ to $[0,1]$, it is defined by
-\[
-x \mapsto F(x) = P(-\infty, x].
-\]
 
-```
+$$x \mapsto F(x) = P(-\infty, x].$$
+
+---
 
 A probability distribution defines a unique distribution function. What is perhaps surprising
 is that a distribution function defines a unique probability distribution function.
 
-```{proposition prop-distrib-function}
+### Proposition
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $F$ be a function from $\mathbb{R}$ to $[0,1]$.
 
-The function $F$ is the distribution function of a probability distribution on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, iff the following five properties are satisfied:
+The function $F$ is the distribution function of a probability distribution on
+$(\mathbb{R}, \mathcal{B}(\mathbb{R}))$,
+
+iff
+
+the following five properties are satisfied:
 
 1. $F$ is non-decreasing,
 1. $F$ is right-continuous
-1. $\lim_{y \nearrow x} F(y)$ exists at every $x \in \mathbb{R}$ ($F$ has left-limits everywhere)
+1. $\lim_{y \nearrow x} F(y)$ exists at every $x \in \mathbb{R}$ ( $F$ has left-limits everywhere )
 1. $\lim_{x \to -\infty}F(x)=0$
 1. $\lim_{x \to \infty} F(x)= 1.$
 
-```
+]
 
-This is a rephrasing of  Theorem \@ref(thm:dudley3-1-3).
 
-Figure \@ref(fig:distribpoisson) shows the cumulative distribution function
-of Poisson distributions for different values of the parameter (see Sections \@ref(conv2poisson)
-and \@ref(poisson) for more on Poisson distributions).
+---
+
+### Cumulative distribution function of Poisson distributions for different values of the parameter
+
+.fl.w-30[
+
 For parameter $\mu$, $F_{\mu}(x) = \sum_{k \leq x}  \mathrm{e}^{-\mu} \frac{\mu^k}{k!}$.
 
+Apparently, $\mu \leq \nu \Rightarrow F_{\mu} \geq F_{\nu}$.
 
-(ref:distribpoisson) Cumulative distribution functions for Poisson distributions with different
-parameters. Observe that, apparently, $\mu \leq \nu \Rightarrow F_{\mu} \geq F_{\nu}$. How would
-you establish this domination property?
+`r fontawesome::fa("glass-cheers")` How would you establish this domination property?
 
+]
 
-```{r distribpoisson, fig.cap="(ref:distribpoisson)", echo=FALSE, warning=FALSE, message=FALSE, }
+.fl.w-70[
+
+```{r distribpoisson, echo=FALSE, warning=FALSE, message=FALSE}
 # %%
 x = as.integer(seq(0, 20, by=1))
 lambdas =  c(1, 5, 10)
@@ -921,61 +1169,75 @@ rm(df, lambdas, x)
 
 # %%
 ```
+]
+
+---
+template: inter-slide
+name: generalrv
 
 
-## General random variables  {#randomvariablesperse}
+## General random variables
+
+---
 
 A real random variable is neither a variable, nor random.
 A real random variable is a measurable function from
 some measurable space to the real line endowed with the
 Borel $\sigma$-algebra. There is nothing random in a random variable.
 
-```{definition,  realrv, name="Real valued random variable"}
+### Definition
+
 Given a measurable space $(\Omega, \mathbb{F})$,
 a mapping $X$ from $\Omega$ to $\mathbb{R}$ is a real valued
 random variable such that for every $B \in \mathcal{B}(\mathbb{R})$
 the inverse image of $B$:
-\[
-X^{-1}(B) = \{ \omega : \omega \in \Omega, X(\omega) \in {B}\}
-\]
+
+$$X^{-1}(B) = \{ \omega : \omega \in \Omega, X(\omega) \in {B}\}$$
+
 belongs to $\mathcal{F}$
-```
 
 
-
-Once a measurable space is endowed with a probability distribution,
-is it possible
-to define the (probability) distribution of a random variable.
+---
 
 
-```{definition disrv}
+Once a measurable space is endowed with a probability distribution, is it possible to define the (probability) distribution of a random variable.
+
+---
+
+### Definition
 
 Given $(\Omega, \mathcal{F}, P)$ and a real valued random variable $X$,
 the law or probability distribution of $X$, denoted by $P \circ X^{-1}$, is the probability
 distribution on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$  defined by
-\[
-(P \circ X^{-1})(B) =  P(X^{-1}(B)) \quad \text{for all } B \in \mathcal{B}(\mathbb{R}).
-\]
 
-```
+$$(P \circ X^{-1})(B) =  P(X^{-1}(B)) \quad \text{for all } B \in \mathcal{B}(\mathbb{R})$$
 
+
+---
 
 
 Random variables may be vector-valued, function-valued, _etc_.
 General random variables are defined as measurable functions
 between measurable spaces.
 
-```{definition rv, name="Random variable"}
+### Definition
+
 Given two  measurable spaces $(\Omega, \mathcal{F})$, and $(\Omega', \mathcal{G})$
 a mapping $X$ from $\Omega$ to $\Omega'$ is a $\mathcal{F}/\mathcal{G}$-random variable if
 for every $B \in \mathcal{G}$ the inverse image of $B$:
-\[
-X^{-1}(B) = \{ \omega : \omega \in \Omega, X(\omega) \in {B}\}
-\]
-belongs to $\mathcal{F}$.
-```
 
-## Bibliographic remarks  {#bibliolanguage}
+$$X^{-1}(B) = \{ \omega : \omega \in \Omega, X(\omega) \in {B}\}$$
+
+belongs to $\mathcal{F}$.
+
+---
+exclude: true
+template: inter-slide
+
+## Bibliographic remarks
+
+---
+exclude: true
 
 There are many beautiful books on Probability Theory. They are targetted at
 different audiences. Some may be more suited to the students of the dual curriculum
