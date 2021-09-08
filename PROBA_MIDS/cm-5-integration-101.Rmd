@@ -63,128 +63,159 @@ template: inter-slide
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-template: inter-slide
+class: inverse, middle, left
 
+## `r fontawesome::fa("map", fill="white")` 
 
-## `r fontawesome::fa("map", fill="white")`
+.fl.w-50[
 
-### [...](#bigpic)
+### [Simple functions](#simplefunctions)
 
-### [...](#gmm)
+### [Integration](#integration)
 
-### [...](#em)
+### [Limit theorems](#limittheorems)
 
-### [...](#mclust)
+### [Expectation](#expectation)
 
+]
 
+.fl.w-50[
 
+### [Jensen formula](#jensen)
 
----
-template: inter-slide
+### [Variance](#variance)
+### [Higher moments](#highermoments)
+### [Median and interquartile range](#median)
+### [ $\mathcal{L}_p$ and $L_p$ spaces](#lpspaces)
 
-
-## Motivation
-
-
+]
 ---
 name: roadmapintegration
 
 ### Roadmap
 
-We start by reviewing basic definitions and results from integration theory.
-We follow the measure-theoretic approach.  First, we define _simple functions,_
-a subclass of piecewise measurable functions in Section \@ref(simplefunctions). Defining the integral of a simple function
-with respect to a measure in Section \@ref(integration) is straightforward. Some more work allows us to derive
-useful properties: linearity, monotonicity, to name a few. In section \@ref(integration), we define
-the integral of a non-negative measurable function as a supremum
-of integrals of simple functions. This definition is theoretically
-sound and it lends itself to computations.
-Section \@ref(biglimittheorems) states three convergence theorems
+First, we define _simple functions,_
+a subclass of piecewise measurable functions 
+
+Defining the integral of a simple function
+with respect to a measure 
+is straightforward. 
+
+Some more work allows us to derive
+useful properties: linearity, monotonicity, to name a few. 
+
+We define the integral of a non-negative measurable function as a supremum
+of integrals of simple functions. 
+
+This definition is theoretically sound and it lends itself to computations.
+
+We state three convergence theorems
 culminating with the _dominated convergence theorem_.
 
-In Section \@ref(expectation), we relate the notion of _expectation_
-of a random variable and the notion of integral. The _Transfer Theorem_
-(Theorem \@ref(thm:transfertheorem)) is a key instrument in the
+We relate the notion of _expectation_
+of a random variable and the notion of integral. 
+
+The _Transfer Theorem_ is a key instrument in the
 characterization of image distributions.
+
+???
+
+We start by reviewing basic definitions and results from integration theory.
+
+We follow the measure-theoretic approach.  
+
 
 ---
 name: simplefunctions
+template: inter-slide
 
-### Simple functions
+## Simple functions
+
+---
 
 The integral of a $\{0,1\}$-valued measurable function $f$ with respect to a measure $\mu$
-is defined
+is defined by
 
-$$\int_{\Omega} f \mathrm{d}\mu = \mu\Big(f^{-1}(\{1\})\Big) \, ,$$
-
-
+$$\int_{\Omega} f \mathrm{d}\mu = \mu\Big(f^{-1}(\{1\})\Big)$$
 
 alternatively
 
 $$\int_{\Omega} \mathbb{I}_A \mathrm{d}\mu = \mu(A) \qquad \text{for any measurable set } A \, .$$
 
+--
 
-
-The next step consists in defining the integral of finite linear combinations of
-$\{0,1\}$-valued measurable function $f$.
+The next step consists in defining the integral of finite linear combinations of $\{0,1\}$-valued measurable function $f$.
 
 ---
 
-### Definition
-simplefun, name="Simple function"}
+### Definition: Simple function
+
 
 Let $(\Omega, \mathcal{F})$ be a measurable space.
-The  function $f : \Omega \to \mathbb{R}$  is said to be _simple_ iff
+
+The  function $f : \Omega \to \mathbb{R}$  is said to be _simple_ 
+
+iff
 
 - $f$ takes finitely many values: $\Big|\big\{ f(x) : x \in \Omega\big\} \Big|<\infty$
-- For each $y \in f(\Omega) \subset \mathbb{R}$, $f^{-1}(\{y\}) \in \mathcal{F}$.
+
+- For each $y \in f(\Omega) \subset \mathbb{R}$, $f^{-1}(\{y\}) \in \mathcal{F}$
 
 
 
 ---
 
-A simple function defines a partition of $\Omega$ into finitely many measurable classes. The simple function is  constant on each class.
+A simple function defines a partition of $\Omega$ into finitely many measurable classes. 
 
-If $f$ is a simple function, then the $\sigma$-algebra $f^{-1}(\mathcal{B}(\mathbb{R}))$
-is finite.
+The simple function is  constant on each class.
+
+--
+
+If $f$ is a simple function, 
+
+then, 
+
+the $\sigma$-algebra $$f^{-1}(\mathcal{B}(\mathbb{R})) =  \left\{f^{-1}(B) : B \in \mathcal{B}(\mathbb{R})\right\}$$ is finite
 
 ---
 
 ### Example
 
-Simple functions are finite linear combinations of set characteristic (indicator) functions.
+Simple functions are finite linear combinations of set characteristic (indicator) functions
 
 - For each $A \in \mathcal{F}$, $\mathbb{I}_A$ is simple
+
 - For any finite collection $A_1, \ldots, A_n$  of measurable subsets of $\Omega$,
 any sequence $c_1, \ldots, c_n$  of real numbers, $\sum_{i \leq n} c_i \mathbb{I}_{A_i}$
 is a simple function
+
 - For any measurable function $f: \Omega \to \mathbb{R}$, and $n \in \mathbb{N}$,
 the function $g_n$ defined by
 $$g_n(\omega) =  n \wedge (-n \vee \lfloor f(\omega) \rfloor)$$
-
-
-is simple.
+is simple
 
 
 
 ---
 
 
-The definition of the integral of a simple function with respect to a measure
-is straightforward: it is a finite sum.
+The definition of the integral of a simple function with respect to a measure is straightforward: it is a finite sum
 
 
-### Definition
-intsimplefun, name="Integral of a simple function"}
+### Definition: Integral of a simple function
 
-Let $(\Omega, \mathcal{F}, \mu)$ be a measured space. Let $f : \Omega \to \mathbb{R}$
+
+Let $(\Omega, \mathcal{F}, \mu)$ be a measured space. 
+
+Let $f : \Omega \to \mathbb{R}$
 be a non-negative simple function which is defined by a finite partition of $\Omega$
 into measurable sets $A_1, A_2, \ldots, A_n$ and numbers $f_1, \ldots, f_n$:
+
 $$f(\omega) = \sum_{i \leq n} f_i \mathbb{I}_{A_i}(\omega) \,.$$
 
 
 The integral of $f$ with respect to  $\mu$ is defined by
-$$\int_\Omega f \mathrm{d}\mu = \sum_{i \leq n} f_i \mu(A_i) \, .$$
+$$\int_\Omega f \mathrm{d}\mu = \sum_{i \leq n} f_i \mu(A_i)$$
 
 
 
@@ -193,43 +224,56 @@ $$\int_\Omega f \mathrm{d}\mu = \sum_{i \leq n} f_i \mu(A_i) \, .$$
 
 
 
-### Remark
-Note that if measure $\mu$ is not finite, the integral of a simple non-negative function
-may be infinite.
+
+`r fontawesome::fa("hand-point-right")` if measure $\mu$ is not finite, the integral of a simple non-negative function may be infinite
 
 If $\mu(A_i)=\infty$ and $f_i=0$, we agree on $f_i \mu(A_i) =0$.
 
 
 ---
 
-If we turn to signed simple functions, it is enough to notice than if $f$ is simple,
-so are $(f)_+$ and $(f)_-$ and to define  $\int_\Omega f \mathrm{d}\mu$
-as $$\int_\Omega (f)_+ \mathrm{d}\mu - \int_\Omega (f)_- \mathrm{d}\mu$$
+If we turn to signed simple functions, 
 
+it is enough to notice that
 
-provided at leat one of the two summands is finite.
+> if $f$ is simple, so are $(f)_+$ and $(f)_-$ 
+
+and to define  $\int_\Omega f \mathrm{d}\mu$
+as 
+
+$$\int_\Omega (f)_+ \mathrm{d}\mu - \int_\Omega (f)_- \mathrm{d}\mu$$
+
+provided at leat one of the two summands is finite
 
 ---
 
-Although they are simple, simple functions have interesting approximation capabilities.
+Although they are simple, simple functions have interesting approximation capabilities
+
+
 Any non-negative measurable function can be approximated from below by
-non-negative simple functions.
+non-negative simple functions `r fontawesome::fa("glass-cheers")`
 
 ---
 
-### Proposition
- limsimplefun, name="Approximation of measurable functions"}
+### Proposition: Approximation of measurable functions
+ 
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
-Let $(\Omega, \mathcal{F})$ be a measurable space. Any non-negative measurable function
-$f: \Omega \to \mathbb{R}$ is the monotone pointwise limit of simple functions:
-there exists a sequence of simple function $f_1, \ldots, f_n, \ldots$ such that
-for each $\omega \in \Omega$, the following holds:$$f_1(\omega) \leq f_2(\omega) \leq \ldots \leq f_n(\omega) \leq \ldots \leq f(\omega)$$
+Let $(\Omega, \mathcal{F})$ be a measurable space. 
 
+Any non-negative measurable function $f: \Omega \to \mathbb{R}$ is the monotone pointwise limit of simple functions:
 
+there exists a sequence of simple function $f_1, \ldots, f_n, \ldots$ 
+
+such that
+
+for each $\omega \in \Omega$, the following holds:
+
+$$f_1(\omega) \leq f_2(\omega) \leq \ldots \leq f_n(\omega) \leq \ldots \leq f(\omega)$$
 and
-$$\lim_n f_n(\omega) = f(\omega) \, .$$
+$$\lim_n f_n(\omega) = f(\omega)$$
 
-
+]
 
 
 ---
@@ -238,40 +282,57 @@ $$\lim_n f_n(\omega) = f(\omega) \, .$$
 ### Proof
 
 Define $f_n$ as
-$$  f_n(\omega) = n  \wedge \Big(2^{-n} \big\lfloor 2^n f(\omega) \big\rfloor \Big) \, .$$
+$$f_n(\omega) = n  \wedge \Big(2^{-n} \big\lfloor 2^n f(\omega) \big\rfloor \Big)$$
 
 
 As
 $$\big\lfloor 2^n f(\omega) \big\rfloor \leq 2^n f(\omega)$$
-
-
 we have $f_n(\omega)\leq f(\omega)$ for all $\omega$.
 
 The range of function $f_n$ is $i \times 2^{-n}$ for $i=0, \ldots, n \times 2^n$.
+
 For each $i \in 0, \ldots, (n-1) \times 2^n$
 $$f_n^{-1}\Big(\{i \times 2^{-n}\}\Big) =f^{-1}\Big(\Big[\frac{i}{2^n}, \frac{i+1}{2^n}\Big)\Big)$$
 
 
-which is in $\mathcal{F}$ because $f$ is measurable and $\Big[\frac{i}{2^n}, \frac{i+1}{2^n}\Big) \in \mathcal{B}(\mathbb{R})$.
+which is in $\mathcal{F}$ because $f$ is measurable and $\Big[\frac{i}{2^n}, \frac{i+1}{2^n}\Big) \in \mathcal{B}(\mathbb{R})$
+
 Likewise $f_n^{-1}\Big(\{n\}\Big) =f^{-1}\big(\big[n, \infty\big)\big)$ belongs to $\mathcal{F}$.
+
+---
+
+
+### Proof (continued)
 
 To check that $f_n \leq f_{n+1}$, we consider two cases.
 
 1. $f_{n+1}(\omega)\geq n$. This entails $f(\omega)\geq n$ and thus $f_n(\omega)=n <f_{n+1}(\omega)$
-1. $f_{n+1}(\omega) = k + i 2^{-n-1}$ for $k<n$ and $i<2^{n+1}$. This entails $f_{n}(\omega) = k + \lfloor i/2\rfloor  2^{-n} \leq f_{n+1}(\omega)$.
 
-Finally if $f(\omega) \leq n$, $0 \leq f(\omega) - f_n(\omega) \leq 2^{-n}$. This implies that $\lim_n f_n(\omega)=f(\omega)$ for all $\omega$.
+2. $f_{n+1}(\omega) = k + i 2^{-n-1}$ for $k<n$ and $i<2^{n+1}$. This entails $f_{n}(\omega) = k + \lfloor i/2\rfloor  2^{-n} \leq f_{n+1}(\omega)$.
+
+Finally, if $f(\omega) \leq n$, $0 \leq f(\omega) - f_n(\omega) \leq 2^{-n}$. 
+
+This implies that $\lim_n f_n(\omega)=f(\omega)$ for all $\omega$.
+
 `r fontawesome::fa("square")`
 
 ---
 
-Figure \@ref(fig:approxexpsimple) illustrates the approximation capabilities of simple functions.
 
 
-(ref:approxexpsimple) Approximation of the exponential function by simple functions $n \wedge \Big(2^{-n} \big\lfloor 2^n \exp(\omega) \big\rfloor \Big)$ for $n=2, 3, 4$.
+###  Approximation of the exponential function 
 
+.fl.w-30[
+Consider the sequence of simple functions 
 
-```{r approxexpsimple, echo=FALSE, fig.cap='(ref:approxexpsimple)'}
+$$\omega \mapsto n \wedge \Big(2^{-n} \big\lfloor 2^n \exp(\omega) \big\rfloor \Big)$$
+
+for $n=2, 3, 4, ...$
+
+]
+
+.fl.w-70[
+```{r approxexpsimple, echo=FALSE}
 # %%
 simple <- function(.fun=exp, n=10){
   function(x){
@@ -291,83 +352,112 @@ as_tibble(list(x=seq(0, 2, by=.001))) %>%
   guides(linetype=guide_legend(title=NULL))
 # %%
 ```
-
+]
 ---
 
 ### Proposition
 
-
-If $f,g$ are two non-negative simple functions on $(\Omega, \mathcal{F})$, then for all $a, b\in [0,\infty)$,
-$a f + b g$ and $fg$ are non-negative simple functions.
-
-
----
+ 
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 
-### Exercise
+If $f,g$ are two non-negative simple functions on $(\Omega, \mathcal{F})$
 
-Check  the proposition.
+then 
+
+for all $a, b\in \mathbb{R}_+$,
+
+- $a f + b g$ and 
+- $fg$ 
+
+are non-negative simple functions.
+
+]
+
+--
+
+
+
+
+`r fontawesome::fa("brain")` Check  the proposition.
 
 
 ---
 
 ### Proposition (Monotonicity of integration of simple functions)
 
+ 
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
-If $f,g$ are two non-negative simple functions
-and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$ such that
-$$\mu\Big\{ \omega: f(\omega)> g(\omega)\Big\} = 0 \, .$$ ($f$ is less of equal than $g$ $\mu$-almost everywhere), then
+If 
+- $f,g$ are two non-negative simple functions and 
+- $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$ such that
+$$\mu\Big\{ \omega: f(\omega)> g(\omega)\Big\} = 0$$ 
+( $f$ is less of equal than $g$ $\mu$-almost everywhere ), 
 
+then
 
-$$\int  f  \, \mathrm{d}\mu \leq \int  g  \, \mathrm{d}\mu \, .$$
+$$\int  f  \, \mathrm{d}\mu \leq \int  g  \, \mathrm{d}\mu$$
 
+]
 
-### Exercise
+--
 
-Check Proposition
+`r fontawesome::fa("brain")` Check Proposition
 
 
 ---
 
 ### Proposition (Linearity of integration of simple functions)
 
-If $f,g$ are two non-negative simple functions
-and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$, then for all $a, b\in [0,\infty)$,
 
-$$\int a f + b g \, \mathrm{d}\mu = a \int  f  \, \mathrm{d}\mu + b \int  g \, \mathrm{d}\mu \, .$$
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
+If 
+- $f,g$ are two non-negative simple functions and 
+- $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$, 
 
-### Exercise
+then 
 
-Check Proposition
+for all $a, b\in \mathbb{R}_+$,
+
+$$\int a f + b g \, \mathrm{d}\mu = a \int  f  \, \mathrm{d}\mu + b \int  g \, \mathrm{d}\mu$$
+
+]
+
+--
+
+`r fontawesome::fa("brain")` Check Proposition
 
 
 ---
 name: integration
 template: inter-slide
 
-
 ## Integration
 
 ---
 
 
-Let $\mathcal{S}_+$ denote the set of non-negative simple functions on $(\Omega, \mathcal{F})$.
+Let $\mathcal{S}_+$ denote the set of non-negative simple functions on $(\Omega, \mathcal{F})$
 
 ### Definition (Integration with respect to a measure)
 
 Let $f$ be a non-negative measurable function on $(\Omega, \mathcal{F}, \mu)$,
-then for any $A \in \mathcal{F}$, the integral of $f$ over $A$ with respect to
+
+then 
+
+for any $A \in \mathcal{F}$, the integral of $f$ over $A$ with respect to
 measure $\mu$ is defined by:
 
 $$\int_A f \, \mathrm{d}\mu = \sup_{s \in \mathcal{S}_+: s \leq f} \int_A s \, \mathrm{d}\mu$$
 
 
----
+--
 
-### Remark
+`r fontawesome::fa("hand-point-right")`
 If the supremum  is finite, the function is said to be _integrable_ with respect to $\mu$,
-or to be $\mu$-integrable.
+or to be $\mu$-integrable
 
 
 ---
@@ -379,16 +469,26 @@ or to be $\mu$-integrable.
 ### Proposition (Monotonicity of integration)
 
 
-If $f,g$ are two non-negative measurable  functions
-and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$ such that
-$$\mu\Big\{ \omega: f(\omega)> g(\omega)\Big\} = 0 \, .$$ ($f$ is less of equal than $g$ $\mu$-almost everywhere), then
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+If 
+
+- $f,g$ are two non-negative measurable  functions
+and 
+- $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$ such that
+$$\mu\Big\{ \omega: f(\omega)> g(\omega)\Big\} = 0$$ 
+( $f$ is less of equal than $g$ $\mu$-almost everywhere ), 
+
+then
 
 
-$$\int  f \,  \mathrm{d}\mu \leq \int  g  \, \mathrm{d}\mu \, .$$
+$$\int  f \,  \mathrm{d}\mu \leq \int  g  \, \mathrm{d}\mu$$
 
-### Exercise
+]
 
-Prove Proposition
+--
+
+`r fontawesome::fa("brain")` Prove Proposition
 
 
 ---
@@ -396,15 +496,19 @@ Prove Proposition
 
 ### Proposition (Linearity of integration)
 
-If $f,g$ are two non-negative measurable  functions
-and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$, then for all $a, b\in [0,\infty)$,
 
-$$\int a f + b g \, \mathrm{d}\mu = a \int  f \,  \mathrm{d}\mu + b \int  g \, \mathrm{d}\mu \, .$$
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+If $f,g$ are two non-negative measurable  functions and $\mu$ a non-negative measure on $(\Omega, \mathcal{F})$, then for all $a, b\in \mathbb{R}_+$,
+
+$$\int a f + b g \, \mathrm{d}\mu = a \int  f \,  \mathrm{d}\mu + b \int  g \, \mathrm{d}\mu$$
+
+]
+
+--
 
 
-### Exercise
-
-Prove Proposition
+`r fontawesome::fa("brain")`  Prove Proposition
 
 
 ---
@@ -424,7 +528,7 @@ is finite.
 
 
 ---
-name: biglimittheorems
+name: limittheorems
 template: inter-slide
 
 
@@ -433,13 +537,28 @@ template: inter-slide
 
 ---
 
-In this section, measurable functions are meant to be real-valued,
-and $\mathbb{R}$ is endowed with the Borel $\sigma$-algebra ($\mathcal{B}(\mathbb{R})$).
+### `r fontawesome::fa("hand-point-right")` 
 
-Theorems \@ref(thm:thmConvMonInt), \@ref(thm:thmfatou), \@ref(thm:thmdominatedConv) below
-are the three pillars of  integral calculus.
+- Measurable functions are meant to be real-valued, and 
+
+- $\mathbb{R}$ is endowed with the Borel $\sigma$-algebra ( $\mathcal{B}(\mathbb{R})$ )
+
+### `r fontawesome::fa("university")`
+
+- Monotone convergence Theorem 
+
+- Fatou's Lemma
+
+- Dominated convergence Theorem 
+
+are the three pillars of  integral calculus 
+
+---
 
 ### Theorem (Monotone convergence theorem)
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 Let $(\Omega, \mathcal{F}, \mu)$ be a measured space.
 
@@ -449,6 +568,8 @@ Then
 
 $$\int \lim_n \uparrow f_n \, \mathrm{d}\mu = \lim_n \uparrow \int f_n \, \mathrm{d}\mu.$$
 
+]
+
 ---
 The proof of the monotone convergence theorem boils down to the
 definition of positive measure and property $\mu(\lim_n \uparrow A_n)= \lim_n \uparrow \mu(A_n)$.
@@ -457,9 +578,12 @@ definition of positive measure and property $\mu(\lim_n \uparrow A_n)= \lim_n \u
 ### Proof
 
 Let function $f$ be defined by $f(\omega)=\lim_n \uparrow f_n(\omega)$ for all $\omega \in \Omega$.
+
 Note that if $f(\omega)=0$, then $f_n(\omega)=0$  for all $n\in \mathbb{N}$.
 
-The function  $f$ is  positive measurable.  In order to prove the monotone convergence theorem it is enough to check that for
+The function  $f$ is  positive measurable.  
+
+In order to prove the monotone convergence theorem it is enough to check that for
 every non-negative simple function $g$ such that $g \leq f$ everywhere, for any $a\in [0, 1)$, the following holds:
 
 $$a \int g \, \mathrm{d} \mu \leq \lim_n \uparrow \int f_n \, \mathrm{d}\mu \,.$$
@@ -471,13 +595,19 @@ For each $n \in \mathbb{N}$, define $$E_n = \Big\{ \omega : f_n(\omega) \geq a g
 ### Proof (continued)
 
 Note that as $(f_n)_n$ is non-decreasing, the sequence $(E_n)$ is non-decreasing.
+
 Moreover, if $f(\omega)>0$ as $\lim_n \uparrow f_n(\omega)=f(\omega) > a f(\omega) \geq a g(\omega)$.
+
 Hence for all $\omega \in \Omega$, $\mathbb{I}_{E_n}(\omega)=1$ for all sufficiently large $n$
-(beware there is no uniformity guarantee). We have $$\lim_n \uparrow E_n = \Omega\, .$$
+(beware there is no uniformity guarantee), we have 
+
+$$\lim_n \uparrow E_n = \Omega$$
 
 Combining the different remarks, we have for all $n$,
-$\mathbb{I}_{E_n} a g \leq f_n$ everywhere. Monotonicity of integration entails, for all $n$
-$$\int \mathbb{I}_{E_n} a g \,\mathrm{d}\mu \leq \int f_n \,\mathrm{d}\mu \qquad\forall n\, .$$
+$\mathbb{I}_{E_n} a g \leq f_n$ everywhere. 
+
+Monotonicity of integration entails, for all $n$
+$$\int \mathbb{I}_{E_n} a g \,\mathrm{d}\mu \leq \int f_n \,\mathrm{d}\mu \qquad\forall n$$
 
 
 Now, for each $n$,  $\mathbb{I}_{E_n} a g$ is a non-negative simple function, and the sequence
@@ -488,7 +618,9 @@ towards simple function $ag$.
 
 ### Proof (continued)
 
-Let $g = \sum_{i \leq k} c_i \mathbb{I}_{A_i}$ where $(A_i)_{i\leq k}$ is a finite partition of $\Omega$ into measurable subsets. $$\mathbb{I}_{E_n}  g =  \sum_{i \leq k} c_i \mathbb{I}_{A_i \cap E_n} \, .$$
+Let $g = \sum_{i \leq k} c_i \mathbb{I}_{A_i}$ where $(A_i)_{i\leq k}$ is a finite partition of $\Omega$ into measurable subsets. 
+
+$$\mathbb{I}_{E_n}  g =  \sum_{i \leq k} c_i \mathbb{I}_{A_i \cap E_n}$$
 
 
 Hence
@@ -501,27 +633,26 @@ For each $i \leq k$, we have $\lim_n \uparrow c_i  \mu(A_i \cap E_n)  = c_i \mu(
 
 We have:
 
-$$\int \lim_n \uparrow \mathbb{I}_{E_n} a g \,\mathrm{d}\mu = \lim_n \uparrow \int \mathbb{I}_{E_n} a g \, \mathrm{d}\mu \, .$$
+$$\int \lim_n \uparrow \mathbb{I}_{E_n} a g \,\mathrm{d}\mu = \lim_n \uparrow \int \mathbb{I}_{E_n} a g \, \mathrm{d}\mu$$
 
 
-This proves that \@ref(eq:monotone1) holds for all $a\in [0,1)$ and $g \in \mathcal{S}_+$ with $g \leq f$:
-$$\forall g \in \mathcal{S}_+ \text{ with } \forall a \in [0,1),$$
-
-
+This proves that monotonicity holds for all $a\in [0,1)$ and $g \in \mathcal{S}_+$ with $g \leq f$:
+$$\forall g \in \mathcal{S}_+ \text{ with } \forall a \in [0,1)$$
 
 `r fontawesome::fa("square")`
+
+
 ---
 
 
 
-### Exercise
 
-The non-negativity assumptiom on $f_n$ is not necessary. It is enough to assume
+`r fontawesome::fa("brain")`  The non-negativity assumptiom on $f_n$ is not necessary. It is enough to assume
 $\int f_1 \mathrm{d}\mu > - \infty$. Prove this.
 
-### Exercise
+--
 
-Let $(f_n)_n$ be a monotone decreasing sequence of non-negative measurable functions.
+`r fontawesome::fa("brain")` Let $(f_n)_n$ be a monotone decreasing sequence of non-negative measurable functions.
 Let $f = \lim_n \downarrow f_n$ (check the existence of $f$).
 
 Is it true that $\int \lim_n \downarrow f_n \mathrm{d}\mu = \lim_n \downarrow \int f_n \mathrm{d}\mu$?.
@@ -537,6 +668,9 @@ Answer the same question if $\mu$ is assumed to be a probability measure.
 
 ### Theorem (Fatou's Lemma)
 
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $(\Omega, \mathcal{F}, \mu)$ be a measured space.
 
 Let $(f_n)_n$  be  a sequence of non-negative measurable functions.
@@ -544,6 +678,8 @@ Let $(f_n)_n$  be  a sequence of non-negative measurable functions.
 Then
 
 $$\int \liminf_n  f_n \mathrm{d}\mu \leq  \liminf_n  \int f_n \mathrm{d}\mu.$$
+
+]
 
 ---
 
@@ -558,6 +694,10 @@ $$\int h_n \mathrm{d}\mu \leq \inf_{m\geq n} \int f_m \mathrm{d}\mu \, .$$
 The sequence $h_n$ is non-decreasing.
 
 And $\lim \uparrow h_n(\omega) = \liminf f_n(\omega)$ for all $\omega \in \Omega$.
+
+---
+
+### Proof (continued)
 
 For each $n$, by the monotone convergence theorem
 
@@ -579,17 +719,24 @@ $$\int \liminf_n f_n \mathrm{d}\mu \leq \lim_n \inf_{m\geq n} \int f_m \mathrm{d
 
 ### Theorem (Dominated convergence theorem)
 
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $(\Omega, \mathcal{F}, \mu)$ be a measured space.
 
 Let $(f_n)_n$  be  a sequence of measurable functions that converges pointwise towards function $f$.
 
 Assume that there exists a integrable function $g$ that
 dominates $(f_n)_n$: for all $n$, all $\omega \in \Omega$,
-$|f_n(\omega)|\leq g(\omega)$.  Then $f$ is integrable and
+$|f_n(\omega)|\leq g(\omega)$.  
 
-$$\int f \mathrm{d}\mu = \int \lim_n  f_n \mathrm{d}\mu =  \lim_n  \int f_n \mathrm{d}\mu.$$
+Then 
 
+$f$ is integrable and
 
+$$\int f \mathrm{d}\mu = \int \lim_n  f_n \mathrm{d}\mu =  \lim_n  \int f_n \mathrm{d}\mu$$
+
+]
 
 
 ---
@@ -608,13 +755,21 @@ Now define $h_n = \inf_{m\geq n} f_m$ and $j_n = \sup_{m \geq n}f_m$.
 
 We have $\lim_n \uparrow h_n = f$ and $\lim_n \downarrow j_n=f.$
 
-Note also that
+---
+
+### Proof (continued)
+
+Note  that
 
 $$\int h_n \mathrm{d}\mu \leq \int f \mathrm{d}\mu \leq \int j_n \mathrm{d}\mu \, .$$
 
+
+
 By monotone convergence
 
-$$\int h_n \mathrm{d}\mu \uparrow \int f\mathrm{d}\mu$ and $\int j_n \mathrm{d}\mu \downarrow \int f\mathrm{d}\mu$$
+$$\int h_n \mathrm{d}\mu \uparrow \int f\mathrm{d}\mu$$ 
+and 
+$$\int j_n \mathrm{d}\mu \downarrow \int f\mathrm{d}\mu$$
 
 This entails $\lim \int f_n \mathrm{d}\mu$.
 
@@ -646,18 +801,22 @@ template: inter-slide
 
 ### Proposition
 
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $(\Omega, \mathcal{F})$ be a measurable space
 and $\mu$ be a $\sigma$-finite measure over $(\Omega, \mathcal{F})$.
 
 Let $f$ be a non-negative measurable  real function over $(\Omega, \mathcal{F})$.
 
-Let $\nu : \mathcal{F} \to [0, \infty)$ be defined by
+Let $\nu : \mathcal{F} \to \mathbb{R}_+$ be defined by
 
 $$\nu(A) = \int \mathbb{I}_A f \, \mathrm{d}\mu = \int_A f\, \mathrm{d}\mu \,.$$
 
 $\nu$ is a measure over $(\Omega, \mathcal{F})$. The function
 $f$ is said to be a density of $\nu$ with respect to $\mu$.
 
+]
 
 ---
 
@@ -700,10 +859,9 @@ This proves that if $\mu$ is $\sigma$-finite, so is $\nu$.
 
 
 
+--
 
-### Exercise
-
-Check that if $\mu(A)=0$, then $\nu(A)=0$ for every $A \in \mathcal{F}$.
+`r fontawesome::fa("brain")` Check that if $\mu(A)=0$, then $\nu(A)=0$ for every $A \in \mathcal{F}$.
 
 
 ---
@@ -721,21 +879,26 @@ with probabilistic notation.
 
 ### Definition
 
-Let $(\Omega, \mathcal{F}, P)$ be a probability space. The random variable $X$
-defined on $(\Omega, \mathcal{F})$ is $P$-integrable if the measurable
-function $|X|: \omega \mapsto |X(\omega)|$ is $P$-integrable: we agree on
+Let $(\Omega, \mathcal{F}, P)$ be a probability space. 
 
-$$\mathbb{E} X = \mathbb{E}_P X = \int_{\mathcal{X}} X(\omega) \mathrm{d}P(\omega) =\int X \mathrm{d}P \, .$$.
+The random variable $X$
+defined on $(\Omega, \mathcal{F})$ is $P$-integrable 
+
+If 
+
+the measurable function $|X|: \omega \mapsto |X(\omega)|$ is $P$-integrable, 
+
+we agree on:
+
+$$\mathbb{E} X = \mathbb{E}_P X = \int_{\mathcal{X}} X(\omega) \mathrm{d}P(\omega) =\int X \mathrm{d}P$$.
 
 
 
 
----
+--
 
 
-### Exercise
-
-Check the consistency of this definition with the definition used in the discrete setting.
+`r fontawesome::fa("hand-point-right")` Check the consistency of this definition with the definition used in the discrete setting.
 
 
 ---
@@ -747,17 +910,25 @@ of an image distribution or to simplify the computation of an expectation.
 
 ### Theorem (Transfer formula)
 
-Let $(\mathcal{X}, \mathcal{F}, P)$ be a probability space,
-$(\mathcal{Y}, \mathcal{G})$  a measurable space,
-$f$ a measurable function from $(\mathcal{X}, \mathcal{F})$ to $(\mathcal{Y}, \mathcal{G})$.
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+Let 
+- $(\mathcal{X}, \mathcal{F}, P)$ be a probability space,
+- $(\mathcal{Y}, \mathcal{G})$  be a measurable space,
+- $f$ be a measurable function from $(\mathcal{X}, \mathcal{F})$ to $(\mathcal{Y}, \mathcal{G})$.
+
 Let $Q$ denote the probability distribution that is the image of $P$ by $f$: $Q = P \circ f^{-1}$.
 
-Then for all measurable functions $h$ from $(\mathcal{Y}, \mathcal{G})$ to $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$
+Then 
+
+for all measurable functions $h$ from $(\mathcal{Y}, \mathcal{G})$ to $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$
 
 $$\mathbb{E}[h(Y)] = \int_{\mathcal{Y}} h(y) \mathrm{d}Q(y)  = \int_{\mathcal{X}} h\circ f(x) \mathrm{d}P(x) = \mathbb{E} h\circ f(X) \,$$
 
 if either integral is defined.
 
+]
 
 ---
 
@@ -777,7 +948,9 @@ $$\begin{array}{rl}
 \end{array}$$
 
 Then, by linearity, the transfer formula holds for all simple functions from $\mathcal{Y}$ to $\mathbb{R}$.
+
 By the definition of the Lebesgue integral, the transfer formula holds for non-negative measurable functions.
+
 The usual decomposition argument completes the proof.
 
 `r fontawesome::fa("square")`
@@ -797,17 +970,20 @@ template: inter-slide
 
 ---
 The tools from integration theory we have reviewed so far serve to compute or approximate
-integrals and expectations. The next theorem circumvents computations and allows us to compare expectations.
+integrals and expectations. 
+
+The next theorem circumvents computations and allows us to compare expectations.
 
 Jensen's inequality is a workhorse of Information Theory, Statistics and large parts of Probability Theory.
-It embodies the interaction between convexity and expectation.
+
+It embodies the interaction between _convexity_ and _expectation_
 
 We first introduce a modicum of convexity theory and notation.
 
 ### Definition (Lower semi-continuity)
 
 
-A function $f$ from some metric space $\mathcal{X}$ to $\mathbb{R}$ is lower semi-continuous
+A function $f$ from some metric space $\mathcal{X}$ to $\mathbb{R}$ is _lower semi-continuous_
 at $x \in \mathcal{X}$,
 
 if
@@ -820,11 +996,14 @@ $$\liminf_{x_n \to x} f(x_n) \geq f(x) \, .$$
 ---
 
 
-### Remark
 
-A continuous function is lower semi-continuous. But the converse is not true. If $A \subseteq \mathcal{X}$
-is an open set, then $\mathbb{I}_A$ is lower semi-continuous but, unless it is constant, it is not
-continuous  at the boundary of $A.$
+
+A continuous function is lower semi-continuous
+
+`r fontawesome::fa("exclamation-triangle")` The converse is not true. 
+
+If $A \subseteq \mathcal{X}$ is an open set, then $\mathbb{I}_A$ is lower semi-continuous but, unless it is constant, it is not
+continuous  at the boundary of $A$
 
 
 
@@ -833,23 +1012,27 @@ continuous  at the boundary of $A.$
 ### Definition (Convex subset)
 
 
-Let $\mathcal{X}$  be a vector space, a subset $C \subseteq \mathcal{X}$ is said to be convex
-if for all $x,y \in C$,  all $\lambda \in [0,1]$:
+Let $\mathcal{X}$  be a vector space
+
+A subset $C \subseteq \mathcal{X}$ is said to be _convex_
+
+if 
+
+for all $x,y \in C$,  all $\lambda \in [0,1]$:
 
 $$\lambda x + (1-\lambda) y \in C \, .$$
 
 
 
 
----
+--
 
 
-### Exercise
+`r fontawesome::fa("brain")` Let $C$ be a convex subset of some (topological real) vector space, let $\overline{C}$ be the closure of $C$.  
 
-Let $C$ be a convex subset of some (topological real) vector space, let $\overline{C}$ be
-the closure of $C$.  Prove that  $\overline{C}$ and $\overline{C} \setminus C$ are convex.
+Prove that  $\overline{C}$ and $\overline{C} \setminus C$ are convex.
 
-A convex set may be neither closed nor open. Provide examples.
+`r fontawesome::fa("brain")` A convex set may be neither closed nor open. Provide examples.
 
 
 ---
@@ -859,9 +1042,16 @@ In the next definition, we  consider functions from some vector space to $\mathb
 ### Definition (Convex functions)
 
 
-Let $\mathcal{X}$ be a (topological) vector space.  Let $C \subseteq \mathcal{X}$
-be a convex subset. A function $f$ from $\mathcal{C}$ to $\mathbb{R} \cup \{\infty\}$
-is convex if for $x,y \in C$,  all $\lambda \in [0,1]$,
+Let $\mathcal{X}$ be a (topological) vector space.  
+
+Let $C \subseteq \mathcal{X}$ be a convex subset. 
+
+A function $f$ from $\mathcal{C}$ to $\mathbb{R} \cup \{\infty\}$
+is convex 
+
+if 
+
+for $x,y \in C$,  all $\lambda \in [0,1]$,
 
 $$f(\lambda x + (1-\lambda) y) \leq \lambda f(x) + (1-\lambda) f(y) \, .$$
 
@@ -881,7 +1071,7 @@ The dotted lines define supporting hyperplanes for the epigraph of $f$.
 
 
 
-```{r convexfunfig, echo=FALSE, fig.cap='(ref:convexfunfig)'}
+```{r convexfunfig, echo=FALSE}
 # %%
 foo <- function(x){
   ifelse(x < 0, -x, x^2)
@@ -903,18 +1093,24 @@ data %>%
 ---
 
 
-### Exercise
+`r fontawesome::fa("brain")` Check that a convex function $f$ is lower semi-continuous 
 
-Check that a convex function $f$ is lower semi-continuous iff sets $\{ x : f(x) \leq t\}$ are closed intervals for all $t \in \mathbb{R}$.
+iff 
+
+sets $\{ x : f(x) \leq t\}$ are closed intervals for all $t \in \mathbb{R}$.
 
 
 The  next result warrants that any convex lower semi-continuous has a dual representation.
+
 This dual representation is a precious tool when comparing expectation of random variables.
 
 ---
 
 
 ### Theorem (Fenchel-Legendre duality)
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 Let $f$ be a convex lower-semi-continuous function on $\mathbb{R}$ with  a closed domain.
 
@@ -932,7 +1128,7 @@ Then
 - $f= (f^{*})^*$, the dual function of the dual function equals the original function: $f(x) = \sup_{y} xy -f^*(y).$
 
 
-
+]
 
 ---
 
@@ -941,8 +1137,10 @@ Then
 
 The next  dual pairs will be used in several places.
 
-- if $f(x) = \frac{|x|^p}{p}$ ($p> 1$), then $f^*(y)= \frac{|y|^q}{q}$ where $q=p/(p-1)$.
-- if $f(x) = |x|$, then  $f^*(y)= 0$  for $y \in [-1,1]$ and $\infty$ for $|y|>1$.
+- if $f(x) = \frac{|x|^p}{p}$ ( $p> 1$ ), then $f^*(y)= \frac{|y|^q}{q}$ where $q=p/(p-1)$
+
+- if $f(x) = |x|$, then  $f^*(y)= 0$  for $y \in [-1,1]$ and $\infty$ for $|y|>1$
+
 - if $f(x) = \exp(x)$  then $f^*(y) = y \log y - y$ for $y>0$, $f^*(y)=\infty$ for $y<0$
 
 
@@ -994,16 +1192,12 @@ this entails $f(x) + f^*(y)= xy$.
 
 ---
 
-
-### Exercise
-
+`r fontawesome::fa("brain")`
 Extend the notion of Fenchel-Legendre duality to lower-semi-continuous convex functions over $\mathbb{R}^k$.
 
-### Exercise
+`r fontawesome::fa("brain")` Are all convex functions lower-semi-continuous? measurable?
 
-Are all convex functions lower-semi-continuous? measurable?
-
-Are all convex  lower-semi-continuous functions measurable?
+`r fontawesome::fa("brain")` Are all convex  lower-semi-continuous functions measurable?
 
 
 ---
@@ -1012,9 +1206,14 @@ Are all convex  lower-semi-continuous functions measurable?
 ### Remark
 
 It is possible to define $f^*$ as $f^*(y) =\sup_x xy -f(x)$ even if $f$ is not convex
-and lower semi-continuous. The function $f^*$ retains the convexity and lower semi-continuity
-properties. But $f \neq (f^{*})^*$, we only get $f \geq (f^{*})^*$. Indeed
-$(f^{*})^*$ is the largest convex minorant of $f$.
+and lower semi-continuous. 
+
+The function $f^*$ retains the convexity and lower semi-continuity
+properties. 
+
+But $f \neq (f^{*})^*$, we only get $f \geq (f^{*})^*$. 
+
+Indeed $(f^{*})^*$ is the largest convex minorant of $f$.
 
 
 
@@ -1022,13 +1221,21 @@ $(f^{*})^*$ is the largest convex minorant of $f$.
 
 ### Theorem (Jensen's inequality)
 
-Let $X$ be a real-valued random variable and $f: \mathbb{R} \to \mathbb{R}$ be
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+
+Let 
+- $X$ be a real-valued random variable and 
+- $f: \mathbb{R} \to \mathbb{R}$ be
 _convex, lower-semi-continuous_ such that the closed set  $\text{Dom}(f) \subseteq \text{supp}(\mathcal{L}(X))$
-and $\mathbb{E} |f(X)|< \infty$, then
+and $\mathbb{E} |f(X)|< \infty$, 
+
+then
 
 $$f(\mathbb{E} X) \leq \mathbb{E} f(X) \, .$$
 
-
+]
 
 ---
 
@@ -1057,8 +1264,7 @@ $$\begin{array}{rl}
 
 ---
 
-
-### Exercise
+`r fontawesome::fa("brain")`
 
 In the argument above, it is not _a priori_ obvious that $\sup_y \Big( yX - f^*(y)\Big)$ is measurable,
 since the supremum is taken over a non-countable collection. Check that this is not an issue.
@@ -1087,16 +1293,20 @@ a random variable.
 ### Proposition (Characterizations of variance)
 
 
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+
 Let $X$ be a random variable over some probability space.
+
 The variance of $X$ is finite iff $\mathbb{E}X^2 <\infty$ and it may
-be defined using the netx three equalities:
+be defined using the next three equalities:
 
 $$\begin{array}{rl}
 \operatorname{var}(X) & =  \mathbb{E}\left[(X - \mathbb{E}X)^2\right] \\
  & = \inf_{a \in \mathbb{R}} \mathbb{E}\left[(X - a)^2\right] \\
  & = \mathbb{E}X^2 - (\mathbb{E}X)^2 \,.
 \end{array}$$
-
+]
 ---
 
 We need to check that three right-hand-side are finite if one of them is, and
@@ -1117,6 +1327,10 @@ The right-hand-side on the first line, the infimum on the second line are finite
 
 As $X^2 \leq 2 (X- \mathbb{E}X)^2 + 2 (\mathbb{E}X)^2$, $\mathbb{E}X^2<\infty$ if $\mathbb{E}\left[(X - \mathbb{E}X)^2\right] <\infty.$
 
+---
+
+### Proof (continued)
+
 Assume now that $\mathbb{E}X^2 < \infty$.
 $$\begin{array}{rl}
   \mathbb{E}\left[(X - a)^2\right]
@@ -1127,6 +1341,7 @@ $$\begin{array}{rl}
 
 As $(a- \mathbb{E}X)^2\geq 0$, we have established that
 $\mathbb{E}\left[(X - \mathbb{E}X)^2\right]   = \inf_{a \in \mathbb{R}} \mathbb{E}\left[(X - a)^2\right]$.
+
 Moreover, the infimum is a minimum, it is achieved at a single point $\mathbb{E}X$.
 
 `r fontawesome::fa("square")`
@@ -1134,18 +1349,13 @@ Moreover, the infimum is a minimum, it is achieved at a single point $\mathbb{E}
 ---
 
 
-
-### Remark
-
-The first and second characterizations of variance assert that the expectation minimizes the average quadratic error. A fact of great importance in Statistics.
+`r fontawesome::fa("hand-point-right")` The first and second characterizations of variance assert that the expectation minimizes the average quadratic error. A fact of great importance in Statistics.
 
 
----
+--
 
 
-### Exercise
-
-Check that if $P\left\{ X \in [a,b]\right\} =1$, then $\operatorname{var}(X)\leq \frac{(b-a)^2}{4}$ \, .
+`r fontawesome::fa("brain")` Check that if $P\left\{ X \in [a,b]\right\} =1$, then $\operatorname{var}(X)\leq \frac{(b-a)^2}{4}$
 
 
 ---
@@ -1163,10 +1373,13 @@ small technical result in real analysis.
 ### Proposition (Young's inequality)
 
 
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $p, q>1$ be _conjugate_ ($1/p + 1/q =1$), and $x, y>0$, then
 
 $$xy \leq \frac{x^p}{p} + \frac{y^q}{q} \,.$$
 
+]
 
 ---
 
@@ -1200,10 +1413,13 @@ y <- 1
 
 ### Graphic proof of Young's inequality.
 
+.fl.w-50.f6[
 We choose $p=`r p`$ and $q= `r q`$, $x = `r x`$ and $y= `r y`$. The black point is located at $(x,y)^T$. The product $xy$ equals the area of the rectangle located between the origin and $(x,y)^T$ (delimited by the dashed segments). The dotted line represents function $s \mapsto s^{p-1}$, and interchanging  the axes, the function $t \mapsto t^{q-1} = t^{1/(p-1)}$. The area of the light grey surface under the dotted line equals $\frac{x^p}{p} = \int_0^x s^{p-1} \mathrm{d}s$, while the area of the darker grey surface below line $y=1$ and above the dotted line, equals  $\frac{y^q}{q} = \int_0^y t^{q-1} \mathrm{d}t$. The union of the two disjoint surfaces covers the rectangle  located between the origin and $(x,y)^T$. Equality occurs when the dotted line passes though $(x,y)^T$, that is when $y=x^{p-1}$.
 
+]
 
-```{r graphyoung, echo=FALSE, fig.cap='(ref:graphyoung)'}
+.fl.w-50[
+```{r graphyoung, echo=FALSE}
 # %%
 data1 <- as_tibble(list(s=seq(0, 2, by=.001))) %>%
   mutate(t = s^(p-1))
@@ -1224,12 +1440,11 @@ data1 %>%
   geom_ribbon(data=data2, aes(x=s, ymin=t, ymax=1), alpha=.3)
 # %%
 ```
-
+]
 
 ---
 
 
-### Remark
 
 A special case of Young inequality is obtained by taking $p=q=2$.
 
@@ -1241,11 +1456,17 @@ and Minkowski.
 ### Theorem (Cauchy-Schwarz)
 
 
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $X$ and $Y$ be two random variables on the same probability space.
-Assume both $\mathbb{E}X^2$ and $\mathbb{E}Y^2$ are finite. Then
 
-$$\mathbb{E} [XY] \leq  \sqrt{\mathbb{E}X^2} \times  \sqrt{\mathbb{E}Y^2} \,.$$
+Assume both $\mathbb{E}X^2$ and $\mathbb{E}Y^2$ are finite. 
 
+Then
+
+$$\mathbb{E} [XY] \leq  \sqrt{\mathbb{E}X^2} \times  \sqrt{\mathbb{E}Y^2}$$
+
+]
 
 ---
 
@@ -1268,32 +1489,34 @@ Taking expectation on both sides leads to the desired result.
 
 ---
 
-### Exercise
-
-Why is the inequality trivially satisfied if  $\sqrt{\mathbb{E}X^2}=0$?
+`r fontawesome::fa("brain")` Why is the inequality trivially satisfied if  $\sqrt{\mathbb{E}X^2}=0$?
 
 
----
-
-Theorem \@ref(thm:thmcauchyschwartz) tells us that if $X$ and $Y$ are
+`r fontawesome::fa("hand-point-up")`  If $X$ and $Y$ are
 square-integrable, then $XY$ is integrable.
 
 ---
 
 Hölder's inequality generalizes Cauchy-Schwarz inequality.
+
 Indeed, Cauchy-Schwarz inequality is just Hölder's inequality
-for $p=q=2$ ($2$ is its own conjugate).
+for $p=q=2$ ( $2$ is its own conjugate )
 
 ### Theorem (Hölder's inequality)
 
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $X$ and $Y$ be two random variables on the same probability space.
-Let $p, q>1$ be _conjugate_ ($1/p + 1/q =1$),
+
+Let $p, q>1$ be _conjugate_  ( $1/p + 1/q =1$ ),
 assume both $\mathbb{E}|X|^p$ and $\mathbb{E}|Y|^q$ are finite.
 
 Then we have
 
-$$\mathbb{E} [XY] \leq  \left(\mathbb{E}|X|^p\right)^{1/p} \times  \left(\mathbb{E}|Y|^q\right)^{1/q} \,.$$
+$$\mathbb{E} [XY] \leq  \left(\mathbb{E}|X|^p\right)^{1/p} \times  \left(\mathbb{E}|Y|^q\right)^{1/q}$$
 
+]
 
 ---
 
@@ -1333,10 +1556,14 @@ $$\begin{array}{rl}
 
 ### Corollary
 
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 For $1\leq p < q$,
 
 $$\mathbb{E}\Big[|X|^p\Big]^{1/p} \leq \mathbb{E}\Big[|X|^q\Big]^{1/q} \, .$$
 
+]
 
 ---
 
@@ -1347,14 +1574,21 @@ satisfies the triangle inequality.
 
 ### Theorem (Minkowski's inequality)
 
-Let $X, Y$ be two real-valued random variables defined on the same probability space. Let $p \in [1, \infty)$.
 
-Assume that $\mathbb{E}|X|^p <\infty$  and $\mathbb{E}|Y|^p<\infty.$ Then we have:
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+Let $X, Y$ be two real-valued random variables defined on the same probability space. 
+
+Let $1 \leq p < \infty$
+
+Assume that $\mathbb{E}|X|^p <\infty$  and $\mathbb{E}|Y|^p<\infty$ 
+
+Then we have:
 
 $$\left(\mathbb{E} [| X + Y|^p]\right)^{1/p} \leq \left(\mathbb{E} [| X|^p]\right)^{1/p} + \left(\mathbb{E} [|Y|^p]\right)^{1/p}$$
 
 which entails $\mathbb{E}|X+Y|^p <\infty.$
-
+]
 ---
 
 The proof of Minkowski's inequality follows from Hölder's inequality
@@ -1425,6 +1659,9 @@ The median minimizes the mean absolute deviation.
 
 ### Proposition
 
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 If $m$  is such that $P\{ X > m\} = P\{ X<m\}$
 
 then  $m$ is median of the distribution of $X$,
@@ -1433,7 +1670,7 @@ and if $X$ is integrable:
 
 $$\mathbb{E}\Big| X - m \Big| = \min_{a \in \mathbb{R}} \mathbb{E}\Big| X - a \Big|$$
 
-
+]
 
 
 ---
@@ -1462,12 +1699,15 @@ and standard deviation.
 
 ### Theorem (Lévy's inequality)
 
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
 Let $m$ be the median of the distribution of $X$, a square-integrable random
 variable over some probability space. Then
 
 $$\Big| m - \mathbb{E} X\Big| \leq \sqrt{\operatorname{var}(X)} \, .$$
 
-
+]
 
 
 ---
@@ -1524,7 +1764,11 @@ name: lpspaces
 ---
 
 
-Let $p \in [1, \infty)$. Let $(\Omega, \mathcal{F}, P)$ be a probability space. Define $\mathcal{L}_p(\Omega, \mathcal{F}, P)$
+Let $p \in [1, \infty)$. 
+
+Let $(\Omega, \mathcal{F}, P)$ be a probability space. 
+
+Define $\mathcal{L}_p(\Omega, \mathcal{F}, P)$
 (often abbreviated to $\mathcal{L}_p(P)$ or even $\mathcal{L}_p$ when there is no ambiguity) as
 
 $$\mathcal{L}_p(\Omega, \mathcal{F}, P) = \Big\{ X : X \text{ is a real random variable over } (\Omega, \mathcal{F}, P), \quad \mathbb{E}|X|^p < \infty \Big\} \, .$$
@@ -1541,11 +1785,20 @@ We first notice that sets $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ form a nested 
 ### Proposition
 
 
-Let $(\Omega, \mathcal{F}, P)$ be a probability space, then for $1 \leq p \leq q <\infty$:
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+
+Let $(\Omega, \mathcal{F}, P)$ be a probability space, 
+
+then 
+
+for $1 \leq p \leq q <\infty$:
 
 1. $\|X\|_p < \| X\|_q$.
+
 2. $\mathcal{L}_q(\Omega, \mathcal{F}, P) \leq \mathcal{L}_p(\Omega, \mathcal{F}, P)$.
 
+]
 
 
 ---
@@ -1553,9 +1806,12 @@ Let $(\Omega, \mathcal{F}, P)$ be a probability space, then for $1 \leq p \leq q
 ### Proof
 
 
-Assume $1 \leq p \leq q <\infty$,
-as $x \mapsto x^{q/p}$ is convex on $[0, \infty)$
-by Jensen's inequality  (Theorem \@ref(thm:thmjensen)), we have
+Assume $1 \leq p \leq q <\infty$
+
+As $x \mapsto x^{q/p}$ is convex on $[0, \infty)$
+by Jensen's inequality, 
+
+we have
 
 $$\begin{array}{rl}
   \mathbb{E} [|X|^p]^{q/p} & \leq \mathbb{E} [|X|^q] \,.
@@ -1567,13 +1823,20 @@ This establishes 1.) And 2.) is an immediate consequence of $1$.
 
 ---
 
-Proposition \@ref(prp:nestinglp) is a about inclusion of sets. The next theorem
+Proposition  is a about inclusion of sets. 
+
+The next theorem
 summarizes several points: that sets $\mathcal{L}_p$ are linear subspaces of $\mathcal{L}_0$,
 and that they are complete as pseudo-metric (pseudo-normed) spaces.
 
 ### Theorem  (completeness of $\mathcal{L}_p$)
 
-For $p \in [1, \infty)$, let $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ and $\|\cdot\|_p$ be defined as above. Then,
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+For $1 \leq p < \infty$, let $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ and $\|\cdot\|_p$ be defined as above. 
+
+Then,
 
 1. $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ is a linear subspace  of the space of real random variables.
 1. $\| \cdot\|_p$ is a pseudo-norm on $\mathcal{L}_p(\Omega, \mathcal{F}, P)$.
@@ -1581,9 +1844,13 @@ For $p \in [1, \infty)$, let $\mathcal{L}_p(\Omega, \mathcal{F}, P)$ and $\|\cdo
 $$\lim_n \sup_{m\geq n} \Big| X_n - X_m \Big|_p = 0$$
 
 
-then there exists $X \in \mathcal{L}_p(\Omega, \mathcal{F}, P)$ such that $\lim_n \| X_n - X\|_p=0$.
-1. There exists a subsequence $(X_{m_n})_{n}$ such that $X_{m_n} \to X$ $P$-almost surely.
+then 
 
+- There exists $X \in \mathcal{L}_p(\Omega, \mathcal{F}, P)$ such that $\lim_n \| X_n - X\|_p=0$.
+
+- There exists a subsequence $(X_{m_n})_{n}$ such that $X_{m_n} \to X$ $P$-almost surely.
+
+]
 
 
 ---
@@ -1592,6 +1859,7 @@ then there exists $X \in \mathcal{L}_p(\Omega, \mathcal{F}, P)$ such that $\lim_
 ### Remark
 
 In a pseudo-metric space, to prove that a Cauchy sequence converges, it is enough to check convergence of a subsequence.
+
 Picking a convenient subsequence, and possibly relabeling elements, we may assume   $\Big\| X_n - X_m \Big\|_p \leq 2^{- n \wedge m}$ for all $n,m$.
 
 
@@ -1599,6 +1867,9 @@ Picking a convenient subsequence, and possibly relabeling elements, we may assum
 name:  borelCant1
 
 ### First Borell-Cantelli Lemma
+
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
 Let $(A_n)_n$ be a sequence of events from some probability space $(\Omega, \mathcal{F}, P)$.
 
@@ -1610,18 +1881,27 @@ with probability $1$, only finetely many events $A_n$  are realized:
 
 $$P \left\{ \omega : \sum_n \mathbb{I}_{A_n}(\omega) < \infty \right\} = 1 \,.$$
 
-
+]
 
 
 ---
 
 ### Proof (Borell-Cantelli Lemma)
 
-The event $\left\{ \omega : \sum_n \mathbb{I}_{A_n}(\omega) = \infty \right\}$ coincides with $\cap_n \cup_{m\geq n} A_n$:
-$$P \left\{ \sum_n \mathbb{I}_{A_n}(\omega) = \infty\right\} = P(\cap_n \cup_{m\geq n} A_n) \, .$$
+The event 
 
+$$\left\{ \omega : \sum_n \mathbb{I}_{A_n}(\omega) = \infty \right\}$$
 
-Now, the sequence $(\cup_{m\geq n} A_n)_n$ is monotone decreasing: $\lim_n \downarrow \cup_{m\geq n} A_n = \cap_n \cup_{m\geq n} A_n \,.$$
+coincides with $\cap_n \cup_{m\geq n} A_n$:
+
+$$P \left\{ \sum_n \mathbb{I}_{A_n}(\omega) = \infty\right\} = P(\cap_n \cup_{m\geq n} A_n)$$
+
+---
+
+### Proof (continued)
+
+Now, the sequence $(\cup_{m\geq n} A_n)_n$ is monotone decreasing: 
+$$\lim_n \downarrow \cup_{m\geq n} A_n = \cap_n \cup_{m\geq n} A_n$$
 
 By Fatou's Lemma,
 $$\begin{array}{rl}
@@ -1736,23 +2016,32 @@ This relation is an equivalence relation (reflexive, symmetric and transitive).
 If $X \equiv X'$ and $Y \equiv Y'$, then $\|X -Y\|_p = \|X' -Y\|_p = \|X' - Y'\|_p$.
 $L_p(\Omega, \mathcal{F}, P)$ is the quotient space of $\mathcal{L}_p$ by relation $\equiv$.
 
+---
+
 We have the fundamental result.
 
 ### Theorem
 
-For $p \in [1, \infty)$, $L_p(\Omega, \mathcal{F}, P)$ equiped with
+
+.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
+
+For $1 \leq p <\infty$, $L_p(\Omega, \mathcal{F}, P)$ equiped with
 $\| \cdot\|_p$ is a complete normed space (Banach space).
+
+]
 
 
 This eventually allows us to invoke theorems from functional analysis.
 
 ---
 template: inter-slide
-
+exclude: true
 
 ## Bibliographic remarks {#bibmoments}
 
 ---
+exclude: true
+
 
 @MR1932358 gives a self-contained and thorough treatment of
 measure and integration theory with probability theory in mind.
