@@ -1,0 +1,592 @@
+---
+title: "EDA I: Introduction to R and Data Analysis"
+subtitle: "Analyse de Données Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r xaringan-themer, include=FALSE, warning=FALSE, eval=FALSE}
+pacman::p_load("xaringanthemer")
+
+xaringanthemer::style_xaringan()
+
+knitr::opts_chunk$set(echo=FALSE)
+
+options(htmltools.dir.version = FALSE, htmltools.preserve.raw = FALSE)
+```
+
+
+---
+template: inter-slide
+
+# I :  Introduction to `r fontawesome::fa("r-project")` and Visualization
+
+### `r Sys.Date()`
+
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
+
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
+---
+template: inter-slide
+
+## `r fontawesome::fa("map", fill="white")`
+
+### [Grammar of Graphics](#gg)
+
+### [DIY](#diy)
+
+### [Books](#books)
+
+
+---
+template: inter-slide
+
+## Grammar of Graphics
+
+---
+### Grammar of Graphics in Action
+
+```{r rossling, eval=TRUE}
+knitr::include_url("https://www.youtube.com/embed/jbkSRLYSojo")
+```
+
+---
+
+### Gapminder 
+
+[Gapminder](https://www.gapminder.org) is a Swedish foundation. Its website states
+
+> Gapminder fights devastating misconceptions about global development. Gapminder produces free teaching resources making the world understandable based on reliable statistics. Gapminder promotes a fact-based worldview everyone can understand.
+
+One of its founder, the late Hans Rosling, is famous for a 2006 Ted talk called _The best statistics you’ve ever seen_.  It became one of the most seen TED talks ever, thanks to its unique combination of knowledge-testing, animating bubble charts and storytelling about global development.
+
+[`r fontawesome::fa("link")` Gapminder](https://www.gapminder.org)
+
+
+
+---
+template: inter-slide
+name: diy
+
+## Do It Yourself 
+
+---
+### Install and load packages
+
+.fl.w-50.pa2[
+
+The `gapminder` data can be gathered from pakage `gapminder`
+
+- packages can be installed from `CRAN` using `install.packages()`
+
+- Once a package is installed on hard drive, it has to be loaded in the current session using `require()` or `library()`  
+
+- Function `p_load` from package `pacman` installs the package if needed and loads it
+
+- Loading `tidyverse` loads a collection of packages dedicated to table manipulations and graphics including `ggplot2`. 
+
+- Loading `tidyverse` also loads `magrittr`
+
+]
+
+.fl.w-50.pa2[
+
+```{r load_gapminder_again, echo=TRUE}
+pacman::p_load("tidyverse")
+pacman::p_load("gapminder")
+```
+]
+
+???
+
+---
+
+### Have a look at gapminder dataset
+
+.fl.w-30.pa2[
+
+- `gapminder` is a `data.frame`
+
+- It is also a `tibble`
+
+- `data.frame` like structures show up in every corner o Data Science
+
+]
+
+.fl.w-70.pa2[
+
+```{r bare_gapminder}
+gapminder
+```
+
+]
+
+---
+
+### Get a feeling of the dataset
+
+.fl.w-30.pa2[
+
+```{r stratified_sampling}
+tmp <- gapminder %>% 
+  group_by(continent) %>%  #<<
+  slice_sample(n=2)        #<<
+
+```
+]
+
+.fl.w-70.pa2[
+
+```{r stratified_sampling_bis, echo=FALSE}
+tmp
+```
+
+]
+
+---
+exclude: true
+
+### Gapminder tibble  (extract)
+
+```{r gapminder_td, eval=FALSE}
+gapminder %>% 
+  filter(year==2002)  %>% 
+  mutate(pop = stringr::str_c(round(pop/1e6,1), 'M')) %>% 
+  DT::datatable(options=list(pageLength=8, dom = 't'), rownames = FALSE) %>%  #<<
+  DT::formatCurrency('gdpPercap', digits=0) %>%      #<<
+  DT::formatRound('lifeExp', 1) #<<
+```
+
+---
+exclude: true
+
+
+```{r gapminder_td_bis, echo=FALSE}
+gapminder %>% 
+  filter(year==2002)  %>% 
+  mutate(pop = stringr::str_c(round(pop/1e6,1), 'M')) %>% 
+  DT::datatable(options=list(pageLength=8, dom = 't'), rownames = FALSE) %>%  #<<
+  DT::formatCurrency('gdpPercap', digits=0) %>%      #<<
+  DT::formatRound('lifeExp', 1) #<<
+```
+
+???
+
+- [ ] Formatting instruction should not be wired in the table fed to `DT`
+- [ ] reorder columns
+- [ ] order countries by decreasing population size
+- [ ] right-align `pop` column
+- [ ] make provision for caption 
+
+--- 
+### Picking one year of data 
+
+.fl.w-30.pa2[
+
+```{r gapminder_filtered, echo=TRUE}
+gapminder_2002 <- 
+  gapminder %>% 
+  filter(year==2002)
+```
+
+]
+
+.fl.w-70.pa2[
+
+```{r gapminder_filtered_glimpse, echo=FALSE}
+gapminder_2002 
+```
+
+]
+
+
+???
+
+
+---
+template: inter-slide
+
+## Static plotting
+
+---
+
+### First attempt
+
+
+.fl.w-40.pa2[
+
+- Define a plot with respect to `gapminder_2002`
+
+- Map variables `gdpPercap` and `lifeExp` to axes `x` and `y`
+
+- For each row, draw a point at coordinates defined by the mapping
+
+```{r bad, eval=FALSE, echo=TRUE}
+gapminder_2002 %>% 
+  ggplot() +    #<< 
+  aes(x=gdpPercap, y=lifeExp) +  #<<
+  geom_point() #<<
+```
+
+]
+
+
+--
+
+.fl.w-60.pa2[
+
+```{r bad-out, ref.label="bad", echo=FALSE}
+```
+
+]
+
+
+
+???
+
+What's missing there?
+
+-  [ ] colors
+-  [ ] bubble sizing
+-  [ ] titles and legends
+
+---
+
+### Display more information
+
+
+.fl.w-30.pa2[
+
+- Map `continent` to color
+
+- Map `pop` to bubble size
+
+- Make point transparent by tuning `alpha` (avoid overplotting)
+
+```{r better, echo=TRUE, eval=FALSE}
+p <- gapminder_2002 %>% 
+  ggplot() +
+  aes(x=gdpPercap, 
+      y=lifeExp, 
+      size = pop, #<<
+      color = continent #<<
+      ) +
+  geom_point(alpha=.75)  #<<
+
+p
+```
+
+]
+
+
+.fl.w-70.pa2[
+
+```{r better-out, ref.label="better", echo=FALSE}
+
+```
+
+
+]
+
+
+---
+
+### Scaling 
+
+.fl.w-30.pa2[
+
+In order to pay tribute to Hans Rosling, we need to take care of two _scaling_ issues:
+
+- the gdp per capita axis should be _logarithmic_
+
+- the area of the point should be proportionnal to the population
+
+```{r scaling, echo=TRUE, eval=FALSE}
+p <- p + 
+  scale_x_log10(limits=c(100,5e4)) + #<<
+  scale_size_area()  #<<
+
+p
+```
+]
+
+.fl.w-70.pa2[
+
+
+```{r scaling-out, ref.label="scaling", echo=FALSE}
+
+```
+
+]
+
+
+
+---
+
+### In perspective 
+
+
+.fl.w-30.pa2[
+
+- Add a plot title
+
+- Make axes titles 
+  + explicit and 
+  + readable
+
+```{r title, echo=TRUE, eval=FALSE}
+p +
+  labs(title= "Gapminder bubble plot (2002)", 
+       x = "Income", 
+       y = "Lifespan")
+```
+
+]
+
+
+.fl.w-70.pa2[
+
+```{r title-out, ref.label="title"}
+
+```
+
+]
+
+---
+
+### Theming
+
+
+.pull-left[
+
+- Theming
+
+```{r theme, echo=TRUE, eval=FALSE}
+p +
+  labs(title= stringr::str_c("Gapminder ", min(p$data$year), "-", max(p$data$year)), 
+       x = "Income", 
+       y = "Lifespan") 
+
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r theme-out, ref.label="theme"}
+
+```
+
+]
+
+???
+
+How to choose a theme? 
+
+---
+
+
+
+### Tuning scales
+
+
+.fl.w-60.pa2[
+
+```{r theme_scale, echo=TRUE, eval=FALSE}
+neat_color_scale <- 
+      c("Africa" = "#01d4e5", 
+        "Americas" = "#7dea01" , 
+        "Asia" = "#fc5173", 
+        "Europe" = "#fde803", 
+        "Oceania" = "#536227")
+p <- p +
+  scale_size_area(max_size = 15) + 
+  scale_color_manual(values = neat_color_scale) #<< 
+
+p +
+  labs(title= "Gapminder (2002)", 
+       x = "Income", 
+       y = "Lifespan") 
+```
+
+]
+
+
+
+.fl.w-40.pa2[
+
+```{r theme_scale-out, ref.label="theme_scale", warning=FALSE, echo=FALSE, message=FALSE}
+
+```
+
+]
+
+---
+
+```{r theme_scale-out-bis, ref.label="theme_scale", warning=FALSE, echo=FALSE, message=FALSE, out.width="90%"}
+```
+
+---
+template: inter-slide
+
+## Facetting 
+
+---
+
+```{r facet, eval=FALSE, echo=TRUE}
+ggplot(data = gapminder) +
+  geom_point(aes(x = gdpPercap, 
+                 y = lifeExp, 
+                 size = pop, 
+                 color = continent),
+             alpha=.5)   +
+  scale_x_log10(limits=c(100, 50000)) +
+  scale_size_area(max_size = 15, 
+                  labels= scales::label_number(scale=1/1e6, suffix=" M")) +
+  scale_color_manual(values = neat_color_scale) +
+  guides(color = guide_legend(title = "Continent", 
+                              override.aes = list(size = 5), 
+                              order = 1),
+         size = guide_legend(title = "Population",
+                             order = 2)) +
+  labs(title= "Gapminder", x = "Income", y = "Lifespan") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  facet_wrap(vars(year), ncol=6)  #<< 
+```
+
+
+---
+
+
+```{r facet-out, ref.label="facet", out.width="80%", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+---
+
+### Don't Repeat Yoursel (DRY)
+
+> Abide to the DRY principle using operator `%+%`: the `ggplot2` object `p` can be fed with another dataframe and all you need is proper facetting. 
+
+```{r dryit, message=FALSE, warning=FALSE}
+(p %+% gapminder) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  labs(title= "Gapminder (1952-2007)", x = "Income", y = "Lifespan") +
+  facet_wrap(vars(year)) 
+```
+
+---
+
+```{r dryit-out, ref.label="dryit", out.width="80%", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+---
+template: inter-slide
+
+## Animate for free with `plotly`
+
+---
+
+### From `r fontawesome::fa("r-project")` to `D3.js`
+
+```{r animate, warning=FALSE, eval=FALSE, message=FALSE, out.width="80%"}
+(ggplot(data = gapminder) +
+   aes(x = gdpPercap, 
+      y = lifeExp, 
+      size = pop, 
+      text = country, 
+      color = continent, 
+      frame = year) +   #<< 
+   geom_point() +
+  scale_x_log10() +
+  scale_size_area(max_size = 15, 
+                  labels= scales::label_number(scale=1/1e6, 
+                                               suffix=" M")) +
+  scale_color_manual(values = neat_color_scale) +
+  theme(legend.position = "none") +
+  labs(title= "Gapminder", x = "Income", y = "Lifespan")) %>% 
+  plotly::ggplotly(height = 500, width=750)     #<< 
+```
+
+---
+
+```{r animate-out, ref.label="animate", echo=FALSE, message=FALSE, warning=FALSE}
+
+
+```
+
+---
+
+
+
+```{r}
+knitr::include_url("https://plotly.com/r/")
+```
+
+
+
+---
+template: inter-slide
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+---
+
+```{r}
+knitr::include_url("https://www.youtube.com/embed/3n9nASHg9gc")
+```
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: cover
+
+
+# The End

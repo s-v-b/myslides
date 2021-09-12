@@ -759,7 +759,7 @@ table(train$Embarked) %>%
 
 
 
-`r fontawesome::fa("")` Base function `summary` tells us everything there is to know: number of passengers for every class and passengers, and number of sample elements  with unknown class
+`r fontawesome::fa("lightbulb")` Base function `summary` tells us everything there is to know: number of passengers for every class and passengers, and number of sample elements  with unknown class
 
 `r fontawesome::fa("exclamation-triangle")` Base function `table` puts dust under the carpet:  number of passengers with unknown class is unreported
 
