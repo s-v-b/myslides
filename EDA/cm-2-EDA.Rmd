@@ -1,9 +1,15 @@
 ---
 title: "Univariate statistics"
-subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+subtitle: "EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -23,76 +29,37 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
 name: layout-general
 layout: true
 class: left, middle
 
-```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-xaringanExtra::use_animate_css()
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-xaringanExtra::use_tile_view()
-
-xaringanExtra::use_tachyons(minified = FALSE)
-
-xaringanExtra::use_logo(
-  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_editable(expires = 1)
-
-xaringanExtra::use_fit_screen()
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_broadcast()
-
-xaringanExtra::use_clipboard()
-
-source("./loaders_fixers.R")
 ```
 
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-
-
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Univariate Statistics
 
 ### `r Sys.Date()`
 
-#### [EDA Master I MIDS et MFA](/courses/eda/index.html)
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
 
-#### [Stéphane Bocuheron](http://stephane-v-boucheron.fr)
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 
 ---
-class: inverse, middle
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -123,7 +90,7 @@ Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi
 
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Samples
 
@@ -355,7 +322,7 @@ To compute summary statistics when facing missing values,  `na.rm` has to be `TR
 What is the class of `NA`, `NA_integer_`, `NA_real_`?
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Robust summary statistics
 
@@ -407,7 +374,7 @@ rapportools::kurtosis
 Check that the kurtosis and the skewness are translation invariant.
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Boxplots
 
@@ -642,7 +609,7 @@ Extreme lie far away above the whiskers
 ]
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Violinplots
 
@@ -697,7 +664,7 @@ exclude: true
 
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Histograms
 
@@ -712,7 +679,7 @@ exclude: true
 ]
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Numerical summaries for categorical samples
 
@@ -788,7 +755,7 @@ exclude: true
 #   kable()
 ```
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Graphical summaries for categorical samples
 
@@ -804,7 +771,7 @@ exclude: true
 xx
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Barplots
 
@@ -1038,6 +1005,13 @@ dt %>%
 
 
 ---
+template: inter-slide
+
+
+## Barplots in action
+
+
+---
 
 ### Semmelweis inquiry
 
@@ -1121,7 +1095,7 @@ Semmelweis was puzzled that puerperal fever was rare among women giving street b
 
 .fl.w-third.pa2[
 
-```{r, echo=FALSE}
+```{r  read_semmelweis, echo=FALSE}
 read_csv("DATA/semmelweis.csv",
         col_types = cols(BirthsL = col_integer(), #<<
                          BirthsM = col_integer(),
@@ -1189,7 +1163,7 @@ more natural to handle "Year" as a `Date` object)
 .fl.w-two-thirds.pa2[
 
 
-```{r}
+```{r pivot_semmelweis}
 tmp <- semmelweis %>%
   select(Year, RateM, RateL) %>%
   pivot_longer(cols=c(RateM, RateL),  #<<
@@ -1198,9 +1172,9 @@ tmp <- semmelweis %>%
              ) %>%
   mutate(Clinic = as_factor(Clinic), #<<
          Year = as_factor(Year)) %>%
-  mutate(Clinic = fct_recode(Clinic,
+  mutate(Clinic = fct_recode(Clinic,        #<<
                              Doctors="RateM",
-                            Midwifes="RateL")
+                             Midwifes="RateL")
          )
 ```
 
@@ -1226,6 +1200,10 @@ head(tmp, 4) %>% knitr::kable(format = 'html')
 
 - Experimental data
 
+
+???
+
+
 ---
 
 ### Data wrangling makes ploting easy.
@@ -1235,19 +1213,18 @@ head(tmp, 4) %>% knitr::kable(format = 'html')
 
 ```{r semmelweis-label, panelset=c("Code", "Semmelweis barplot"), fig.height=4}
 tmp %>%
-  ggplot(mapping = aes(x=Year,
-                       y=Death_rate,
-                       group=Clinic,
-                       fill=Clinic,
-                       linetype=Clinic)) +
-        geom_col(position="dodge",   #<<
-                 colour="black",
-                 width=.2) +
+  ggplot() +
+  aes(x=Year,
+      y=Death_rate,
+      group=Clinic,
+      fill=Clinic,
+      linetype=Clinic)) +
+  geom_col(position="dodge",   #<<
+           colour="black",
+           width=.2) +
   theme(legend.position=c(5.5/6, 13/15)) +
   ggtitle("Semmelweis data") +
   ylab("Death rate (%)")
-
-
 ```
 
 ]
