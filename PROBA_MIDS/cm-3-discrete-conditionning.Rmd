@@ -154,7 +154,7 @@ $$P\{ B \mid A \} =  \frac{P\{ X \geq 2 t\}}{P\{ X \geq t\}}$$
 
 Let   $P$ be a probability distribution  on $(\Omega, \mathcal{F})$
 
-Let  $A  \in \mathcal{F})$ be such that  $P\{A\} > 0$
+Let  $A  \in \mathcal{F}$ be such that  $P\{A\} > 0$
 
 then
 
