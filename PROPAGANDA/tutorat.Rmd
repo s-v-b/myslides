@@ -1,0 +1,26 @@
+
+---
+
+.pull-left[
+
+### L'idée 
+
+> En Licence 1 et 2, il existe un système de _tutorat._ 
+
+> Les tuteurs sont des étudiants de L3 ou de Master, rémunérés (environ 15 € net par heure) pour conseiller les étudiants dans leurs choix de parcours et les aider dans leurs études
+
+> Le tutorat se déroule en général sur le temps du midi, 2 ou 3 jours par semaine
+
+> L'idée est que sur chaque créneau, on ait deux intervenants: un moniteur et un élève de M1
+
+]
+
+.pull-right[
+
+### Si vous êtes intéressé, contacter : 
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://paullaurain.weebly.com")
+```
+
+]

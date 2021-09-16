@@ -68,13 +68,13 @@ name: xxx
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [Motivation](#bigpic)
+### [Motivation](#motivation)
 
-### [Binomial](#gmm)
+### [Binomial](#bernoulli)
 
-### [Poisson](#em)
+### [Poisson](#poisson)
 
-### [Geometric](#mclust)
+### [Geometric](#geometric)
 
 ???
 
@@ -91,12 +91,15 @@ name: motivation
 The goal of this lesson is
 
 - getting acquainted with important families of distributions and
-- getting familiar with distributional calculus.
+
+- getting familiar with distributional calculus
 
 Probability distributions will be presented through
 
 - distribution functions,
+
 - probability mass functions (discrete distribution)
+
 - ...
 
 
@@ -120,7 +123,7 @@ A Bernoulli distribution is completely defined by its success parameter
 
 ---
 
-### Definition  binomial}
+### Definition  binomial
 
 Assume $\Omega^{\prime} = \{0,1\}^n$
 
@@ -144,13 +147,13 @@ This connexion goes further: the sum of _independent_ Bernoulli random  variable
 ### Proposition
 
 Let $X_1, X_2, \ldots, X_n$ be _independent_, identically distributed Bernoulli random variables with
-success parameter $p \in [0,1]$,
+_success_ parameter $p \in [0,1]$,
 
 then
 
 $$Y = \sum_{i=1}^n X_i$$
 
-is distributed according to a Binomial disctribution with size parameter $n$ and success probability $p$:
+is distributed according to a Binomial disctribution with _size_ parameter $n$ and _success_ probability $p$:
 
 $$Y \sim \operatorname{Bin}(n,p)$$
 
@@ -174,15 +177,17 @@ P\Big\{ \sum_{i=1}^n  X_i = k \Big\}
 ---
 
 
-This observation facilitates the computation of moments of Binomial distribution.
+This observation facilitates the computation of moments of Binomial distribution `r fontawesome::fa("glass-cheers")`
 
-The expected value of a Bernoulli distribution with parameter $p$ is $p$! Its variance is $p(1-p)$.
+- `r fontawesome::fa("hand-point-right")` The _expected value/expectation_ of a Bernoulli distribution with parameter $p$ is $p$
 
-By linearity of expectation, the expected value of the binomial distribution with parameters $n$ and $p$ is $n \times p$
+- `r fontawesome::fa("hand-point-right")` Its variance is $p(1-p)$
 
-The variance of a sum of independent random variables  is the sum of the variances
+- By _linearity of expectation_, the expected value of the binomial distribution with parameters $n$ and $p$ is $n \times p$ `r fontawesome::fa("glass-cheers")`
 
-The variance of the binomial distribution with parameters $n$ and $p$ is $n \times p(1-p)$.
+- `r fontawesome::fa("hand-point-right")` The variance of a sum of independent random variables  is the sum of the variances
+
+- `r fontawesome::fa("hand-point-right")` The variance of the binomial distribution with parameters $n$ and $p$ is $n \times p(1-p)$ 
 
 ```{r loads, echo=FALSE, message=FALSE, warning=FALSE}
 # %%
@@ -197,7 +202,7 @@ old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
 
 ### Binomial probability mass functions with $n=20$ and different values of $p$ : $.5, .7, .2$.
 
-```{r witbinom, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:witbinom)', fig.align="center"}
+```{r witbinom, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center"}
 # %%
 n <- 20
 x <-  as.integer(seq(0, 20, by=1))
@@ -239,11 +244,11 @@ then
 
 $X+Y$ is distributed according to $\text{Bin}(n_1+n_2, p)$
 
-$$X ⊥\!\!\!\bot Y, \quad X \sim\operatorname{Bin}(n_1, p), \quad Y \sim\operatorname{Bin}(n_2, p) \Rightarrow X+ Y \sim\operatorname{Bin}(n_1+n_2, p)$$
+$$X \bot\!\!\!\bot Y, \quad X \sim\operatorname{Bin}(n_1, p), \quad Y \sim\operatorname{Bin}(n_2, p) \Rightarrow X+ Y \sim\operatorname{Bin}(n_1+n_2, p)$$
 
 ---
 
-### Exercise
+### `r fontawesome::fa("brain")`
 
 Check the preceding proposition.
 
@@ -353,14 +358,14 @@ The last expression if the pmf of $\operatorname{Po}(\lambda + \mu)$ at $k$
 ---
 
 
-### Exercise
+### `r fontawesome::fa("brain")`
 
 Check that the _mode_ (maximum) of a Poisson probability mass function with parameter $\lambda$
 is achieved at $k= \lfloor \lambda \rfloor$
 
 It is always unique?
 
-### Exercise
+### `r fontawesome::fa("brain")`
 
 Check that the _median_ of a Poisson distribution with integer parameter $\lambda$ is not smaller than $\lambda$
 
@@ -375,11 +380,17 @@ name: geometric
 A geometric distribution is a probability distribution over $\mathbb{N} \subset \{0,1\}$. It depends
 on a parameter $p>0$.
 
-Assume we are allowed to toss a biased coin infinitely many times. The number of
-times we have to toss the coin _until_ we get a _head_ is geometrically distributed.
+Assume we are allowed to toss a biased coin infinitely many times. 
+
+The number of times we have to toss the coin _until_ we get a _head_ is geometrically distributed.
+
+---
+
 
 Let $X$ be distributed according to a geometric distribution with parameter $p$.
-The geometric probability distribution is easily defined by its tail function.
+
+The geometric probability distribution is easily defined by its _tail function_
+
 In the event $X>k$, the first $k$ outcomes have to be _tail_.
 
 $$P \{ X > k \} = (1-p)^k$$
@@ -394,12 +405,14 @@ $$\mathbb{E}X = \sum_{k=0}^\infty P \{ X > k \} = \frac{1}{p}$$
 
 ---
 
-### Remark
+### `r fontawesome::fa("exclamation-triangle")`
 
 It is also possible to define geometric random variables as
 the number of times we have to toss the coin __before__ we get a _head_.
-This requires modifying quantile function, probability mass function, expectation,
-and so on.  This is the convention `R` uses.
+
+This requires modifying quantile function, probability mass function, expectation, and so on.  
+
+This is the convention `r fontawesome::fa("r-project")` uses.
 
 
 ---
