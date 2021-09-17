@@ -1218,7 +1218,7 @@ tmp %>%
       y=Death_rate,
       group=Clinic,
       fill=Clinic,
-      linetype=Clinic)) +
+      linetype=Clinic) +
   geom_col(position="dodge",   #<<
            colour="black",
            width=.2) +
