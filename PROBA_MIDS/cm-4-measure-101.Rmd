@@ -65,8 +65,10 @@ template: inter-slide
 ---
 template: inter-slide
 
-## `r fontawesome::fa("map", fill="white")`
+### `r fontawesome::fa("map", fill="white")`
 
+
+.pull-left[
 
 ### [Motivation](#motivation)
 
@@ -76,6 +78,11 @@ template: inter-slide
 
 ### [Measurable functions](#measurablefunctions)
 
+]
+
+
+.pull-right[
+
 ### [Lebesgue Measure](#lebesque)
 
 ### [Monotone class theorem](#monotoneclass)
@@ -84,7 +91,7 @@ template: inter-slide
 
 ### [General random variables](#generalrv)
 
-
+]
 
 ---
 template: inter-slide
@@ -178,13 +185,15 @@ In the sequel $2^{\Omega}$ denotes the collection of all subsets of $\Omega$ (th
 A sensible collection of events has to be a $\sigma$-algebra
 
 
-Definition $\sigma$-algebra
+### Definition 
 
-Given a set $\Omega$, a collection $\mathcal{G}$ of subsets of $\Omega$ ($\mathcal{G} \subseteq 2^{\Omega}$) is called a  $\sigma$-algebra (a sigma  algebra) iff
+Given a set $\Omega$, a collection $\mathcal{G}$ of subsets of $\Omega$ ( $\mathcal{G} \subseteq 2^{\Omega}$  ) is called a  $\sigma$-algebra (a sigma  algebra) 
+
+iff
 
 - $\mathcal{G}$ is closed under $countable$ union
 - $\emptyset \in \mathcal{G}$
-- $\mathcal{G}$ is closed under complementation ($A \in \mathcal{G} \Rightarrow A^c = \Omega \setminus A \in \mathcal{G}$)
+- $\mathcal{G}$ is closed under complementation ( $A \in \mathcal{G} \Rightarrow A^c = \Omega \setminus A \in \mathcal{G}$ )
 
 --
 
@@ -495,16 +504,16 @@ if
 
 `r fontawesome::fa("brain")`
 
- If you think $(\mathbb{R}, 2^{\mathbb{R}})$ is a measurable space, define a $\sigma$-additive measure on it
+If you think $(\mathbb{R}, 2^{\mathbb{R}})$ is a measurable space, define a $\sigma$-additive measure on it
 
- Try even to define a probability measure
+Try even to define a probability measure
 
 ---
 
 
 The notion of $\sigma$-additivity is stronger than finite additivity
 
-Assuming the __Axiom of Choice_ (as usual when working in Analysis or Probability), there exists a function $\mu$
+Assuming the _Axiom of Choice_ (as usual when working in Analysis or Probability), there exists a function $\mu$
 that map  $2^{\mathbb{N}}$ to $[0,1]$, that is  additive ( $\mu(A \cup B)= \mu(A) + \mu(B)$ for all $A, B, A\cap B=\emptyset$ ),
 zero on all finite subsets of $\mathbb{N}$ and such that $\mu(\mathbb{N})=1$.
 

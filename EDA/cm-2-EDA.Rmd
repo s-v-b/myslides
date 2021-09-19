@@ -146,9 +146,8 @@ tit_col_types = cols(
 
 ### Viewing (part of) the dataset
 
-.fl.w-40.pa2[
 
-`r fontawesome::fa("database")`  Table wrangling
+`r fontawesome::fa("database")`  Table loading and wrangling
 
 ```{r load-titanic-label, echo=TRUE}
 train <- read_csv("DATA/titanic/train.csv",
@@ -159,29 +158,46 @@ test <- read_csv("DATA/titanic/test.csv",
 test <- mutate(test, #<<
                Survived=NA)  #<<
 
-tit <- union(train,
-             test)
+tit <- union(train, test)
 ```
+
+
+---
+
+
+
+
+### `r fontawesome::fa("chalkboard-teacher")`  Reporting
+
+.fl.w-40.pa2[
+
+```{r tit_kable, echo=TRUE, eval=FALSE}
+tit %>%
+  dplyr::select(Survived, #<<
+                Pclass, 
+                Sex, 
+                Age) %>%   
+  dplyr::sample_n(5) %>%   #<<
+  knitr::kable()   #<<
+```
+
+
+We _project_ the table on four columns, then _sample_ 5 rows at random,
+and then _display_ 
+
 
 ]
 
 .fl.w-60.pa2[
 
-.small[
+```{r, ref.label="tit_kable", echo=FALSE}
 
-`r fontawesome::fa("chalkboard-teacher")`  Reporting
-
-```{r , echo=FALSE}
-tit %>%
-  dplyr::select(Survived, Pclass, Sex, Age) %>%
-  dplyr::sample_n(5) %>%
-  kable()
 ```
 
-]
+
+
 
 ]
-
 
 
 ---
@@ -211,6 +227,19 @@ is either with
 
 `r fontawesome::fa("exclamation-triangle")` The boundary between qualitative and quantitative is not always straightforward
 
+
+---
+
+
+We will learn about:
+
+- numerical summaries 
+
+- graphical displays 
+
+for univariate samples
+
+
 ---
 class: middle, center, inverse
 
@@ -218,41 +247,42 @@ class: middle, center, inverse
 
 ---
 
-### For quantitative variables
+### Numerical summaries for quantitative variables
 
-- Mean:
+- **Mean**:
 
-$$\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i \qquad  \text{(location)}$$
+$$\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i \qquad  \textbf{(location)}$$
 
-- Standard deviation:
+- **Standard deviation**:
 
-$$s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2 \quad \text{or}\quad s^2 = \frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2\qquad\text{(dispersion)}$$
+$$s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2 \quad \text{or}\quad s^2 = \frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2\qquad\textbf{(dispersion)}$$
 
-- Skewness
+- **Skewness**
 
 $$\frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^3}{s^3}$$
 
-- Kurtosis
+- **Kurtosis**
 
 $$\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i -\overline{X}_n\big)^4}{s^4} - 2$$
 
 ---
 
+### Numerical summaries at work 
 
 
 ```{r}
-s <- rnorm(1000)
+s <- rnorm(1000)   # a random sample from the standard normal distribution 
 
-mean(s) - sum(s)/length(s)
+mean(s) - sum(s)/length(s)   #<< 
 
-sd(s) - sqrt(sum((s-mean(s))^2)/(length(s)-1))
+sd(s) - sqrt(sum((s-mean(s))^2)/(length(s)-1))   #<< 
 
-mean((s- mean(s))^4)/sd(s)^4 -3
+mean((s- mean(s))^4)/sd(s)^4 -3   #<< 
 ```
 
 ---
 
-### TODO
+### What if some data are missing? 
 
 ```{r}
 s <- rnorm(10)
@@ -261,9 +291,9 @@ s
 ```
 
 ```{r}
-mean(s)
-mean(s, na.rm = TRUE)
-mean(s[-c(2, 3, 7)])
+mean(s)   #<< 
+mean(s, na.rm = TRUE)  #<< 
+mean(s[-c(2, 3, 7)])  
 ```
 
 
@@ -302,7 +332,11 @@ function (x, trim = 0, na.rm = FALSE, ...)
 
 ```
 
+
+
 ---
+
+### `r fontawesome::fa("brain")`
 
 - What happens when `na.rm` is `TRUE`?
 
@@ -312,14 +346,27 @@ function (x, trim = 0, na.rm = FALSE, ...)
 
 - Which lines actually compute the (uniformly) weighted mean?
 
+???
+
+
+- The first `if (...) {...}` is an example of defensive programming
+
+- `if (na.rm) { ... }` handles missing data when the default behavior is overriden. 
+`NA` are filtered out
+
+- When positive, parameter  `trim` allows us to compute _trimmed means_ 
+
+Depending on optional arguments, fucntion `mean` allows to compute either arithmetic means, or trimmed (arithmetic) means
 
 ---
 
-In a _tidy_ sample, _missing values_ are explicitely pointed as missing information using special objects `NA`, `NA_integer_`, `NA_real_`, ...
+### `r fontawesome::fa("hand-point-right")`
 
-To compute summary statistics when facing missing values,  `na.rm` has to be `TRUE`.
+- In a _tidy_ sample, _missing values_ are explicitely pointed as missing information using special objects `NA`, `NA_integer_`, `NA_real_`, ...
 
-What is the class of `NA`, `NA_integer_`, `NA_real_`?
+- To compute summary statistics when facing missing values,  `na.rm` has to be `TRUE`.
+
+- What is the class of `NA`, `NA_integer_`, `NA_real_`?
 
 ---
 template: inter-slide
@@ -329,24 +376,26 @@ template: inter-slide
 
 ---
 
+### `summary(...)` 
+
 ```{r}
 summary(s)
 ```
 
 ---
 
-- Order statistics: $x_{1:n} \leq x_{2:n} \leq \ldots \leq x_{n:n}$
+- **Order statistics**: $x_{1:n} \leq x_{2:n} \leq \ldots \leq x_{n:n}$
 
-- Median.  $x_{\lfloor n/2\rfloor+1:n}$ if $n$ is odd,
+- **Median**  $x_{\lfloor n/2\rfloor+1:n}$ if $n$ is odd,
 $(x_{n/2:n}+ x_{n/2+1:n})/2$ if $n$ is even
 
-- Quartiles, $x_{\lfloor n/4\rfloor:n}$ and $x_{\lfloor 3 n/4\rfloor:n}$
+- **Quartiles** $x_{\lfloor n/4\rfloor:n}$ and $x_{\lfloor 3 n/4\rfloor:n}$
 
-- Quintiles $x_{\lfloor k n/5\rfloor:n}$ pour $k \in 1, \ldots, 4$
+- **Quintiles** $x_{\lfloor k n/5\rfloor:n}$ pour $k \in 1, \ldots, 4$
 
-- Deciles $x_{\lfloor k n/10\rfloor:n}$ pour $k \in 1, \ldots, 9$
+- **Deciles** $x_{\lfloor k n/10\rfloor:n}$ pour $k \in 1, \ldots, 9$
 
-- Percentiles
+- **Percentiles**
 
 - ...
 
@@ -703,7 +752,7 @@ of occurences of the symbol and the total length of the sequence
 ```{r}
 summary(train$Pclass)
 
-table(train$Pclass) %>%
+table(train$Pclass) %>%   #<< 
   kable(col.names = c("PClass", "Frequency"))
 ```
 
@@ -720,7 +769,7 @@ For univariate samples, ...
 ```{r}
 summary(train$Embarked)
 
-table(train$Embarked) %>%
+table(train$Embarked) %>% #<< 
   kable(col.names = c("Embarkment", "Frequency"))
 ```
 
@@ -950,6 +999,7 @@ like defining a _pipeline_
 
 
 ---
+exclude: true
 
 .fl.w-third.pa2[
 A stacked barplot offers another possibility to show the different proportions
@@ -1257,13 +1307,15 @@ class: center, middle, inverse
 
 ---
 
+### Milestones 
+
 - Semmelweis circa 1847 Puerperal fever
 
 - Snow circa 1852 Cholera
 
-- Hill Randomized Clinical Trial Streptomyces versus Collapsotherapia against Tuberculosis 1948
+- Hill _Randomized Clinical Trial Streptomyces versus Collapsotherapia against Tuberculosis_ 1948
 
-- 
+- ... 
 
 ---
 class: center, middle, inverse
