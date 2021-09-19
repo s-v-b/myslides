@@ -249,7 +249,7 @@ class: middle, center, inverse
 
 ### Numerical summaries for quantitative variables
 
-- **Mean**:
+- __Mean__:
 
 $$\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i \qquad  \textbf{(location)}$$
 
@@ -834,9 +834,6 @@ For qualitative samples, `barplot` are a simple way of visualizing counts
 
 .fl.w-50.pa2[
 
-
-
-
 ```{r titanic-label-allin1, fig.show='hide'}
 tit %>%
   ggplot(mapping=aes(x=Pclass)) +
@@ -870,19 +867,18 @@ Most of the flexibility lies in the mapping of modalities on the `X-axis` or doi
 
 ???
 
-Empasize
+Emphasize
 
 - distinction betweem `geom_`  and `stat_`
 
--
+
 
 ---
 
 ### Bar plotting in two steps using `group_by()`, `n()` and `geom_col()`
 
-.fl.w-50.pa2[
+.fl.w-50.pa2.f5[
 
-.small[
 
 
 ```{r titanic-label, fig.show='hide'}
@@ -897,7 +893,7 @@ p + geom_col(width=.3)  #<<
 ```
 
 ]
-]
+
 
 
 .fl.w-50.pa2[
@@ -1577,12 +1573,21 @@ dataset.
 
 .pull-left[
 
-Function `equantile` returns a function
+Function `equantile()` returns a function
 
-The returned function is parametrized by argument
+The returned function is _parametrized_ by argument
 `sample`
 
-`closure`
+.small[
+
+- A function captures (encloses) the _environment_ in which it is created
+
+- Function `equantile` creates a new _execution environment_ every time it is run. This environment is usually ephemeral, but here it becomes the _enclosing environment_ of the manufactured function
+
+- The _enclosing environment_ of the manufactured function is an _execution environment_ of the function factory
+
+]
+
 
 ]
 
@@ -1594,6 +1599,7 @@ The returned function is parametrized by argument
 equantile <- function(sample){
   sample <- sort(sample)
   m <- length(sample)
+  
   function(p){     #<<
     ks <- pmax(1, ceiling(m * p)) #<<
     sample[ks]  #<<
@@ -1601,13 +1607,9 @@ equantile <- function(sample){
 }
 ```
 
-> A function captures (encloses) the environment in which it is created
-
-> Function `equantile` creates a new execution environment every time it is run. This environment is usually ephemeral, but here it becomes the enclosing environment of the manufactured function
-
-> The enclosing environment of the manufactured function is an execution environment of the function factory.
-
 See [Advanced R programming](https://adv-r.hadley.nz/function-factories.html)
+]
+
 ]
 
 
