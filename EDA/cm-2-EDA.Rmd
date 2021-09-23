@@ -1751,7 +1751,7 @@ exclude: true
 
 - Atkinson
 
-- Decile ratis
+- Decile ratios
 
 
 
