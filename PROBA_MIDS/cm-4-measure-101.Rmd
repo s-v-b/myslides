@@ -63,9 +63,8 @@ template: inter-slide
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-template: inter-slide
+class: left, middle, inverse
 
-### `r fontawesome::fa("map", fill="white")`
 
 
 .pull-left[
@@ -675,9 +674,10 @@ of Lebesgue's measure
 Any non-decreasing CADLAG function $F$ on $\mathbb{R}$ defines a $\sigma$-additive
 measure $\mu$ on $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$ that satisfies:
 
-$$\mu((a, b)) = F(b_-) - F(a)$$
+$$\mu((a, b)) = F(b) - F(a)$$
 
 where $F(x_-)= \lim_{t \uparrow x} F(t)$
+
 ]
 
 
@@ -763,8 +763,8 @@ $\mathcal{X}$
 Recall the idealized hashing setting
 
 Let $\Omega$ denote the set of functions from $1, \ldots, n$  to $1, \ldots, m$
-(assume $n \leq m$). For $\omega \in \Omega$ ($\omega$ is function, but it
-is also a $1, \ldots, m$-valued sequence of length $n$), let $f(\omega)$ be the
+(assume $n \leq m$). For $\omega \in \Omega$ ( $\omega$ is function, but it
+is also a $1, \ldots, m$-valued sequence of length $n$ ), let $f(\omega)$ be the
 number of values in $1, \ldots, m$ that have no occurrence in $\omega$
 (the number of empty bins in the allocation defined by $\omega$).
 
@@ -857,6 +857,7 @@ $\sigma$-algebra that makes all continuous functions  measurable?
 The pointwise limit of measurable functions is a measurable function:
 
 if 
+
 - $(f_n)_n$ is a sequence of measurable functions from $(\Omega, \mathcal{F})$
 to $(\mathcal{X}, \mathcal{G})$, and 
 - $f_n \to f$ pointwise, 
@@ -946,7 +947,11 @@ $$A, B \in \mathcal{G} \Rightarrow A \cap B \in \mathcal{G}$$
 ### Definition: Monotone class
 
 A collection $\mathcal{M}$ of subsets of $\Omega$ is said to be
-a monotone class or a  $\lambda$-system if it satisfies the following properties:
+a _monotone class_ or a  $\lambda$-system 
+
+if 
+
+it satisfies the following properties:
 
 1. $\Omega \in \mathcal{M}$
 
@@ -967,6 +972,7 @@ then $\lim_n A_n = \cup_{n \in \mathbb{N}} A_n \in \mathcal{M}$.
 It makes sense to talk about the smallest $\lambda$-system containing a collection of sets
 
 ---
+name: usefulprop
 
 The next easy proposition makes $\lambda$-system very useful when we want to check that two probability distributions are equal.
 
@@ -1023,21 +1029,28 @@ iff
 
 there exists $(A_n)_n$ with $\Omega \subseteq \cup_n A_n$ and $\mu(A_n) < \infty$ for each $n$.
 
+---
+
+
 - Finite measures (this encompasses  probability measures) are $\sigma$-finite.
 
 - Lebesgue measure is $\sigma$-finite.
 
 - The counting measure on $\mathbb{R}$ is not $\sigma$-finite.
 
----
+???
 
-What happens if we only assume that the two measures are $\sigma$-finite?
+In the statement of the monotone class theorem, what happens if we only assume that the two measures are $\sigma$-finite?
+
+---
 
 ### Theorem (Monotone class lemma)
 
 .bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5.f6[
 
-If $\mathcal{A}$ is a $\pi$-systen in $\Omega$ and $\mathcal{M}$ a $\lambda$-system in $\Omega$ such that $\mathcal{A} \subseteq \mathcal{M}$,
+If 
+- $\mathcal{A}$ is a $\pi$-systen in $\Omega$ and 
+- $\mathcal{M}$ a $\lambda$-system in $\Omega$ such that $\mathcal{A} \subseteq \mathcal{M}$,
 
 then
 
@@ -1052,7 +1065,7 @@ $$\sigma(\mathcal{A}) \subseteq \mathcal{M}$$
 ### Proof
 
 Let $\mathcal{M}$ denote the intersection of all monotone classes that contain
-tyhe $\pi$-system $\mathcal{A}$.
+the $\pi$-system $\mathcal{A}$.
 
 As a $\sigma$-algebra is a monotone class (a $\lambda$-system), we have $\mathcal{M} \subseteq \sigma(\mathcal{A})$, the only point that
 has to be checked is $\sigma(\mathcal{A}) \subseteq \mathcal{M}$.
@@ -1081,7 +1094,9 @@ If $(B_n)_n$ is an increasing sequence of elements of $\mathcal{M}_A$, then
 
 $$(\cup_n B_n) \cap A = \cup_n \Big(\underbrace{B_n \cap A }_{\in \mathcal{M}}\Big)$$
 
-the right-hand-side belongs to $\mathcal{M}$ since $\mathcal{M}$ is monotone. Hence
+the right-hand-side belongs to $\mathcal{M}$ since $\mathcal{M}$ is monotone. 
+
+Hence
 $\mathcal{M}_A$ is closed by monotone increasing limit.
 
 ---
@@ -1108,7 +1123,7 @@ This shows that $\mathcal{M}^\circ= \mathcal{M}$.
 
 ---
 
-Combining Proposition and the Monotone Class Lemma
+Combining [Proposition](#usefulprop) and the Monotone Class Lemma
 leads to the next useful corollary.
 
 
