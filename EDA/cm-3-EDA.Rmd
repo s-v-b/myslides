@@ -522,13 +522,25 @@ df %>%
 
 <img src=`r knitr::fig_chunk("mosaic-ggplot-label","png")` alt="Hand made mosaic plot" height="400", align="left">
 
+
+
+]
+]
+
+???
+
 More work would allow to put the bars closer and to mimick the mosaicplot in a more faithful way
 
-In the Grammar of Graphics perspective,
-barplots, two-way mosaicplots, higher-dimensional mosaicplots are based on column plots and require stat functions involving aggregation operations from extended SQL
 
-]
-]
+
+In the Grammar of Graphics perspective,
+
+- barplots, 
+- two-way mosaicplots, 
+- higher-dimensional mosaicplots 
+
+are based on column plots and require stat functions involving aggregation operations from extended SQL
+
 
 ---
 exclude: true

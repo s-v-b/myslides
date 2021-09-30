@@ -38,7 +38,9 @@ xaringanExtra::use_panelset()
 
 xaringanExtra::use_editable(expires = 1)
 
-xaringanExtra::use_scribble()
+xaringanExtra::use_clipboard()
+
+# xaringanExtra::use_scribble()
 
 pacman::p_load(tidyverse)
 pacman::p_load(readr)

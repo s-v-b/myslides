@@ -4,6 +4,12 @@ subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -23,77 +29,34 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
 name: layout-general
 layout: true
 class: left, middle
 
-```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-xaringanExtra::use_animate_css()
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-xaringanExtra::use_tile_view()
-
-xaringanExtra::use_tachyons(minified = FALSE)
-
-xaringanExtra::use_logo(
-  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
 ```
 
 
-
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-
-
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Multilinear Regression I
 
-### `r Sys.Date()`
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
 
-#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+#### [`r params$coursetitle`](`r params$homepage`)
 
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 ---
-class: inverse, middle
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -111,7 +74,7 @@ class: inverse, middle
 
 
 ---
-class: center, middle, inverse
+template: inter-slide
 name: rev-slr
 
 ## Revisiting simple linear regression
@@ -240,7 +203,7 @@ whiteside %>%
 
 ---
 
-`r chunk_reveal("my_whiteside",
+`r flipbookr::chunk_reveal("my_whiteside",
                 break_type="auto",
                 display_type="code",
                 title="### Whiteside step by step")`
@@ -266,7 +229,7 @@ whiteside %>%
 ```
 
 ---
-class: center, inverse, middle
+template: inter-slide
 name: slr-group
 
 ## Simple linear regression per group
@@ -401,7 +364,7 @@ whiteside %>%
 
 
 ---
-class: inverse, middle, center
+template: inter-slide
 name: formulae
 
 ## About formulae
@@ -525,7 +488,7 @@ The second question is about model assessment/validation/selection
 The first question  is about programming, the second takes us in inferential statistics territory
 
 ---
-class: center, middle, inverse
+template: inter-slide
 name: polynomials
 
 ## Higher degree polynomials
@@ -752,7 +715,7 @@ has inspired _model selection methods_ in many areas of statistics and machine l
 
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Variable selection in Gaussian Linear Models
 
@@ -773,7 +736,7 @@ $\sigma=1$ and $\epsilon$ is a standard Gaussian vector of dimension $p$.
 
 ---
 
-`r chunk_reveal("my_simul_anova", break_type="auto", display_type="code", title="### Preparing ANOVA")`
+`r flipbookr::chunk_reveal("my_simul_anova", break_type="auto", display_type="code", title="### Preparing ANOVA")`
 
 ```{r my_simul_anova, include = FALSE}
 set.seed(1515)   # for reproducibility
@@ -946,7 +909,7 @@ s <- sd(tib$residuals)
 tit <- "Kernel density estimate of residuals distribution (full model)"
 ```
 
-`r chunk_reveal("kde_residuals", break_type="auto", title="### Residual distribution (full model)")`
+`r flipbookr::chunk_reveal("kde_residuals", break_type="auto", title="### Residual distribution (full model)")`
 
 
 
@@ -983,7 +946,7 @@ shapiro.test(residuals(lm_df[['full']]))
 ```
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Using Fisher $F$ statistic
 
@@ -1161,7 +1124,7 @@ class: middle, center, inverse
 ##
 
 ---
-class: center, middle, inverse
+class: inverse, middle, center
 background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
