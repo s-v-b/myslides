@@ -1,0 +1,1526 @@
+---
+title: "Master mention Mathématiques et applications"
+subtitle: "Présentation aux étudiants de licence"
+author: "Université Paris-Diderot"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "hygge"]
+    lib_dir: libs
+    seal: false
+    toc: true
+    toc_depth: 2
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      countdown: 180000
+---
+background-image: url('figs/GdsMoulinsNeige.jpg')
+background-size: cover
+class: top, center
+
+
+# Master Mathématiques et applications
+
+### Université Paris-Diderot
+
+#### `r Sys.Date()`
+
+---
+name: layout-general
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE}
+options(htmltools.dir.version = FALSE)
+require(magrittr, quietly = TRUE)
+require(readr, quietly = TRUE)
+require(kableExtra, quietly = TRUE)
+require(formattable, quietly = TRUE)
+UE_M1_TC_18_19 <- read_delim("~/MEDOCS/MASTERS/bookdown/UE_Maths_19_23.csv",
+";", escape_double = FALSE, trim_ws = TRUE)
+```
+
+
+```{r, echo=FALSE, include=FALSE, message=FALSE}
+df_parcours <- read_delim("df_parcours_parcours/Parcours_M2.csv",
+    ";", escape_double = FALSE, col_types = cols(Convention = col_skip(),
+        Double = col_skip(), Débouchés = col_skip()),
+    trim_ws = TRUE)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+parcours_parcours <- read_delim("df_parcours_parcours/Parcours_Parcours.csv",
+";", escape_double = FALSE, col_types = cols(Compatible = col_integer()), trim_ws = TRUE)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+parcours_m1 <- read_delim("df_parcours_parcours/Parcours_M1.csv", 
+    ";", escape_double = FALSE, trim_ws = TRUE)
+```
+
+
+
+
+???
+
+---
+name: student_friendly
+
+# Master de mathématiques
+
+Un diplôme en deux ans
+
+Trois grands types de débouchés :
+
+> Concours d'enseignement du second degré (Capes, Agrégation)
+
+> Métiers d'ingénieurie, industrie
+
+> Recherche, fondamentale ou appliquée, et enseignement supérieur
+
+Tous ces débouchés sauf un font l'objet de différents parcours du master «Mathématiques et applications»
+
+
+???
+
+Merci d'être venus. Nous sommes là pour parler de votre avenir.
+
+Vous entrez dans le dernier semestre de Licence de Mathématiques.
+Nous espérons que poursuivrez dans cette voie. Poursuivre en Mathématiques,
+c'est généralement, suivre les enseignements d'un master.
+
+Un master, c'est deux ans d'études qui débouchent en général
+sur trois grands types d'activité et une multitude de métiers.
+
+---
+name:2mentions11parcours
+
+# Masters de Mathématiques : deux mentions
+
+### Master **Mathématiques et applications**
+
+> À partir de septembre 2019: **9 parcours**
+
+
+### Master **Métiers de l’Enseignement, de l’Éducation et de la Formation (MEEF)**
+
+> Préparation au CAPES de Mathématiques
+
+> [Parcours Mathématiques]({{meef}}). Partenariat avec l'ESPE
+
+???
+
+À Paris Diderot,  deux mentions de Master intéressent les mathématiciens.
+
+- Mention Maths et applications : 9 parcours identifiés en Master II.
+- [Mention MEEF]({{meef}}), nous ne sommes concernés que par le parcours Mathématiques
+
+Ces deux mentions se distinguent par les débouchés et les métiers auxquels elles préparent.
+
+La mention MEEF conduit à l'enseignement dans les collèges et les lycées. Elle
+prépare au concours de recrutement du CAPES. Quel beau métier, professeur !
+
+La mention Mathématiques et applications conduit elle aussi à l'enseignement dans
+les Lycées (préparation à l'agrégation) mais aussi à une foule d'autres métiers.
+
+
+---
+
+# Les parcours du Master Mathématiques et applications
+
+```{r, echo=FALSE, include=FALSE, message=FALSE}
+# df_parcours <- read_delim("~/MEDOCS/MASTERS/FONCTIONNEMENT/df_parcours.csv",";", escape_double = FALSE, trim_ws = TRUE)
+df_parcours <- read_delim("df_parcours.csv",
+    ";", escape_double = FALSE, col_types = cols(Convention = col_skip(),
+        Double = col_skip(), Débouchés = col_skip()),
+    trim_ws = TRUE)
+```
+
+
+
+
+---
+class: middle
+
+### Du Master I 
+
+
+
+```{r, echo=FALSE, message=FALSE}
+parcours_m1 %>% 
+  dplyr::mutate(Symbole = kableExtra::cell_spec(Symbole, color = row.names(.), bold=T)) %>%
+  dplyr::select(Nom, Symbole) %>% 
+  knitr::kable(escape = F) %>% 
+  kableExtra::kable_styling(full_width = TRUE, bootstrap_options = c("condensed", "striped"))
+```
+  
+
+### au ...
+
+---
+
+###  ... Master II 
+
+
+
+```{r  menum2, echo=FALSE, message=FALSE}
+df_parcours %>% 
+  dplyr::filter(Code != 'MEEF') %>% 
+  dplyr::inner_join(parcours_parcours, 
+                                  by=c("Code" = "Parcours-M2")) %>% 
+  dplyr::select(Num, Nom, Code, "Parcours-M1", Compatible) %>% 
+  dplyr::inner_join(parcours_m1, by=c("Parcours-M1" = "Code")) %>%
+  dplyr::select(Num, Nom.x, Symbole) %>% 
+  dplyr::group_by(Num, Nom.x) %>% 
+  dplyr::summarize(Compatible = toString((unique(Symbole)))) %>% 
+  dplyr::arrange(Num) %>% 
+  dplyr::rename('Parcours M2' = Nom.x, 'Parcours M1'= Compatible) %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select('Parcours M2', 'Parcours M1') %>% 
+  knitr::kable(escape = F) %>% 
+  kableExtra::kable_styling(full_width = TRUE, 
+                            bootstrap_options = c("condensed", "striped"))
+```
+
+
+
+
+
+
+
+
+
+---
+# Master I : tronc commun MFA
+
+En Master I, six parcours sont regroupés dans un *tronc commun* appelé **Mathématiques fondamentales et appliquées**.
+
+Le *tronc commun* conduit aux parcours de Master II suivants
+
+```{r, echo=FALSE}
+df_parcours %>%
+  dplyr::filter(Num<=6) %>%
+  dplyr::select(Nom, Nouveau) %>%
+  dplyr::mutate(Nouveau = ifelse(Nouveau, "Nouveau", " ")) %>%
+   dplyr::mutate(Nouveau = kableExtra::cell_spec(Nouveau, italic=T, font_size=14, angle=-20)) %>%
+  dplyr::rename(Parcours=Nom, ' '=Nouveau) %>%
+  knitr::kable(escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE, bootstrap_options = c("condensed", "striped"))
+```
+
+---
+name: tubulaires
+
+# Les parcours MIC-MIDS-ISIFAR
+
+Les parcours
+
+> Mathématiques Informatique Cryptologie (MIC)
+
+> Mathématiques Informatique Données (MIDS)
+
+> ISIFAR
+
+sont *tubulaires* organisés sur deux années
+
+???
+
+---
+layout: false
+class: inverse, center, middle
+
+# Orientation
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+---
+name: orientation
+
+# S'orienter
+
+> Réfléchir aux *domaines d'activité* qui vous attirent
++ Analyse
++ Logique
++ Mathématiques financières
++ Sécurité
++ Science des données
++ Enseignement
++ ...
+
+
+> Réfléchir aux *métiers* associés à ces *domaines*
++ Analyse
+  - Universitaire/R et D industrielle
++ Mathématiques financières
+  - Quant/Broker/Analyste/Algorithmic trading
++ Science des données
+  - Data scientist/engineer/architect
+
+???
+
+S'interroger sur sa solidité
+
+### Exemple:
+
+- Débouché : Recherche en logique mathématique
+  + Question :  $\mathrm{P} \stackrel{?}{=} \mathrm{NP}$
+  + Prix : $1$M.US$ ([Clay Foundation](http://www.claymath.org/))
+- Parcours
+Logique Mathématique et
+Fondement de l'Informatique
+- Master I : Tronc commun, UEs bien choisies
+
+
+
+Domaines d'activité/métier
+
+- Logique mathématique
+- Finance :
+  + plusieurs métiers : quant, broker, analyste
+  + plusieurs parcours : m2mo, isifar
+- Données :
+  + métiers : ds, de, da
+  + parcours : m2mo, mids, isifar
+- Enseignement
+  + métiers : collèges, lycées, prépas
+  + mentions : Maths MG, MEEF Mathématiques
+
+
+SOIP
+
+---
+name: aide-orientation
+class: middle
+
+# Aide à l'orientation
+
+- [Service d'Orientation et d'Insertion (SOI)](https://etudes-formations.univ-paris-diderot.fr/orientation-et-insertion-professionnelle)
+- [Recherche de stage](http://reseaupro.univ-paris-diderot.fr/index.php/orientation)
+- Les brochures [Zoom Métiers](https://librairie.onisep.fr/Collections/Grand-public/Zoom-sur-les-metiers/Les-metiers-des-mathematiques-et-de-l-informatique) éditées par l’ONISEP
+- Le [Maths Club](https://irem.univ-paris-diderot.fr/tags/maths-club)
+
+---
+name: orientation-concrete
+class: middle
+
+# Orientation : choix des parcours
+
+> Identifier les parcours de Master qui correspondent à vos
+domaines de prédilection et aux métiers qui vous attirent
+
+> Postuler aux Masters I qui correspondent à ces parcours
+
+
+
+
+???
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Candidatures
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+---
+# Admission en Master I
+
+- Procédure : [e-candidat](https://www.univ-paris-diderot.fr/lapplication-ecandidat)
+  + CV
+  + Lettre de motivation
+- Calendrier
+  - Ouverture : [mettre un lien]()
+  - Date limite de dépot des dossiers :
+  - Session 2
+  - *Il est possible de déposer un dossier avant l'obtention officielle du diplôme de Licence*
+- Peut-on postuler à plusieurs parcours au sein de Paris Diderot ?
+  - oui
+  - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG/PMA/Modélisation
+
+
+???
+
+Conseils à donner oralement
+
+- délais
+- candidature après session II (envoyer un dossier avant)
+- capacités d'accueil
+- pour les parcours MF/PMA/Modélisation/MG/LMFI/M2MO
+
+---
+layout: false
+class: middle, center, inverse
+
+# Validation
+
+
+???
+
+---
+layout: true
+class: left, middle
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+---
+name: proc-validation
+
+# Procédures de validation
+
+Aucune compensation automatique n'est prévue
+
+Si des compensations prévues, les règles varient suivant les parcours
+
+Elles ne dépasseront jamais le cadre d'un bloc d'UE d'un même semestre
+
+Plus de compensations inter-semestrielles
+
+---
+layout: false
+class: inverse, middle, center
+
+# Financements
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+---
+name: financement
+
+# Sources
+
+.left-column[
+
+### Bourses
+
+]
+
+.right-column[
+
+### Sources
+
+Au delà des bourses distribuées selon des critères sociaux, il existe des bourses décernées *au mérite* après un examen compétitif des dossiers de candidatures.
+
+- Programme PGSM de la [Fondation des Sciences Mathématiques de Paris](https://www.sciencesmaths-paris.fr/en/masters-250.htm)
+- Bourses des ambassades
+
+]
+
+???
+
+Un guichet commun ?
+
+---
+name: alternance
+
+# Financements
+
+.left-column[
+### Bourses
+### Alternance
+]
+
+.right-column[
+
+> Il est possible de faire
+certains M2 en *alternance* avec un contrat de
+- *apprentissage* :
+  Master MIC mathématiques (simple)
+- *professionnalisation* :
+  Master ISIFAR
+
+> Les lauréats du CAPES suivent le Master II MEEF en tant que fonctionnaire-stagiaire.
+Ils sont rémunérés.
+]
+
+???
+
+Distinguer *contrat de professionalisation*  et *contrat d'apprentissage*
+
+Les étudiants s'inquiètent des limites d'age imposées éventuellement par les contrats.
+
+
+
+---
+name: Professionnalisation
+
+# Financements
+
+.left-column[
+## Bourses
+## Alternance
+### [Contrats](https://www.letudiant.fr/alternance/le-contrat-de-professionnalisation-1.html)
+]
+
+.right-column[
+
+> Le contrat d'alternance est  un contrat de travail particuliers. Il est signé soit pour une durée précise sous forme de CDD (renouvelable une fois), soit en CDI avec une période de professionnalisation de six à douze mois.
+
+> Toutes les entreprises privées, y compris les sociétés d'intérim, sont éligibles
+
+]
+
+???
+
+Chercher les contrats d'alternance durant le second semestre de Master I
+
+---
+layout: false
+class: center, middle, inverse
+
+# M1 MFA et parcours associés
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+---
+# Master I : Tronc commun MFA
+
+### Semestre I
+
+.pull-left[
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==1) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('3 UE de Mathématique parmi 5'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"),
+                             font_size = 16)
+```
+
+Le choix des cours suivis dépend en partie du
+parcours
+]
+
+
+
+.pull-right[
+Ce premier semestre est un semestre d'orientation
+
+Selon les parcours visés, vous devrez choisir trois UEs de Mathématiques parmi les cinq proposées
+
+> Si vous envisagez le parcours *Logique Mathématique*, vous suivrez le cours de *Logique*, sans doute celui d'*Algèbre*. Le troisième cours sera au choix
+
+Choix effectués lors des inscriptions pédagogiques
+]
+
+???
+
+Au premier semestre, 3 UE de mathématique
+
+- MF Analyse/Algèbre
+- PMA Analyse/Probabilités
+- M2MO Analyse/Probabilités/Complexité
+- Modélisation
+- LMFI Logique/
+- MG Analyse
+
+Expliciter les choix possibles. Ajouter à la carte des UEs
+des indications sur les parcours où ces UEs sont
+recommandées, voire obligatoires.
+
+
+---
+class: top
+
+### Master I Tronc commun MFA : Semestre II
+
+.pull-left[
+
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==2 & Periode==1) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('Semestre II Période I'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"), font_size = 16)
+
+```
+
+<br>
+
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==2 & is.na(Periode)) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('Semestre II sur les deux périodes'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"), font_size = 12)
+
+```
+]
+
+.pull-right[
+
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==2 & Periode==2) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('Semestre II Période II'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"), font_size = 16)
+
+```
+
+<br>
+
+> Deux ou trois cours durant chaque période de six semaines et éventuellement un cours s'étalant sur le semestre.
+]
+
+
+
+
+
+???
+
+
+Au second semestre
+
+- M2MO
+  + Probability Martingales/Markov
+  + Statistique fondamentale/Approfondie
+  + Analyse App I/II
+  +
+
+---
+name: distance
+class: middle
+
+### Master I *à distance*
+
+Suivre le Master I à distance revient à :
+
+- choisir le *contrôle terminal*
+- renoncer au *contrôle continu*
+
+Choix à faire lors des inscriptions pédagogiques
+
+
+???
+
+Que dire de plus ?
+
+
+---
+name: MF-teaser
+background-image: url('figs/idf.jpg')
+background-size: cover
+class: top, center, inverse
+
+# Parcours Mathématiques fondamentales
+
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+---
+name: mf
+
+# Parcours Mathématiques fondamentales
+
+> Formation de haut niveau en mathématiques à des étudiants qui se destinent aux métiers de l'enseignement et de la recherche.
+
+> Il débouche donc naturellement (mais pas exclusivement) sur une thèse de mathématiques.
+
+- [Laboratoire IMJ-PRG](https://www.imj-prg.fr) (CNRS-Paris-Diderot-SU)
+- Convention avec Sorbonne-Université (ex UPMC-Paris 6)
+- [Brochure 2017-18](http://www.math.univ-paris-diderot.fr/_media/formations/masters/math/brochure_maths_fond_2018-2019.pdf)
+
+Responsable : [Marc Rosso](https://webusers.imj-prg.fr/~marc.rosso/)
+
+???
+
+- Un parcours élitiste
+- Un débouché : Doctorat
+- Un Doctorat, c'est une allocation, un encadrement
+- Un doctorat. c'est éventuellement un passeport pour l'enseignement en classes préparatoires
+
+Peut-on préparer l'agrégation en préparant une thèse ?
+
+---
+name: lmfi
+
+# Parcours: Logique Mathématiques et Fondements de l'Informatique
+
+> Ce master offre une formation de haut niveau en Logique. Il a pour objectif
+de former des chercheurs ou ingénieurs de recherche possédant la maîtrise
+des outils logiques fondamentaux utilisés en Mathématiques et en
+Informatique.
+
+> Seul M2 en France consacré la logique mathématique et à ses applications en informatique
+
+
+Responsables :
+- Informatique [Christine Tasson](http://www.irif.fr/~tasson/)
+- Mathématiques [Boban Velickovic](http://www.logique.jussieu.fr/~boban/)
+
+
+???
+
+Revoir l'attaque.
+
+- Comment se situe la Logique Mathématique dans l'univers des Mathématiques (fondamentales) ?
+- Quel langage tenir aux étudiants de Licence à ce sujet
+- Trouver des mots pour expliquer le rôle de P7 dans la recherche en Logique en France et en Europe
+- Suggérer le rôle de la logique dans la relation Mathématique/Informatique. Hommage à Turing.
+- Évoquer métiers et débouchés
+
+
+---
+name: m2mo
+
+# Parcours M2MO (Modélisation Aléatoire, ex-Laure Élie)
+
+.pull-left[
+Mathématiques financières
+
+Science des données
+
+Responsables:
+
+[Jean-François Chassagneux](https://www.lpsm.paris//pageperso/chassagneux/index.html)
+[Huyen Pham](https://sites.google.com/site/phamxuanhuyen/)
+
+[Association Alumni](https://masterfinance.math.univ-paris-diderot.fr/index.php/anciens/association)
+]
+
+.pull-right[
+
+.rotate-right[
+```{r echo=FALSE, out.width="85%"}
+knitr::include_graphics("./figs/affiche_m2mo.png")
+```
+]
+
+
+
+]
+
+???
+
+- Prévoir une attaque
+- Présence sur les réseaux sociaux LinkedIn Twitter Instagram Facebook
+- Les Mathématiques financières
+- Les statistiques
+- Le *Machine Learning*
+
+---
+name: mg
+
+# Parcours Mathématiques Générales
+
+> Le M2 Mathématiques générales permet d'acquérir une formation solide et généraliste en mathématiques, à la fois théorique et pratique, en lien avec l'enseignement des mathématiques
+
+> Le parcours Mathématiques générales-Agrégation est centré sur la préparation à l'[agrégation externe](http://www.devenirenseignant.gouv.fr)
+
+> Le jury de délivrance du M2 se réunit avant les résultats d'admissibilité
+
+Responsable:
+[Antoine Chambert-Loir](https://webusers.imj-prg.fr/~antoine.chambert-loir/index.xhtml)
+
+???
+
+- Attaque
+- Métiers. Qu'est-ce-qu'un agrégé ?
+- L'agrégation dans une vie de mathématicien
+- Les options
+- Les choix de cours à suivre en Master I
+
+---
+name: pma
+
+# Parcours: Probabilités et Modèles Aléatoires (ouverture 2020)
+
+.pull-left[
+
+Probabilités et Modélisation Stochastique
+
+[Laboratoire LPSM](http:\\www.lpsm.paris) (CNRS-Paris-Diderot-SU)
+
+Convention avec Sorbonne-Université
+]
+
+.pull-right[
+
+.rotate-right[
+```{r echo=FALSE, out.width="85%"}
+knitr::include_graphics("./figs/LPSM_Lancement.jpg")
+```
+]
+
+]
+
+???
+
+- Le rôle/La vocation de Master
+- Le Laboratoire LPSM
+- Théorie des Processus
+- La Mécanique statistique
+-
+
+---
+name: mod
+
+# Parcours Modélisation (ouverture 2020)
+
+.content-box-gray[Nouveau !
+
+- Analyse numérique
+- [Laboratoire Jacques-Louis Lions](https://www.ljll.math.upmc.fr/) (CNRS-Paris-Diderot-SU)
+- Convention avec Sorbonne-Université (ex UPMC-Paris 6)
+]
+
+???
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Mathématique-Informatique-Cryptologie
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+---
+name: mic
+
+# Double Master MIC
+
+.content-box-gray[Nouveau ! : M1 en 2019, M2 en 2020]
+
+.pull-left[
+### Admission
+
+- Double Licence Mathématiques-Informatique ou
+- Licence de Mathématiques + Test Informatique ou
+- Licence d'Informatique + Test de Mathématiques
+
+
+
+]
+
+.pull-right[
+
+### Débouchés
+
+Professionnels de la cryptologie et de la sécurité informatique.
+
+- Expert sécurité (grands groupes, banques, cabinets de consultants, startups)
+- Ingénieur bureau d'étude (applications et services en ligne, objets connectés, blockchain)
+- Agences gouvernementales (ANSSI, ministère de la défense)
+
+
+]
+
+
+---
+class: middle
+
+### Master MIC :  Compétences visées
+
+- Sécurité de protocoles de communication (GSM, Internet, ...)
+- Informatique embarquée
+- Programmation sur carte à puce
+- Sécurisation d'un réseau informatique
+- Architecture sécurité d'un réseau
+
+
+
+
+---
+name: m1-mic
+## Formation en M1 Double Master MIC
+
+```{r, echo=FALSE}
+# %%
+ue_mic <- readr::read_delim("UE_MIC.csv", ";", escape_double = FALSE,
+  col_types = cols(Année = col_character(),
+                   ECTS = col_character(),
+                   Semestre = col_character(),
+                   Nom = col_character()), trim_ws = TRUE)
+# %%
+```
+.pull-left[
+
+36 ECTS
+```{r load-tab-ue-mic-1, echo=FALSE, message=FALSE}
+# %%
+#
+# require(tidyverse)
+ue_mic %>%
+  dplyr::filter(Semestre=='1' & Année=='1') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Semestre I', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size=16)
+# %%
+```
+
+
+]
+
+
+
+.pull-right[
+
+36 ECTS au choix parmi
+```{r load-tab-ue-mic-2, echo=FALSE, message=FALSE}
+# %%
+#
+# require(tidyverse)
+ue_mic %>%
+  dplyr::filter(Semestre=='2' & Année=='1') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Semestre II', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size=16)
+# %%
+```
+
+
+]
+
+
+
+---
+name: m2-mic
+## Formation en M2 Double Master MIC
+
+
+.pull-left[
+
+Septembre à décembre
+
+```{r load-tab-ue-mic-3, echo=FALSE, message=FALSE}
+# %%
+#
+# require(tidyverse)
+ue_mic %>%
+  dplyr::filter(Semestre=='1' & Année=='2') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Période I', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size=16)
+# %%
+```
+
+]
+
+
+
+.pull-right[
+
+Janvier à mars
+
+```{r load-tab-ue-mic-4, echo=FALSE, message=FALSE}
+# %%
+#
+# require(tidyverse)
+ue_mic %>%
+  dplyr::filter(Semestre=='2' & Année=='2') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Période II', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size=16)
+# %%
+```
+
+
+]
+
+
+<br>
+
+.center[
+**Stage d'avril à septembre**
+]
+
+
+---
+name: m2-mic-apprentissage
+
+## Master MIC simple en Alternance
+
+.pull-left[
+- M1 MIC Maths 30 ECTS par semestre (enlever un cours d'informatique par semestre)
+- Rechercher un contrat d'apprentissage à partir du mois de février en Master I
+
+> Rythme d'alternance (en Master II)
+- un jour par semaine en entreprise sur dix semaines
+- deux jours par semaine sur dix semaines
+- puis stage entièrement dans l'entreprise
+]
+
+.pull-right[
+> Possibilité de faire précéder l'alternance par un stage d'été entre le Master I et le Master II pour découvrir l'entreprise
+
+Exemples :
+- Thalès
+- CEA
+- Orange
+- BNP
+]
+
+---
+layout: false
+class: inverse, middle, center
+
+# Mathématique-Informatique-Données
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+---
+name: mids
+
+# Double Master MIDS
+
+.content-box-gray[Nouveau ! : M1 en 2019, M2 en 2020]
+
+.pull-left[
+### Admission
+
+- Double Licence Mathématiques-Informatique ou
+- Licence de Mathématiques + Test Informatique ou
+- Licence d'Informatique + Test de Mathématiques
+
+### Responsables
+
+- Mathématiques : [S. Gaïffas](http://www.cmap.polytechnique.fr/~gaiffas/)
+- Informatique : [C. Sirangelo](https://www.irif.fr/~cristina/)
+
+]
+
+.pull-right[
+### Organisation
+
+- Master I
+  - 36 ECTS Semestre I
+  - 36 ECTS Semestre II
+- Master II
+  - 18 ECTS en Semestre I partie I (Septembre-Novembre)
+  - 18 ECTS en Semestre I partie II (Janvier-Mars)
+  - 27 ECTS stage Avril-Septembre
+
+
+]
+
+???
+
+Etoffer la présentation des débouchés et l a
+
+---
+name: mids-debouches1
+
+## Double Master MIDS : débouchés
+
+.left-column[
+### Data engineer
+]
+
+.right-column[
+
+> Data engineers are software engineers who design, build, integrate data from various resources, and manage big data.
+
+
+]
+
+---
+name: mids-debouches2
+
+## Double Master MIDS : débouchés 2
+
+.left-column[
+### Data engineer
+### Data architect
+]
+
+.right-column[
+
+
+> A data architect is a practitioner of data architecture, an information technology discipline concerned with designing, creating, deploying and managing an organization's data architecture.
+
+]
+
+---
+name: mids-debouches3
+
+## Double Master MIDS : débouchés 3
+
+.left-column[
+### Data engineer
+### Data architect
+### Data scientist
+]
+
+.right-column[
+
+
+> Data science is a "concept to unify statistics, data analysis, machine learning and their related methods" in order to "understand and analyze actual phenomena" with data.
+
+> It employs techniques and theories drawn from many fields within the context of mathematics, statistics, information science, and computer science.
+
+
+]
+---
+name: mids-m1-ue
+
+### Double Master MIDS : première année
+
+
+```{r load-tab-ue-1, echo=FALSE, message=FALSE}
+# %%
+#
+# require(tidyverse)
+ues <- read_delim("UE_MIDS_1923_bis.csv", ";", escape_double = FALSE,
+  col_types = cols(Année = col_character(),
+                   CM = col_character(),
+                   Semestre = col_character(),
+                   TD = col_character()), trim_ws = TRUE)
+# %%
+```
+
+
+.pull-left[
+
+```{r tab-s1, echo=FALSE}
+# %%
+ues %>%
+  dplyr::filter(Semestre=='1' & Année=='1') %>%
+  dplyr::select(Cours=Nom) %>%
+  knitr::kable(caption = 'Semestre I', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"))
+# %%
+```
+
+36 ECTS
+]
+
+
+.pull-right[
+
+```{r tab-s2, echo=FALSE}
+# %%
+ues %>%
+  dplyr::filter(Semestre=='2' & Année=='1') %>%
+  dplyr::select(Cours=Nom) %>%
+  knitr::kable(caption = 'Semestre II', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"))
+# %%
+```
+
+36 ECTS
+]
+
+
+???
+
+---
+name: mids-annee2
+
+### Double Master MIDS : seconde année
+
+.pull-left[
+
+```{r tab-a2-s1, echo=FALSE}
+# %%
+ues %>%
+  dplyr::filter(Année=='2' & Semestre=='3') %>%
+  dplyr::select(Cours=Nom) %>%
+  knitr::kable(caption = 'Semestre I Partie I', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"))
+# %%
+```
+]
+
+
+.pull-right[
+
+
+```{r tab-a2-s2, echo=FALSE}
+# %%
+ues %>%
+  dplyr::filter(Semestre=='4' & Année=='2') %>%
+  dplyr::select(Cours=Nom) %>%
+  knitr::kable(caption = 'Semestre I Partie II', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE, bootstrap_options = c("condensed", "striped"))
+# %%
+```
+
+- 2 cours de mathématiques
+- 3 cours d'informatique
+
+]
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# ISIFAR
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+---
+name: isifar
+
+# Master  ISIFAR
+
+
+.pull-left[
+
+###Débouchés
+
+Cadres à profil d'ingénieur statisticien/informaticien, spécialisés dans les applications  aux problèmes actuariels, financiers ou de gestion des risques.
+
+### Responsables
+
+- M1 : [Sandrine Péché](peche@math.univ-paris-diderot.fr)
+- M2 : [Noufel Frikha](frikha@math.univ-paris-diderot.fr)
+
+
+]
+
+
+
+.pull-right[
+
+### Compétences visées
+
+- méthodes mathématiques
+  + statistiques
+  + numériques
+- outils informatiques pour
+  + banque,
+  + finance
+  + assurance
+  + marketing.
+
+Profil recherché par les banques (gestions des risques), les sociétés d'assurance (actuariat), les organismes économiques, les sociétés financières et les sociétés de services informatiques (SSII).
+
+]
+
+
+???
+
+Pourquoi le Master ISIFAR constitue une alternative au Master MO ? À quel public
+s'adresse-t-il ? Qu'est ce que la gestion quantitative du risque ?
+Comment devenir Actuaire ? Y-a-t-il parmi les anciens étudiants des
+personnes qui sont devenues Actuaires ? (il y en a parmi les anciens du M2MO)
+
+---
+name: ue-isifar-m1
+
+### Master I ISIFAR
+
+
+```{r, ue-isifar, echo=FALSE}
+# %%
+ue_isifar <- read_delim("UE_ISIFAR.csv", ";", escape_double = FALSE,
+  col_types = cols(Année = col_character(),
+                   ECTS = col_character(),
+                   Semestre = col_character(),
+                   Nom = col_character()), trim_ws = TRUE)
+
+# %%
+```
+
+.pull-left[
+
+```{r, echo=FALSE}
+# %%
+ue_isifar %>%
+  dplyr::filter(Semestre=='1' & Année=='1') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Semestre I', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"))
+# %%
+```
+]
+
+
+
+.pull-right[
+
+```{r, echo=FALSE}
+# %%
+ue_isifar %>%
+  dplyr::filter(Semestre=='2' & Année=='1') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Semestre II', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"))
+# %%
+```
+
+]
+
+---
+name: ue-isifar-m2
+
+### Master II ISIFAR
+
+
+.pull-left[
+De septembre à décembre
+
+```{r, echo=FALSE}
+# %%
+
+ue_isifar %>%
+  dplyr::filter(Semestre=='1' & Année=='2') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Période I', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size = 16)
+# %%
+```
+
+]
+
+
+.pull-right[
+De janvier à mars
+
+```{r, echo=FALSE}
+# %%
+ue_isifar %>%
+  dplyr::filter(Semestre=='2' & Année=='2') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Période II', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size = 16)
+# %%
+```
+]
+
+<br>
+
+.center[
+### Stage d'avril à septembre  18 ECTS
+]
+
+---
+name: ue-isifar-m2-alternance
+
+### Master II ISIFAR en alternance
+
+.pull-left[
+- Rechercher un contrat d'apprentissage à partir du mois de février en Master I
+- Possibilité de faire précéder l'alternance par un stage d'été entre le Master I et le Master II pour découvrir l'entreprise
+- En 2019-19, 14 étudiants sur 50 suivent le Master II ISIFAR en alternance
+
+]
+
+.pull-right[
+
+Rythme d'alternance
+
+>- un jour par semaine en entreprise sur dix semaines
+- deux jours par semaine sur dix semaines
+- puis stage entièrement dans l'entreprise
+
+]
+
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Master mention Métiers de l'Enseignement, l'Éducation et de la Formation
+
+### parcours Mathématiques
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+---
+name: meef
+
+# Master Métiers de l’Enseignement, de l’Éducation et de la Formation (MEEF)
+
+- Préparation aux CAPES externe et CAFEP de Mathématiques
+- Partenariat avec l'[École Supérieure du Professorat et de l'Éducation (ESPE) de Paris](https://candidature.espe-paris.fr/).
+- Master I : Préparation CAPES externe/CAFEP
+- Master II : fonctionnaire stagiaire en en alternance : trois jours par semaine
+devant une classe de collège ou lycée et deux jours par semaine en formation à l'ESPE.
+
+> Futurs professeurs de mathématiques en collège et lycée
+
+> Formation progressive et intégrée, vise à décloisonner les aspects disciplinaire, didactique, professionnel et numérique.
+
+
+---
+name: meef-Contenu
+
+### Master I MEEF parcours Mathématiques
+
+60 crédits entre septembre et mai
+
+```{r load-meef, echo=FALSE}
+# %%
+ue_meef <- read_delim("UE_M1MEF.csv", ";", escape_double = FALSE,
+  col_types = cols(Période = col_character(),
+                   ECTS = col_character(),
+                   Nom = col_character()), trim_ws = TRUE)
+# %%
+```
+
+
+
+.pull-left[
+```{r, echo=FALSE}
+# %%
+ue_meef %>%
+  dplyr::filter(Période=='1') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Septembre-Mars', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size = 16)
+# %%
+```
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE}
+# %%
+ue_meef %>%
+  dplyr::filter(Période=='2') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Avril-Mai', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size = 16)
+# %%
+```
+
+<br>
+
+
+```{r, echo=FALSE}
+# %%
+ue_meef %>%
+  dplyr::filter(Période=='0') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Septembre-Mai', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size = 16)
+# %%
+```
+]
+---
+name: meef-candidatures
+class: middle
+
+### Master MEEF informations pratiques
+
+> Candidatures au Master I MEEF au mois de mai-juin sur le [site de l'ESPE](https://candidature.espe-paris.fr/)
+
+> Attention : il est question d'une réforme dont la teneur n'est pas connue.
+Pour rester informé, consulter la [page publique du Master MEEF](https://www.math.univ-paris-diderot.fr/formations/masters/meef/index)
+
+> Contact: [David Mauger](https://webusers.imj-prg.fr/~david.mauger/), bureau 609A
+
+
+???
+
+Le Master MEEF se déroule sur deux ans, soit quatre semestres. Ce master (niveau bac+5) est validé par l'obtention de 120 crédits ECTS. La formation est conçue comme une formation progressive et intégrée, dont les enseignements visent à décloisonner les aspects disciplinaire, didactique, professionnel et numérique.
+
+
+"Master Mention Métiers de l’Enseignement, de l’Éducation et de la Formation
+	parcours Mathématique"
+
+Diapo 49/51 : "fonctionnaire stagiaire en alternance (2 jours par semaine en formation à l'ESPE, 3 jours par semaine en établissement scolaire)" plutôt que "en immersion"
+Ajouter
+"Candidatures au M1 MEEF au mois de mai-juin sur le site de l'ESPE : https://candidature.espe-paris.fr/
+Attention : il est en ce moment question d'une réforme dont nous ne connaissons pas encore la teneur...
+Pour rester informer, la page publique du Master MEEF : https://www.math.univ-paris-diderot.fr/formations/masters/meef/index "
+
+Sur une autre diapo probablement :
+"Contenu du M1 MEEF parcours Mathématiques <actuel>
+
+Première période (sept - mars) :
+Probas-stats 6 ECTS
+Arithmétique 6 ECTS
+Analyse 6 ECTS
+Algèbre linéaire 6 ECTS
+Géométrie 6 ECTS
+Préparation à l'écrit 5 ECTS
+Tronc commun 6 ECTS
+
+Deuxième période (avril-mai) :
+Histoire des mathématiques 3 ECTS
+
+Toute l'année (sept-mai) :
+Préparation à l'oral 10 ECTS
+Numérique 3 ECTS
+Stage 3 ECTS"
+
+
+
+
+Master I MEEF. La première année comporte une préparation intensive aux épreuves du concours de recrutement (CAPES externe, CAFEP et 3e concours) et une formation professionnelle initiale, notamment au travers de stages (5 semaines). Le calendrier, rythmé par les enseignements, les stages et le concours, impose une organisation non semestrielle. Les épreuves des concours ont lieu pendant l'année de M1 (écrits d'admissibilité au début du mois d'avril, oraux d'admission en juin-juillet). → M1 MEEF
+
+Master II MEEF. Les candidats admis au Capes deviennent fonctionnaires stagiaires en début de seconde année. Cette année débute par un module de prise de fonctions, puis se déroule en alternance : trois jours par semaine
+devant une classe de collège ou lycée et deux jours par semaine en formation à l'ESPE.
