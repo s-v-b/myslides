@@ -522,13 +522,25 @@ df %>%
 
 <img src=`r knitr::fig_chunk("mosaic-ggplot-label","png")` alt="Hand made mosaic plot" height="400", align="left">
 
+
+
+]
+]
+
+???
+
 More work would allow to put the bars closer and to mimick the mosaicplot in a more faithful way
 
-In the Grammar of Graphics perspective,
-barplots, two-way mosaicplots, higher-dimensional mosaicplots are based on column plots and require stat functions involving aggregation operations from extended SQL
 
-]
-]
+
+In the Grammar of Graphics perspective,
+
+- barplots, 
+- two-way mosaicplots, 
+- higher-dimensional mosaicplots 
+
+are based on column plots and require stat functions involving aggregation operations from extended SQL
+
 
 ---
 exclude: true
@@ -1249,6 +1261,25 @@ the scope of this lesson)
 ]
 
 ---
+
+```{r flip-scatplot-residuals, include=FALSE}
+p_scatter_gaussian %+% 
+  broom::augment(lm(Y ~ X, u)) +  #<< 
+  geom_line(aes(x=X, y=.fitted)) +
+  geom_segment(aes(x=X, 
+                   xend=X, 
+                   y=.fitted, 
+                   yend=Y, 
+                   color=as_factor(sign(.resid))),
+               alpha=.2) +
+  theme(legend.position = "None") +
+  ggtitle("Gaussian cloud",
+          subtitle = "with residuals!")
+```
+
+`r flipbookr::chunk_reveal("flip-scatplot-residuals", title="### Visualizing residuals")`
+
+---
 class: middle, inverse, center
 
 
@@ -1259,17 +1290,121 @@ class: middle, inverse, center
 
 ### Attention! `r fontawesome::fa("exclamation-triangle")`
 
-- Any quantitative bivariate sample can be always fed to `lm`, and whatever the
-bivariate dataset, you will obtain a linear prediction model
+- Any numeric bivariate sample can be  fed to `lm`
+- Whatever the bivariate dataset, you will obtain a linear prediction model
 
-- It is not wise to rely only on  the `Multiple R-squared` to assess a linear model
+- It is not wise to rely exclusively on  the `Multiple R-squared` to assess a linear model
 
-- Different datasets can lead to the same regression line and the same `Multiple R-squared`
-and the same `Adjusted R-squared`
+- `r fontawesome::fa("hand-point-right")` Different datasets can lead to the same regression line and the same `Multiple R-squared`
+and the same `Adjusted R-squared` 
+
 
 ---
 
-### Anscombe quartet
+### Anscombe quartet 
+
+.fl.w-50.pa2[
+
+4 simple linear regression problems packaged in dataframe 
+`datasets::anscombe`
+
+- `y1 ~ x1`
+- `y2 ~ x2`
+- `y3 ~ x3`
+- `y4 ~ x4`
+
+]
+
+.fl.w-50.pa2[
+```{r}
+anscombe <- datasets::anscombe 
+
+anscombe %>% gt()
+```
+]
+
+
+---
+
+
+### Anscombe quartet: 4 datasets, 1 linear fit with almost identical goodness of fits
+
+.panelset[
+
+.panel[.panel-name[`y1 ~ x1`]
+
+```{r}
+lm(y1 ~ x1, anscombe) %>% 
+  summary
+```
+
+]
+
+.panel[.panel-name[`y2 ~ x2`]
+```{r}
+lm(y2 ~ x2, anscombe) %>% 
+  summary
+```
+]
+
+.panel[.panel-name[`y3 ~ x3`]
+```{r}
+lm(y3 ~ x3, anscombe) %>% 
+  summary
+```
+]
+
+.panel[.panel-name[`y4 ~ x4`]
+```{r}
+lm(y4 ~ x4, anscombe) %>% 
+  summary
+```
+]
+
+]
+
+???
+
+
+
+---
+
+### Anscombe quartet (continued)
+
+All four numerical summaries look similar:
+
+- `Intercept` $\approx 3.0017$
+
+- `slope` $\approx 0.5$
+
+- Residual standard error $\approx 1.236$
+
+- Multiple R-squared $\approx .67$
+
+- F-statistic $\approx 18$
+
+$n$ is equal to 11
+
+The number of adjusted parameters $p$ is 2
+
+The number of degrees of freedom is $n-p=9$
+
+???
+
+How is RSE computed ? 
+
+$$\frac{1}{n-p}\sum_{i=1}^n \left(y_j[i] - \widehat{y}_j[i] \right)^2$$
+
+How is R-squared computed ?
+
+How is adjusted R-squared ?
+
+---
+
+
+---
+
+### Anscombe quartet (continued)
 
 .panelset[
 .panel[.panel-name[Beyond numbers]
@@ -1281,21 +1416,10 @@ This is the message of the Anscombe quartet.
 It is made of four bivariate samples with $n=11$ individuals.
 ]
 
-.panel[.panel-name[My code]
-```{r, echo=TRUE, eval=TRUE}
-anscombe <- datasets::anscombe   # From base R
 
-anscombe %>%     #  tidy it
-  pivot_longer(- starts_with('y'), names_to = 'group', values_to = 'X') %>%
-  pivot_longer(starts_with('y'), names_to = 'groupy', values_to = 'Y') %>%
-  filter(stringr::str_sub(group, 2L)==stringr::str_sub(groupy, 2L)) %>%
-  select(-groupy) %>%
-  mutate(group=stringr::str_sub(group, 2L)) %>% 
-  arrange(group) ->  anscombe
-```
-]
 
-.panel[.panel-name[Better code]
+.panel[.panel-name[Anscombe in long format]
+
 ```{r}
 datasets::anscombe %>%
   pivot_longer(everything(),
@@ -1333,6 +1457,30 @@ anscombe  %>%
 
 ]
 ]
+
+---
+
+```{r pivot_anscombe, include=FALSE}
+datasets::anscombe %>%
+  pivot_longer(everything(),
+    names_to = c(".value", "group"),
+    names_pattern = "(.)(.)"
+  )  %>% 
+  rename(X=x, Y=y) %>% 
+  arrange(group)-> anscombe_long
+
+anscombe_long
+```
+
+
+`r flipbookr::chunk_reveal("pivot_anscombe", title="### Pivoting Anscombe")`
+
+???
+
+Interpreting `pivot_longer`
+
+
+
 ---
 
 ### Performing regression per group
@@ -1340,7 +1488,7 @@ anscombe  %>%
 For each value of `group` we perform a linear regression of `Y`  versus `X`
 
 ```{r}
-list_lm <- purrr::map(anscombe$group ,
+list_lm <- purrr::map(anscombe_long$group ,
                       .f = function(g) lm(Y ~ X,
                                           anscombe,
                                           subset = anscombe$group==g))
@@ -1363,7 +1511,9 @@ to be evaluated on each list item
 
 All four regressions lead to the same intercept and the same slope
 
-All four regressions have the same RSS
+All four regressions have the same Sum of Squared Residuals
+
+All four regressions have the same Adjusted R-square
 
 We are tempted to conclude that 
 
@@ -1380,11 +1530,11 @@ Plotting points and lines helps dispel this illusion
 
 .panel[.panel-name[Code]
 
-```{r}
+```{r, warning=FALSE}
 p <- anscombe %>%
   ggplot(aes(x=X, y=Y)) +
   geom_smooth(method="lm", se=FALSE) +  #<<
-  facet_wrap(~ group) +   #<<
+  facet_wrap(~ group) +                 #<<
   ggtitle("Anscombe quartet: linear regression Y ~ X")
 ```
 
@@ -1403,7 +1553,7 @@ p
 Least squares minimization leads to the same optimum
 on the four datasets, that is to the same intercept and slope
 
-The distribution of residuals differ substantially from one dataset
+The distribution of residuals differ substantially from one dataset to the next
 
 ]
 ]
@@ -1421,15 +1571,18 @@ p + geom_point()
 Among the four datasets, only the two left ones are righteously handled
 using simple linear regression
 
-The bottom left dataset outlines the impact of outliers on Least Squares Minimization
+The bottom left dataset outlines the impact of *outliers* on Least Squares Minimization
+
+
+]
+]
+
+]
+
+???
 
 What happens if we fit a line by minimizing Least Absolute Deviation? (adopt an $\ell_1$ criterion
 rather than an $\ell_2$)
-
-]
-]
-
-]
 
 
 ---

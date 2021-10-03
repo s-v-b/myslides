@@ -1,0 +1,989 @@
+---
+title: "Master I Mathématiques et applications"
+subtitle: "Tronc commun"
+author: "Université Paris-Diderot"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "hygge"]
+    lib_dir: libs
+    seal: false
+    toc: true
+    toc_depth: 2
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      countdown: false
+---
+background-image: url('figs/GdsMoulinsNeige.jpg')
+background-size: cover
+class: top, center
+
+
+# Master I Mathématiques et Applications
+
+## Parcours Mathématiques Fondamentales et Appliquées
+
+### Université de Paris/Paris-Diderot
+
+#### `r Sys.Date()`
+
+
+---
+name: inter-title
+class: middle, center, inverse
+background-image: None
+count: false
+
+
+{{content}}
+
+---
+name: layout-general
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE}
+options(htmltools.dir.version = FALSE)
+require(magrittr, quietly = TRUE)
+require(readr, quietly = TRUE)
+require(kableExtra, quietly = TRUE)
+require(formattable, quietly = TRUE)
+UE_M1_TC_18_19 <- read_delim("./UE_Maths_19_23.csv",
+";", escape_double = FALSE, trim_ws = TRUE)
+```
+
+
+```{r, echo=FALSE, include=FALSE, message=FALSE}
+df_parcours <- read_delim("df_parcours.csv",
+                          ";",
+                          escape_double = FALSE,
+                          col_types = cols(Convention = col_skip(),
+                                           Double = col_skip(),
+                                           Nouveau = col_skip(),
+                                           Num = col_integer()),
+                          trim_ws = TRUE)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+parcours_parcours <- read_delim("df_parcours_parcours/Parcours_Parcours.csv",
+";", escape_double = FALSE, col_types = cols(Compatible = col_integer()), trim_ws = TRUE)
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+parcours_m1 <- read_delim("df_parcours_parcours/Parcours_M1.csv",
+    ";", escape_double = FALSE, trim_ws = TRUE)
+```
+
+
+
+
+???
+
+---
+template: inter-title
+
+# Le Master I au sein du Master
+
+---
+name: bienvenue1
+
+##  Master de mathématiques
+
+Un diplôme en deux ans organisésen _parcours_
+
+Trois grands types de débouchés font l'objet de différents parcours
+
+.left-column[
+
+### Enseignement
+
+
+]
+
+.right-column[
+
+Le Master comporte une préparation à l'Aggrégation de Mathématiques.
+L'aggrégation ouvre les porte de l'enseignement secondaire,
+et des classes préparatoires.  🏫
+
+Pour être nommé en classe préparatoire, il est bon d'etre aussi titulaire
+d'un doctorat.
+
+]
+
+
+
+???
+
+Merci d'être venus. Bienvenue en Master I de Mathématiques.
+
+Nous sommes là aujourd'hui pour situer cette année de Master I au sein
+du Master et de ses parcours.
+
+Un master de mathématiques,
+c'est deux ans d'études qui débouchent en général
+sur trois grands types d'activité et une multitude de métiers.
+
+La mention Mathématiques et applications conduit à l'enseignement dans
+les Lycées (préparation à l'agrégation) mais aussi à une foule d'autres métiers.
+
+
+---
+name: bienvenue2
+
+##  Master de mathématiques
+
+Un diplôme en deux ans organisésen _parcours_
+
+Trois grands types de débouchés font l'objet de différents parcours
+
+.left-column[
+
+### Enseignement
+
+### Ingénieurie
+
+
+
+]
+
+.right-column[
+
+Les entreprises sont friandes de mathématiciens. L'ingénieurie
+mathématique s'appuie sur l'analyse numérique, les statistiques,
+mais aussi la théorie des nombres, et l'algèbre.
+
+- Mathématiques financières
+- Gestion du risque
+- Science des données
+- ...
+
+]
+
+
+---
+name: bienvenue3
+
+##  Master de mathématiques
+
+Un diplôme en deux ans organisé en _parcours_
+
+Trois grands types de débouchés font l'objet de différents parcours
+
+.left-column[
+
+### Enseignement
+
+### Ingénieurie
+
+### Recherche
+
+]
+
+.right-column[
+
+Le Master de Mathématiques prépare à la recherche en Mathématiques.
+
+Ces carrières se déroulent souvent dans l'enseignement supérieur, parfois dans
+les établissements de recherche (CNRS, INRIA, Max-Planck, ...)
+
+Après le Master, il faut obtenir un doctorat. Les Master de Mathématiques fait
+partie de l'[École doctorale de Paris-Centre](http://ed386.sorbonne-universite.fr/fr/index.html)  `r emo::ji('mortar_board')`
+
+]
+
+---
+class: middle
+
+
+##  Parcours (Master II)
+
+Le *tronc commun* de Master I appelé **Mathématiques fondamentales et appliquées**
+conduit aux parcours de Master II suivants
+
+```{r, echo=FALSE, message=FALSE}
+df_parcours %>%
+  dplyr::filter(Code != 'MEEF') %>%
+  dplyr::inner_join(parcours_parcours,
+                                  by=c("Code" = "Parcours_M2")) %>%
+  dplyr::select(Num, Nom, Code, Parcours_M1, Compatible) %>%
+  dplyr::inner_join(parcours_m1, by=c(Parcours_M1 = "Code")) %>%
+  dplyr::filter(Parcours_M1=="M1-MFA") %>%
+  dplyr::select(Nom.x)  %>%
+  dplyr::rename('Parcours M2' = Nom.x) %>%
+  knitr::kable(escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+                            bootstrap_options = c("condensed", "striped"))
+```
+
+???
+
+
+---
+template: inter-title
+background-image: url('figs/idf.jpg')
+background-size: cover
+
+
+## Parcours Mathématiques fondamentales
+
+
+---
+name: mf
+
+## Parcours Mathématiques fondamentales
+
+> Formation de haut niveau en mathématiques à des étudiants qui se destinent aux métiers de l'enseignement et de la recherche.
+
+> Il débouche donc naturellement (mais pas exclusivement) sur une thèse de mathématiques.
+
+- [Laboratoire IMJ-PRG](https://www.imj-prg.fr) (CNRS-Paris-Diderot-SU)
+- Convention avec Sorbonne-Université (ex UPMC-Paris 6)
+- [Brochure 2017-18](http://www.math.univ-paris-diderot.fr/_media/formations/masters/math/brochure_maths_fond_2018-2019.pdf)
+
+Responsable : [Marc Rosso](https://webusers.imj-prg.fr/~marc.rosso/)
+
+???
+
+- Un parcours élitiste
+- Un débouché : Doctorat
+- Un Doctorat, c'est une allocation, un encadrement
+- Un doctorat. c'est éventuellement un passeport pour l'enseignement en classes préparatoires
+
+Peut-on préparer l'agrégation en préparant une thèse ?
+
+
+---
+template: inter-title
+background-image: url('figs/idf.jpg')
+background-size: cover
+
+## Parcours Logique Mathématiques et Fondements de l'Informatique
+
+---
+name: lmfi
+
+## Parcours: Logique Mathématiques et Fondements de l'Informatique (LMFI)
+
+> Ce master offre une formation de haut niveau en Logique. Il a pour objectif
+de former des chercheurs ou ingénieurs de recherche possédant la maîtrise
+des outils logiques fondamentaux utilisés en Mathématiques et en
+Informatique.
+
+> Seul M2 en France consacré la logique mathématique et à ses applications en informatique
+
+
+Responsables :
+- Informatique [Christine Tasson](http://www.irif.fr/~tasson/)
+- Mathématiques [Boban Velickovic](http://www.logique.jussieu.fr/~boban/)
+
+
+???
+
+Revoir l'attaque.
+
+- Comment se situe la Logique Mathématique dans l'univers des Mathématiques (fondamentales) ?
+- Quel langage tenir aux étudiants de Licence à ce sujet
+- Trouver des mots pour expliquer le rôle de P7 dans la recherche en Logique en France et en Europe
+- Suggérer le rôle de la logique dans la relation Mathématique/Informatique. Hommage à Turing.
+- Évoquer métiers et débouchés
+
+
+---
+template: inter-title
+background-image: url('figs/bourse.jpg')
+background-size: cover
+
+## Parcours M2MO (Modélisation Aléatoire, ex-Laure Élie)
+
+
+---
+name: m2mo
+
+## Parcours M2MO (Modélisation Aléatoire, ex-Laure Élie)
+
+.pull-left[
+Mathématiques financières
+
+Science des données
+
+Responsables:
+
+[Jean-François Chassagneux](https://www.lpsm.paris//pageperso/chassagneux/index.html)
+
+[Huyen Pham](https://sites.google.com/site/phamxuanhuyen/)
+
+[Association Alumni](https://masterfinance.math.univ-paris-diderot.fr/index.php/anciens/association)
+]
+
+.pull-right[
+
+.rotate-right[
+```{r echo=FALSE, out.width="85%"}
+knitr::include_graphics("./figs/affiche_m2mo.png")
+```
+]
+
+
+
+]
+
+???
+
+- Prévoir une attaque
+- Présence sur les réseaux sociaux LinkedIn Twitter Instagram Facebook
+- Les Mathématiques financières
+- Les statistiques
+- Le *Machine Learning*
+
+
+---
+template: inter-title
+background-image: url('figs/idf.jpg')
+background-size: cover
+
+
+## Parcours Mathématiques Générales
+
+
+---
+name: mg
+
+## Parcours Mathématiques Générales
+
+> Le M2 Mathématiques générales permet d'acquérir une formation solide et généraliste en mathématiques, à la fois théorique et pratique, en lien avec l'enseignement des mathématiques
+
+> Le parcours Mathématiques générales-Agrégation est centré sur la préparation à l'[agrégation externe](http://www.devenirenseignant.gouv.fr)
+
+> Le jury de délivrance du M2 se réunit avant les résultats d'admissibilité
+
+Responsable:
+[Antoine Chambert-Loir](https://webusers.imj-prg.fr/~antoine.chambert-loir/index.xhtml)
+
+???
+
+- Attaque
+- Métiers. Qu'est-ce-qu'un agrégé ?
+- L'agrégation dans une vie de mathématicien
+- Les options
+- Les choix de cours à suivre en Master I
+
+---
+template: inter-title
+background-image: url('figs/idf.jpg')
+background-size: cover
+
+## Parcours: Probabilités et Modèles Aléatoires (ouverture 2020)
+
+
+---
+name: pma
+
+## Parcours: Probabilités et Modèles Aléatoires (ouverture 2020)
+
+.pull-left[
+
+Probabilités et Modélisation Stochastique
+
+[Laboratoire LPSM](http:\\www.lpsm.paris) (CNRS-Paris-Diderot-SU)
+
+Convention avec Sorbonne-Université
+]
+
+.pull-right[
+
+.rotate-right[
+```{r echo=FALSE, out.width="85%"}
+knitr::include_graphics("./figs/LPSM_Lancement.jpg")
+```
+]
+
+]
+
+???
+
+- Le rôle/La vocation de Master
+- Le Laboratoire LPSM
+- Théorie des Processus
+- La Mécanique statistique
+-
+
+---
+template: inter-title
+background-image: url('figs/idf.jpg')
+background-size: cover
+
+## Parcours: Mathématiques de la Modélisation (ouverture 2020)
+
+---
+name: mod
+
+# Parcours Mathématiques de la Modélisation (ouverture 2020)
+
+.content-box-gray[Nouveau !
+
+- Analyse numérique
+- [Laboratoire Jacques-Louis Lions](https://www.ljll.math.upmc.fr/) (CNRS-Paris-Diderot-SU)
+- Convention avec Sorbonne-Université (ex UPMC-Paris 6)
+]
+
+???
+
+
+---
+template: inter-title
+background-image: url('figs/idf.jpg')
+background-size: cover
+
+## Passerelle ISIFAR
+
+
+---
+name: passerelle
+class: middle, center
+
+## Passerelle ISIFAR
+
+
+---
+name: prourquoi-isifar
+
+## Pourquoi ?
+
+
+.pull-left[
+
+On peut :
+
+- aimer appliquer des méthodes mathématiques
+ou inspirées des mathématiques sans adorer l'abstraction.
+- préférer l'application aux preuves.
+- préférer les chiffres `r emo::ji('chart_with_upwards_trend')` aux symboles logiques $\ldots \Rightarrow \exists A \in \mathcal{B}(\mathbb{R}) \ldots$
+ `r emo::ji('woman_frowning')`
+
+
+
+]
+
+.pull-right[
+
+Le [Master II Isifar](http://master.math.univ-paris-diderot.fr/annee/m2-isifar/) peut constituer une alternative au Master II M2MO
+
+Pour intégrer le Master II Isifar à partir du Master I MFA,
+soigner ses compétences informatiques et statistiques.
+
+]
+
+???
+
+Étudiants attirés par la Finance, l'Assurance, etc, mais ayant
+peu d'appétit pour l'abstraction et les preuves
+
+---
+name: ue-isifar-m2
+
+## Master II ISIFAR
+
+```{r, ue-isifar, echo=FALSE}
+# %%
+ue_isifar <- read_delim("UE_ISIFAR.csv", ";", escape_double = FALSE,
+  col_types = cols(Année = col_character(),
+                   ECTS = col_character(),
+                   Semestre = col_character(),
+                   Nom = col_character()), trim_ws = TRUE)
+
+# %%
+```
+
+.pull-left[
+De septembre à décembre
+
+```{r, echo=FALSE}
+# %%
+
+ue_isifar %>%
+  dplyr::filter(Semestre=='1' & Année=='2') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Période I', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size = 16)
+# %%
+```
+
+]
+
+
+.pull-right[
+De janvier à mars
+
+```{r, echo=FALSE}
+# %%
+ue_isifar %>%
+  dplyr::filter(Semestre=='2' & Année=='2') %>%
+  dplyr::select(Cours=Nom, ECTS) %>%
+  knitr::kable(caption = 'Période II', escape = F) %>%
+  kableExtra::kable_styling(full_width = TRUE,
+    bootstrap_options = c("condensed", "striped"), font_size = 16)
+# %%
+```
+]
+
+<br>
+
+.center[
+### Stage d'avril à septembre  18 ECTS
+]
+
+---
+name: ue-isifar-m2-alternance
+
+### Master II ISIFAR en alternance
+
+.pull-left[
+- Rechercher un contrat d'apprentissage à partir du mois de février en Master I
+- Possibilité de faire précéder l'alternance par un stage d'été entre le Master I et le Master II pour découvrir l'entreprise
+- En 2019-19, 14 étudiants sur 50 suivent le Master II ISIFAR en alternance
+
+]
+
+.pull-right[
+
+Rythme d'alternance
+
+>- un jour par semaine en entreprise sur dix semaines
+- deux jours par semaine sur dix semaines
+- puis stage entièrement dans l'entreprise
+
+]
+
+
+---
+template: inter-title
+
+# Contacts
+
+
+---
+name: contacts
+
+## Responsable administratif
+
+### [Christian Sénécal](mailto:senecal@math.univ-paris-diderot.fr)
+
+.pull-left[
+
+- Secrétariat de l'UFR de Mathématiques
+- Bâtiment Sophie Germain Salle 2008
+]
+
+.pull-right[
+```{r, trombi-cs, out.width="60%", echo=FALSE}
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+```
+]
+
+- Inscriptions pédagogiques
+- Modalités de controle continu
+
+
+---
+name: distance
+
+## Modalités de contrôle continu
+
+Il est possible de renoncer sous conditions au contrôle continu,
+et d'opter pour le Master I *à distance*.
+
+Suivre le Master I à distance revient à :
+
+- choisir le *contrôle terminal*
+- renoncer au *contrôle continu*
+
+Cette possibilité est offerte sous condition et sur justificatifs
+
+C'est un choix à faire lors des inscriptions pédagogiques _au début chaque semestre_
+
+
+???
+
+Que dire de plus ?
+---
+
+## Responsables pédagogiques
+
+.pull-left[
+
+### [__David Gérard-Varet__](https://webusers.imj-prg.fr/~david.gerard-varet/)
+
+[Institut de Mathématiques de Jussieu-Paris-Rive-Gauche](https://www.imj-prg.fr)
+
+
+```{r trombi-dgv, out.width = "40%", echo=FALSE, fig.align="center"}
+knitr::include_graphics("https://webusers.imj-prg.fr/~david.gerard-varet/gerard_varet_small.jpg")
+```
+
+]
+
+.pull-right[
+
+### [__Stéphane Boucheron__](http://stephane-v-boucheron.fr)
+
+[Laboratoire Probabilités, Statistique et Modélisation](https://lpsm.paris)
+
+
+```{r trombi-sb, out.width = "40%", echo=FALSE, fig.align="center"}
+knitr::include_graphics("http://stephane-v-boucheron.fr/img/ritratto.jpg")
+```
+]
+
+.center[
+
+
+
+Entretiens sur rendez-vous par [courriel](mailto:responsable-master@math.univ-paris-diderot.fr)
+
+Questions d'orientation
+
+]
+
+???
+
+### À régler avec le responsable administratif :
+
+..
+
+### Avec les responsables pédagogiques
+
+- sur rendez-vous
+- pendant les heures prévues
+- question d'orientation
+
+
+---
+template: inter-title
+
+# Orgnisation de l'année
+
+
+---
+name: deroulement
+class: middle, center
+
+## Année académique
+
+![déroulement](annee19_20.svg)
+
+
+
+???
+
+
+
+---
+name: edt
+
+## Emploi du temps premier semestre
+
+![edt](figs/etd_snap.png)
+
+
+---
+name: inscriptions-ad
+
+## Inscriptions
+
+.pull-left[
+### Inscription administrative
+
+- Où ?
+- Quand ?
+- Comment ?
+- Pourquoi ?
+]
+
+--
+
+.pull-right[
+### Inscriptions pédagogique
+
+- choix des Cours
+- choix des groupes de Travaux dirigés (éventuellement)
+- dispense éventuelle de controle continu
+]
+
+???
+
+---
+template: inter-title
+
+# ENT Moodle
+
+
+---
+
+## ENT Moodle : se connecter
+
+![Moodle1](figs/moodle_snap1.png)
+
+
+???
+
+Il faut disposer d'accès à l'ENT
+Cet accès est possible après inscription administrative
+
+---
+
+## ENT Moodle : page du Master 1
+
+![Moodle1](figs/moodle_snap2.png)
+
+???
+
+(5mn)
+
+- Auto-inscription
+- Pourquoi s’inscrire ?
+- Charger l’app Moodle sur son portable
+
+
+
+- Organisation semestre II (5 mn)
+    - Césures
+    - Les tubes
+    - Projet/Mémoire/Stage
+    - Entretiens (objectifs, quand, comment)
+- Grille de choix semestre II (5mn)
+- Anglais (10mn)
+    - Comment ? Quand ? Pourquoi ?
+    - Validation des acquis
+    - Caveat
+- Université/adresses utiles (5mn)
+    - Bibliothèque générale
+    - Bibliothèque MIR
+    - Ressources informatiques (machines/tablettes/cloud)
+    - Sport
+    - Manger
+    - Santé
+    - SOIP
+- Validation  (10mn)
+    - Modalités de contrôle des connaissances
+    - Redoublements
+    - 1ere session
+        Règles de compensation (où en est-on ?)
+    - 2nde chance
+
+
+
+---
+name:moodle_fin
+
+
+La page Moodle du Master I sera notre moyen de communication:
+
+- envoi de messages aux groupes d'enseignants, d'étudiants
+- prise de rendez-vous pour les entretiens
+- accès aux annonces
+- emploi du temps
+- agenda des examens
+- mise à disposition de documents administratifs
+
+N'oubliez pas de consulter fréquemment votre courriel sur
+
+> `xxx.yyy@etu.univ-paris-diderot.fr`
+
+ou de rediriger cette boite aux lettres vers une de vos boites habituelles.
+
+???
+
+- Présentation des parcours (20mn)
+    - __Mathématiques Fondamentales__
+    - Probabilités
+    - Mathématiques de la Modélisation
+    - __Mathématiques générales__
+    - __M2MO__
+    - __Logique Mathématiques et Fondement de l’informatique__
+    - ISIFAR
+
+
+
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+
+
+---
+template: inter-title
+
+# Validation
+
+
+---
+name: proc-validation
+
+## Procédure de validation
+
+
+.pull-left[Aucune compensation automatique n'est prévue
+
+Elles ne dépasseront jamais le cadre d'un bloc d'UE d'un même semestre
+
+Plus de compensations inter-semestrielles
+]
+
+.pull-right[
+
+![Graduation](figs/accomplishment-black-and-white-black-and-white-2365535.jpg)
+
+]
+
+
+???
+
+---
+name: redoublemets
+
+## Cas des redoublements
+
+???
+
+Au cas par cas
+
+
+---
+template: inter-title
+
+# Les cours
+
+
+---
+
+## Semestre I
+
+.pull-left[
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==1) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('3 UE de Mathématique parmi 5'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"),
+                             font_size = 16)
+```
+
+Le choix des cours suivis dépend en partie du
+parcours de Master II envisagé
+]
+
+--
+
+.pull-right[
+Ce premier semestre est un semestre d'orientation
+
+Selon les parcours visés, vous devrez choisir trois UEs de Mathématiques parmi les cinq proposées
+
+> Si vous envisagez le parcours *Logique Mathématique*, vous suivrez le cours de *Logique*, sans doute celui d'*Algèbre*. Le troisième cours sera au choix
+
+Choix effectués lors des inscriptions pédagogiques
+]
+
+???
+
+Au premier semestre, 3 UE de mathématique
+
+- MF Analyse/Algèbre
+- PMA Analyse/Probabilités
+- M2MO Analyse/Probabilités/Complexité
+- Modélisation
+- LMFI Logique/
+- MG Analyse
+
+Expliciter les choix possibles. Ajouter à la carte des UEs
+des indications sur les parcours où ces UEs sont
+recommandées, voire obligatoires.
+
+
+- Organisation semestre I (5mn)
+    - Césure
+    - Examens
+    - Cas du cours __Complexité___
+    - S’abonner au calendrier
+    - Entretiens (objectifs, quand, comment)
+- Grille de choix pour semestre I (5mn)
+
+---
+class: top
+
+## Semestre II
+
+.pull-left[
+
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==2 & Periode==1) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('Semestre II Période I'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"), font_size = 16)
+
+```
+
+<br>
+
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==2 & is.na(Periode)) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('Semestre II sur les deux périodes'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"), font_size = 12)
+
+```
+]
+
+--
+
+.pull-right[
+
+```{r, echo=FALSE}
+UE_M1_TC_18_19 %>%
+  dplyr::filter(Semestre==2 & Periode==2) %>%
+  dplyr::select(Nom) %>%
+  dplyr::rename('Semestre II Période II'=Nom) %>%
+  knitr::kable(format='html') %>%
+  kableExtra::kable_styling( full_width = TRUE, bootstrap_options = c("striped", "condensed"), font_size = 16)
+
+```
+
+<br>
+
+> Deux ou trois cours durant chaque période de six semaines et éventuellement un cours s'étalant sur le semestre.
+]
+
+
+
+
+
+???
+
+
+Au second semestre
+
+- M2MO
+  + Probability Martingales/Markov
+  + Statistique fondamentale/Approfondie
+  + Analyse App I/II
+  +

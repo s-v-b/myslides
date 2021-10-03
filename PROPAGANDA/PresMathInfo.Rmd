@@ -1,0 +1,892 @@
+---
+title: "Double Master Math-Informatique<br> Sciences des Données"
+subtitle: "Université de Paris (Paris-Diderot)"
+author: "Stéphane Gaïffas"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+name: layout-general
+layout: true
+class: left, top
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE}
+```
+
+
+---
+class: middle, center
+
+
+# Double Master [Science des Données](http://master.math.univ-paris-diderot.fr/parcours/data/)
+
+## Mentions Mathématique *et* Informatique
+
+### `r Sys.Date()`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+---
+class: center, middle, inverse
+
+# Débouchés
+
+
+---
+name: Débouchés
+class: middle
+
+####  `r fontawesome::fa("chart-area")` Data scientist
+> Data science is a "concept to unify statistics, data analysis, machine learning and their related methods" in order to "understand and analyze actual phenomena" with data. It employs techniques and theories drawn from many fields within the context of mathematics, statistics, information science, and computer science.
+
+#### `r fontawesome::fa("server")` Data engineer
+> Data engineers are software engineers who design, build, integrate data from various resources, and manage big data.
+
+#### `r fontawesome::fa("database")` Data architect
+> A data architect is a practitioner of data architecture, an information technology discipline concerned with designing, creating, deploying and managing an organization's data architecture.
+
+
+---
+name: xkcd1
+class: middle, center
+
+<img src="https://imgs.xkcd.com/comics/machine_learning_2x.png" alt="drawing" width="400"/>
+
+From https://imgs.xkcd.com
+
+---
+name: linkedIn
+class: middle
+
+
+### Extrait `LinkedIn` le 6 novembre 2018
+
+<img src="img/ecranLinkedIn.png" width="300px" align="right"/>
+
+> You are
+
+> Scientific Engineer in computer science or statistics (Python, R, C++, SQL) with good background in algorithmic approach (Tensorflow, Caffe, Blockchain…)
+
+> Experimented on the architecture of digital platform (Hadoop / Apache Spark/ Hive /Elastic Search), in particular the communication aspects (MQTT, JSON, Time series)
+
+???
+
+background-image: url(file:///Users/stephaneboucheron/MEDOCS/MATH_INFO_DATA/img/ecranLinkedIn.png)
+
+
+
+
+---
+exclude: false
+name: etvous
+
+
+# Et vous dans tout ça ?
+
+> Ce double master est conçu pour vous
+
+[L3 Math-Info](http://www.math.univ-paris-diderot.fr/formations/licences/mathinfo2/l3)
+
+- Programmation fonctionnelle, `r fontawesome::fa("r-project", fill = "steelblue")`, `Scala`
+
+- Algorithmique, `Machine Learning, Données massives`, ...
+
+- Analyse, `Statistique, Machine Learning, Optimisation`, ... `r fontawesome::fa("r-project", fill = "steelblue")` `r fontawesome::fa("python")`, ...
+
+- Programmation réseaux, `IOT`, ...
+
+- Méthodes numériques, `Optimisation`, `Deep learning`, ...
+
+- ...
+
+
+
+
+---
+class: middle
+
+.left-column[
+
+### Un Master dans Paris
+
+### [Université de Paris](https://www.u-paris.fr)
+
+### Campus des Grands Moulins
+
+]
+
+.right-colum[
+
+
+```{r, echo=FALSE, message=FALSE, fig.align='right', fig.width=8}
+require(magrittr)
+m <- leaflet::leaflet() %>%
+  leaflet::setView(lat=48.853646831055556,
+                      lng=2.3488426208496094, zoom=12) %>%
+  leaflet::addTiles() %>%  # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(lat=48.82717410837418,
+                      lng=2.380986213684082,
+                      popup="Bâtiment Sophie Germain") %>%
+  leaflet::addMarkers(lng=2.38004207611084,
+                      lat=48.8326901185081,
+                      popup="Barge du Crous")
+
+m
+```
+
+]
+
+---
+exclude: true
+
+### Double Master: [Master I](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+.pull-left[
+
+__Semestre I__
+
+- Mathématiques 18 ECTS
+  + [Probabilités](http://stephane-v-boucheron.fr/courses/probability/)
+  + [Thérie de l'information et Analyse](https://webusers.imj-prg.fr/~antoine.chambert-loir/enseignement/2019-20/shannon/index.xhtml)
+  + [Complexité](http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/)
+
+- Informatique  18 ECTS
+  + [Langages à objets]()
+  + [Algorithmes]()
+  + [Intelligence Artificielle et jeux ]()
+]
+
+
+.pull-right[
+
+__Semestre II__
+
+- Mathématiques 18 ECTS
+  + [Analyse de donneées exploratoires]()
+  + [Statistiques]()
+  + [Optimisation]()
+
+- Informatique  15 ECTS
+  + [Bases de données avancées]()
+  + [Algorithmique avancée]()
+  + [Technologies Big data](https://stephanegaiffas.github.io/big_data_course/)
+
+- Anglais 3 ECTS
+]
+
+
+---
+class: middle, center, inverse
+
+## [Master I](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+---
+exclude: true
+class: middle, center, inverse
+
+
+## La formation
+
+
+---
+exclude: false
+
+### Des mathématiques
+
+.pull-left[
+
+- Probabilités `r fontawesome::fa("random")`
+
+- Théorie de l'Information  `r fontawesome::fa("wave-square")`
+
+- Complexité/Algorithmes `r fontawesome::fa("code")`
+
+- Statistiques  `r fontawesome::fa("code")`
+
+- Optimisation `r fontawesome::fa("drafting-compass")`
+
+- Machine Learning `r fontawesome::fa("tools")`
+
+- IA (Deep Learning) `r fontawesome::fa("brain")`
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/pexels-andrea-piacquadio-3768126.jpg")
+```
+]
+
+---
+exclude: false
+
+### De l'informatique
+
+.pull-left[
+
+<img src="https://imgs.xkcd.com/comics/git_commit_2x.png">
+
+
+<img src="img/stravaParis.png" align="center" width="250">
+
+]
+
+.pull-right[
+
+
+- Bases de données, SQL, ..., n(ot) o(nly) SQL
+
+<img src="https://spark.apache.org/images/spark-logo-trademark.png"  width=100 align="right">
+
+- Architectures *Big Data*
+
+<img src="https://kafka.apache.org/images/kafka_diagram.png" width=200, align="right">
+
+- Algorithmique des données massives
+
+<img src="https://keras.io/img/logo-small.png" align="right", width=200>
+
+- Réseaux complexes
+
+- ...
+
+
+]
+
+---
+exclude: true
+
+### [Master I Semestre I](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+                        <th>Crypto</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-theorie-information/" class="plain">Théorie de l&#39;information</a>
+              </td>
+              <td>6</td><td>`r fontawesome::fa('check')`</td>
+              <td>`r fontawesome::fa('check')`</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+              </td>
+              <td>6</td><td>`r fontawesome::fa('check')`</td><td>`r fontawesome::fa('check')`</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-algebre/" class="plain">Algèbre effective</a>
+              </td>
+              <td>6</td><td>`r fontawesome::fa('check')`</td><
+              td></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-probabilites/" class="plain">Probabilités</a>
+              </td>
+              <td>6</td><td></td><td>`r fontawesome::fa('check')`</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-prog-obj/" class="plain">Programmation objet avancée</a>
+              </td>
+              <td>6</td><td>`r fontawesome::fa('check')`</td><td>`r fontawesome::fa('check')`</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-theorie-jeux/" class="plain">Intelligence artificielle et théorie des jeux</a>
+              </td>
+              <td>6</td><td>`r fontawesome::fa('check')`</td><td>`r fontawesome::fa('check')`</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-protocoles-reseaux/" class="plain">Protocoles réseaux</a>
+              </td>
+              <td>6</td><td>`r fontawesome::fa('check')`</td><td></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo/" class="plain">Algorithmique</a>
+              </td>
+              <td>6</td><td></td><td>`r fontawesome::fa('check')`</td>
+        </tr>
+
+        </table>
+
+
+---
+class: middle, center 
+
+### [Master I Semestre I](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+| Module | Data | .gray[Crypto] |
+|:-------|:----:|:-------------:|
+| <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-theorie-information/" class="plain">Théorie de l&#39;information</a> |  `r fontawesome::fa('check')` | .lightGray[`r fontawesome::fa('check')`] |
+| <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a> |  `r fontawesome::fa('check')` | .whiteSmoke[`r fontawesome::fa('check')`] |
+|<a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-algebre/" class="plain">Algèbre effective</a>| |  .whiteSmoke[`r fontawesome::fa('check')`]|
+|<a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-probabilites/" class="plain">Probabilités</a>|  `r fontawesome::fa('check')` | |
+|<a href="http://master.math.univ-paris-diderot.fr/modules/m1info-prog-obj/" class="plain">Langages à objets avancés</a>| `r fontawesome::fa('check')` | .whiteSmoke[`r fontawesome::fa('check')`]|
+|<a href="http://master.math.univ-paris-diderot.fr/modules/m1info-theorie-jeux/" class="plain">Intelligence artificielle et théorie des jeux</a> | `r fontawesome::fa('check')` | .whiteSmoke[`r fontawesome::fa('check')`]|
+|<a href="http://master.math.univ-paris-diderot.fr/modules/m1info-protocoles-reseaux/" class="plain">Protocoles réseaux</a> |  | .whiteSmoke[`r fontawesome::fa('check')`]|
+|<a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo/" class="plain">Algorithmique</a> | `r fontawesome::fa('check')` | .whiteSmoke[ ] |
+
+---
+
+### [Master I Semestre II](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/" class="plain">Analyse des données  `r fontawesome::fa("r-project", fill = "steelblue")`</a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-bases-donnees/" class="plain">Bases de données avancées</a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo-avancee/" class="plain">Algorithmique avancée</a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-big-data/" class="plain">Technologies Big Data  <img src="https://spark.apache.org/images/spark-logo-trademark.png"  width=60 align="right"></a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s2-anglais-3/" class="plain">Anglais</a>
+              </td>
+              
+        </tr>
+
+        </table>
+
+
+
+
+
+---
+exclude: true
+
+### Double Master:   [Master II](https://m2mids.github.io/m2mids/)
+
+__Semestre I (Septembre-Mars)__
+
+.pull-left[
+
+- [Machine Learning](https://stephanegaiffas.github.io/teaching/m2mo)
+
+- [Optimisation pour l'apprentissage](http://master.math.univ-paris-diderot.fr/modules/m2mo-optim-ml/)
+
+- [NLP]()
+
+- POCA (Scala) <img src="https://docs.scala-lang.org/resources/img/frontpage/scala-logo-white@2x.png" width="75px">
+
+- BDAA (Architecture avancée)
+
+]
+
+
+
+
+
+.pull-right[
+
+- [Deep learning](http://master.math.univ-paris-diderot.fr/modules/m2mo-deepl/)
+
+- [Renforcement]()
+
+- [Données massives]()
+
+- [Algo réparties]()
+
+- [Programmation répartie]()
+
+- [Réseaux d'interactions]()  `r fontawesome::fa("share-alt")`
+
+- [Accès information MAIN]()
+
+]
+
+
+
+
+
+---
+class: center, middle, inverse
+
+## [Master II]([Master II](https://m2mids.github.io/m2mids/)
+
+---
+class: center, middle
+
+
+```{r, echo=FALSE, out.width="800px", out.height="600px"}
+knitr::include_url("https://m2mids.github.io/m2mids/")
+```
+
+---
+
+### Période I
+
+Septembre-Décembre (10 semaines)
+
+.pull-left[
+
+<h3>Cours Informatique</h3>
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2-info-poca/" class="plain">Programmation Objet, Concepts Avancés
+              <img src="https://docs.scala-lang.org/resources/img/frontpage/scala-logo-white@2x.png" width="60px"></a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2-info-archi-bd/" class="plain">Architecture des systèmes de base de données</a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+<a href="https://m2mids.github.io/m2mids/courses/bdd-spe" class="plain">Bases de données spécialisées</a>
+              </td>
+              
+        </tr>
+
+        </table>
+]
+
+.pull-right[
+
+<h3>Cours Mathématiques</h3>
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2mo-ml/" class="plain">Introduction au Machine Learning</a>
+              </td>
+              
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2mo-optim-ml/" class="plain">Optimisation pour l&#39;apprentissage</a>
+              </td>
+              
+              
+        </tr>
+        <tr>
+        <td> 
+    <a href="http://master.math.univ-paris-diderot.fr/modules/m2-linguist-tal/" class="plain">Traitement de la langue naturelle  (NLP, TAL)</a> </td> 
+        
+        </tr>
+
+</table>
+
+]
+
+
+---
+
+
+### Période II
+
+Janvier-Mars 10 semaines
+
+.pull-left[
+
+#### Cours Informatique
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2info-grands-graphes/" class="plain">Grands réseaux d’interaction</a>
+              </td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2info-maai/" class="plain">Méthodes algorithmiques pour l&#39;accès à l&#39;information numérique</a>
+              </td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2info-prog-repart/" class="plain">Programmation répartie</a>
+              </td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2info-algo-repart/" class="plain">Algorithmique repartie</a>
+              </td>
+        </tr>
+
+        </table>
+]
+
+.pull-right[
+
+#### Cours Mathématiques
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2mo-deepl/" class="plain">Deep learning</a>
+              </td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2mo-renforcement/" class="plain">Renforcement</a>
+              </td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2mo-mmd/" class="plain">Algorithmique des données massives</a>
+              </td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m2-anglais/" class="plain">Anglais</a>
+              </td>
+        </tr>
+
+        </table>
+]
+
+---
+
+.content-box-gray[
+
+__Semestre II__
+
+__Stage (Avril-Septembre)__
+
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/pexels-startup-stock-photos-7065.jpg")
+```
+
+]
+
+
+---
+exclude: false
+class: middle, center, inverse
+
+##  Attendus
+
+
+
+
+---
+exclude: true
+
+```{r, out.width="150px", fig.align='left', echo=FALSE, }
+knitr::include_graphics("./img/pensive-man-leaning-on-white-table-3777553.jpg")
+```
+
+---
+exclude: false
+
+.pull-left[
+<img src="./img/woman-in-white-shirt-showing-frustration-3807738.jpg" align="left" width="160px" style="margin:5px 10px">
+
+Le [Double Master Mathématiques-Informatique](http://master.math.univ-paris-diderot.fr/parcours/data/) est un débouché naturel de la [Double Licence Mathématiques-Informatique](http://licence.math.univ-paris-diderot.fr/mathinfo/)
+
+
+
+
+`r fontawesome::fa("user-graduate", fill = "black")` __Sous conditions__, les titulaires d'une [Licence de Mathématiques](http://licence.math.univ-paris-diderot.fr/maths/) peuvent accéder à ce [Double Master Mathématiques-Informatique](http://master.math.univ-paris-diderot.fr/parcours/data/)
+]
+
+.pull-right[
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("http://licence.math.univ-paris-diderot.fr/mathinfo/")
+```
+
+
+]
+
+
+
+.content-box-gray[
+Pour suivre le double Master, il faut disposer d'un bagage informatique substantiel :
+
+- Algorithmique  `r fontawesome::fa("database", fill = "black")`
+
+- Langages de programmation `C`, `r fontawesome::fa("java")`, `r fontawesome::fa("python")`, ...
+
+- Environnement de programmation `r fontawesome::fa("code-branch", fill = "black")`
+
+]
+
+---
+exclude: true
+
+.pull-left[
+
+### Mathématiques
+
+
+- [Analyse](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s6-Integration/)
+
+- [Probabilités](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s5-probas/)
+
+- [Algèbre linéaire](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s5-an_num_mat/)
+
+- [Analyse numérique](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s6-optim/)
+
+
+<img src="http://www.maths-et-tiques.fr/images/M_images/cosinus1.jpeg"  width="300">
+]
+
+.pull-right[
+
+
+
+### Informatique <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/768px-Python-logo-notext.svg.png" width="100", align="right">
+
+- [Algorithmique](http://licence.math.univ-paris-diderot.fr/modules/l2math-s3-algo_prog/)
+
+- [Programmation](http://licence.math.univ-paris-diderot.fr/modules/l2math-s3-algo_prog/)
+  + [Python]()
+  + C
+
+<img src="https://d33wubrfki0l68.cloudfront.net/62bcc8535a06077094ca3c29c383e37ad7334311/a263f/assets/img/logo.svg" align="right" width="150">
+
+<img src="https://www.bluexml.com/wp-content/uploads/2017/07/Logo_Docker.png" align="left" width="150">
+
+<img src="https://git-scm.com/images/logo@2x.png" align="right" width="150" vspace="50">
+]
+
+---
+class: middle, center, inverse
+
+# Postuler
+
+---
+class: middle, center
+
+```{r, echo=FALSE, out.width="80%"}
+knitr::include_url("https://ecandidat.app.u-paris.fr/m20/m20/#!accueilView")
+```
+
+https://candidaturesca19mprod.app.univ-paris-diderot.fr/m20/
+
+---
+class: inverse, middle, center
+
+# Liens
+
+---
+
+##  Responsables pédagogiques
+
+.pull-left[
+### [Cristina Sirangelo](https://www.irif.fr/~cristina/)
+Informatique, Bases de données `r fontawesome::fa("database", fill = "black")`
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://www.irif.fr/~cristina/")
+```
+
+]
+
+.pull-right[
+### [Stéphane Gaïffas](https://stephanegaiffas.github.io)
+Mathématiques, Machine Learning
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://stephanegaiffas.github.io")
+```
+]
+
+
+
+---
+class: middle
+
+### Pour en savoir plus
+
+```{r, echo=FALSE, out.extra='style="border: none;"', out.width='100%'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/parcours/data/index.html")
+```
+
+[http://master.math.univ-paris-diderot.fr/annee/m1-mi/](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: cover
+
+
+# Merci

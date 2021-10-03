@@ -4,6 +4,12 @@ subtitle: "EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -23,74 +29,38 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
 name: layout-general
 layout: true
 class: left, middle
 
-```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-xaringanExtra::use_animate_css()
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-xaringanExtra::use_tile_view()
-
-xaringanExtra::use_tachyons(minified = FALSE)
-
-xaringanExtra::use_logo(
-  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
 ```
 
 
-
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-
-
 ---
-class: middle, center, inverse
+template: inter-slide
 
 # Multilinear Regression II
 
-### `r Sys.Date()`
 
-#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
 
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
+```{r, echo=FALSE}
+library(flipbookr)
+```
+
 
 ---
 class: inverse, middle

@@ -1,0 +1,872 @@
+---
+title: "Master I Mathématiques-Informatique"
+subtitle: "Parcours MIC et MIDS"
+author: "Université Paris-Diderot"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "hygge"]
+    lib_dir: libs
+    seal: false
+    toc: true
+    toc_depth: 2
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      countdown: false
+---
+background-image: url('figs/wallace.jpg')
+background-size: cover
+class: top, center
+
+
+# Master I Mathématiques-Informatique
+
+## Parcours MIC et MIDS
+
+### Université de Paris/Paris-Diderot
+
+#### `r Sys.Date()`
+
+
+---
+name: inter-title
+class: middle, center, inverse
+background-image: None
+count: false
+
+
+{{content}}
+
+---
+name: layout-general
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE}
+options(htmltools.dir.version = FALSE)
+require(magrittr, quietly = TRUE)
+require(readr, quietly = TRUE)
+require(kableExtra, quietly = TRUE)
+require(formattable, quietly = TRUE)
+
+```
+
+
+
+
+
+
+???
+
+---
+template: inter-title
+
+# Le Master I au sein du Double Master
+
+---
+name: bienvenue1
+
+##  Double Master Mathématiques-Informatique
+
+Un double-diplôme en deux ans organisé en deux _parcours_
+
+
+.left-column[
+
+### Sécurité
+
+
+]
+
+.right-column[
+
+
+```{r, blechtley, out.width="60%", echo=FALSE, fig.align="right"}
+knitr::include_graphics("./figs/colossus-at-bletchley-park-1222483.jpg")
+```
+
+]
+
+
+
+???
+
+Merci d'être venus.
+
+Nous sommes là aujourd'hui pour situer cette année de Master I au sein
+du Double Master et de ses parcours.
+
+Les lauréats  de ce double Master obtiennent après deux ans d'étude deux diplomes: un *Master mention Mathématique parcours Informatique-Cryptologie* et un *Master mention Informatique parcours Mathématiques-Cryptologie*.
+
+TODO:
+prévoir 5 lignes un peu plus substantielles
+
+
+---
+name: bienvenue2
+
+##  Double Master Mathématiques-Informatique
+
+Un double-diplôme en deux ans organisé en deux _parcours_
+
+.left-column[
+
+### Sécurité
+
+### Science des données
+
+]
+
+.right-column[
+
+- Data scientist
+- Data architect
+- Data engineer
+
+]
+
+
+???
+
+Les lauréats  de ce double Master obtiennent après deux ans d'étude deux diplomes: un *Master mention Mathématique parcours Informatique-Science des données* et un *Master mention Informatique parcours Mathématiques-Science des données*.
+
+Nous sommes convaincus qu'une formation large, exigeante ouvre aux diplomés des perspectives immédiates. Elle leur offre aussi la possibilité de s'adapter, d'évoluer dans une domaine où les changements sont rapides. Une connaissance intime de la structure et de l'interprétation des langages de programmation est le meilleur moyen de maitriser rapidement, sans difficultés, les nouveaux langages et cadres de développement logiciel. La maitrise des nouvelles architectures de bases de données permet d'en apprécier les mérites et d'en user efficacement. Pour utiliser de façon profitable et utile, les  méthodes de *machine learning*, la voie la plus sure passe par une compréhension intime dans une
+perspective  statistique bien assimilée.
+
+
+---
+template: inter-title
+
+# Contacts
+
+
+---
+name: contacts
+
+## Responsable administratif
+
+### [Christian Sénécal](mailto:senecal@math.univ-paris-diderot.fr)
+
+.pull-left[
+
+- Secrétariat de l'UFR de Mathématiques
+- Bâtiment Sophie Germain Salle 2008
+]
+
+.pull-right[
+```{r, trombi-cs, out.width="60%", echo=FALSE}
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+```
+]
+
+- Inscriptions pédagogiques
+- Modalités de controle continu
+
+???
+
+
+---
+
+## Responsables pédagogiques
+
+.pull-left[
+
+### [__Cristina Sirangelo__](https://www.irif.fr/~cristina/)
+
+[Institut de Recherche en Informatique Fondamentale](https://www.irif.fr)
+
+
+```{r trombi-dgv, out.width = "40%", echo=FALSE, fig.align="center"}
+knitr::include_graphics("https://www.irif.fr/~cristina/cristina.jpg")
+```
+
+]
+
+.pull-right[
+
+### [__Pascal Molin__](https://webusers.imj-prg.fr/~pascal.molin/)
+
+
+[Institut de Mathématiques de Jussieu-Paris-Rive-Gauche](https://www.imj-prg.fr)
+
+```{r trombi-sb, out.width = "40%", echo=FALSE, fig.align="center"}
+knitr::include_graphics("https://webusers.imj-prg.fr/~pascal.molin/pics/me.jpg")
+```
+]
+
+.center[
+
+
+
+Entretiens sur rendez-vous par [courriel](mailto:responsable-master@math.univ-paris-diderot.fr)
+
+Questions d'orientation
+
+]
+
+???
+
+### À régler avec le responsable administratif :
+
+..
+
+### Avec les responsables pédagogiques
+
+- sur rendez-vous
+- pendant les heures prévues
+- question d'orientation
+
+
+---
+template: inter-title
+
+# Orgnisation de l'année
+
+
+---
+name: deroulement
+class: middle, center
+
+## Année académique
+
+![déroulement](figs/annee19_20.svg)
+
+
+
+???
+
+
+
+---
+name: edt
+
+## [Emploi du temps premier semestre](https://calendar.google.com/calendar/embed?src=g6mc1c0eqnidq7et8hbrfh2im0%40group.calendar.google.com&ctz=Europe%2FParis&mode=WEEK&dates=20190909/20190915)
+
+<iframe src="https://calendar.google.com/calendar/embed?src=g6mc1c0eqnidq7et8hbrfh2im0%40group.calendar.google.com&ctz=Europe%2FParis&mode=WEEK&dates=20190909/20190915" style="border: 0" width="600" height="450" frameborder="0" scrolling="no"></iframe>
+
+---
+name: inscriptions-ad
+
+## Inscriptions
+
+.pull-left[
+
+### Inscription administrative (IA)
+
+- Où : [Bureau Inscriptions Administratives](https://etudes-formations.univ-paris-diderot.fr/BIA)
+- Quand : _Rapidement_
+- Comment : Voir [WWW](https://etudes-formations.univ-paris-diderot.fr/BIA)
+- Pourquoi : ENT, SS, Assurance, Scolarité
+
+]
+
+--
+
+.pull-right[
+
+### Inscriptions pédagogique
+
+- Où : UFR de Mathématiques + UFR d'Informatique
+- Quand :
+  - _après Inscription Administrative_
+  - au début de chaque semestre !
+- Choix des groupes de Travaux dirigés (éventuellement)
+
+
+]
+
+???
+
+---
+template: inter-title
+
+# ENT : Moodle `r emo::ji("computer")`
+
+---
+class: middle
+
+## ENT Moodle : se connecter
+
+
+
+[Moodle à Diderot](https://moodlesupd.script.univ-paris-diderot.fr)
+
+[Formation M1 Math-info](https://moodlesupd.script.univ-paris-diderot.fr/course/view.php?id=3060)
+
+
+
+---
+class: middle, center
+
+<iframe src="https://moodlesupd.script.univ-paris-diderot.fr" style="border: 0"  frameborder="0" width="800" height="600" scrolling="yes"></iframe>
+
+???
+
+Il faut disposer d'accès à l'ENT
+Cet accès est possible après inscription administrative
+
+
+(5mn)
+
+- Auto-inscription
+- Pourquoi s’inscrire ?
+- Charger l’app Moodle sur son portable
+
+
+
+- Organisation semestre II (5 mn)
+    - Césures
+    - Les tubes
+    - Projet/Mémoire/Stage
+    - Entretiens (objectifs, quand, comment)
+- Grille de choix semestre II (5mn)
+- Anglais (10mn)
+    - Comment ? Quand ? Pourquoi ?
+    - Validation des acquis
+    - Caveat
+- Université/adresses utiles (5mn)
+    - Bibliothèque générale
+    - Bibliothèque MIR
+    - Ressources informatiques (machines/tablettes/cloud)
+    - Sport
+    - Manger
+    - Santé
+    - SOIP
+- Validation  (10mn)
+    - Modalités de contrôle des connaissances
+    - Redoublements
+    - 1ere session
+        Règles de compensation (où en est-on ?)
+    - 2nde chance
+
+
+
+---
+name:moodle_fin
+
+
+La page Moodle du Master I sera notre moyen de communication:
+
+- envoi de messages aux groupes d'enseignants, d'étudiants
+- prise de rendez-vous pour les entretiens
+- accès aux annonces
+- emploi du temps
+- agenda des examens
+- mise à disposition de documents administratifs
+
+N'oubliez pas de consulter fréquemment votre courriel sur
+
+> `xxx.yyy@etu.univ-paris-diderot.fr`
+
+ou de rediriger cette boite aux lettres vers une de vos boites habituelles.
+
+???
+
+- Présentation des parcours (20mn)
+    - __Mathématiques Fondamentales__
+    - Probabilités
+    - Mathématiques de la Modélisation
+    - __Mathématiques générales__
+    - __M2MO__
+    - __Logique Mathématiques et Fondement de l’informatique__
+    - ISIFAR
+
+
+
+
+---
+layout: true
+class: left, top
+background-image: url('figs/paris-diderot.png')
+background-size: 15%
+background-position: 5% 95%
+
+
+
+
+---
+template: inter-title
+
+# Validation
+
+
+---
+name: proc-validation
+
+## Procédure de validation
+
+
+.pull-left[
+
+Pour valider un semestre de double master, il faut valider 18 crédits de mathématiques et 18 d'informatique.
+
+Chaque cours est validé si l'étudiant y obtient une note supérieure ou égale à 10.
+]
+
+.pull-right[
+
+![Graduation](figs/accomplishment-black-and-white-black-and-white-2365535.jpg)
+
+L'année est validée si les conditions suivantes sont réunies :
+
+- la moyenne globale sur l'année est supérieure ou égale à 10
+- sur chacun des semestre l'étudiant valide au moins 80% des crédits requis
+- les notes aux modules obligatoires sont supérieures à 7
+
+]
+
+
+???
+
+
+---
+name: simplemaster1
+
+## Passage en Master II simple
+
+.column-left[
+
+### Pourquoi ?
+
+
+Pour valider le seul master mathématiques, il suffit de valider 18 crédits de mathématiques et 12 d'informatique sur chaque semestre.
+
+Pour valider le seul master mathématiques, il suffit de valider 12 crédits de mathématiques et 18 d'informatique sur chaque semestre.
+
+
+]
+
+.column-right[
+
+### Et après ?
+
+- Master II MIC  Mathématiques (éventuellement en Apprentissage)
+- Master II ISIFAR Mathématiques (éventuellement en Apprentissage)
+- Master II Données (Informatique)
+-
+]
+
+
+???
+
+TODO:
+
+> Comment cela interfère-t-il avec d'éventuelles compensations ?
+
+
+
+---
+name: simplemaster2
+
+## Passage en Master II simple
+
+.column-left[
+
+### Pourquoi ?
+
+### Comment ?
+
+]
+
+.column-right[
+
+À préciser
+
+
+
+]
+
+
+---
+name: redoublements
+
+## Redoublement
+
+
+???
+
+Au cas par cas
+
+À éviter autant que possible
+
+
+---
+name: mcc
+
+## Modalités de contrôle des connaissances
+
+Chaque cours dispose de sa propre règle
+
+En première session,
+le contrôle des connaissances est constitué par
+un contrôle continu et un examen terminal.
+
+Les poids relatifs du contrôle continu et de l'examen terminal
+varient d'un cours à l'autre.
+
+Les modalités du contrôle continu (Partiel, Projets, ...) varient d'un cours à l'autre. Elles sont rappelées
+en début de semestre.
+
+Il n'est pas possible de renoncer au contrôle continu.
+
+
+
+???
+
+TODO:
+- vérifier la possibilité de renoncer au contrôle continu.
+
+
+---
+template: inter-title
+
+# Les cours
+
+---
+
+## Semestre I
+
+
+Parcours : trois modules de mathématiques et trois modules d'informatique.
+
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+
+                        <th>Cryptologie</th>
+
+                        <th>Données</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-theorie-information/" class="plain">Théorie de l&#39;information</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-algebre/" class="plain">Algèbre effective</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-probabilites/" class="plain">Probabilités</a>
+              </td>
+              <td>6</td><td></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-prog-obj/" class="plain">Programmation objet avancée</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-theorie-jeux/" class="plain">Intelligence artificielle et théorie des jeux</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-protocoles-reseaux/" class="plain">Protocoles réseaux</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo/" class="plain">Algorithmique</a>
+              </td>
+              <td>6</td><td></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+</table>
+
+
+
+???
+
+Au premier semestre, 3 UE de mathématique
+
+- MF Analyse/Algèbre
+- PMA Analyse/Probabilités
+- M2MO Analyse/Probabilités/Complexité
+- Modélisation
+- LMFI Logique/
+- MG Analyse
+
+Expliciter les choix possibles. Ajouter à la carte des UEs
+des indications sur les parcours où ces UEs sont
+recommandées, voire obligatoires.
+
+
+- Organisation semestre I (5mn)
+    - Césure
+    - Examens
+    - Cas du cours __Complexité___
+    - S’abonner au calendrier
+    - Entretiens (objectifs, quand, comment)
+- Grille de choix pour semestre I (5mn)
+
+---
+class: top
+
+## Semestre II  Parcours Données
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/" class="plain">Analyse des données</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-bases-donnees/" class="plain">Bases de données avancées</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo-avancee/" class="plain">Algorithmique avancée</a>
+              </td>
+              <td>6</td>
+        </tr>
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-big-data/" class="plain">Technologies Big Data</a>
+              </td>
+              <td>3</td>
+        </tr>
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s2-anglais-3/" class="plain">Anglais</a>
+              </td>
+              <td>3</td>
+        </tr>
+        </table>
+
+???
+
+
+Au second semestre
+
+- M2MO
+  + Probability Martingales/Markov
+  + Statistique fondamentale/Approfondie
+  + Analyse App I/II
+  +
+
+
+---
+
+
+## Semestre II  Parcours Cryptologie et Sécurité
+
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-codes-crypto/" class="plain">Codes et cryptographie</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-cartes-puces/" class="plain">Programmation sur cartes à puces</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-prog-crypto/" class="plain">Programmation pour la cryptographie</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-projet/" class="plain">Projet de cryptographie</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo-avancee/" class="plain">Algorithmique avancée</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-systeme/" class="plain">Programmation système</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-bases-donnees/" class="plain">Bases de données avancées</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s2-anglais-3/" class="plain">Anglais</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+        </table>
+
+---
+template: inter-title
+name: meetups
+
+
+# MEETUPS `r emo::ji("geek")`
+
+
+---
+
+[MeetUP](https://www.meetup.com)
+
+.pull-left[
+[Paris-Machine-learning-applications-group](https://www.meetup.com/Paris-Machine-learning-applications-group/)
+
+> The Paris Machine learning meetup group is open to everyone who is interested in applications of Machine Learning and more generally Artificial Intelligence in every field. Our speakers are researchers in industry, academia, government and startups, Please Join us ! !
+
+]
+
+.pull-right[
+
+[Deep-Learning-Paris-Meetup](https://www.meetup.com/Deep-Learning-Paris-Meetup/)
+
+> L'objectif de ce groupe est d'échanger autour des problématiques techniques liées au deep learning . Nous parlerons de différentes librairies de deep (`Theano`, `pylearn2`, `Torch`, `CNN`, `DL4J`) de word embedding (`word2vec, Glove, ...` ) et plus si affinitées `r emo::ji("smile")`
+
+> Le but est de coder ensemble et de comparer nos approches et d'échanger des tips. Nous recommandons ce Meetup aux personnes déjà expérimentés en Machine Learning `r emo::ji("smile")`
+
+]
+
+---
+template: inter-title
+name: anglais
+
+# ANGLAIS `r emo::ji("british")`
+
+
+
+---
+
+Enseignement d'__Anglais de spécialité__ dispensé durant les deux semestres
+
+Enseignement comptabilisé au second semestre
+
+---
+class: middle, center
+
+
+<iframe src="https://www.eila.univ-paris-diderot.fr/enseignement/lansad/index" style="border: 0" width="600" height="450" frameborder="0" scrolling="yes"></iframe>

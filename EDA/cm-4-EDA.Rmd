@@ -43,6 +43,7 @@ class: left, middle
 
 ```
 
+
 ---
 template: inter-slide
 
@@ -50,6 +51,7 @@ template: inter-slide
 
 
 #### [`r params$curriculum`](`r params$homepage_curriculum`)
+
 
 #### [`r params$coursetitle`](`r params$homepage`)
 
@@ -205,7 +207,7 @@ whiteside %>%
 
 `r flipbookr::chunk_reveal("my_whiteside",
                 break_type="auto",
-                display_type="code",
+#                display_type="code",
                 title="### Whiteside step by step")`
 
 ```{r my_whiteside, include = FALSE}
@@ -716,7 +718,7 @@ has inspired _model selection methods_ in many areas of statistics and machine l
 
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Variable selection in Gaussian Linear Models
 
@@ -1125,7 +1127,7 @@ template: inter-slide
 ##
 
 ---
-template: inter-slide
+class: inverse, middle, center
 background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 

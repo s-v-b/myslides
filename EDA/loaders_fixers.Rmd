@@ -38,15 +38,19 @@ xaringanExtra::use_panelset()
 
 xaringanExtra::use_editable(expires = 1)
 
+xaringanExtra::use_clipboard()
+
+# xaringanExtra::use_scribble()
+
 pacman::p_load(tidyverse)
 pacman::p_load(readr)
 pacman::p_load(latex2exp)
 pacman::p_load(kableExtra)
 pacman::p_load(gt)
+pacman::p_load(data.table)
+pacman::p_load("knitr")
 
 old_theme <-theme_set(theme_minimal(base_size=12, base_family = "Helvetica"))
-
-pacman::p_load("knitr")
 
 opts_chunk$set(warning = FALSE,
                message = FALSE,
@@ -56,5 +60,5 @@ opts_chunk$set(warning = FALSE,
                fig.retina = 4,
                fig.height = 4)
 
-pacman::p_load(data.table)
+
 ```
