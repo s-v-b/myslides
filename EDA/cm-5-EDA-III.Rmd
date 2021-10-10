@@ -1,0 +1,469 @@
+---
+title: "Multilinear Regression III: Variable selection"
+subtitle: "EDA Master I, MIDS & MFA"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+#require(flipbookr)
+```
+
+```{r echo=FALSE}
+xaringanExtra::use_scribble()
+```
+
+
+
+---
+template: inter-slide
+
+# Multilinear Regression II: Variable selection
+
+
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
+
+
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
+
+
+
+---
+class: inverse, middle
+
+## `r fontawesome::fa("map", fill="white")`
+
+### Motivations
+
+### Nested models 
+
+### Information criteria
+
+### Cross-validation
+
+---
+---
+template: inter-slide
+name: anova
+
+
+## ANOVA
+
+
+---
+
+[ANOVA](https://en.wikipedia.org/wiki/Analysis_of_variance) stands for ANalysis
+Of VAriance.
+
+Its provides us with a method for choosing and assessing a model at
+least if we adhere to the _Gaussian Linear Modeling_ credo.
+
+
+ANOVA is just the tip of a large iceberg.
+
+It has been extended to more general models and
+has inspired _model selection methods_ in many areas of statistics and machine learning.
+
+
+---
+template: inter-slide
+
+## Variable selection in Gaussian Linear Models
+
+---
+
+
+
+In the sequel of this section, we use simulated data to introduce and motivate
+the ANOVA method.
+
+We generate
+
+- a design matrix $Z \in \mathcal{M}_{n,p}$
+with $n=1000$ and $p=100$,
+- a sparse random vector $\beta \in \mathbb{R}^p$
+- a vector of observation $Y = Z \times \beta + \sigma \epsilon$ where
+$\sigma=1$ and $\epsilon$ is a standard Gaussian vector of dimension $p$.
+
+---
+
+`r flipbookr::chunk_reveal("my_simul_anova", break_type="auto", display_type="code", title="### Preparing ANOVA")`
+
+```{r my_simul_anova, include = FALSE}
+set.seed(1515)   # for reproducibility
+
+p <- 100    # dimension of sample points
+n <- 1000   # sample size
+
+sigma <- 1  # noise standard deviation
+
+betas <- matrix(rbinom(p, 1, 0.1) * rnorm(p, mean=1),
+                nrow=p, ncol=1)  # true coefficient vector
+
+important_coeffs <- which(abs(betas) >.01) # sparse support
+
+Z <- matrix(rnorm(n*p, 5), ncol = p, nrow=n)  #  design
+
+Y <- Z %*% betas  + matrix(rnorm(n, 0, sd=sigma), nrow=n)
+
+df <- as.data.frame(cbind(Z, Y), )
+
+names(df)  <- c(paste("x", 1:p, sep="_"), "y")
+```
+
+---
+
+### True model versus full model
+
+Dataframe `df` fits Gaussian linear modeling assumptions
+
+We may feed it to `lm()`
+
+This leads to what we call the _full model_
+
+We may also take advantage of the fact that we know which columns of $Z$ matters when we want to predict $Y$.
+
+Hence, we can compare the linear model obtained by brute force `lm(y ~ . -1, df)` ( $-1$ because we need no intercept) with the linear model obtained by using columns of `df` corresponding
+to non-null coefficients of `betas`
+
+We call the former the _true model_
+
+---
+
+### Building formulae
+
+```{r}
+formula_full <- formula("y ~ . - 1")
+
+formula_true <- formula(str_c("y",
+                              paste(str_c("x",
+                                          important_coeffs,
+                                          sep = "_"),
+                                     collapse =" + "),
+                              sep=" ~ "))
+
+formulae <-  c(formula_full, formula_true)
+
+lm_df <- map(formulae,
+             lm,
+             data=df)
+
+names(lm_df) <- c("full", "true")
+```
+
+---
+
+### The true model
+
+```{r}
+formula_true
+```
+
+```{r, echo=FALSE}
+rsss <- map_dbl(lm_df,
+                ~ round(sum(residuals(.)^2), 1))
+```
+
+---
+
+### Comparing reconstruction errors
+
+We can compare the true and full models using the quadratic error criterion.
+
+The residuals can be gathered from both models using function `residuals()`.
+
+The Residual Sum of Squares (RSS)  are respectively `r rsss['full']` for the full model and `r rsss['true']`.
+
+At first glance, the full model achieves a better fit to the data than the true model
+
+---
+
+### Comparing estimation errors
+
+`r fontawesome::fa("exclamation-triangle")` This comparison is not fair
+
+The full model is obtained by optimizing the quadratic error over a set which is much larger  than the set used
+for the true model
+
+As we are handling simulated data, we can compare the coefficient
+estimates in the two models and see whether one comes closer to
+the coefficients used to generate the data
+
+The squared $\ell_2$ distances to $\beta$ are substantially different:
+
+$$\| \beta - \widehat{\beta}^{\text{true}}\|^2  = 1.31 \times 10^{-2}$$
+
+while
+
+$$\| \beta - \widehat{\beta}^{\text{full}}\|^2  = 9.75 \times 10^{-2}$$
+
+---
+
+### Overfitting
+
+The fact that the full model outperforms the small model with
+respect to the Residual Sum of Squares criterion is righteously called _overfitting_.
+
+```{r, echo=FALSE, include=FALSE}
+full_distance = norm(coefficients(lm_df[['full']]) - betas, type = "2")^2
+
+small_distance = norm(coefficients(lm_df[['true']]) - betas[important_coeffs], type = "2")^2
+```
+
+---
+
+### Diagnosing the full model
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r qplot-residuals-label, fig.show='hide', fig.height=3.5}
+xx <- residuals(lm_df[['full']])
+yy <- fitted.values(lm_df[['full']])
+qplot(y=yy,
+      x=xx,
+      alpha=I(.25)) +
+  xlab("fitted values") +
+  ylab("residuals") +
+  ggtitle("Gaussian linear model",
+  subtitle = "n=1000, p=100, full model")
+```
+
+]
+
+.panel[.panel-name[Residuals versus Fitted plot]
+
+![](`r knitr::fig_chunk("qplot-residuals-label","png")`)
+
+]
+
+]
+
+---
+
+###
+
+
+```{r}
+head((anova(lm_df[['full']]))  %>%
+       broom::tidy(.n), 10)
+```
+
+---
+
+```{r, echo=FALSE}
+tib <-
+  tibble(residuals= residuals(lm_df[['full']]))
+m <- mean(tib$residuals)
+s <- sd(tib$residuals)
+tit <- "Kernel density estimate of residuals distribution (full model)"
+```
+
+`r flipbookr::chunk_reveal("kde_residuals", break_type="auto", title="### Residual distribution (full model)")`
+
+
+
+```{r kde_residuals, include=FALSE, fig.width=6, cache=F, comment = ""}
+tib %>%
+  ggplot(aes(x=residuals)) +
+  geom_histogram(aes(y=..density..),
+                 alpha=.3) +
+  stat_density(kernel = "epanechnikov",
+               bw = .15,
+               alpha=.0,
+               col=1) +
+  stat_function(fun = dnorm,
+                args=list(mean=m,
+                          sd=s),
+                linetype=2) +
+  ggtitle(tit,
+          "Dashed curve: Gaussian fit")
+```
+
+---
+
+### Assessing residuals
+
+```{r}
+shapiro.test(residuals(lm_df[['full']]))
+```
+
+
+```{r}
+# (coefficients(lm.1)[1])^2 + norm(betas - coefficients(lm.1)[-1])^2
+
+# norm(betas - lm.0$coefficients)^2
+```
+
+---
+template: inter-slide
+
+## Using Fisher $F$ statistic
+
+---
+
+### Computing the Fisher $F$ statistic for comparing model 0 and model 1
+
+As we are dealing with simulated data, we can behave as if a benevolent _oracle_
+had whispered that all but `97` coefficients are null, and even told us the index
+of the non-null coefficients.
+
+We fit this exact and minimal model to the data.
+
+Under the Gaussian linear model assumption, the empirical distribution of residuals is the empirical distribution of the projection of a standard Gaussian vector onto the linear subspace orthogonal to the subspace generated by the design columns.
+
+As such the distribution of residuals is not the empirical distribution of an i.i.d Gaussian sample. Nevertheless, if the linear subspace is not too correlated with the canonical basis, the residuals empirical distribution is not too far from a Gaussian distribution.
+
+---
+exclude: true
+
+```{r residdistrib, echo=FALSE, warning=FALSE, fig.cap='(ref:residdistrib)'}
+residuals(lm_df[['true']]) %>%
+  tibble(residuals= .) %>%
+  ggplot(aes(x=residuals)) +
+  stat_density(kernel = "epanechnikov", bw = .15, alpha=.0, col=1) +
+  stat_function(fun = dnorm,
+                mean=mean(residuals(lm_df[['true']])),
+                sd=sd(residuals(lm_df[['true']])),
+                linetype=2) +
+  ggtitle("True model: Kernel density estimate of residuals distribution (true model)",
+          "Dashed curve: Gaussian fit")
+```
+
+---
+
+### Comparing true model and full model
+
+We are facing a _binary hypotheses problem_.
+
+- Null hypothesis: all coefficients but `x_2 , x_9 , x_22 , x_27 , x_41 , x_49 , x_52 , x_53 , x_59, x_60 , x_77 , x_88 , x_93` are null
+
+- Alternative hypothesis: the vector of coefficients doesnot satisfy the $13$ linear equations defining the null hypothesis
+
+Note that both the null and alternative hypotheses are composite.
+
+---
+
+The null hypothesis asserts that the true vector of coefficients belong to a linear subspace of dimension `13` of $\mathbb{R}^{100}$.
+
+If we stick to Gaussian linear modelling
+we may test this null hypothesis by performing a _Fisher test_.
+
+Under the null hypothesis,
+
+$$\frac{\|\widehat{Y} - \widehat{Y}^\circ\|^2/(p-p^\circ)}{\|{Y} - \widehat{Y}\|^2/(n-p)} \sim F_{p-p^\circ, n-p}$$
+
+where $F_{p-p^\circ, n-p}$ stands for the Fisher distribution with
+$p-p^\circ$ and $n-p$ degrees of freedom.
+
+Function `anova`  does this.
+
+---
+exclude: true
+
+```{r, tidy.opts=''}
+anova(lm_df[['true']], lm_df[['full']]) %>%
+  broom::tidy() %>%
+  dplyr::mutate_if(is.numeric, round, 2)
+```
+
+On the second row, column `statistic` contains the Fisher statistic. The `p.value` tells us the probability that a random variable distributed according to Fisher distribution with $87$ and $900$ degrees of freedom ($F_{87,900}$) exceeds the statistic's value $0.89$. The fact that `p.value` (`pf(.89, 87, 900, lower.tail = FALSE)`) is $0.75$ does not prompt us to reject the null hypothesis.
+
+---
+
+### Handling $p$-values
+
+The rule of thumb when using the `p.value` reported by a test function is the following:
+
+> If, _under the null hypothesis_, you  accept to be wrong  with probability $\alpha$,
+
+> then
+
+> you should reject when the `p.value` is less than $\alpha$
+
+In words: if you are looking for a _level_ (probability of an error of the first kind) equal to $\alpha$, you should reject the null hypothesis when the $p$-value is less than $\alpha$
+
+We can decompose the computations performed by ANOVA
+
+---
+exclude: true
+
+```{r, eval=FALSE}
+setdiff(important_coeffs, # 2  9 22 27 41 49 52 53 59 60 77 88 93
+        which(
+(df %>%
+  select(starts_with("x")) %>%
+  purrr::map_dbl(.f = ~ cor(., df$y)) %>%
+  abs() ) > .05)
+)
+```
+
+```{r, eval=FALSE}
+lm.0 %>% summary()
+(svd(t(Z) %*% (Z))$d)^(-1)
+   # Inverse of covariance matrix of coefficients in lm.0
+```
+
+---
+exclude: true
+class: middle, center, inverse
+
+## Iterative methods for OLS
+
+---
+exclude: true
+class: middle, center, inverse
+
+## ...
+
+
+---
+exclude: true
+template: inter-slide
+
+## Feature engineering
+
+---
+exclude: true
+template: inter-slide
+
+##

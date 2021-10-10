@@ -1,0 +1,698 @@
+---
+title: "Multilinear Regression II: Diagnostics"
+subtitle: "EDA Master I, MIDS & MFA"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+require(flipbookr)
+```
+
+
+```{r echo=FALSE}
+#xaringanExtra::use_scribble()
+```
+
+
+---
+template: inter-slide
+
+# Multilinear Regression II: Diagnostics
+
+
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
+
+
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
+
+
+
+---
+class: inverse, middle
+
+## `r fontawesome::fa("map", fill="white")`
+
+### Motivations
+
+### Residuals  
+
+### Spotting outliers
+
+---
+template: inter-slide
+
+## Motivations 
+
+
+---
+
+### Revisiting (again) the Anscombe quartett
+
+```{r tidy_my_anscombe}
+datasets::anscombe %>%
+  pivot_longer(everything(),
+    names_to = c(".value", "group"),
+    names_pattern = "(.)(.)"
+  )  %>% 
+  rename(X=x, Y=y) %>% 
+  arrange(group)-> anscombe
+
+lms <- list()
+
+for (s in as.character("1":"4")) {
+  lms[[s]] <-  lm(Y ~ X, 
+                  anscombe, 
+                  subset = group==s) 
+}   
+```
+
+---
+
+### Visualization: scatterplots and lineplots 
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r, warning=FALSE}
+p <- anscombe %>%
+  ggplot(aes(x=X, y=Y)) +
+  geom_smooth(method="lm", se=FALSE) +  #<<
+  facet_wrap(~ group) +                 #<<
+  ggtitle("Anscombe quartet: linear regression Y ~ X")
+```
+
+]
+
+
+
+.panel[.panel-name[Lines and points]
+
+.pull-left[
+```{r, echo=FALSE}
+p + geom_point()
+```
+]
+
+.pull-right[
+
+Among the four datasets, only the two left ones are righteously handled
+using simple linear regression
+
+The bottom left dataset outlines the impact of *outliers* on Least Squares Minimization
+
+
+]
+]
+
+]
+
+???
+
+
+---
+
+Base `r fontawesome::fa("r-project")` has a generic `plot()` function. 
+
+For objects of class `lm`, function `plot` outputs diagnostic plots that can help figure out 
+whether liner modeling is convenient in the current context
+
+---
+
+### Graphic diagnostic on Anscombe first dataset
+
+```{r, out.width="50%", fig.show='hold'}
+plot(lms[["1"]])
+```
+
+
+---
+
+### Graphic diagnostic on Anscombe third dataset
+
+```{r, out.width="50%", fig.show='hold'}
+  plot(lms[["3"]])
+```
+
+
+---
+
+### Graphic diagnostic on Anscombe second dataset
+
+```{r, out.width="50%", fig.show='hold'}
+plot(lms[["2"]])
+```
+
+---
+
+All plots are concerned with residuals, and most of them with fitted values
+
+To understand and possibly use the diagnostic plots, we need to know the meaning of some terms
+
+- Normal QQ-plot
+
+- Standardized residuals
+
+- Cook's distance 
+
+- Leverages
+
+
+???
+---
+
+
+All diagnostic plots can be built using the output of `broom::augment()`
+
+
+```{r}
+broom::augment(lms[["1"]]) 
+```
+
+
+---
+template: inter-slide
+name: residuals-predictions
+
+## Residual and predictions
+
+---
+
+### Spotting a trend 
+
+.fl.w-50.pa2[
+Residuals and predictions are supposed to be orthogonal
+
+Orthogonality is weaker than independence
+
+The first diagnostic plot attempts to visualize a possible 
+trend 
+
+```{r}
+p <- broom::augment(lms[["2"]])  %>% 
+  ggplot() +
+  aes(x=.fitted) +
+  aes(y=.resid) +
+  geom_point() +
+  ggtitle("First diagnostic plot")
+```
+]
+
+
+.fl.w-50.pa2[
+
+```{r, echo=FALSE}
+p
+```
+
+
+
+]
+---
+template: inter-slide
+name: qqplot
+
+## Normal QQ-plot
+
+---
+
+Quantiles functions are defined at the end of the [lesson on Univariate Statistics](http://stephane-v-boucheron.fr/slides/cm-2-ISIDATA.html?panelset1=code2#72)
+
+The (empirical) quantile function is the (generalized) inverse of the (empirical) cumulative distribution function
+
+In diagnostic plots, the second plot is a normal QQ-plot: it compares the empirical quantile function defined by the residuals (the quantile function of the empirical distribution of the standardized residuals) with the quantile function of a Gaussian distribution with the same expectation (mean)  and standard-deviation
+
+---
+
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+The _quantile function_ of a probability distribution over $\mathbb{R}$ is
+the generalized, left-continuous inverse function of the cumulative
+distribution function.
+
+For $p \in (0,1)$
+
+$$F_n^{\leftarrow}(p) = \inf \Big\{ z : F_n(z) \geq p\Big\}$$
+
+$$F_n^{\leftarrow}(p) =  X_{k+1:n} \qquad \text{if } \qquad\frac{k}{n} < p \leq \frac{k+1}{n}$$
+
+]
+
+
+---
+
+
+.fl.w-third.pa2[
+
+In order to plot the quantile function, it is almost enough to exchange the
+role of the axes in the ECDF plot.
+
+```{r  eruptions-label, echo=TRUE, fig.show='hide'}
+p <- broom::augment(lms[["1"]]) %>%
+  ggplot(mapping=aes(x=.std.resid)) +
+  geom_step(stat="ecdf", direction='vh') +
+  coord_flip() +
+  xlab("Quantiles") +
+  ylab("Probabilities") +
+  ggtitle("Anscombe I: residuals quantile function")
+```
+
+Why is it safe to set the `direction` argument in the call to `geom_step()`
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+```{r, echo=FALSE}
+p
+```
+
+
+
+]
+
+
+---
+
+### Use `geom_qq()`
+
+```{r}
+broom::augment(lms[["1"]]) %>%
+  ggplot(mapping=aes(sample=.std.resid)) +
+  geom_qq() +
+  stat_qq_line() +
+  xlab("Normal Quantiles") +
+  ylab("Standardized residuals") +
+  ggtitle("Anscombe I: residuals quantile function")
+
+```
+
+---
+### Comparing sample quantiles with distributional quantiles
+
+`r fontawesome::fa("bullhorn")`
+
+
+When it comes to comparing the empirical distribution defined by one sample, and 
+another distribution (the so-called theoretical distribution),  _quantile-quantile plots_ ( `qqplot` ) are favored
+
+
+- $F$ the theoretical CDF and $G_m$  the empirical CDF
+
+- the quantile-quantile function is defined by
+
+$$G_m^\leftarrow \circ F(z) = Y_{k+1:m}\qquad \text{if} \qquad \frac{k}{m}< F(z) \leq \frac{k+1}{m}$$
+
+
+
+
+---
+
+### Standardizing residuals 
+
+If we believe in the Gaussian Linear Model theory $Y =  Z \times \theta + \sigma \epsilon$
+where $(\epsilon_i)_{i\leq n} \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$, 
+
+- the residuals $\widehat{\epsilon}$ are distributed like $\sigma (\text{Id} - H) \times \epsilon$
+
+- $\widehat{\epsilon}_i \sim \mathcal{N}(0, \sigma^2 (1 - H_{i,i}))$
+
+- Standardized residuals are $\widehat{\epsilon}_i/(\sigma\sqrt{1- H_{i,i}})$
+
+If Gaussian Linear Model assumption holds, the distribution of standardized residuals should 
+not depart too much from a standard Gaussian distribution 
+
+---
+
+The third diagnostic plot plots the square root of the standardized residuals against fitted values
+
+Like the first diagnostic plot, it aims at detecting trends which should not be observed under Gaussian linear model theory
+
+
+---
+template: inter-slide
+
+## Leverages
+
+---
+### `r fontawesome::fa("syringe")` Leverages
+
+The Hat matrix satisfies
+
+$$\sum_{i=1}^n H_{i,i} =  \text{rank}(Z)$$
+
+$$0 \leq H_{i,i } \leq 1 \qquad \forall i \leq n$$
+
+
+$$\widehat{Y}_i =  H_{i,i}Y_i + \sum_{j\neq i} H_{i, j} Y_j  \qquad \forall i \leq n$$
+
+$H_{i,i}$ is called the _leverage_ of the $i^{\text{th}}$ case (row)
+
+---
+
+### `r fontawesome::fa("syringe")` Spectral properties of Projection matrices
+
+- If the design is orthogonal (with unit normed columns) $H = Z \times Z^T$
+
+- The average leverage is $1/n$
+
+- What does large or small leverages mean ?
+
+- What is a _typical_ leverage ?
+
+---
+
+### `r fontawesome::fa("hand-point-right")` Leverages
+
+Assume that the columns of $\mathbf{Z}$ are centered (have zero mean)
+
+Assuming that the columns of $\mathbf{Z}$ are centered means that $1$ is in the kernel
+(nullspace) of the Hat matrix
+
+Denote by $Z_i$ the $i^{th}$ column of $\mathbf{Z}^T$  ( $i^{\text{th}}$ observation )
+
+$$H_{i,i} =  Z_i^T \times (\mathbf{Z}^T\mathbf{Z})^{-1} \times Z_i$$
+
+Lines $r^2 =  z^T \times (\mathbf{Z}^T\mathbf{Z})^{-1} \times z$ are centered ellipses
+with axes defined by the eigenvectors of $\mathbf{Z}^T\mathbf{Z}$
+
+
+> In some problems, high-leverage points with values close to $1$ can occur, and
+> identifying these cases is very useful in understanding a regression problem
+
+Weisberg p. 170
+
+
+
+---
+exclude: true 
+
+class: middle, center, inverse
+
+## Leave One Out (LOO)/Jackknife
+
+---
+exclude: true
+
+### Notation
+
+.fl.w-50.pa2[
+
+- $Y^{(i)}$: $Y$ deprived from $i^{\text{th}}$ coordinate
+
+- $\mathbf{Z}^{(i)}$: designed deprived from $i^{\text{th}}$ row
+
+- $\epsilon^{(i)}$: $ϵ$ deprived from $i^{\text{th}}$ coordinate
+
+]
+--
+exclude: true
+
+.fl.w-50.pa2[
+
+- $\widehat{\theta}^{(i)}$: minimizer of $\big\|Y^{(i)} -\mathbf{Z}^{(i)}ϑ \big\|^2_2$
+
+$$\widehat{\theta}^{(i)} = \left({\mathbf{Z}^{(i)}}^T\mathbf{Z}^{(i)}\right)^{-1}{\mathbf{Z}^{(i)}}^T$$
+
+- $\widehat{Y}^{(i)} = \mathbf{Z} \widehat{\theta}^{(i)}$
+
+]
+
+???
+
+These objects obtained by removing the $i^{\text{th}}$ observation from the data.
+
+Comparing $\widehat{\theta}$ and $\widehat{\theta}^{(i)}$ tells us about the _influence_
+of the $i^{\text{th}}$ sample point
+
+---
+exclude: true
+
+### A weighted $\ell_2$ distance from $\widehat{\theta}$
+
+
+$$D(ϑ, \widehat{\theta})= \frac{1}{p \widehat{\sigma}^2}  (ϑ -\widehat{\theta})^T × \big(\mathbf{Z}^T\mathbf{Z}\big)× (ϑ -\widehat{\theta})$$
+
+
+---
+exclude: true
+
+### Cook's distance
+
+
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+$$D_i = D(\widehat{\theta}^{(i)}, \widehat{\theta})= \frac{1}{p \widehat{\sigma}^2}  (\widehat{\theta}^{(i)} -\widehat{\theta})^T × \big(\mathbf{Z}^T\mathbf{Z}\big) × (\widehat{\theta}^{(i)} -\widehat{\theta})$$
+
+]
+
+This is a weighted $\ell_2$ distance between $\widehat{\theta}$ and $\widehat{\theta}^{(i)}$, the OLS solution obtained by removing the $i^{\text{th}}$ observation.
+
+???
+
+Cook (1977)
+
+Cook's distance  is a statistic
+
+
+---
+exclude: true
+
+### Using $D_i$
+
+Deleting observations with large values of $D_i$ results in substantial changes in the analysis
+
+Observations with the largest few $D_i$ are o special interest
+
+???
+
+---
+exclude: true
+
+If $D_i$ were exactly equal to the $\alpha$ quantile of $F_{p, n-p}$
+distribution,
+
+then
+
+deleting the $i^{\text{th}}$ observation would move
+the estimate of $\widehat{\beta}$ to the edge of $1-\alpha$ confidence region
+based on the complete dataset
+
+---
+
+### Cook's distances
+
+$$D_i = \frac{1}{p} \frac{H_{i,i}}{(1 - H_{i,i})^2} \frac{\left(Y_i - \widehat{Y}_i\right)^2}{\widehat{\sigma}^2}$$
+
+
+---
+
+```{r}
+lms[["3"]] %>% 
+  broom::augment() %>% 
+  ggplot() +
+  aes(x=.hat) +
+  aes(y=.std.resid) +
+  geom_point() +
+  xlab("Leverage") +
+  ylab("Standardized residual") +
+  ggtitle("Anscombe third dataset")
+```
+
+
+---
+exclude: true
+
+If all leverages are $1/n$
+
+$$\sum_{i=1}^n D_i =$$
+
+
+---
+exclude: true
+### LOOCV
+
+
+???
+
+- Ouverture to resampling method
+
+- Jackknife
+
+- Bootstrap
+
+- Cross-Validation
+
+---
+exclude: true
+
+###
+
+- $\widehat{Y}^{(i)}_i = X_i^T \widehat{\theta}^{(i)}$ is a linear function of $ϵ^{(i)}$
+
+- $Y_i$ is a linear function of $\epsilon_i$
+
+
+- $Y_i$ and  $\widehat{Y}^{(i)}_i$ are stochastically independent
+
+- We do not need to assume that the noise is Gaussian to ensure that
+
+---
+exclude: true
+
+- If noise is centered
+
+$$\mathbb{E}\left[Y_i - \widehat{Y}^{(i)}_i\right] = 0$$
+
+$$\mathbb{E}\left[\left(Y_i - \widehat{Y}^{(i)}_i\right)^2\right] = \sigma^2 (1+ H_{i,i})$$
+
+- If noise is Gaussian
+
+$$Y_i - \widehat{Y}^{(i)}_i \sim \mathcal{N}\left(0, \sigma^2 \left(1+ X_i^T \left({\mathbf{Z}^{(i)}}^T \mathbf{Z}^{(i)}\right)^{-1}X_i\right)\right)$$
+
+with
+
+$$X_i^T \left({\mathbf{Z}^{(i)}}^T \mathbf{Z}^{(i)}\right)^{-1}X_i = H_{i,i}$$
+
+---
+exclude: true
+
+$$\mathbb{E}\left[\sum_{i=1}^n \left(Y_i - \widehat{Y}^{(i)}_i\right)^2\right] = \sigma^2 (n+p)$$
+
+???
+
+Computing the LOOCV estimate
+
+$$\sum_{i=1}^n \left(Y_i - \widehat{Y}^{(i)}_i\right)^2$$
+
+looks demanding
+
+---
+exclude: true
+### Leave-One-Out Cross-Validation formula
+
+
+$$\sum_{i=1}^n \left(Y_i - \widehat{Y}^{(i)}_i\right)^2 = \sum_{i=1}^n  \frac{(Y_i - \widehat{Y}_i)^2}{(1-H_{i,i})^2}$$
+
+???
+
+One of the most beautiful formulae in statistics
+
+
+---
+exclude: true
+### Shermann-Morrison formula (redux)
+
+Let $\mathbf{A}$ be an invertible square matrix and $u, v$ be two vectors
+
+- $\mathbf{A}+ u\,v^T$ is invertible iff $1 + v^T \mathbf{A}^{-1} u \neq 0$
+
+- if $1 + v^T \mathbf{A}^{-1} u \neq 0$
+
+$$\left(\mathbf{A} + u\,v^T\right)^{-1} = \mathbf{A}^{-1} - \frac{1}{1 + v^T \mathbf{A}^{-1} u} \mathbf{A}^{-1} uv^T \mathbf{A}^{-1}$$
+
+??
+
+The inverse of a rank-one perturbation is a rank-one perturbation of the inverse
+
+---
+exclude: true
+### Proof of Shermann-Morrison formula
+
+If $\mathbf{A} + u\,v^T$ is not invertible, there exists a non-zero vector $w$ such that $$\mathbf{A} w + u\, v^T\, w=0$$
+
+Note that this implies $v^T\, w\neq 0$
+
+This also implies $v^T w + v^T \mathbf{A}^{-1} u v^T w=0$
+
+And thus $1 + v^T \mathbf{A}^{-1} u = 0$
+
+
+---
+exclude: true
+### Proof of Shermann-Morrison formula (continued)
+
+Conversely, if $1 + v^T \mathbf{A}^{-1} u = 0$
+
+$$\left(\mathbf{A} + u v^T\right)× \left(\mathbf{A}^{-1} u\right) = u \left(1 + v^T \mathbf{A}^{-1} u\right)=0$$
+
+This implies  that $\mathbf{A} + u v^T$ is not invertible
+
+---
+exclude: true
+### Proof of Shermann-Morrison formula (continued)
+
+To check the  formula, first check the easier formula
+$$\left(\mathbf{Id} + xy^T \right)^{-1} = \mathbf{Id} - \frac{1}{1+ y^Tx} xy^T$$
+for $1 + y^Tx\neq 0$
+
+Then use this formula with $x=\mathbf{A}^{-1}u$ and $y=v$
+
+`r fontawesome::fa("square")`
+---
+exclude: true
+### Proof of LOOCV formula
+
+Let $\mathbf{Z}$ denote the design matrix
+
+Let $X_i$ denote the  $i^{\text{th}}$ column of $\mathbf{Z}^T$
+
+Let $\mathbf{Z}^{(i)}$ denote the design matrix deprived from its  $i^{\text{th}}$  row
+
+$$\mathbf{Z}^T \times \mathbf{Z} = \left({\mathbf{Z}^{(i)}}^T \mathbf{Z}^{(i)}\right) + X_i X_i^T$$
+
+`r fontawesome::fa("hand-point-right")` ${\mathbf{Z}^{(i)}}^T \mathbf{Z}^{(i)}$ is a rank one perturbation of $\mathbf{Z}^T \times \mathbf{Z}$
+
+
+---
+exclude: true
+### Proof of LOOCV formula (continued)
+
+
+
+$$$$
+
+`r fontawesome::fa("square")`
+
+

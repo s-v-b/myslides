@@ -41,6 +41,7 @@ class: left, middle
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
+#require(flipbookr)
 ```
 
 
@@ -101,6 +102,10 @@ class: middle, center, inverse
 
 ## Tidy approach to modeling
 
+
+???
+
+[Modern Dive](https://moderndive.com/index.html)
 ---
 class: middle, center, inverse
 
@@ -1024,7 +1029,7 @@ $\sigma=1$ and $\epsilon$ is a standard Gaussian vector of dimension $p$.
 
 ---
 
-`r chunk_reveal("my_simul_anova", break_type="auto", display_type="code", title="### Preparing ANOVA")`
+`r flipbookr::chunk_reveal("my_simul_anova", break_type="auto", display_type="code", title="### Preparing ANOVA")`
 
 ```{r my_simul_anova, include = FALSE}
 set.seed(1515)   # for reproducibility
@@ -1197,7 +1202,7 @@ s <- sd(tib$residuals)
 tit <- "Kernel density estimate of residuals distribution (full model)"
 ```
 
-`r chunk_reveal("kde_residuals", break_type="auto", title="### Residual distribution (full model)")`
+`r flipbookr::chunk_reveal("kde_residuals", break_type="auto", title="### Residual distribution (full model)")`
 
 
 
