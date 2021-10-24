@@ -618,12 +618,13 @@ name: computing-svd
 
 .bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-Computing the SVD is as hard as computing the spectral decomposition of a symmetric matrix
+Computing the SVD is not more costly than computing the spectral decomposition of a symmetric matrix
 
 ]
 
 
 ---
+exclude: true 
 
 ### Proof
 
@@ -638,16 +639,19 @@ which defines a spectral decomposition of $A$  `r fontawesome::fa("glass-cheers"
 
 ---
 
-### Proof (converse part)
+### Proof 
 
-If we have an eigendecomposition algorithm, we can feed it with
+If we have an eigendecomposition algorithm (say `eigen`), we can feed it with
 
-- $A \times A^T$ to get the left singular vectors and
-- $A^T \times A$ to get the right singular vectors.
+- symmetric matrix $A \times A^T$ to get the _left singular vectors_ as _eigenvectors_ of $A \times A^T$  and
+- symmetric matrix $A^T \times A$ to get the _right singular vectors_ as _eigenvectors_ of $A^T \times A$
 
 Both spectral decompositions lead to the squared singular values
 
-If we count the number of field operations, both problems are linearly equivalent
+If we count the number of field operations, both problems are linearly equivalent (matrix multiplication is less expansive 
+than spectral or singular value decomposition).
+
+
 `r fontawesome::fa("glass-cheers")`
 
 `r fontawesome::fa("square")`
