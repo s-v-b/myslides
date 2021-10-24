@@ -29,15 +29,7 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-name: inter-slide
-class: left, middle, inverse
-
-{{ content }}
-
----
-name: layout-general
-layout: true
-class: left, middle
+exclude: true
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
@@ -61,7 +53,21 @@ options(ggplot2.discrete.colour="viridis")
 options(ggplot2.discrete.fill="viridis")
 options(ggplot2.continuous.fill="viridis")
 options(ggplot2.continuous.colour="viridis")
+
+xaringanExtra::use_scribble()
 ```
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{content}}
 
 ---
 template: inter-slide
@@ -76,6 +82,8 @@ template: inter-slide
 #### [`r params$coursetitle`](`r params$homepage`)
 
 #### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
+
 
 
 ---
@@ -94,8 +102,6 @@ template: inter-slide
 ### [PCA and SVD](#pca-svd)
 
 ### [Visualizing PCA](#vis-pca)
-
-
 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -640,17 +646,6 @@ If we count the number of field operations, both problems are linearly equivalen
 
 `r fontawesome::fa("square")`
 
----
-exclude: true
-
-### Power method
-
-We focus on the symmetric eigenvalue problem
-
----
-exclude: true
-
-### Rearrangement methods
 
 
 ---
@@ -1957,7 +1952,7 @@ An excerpt of the body of `augment.prcomp`
 
 .f6[
 
-```{r, eval=FALSE}
+```
 function (x, data = NULL, newdata, ...)
 {
     ret <- if (!missing(newdata)) {
@@ -2064,13 +2059,10 @@ Few of these factorizations are as well understood as SVD.
 
 @MR1417720 is classic on matrix computations.
 
-
 ---
 
-class: middle, center, inverse
+```{r child="closing_slide.Rmd"}
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
+```
 
 
-# The End
