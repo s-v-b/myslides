@@ -69,7 +69,7 @@ name: roadmap
 
 
 
-##  [Characteristic functions](#characteristic-functions)
+## [Characteristic functions](#characteristic-functions)
 
 ## [Convolutions](#convolutions)
 
@@ -118,10 +118,10 @@ class: inverse, center, middle
 - Laplace transform ( $[0, \infty)$ -valued)
 
 ---
+exclude: true
 class: inverse, middle, center
 
-## `r fontawesome::fa("Syringe", fill="white")` Probability Generating Functions
-
+## `r fontawesome::fa("syringe", fill="white")` Probability Generating Functions
 
 ---
 name: characteristic-functions
@@ -142,12 +142,12 @@ class: inverse, middle, center
 
 The _characteristic function_ $\widehat{F}$ of distribution $P$ is defined by
 
-\begin{align*}
+$$\begin{array}{rl}
 \widehat{F} \quad :  & \quad \mathbb{R}  \to \mathbb{C} \\
 \widehat{F}(t) & = \mathbb{E}\left[\mathrm{e}^{i t X}\right] \\
   & = \int_{\mathbb{R}} \mathrm{e}^{i t x} \mathrm{d}F(x) \\
   & =	\int_{\mathbb{R}} \cos(t x) \mathrm{d}F(x) + i \int_{\mathbb{R}} \sin(t x) \mathrm{d}F(x)
-\end{align*}
+\end{array}$$
 
 ]
 
@@ -185,16 +185,16 @@ Let $X \sim P$ with characteristic function $\widehat{F}$
 
 ---
 
-### Checking  the continuity property
+### Proof (Checking  the continuity property)
 
 Calculus leads to
 
-\begin{align*}
+$$\begin{array}{rl}
 \Big| \mathrm{e}^{i(t+ \delta)x} - \mathrm{e}^{itx}\Big|
   & = \Big| \mathrm{e}^{itx}\Big| \times \Big|\mathrm{e}^{i\delta x} - 1\Big|
   & \leq \Big|\mathrm{e}^{i\delta x} - 1\Big| \\
   & \leq 2 \Big( 1 \wedge \big| \delta x \big| \Big)
-\end{align*}
+\end{array}$$
 
 for every $t\in \mathbb{R}, \delta \in \mathbb{R}, x \in \mathbb{R}$.
 
@@ -202,10 +202,10 @@ for every $t\in \mathbb{R}, \delta \in \mathbb{R}, x \in \mathbb{R}$.
 
 Integration with respect to $F$:
 
-\begin{align*}
+$$\begin{array}{rl}
   \Big| \widehat{F}(t+\delta) - \widehat{F}(t)\Big|
   & \leq \int 2 \Big( 1 \wedge \big| \delta x \big| \Big) \mathrm{d}F(x) \,.
-\end{align*}
+\end{array}$$
 
 --
 
@@ -244,13 +244,13 @@ $$\widehat{F}_{X+Y}(t) =  \widehat{F}_X(t) \times \widehat{F}_Y(t)\qquad \forall
 ### Proof
 
 
-\begin{align*}
+$$\begin{array}{rl}
 \widehat{F}_{X+Y}(t)
   & = \mathbb{E}\Big[\mathrm{e}^{it (X+Y)}\big] \\
   & = \mathbb{E}\Big[\mathrm{e}^{it X} \mathrm{e}^{it Y}\big] \\
   & = \mathbb{E}\Big[\mathrm{e}^{it X} \big] \times \mathbb{E}\big[\mathrm{e}^{it Y}\big] \qquad \text{independance}\\
   & =  \widehat{F}_X(t) \times \widehat{F}_Y(t) \, .
-\end{align*}
+\end{array}$$
 
 
 `r fontawesome::fa("square")`
@@ -284,6 +284,9 @@ the characteristic function of the standard Gaussian distribution.
 
 ---
 
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Proposition
 
 Let $\widehat{\Phi}$ denote the characteristic function of the standard univariate Gaussian distribution $\mathcal{N}(0,1)$,
@@ -292,6 +295,7 @@ The following holds
 
 $$\widehat{\Phi}(t) = \mathrm{e}^{-\frac{t^2}{2}}$$
 
+]
 ---
 
 ### Proof
@@ -301,13 +305,13 @@ As $\phi$ is even, $\widehat{\Phi}(t) =\mathbb{E} \cos(tX)$
 
 --
 
-\begin{align*}
+$$\begin{array}{rl}
 \widehat{\Phi}'(t)
 & = - \mathbb{E}\left[X \sin(t X) \right] \\
 & =  - \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}} x \sin(tx) \mathrm{e}^{-\frac{x^2}{2}} \mathrm{d}x \\
 & = \frac{1}{\sqrt{2 \pi}} \Big[\sin(tx) \mathrm{e}^{-\frac{x^2}{2}} \Big]_{-\infty}^{\infty} - t \frac{1}{\sqrt{2 \pi}}\int_{\mathbb{R}}  \cos(tx) \mathrm{e}^{-\frac{x^2}{2}} \mathrm{d}x \\
 & = - t \widehat{\Phi}(t) \,.
-\end{align*}
+\end{array}$$
 
 --
 
@@ -326,7 +330,7 @@ $$g(t)= \mathrm{e}^{- \frac{t^2}{2}}$$
 
 ---
 
-fontawesome::fa("puzzle-piece")
+### `r fontawesome::fa("puzzle-piece")`
 
 - Why is $\widehat{\Phi}$ differentiable?
 
@@ -334,7 +338,7 @@ fontawesome::fa("puzzle-piece")
 
 ---
 
-`r fontawesome::fa("exclamation")`
+### `r fontawesome::fa("exclamation")`
 
 A byproduct of Proposition is the following integral representation of the Gaussian density.
 
@@ -350,7 +354,9 @@ class: inverse, middle, center
 
 ---
 
-`r fontawesome::fa("syringe")` If $f$ and $g$ are two integrable functions, the _convolution_  of $f$ and $g$ is defined as
+### `r fontawesome::fa("syringe")`
+
+If $f$ and $g$ are two integrable functions, the _convolution_  of $f$ and $g$ is defined as
 
 $$f \star g (x)  = \int_{\mathbb{R}} f(x-y)g(y) \mathrm{d}y = \int_{\mathbb{R}} g(x-y)f(y) \mathrm{d}y$$
 
@@ -371,6 +377,9 @@ In order to understand it, we shall need an operation stemming from analysis: _c
 ---
 name:convdensity
 
+
+.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Proposition  (Regularization by convolution)
 
 Let $X \sim  P_X, Y \sim P_Y$, with $X \perp\!\!\!\perp Y$
@@ -381,6 +390,7 @@ Then the distribution of $X+Y$ is absolutely continuous and has density
 
 $$p_x \star P_Y (z) = \int_{\mathbb{R}} p_X(z -y ) \mathrm{d}P_Y(y)$$
 
+]
 
 ---
 
@@ -389,13 +399,13 @@ $$p_x \star P_Y (z) = \int_{\mathbb{R}} p_X(z -y ) \mathrm{d}P_Y(y)$$
 
 Let $B$ be Borel subset of $\mathbb{R}$  ( $B \in \mathcal{B}(\mathbb{R})$ )
 
-\begin{align*}
+$$\begin{array}{rl}
 P \Big\{ X+Y  \in B\Big\}
   & = \int_{\mathbb{R}} \Big( \int_{\mathbb{R}} \mathbb{I}_B(x+y) p_X(x)\mathrm{d}x\Big) \mathrm{d}P_Y(y) \\
   & = \int_{\mathbb{R}} \Big(\int_{\mathbb{R}} \mathbb{I}_B(z) p_X(z-y)\mathrm{d}z\Big) \mathrm{d}P_Y(y) \\
   & = \int_{\mathbb{R}} \mathbb{I}_B(z) \Big(\int_{\mathbb{R}}  p_X(z-y) \mathrm{d}P_Y(y) \Big) \mathrm{d}z \\
   & = \int_{\mathbb{R}} \mathbb{I}_B(z) p_x \star P_Y (z) \mathrm{d}z
-\end{align*}
+\end{array}$$
 
 where
 
@@ -419,7 +429,7 @@ $X+Y$ has a density.
 
 ---
 
-`r fontawesome::fa("puzzle=piece")`
+### `r fontawesome::fa("puzzle-piece")`
 
 - Check that if $X$ and $Y$ are independent with densities $f_X$ and $f_Y$,
 $f_X \star f_Y$  is a density of the distribution of $X+Y$.
@@ -434,13 +444,14 @@ Vanishing perturbations
 
 
 
+
 ### Proposition
 
 Assume
 
 - $P_X \trianglelefteq \text{Lebesgue}$ with density $p_X$
 
-- $P_X(-\infty, 0] = \alpha \in (0,1)$.
+- $P_X(-\infty, 0] = \alpha \in (0,1)$
 
 Then
 
@@ -448,21 +459,21 @@ $$\lim_{\sigma \downarrow 0} \mathbb{P}\big\{ Y + \sigma X \leq a \Big\} = P_Y(-
 
 
 
-
-`r fontawesome::fa("triangle-exclamation")` If $P_Y \trianglelefteq \text{Lebesgue}$ the limit is the CDF of $P_Y$
+`r fontawesome::fa("exclamation-triangle")` If $P_Y \trianglelefteq \text{Lebesgue}$,  the limit is the CDF of $P_Y$
 
 
 ---
 
 ### Proof
 
-\begin{align*}
+
+$$\begin{array}{rl}
 \mathbb{P}\big\{ Y + \sigma X \leq a \Big\}
     & = \int_{\mathbb{R}} \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-y}{\sigma}} p_X(x) \mathrm{d}x \mathrm{d}P_Y(y) \\
     & = \int_{(-\infty,a)} \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-y}{\sigma}} p_X(x) \mathrm{d}x \mathrm{d}P_Y(y) \\
     & + \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-a}{\sigma}} p_X(x) \mathrm{d}x P_Y\{a\} \\
     & + \int_{(a, \infty)} \int_{\mathbb{R}} \mathbb{I}_{x \leq  \frac{a-y}{\sigma}} p_X(x) \mathrm{d}x \mathrm{d}P_Y(y)
-\end{align*}
+\end{array}$$
 
 By monotone convergence,
 
@@ -558,7 +569,7 @@ The characteristic function of $Y$  at $t$ is $\mathrm{e}^{- \frac{t^2 \sigma^2}
 
 ### Proof (continued)
 
-\begin{align*}
+$$\begin{array}{rl}
 \mathbb{P}\Big\{ Y \leq u\Big\}
 & = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma} \phi\Big(\frac{y -x}{\sigma}\Big) \mathrm{d}F(x)  \mathrm{d}y \\
 & = \int_{-\infty}^u \int_{\mathbb{R}} \frac{1}{\sigma}
@@ -571,7 +582,7 @@ The characteristic function of $Y$  at $t$ is $\mathrm{e}^{- \frac{t^2 \sigma^2}
 \frac{1}{{2 \pi}} \mathrm{e}^{- \frac{t^2}{2}} \mathrm{e}^{-\frac{ity}{\sigma}} \widehat{F}(t/\sigma)  \mathrm{d}t
  \mathrm{d}y \\
 & = \int_{-\infty}^u  \left( \frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y
-\end{align*}
+\end{array}$$
 
 The quantity $\frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t$ is a version of the density of the distribution of $Y = X + \sigma Z$  (why?).
 
@@ -619,7 +630,7 @@ The proof consists in combining  [Proposition](#approxident) and  [Inversion for
 
 ---
 
-`r fontawesome::fa("triangle-exclamation")`  [Theorem](#generalInvFormula) does not deliver directly the distribution function $F$
+`r fontawesome::fa("exclamation-triangle")`  [Theorem](#generalInvFormula) does not deliver directly the distribution function $F$
 
 `r fontawesome::fa("frown")`  If CDF $F$ is not continuous,
 $u \mapsto \widetilde{F}(u) = F(u_-) + \frac{1}{2} P\{u\}$, is not a CDF
@@ -667,13 +678,13 @@ Let $x$  be a continuity point of $F$.
 
 $$\lim_{\sigma \downarrow 0} P\Big\{ X + \sigma Z  \leq x \Big\} = F(x)$$
 
-\begin{align*}
+$$\begin{array}{rl}
 \lim_{\sigma \downarrow 0} P\Big\{ X + \sigma Z  \leq x \Big\}
  & = \lim_{\sigma \downarrow 0}
  \int_{-\infty}^x  \left( \frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t   \right) \mathrm{d}y \\
  & = \int_{-\infty}^x   \frac{1}{{2 \pi}}\int_{\mathbb{R}} \lim_{\sigma \downarrow 0} \mathrm{e}^{- \frac{t^2 \sigma^2}{2}}\mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \\
  & = \int_{-\infty}^x   \frac{1}{{2 \pi}}\int_{\mathbb{R}} \mathrm{e}^{-ity} \widehat{F}(t)\mathrm{d}t    \mathrm{d}y \,
-\end{align*}
+\end{array}$$
 
 where interchange of limit and integration is justified by dominated convergence.
 
@@ -699,14 +710,6 @@ The proof of the alternative inversion formula can be found in textbooks like [D
 Let $\widehat{F}$ denote the characteristic function of the probability distribution $P$.
 
 $$\widehat{F}(t) = \mathrm{e}^{-\frac{t^2}{2}} \Rightarrow  P = \mathcal{N}(0,1)$$
-
-]
-
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
-
-### Corollary
-
-Let $\widehat{F}$ denote the characteristic function of probability distribution $P$,
 
 $$\widehat{F}(t) = \mathrm{e}^{i\mu t -\frac{\sigma^2 t^2}{2}} \Rightarrow  P = \mathcal{N}(\mu,\sigma^2)$$
 
@@ -758,7 +761,7 @@ $X \sim \mathcal{N}(0,1)$
 ---
 name: laplace-distrib
 
-### Application : exponential and Cauchy distributions
+### Application : Exponential and Cauchy distributions
 
 Let $X = \epsilon \times Y$ with
 $$\epsilon \quad \bot\!\!\!\bot \quad Y \sim \text{Exp}$$
@@ -852,6 +855,12 @@ The Cauchy distribution has no expectation, it does not satisfy the conditions o
 
 The Cauchy distribution (along with the Normal distribution) is an example of _stable_ distribution
 
+???
+
+If $X \bot\!\!\!\bot Y$ and $X \sim Y \sim \text{Cauchy}$,
+$$\widehat{F}_{X+Y}(t) = \mathrm{e}^{-2|t|} = \widehat{F}_{X+X}(t) = \widehat{F}_{X}(t) \times \widehat{F}_{X}(t)$$
+
+This illustrates the fact that $\widehat{F}_{X+Y} = \widehat{F}_{X} \times \widehat{F}_{Y}$ does not imply independence of $X$ and $Y$.
 
 
 ---
@@ -862,7 +871,7 @@ class: inverse, center, middle
 
 
 ---
-name:differentiabilitytehorem
+name: differentiabilitytehorem
 
 Differentiability of the Fourier transform at $0$ and  integrability
 are intimately related
@@ -900,7 +909,7 @@ $$\mathrm{e}^{ix} - \sum_{k=0}^n \frac{(ix)^k}{k!} = \frac{i^{n+1}}{n!} \int_0^x
 
 The modulus of the right hand side can be upper-bounded in two different ways.
 
-$$\frac{1}{n+!}\Big| \int_0^x (x-s)^n \mathrm{e}^{is} \mathrm{d}s \Big|
+$$\frac{1}{n!}\Big| \int_0^x (x-s)^n \mathrm{e}^{is} \mathrm{d}s \Big|
   \leq \frac{|x|^{n+1}}{(n+1)!}$$
 
 which is good when $|x|$ is small.
@@ -920,11 +929,11 @@ The modulus of the right hand side can be upper-bounded by $2|x|^n/n!$.
 ### Proof (continued)
 
 Applying this Taylor expansion to $x=t X$, using the pointwise upper bounds and taking expectations leads to
-\begin{align*}
+$$\begin{array}{rl}
   \Big| \widehat{F}(t) - \sum_{k=0}^n \mathbb{E}\frac{(itX)^k}{k!}  \Big|
     & \leq \mathbb{E} \Big[\min\Big( \frac{|tX|^{n+1}}{(n+1)!} ,2 \frac{|tX|^n}{n!}\Big)\Big] \\
     & = \frac{|t|^n}{(n+1)!} \mathbb{E} \Big[\min\Big(|tX|^{n+1} ,2 (n+1) |X|^n \Big)\Big] \, .
-\end{align*}
+\end{array}$$
 
 The right hand side is well defined as soon as $\mathbb{E}|X|^n < \infty$.
 
@@ -978,11 +987,11 @@ $$1 - \cos x = \int_0^x \cos(s) (x-s) \mathrm{d}s = x^ 2 \int_0^1 \cos(sx) (1-s)
 
 `r fontawesome::fa("exclamation")`  $\int_0^1 \cos(sx) (1-s) \mathrm{d}s\geq 0$ for all $x \in \mathbb{R}$.
 
-\begin{align*}
+$$\begin{array}{rl}
   \frac{2\mathbb{E}\Big[1 - \cos(hX)\Big]}{h^2}
     & = 2 \frac{\mathbb{E}\Big[ h^2 X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s\Big]}{h^2} \\
     & = 2 \mathbb{E}\Big[ X^2 \int_0^1 \cos(shX) (1-s) \mathrm{d}s\Big] \, .
-\end{align*}
+\end{array}$$
 
 
 ---
@@ -1266,17 +1275,17 @@ of the cumulative distribution function $F$.
 The quantile function $F^{\leftarrow}$ of random variable  $X$
 distributed according to $P$ (with cumulative distribution function $F$) is defined as
 
-\begin{align*}
+$$\begin{array}{rl}
 F^{\leftarrow} (p)
    & = \inf \Big\{ x : P\{X \leq x\} \geq p \Big\} \\
    & = \inf \Big\{ x : F (x) \geq p \Big\} \qquad \text{for } p \in (0,1).
-\end{align*}
+\end{array}$$
 
 ]
 
 ---
 
-`r fontawesome::fa("triangle-exclamation")` The quantile function is  non-decreasing and  left-continuous
+`r fontawesome::fa("exclamation-triangle")` The quantile function is  non-decreasing and  left-continuous
 
 ---
 name: fundapropquantiles
@@ -1368,11 +1377,11 @@ The quantile transformation works whatever the continuity properties of $F$
 
 ### Proof
 
-\begin{align*}
+$$\begin{array}{rl}
   P\Big\{ F^\leftarrow(U) \leq x \Big\}
   & = P\Big\{ U \leq F(x) \Big\} \\
   & = F(x) \, .
-\end{align*}
+\end{array}$$
 
 `r fontawesome::fa("square")`
 
@@ -1449,7 +1458,7 @@ $F (X)$ and $1 - F (X)$ are uniformly distributed on $[0, 1]$.
 
 ]
 
-`r fontawesome::fa("piece-puzzle")` Prove Corollary
+`r fontawesome::fa("puzzle-piece")` Prove Corollary
 
 
 ---
