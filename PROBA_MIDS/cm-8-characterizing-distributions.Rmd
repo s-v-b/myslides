@@ -68,7 +68,6 @@ template: inter-slide
 name: roadmap
 
 
-
 ## [Characteristic functions](#characteristic-functions)
 
 ## [Convolutions](#convolutions)
@@ -81,7 +80,7 @@ name: roadmap
 
 
 ---
-class: inverse, center, middle
+template: inter-slide
 
 ## Motivation
 
@@ -125,7 +124,7 @@ class: inverse, middle, center
 
 ---
 name: characteristic-functions
-class: inverse, middle, center
+template: inter-slide
 
 ## Characteristic functions
 
@@ -268,7 +267,7 @@ $$\Big(\forall t \in \mathbb{R}, \quad \widehat{F}_{X+Y}(t) =  \widehat{F}_X(t) 
 
 ---
 name: secgaussiancharac
-class: inverse, middle, center
+template: inter-slide
 
 ## Characteristic function of a univariate Gaussian distribution
 
@@ -348,7 +347,7 @@ It does not look interesting, but it is a milestone for the derivation of the _g
 
 ---
 name: convolutions
-class: inverse, middle, center
+template: inter-slide
 
 ## Sums of independent random variables and convolutions
 
@@ -485,7 +484,8 @@ By monotone convergence,
 
 ---
 name: sectioninversionformula
-class: middle, inverse, center
+template: inter-slide
+
 
 ## Inversion formula
 
@@ -648,7 +648,7 @@ $u \mapsto \widetilde{F}(u) = F(u_-) + \frac{1}{2} P\{u\}$, is not a CDF
 name: simple-inversion
 
 
-When the distribution function is absolutely continuous, Fourier inversion is simpler `r fontawesome::fa("smile")`
+When the distribution function is absolutely continuous, with continuous density over $\mathbb{R}$,  Fourier inversion is simpler `r fontawesome::fa("smile")`
 
 .bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
@@ -665,6 +665,13 @@ Then:
 - $y \mapsto \frac{1}{{2 \pi}} \int_{\mathbb{R}} \widehat{F}(t) \mathrm{e}^{-ity} \mathrm{d}t$ is a uniformly continuous version of the density of $P$.
 
 ]
+
+???
+
+Integrability of $\widehat{F}$ matters
+
+Think of exponential distribution
+
 
 ---
 
@@ -865,7 +872,7 @@ This illustrates the fact that $\widehat{F}_{X+Y} = \widehat{F}_{X} \times \wide
 
 ---
 name: secdifferentiabilityintegrability
-class: inverse, center, middle
+template: inter-slide
 
 ## Differentiability and integrability
 
@@ -953,8 +960,7 @@ $$\widehat{F}(t) = \sum_{k=0}^n i^k \mathbb{E}X^k \frac{t^k}{k!} + o(|t|^n)$$
 
 ---
 
-In the other direction, the connection is not as simple (`r fontawesome::fa("frown")`): differentiability
-of the Fourier transform does not imply integrability.
+In the other direction, the connection is not as simple (`r fontawesome::fa("frown")`): differentiability of the Fourier transform does not imply integrability.
 
 But ...
 
@@ -1016,8 +1022,8 @@ The proof is completed by invoking the [Theorem connecting integrability and smo
 
 ---
 name:secquantiles
+template: inter-slide
 
-class: inverse, middle, center
 
 ## Quantile functions
 
@@ -1054,8 +1060,7 @@ The quantile function
 of a discrete distribution is a step function  that jumps at the cumulative probability of every possible outcome.
 
 
-If a probability distribution is a mixture of a discrete distribution and a continuous distribution, the
-quantile function jumps at the cumulative probability of every possible outcome of the discrete component.
+If a probability distribution is a mixture of a discrete distribution and a continuous distribution, the quantile function jumps at the cumulative probability of every possible outcome of the discrete component.
 
 ???
 
@@ -1074,7 +1079,7 @@ require(tidyverse)
 
 .pull-left[
 
-```{r quantiles, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:quantiles)'}
+```{r quantiles, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Binomial quantiles'}
 # %%
 n <- 10
 p <- seq(0, 1, by=.01)
@@ -1118,7 +1123,7 @@ name: quantiles2
 
 .pull-left[
 
-```{r quantiles2, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:quantiles2)'}
+```{r quantiles2, echo=FALSE, message=FALSE, warning=FALSE, }
 # %%
 tau <-  c(0,  -1)
 df <- tibble::tibble(p=seq(0.01, .99, by=0.01)) %>%
@@ -1142,7 +1147,11 @@ rm(df, tau, p)
 # %%
 ```
 
-Quantile functions $\max(X, \tau)$ where $X \sim \mathcal{N}(0,1)$ for $\tau \in \{0, -1\}$
+Quantile functions of
+
+$$\max(X, \tau) \text{ where } X \sim \mathcal{N}(0,1)$$
+
+for $\tau \in \{0, -1\}$
 
 ]
 
@@ -1174,7 +1183,7 @@ name: quantiles3
 
 .pull-left[
 
-```{r quantiles3, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='(ref:quantiles3)'}
+```{r quantiles3, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Clipped Gaussians CDF'}
 df2 <- tibble::tibble(x=seq(-2, 2, by=0.01)) %>%
       mutate('0' = ifelse(x<0, 0, pnorm(x)),
              '-1' = ifelse(x< (-1), 0, pnorm(x))) %>%
@@ -1197,7 +1206,7 @@ rm(df2, q)
 
 .pull-right[
 
-Cumulative distribution functions for the probability distributions illustrated in [Figure](#quantiles2) (clipped Gaussian distributions)
+Cumulative distribution functions for  clipped Gaussian distributions
 
 ]
 
@@ -1238,7 +1247,7 @@ rm(df, p)
 
 .pull-right[
 
-Representation of $F \circ F^{\leftarrow}$ for the probability distributions illustrated in Figures [clipped Gaussian quantile functions](#quantiles2)  and [clipped Gaussian CDFs](#quantiles3).
+Representation of $F \circ F^{\leftarrow}$ for the clipped Gaussian distributions
 
 The function $F \circ F^{\leftarrow}$ always lies above the line $y=x$ (dotted line) as prescribed in [Proposition](#fundapropquantiles)
 
@@ -1412,6 +1421,7 @@ q
 rm(n, sample, p, df, q)
 # %%
 ```
+
 A popular device for comparing two probability distributions on the real line defined by their cumulative distributions $F$ and $G$.
 
 The QQ-plot consists in plotting function $G^{\leftarrow} \circ F$.
@@ -1462,6 +1472,7 @@ $F (X)$ and $1 - F (X)$ are uniformly distributed on $[0, 1]$.
 
 
 ---
+exclude: true
 class: middle, center, inverse
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
@@ -1469,3 +1480,9 @@ background-size: 112%
 
 
 # The End
+
+---
+
+```{r child="closing_slide.Rmd"}
+
+```
