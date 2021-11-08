@@ -1,0 +1,316 @@
+
+---
+
+Just like PCA, correspondance analysis (CA) builds on Singular Value Decomposition `r fontawesome::fa("glass-cheers")`
+
+`r fontawesome::fa("bullhorn")` CA  consists in computing the SVD of a _transformation_ of the two-way contingency table.
+
+This transformation is best explained by extending the SVD definition 
+
+
+---
+
+### Digression 
+
+For $\mathbb{R}^p$, the Euclidean norm of $x$ is defined by $\| x \|^2 = \sum_{i=1}^p x_i^2 = \langle x, x\rangle$
+
+If $A \in \mathcal{M}_{p,p}$ is a symmetric positive definite matrix with spectral decomposition $A = O \times \Lambda  \times O^T$ (the columns of $O$ are unit eigenvectors of $A$,  $O \times O^T=\text{Id}_p$ and the diagonal coefficients of $\Lambda$ are the eigenvalues of $A$)
+
+We may define another norm on $\mathbb{R}^p$: 
+$$\| x \|_A^2 =  \langle x, A x\rangle =  (O^Tx)^T \Lambda (O^T x)$$
+
+or 
+
+$$\| x \|_A^2 = \langle A^{1/2}x, A^{1/2} x\rangle$$
+
+This is the Mahalanobis norm induced by $A$
+
+???
+
+
+---
+
+When dealing with matrices, the Hilbert-Schmidt norm plays the role of the Euclidean norm
+
+We may define variations of Hilbert-Schmidt norm in a way that parallels the definition of Mahalanobis norms 
+
+
+---
+
+
+$\mathcal{M}(n,p)$ denotes the set of real matrices with $n$ rows and $p$ columns
+
+We will use weighted versions of [Hilbert-Schmidt-Frobenius inner-product and norm](#eckartyoung).
+
+
+---
+name: weighted-HS-norm
+
+
+### Proposition Weighted Hilbert-Schmidt-Frobenius inner-product
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}_{p, p}, \Phi \in \mathcal{M}_{q,q}$ be symmetric and positive definite.
+
+Matrices $\Omega, \Phi$ define an _inner product_ on $\mathcal{M}_{p,q}$:
+let $X, Y \in \mathcal{M}_{p,q}$
+
+$$\begin{array}{rl} \langle X, Y\rangle_{\Omega, \Phi}  & = \operatorname{Trace}\left(\Omega \times X \times \Phi \times Y^T\right)  \\  & =  \bigg\langle  \Omega^{1/2} \times X \times \Phi^{1/2}, \Omega^{1/2} \times Y \times \Phi^{1/2}  \bigg\rangle_{\text{HS}}\end{array}$$
+
+The weighted Hilbert-Schmidt-Frobenius norm of $X$ is defined by
+
+$$\Vert X \Vert_{\Omega, \Phi}^2 = \left\Vert   \Omega^{1/2} \times X \times \Phi^{1/2}\right\Vert_{\text{HS}}^2$$
+
+]
+
+???
+
+
+---
+
+
+### Proof
+
+Linearity with respect to $X$ and $Y$ follows from distributivity of matrix multiplication with respect to matrix addition.
+
+Symmetry is a consequence of invariance of trace by similarity.
+
+Multiplying on the left by $\Omega^{-1/2}$  and on the right by $\Omega^{1/2}$,
+
+$$\begin{array}{rl}
+\langle X, Y\rangle_{\Omega, \Phi}
+ & = \operatorname{Trace}\left(\Omega \times X \times \Phi \times Y^T\right)  \\
+ & = \operatorname{Trace}\left(\Omega^{1/2} \times X \times \Phi \times Y^T \times \Omega^{1/2} \right) \\
+ & = \operatorname{Trace}\left(\big(\Omega^{1/2} \times X \times \Phi^{1/2}\big) \times\big(\Phi^{1/2} \times Y^T \times \Omega^{1/2}\big) \right) \\
+& = \operatorname{Trace}\left(\big(\Omega^{1/2} \times X \times \Phi^{1/2}\big) \times \big(\Omega^{1/2} \times Y \times \Phi^{1/2}  \big)^T \right)\\
+& = \left\langle \Omega^{1/2} \times X \times \Phi^{1/2}, \Omega^{1/2} \times Y \times \Phi^{1/2} \right\rangle_{\text{HS}} \\
+& = \left\langle \Omega^{1/2} \times Y \times \Phi^{1/2}, \Omega^{1/2} \times X \times \Phi^{1/2} \right\rangle_{\text{HS}} \\
+& = \langle Y, X\rangle_{\Omega, \Phi}\end{array}$$
+
+???
+
+Remember that the trace is _invariant by similarity_:
+
+$$\operatorname{Tr}(Z) = \operatorname{Tr}(P \times Z \times P^{-1})$$
+for all  $Z$ and invertible $P$
+
+
+---
+
+### Proof (continued)
+
+Positivity is a by-product of the argument above:
+
+$$\begin{array}{rl}\langle X, X\rangle_{\Omega, \Phi}  & = \langle \Omega^{1/2} \times X \times \Phi^{1/2}, \Omega^{1/2} \times X \times \Phi^{1/2} \rangle \\  & \geq 0\end{array}$$
+
+with equality only if $X=0$
+
+
+`r fontawesome::fa("square")`
+
+
+???
+
+We shall extend the notion of Singular Value Decomposition so as to adapt
+to weighted Hilbert-Schmidt-Frobenius norms.
+
+
+---
+name: extendedsvd
+
+
+### Theorem Extended SVD factorization
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}(p,p)$, $\Phi \in \mathcal{M}(q,q)$ be symmetric and Positive Definite.
+
+Let $X \in \mathcal{M}(n,p)$
+
+There exists $M, D, N$ such that
+
+$$X =  N \times D \times M^T$$
+
+with  $N \in \mathcal{M}(p,p)$, $M \in \mathcal{M}(q,q)$ and  $D \in \mathcal{M}(p, q)$ satisfying:
+
+- $N^T \times \Omega \times N = I_p$
+
+- $M^T \times \Phi \times M = I_q$
+
+- $D_{k,k} \geq D_{k+1, k+1} \geq 0$  for $0\leq k< \min (p,q)$  and $D_{j,k}=0$ for $j\neq k$.
+
+If $\Omega = I_p$ and $\Phi = I_q$, we recover the Singular Value Decomposition
+
+]
+
+---
+
+
+### Proof
+
+Because they are positive definite, by the spectral decomposition theorem, $\Omega$ and $\Phi$
+have invertible square roots:
+
+there exists symmetric invertible matrices $\Omega^{1/2}$ and $\Phi^{1/2}$ such that
+
+$$\Omega = (\Omega^{1/2})^2\qquad\text{and}\qquad\Phi = (\Phi^{1/2})^2$$
+
+Let $U \times D \times V^T$  be the SVD factorization of $\Omega^{1/2} \times  X \times \Phi^{1/2}$, then
+
+$$X = \underbrace{\Omega^{-1/2} \times U}_{:=N} \times D \times   \underbrace{V^T \times \Phi^{-1/2}}_{:=M^T}$$
+
+???
+
+The existence  $\Omega^{1/2}$  and $\Phi^{1/2}$ is guaranteed by the _spectral decomposition theorem_
+
+The proof provides a straightforward computational recipe
+
+---
+
+### Proof (continued)
+
+Indeed:
+
+$$\begin{array}{rl}N^T \times \Omega \times N & = (U^T \times \Omega^{-1/2}) \times \Omega \times (\Omega^{-1/2} \times U) \\ &= U^T \times  (\Omega^{-1/2} \times \Omega \times \Omega^{-1/2} ) \times U \\ & = \operatorname{Id}_p\end{array}$$
+
+and similarly for $M$ and $\Phi$.
+
+`r fontawesome::fa("square")`
+
+---
+
+### `r fontawesome::fa("laptop-code")` Computing the extended SVD
+
+Given $X$, $\Omega$ and $\Phi$, computing the extended SVD of $X$ with respect to $\Phi, \Omega$ is not harder than computing an ordinary SVD
+
+$\Omega^{1/2}$ and $\Phi^{1/2}$ can be obtained from the SVD of $\Omega, \Phi$
+
+Indeed, from the proof of the existence of the extended SVD, the extended SVD of $X$ can be obtained in a three-steps approach:
+
+- Compute $\Omega^{1/2}$ and $\Phi^{1/2}$  from the SVDs of $\Omega, \Phi$
+
+- Compute the ordinary SVD $U \times D \times V^T$ of $\Omega^{1/2} \times X \times \Phi^{1/2}$
+
+- Return $\Omega^{-1/2} \times U$, $D$,  $\Phi^{-1/2}\times V$
+
+
+???
+
+
+
+---
+name: truncSVD
+
+
+### Definition: Truncated extended SVD factorization
+
+Let $k \leq \min(p,q)$.
+
+The $k$-truncated extended SVD factorization of $X \in \mathcal{M}(p,q)$
+with respect to $\Omega, \Phi$
+is derived from the extended SVD factorization
+$$X = N \times D \times M^T$$
+by taking the first $k$ columns of $N$ ( $N_{[k]}$ ) and $M$ ( $M_{[k]}$ ) as well as the first $k$ rows and columns of $D$  ( $D_{[k]}$ )
+
+The matrix
+
+$$N_{[k]} \times D_{[k]} \times M_{[k]}^T$$
+
+has rank not larger than $k$.
+
+It has rank $k$ if $D[k,k]>0$.
+
+
+???
+
+The truncated generalized SVD factorization is defined in a way that parallels the truncated SVD
+
+---
+
+### Performance of $k$-truncated SVD
+
+The $k$-truncated SVD of $X$ is known to be the best rank- $k$ approximation of $X$ in the least-square sense
+(that is according to the Hilbert-Schmidt norm)  `r fontawesome::fa("glass-cheers")`
+
+The  $k$-truncated extended SVD factorization
+also enjoys optimal approximation properties under rank constraints
+
+Wheras the optimality
+property of the truncated SVD was assessed with respect to Hilbert-Schmidt-Frobenius norm,
+the property of the truncated SVD is assessed with respect to a weighted version of Hilbert-Schmidt-Frobenius norm
+
+---
+name: weightedHSorthobasis
+
+### Proposition
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}_{p, p}, \Phi \in \mathcal{M}_{q,q}$ be symmetric and positive definite.
+
+Let $X \in \mathcal{M}_{p,q}$ with extended SVD factorization $X = N \times D \times M^T$ with respect to $\Omega$
+and $\Phi$.
+
+Let $(n_i)_{i \leq p}$ and $(m_{j})_{j\leq q}$  denote the columns of $N$ and $M$
+
+then
+
+$\left(n_i \times m_j^T \right)_{i\leq p, j \leq q}$ is an orthonormal basis of $\mathcal{M}_{q,q}$
+endowed with inner product $\langle X, Y\rangle_{\Omega, \Phi}$
+
+]
+
+
+???
+
+The straightforward proof parallels the proof of the statement for the ordinary SVD.
+
+
+---
+
+### Proof
+
+$$\begin{array}{rl}\langle n_i \times m_j^T , n_k \times m_\ell^T \rangle_{\Omega, \Phi} & = \operatorname{Tr}\left(\Omega \times n_i \times \underbrace{m_j^T \times \Phi \times m_\ell}_{=\langle m_j , m_{\ell}\rangle_{\Phi}} \times n_k^T \right)\\ &= \langle m_j , m_{\ell}\rangle_{\Phi} \operatorname{Tr}\left(\Omega \times n_i  \times n_k^T \right)\\ & = \langle m_j , m_{\ell}\rangle_{\Phi} \times \langle n_i , n_{k}\rangle_{\Omega}\end{array}$$
+
+The fact that $N$ (resp. $M$) is $\Omega$ (resp. $\Phi$) orthogonal allows to conclude
+
+`r fontawesome::fa("square")`
+
+???
+
+We just take advantage of the observation
+
+$$m_j^T \times \Phi \times m_\ell = \operatorname{Tr}\left(\Phi \times m_\ell \times m_j^T \right)$$
+
+
+---
+name: extendedEckartYoung
+
+### Theorem  Eckart-Young Theorem for extended SVD
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+Let $\Omega \in \mathcal{M}_{p, p}, \Phi \in \mathcal{M}_{q,q}$ be symmetric and positive definite.
+
+Let $X \in \mathcal{M}_{p,q}$ with extended SVD factorization $X = N \times D \times M^T$. Let $X_{[k]}$
+denote the $k$-truncated extended SVD of $X$ with respect to $\Omega$ and $\Phi$.
+
+Then $X_{[k]}$ minimizes
+
+$$\Vert X-Y\Vert^2_{\Omega, \Phi} =  \langle X-Y, X-Y\rangle_{\Omega, \Phi} = \operatorname{Trace}\left(\Omega (X-Y) \Phi (X-Y)^T\right)$$
+
+among all matrices $Y \in \mathcal{M}_{p,q}$ with rank less or equal than $k$.
+
+]
+
+---
+
+### Proof
+
+The argument parallels the proof of Eckart-Young's Theorem for SVD.
+
+`r fontawesome::fa("square")`

@@ -1,0 +1,137 @@
+
+---
+
+In this lesson, we further explore the connection between two qualitative variables, that is,
+we attempt to go beyond Lesson [Bivariate statistics](#biv).
+
+Our starting point is a qualitative
+bivariate sample.
+
+Consider the  celebrated `UCBAdmissions` dataset
+
+According to `R` documentation,
+this dataset is made of
+
+> Aggregate data on applicants to graduate school at Berkeley for the six largest departments in 1973 classified by admission and sex.
+
+This is a compilation of `r sum(datasets::UCBAdmissions)` application files.
+
+For each application file,
+three variables have been reported: the `department`, the `gender` of the applicant and whether
+the applicant has been `admitted`
+
+The dataset is a trivariate sample. In the sequel we make it
+a bivariate sample by focusing on `Gender`  and `Admit`.
+
+???
+
+The dataset was gathered because
+the admission process at UCB graduate schools was suspected to be biased against women
+
+
+---
+
+### Plotting two-way contingency tables
+
+As in Lesson [Bivariate statistics](#biv), we start by collecting the 2-way _contingency table_ and
+displaying a _mosaicplot_.
+
+```{r, echo=FALSE}
+UCBAdmissions <- datasets::UCBAdmissions
+
+apply(UCBAdmissions, MARGIN = c(1,2), sum) %>%
+  as_tibble(rownames = "Admit") -> ucb2
+```
+
+.panelset[
+
+.panel[.panel-name[`mosaicplot`]
+
+.fl.w-50.pa2[
+
+```{r mosaic1, fig.height=4, fig.show='hide'}
+mosaicplot(~ Gender + Admit,   #<<
+           UCBAdmissions)      #<<
+```
+
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("mosaic1", "png")`)
+
+]
+
+]
+
+.panel[.panel-name[`mosaic` (from `vcd`)]
+
+
+.fl.w-50.pa2[
+
+```{r mosaic2, fig.height=4, fig.show='hide'}
+apply(UCBAdmissions,
+      MARGIN = c(1,2),
+      sum) %>%
+  as.table() %>%
+  vcd::mosaic(formula=Admit~Gender,  #<<
+              data=.)                #<<
+```
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("mosaic2", "png")`)
+
+]
+
+]
+
+.panel[.panel-name[`ggmosaic`]
+
+.fl.w-50.pa2[
+
+.f6[
+If, rather than the contingency table,  we have the original data (a dataframe
+with two categorical columns), we can visualize the contengincy table using
+`geom_mosaic` from `ggmosaic`. Conforming to the `ggplot2` API, `geom_mosaic`
+works on a native dataframe and compute _statistics_ from the dataframe, the
+statistics are then used to draw the picture
+
+```{r prep-mosaic3, echo=FALSE, eval=TRUE}
+titanic_train <- readr::read_csv("DATA/TITANIC/train.csv",
+                col_types = cols(Embarked = col_factor(levels = c("Q", "C", "S")),
+                                 Pclass = col_factor(levels = c("1", "2", "3")),
+                                 Sex = col_factor(levels = c("male", "female")),
+                                 Survived = col_factor(levels = c("0", "1"))))
+```
+
+```{r mosaic3, fig.height=4, fig.show='hide'}
+titanic_train %>%
+  dplyr::select(Pclass, Embarked) %>%
+  drop_na() %>%
+  ggplot() +
+  geom_mosaic(aes(x = product(Embarked, Pclass), fill=Embarked)) +
+  labs(x= "Passenger class", y="Embarked") +
+  scale_fill_viridis_d() +
+  ggtitle("Titanic mosaic with tidyverse flavor")
+```
+]
+]
+
+.fl.w-50.pa2[
+
+![](`r knitr::fig_chunk("mosaic3", "png")`)
+
+]
+
+]
+]
+
+???
+
+
+This mosaicplot suggests that Admission and Gender are associated.
+
+[ggmosaic](https://cran.r-project.org/web/packages/ggmosaic/vignettes/ggmosaic.html)
+
