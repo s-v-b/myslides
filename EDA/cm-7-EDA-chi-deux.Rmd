@@ -1,0 +1,142 @@
+
+---
+name: chisqDist
+
+In order to assess the association between two qualitative variables, we use
+an _information divergence_ between the joint distribution and the product
+of the two marginal distributions.
+
+In correspondence analysis, the relevant information
+divergence is the $\chi^2$ (khi-square) divergence.
+
+### Definition   Chi-square divergence
+
+Let $P$ and $Q$ be two probability distributions over the same measurable space.
+
+The $\chi^2$ (khi-square) divergence from $P$ to $Q$ is defined as
+
+- $\infty$ if $P$ is not absolutely continuous with respect to $Q$ and
+
+- $\chi^2(P \Vert Q)  = \mathbb{E}_Q\Big[ \left(\frac{\mathrm{d}P}{\mathrm{d}Q} - 1\right)^2\Big]  \qquad \text{  otherwise}$
+
+
+---
+
+
+### $f$-divergences
+
+The $\chi^2$-divergence belongs to the family of _information divergences_ or  $f$-divergences
+that fits the next expression: if $P$ is absolutely continuous with respect to $Q$
+
+$$I_f(P, Q)  = \mathbb{E}_Q\Big[ f\left(\frac{\mathrm{d}P}{\mathrm{d}Q}\right)\Big]$$
+
+with $f$ convex and $f(1)=0$.
+
+- for $f(x)= x \log (x)$, the information divergence is the _relative entropy_ or _Kullback-Leibler divergence_
+ $D(P \Vert Q)$
+
+- for $f(x)= |x -1|$, the information divergence is the _total variation distance_ $\mathrm{d}_{\text{TV}}(P,Q)$
+
+- for $f(x)= (x-1)^2$, the $f$-divergence is the $\chi^2$ _divergence_   $\chi^2(P \Vert Q)$
+
+---
+name: chisqassociation
+
+### Definition Chi-Square association index
+
+Let  $P$ be a probability distribution over $\mathcal{X} \times \mathcal{Y}$ (a bivariate distribution)
+with marginal distributions $P_X$ and $P_Y$.
+
+The $\chi^2$-association index is defined as
+
+$$\chi^2(P \Vert P_X \otimes P_Y)$$
+
+---
+
+### Application
+
+A 2-way contingency table like `ucb2` defines a joint distribution $P$ on couples
+from $\mathcal{X} \times \mathcal{Y}$ as well as two marginal distributions:
+
+$$P\{(a,b)\} = \frac{N_{a,b}}{n} \qquad P_X\{a\} = \frac{N_{a, .}}{n} \qquad
+P_Y\{b\} = \frac{N_{.,b}}{n}$$
+
+In the sequel, $w_a = P_X\{a\} = \frac{N_{a, .}}{n}$ for every $a\in \mathcal{X}$.
+
+The $\chi^2$ divergence defined by the two-way contingency table is
+$$\begin{array}{rl}  \chi^2(P, \Vert P_X \otimes P_Y)  & = \sum_{a \in \mathcal{X}, b \in \mathcal{Y}}  \frac{N_{a,\cdot} N_{\cdot, b}}{n^2} \left( \frac{n N_{a,b}}{N_{a,\cdot} N_{\cdot, b}} - 1\right)^2 \\  & = \sum_{a \in \mathcal{X}} \frac{N_{a, .}}{n} \sum_{b \in \mathcal{Y}}   \frac{\left( \frac{N_{a,b}}{N_{a,\cdot}} - \frac{N_{\cdot, b}}{n} \right)^2}{N_{.,b}/n} \\   & = \sum_{a \in \mathcal{Y}} w_a \times \chi^2\left(P_Y (\cdot | X=a)  \Vert   P_Y\right) \end{array}$$
+
+???
+
+The last expression shows that the _Pearson association_ statistic is a (convex) combination of
+the $\chi^2$ divergences between the conditional distributions of $Y$  given the values of $X$ and the
+marginal distribution of $Y$.
+
+
+---
+
+### Pearson association index
+
+Given a two-way contingency table, the Pearson association index is defined as
+
+$$n \times \chi^2(P \Vert P_X \otimes P_Y) =  \sum_{a \in \mathcal{X},b \in \mathcal{Y}}  \frac{\left({N_{a,b}} - \frac{N_{a, .}}{n}N_{., b} \right)^2}{N_{a,.} N_{.,b}/n}$$
+
+
+
+---
+
+Note the factor $n$.
+
+It is motivated by testing theory.
+
+Indeed, if we collect a bivariate sample of length $m$
+according to $P_X \otimes P_Y$ (that is if the two variables are stochastically independent), compute the contingency
+table defined by this random sample, then the Pearson association is a random variable.
+
+If $m$ is large enough,
+the distribution of the Pearson association index is close (in the topology of weak convergence) to a
+$\chi^2$-distribution with $(|\mathcal{X}|-1)(|\mathcal{Y}|-1)$ degrees of freedom.
+
+The fact that the distribution of the Pearson association index is close to a probability distribution that does not depend on the details of $P_X$ and $P_Y$ is important, both theoretically and practically.
+
+
+We may compare the computed Pearson association index to the quantiles of the $\chi^2$ distribution
+with the adequate number of degrees of freedom.
+
+---
+
+### Illustration UCB admission data
+
+For the UCB admission data, this leads to
+
+```{r, eval=TRUE}
+M <- apply(UCBAdmissions, MARGIN = c(1,2), sum)
+
+rowsums <- M %*% matrix(1, nrow=2, ncol=1)
+
+colsums <- matrix(1, nrow=1, ncol=2)  %*% M
+
+n <- sum(M)
+
+sum((M - rowsums %*% colsums/n)^2/(rowsums %*% colsums/n))  #<<
+
+chisq.test(as.table(apply(UCBAdmissions, MARGIN = c(1,2), sum)), correct = FALSE)
+```
+
+---
+
+
+### Tentative interpretation
+
+This results suggests that admission and gender are associated. Further
+interpretation requires more visualization tools and modeling assumptions.
+
+We shall first extend the matrix analytic notions that underpins
+Principal Component Analysis, that is SVD and Hilbert-Schmidt-Frobenius norms.
+
+In [Recipes](#basicca),  we construct _Correspondence Analysis_ as a pair of dual _extended SVD_ known
+as row-profiles and column-profiles analyses
+
+In [Applications](#visuca), we illustrate recipes
+on examples using  `r fontawesome::fa("r-project")` packages
+

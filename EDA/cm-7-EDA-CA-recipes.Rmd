@@ -1,0 +1,725 @@
+
+
+---
+
+### FactoMineR homepage
+
+
+<iframe src="http://factominer.free.fr" height="400" width="800" title="FactoMineR"></iframe>
+
+
+---
+
+### FactoMineR on Correspondance Analysis
+
+
+<iframe src="http://factominer.free.fr/factomethods/correspondence-analysis.html" height="400" width="800" title="FactoMineR"></iframe>
+
+
+
+
+
+
+---
+
+`r fontawesome::fa("bullhorn")` Correspondence Analysis (CA) consists of
+
+- normalizing and recentering the 2-way contingency table
+
+- computing the _extended_ SVD
+with carefully chosen matrices $\Omega$ and $\Phi$.
+
+
+`r fontawesome::fa("bullhorn")` Reporting CA consists of
+
+- Row Profiles analysis
+
+- Column Profiles analysis
+
+- Singular value analysis
+
+
+---
+
+### Two important diagonal matrices
+
+Consider a 2-way contingency table $X \in \mathcal{M}_{p, q}$.
+
+Let $n$ denote sum of coefficients of $X$: $n = \sum_{a \leq p, b \leq q} X_{a, b}$.
+
+Let $P$ be the _normalization_ of $X$:
+
+$$P = \frac{1}{n} X$$
+
+Let
+
+- $D_r \in \mathcal{M}_{p,p}$ be the diagonal matrix of row sums of $P$
+
+- $D_c \in \mathcal{M}_{q,q}$ be the diagonal matrix of column sums of $P$
+
+The diagonal elements of $D_r$ define the row weights
+
+The diagonal coefficients of $D_c$ define the so-called _centroid_ : the marginal distribution of $Y$
+
+
+
+???
+
+The marginal distribution of $Y$ is the weighted average of
+the conditional distributions of $Y$ given $X$.
+
+---
+name: rowprofiles
+
+
+### Row profiles
+
+The rows of matrix
+
+$$R = D_r^{-1} \times P \qquad  R_{a,b} = \frac{N_{a,b}}{N_{a,.}}$$
+
+are called _row profiles_
+
+Each _row profile_ defines a conditional probability of $Y$ given $X$
+
+In Correspondence Analysis, row profile analysis consists of factorizing the centered row profile matrix $R$
+
+The recipe consists in choosing the couple of symmetric positive definitive matrices that define the extended SVD
+
+---
+
+### Example
+
+Consider the 2-way contingency table derived from the `Embarkment` and `Pclass` columns of the `train` subset of the Titanic dataset
+
+|   |   1|   2|   3|
+|:--|---:|---:|---:|
+|Queenstown  |   2|   3|  72|
+|Cherbourg  |  85|  17|  66|
+|Southampton  | 127| 164| 353|
+
+Once normalized by the table sum `n=889`, we obtain matrix $P$ (up to rounding errors):
+
+$$\begin{bmatrix}
+ 0.002 & 0.003 & 0.081 \\
+ 0.096 & 0.019 & 0.074 \\
+ 0.143 & 0.184 & 0.397
+\end{bmatrix}$$
+
+Matices $D_r$ and $D_c$ are
+
+$$D_r \approx
+\begin{bmatrix} 0.086 & 0 & 0 \\
+                0 & 0.189 & 0 \\
+                0 & 0 & 0.724 \end{bmatrix} \qquad
+ D_c \approx
+\begin{bmatrix} 0.241 & 0 & 0 \\
+                0 & 0.206 & 0 \\
+                0 & 0 & 0.552 \end{bmatrix}$$
+
+???
+
+```{r, eval=TRUE, echo=TRUE}
+readr::read_csv("DATA/TITANIC/train.csv",
+                col_types = cols(Embarked = col_factor(levels = c("Q", "C", "S")),
+                                 Pclass = col_factor(levels = c("1", "2", "3")),
+                                 Sex = col_factor(levels = c("male", "female")),
+                                 Survived = col_factor(levels = c("0", "1")))) %>%
+dplyr::select(Embarked, Pclass)  %>% table() -> X
+```
+
+```{r}
+P <- X/sum(X) ; Dr <- diag(rowSums(P)) ; Dc <- diag(colSums(P))
+R <- solve(Dr) %*% P
+foo <- matrix(1, nrow = 3, ncol=3) %*%  P
+```
+
+
+---
+
+The row profiles matrix $R$ is $D_r^{-1} \times P$
+
+$$R \approx \begin{bmatrix}
+  0.02 & 0.03 & 0.94 \\
+  0.51 & 0.10 & 0.39 \\
+  0.20 & 0.25 & 0.55 \end{bmatrix}$$
+
+The matrix which is fed to _extended SVD_  is obtained by centering
+$R$ around the weighted average of the rows
+
+$$R - 1 \times 1^T \times P \approx \begin{bmatrix}
+  -0.221 & -0.176 & 0.388 \\
+   0.269 & -0.106 & -0.162 \\
+  -0.041 & 0.044  & -0.002 \end{bmatrix}$$
+
+---
+
+Recall that the row vector $1^T \times P$ defines the marginal distribution of $Y$
+(the column-profile of matrix $P$).
+
+
+Note that all rows of $R - 1 \times 1^T \times P$
+sum up to $0$, they are orthogonal to $(1, 1, 1)^T$.
+
+
+```{r, echo=FALSE, eval=TRUE}
+readr::read_csv("DATA/TITANIC/train.csv",
+                col_types = cols(Embarked = col_factor(levels = c("Q", "C", "S")),
+                                 Pclass = col_factor(levels = c("1", "2", "3")),
+                                 Sex = col_factor(levels = c("male", "female")),
+                                 Survived = col_factor(levels = c("0", "1")))) %>%
+dplyr::select(Embarked, Pclass)  %>% table() -> X
+
+knitr::kable(X, format = "markdown")
+```
+
+
+---
+
+### A Mahalanobis metric for row profiles
+
+The space of row profiles (a subset of $\mathbb{R}^q$) is endowed
+with the  weighted $\ell_2$ metric (a Mahalanobis metric)
+induced by $D_c^{-1}$:
+
+$$(x -y)^T \times D_c^{-1} \times (x-y)$$
+
+---
+
+### Applying the extendend SVD
+
+The extended SVD factorization is actually applied to
+
+$$D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$$
+
+where $1 \times 1^T$ denotes the matrix from $\mathcal{M}_{p, q}$ with all entries equal to $1$.
+
+Matrices $\Omega$ and $\Phi$ are chosen as $D_r$ and $D_c$.
+
+The entry of $D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$ at indices $a,b$ are
+
+$$\frac{n N_{a,b}}{N_{a, .}N_{.,b}} - 1$$
+
+
+???
+
+Entries of $D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$ show up in the
+definition of the chi-square divergence between the joint empirical distributions
+and the product of marginal empirical distributions
+
+---
+
+Recall the definition of the Pearson association index:
+
+$$\begin{array}{rl}
+  n \chi^2(P \Vert  P_X \otimes P_Y)
+  & = n \sum_{a \in \mathcal{X}, b \in \mathcal{Y}}  \frac{N_{a,\cdot} N_{\cdot, b}}{n^2} \left( \frac{n N_{a,b}}{N_{a,\cdot} N_{\cdot, b}} - 1\right)^2 \\
+  & = n \sum_{a \in \mathcal{X}} \frac{N_{a, .}}{n} \sum_{b \in \mathcal{Y}}   \frac{\left( \frac{N_{a,b}}{N_{a,\cdot}} - \frac{N_{\cdot, b}}{n} \right)^2}{N_{.,b}/n} \\
+  & = n \sum_{a \in \mathcal{Y}} w_a \times \chi^2\left(P_Y (\cdot | X=a),  P_Y\right) \\
+  & = \sum_{a \in \mathcal{X},b \in \mathcal{Y}}  \frac{\left({N_{a,b}} - \frac{N_{a, .}}{n}N_{., b} \right)^2}{N_{a,.} N_{.,b}/n}
+\end{array}$$
+
+where $P$ is the joint distribution defined by the contingency table, $P_X, P_Y$ the two marginal distributions
+
+$$\begin{array}{rl} n \chi^2(P \Vert  P_X \otimes P_Y) & = \big\Vert D_r^{1/2} \big(D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T \big)D_c^{1/2}\big\Vert^2_{\text{HS}} \\ & =
+\big\Vert  \big(D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T \big)\big\Vert^2_{D_r^{1/2},D_c^{1/2}}\end{array}$$
+
+---
+
+As
+
+$$D_r^{1/2} \times
+\big(D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T \big) \times D_c^{1/2}
+  =  D_r^{1/2}  \times \big(R - 1 \times  1^T \times P \big) \times  D_c^{-1/2}$$
+
+we can also portray correspondence analysis as
+
+> computing the extended SVD of the centered row profiles matrix
+$$\big(R - 1\times  1^T \times P \big)$$
+> with respect to the symmetric positive definite matrices $\Omega = D_r, \Phi = D_c^{-1}$
+
+---
+
+### Interpretation of singular values
+
+The sum of squared singular values equals the $\chi^2$ Pearson index of association
+
+It is also called the _total inertia_ of the centered row profiles matrix.
+
+The number $k$ of positive singular values equals the rank of  the centered row profiles matrix
+
+The latter is not larger than $q-1$.
+
+The sum of the squared $k-2$ smallest positive singular values
+equals the weighted squared Hilbert-Schmidt-Frobenius distance of the centered row profiles matrix
+to the set of  rank-2  matrices (extended Eckart-Young Theorem).
+
+
+???
+
+
+---
+
+### Interpretation of singular values (continued)
+
+Let $N \in \mathcal{M}_{p, k}$ (resp. $M \in \mathcal{M}_{q, k}$) denote the extended left (resp. right) singular vectors computed
+from the extended SVD of  $R - 1 \times 1^T \times P$ with respect
+to $D_r$ and $D^{-1}_c$
+
+We have
+
+$$N^T \times D_r \times N = I_k \qquad\text{and}\qquad M^T \times D^{-1}_c \times M = I_k$$
+
+Let $D_{s} \in \mathcal{M}_{k,k}$ be the diagonal matrix with non-increasing
+singular values as diagonal coefficients
+
+???
+
+
+---
+
+### Interpretation of left singular vectors
+
+The truncated versions of matrix $N \times D_s$ define the optimal subspaces onto which
+to project the row profiles.
+
+Turn back to the projected Titanic dataset.
+
+The 2 positive squared singular values are $0.103,  0.036$
+(if we sum these two values and multiply the result by the number $889$
+of rows of the Titanic sub-dataset, we recover the Pearson association statistic, $123.57$).
+
+$$F = N \times D_s =\begin{bmatrix} -0.573 & -0.515  \\ 0.604 & -0.165   \\ -0.089  & 0.105\end{bmatrix}$$
+
+???
+
+The graphical display of the row profiles consists in displaying the
+points defined by the rows of $F$. The percentage of inertia assiated
+with each axis is usually added to the plot. If possible
+`rownames`  are used to identify each point and facilitate interpretation.
+
+
+---
+
+### `r fontawesome::fa("ship")` Titanic illustrated : row profiles
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r, echo=TRUE}
+P <- (1/sum(X)) * X
+Dr <- diag(rowSums(P)) ; Dc <- diag(colSums(P))
+R <- diag(rowSums(P)^(-1)) %*% P - matrix(1, 3, 1) %*% colSums(P)
+
+svd_R_ext <- svd(diag(rowSums(P)^(1/2)) %*% R %*% diag(colSums(P)^(-1/2)))
+
+N <- diag(rowSums(P)^(-1/2)) %*% svd_R_ext$u
+M <- diag(colSums(P)^(1/2)) %*% svd_R_ext$v
+F <- N %*% diag(svd_R_ext$d)
+
+res_ca <- data.frame(F[, 1:2])
+names(res_ca) <- c("lambda1", "lambda2")
+res_ca$rownames_ <- c("Queensland", "Cherbourg", "Southampton")
+```
+]
+
+.panel[.panel-name[Plot preparation]
+
+```{r CArowtitanic, echo=TRUE, message=FALSE, warning=FALSE, fig.show='hide', fig.height=3}
+p <-  res_ca %>%
+  ggplot() +
+  aes(x=lambda1, y=lambda2, label=rownames_) +
+  geom_point() +
+  geom_text(vjust = 0, nudge_y = 0.05) +
+  geom_point() +
+  xlim(-1, 1) +
+  ylim(-1, 1) +
+  coord_fixed() +
+  geom_hline(yintercept = 0, linetype=2) +
+  geom_vline(xintercept = 0, linetype=2) +
+  xlab(latex2exp::TeX("$\\lambda_1 = 74.1\\%$")) +
+  ylab(latex2exp::TeX("$\\lambda_2 = 25.9\\%$")) +
+  ggtitle("Titanic CA row profiles")
+
+p
+```
+]
+
+.panel[.panel-name[Plot]
+
+.centered[
+
+![](`r knitr::fig_chunk("CArowtitanic", "png")`)
+
+]
+]
+
+.panel[.panel-name[Discussion]
+
+#### Row profile correspondence analysis of `Embarked` and `Pclass` for subset of Titanic dataset.
+
+Not too surprisingly, the class distribution conditioned on `Embarked=Southampton` is closest to the centroid, that is to the marginal distribution of Passenger class
+
+
+]
+]
+---
+name: colprofiles
+
+### Column-profiles
+
+Whereas in PCA, rows and columns
+play different roles (observations and variables), in CA, rows and  columns are both associated  with modalities
+of categorical variables.
+
+Column analysis consists of performing row analysis on the transposed matrix $P^T$.
+
+The matrix of centered column profiles is
+
+$$D_c^{-1} \times P^T - \mathbf{1} \times \mathbf{1}^T \times P^T$$
+
+Recall that for row profile analyis, the extended SVD factorization is  applied to
+
+$D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$,
+
+with matrices $\Omega$ and $\Phi$ chosen as $D_r$ and $D_c$. This leads
+to
+
+$$D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T = \widetilde{N} \times D_s \times \widetilde{M}^T$$
+
+with
+
+$$R - 1 \times 1^T \times P = \widetilde{N} \times D_s \times \widetilde{M}^T \times D_c$$
+
+---
+
+### Column-profiles (continued)
+
+For column profile analysis, the extended SVD factorization is  applied to $D_c^{-1} \times P^T \times D_r^{-1} - 1 \times 1^T$, with matrices $\Omega$ and $\Phi$ chosen as $D_c$ and $D_r$.
+
+$$D_c^{-1} \times P^T \times D_r^{-1} - 1 \times 1^T = \widetilde{M} \times D_s \times \widetilde{N}^T$$
+
+This leads to
+
+$$C - 1 \times 1^T \times P^T = \widetilde{M} \times D_s \times \widetilde{N}^T D_r$$
+
+Exchanging rows and columns
+does not change the decomposition of inertia `r fontawesome::fa("glass-cheers")`
+
+Investigating the left singular vectors $\widetilde{M}$ of column profile analyis amounts to investigate the right singular vectors of row profile analysis $D_c \times \widetilde{M}$.
+
+???
+
+Column profile correspondence analysis of `Embarked` and `Pclass` for subset of Titanic dataset.
+
+
+---
+
+### `r fontawesome::fa("ship")` Titanic illustrated : column profiles
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r,  echo=TRUE}
+C <- diag(colSums(P)^(-1)) %*% t(P) - matrix(1, 3, 1) %*% rowSums(P)
+
+svd_C_ext <- svd(diag(colSums(P)^(1/2)) %*% C %*% diag(rowSums(P)^(-1/2)))
+
+Ndual <- diag(colSums(P)^(-1/2)) %*% svd_C_ext$u
+
+Mdual <- diag(rowSums(P)^(1/2)) %*% svd_C_ext$v
+
+G <- Ndual %*% diag(svd_C_ext$d)
+
+res_ca_dual <- data.frame(-G[, 1:2])
+names(res_ca_dual) <- c("lambda1", "lambda2")
+res_ca_dual$rownames_ <- c("1", "2", "3")
+```
+
+]
+
+.panel[.panel-name[Plot preparation]
+```{r CArowtitanicDual, echo=TRUE, message=FALSE, warning=FALSE,  fig.show='hide', fig.height=3}
+p %+%
+  res_ca_dual +
+  ggtitle("Titanic CA column profiles")
+```
+]
+
+.panel[.panel-name[Plot]
+
+.center[
+![](`r knitr::fig_chunk('CArowtitanicDual', 'png')`)
+]
+]
+
+.panel[.panel-name[Discussion]
+
+- Passenger Class 3 makes the bulk of passengers (it accounts for more than half of the passengers). The conditional Embarkment distribution for that class is closed to the centroid. Should it be a surprise ?
+
+- Passengers with  Class 2 tickets almost exclusively boarded at Southampton
+
+- Passengers with Class 1 tickets almost exclusively boarded at Southampton and Cherbourg
+
+]
+]
+
+---
+name: assocmodalities
+
+### Association between modalities
+
+Correspondance analysis is used to compare row profiles and
+column profiles
+
+
+It is also and mainly used
+to investigate associations between modalities of the two variables.
+
+
+Function `CA` from `FactoMineR` delivers among other products
+a _biplot for correspondence analysis_.
+
+
+```{r, echo=TRUE, message=FALSE}
+res_ca <- X %>%
+  FactoMineR::CA(ncp = 2, graph = FALSE)   #<<
+```
+
+
+|                 |      Dim.1  | Dim.2 |
+|:----------------|------------:|------:|
+|Variance         |     0.10   | 0.036 |
+| `% of var.`     |     74.12  | 25.87|
+| Cumulative `% of var.`|  74.12 |100.0 |
+
+
+
+
+---
+
+### Disecting the output of `FactoMineR::CA`
+
+This output, denoted `res_ca`,  is a list with five elements
+
+| Element name | Description                                     |
+|:-------------|:------------------------------------------------|
+|`eig`         | a redundant matrix for inertia decomposition    |
+|`call`        | a list of 9 elements|
+|`row`         | a list for row profile analysis |
+|`col`         | a list for column profile analysis|
+|`svd`         | extended SVD components |
+
+---
+
+### Component `eig` of `res_ca` is made of three columns
+
+- Column 1 `eigenvalue` lists the eigenvalues of $\ldots$
+
+- Column 2 is a normalized version of Column 1
+
+- Column 3 is obtained by appling `cumsum` to column 2
+
+
+???
+
+Component `eig` paves the way for building a `screeplot` for CA
+
+
+---
+
+### Component `call` is a list
+
+- `X` is the contingency table that was fed to `CA`
+- `marge.col` is the marginal distribution for columns
+- `marge.row` is the marginal distribution for rows
+- `row.w`:  a constant vector `1` here
+- `excl`:  irrelevant here
+- `Xtot`: irrelevant here
+- `N` sum of coefficients of `X`
+
+`r fontawesome::fa("hand-point-right")` Here `X == Xtot`, `excl` is `NULL` and `row.w` is identically `1`
+
+
+???
+
+
+
+---
+
+### Component `row` of `res_ca`
+
+
+```{r, eval=FALSE, echo=FALSE}
+row_prof <- res_ca$row
+```
+
+If the extended SVD of $X = D_r^{-1} \times P \times D_c^{-1} - \mathbf{1} \times \mathbf{1}^T$ is $U \times D \times V^T$
+
+then
+
+`res_ca$row` is $U \times D = X \times \Phi \times V$
+
+
+```{r, eval=FALSE, echo=FALSE}
+row_prof$coord
+
+foo <- diag(res_ca$call$marge.row^(-1))  %*% (X/sum(X)) %*% diag(res_ca$call$marge.col^(-1)) - matrix(1, nrow = 3, ncol = 3)
+
+res_ca$svd$U %*% diag(res_ca$svd$vs)
+```
+
+???
+
+- Compare with PCA output
+
+---
+exclude: true
+
+### Component `col`
+
+
+---
+
+### Component `svd`
+
+- What matrix is this component the SVD of?
+
+```{r, echo=FALSE, eval=FALSE}
+res_ca$svd$U %*% diag(res_ca$svd$vs)%*% t(res_ca$svd$V)
+```
+
+- It is the (extended)  SVD  of
+
+$$D_r^{-1} \times P \times D_c^{-1} - \mathbf{1} \times \mathbf{1}^T$$
+
+The $\Omega$ matrix is
+
+`diag(res_ca$call$marge.row)`
+
+The $\Phi$ matrix is
+
+`diag(res_ca$call$marge.col)`
+
+
+```{r, echo=FALSE, eval=FALSE}
+diag(res_ca$call$marge.row^(-1))  %*% (X/sum(X)) %*% diag(res_ca$call$marge.col^(-1)) - matrix(1, nrow = 3, ncol = 3)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+t(res_ca$svd$U) %*%  diag(res_ca$call$marge.row)  %*%  res_ca$svd$U
+t(res_ca$svd$V) %*%  diag(res_ca$call$marge.col)  %*%  res_ca$svd$V
+```
+
+
+---
+exclude: true
+
+```{r}
+names(res_ca)
+
+names(res_ca$call)
+res_ca$row
+res_ca$call$marge.row
+```
+
+---
+exclude: true
+
+### Designing a `tidy` method for outputs of `CA` ?
+
+`r fontawesome::fa("exclamation")` the input of `CA` is not a dataframe, it is a _contigency table_
+
+
+
+
+
+---
+
+### Inertia analysis
+
+
+.fl.w-40.pa2[
+
+The inertia of the first dimensions shows if there are strong relationships between variables and suggests the number of dimensions that should be studied.
+
+The first two dimensions express $100\%$ of the total dataset inertia
+
+That means that $100\%$ of the rows (or columns) cloud total variability is explained by the plane (_this is trivial!_)
+]
+
+.fl.w-60.pa2[
+
+.center[
+```{r, decompInertia, echo=FALSE}
+q <- tibble(x=stringr::str_c("Dim.", 1:2, sep=" "), y=res_ca$eig[1:2]) %>%
+  ggplot(aes(x=x, y=y)) +
+  geom_col(width = .25) +
+  ylab("Share of inertia") +
+  xlab("Squared singular values") +
+  ggtitle("Screeplot for correspondance analysis",
+          subtitle="Titanic dataset, Embarkment versus PClass")
+
+q
+```
+]
+]
+---
+
+
+|Rows | $\text{Iner.} \times 1000$| Dim.1  | contribution   | $\cos^2$ |  Dim.2  | contribution   |    $\cos^2$  |
+|:-|:--------:|----:|----:|----:|----:|----:|----:|
+|Q |    51.381 | -0.573 | 27.516 | 0.553 | -0.515 | 63.823 | 0.447 |
+|C |    74.143 |  0.604 |66.897 | 0.931 | -0.165 |14.205 | 0.069 |
+|S |    13.679 | -0.089 | 5.587 | 0.421 |  0.105 |21.972 | 0.579 |
+
+According to rows analysis, Southampton contributes little to total inertia. Indeed,
+Southampton mostly contributes to the centroid.
+
+---
+
+|Rows | $\text{Iner.} \times 1000$| Dim.1  | contribution   | $\cos^2$ |  Dim.2  | contribution   |    $\cos^2$  |
+|:-|:--------:|----:|----:|----:|----:|----:|----:|
+|1 |    77.518 |  0.566 | 74.698 | 0.994 | -0.043 | 1.230 | 0.006 |
+|2 |    29.988 | -0.103 | 2.118 | 0.073 |  0.367 | 77.185 |  0.927 |
+|3 |    31.697 | -0.208 | 23.184 | 0.755 | -0.119 | 21.585 | 0.245 |
+
+Classes contribute more evenly to Inertia.
+
+---
+
+### Biplots for CA
+
+.fl.w-40[
+
+Passengers who boarded at Cherbourg were disproportionately first class passengers
+
+Passengers who boarded at Queenstown were disproportionately third class passengers
+
+Note that this biplot does not displays the weight of the different categories
+
+]
+
+.fl.w-60.pa2[
+
+```{r  fctmCATita, echo=FALSE, warning=FALSE, message=FALSE}
+plot(res_ca)
+```
+
+]
+
+
+
+---
+exclude: true
+
+### Questionnaire
+
+```{r}
+require(FactoMineR)
+data(children)
+res.ca <- CA (children, row.sup = 15:18, col.sup = 6:8)
+```
+
