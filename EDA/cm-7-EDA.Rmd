@@ -4,13 +4,6 @@ subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
-params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
-  lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
-
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css", "custom-callout.css"]
@@ -30,61 +23,98 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-exclude: true
+name: layout-general
+layout: true
+class: left, middle
 
-```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+<style>
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: red;
+}
+</style>
+
+
+```{r xaringanExtra, echo=FALSE}
+xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
 ```
 
-```{r setp-options, echo=FALSE, cache=TRUE}
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons(minified = FALSE)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "110px",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  exclude_class = c("hide_logo")
+)
+
+xaringanExtra::use_panelset()
+
+xaringanExtra::use_editable(expires = 1)
+
+source("./loaders_fixers.R")
+
 knitr::opts_chunk$set(fig.width = 6,
                       message = FALSE,
                       warning = FALSE,
                       comment = "",
                       cache = F)
+library(flipbookr)
 
-pacman::p_load(flipbookr)
-pacman::p_load(FactoMineR)
-pacman::p_load(FactoInvestigate)
-pacman::p_load(ggrepel)
-pacman::p_load(ggfortify)
-pacman::p_load(broom)
-pacman::p_load(ggmosaic)
-opts <- options()  # save old options
-
-options(ggplot2.discrete.colour="viridis")
-options(ggplot2.discrete.fill="viridis")
-options(ggplot2.continuous.fill="viridis")
-options(ggplot2.continuous.colour="viridis")
-
-#xaringanExtra::use_scribble()
 ```
 
----
-name: layout-general
-layout: true
-class: left, middle
 
+```{r, echo=FALSE, message=FALSE}
+# %%
+pacman::p_load(tidyverse)
+pacman::p_load(vcd)
+pacman::p_load(FactoMineR)
+pacman::p_load(factoextra)
+pacman::p_load(data.table)
+pacman::p_load(ggmosaic)
+# old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
+# %%
+```
 
 ---
 name: inter-slide
 class: left, middle, inverse
 
-{{content}}
+{{ content }}
 
 
 ---
 template: inter-slide
 
-# Exploratory Data Analysis VII:  CA
+# Exploratory Data Analysis VII CA
 
 ### `r Sys.Date()`
 
-#### [`r params$curriculum`](`r params$homepage_curriculum`)
+#### [EDA Master I MIDS et MFA](/courses/eda/index.html)
 
-#### [`r params$coursetitle`](`r params$homepage`)
-
-#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
-
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
 template: inter-slide
@@ -315,6 +345,7 @@ P_Y\{b\} = \frac{N_{.,b}}{n}$$
 In the sequel, $w_a = P_X\{a\} = \frac{N_{a, .}}{n}$ for every $a\in \mathcal{X}$.
 
 The $\chi^2$ divergence defined by the two-way contingency table is
+
 $$\begin{array}{rl}  \chi^2(P, \Vert P_X \otimes P_Y)  & = \sum_{a \in \mathcal{X}, b \in \mathcal{Y}}  \frac{N_{a,\cdot} N_{\cdot, b}}{n^2} \left( \frac{n N_{a,b}}{N_{a,\cdot} N_{\cdot, b}} - 1\right)^2 \\  & = \sum_{a \in \mathcal{X}} \frac{N_{a, .}}{n} \sum_{b \in \mathcal{Y}}   \frac{\left( \frac{N_{a,b}}{N_{a,\cdot}} - \frac{N_{\cdot, b}}{n} \right)^2}{N_{.,b}/n} \\   & = \sum_{a \in \mathcal{Y}} w_a \times \chi^2\left(P_Y (\cdot | X=a)  \Vert   P_Y\right) \end{array}$$
 
 ???
@@ -338,21 +369,19 @@ $$n \times \chi^2(P \Vert P_X \otimes P_Y) =  \sum_{a \in \mathcal{X},b \in \mat
 
 Note the factor $n$.
 
-It is motivated by testing theory.
+It is motivated by testing theory
 
 Indeed, if we collect a bivariate sample of length $m$
 according to $P_X \otimes P_Y$ (that is if the two variables are stochastically independent), compute the contingency
 table defined by this random sample, then the Pearson association is a random variable.
 
-If $m$ is large enough,
-the distribution of the Pearson association index is close (in the topology of weak convergence) to a
-$\chi^2$-distribution with $(|\mathcal{X}|-1)(|\mathcal{Y}|-1)$ degrees of freedom.
+If $m$ is large enough, the distribution of the Pearson association index is close (in the topology of weak convergence) to a
+$\chi^2$-distribution with $(|\mathcal{X}|-1)(|\mathcal{Y}|-1)$ degrees of freedom
 
-The fact that the distribution of the Pearson association index is close to a probability distribution that does not depend on the details of $P_X$ and $P_Y$ is important, both theoretically and practically.
-
+The fact that the distribution of the Pearson association index is close to a probability distribution that does not depend on the details of $P_X$ and $P_Y$ is important, both theoretically and practically
 
 We may compare the computed Pearson association index to the quantiles of the $\chi^2$ distribution
-with the adequate number of degrees of freedom.
+with the adequate number of degrees of freedom
 
 ---
 
@@ -1427,7 +1456,6 @@ name: factoshowcase
 
 .panel[.panel-name[The 1974 survey]
 
-.fl.w-60.pa2[
 In a 1974 survey, 1724 women  answered several questions about women'work among which:
 
 - What do you think the perfect family is ?
@@ -1438,14 +1466,6 @@ In a 1974 survey, 1724 women  answered several questions about women'work among 
   - Stay at home
   - Part-time work
   - Full-time work
-]
-
-.fl.w-40.pa2[
-
-```{r, fig.align='right', echo=FALSE}
-knitr::include_graphics("./img/arts_menagers.jpeg")
-```
-]
 
 ]
 
@@ -1473,9 +1493,9 @@ head(tab)
 library(FactoMineR)
 res_ca <- CA(tab)
 
-res_ca$eig %>% knitr::kable(digits = 2)
+res_ca$eig %>% knitr::kable()
 
-res_ca$row$coord %>% knitr::kable(digits = 2)
+res_ca$row$coord %>% knitr::kable()
 ```
 ]
 
@@ -1557,7 +1577,10 @@ analysis and related techniques.
 
 
 ---
+class: middle, center, inverse
 
-```{r child="closing_slide.Rmd"}
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: cover
 
-```
+
+# The End
