@@ -73,7 +73,7 @@ template: inter-slide
 
 ### [Almost sure convergence](#secasconv)
 
-### [$L_p$ convergence](#seclpconv)
+### [_L_<sub>_p_</sub> convergence](#seclpconv)
 
 ### [Convergence in probability](#secconvinp)
 
@@ -110,8 +110,7 @@ random variables (under stringent integrability assumptions).
 
 ---
 name: secasconv
-class: middle, center, inverse
-
+template: inter-slide
 
 ## Almost sure convergence
 
@@ -122,12 +121,18 @@ class: middle, center, inverse
 In probabilistic settings, the notion of almost sure convergence mirrors the analytical notion of pointwise convergence
 
 
-`r fontawesome::fa("syringe")` A sequence of real-valued functions $(f_n)_n$ mapping some space $\Omega$
-to $\mathbb{R}$ _converges pointwise_ to $f: \Omega \to \mathbb{R}$, if
+### `r fontawesome::fa("syringe")` 
+
+A sequence of real-valued functions $(f_n)_n$ mapping some space $\Omega$
+to $\mathbb{R}$ _converges pointwise_ to $f: \Omega \to \mathbb{R}$, 
+
+if
 
 $$\forall \omega \in \Omega, \quad f_n(\omega) \to f(\omega)$$
 
-There is no uniformity condition
+--
+
+`r fontawesome::fa("hand-point-right")` There is no uniformity condition
 
 
 
@@ -141,8 +146,7 @@ is easily extended to multivariate settings.
 
 $(\Omega, \mathcal{F}, P)$: a probability space,
 
-A sequence $(X_n)_n$ of random variables converges almost
-surely (a.s.) towards a random variable $X$
+A sequence $(X_n)_n$ of random variables converges _almost surely_ (a.s.) towards a random variable $X$
 
 if
 
@@ -153,18 +157,21 @@ has $P$-probability $1$.
 
 ---
 
-- Almost sure convergence:  pointwise convergence with probability $1$
+- Almost sure convergence = pointwise convergence with probability $1$
 
 - Almost sure convergence is not tied to integrability
 
 - `r fontawesome::fa("exclamation")` All random variables involved in the above statements live on the same probability space.
 
 - `r fontawesome::fa("puzzle-piece")` Can we design a metric for almost-sure convergence?
+
+--
+
 The answer is no, as for pointwise convergence, in general
 
 ---
 name: seclpconv
-class: middle, center, inverse
+template: inter-slide
 
 ## $L_p$ convergence
 
@@ -172,17 +179,20 @@ class: middle, center, inverse
 ---
 
 ### Definition
+
 For $p \in [1, \infty)$, $L_p$ is the set of random variables over $(\Omega, \mathcal{F}, P)$ that satisfy $\mathbb{E} |X|^p <\infty$.
 
-The $p$-pseudo-norm is defined by $\|X\|_p = \big(\mathbb{E} |X|^p \big)^{1/p}$.
+The $p$-pseudo-norm is defined by 
 
-Convergence in $L_p$ means convergence for this pseudo-norm.
+$$\|X\|_p = \big(\mathbb{E} |X|^p \big)^{1/p}$$
+
+Convergence in $L_p$ means convergence for this pseudo-norm
 
 ---
 
-`r fontawesome::fa("syringe")` Recall that $L_p$ spaces are nested (by Holder's inequality) and complete.
+`r fontawesome::fa("syringe")` Recall that $L_p$ spaces are nested (by Holder's inequality) and complete
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -192,41 +202,47 @@ Convergence in $L_q, q\geq 1$  implies convergence in $L_p, 1\leq p \leq q$.
 
 ---
 
-Almost sure convergence is not tied to integrability.
+Almost sure convergence is not tied to integrability
 
-We cannot ask whether almost sure convergence implies $L_p$ convergence.
+We cannot ask whether almost sure convergence implies $L_p$ convergence
 
-But we can ask whether  $L_p$ convergence implies almost sure convergence.
+But, we can ask whether  $L_p$ convergence implies almost sure convergence
 
-The next statement is  a by-product  of the proof  of the completeness of $L_p$ spaces,
+--
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+The next statement is  a by-product  of the proof  of the _completeness_ of $L_p$ spaces
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
-Convergence in $L_p$ implies almost sure convergence along a subsequence.
+Convergence in $L_p$ implies almost sure convergence _along a subsequence_
+
 
 ]
 
+--
 
-`r fontawesome::fa("triangle-exclamation")` A counter-example  shows that convergence in $L_p$
-does not imply almost-sure convergence.
+A counter-example  shows that convergence in $L_p$ does not imply almost-sure convergence `r fontawesome::fa("frown")`
 
 
 
 
 ---
 name: secconvinp
-class: middle, center, inverse
+template: inter-slide
 
 ## Convergence in probability
 
 ---
 
-__Convention__: $L_0=L_0(\Omega, \mathcal{F}, P)$ is the set of real-valued
-random variables over $(\Omega, \mathcal{F}, P)$
+### Convention  
 
-Like almost sure convergence,  the notion of convergence in probability is relevant
+$L_0=L_0(\Omega, \mathcal{F}, P)$ is the set of real-valued  random variables over $(\Omega, \mathcal{F}, P)$
+
+---
+
+Like almost sure convergence,  the notion of _convergence in probability_ is relevant
 to all sequences in  $L_0$
 
 Like convergence in $L_p, p\geq 1$, convergence in probability can be metrized
@@ -235,19 +251,22 @@ Like convergence in $L_p, p\geq 1$, convergence in probability can be metrized
 
 ### Definition
 
-Let $(\Omega, \mathcal{F}, P)$ be a probability space,
-a sequence $(X_n)_n$ of random variables _converges in probability_
-towards a random variable $X$ if
+Let $(\Omega, \mathcal{F}, P)$ be a probability space
+
+A  sequence $(X_n)_n$ of random variables _converges in probability_
+towards a random variable $X$ 
+
+if
 
 $$\forall \epsilon >0, \qquad \lim_n P \{ |X_n -X| \geq \epsilon\}  = 0$$
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
-Convergence in $L_p, p\geq 1$ implies convergence in probability.
+Convergence in $L_p, p \geq 1$ implies convergence in probability
 
 ]
 
@@ -255,11 +274,13 @@ Convergence in $L_p, p\geq 1$ implies convergence in probability.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition A criterion for convergence in probability
 
-The sequence $(X_n)_n$ converges in probability towards $X$ iff
+The sequence $(X_n)_n$ converges in probability towards $X$ 
+
+iff
 
 $$\lim_n \mathbb{E} \Big[ 1 \wedge |X_n -X|\Big] = 0$$
 
@@ -297,14 +318,16 @@ entails convergence in Probability
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--lighy-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 ### Proposition
+
 Almost sure convergence implies convergence in probability.
 
 ]
 
+---
 
 ### Proof
 
@@ -317,6 +340,11 @@ $$\lim_n \mathbb{E}\Big[ |X_n -X| \wedge 1\Big] = 0$$
 which entails convergence in probability of $(X_n)_n$ towards $X$.
 
 `r fontawesome::fa("square")`
+
+
+???
+
+Here $x \wedge y$ means $\min(x,y)$
 
 
 ---
@@ -332,14 +360,15 @@ $$\mathrm{d}_{\mathrm{KF}}(X, Y) = \inf_{\epsilon\geq 0} P\Big\{ |X-Y| >\epsilon
 
 ---
 
-`r fontawesome::fa("triangle-attention")` we have to check that $\mathrm{d}_{\mathrm{KF}}$ is indeed a distance.
+`r fontawesome::fa("exclamation-triangle")` we have to check that $\mathrm{d}_{\mathrm{KF}}$ is indeed a distance.
 
 This is the content of Proposition below
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Proposition
 
-In the definition of  the Ky-Fan distance, the infimum is attained.
+In the definition of  the Ky-Fan distance, the infimum is attained
 
 ]
 
@@ -347,7 +376,7 @@ In the definition of  the Ky-Fan distance, the infimum is attained.
 
 ### Proof
 
-Let $a > \mathrm{d}_{\mathrm{KF}}(X, Y)$
+Let $a > \mathrm{d}_{\mathrm{KF}}(X, Y)=\epsilon$
 
 The event $A_a = \Big\{ |X-Y| > a \Big\}$ has probability smaller than
 $\epsilon$.
@@ -362,7 +391,8 @@ $$P\Big(\cap_n A_{\epsilon + 1/n}\Big)=  \lim_{n} \uparrow P\Big(A_{\epsilon + 1
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 ### Proposition
 
 Ky-Fan distance satisfies:
@@ -414,6 +444,9 @@ P \Big( |X(\omega) - Z(\omega)| > \mathrm{d}_{\mathrm{KF}}(X, Y) + \mathrm{d}_{\
 ---
 
 
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+
 ### Proposition
 
 The two statements are equivalent:
@@ -423,15 +456,19 @@ The two statements are equivalent:
 1. $\mathrm{d}_{\mathrm{KF}}(X_n, X)$ tends to $0$ as $n$ tends to infinity.
 
 
+]
+
 --
 
-### exercise
+### `r fontawesome::fa("brain")`
 
 Check the proposition.
 
 ---
 
-`r fontawesome::fa("brain")` We leave the following questions as exercises:
+### `r fontawesome::fa("brain")` 
+
+We leave the following questions as exercises:
 
 - Is $\mathcal{L}_0(\Omega, \mathcal{F}, P)$ complete under the Ky-Fan metric?
 
@@ -441,7 +478,7 @@ Check the proposition.
 
 ---
 
-Finally, we state a more gemeral definition of convergence in probability.
+Finally, we state a more general definition of convergence in probability.
 The notion can be tailored to random variables that map some universe
 to some metric space. The connections with almost-sure convergence
 and $L_p$ convergences remain unchanged.
@@ -449,7 +486,10 @@ and $L_p$ convergences remain unchanged.
 
 ### Definition Convergence in probability, multivariate setting
 
-A sequence $(X_n)_{n \in \mathbb{N}}$  of $\mathbb{R}^k$-valued random variables  living on the same probability space $(\Omega, \mathcal{F}, P)$  converges in  probability (in ${P}$-probability) towards a $\mathbb{R}^k$-valued  random variable $X$ iff
+A sequence $(X_n)_{n \in \mathbb{N}}$  of $\mathbb{R}^k$-valued random variables  living on the same probability space $(\Omega, \mathcal{F}, P)$  converges in  probability (in ${P}$-probability) towards a $\mathbb{R}^k$-valued  random variable $X$ 
+
+iff
+
 for every $\epsilon >0$
 
 $$\forall \epsilon>0, \quad \lim_{n \to \infty} {P} \{ \Vert X_n -X\Vert > \epsilon \} = 0$$
@@ -470,13 +510,14 @@ name: wlln
 
 ### Weak law of large numbers
 
-The weak and the strong law of large numbers are concerned with
-the convergence of empirical means of independent, identically distributed,
-integrable random variables  towards their common expectation.
+The _weak_ and the _strong_ law of large numbers are concerned with
+the convergence of empirical means of independent, identically distributed (i.i.d.),
+_integrable_ random variables  towards their common expectation
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-### Theorem Weak  law of large numbers
+### Theorem:  Weak  law of large numbers
+
 If $X_1, \ldots, X_n, \ldots$  are
 
 - independently,
@@ -494,7 +535,7 @@ the sequence $(\overline{X}_n)$ defined by $\overline{X}_n := \frac{1}{n} \sum_{
 
 ### Proof
 
-Assume first that $\mathbb{E}\Big[\Big(X_i-\mu\Big)^2\Big] = \sigma^2 < \infty.$
+Assume first that $\mathbb{E}\Big[\Big(X_i-\mu\Big)^2\Big] = \sigma^2 < \infty$
 
 Then, for all $\epsilon>0$, by the Markov-Chebychev inequality:
 
@@ -506,7 +547,7 @@ $$\begin{array}{rl}
 \end{array}$$
 
 because the variance of a sum of independent  random variables equals the
-sum of the variances of the summands.
+sum of the variances of the summands 
 
 The right-hand side converges to $0$  for all $\epsilon >0$.
 
@@ -516,19 +557,22 @@ The WLLN holds for square-integrable random variables `r fontawesome::fa("glass-
 
 ### Proof (continued)
 
-Let us turn to the general case.
+Let us turn to the general case 
 
-Without loss of generality, assume all $X_n$ are centered.
+Without loss of generality (w.l.o.g.), assume all $X_n$ are centered
 
-Let $\tau >0$  be a truncation threshold (which value will be tuned later).
+Let $\tau >0$  be a truncation threshold (which value will be tuned later)
 
 For each $i \in \mathbb{N}$, $X_i$ is decomposed into a sum:
 
 $$X_i = X^\tau_i + Y^\tau_i$$
 
-with $X^\tau_i =  \mathbb{I}_{|X_i|\leq \tau} X_i$
-and
-$Y^\tau_i =  \mathbb{I}_{|X_i|>\tau} X_i$.
+with 
+
+$$\begin{array}{rl}
+X^\tau_i &=  \mathbb{I}_{|X_i|\leq \tau} X_i\\
+Y^\tau_i &=  \mathbb{I}_{|X_i|>\tau} X_i
+\end{array}$$
 
 ---
 
@@ -549,13 +593,14 @@ $$\begin{array}{rl} P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsil
 
 Taking $n$ to infinity leads to
 
-$$\limsup_n P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Big\} \leq 2  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}$$
+$$\limsup_n P\Bigg\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Bigg\} \leq 2  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}$$
 
 Now as ${\tau \uparrow \infty}$  $|Y^\tau_1|  \downarrow 0$ while $|Y^\tau_1| \leq |X_1|$,
 dominated convergence (here a special case of monotone convergence) warrants
-that $\lim_{\tau \uparrow \infty}  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}=0$.
+that 
+$$\lim_{\tau \uparrow \infty}  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}=0$$
 
-This completes the proof of the WLLN.  `r fontawesome::fa("glass-cheers")`
+This completes the proof of the WLLN `r fontawesome::fa("glass-cheers")`
 
 `r fontawesome::fa("square")`
 
@@ -564,7 +609,7 @@ This completes the proof of the WLLN.  `r fontawesome::fa("glass-cheers")`
 name: secstronglln
 template: inter-slide
 
-## Strong law of large numbers {#secslln}
+## `r fontawesome::fa("dumbbell")` Strong law of large numbers
 
 
 ---
@@ -575,7 +620,7 @@ infinite product distribution.
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Strong  law of large numbers (direct part)
 
@@ -589,7 +634,9 @@ $$\lim_{n \to \infty}    \overline{X}_n =   \mu \qquad\text{with} \quad \overlin
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma  Borel-Cantelli I  `r fontawesome::fa("syringe")`
 
@@ -605,6 +652,7 @@ $$P \Big\{ \omega : \sum_{n} \mathbb{I}_{A_n}(\omega) < \infty\Big\} = 1$$
 ]
 
 ---
+exclude: true
 
 ### Proof
 
@@ -640,12 +688,13 @@ The law of large numbers is the cornerstone of consistency proofs.
 
 Before shifting to non-exponential inequalities, we point a general result about events
 that depend on the limiting behavior of sequences of independent random variables.
+
 ---
 
 The $0-1$-law asserts that under independence,  tail events
-have trivial probabilities.
+have trivial probabilities
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem "0-1-Law"
 
@@ -713,7 +762,7 @@ $$\left\{\omega : \frac{1}{n}\sum_{i=1}^n X_i(\omega) \to \text{finite limit}\ri
 
 belongs to the tail $\sigma$-algebra.
 
-The Strong Law of Large Numbers tells us that under integrability and independence assumptions, this _tail event_ has probability $1$.
+The Strong Law of Large Numbers tells us that,  under integrability and independence assumptions, this _tail event_ has probability $1$
 
 
 ---
@@ -725,7 +774,7 @@ The event
 $$\Big\{ \omega : \lim_n \sum_{i=1}^n \frac{X_i}{n} = \mu \Big\}$$
 
 belongs to the tail $\sigma$-algebra. To check  the Strong Law of Large Numbers, it
-suffices to check that this event has non-zero probability.
+suffices to check that this event has non-zero (positive) probability.
 
 Moreover, using the usual decomposition $X = (X)_+ - (X)_-$ where $(X)_+$ and $(X)_-$
 are the positive and negative parts of $X$, we observe that we can assume without loss of
@@ -887,17 +936,20 @@ The converse Theorem  shows that, under independence assumption, the conditions 
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-### Lemma  Borel-Cantelli II `r fontawesome::fa("syringe")`
+### `r fontawesome::fa("syringe")` Lemma  Borel-Cantelli II 
 
 Let $A_1, A_2, \ldots, A_n$ be independent
 events from probability space $(\Omega, \mathcal{F}, P)$.
+
 If
 
 $$\sum_{n} P(A_n) = \infty$$
 
-then with probability $1$, infinitely many events among $A_1, A_2, \ldots, A_n$ occur:
+then 
+
+with probability $1$, infinitely many events among $A_1, A_2, \ldots, A_n$ occur:
 
 $$P \Big\{ \omega : \sum_{n} \mathbb{I}_{A_n}(\omega) = \infty \Big\} = 1$$
 
@@ -926,7 +978,7 @@ $$\begin{array}{rl}
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 ### Theorem Strong  law of large numbers, converse part
@@ -977,22 +1029,24 @@ But this cannot happen if $S_n/n$ converges toward a finite limit.
 
 ---
 name: secexpoineq
-class: middle, center, inverse
+template: inter-slide
 
 ## Exponential inequalities
 
 ---
 
-Laws of large numbers are asymptotic statements.
+Laws of large numbers are _asymptotic_ statements.
+
 In applications, in Statistics, in Statistical Learning Theory, it is often desirable
-to have guarantees  for fixed $n$. Exponential inequalities are
-refinements of Chebychev inequality. Under strong integrability assumptions
-on the summands, it is possible and relatively easy to derive sharp tail
-bounds for sums of independent random variables.
+to have guarantees  for fixed $n$ 
+
+Exponential inequalities are refinements of Chebychev inequality. 
+
+Under strong integrability assumptions on the summands, it is possible and relatively easy to derive sharp tail bounds for sums of independent random variables.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma  Hoeffding Lemma
 
@@ -1043,9 +1097,10 @@ $$\psi^{\prime\prime}_Y(\lambda) = \frac{\mathbb{E}\Big[ (Y- \mathbb{E}{Y})^2 e^
 ---
 
 Hence,  thanks to the variance upper bound:
-\begin{align*}
+
+$$\begin{array}{rl}
 \psi_Y^{\prime\prime}(\lambda) & \leq \frac{(b-a)^2}{4}~.
-\end{align*}
+\end{array}$$
 
 Note that
 $\psi_{Y}(0)  = \psi_{Y}'(0) =0$, and
@@ -1073,7 +1128,7 @@ for sums of bounded independent random variables.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Hoeffding's inequality
 
@@ -1125,19 +1180,19 @@ $$\begin{array}{rl}P \big\{ S \geq t \big\} & \leq \inf_{\lambda\geq 0}\frac{\ma
 ---
 
 
-Hoeffding's inequality provides interesting tail bounds for binomial random variables which are sums of independent $[0,1]$-valued random variables.
+- Hoeffding's inequality provides interesting tail bounds for binomial random variables which are sums of independent $[0,1]$-valued random variables.
 
-However in some cases, the variance  upper bound used in Hoeffding's inequality
+- In some cases, the variance  upper bound used in Hoeffding's inequality
 is excessively conservative.
 
-Think for example of binomial random variable with parameters $n$ and $\mu/n$,
+Think  of binomial random variable with parameters $n$ and $\mu/n$,
 the variance upper-bound obtained from the boundedness assumption is $n$ while the true variance is $\mu$
 
-This motivates the next two exponential inequalities stated in Theorem \@ref(thm:zbennett)  and Theorem \@ref(thm:zbernstein).
+This motivates the next two exponential inequalities 
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Bennett's inequality
 
@@ -1166,17 +1221,17 @@ where $h(u)=\phi^*(u) = (1+u)\log(1+u) -u$ for $u>0$.
 
 ---
 
-`r fontawesome::fa("triangle-exclamation")`
+`r fontawesome::fa("exclamation-triangle")`
 
 Bennett's inequality provides us with improved tail bounds for  the
-binomial random variable with parameters $n$ and $\mu/n$.
+binomial random variable with parameters $n$ and $\mu/n$
 
 This binomial random variable is distributed like the sum $n$ independent
-Bernoulli random variables with parameter $\mu/n$.
+Bernoulli random variables with parameter $\mu/n$
 
 This fits in the scope of Bennett's inequality, we can choose $b=1$ and $v=\mu.$
 
-`r fontawesome::fa("triangle-exclamation")` The obtained upper bound on the logarithmic moment generating function coincides with logarithmic moment generating function of a centered Poisson random variable with parameter $\mu$
+`r fontawesome::fa("exclamation-triangle")` The obtained upper bound on the logarithmic moment generating function coincides with logarithmic moment generating function of a centered Poisson random variable with parameter $\mu$
 
 
 ---
@@ -1189,7 +1244,7 @@ on $\log \mathbb{E} \mathrm{e}^{\lambda (X_i - \mathbb{E}X_i)}$.
 By homogeneity, we may assume $b=1$.
 
 Note that $\phi(\lambda)/\lambda^2$ is non-decreasing over $\mathbb{R}$. For
-$x\leq 1, \lambda \geq 0$, $\phi(\lambda x)\leq x^2 \phi(\lambda)$.
+$x\leq 1, \lambda \geq 0$, $\phi(\lambda x)\leq x^2 \phi(\lambda)$
 
 $$\begin{array}{rl}
 \log \mathbb{E} \mathrm{e}^{\lambda (X_i - \mathbb{E}X_i)}
@@ -1209,28 +1264,24 @@ one of the pillars of statistical learning theory.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
-### Theorem Bernstein's inequality
+### Theorem: Bernstein's inequality
 
-Let $X_1,\ldots,X_n$ be independent
-real-valued random variables.
-Assume that there exist positive numbers
-$v$ and $c$ such that $\sum_{i=1}^n \mathbb{E}\left[X_i^2\right]  \leq v$ and
+Let $X_1,\ldots,X_n$ be independent real-valued random variables.
 
+Assume that there exist  $v$ and $c$ such that $\sum_{i=1}^n \mathbb{E}\left[X_i^2\right]  \leq v$ and
 $$\sum_{i=1}^n \mathbb{E}\left[  \left(X_i\right)_+^q \right] \leq\frac{q!}{2}vc^{q-2}\quad \text{for all integers }  q \geq 3$$
 
 Let $S=\sum_{i=1}^n \left(X_i-\mathbb{E} X_i \right)$
 
-Then for all $\lambda\in (0,1/c)$
+Then 
 
-$$\log \mathbb{E} \mathrm{e}^{\lambda (S- \mathbb{E}S)} \leq \frac{v\lambda^2}{2(1-c\lambda)}$$
-
-For $t>0$,
-
-$$P \big\{ S > t \big\} \leq \exp\Big( - \frac{v}{c^2} h_1\big(\frac{ct}{v}\big)\Big)$$
-
-with $h_1(x)= 1+x - \sqrt{1+2x}$
+$$\begin{array}{rll}
+\log \mathbb{E} \mathrm{e}^{\lambda (S- \mathbb{E}S)} & \leq \frac{v\lambda^2}{2(1-c\lambda)}  &\forall \lambda\in (0,1/c)\\
+P \big\{ S > t \big\} & \leq   \exp\Big( - \frac{v}{c^2} h_1\big(\frac{ct}{v}\big)\Big)
+& \text{for } t>0\end{array}$$
+with $h_1(x)= 1 + x - \sqrt{1+2x}$
 
 ]
 
@@ -1246,7 +1297,7 @@ Let again $\phi(u)=e^u-u-1$ for $u\in \mathbb{R}$.
 
 For $\lambda>0$,
 
-$$\begin{array}{rl}\phi(\lambda X_i)  & = \sum_{k=2}^\infty \frac{\lambda^k X_i^k}{\lambda^k} \\ & \leq \frac{\lambda^2 X_i^2}{2!} + \sum_{k=3}^\infty \frac{\lambda^k (X_i)_+^k}{\lambda^k}\end{array}$$
+$$\begin{array}{rl}\phi(\lambda X_i)  & = \sum_{k=2}^\infty \frac{\lambda^k X_i^k}{k!} \\ & \leq \frac{\lambda^2 X_i^2}{2!} + \sum_{k=3}^\infty \frac{\lambda^k (X_i)_+^k}{k!}\end{array}$$
 
 ---
 
@@ -1265,6 +1316,7 @@ $$\sup_{\lambda \in [0,1/c)}  \lambda t - \frac{\lambda^2 v}{2 (1 - c \lambda)} 
 
 
 ---
+exclude:true
 class: middle, center, inverse
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
@@ -1273,3 +1325,9 @@ background-size: 112%
 
 
 # The End
+
+---
+
+```{r child="closing_slide.Rmd"}
+
+```
