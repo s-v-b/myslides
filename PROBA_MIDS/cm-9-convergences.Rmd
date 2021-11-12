@@ -318,7 +318,7 @@ entails convergence in Probability
 
 ---
 
-.bg-light-gray.b--lighy-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 ### Proposition
@@ -557,7 +557,7 @@ The WLLN holds for square-integrable random variables `r fontawesome::fa("glass-
 
 ### Proof (continued)
 
-Let us turn to the general case 
+Let us turn to the general case. We do not assume anymore that the $X_i$ are square integrable.
 
 Without loss of generality (w.l.o.g.), assume all $X_n$ are centered
 
@@ -585,7 +585,7 @@ $$\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i \Big| >\epsilon\Big\} \subseteq \Big\{
 Invoking  the union bound, Markov's inequality (twice), the boundedness of the variances
 of the $X^\tau_i$ leads to:
 
-$$\begin{array}{rl} P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Big\} & \leq P \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X^\tau_i \Big| > \frac{\epsilon}{2}\Big\} + P \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big| >\frac{\epsilon}{2}\Big\} \\ & \leq 4 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n X^\tau_i \Big|^2}{\epsilon^2} + 2 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + 2 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + 2 \frac{1}{n}\sum_{i=1}^n  \frac{\mathbb{E}\Big|Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + 2 \frac{\mathbb{E} \Big|Y^\tau_1 \Big|}{\epsilon} \end{array}$$
+$$\begin{array}{rl} P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Big\} & \leq P \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X^\tau_i \Big| > \frac{\epsilon}{2}\Big\} + P \Big\{ \Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big| >\frac{\epsilon}{2}\Big\} \\ & \leq 4 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n X^\tau_i \Big|^2}{\epsilon^2} + 2 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i  \Big|}{\epsilon} \\ & \leq  \frac{4 \text{var}\left(\frac{1}{n}\sum_{i=1}^n X^\tau_i\right)}{\epsilon^2} +  4 \frac{\left(\mathbb{E}\big(\frac{1}{n}\sum_{i=1}^n X^\tau_i \big)\right)^2}{\epsilon^2} +  2 \frac{\mathbb{E}\Big|\frac{1}{n}\sum_{i=1}^n Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + \frac{4\left( \mathbb{E}X_1^\tau\right)^2}{\epsilon^2}+ 2 \frac{1}{n}\sum_{i=1}^n  \frac{\mathbb{E}\Big|Y^\tau_i \Big|}{\epsilon} \\ & \leq  \frac{4 \tau^2}{n\epsilon^2} + \frac{4\left( \mathbb{E}X_1^\tau\right)^2}{\epsilon^2} + 2 \frac{\mathbb{E} \Big|Y^\tau_1 \Big|}{\epsilon} \end{array}$$
 
 ---
 
@@ -593,12 +593,14 @@ $$\begin{array}{rl} P\Big\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsil
 
 Taking $n$ to infinity leads to
 
-$$\limsup_n P\Bigg\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Bigg\} \leq 2  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}$$
+$$\limsup_n P\Bigg\{ \Big|\frac{1}{n}\sum_{i=1}^n X_i - \mu\Big| > \epsilon\Bigg\} \leq \frac{4\left( \mathbb{E}X_1^\tau\right)^2}{\epsilon^2} +2  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}$$
+for all $\tau >0 $
 
-Now as ${\tau \uparrow \infty}$  $|Y^\tau_1|  \downarrow 0$ while $|Y^\tau_1| \leq |X_1|$,
-dominated convergence (here a special case of monotone convergence) warrants
+Now as ${\tau \uparrow \infty}$  $|Y^\tau_1|  \downarrow 0$
+while $|Y^\tau_1| \leq |X_1|$, and likewise $X^\tau_1 \to   X_1$ while $|X^\tau_1| \leq |X_1|$, 
+dominated convergence warrants
 that 
-$$\lim_{\tau \uparrow \infty}  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}=0$$
+$$\lim_{\tau \uparrow \infty}  \frac{\mathbb{E}\Big|Y^\tau_1 \Big|}{\epsilon}=0 \quad \text{and} \quad \lim_{\tau \uparrow \infty}  \frac{(\mathbb{E}X^\tau_1)^2}{\epsilon^2}= \frac{(\mathbb{E}X_1)^2}{\epsilon^2}= 0$$
 
 This completes the proof of the WLLN `r fontawesome::fa("glass-cheers")`
 
