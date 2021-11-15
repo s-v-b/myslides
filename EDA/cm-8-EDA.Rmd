@@ -4,9 +4,15 @@ subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "xaringan-themer.css"]
+    css: ["header-footer.css", "xaringan-themer.css", "custom-callout.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -19,23 +25,41 @@ output:
           <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
           </div>
         </div>
-      highlightStyle: github
+      highlightStyle: pygments
       highlightLines: true
       countIncrementalSlides: false
-bibliography: mon_chapeau.bib
 ---
-name: inter-slide
-class: left, middle, inverse
-
-{{ content }}
-
----
-name: layout-general
-layout: true
-class: left, middle
+exclude: true
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+```
 
+```{r, echo=FALSE}
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+
+pacman::p_load(flipbookr)
+pacman::p_load(FactoMineR)
+pacman::p_load(FactoInvestigate)
+pacman::p_load(ggrepel)
+pacman::p_load(ggfortify)
+pacman::p_load(broom)
+pacman::p_load(vcd)
+pacman::p_load(FactoMineR)
+pacman::p_load(factoextra)
+pacman::p_load(data.table)
+pacman::p_load(ggmosaic)
+opts <- options()  # save old options
+
+options(ggplot2.discrete.colour="viridis")
+options(ggplot2.discrete.fill="viridis")
+options(ggplot2.continuous.fill="viridis")
+options(ggplot2.continuous.colour="viridis")
+
+#xaringanExtra::use_scribble()
 ```
 
 
@@ -65,6 +89,21 @@ NoCite(myBib, "HaTiFr01")
 NoCite(myBib, "Mur12")
 ```
 
+
+
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{content}}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+
+
 ---
 template: inter-slide
 
@@ -73,9 +112,11 @@ template: inter-slide
 
 ### `r Sys.Date()`
 
-#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
 
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 ---
 class: middle, inverse
@@ -1355,6 +1396,7 @@ An inappropriate choice of k may yield poor results. That is why, when performin
 
 
 ---
+exclude: true
 
 ### References 
 
