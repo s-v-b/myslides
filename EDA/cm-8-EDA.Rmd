@@ -29,12 +29,22 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-exclude: true
+name: inter-slide
+class: left, middle, inverse
+
+{{content}}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
 
-```{r, echo=FALSE}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(fig.width = 6,
                       message = FALSE,
                       warning = FALSE,
@@ -54,18 +64,18 @@ pacman::p_load(data.table)
 pacman::p_load(ggmosaic)
 opts <- options()  # save old options
 
-options(ggplot2.discrete.colour="viridis")
-options(ggplot2.discrete.fill="viridis")
-options(ggplot2.continuous.fill="viridis")
-options(ggplot2.continuous.colour="viridis")
+gc <- options(ggplot2.discrete.colour="viridis")
+gc <- options(ggplot2.discrete.fill="viridis")
+gc <- options(ggplot2.continuous.fill="viridis")
+gc <- options(ggplot2.continuous.colour="viridis")
 
 #xaringanExtra::use_scribble()
 ```
 
 
-```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+```{r, eval=FALSE, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
 require(RefManageR, quietly = TRUE)
-BibOptions(check.entries = FALSE,
+foobar <- BibOptions(check.entries = FALSE,
            bib.style = "authoryear",
            cite.style = 'authoryear',
            style = "markdown",
@@ -77,7 +87,7 @@ myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 
 
 
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
 NoCite(myBib, "MR3851754")
 NoCite(myBib, "MR3080408")
 NoCite(myBib, "MR3316191")
@@ -90,17 +100,6 @@ NoCite(myBib, "Mur12")
 ```
 
 
-
----
-name: inter-slide
-class: left, middle, inverse
-
-{{content}}
-
----
-name: layout-general
-layout: true
-class: left, middle
 
 
 
@@ -1319,14 +1318,18 @@ to the late seventies
 Even though minimizing the $k$-means cost is hard,
 one may investigate the _statistical_ problem raised by minimizing the $k$-means cost.
 
-$k$-means served as a showcase for empirical process theory during the early 1980's `r Cite(myBib, "Pol84")`
+$k$-means served as a showcase for empirical process theory during the early 1980's 
 
-Significant progress during recent years `r Cite(myBib, "MR3080408")`, `r Cite(myBib, "MR3316191")`
-
+Significant progress during recent years 
 The $k$-means cost provides a concrete illustration of a recurrent situation. 
 
 If the sampling distribution is square integrable and has a density with respect to Lebesgue measure, the mapping  $\mathsf{R}(\mathbf{c})$
 is differentiable, its gradient can be explicitly computed
+
+
+???
+
+`Cite(myBib, "Pol84")`  `Cite(myBib, "MR3080408")`, `Cite(myBib, "MR3316191")`
 
 ---
 
@@ -1337,9 +1340,15 @@ Whereas the local behavior of the $k$-means cost is simple, the global behavior 
 Bounding the number of global minima, local minima, local extrema and saddlepoints   is difficult.
 
 Observation: under fairly general assumptions,
-the $k$-means cost function is twice differentiable in the neighborhood of optimal codebooks `r Cite(myBib, "Pol84")`
+the $k$-means cost function is twice differentiable in the neighborhood of optimal codebooks 
 
-Even though the $k$-means cost function is not convex, recent advances tell us that if sample size tends to infinity,  an empirical cost functions will also share local minima, local maxima, and local saddlepoints with the  theoretical population cost function `r Cite(myBib, "MR3851754")`
+Even though the $k$-means cost function is not convex, recent advances tell us that if sample size tends to infinity,  an empirical cost functions will also share local minima, local maxima, and local saddlepoints with the  theoretical population cost function 
+
+???
+
+`Cite(myBib, "Pol84")`
+
+`Cite(myBib, "MR3851754")`
 
 ---
 

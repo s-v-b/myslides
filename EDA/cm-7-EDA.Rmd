@@ -29,7 +29,10 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-exclude: true
+name: layout-general
+layout: true
+class: left, middle
+
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
@@ -70,10 +73,6 @@ class: left, middle, inverse
 
 {{content}}
 
----
-name: layout-general
-layout: true
-class: left, middle
 
 ---
 template: inter-slide

@@ -29,7 +29,10 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-exclude: true
+name: layout-general
+layout: true
+class: left, middle
+
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
@@ -54,14 +57,8 @@ options(ggplot2.discrete.fill="viridis")
 options(ggplot2.continuous.fill="viridis")
 options(ggplot2.continuous.colour="viridis")
 
-xaringanExtra::use_scribble()
+# xaringanExtra::use_scribble()
 ```
-
----
-name: layout-general
-layout: true
-class: left, middle
-
 
 ---
 name: inter-slide
@@ -76,15 +73,11 @@ template: inter-slide
 
 ### `r Sys.Date()`
 
-
 #### [`r params$curriculum`](`r params$homepage_curriculum`)
 
 #### [`r params$coursetitle`](`r params$homepage`)
 
 #### [`r params$lecturer`](http://stephane-v-boucheron.fr)
-
-
-
 
 ---
 template: inter-slide

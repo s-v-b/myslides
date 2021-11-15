@@ -29,12 +29,6 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-name: inter-slide
-class: left, middle, inverse
-
-{{ content }}
-
----
 name: layout-general
 layout: true
 class: left, middle
@@ -43,6 +37,12 @@ class: left, middle
 
 #require(flipbookr)
 ```
+
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
 
 
 ---
@@ -210,13 +210,9 @@ Assuming that the columns of $\mathbf{X}$ are centered means that $1$ is in the 
 
 .panel[.panel-name[`pemax ~ age`]
 
-
-
 ]
 
 .panel[.panel-name[`pemax ~ .`]
-
-
 
 ]
 
