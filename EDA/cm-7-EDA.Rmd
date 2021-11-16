@@ -160,6 +160,7 @@ name: factoshowcase
 
 .panel[.panel-name[The 1974 survey]
 
+.fl.w-50[
 In a 1974 survey, 1724 women  answered several questions about women'work among which:
 
 - What do you think the perfect family is ?
@@ -170,6 +171,13 @@ In a 1974 survey, 1724 women  answered several questions about women'work among 
   - Stay at home
   - Part-time work
   - Full-time work
+]
+
+.fl.w-50[
+
+![](./img/arts_menagers.jpeg)
+
+]
 
 ]
 
@@ -220,11 +228,11 @@ res_ca$row$coord %>% knitr::kable()
 
 Another question was asked th 1724 women
 
-- What do you think of the following sentence: women who do not work feel cut off from the world?
-  + Totally agree
-  + Quite agree
-  + Quite disagree
-  + Totally disagree
+- What do you think of the following sentence: _women who do not work feel cut off from the world_?
+  + Totally agree  `r fontawesome::fa("smile")`
+  + Quite agree `r fontawesome::fa("meh")`
+  + Quite disagree `r fontawesome::fa("frown")`
+  + Totally disagree `r fontawesome::fa("angry")`
 
 ]
 
