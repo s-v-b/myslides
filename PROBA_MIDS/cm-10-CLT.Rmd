@@ -80,13 +80,15 @@ old_theme <-theme_set(theme_bw(base_size=9, base_family = "Helvetica"))
 ---
 template: inter-slide
 
-## Weak convergence, vague convergence
-## Convergence in distribution
-## Portemanteau Theorem
-## Lévy continuity theorem
-## Relations between convergences
-## Central limit theorem
-## Weak convergence and transforms
+## `r fontawesome::fa("map", fill="white")`
+
+### [Weak convergence, vague convergence]()
+### [Convergence in distribution]()
+### [Portemanteau Theorem]()
+### [Lévy continuity theorem]()
+### [Relations between convergences]()
+### [Central limit theorem]()
+### [Weak convergence and transforms]()
 
 ---
 template: inter-slide
@@ -289,7 +291,7 @@ Weak convergence of probability measures assesses the proximity of probability m
 comparing their action on a _collection of test functions_
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Weak convergence
 
@@ -321,7 +323,7 @@ $$\lim_n \mathbb{E}_{P_n} [f] =  \mathbb{E}_P [f]$$
 ---
 name: vagueconv
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition  Vague convergence
 
@@ -366,7 +368,7 @@ name: secConvDistribution
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition
 
@@ -402,7 +404,7 @@ name: portemanteau
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Portemanteau Theorem `r fontawesome::fa("luggage-cart")`
 
@@ -546,7 +548,7 @@ but $P(O) = 0 \leq \liminf_n P_n(O)=1$
 
 > For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is determined by cumulative distribution functions. This is sometimes taken as a definition of weak convergence in elementary books.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -573,7 +575,7 @@ name: weakconvquantiles
 
 For probability measures over $(\mathbb{R}, \mathcal{B}(\mathbb{R}))$, weak convergence is also determined by quantile functions
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -592,7 +594,7 @@ at every $x$ which is a  continuity point of $F^\leftarrow$
 ---
 name: asrepweakconv
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition   Almost sure representation
 
@@ -611,7 +613,7 @@ $$Y_n \to Y \qquad P\text{-a.s.}$$
 
 ]
 
-`r fontawesome::fa("triangle-exclamation")`
+`r fontawesome::fa("exclamation-triangle")`
 The random variables $(X_n)_n$  and $X$ may live on different probability spaces.
 
 
@@ -655,7 +657,7 @@ $$\text{This translates to }\quad P \Big\{\omega :  \lim_n Y_n(\omega) =Y(\omega
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -689,7 +691,7 @@ knitr::include_url("https://en.wikipedia.org/wiki/Paul_Lévy_(mathematician)")
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem  Lévy's continuity theorem
 
@@ -704,7 +706,7 @@ the sequence of characteristic functions converges pointwise towards the charact
 
 ---
 
-`r fontawesome::fa("triangle-exclamation")`
+`r fontawesome::fa("exclamation-triangle")`
 The Theorem  asserts that weak convergence
 of probability measures is characterized by a very small subset
 of bounded continuous functions.
@@ -719,7 +721,7 @@ These functions are bounded and infinitely many times differentiable.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lemma
 
@@ -779,7 +781,7 @@ $$\limsup_n \Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| \leq 2\epsilon$$
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Scheffé's Lemma
 
@@ -864,7 +866,7 @@ any probability measure: it is not continuous at $0$.
 
 The next Theorem settles the question.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem  Lévy's continuity theorem, second form
 
@@ -882,7 +884,7 @@ The limit function is the characteristic function of some probability distributi
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition Uniform tightness
 
@@ -909,7 +911,7 @@ $$\forall n \geq n_0(\epsilon), \qquad P_n(K) \geq 1 - ϵ$$
 
 We admit the (important) next Theorem
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Prokhorov-Le Cam
 
@@ -942,7 +944,7 @@ knitr::include_url("https://en.wikipedia.org/wiki/Yuri_Prokhorov")
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Uniform tightness Lemma
 
@@ -996,7 +998,7 @@ ggplot(data=tibble(x=seq(-15,15,by=.001)),
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Truncation Lemma
 
@@ -1116,7 +1118,7 @@ proof of the next Proposition.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1183,7 +1185,7 @@ tends to be of order $1/\sqrt{n}$ and, once rescaled, to be normally distributed
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem  (Central Limit Theorem)
 
@@ -1330,7 +1332,7 @@ in the  next device which proof is left to the reader.
 It consists in the adapting the
 proof of the injectivity Theorem
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Cramer-Wold device
 
@@ -1344,7 +1346,7 @@ $$\langle t, X\rangle =\sum_{i=1}^n t_i X_i  \text{ where } (t_1, \ldots, t_n)^T
 
 The Cramer-Wold device  provides a short path to the Multivariate Central Limit Theorem
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1388,7 +1390,7 @@ some (implicit) probability space.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1403,7 +1405,7 @@ The proof parallels the derivation of the continuity Theorem
 
 As probability generating functions allows us to recover Laplace transforms, the next theorem is a special case of the statement concerning Laplace transforms.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1487,10 +1489,7 @@ The Wadsworth & Brooks/Cole Mathematics Series. 1989. xii+436 pp. ISBN: 0-534-10
 From  [MR0982264  Math Reviews by E. Giné](https://mathscinet-ams-org.ezproxy.math-info-paris.cnrs.fr/mathscinet-getitem?mr=982264)
 
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: 112%
+```{r child="closing_slide.Rmd"}
 
-
-# The End
+```

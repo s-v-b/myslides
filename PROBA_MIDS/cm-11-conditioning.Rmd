@@ -75,19 +75,22 @@ template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
-## Motivation
 
-### Definition and elementary properties
 
-### Construction for $X \in \mathcal{L}_2$
+### [Motivation](#motivcondexp)
 
-### Construction for $X \in \mathcal{L}_1$
+### [Definition and elementary properties](#defcondexp)
 
-### Conditional probabilities
+### [Construction for $X \in \mathcal{L}_2$](#predictpoint)
 
-### Conditional densities
+### [Construction for $X \in \mathcal{L}_1$](#condexpl1)
 
-### Regular conditional probability kernels
+### [Conditional probabilities](#condProbDistrib)
+
+### [Conditional densities](#jointdensity)
+
+### [Regular conditional probability kernels](#regconprob)
+
 
 
 ---
@@ -139,6 +142,8 @@ Events $\{\Vert X\Vert = y\}$, $\{\langle v, X \rangle = y \}$  (generally) have
 probability $0$ for all $y$
 
 ---
+name: defcondexp
+
 
 The general definition of conditional expectation starts from
 what was considered a property when conditioning with respect to atomic
@@ -146,7 +151,7 @@ $\sigma$ -algebras
 
 --
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Conditional expectation
 
@@ -179,7 +184,7 @@ if there exist  different versions, they differ only up to a negligible event
 
 --
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -230,7 +235,7 @@ versions of conditional expectation of $X$ (if they exist) should satisfy
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition (Linearity of Conditional Expectation)
 
@@ -284,7 +289,7 @@ The proof is completed by handling in a similar way the event $\{ a_1 Y_1 + a_2 
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition  (Monotony of Conditional Expectation)
 
@@ -345,7 +350,7 @@ Hence, for all $n$,   $P\{B_n \}= 0$.
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -383,7 +388,7 @@ $$\forall B \in \mathcal{E}, \quad \mathbb{E} \left[
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition  (Tower Property)
 
@@ -444,7 +449,7 @@ even when the conditioning  $\sigma$ sub-algebra is no more atomic `r fontawesom
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Conditional expectation for square-integrable random variables)
 
@@ -494,7 +499,7 @@ is an _inner product_ and $E$ is complete for the topology induced by the norm
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -525,7 +530,7 @@ projection Theorem below.
 
 Our starting point is the next observation
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -550,7 +555,7 @@ this closest $\mathcal{G}$-measurable random variable are warranted by the Proje
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem: Hilbert space Projection Theorem
 
@@ -670,7 +675,7 @@ gives the following corollary
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -702,7 +707,7 @@ By the Projection Theeorem, $\mathbb{E}\left[(X-Y)\mathbb{I}_B\right]=0$.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition Conditional variance
 
@@ -728,7 +733,7 @@ using $\mathbb{E}[X \mid \mathcal{G}]$.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition  (Pythagorean identity)
 
@@ -804,7 +809,7 @@ name: kolmoespcond
 To construct the conditional expectation of a random variable,
 square-integrability is not necessary.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -836,7 +841,7 @@ then $Z = \mathbb{E} \left[ Y \mid \mathcal{G} \right]$
 
 To establish the theorem, we use the _usual machinery_ of limiting arguments.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -951,7 +956,7 @@ and a.s. means $P$-a.s.
 
 The easiest property is:
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -970,7 +975,7 @@ Check it.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -991,7 +996,7 @@ Check  it.
 
 ### An alternative characterization of conditional expectation
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1017,7 +1022,7 @@ with listing many other useful properties of conditional expectation.
 
 They are best discovered and established when needed.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1064,7 +1069,7 @@ Limit theorems from integration theory  (monotone convergence theorem,
 Fatou's Lemma, Dominated  convergence theorem) can be adapted to
 the conditional expectation setting.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem Conditional Monotone convergence
 
@@ -1112,7 +1117,7 @@ $$\begin{array}{rl}
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Conditional Fatou's Lemma)
 
@@ -1170,7 +1175,7 @@ $$\lim_k \uparrow \mathbb{E} \left[ Z_k \mid \mathcal{G} \right] \leq\liminf_n  
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Conditional Dominated convergence)
 
@@ -1210,7 +1215,7 @@ functions and on the monotonicity property of conditional expectation
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Conditional Jensen's inequality)
 
@@ -1270,7 +1275,7 @@ It deserves a proof
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1303,7 +1308,7 @@ Hence $\mathbb{E} \left[ X \right] = \mathbb{E} \left[ X \mid\mathcal{G} \right]
 
 Conditional independance can be generalized to a more general setting.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1493,7 +1498,7 @@ Having a density allows us to
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Conditional density)
 
@@ -1517,7 +1522,7 @@ to be continued ...
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Conditional density, continued)
 
@@ -1546,7 +1551,7 @@ is a version of $\mathbb{E}\big[\mathbb{I}_B \mid \sigma(X)\big]$.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Conditional density, continued)
 
@@ -1768,7 +1773,7 @@ we are interested in conditional probability kernels with respect to $\mathcal{G
 that are compliant with $P$. We call them _regular conditional probability kernels_.
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition (Regular conditional probability)
 
@@ -1804,7 +1809,7 @@ to compute conditional expectations.
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1851,7 +1856,7 @@ $3) \Rightarrow 1)$ is more interesting.
 We shall check  the existence of conditional probabilities in at least
 one  non-trivial case.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 ### Theorem
@@ -2006,7 +2011,7 @@ and that the $\sigma$ -algebra $\mathcal{F}$  is the Borelian $\sigma$ -algebra 
 Defining a probability distribution from a marginal distribution and a kernel
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -2029,12 +2034,9 @@ $$\forall B \in \mathcal{F}, \quad P(B) = \int_{X(\Omega)} N(x, B) \mathrm{d}P_x
 
 ]
 
+
 ---
 
-class: middle, center, inverse
+```{r child="closing_slide.Rmd"}
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: 112%
-
-
-# The End
+```
