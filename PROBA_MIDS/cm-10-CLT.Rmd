@@ -1075,16 +1075,21 @@ By the Uniform Tightness Lemma, $(P_n)_n$  is uniformly tight
 
 --
 
-By the Prokhorov-Le Cam Theorem, there is a probability measure $P$ (with characteristic function $\widehat{F}$), and a subsequence
-$(P_{n(k)})_{k \in \mathbb{N}}$ such that $P_{n(k)} \rightsquigarrow P \text{ as } {k \to \infty}$
+By the Prokhorov-Le Cam Theorem, there is
+- a probability measure $P$ (with characteristic function $\widehat{F}$), and
+- a subsequence $(P_{n(k)})_{k \in \mathbb{N}}$
+such that $P_{n(k)} \rightsquigarrow P \text{ as } {k \to \infty}$
 
 ---
 
 ### Proof of the second form of the continuity theorem (continued)
 
-By the definition of weak convergence,  $P_{n(k)} \rightsquigarrow P \text{ as } {k \to \infty}$  entails
-$\widehat{F}_{n(k)} \rightarrow \widehat{F}'' \text{ as } {k \to \infty}$
+By the definition of weak convergence,
+$$P_{n(k)} \rightsquigarrow P \text{ as } {k \to \infty}$$
+entails
+$$\widehat{F}_{n(k)} \rightarrow \widehat{F}'' \text{ as } {k \to \infty}$$
 where $\widehat{F}''$ is the characteristic function of $P$
+
 --
 
 As $\widehat{F}_n \rightarrow \widehat{F}$, by the unicity of limits, $\widehat{F}= \widehat{F}'$
@@ -1096,9 +1101,10 @@ Finally, by the first form of the Levy continuity Theorem, $P_{n}\rightsquigarro
 
 `r fontawesome::fa("square")`
 
-<br>
+---
 
-`r fontawesome::fa("exclamation-triangle")`
+
+### `r fontawesome::fa("exclamation-triangle")`
 
 All definitions and results in this section can be extended to the $k$-dimensional setting for all $k \in \mathbb{N}$
 
