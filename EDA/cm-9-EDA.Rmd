@@ -23,12 +23,12 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 bibliography: mon_chapeau.bib
----
-name: inter-slide
-class: left, middle, inverse
-
-{{ content }}
-
+params:
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
 ---
 name: layout-general
 layout: true
@@ -40,7 +40,6 @@ class: left, middle
 
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-
 pacman::p_load("ggdendro")
 pacman::p_load("fastcluster")
 pacman::p_load("dendextend")
@@ -73,22 +72,26 @@ NoCite(myBib, "Mur12")
 ```
 
 ---
-class: middle, left, inverse
+name: inter-slide
+class: left, middle, inverse
 
+{{content}}
 
+---
+template: inter-slide
 
 # Exploratory Data Analysis IX Hierarchical Clustering
 
 ### `r Sys.Date()`
 
-#### EDA Master I MIDS et MFA
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
 
-#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+#### [`r params$coursetitle`](`r params$homepage`)
 
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 ---
-class: middle, inverse
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -134,17 +137,76 @@ said to be _nested_
 
 --
 
-A hierarchical clustering of $\mathcal{X}$ is a sequence of  $|\mathcal{X}| -1$ nested partitions 
-of $\mathcal{X}$, starting from the trivial partition into  $|\mathcal{X}|$ singletons and ending 
-into the trivial partition in $1$ subset ( $\mathcal{X}$ itself)
+A hierarchical clustering of $\mathcal{X}$ is a sequence of  $|\mathcal{X}| -1$ nested partitions  of $\mathcal{X}$, starting from the trivial partition into  $|\mathcal{X}|$ singletons and ending  into the trivial partition in $1$ subset ( $\mathcal{X}$ itself)
 
-A hierarchical clustering consists of $|\mathcal{X}|-1$ flat clusterings
+A hierarchical clustering consists of $|\mathcal{X}|-1$ nested flat clusterings
 
 We will explore _agglomerative_ or _bottom-up_ methods to build hierarchical clusterings
 
 ---
 
-### Iris illustration
+### Hierchical clustering and dendrograms
+
+
+.fl.w-40.f6.pa2[
+
+The result of hierarchical clustering is a tree where leafs are labelled by sample points and 
+internal nodes correspond to merging operations
+
+The tree conveys more information: if the tree is properly decorated, it is possible to reconstruct the different merging steps and to know which rule was applied when some merging operation was performed
+
+The tree is called a _dendrogram_
+
+]
+
+.fl.w-60.pa2[
+
+```{r, echo=FALSE}
+data("USArrests")
+library(ggplot2)
+library(ggdendro)
+hc <- hclust(dist(USArrests), "ave")
+hcdata <- dendro_data(hc, type = "rectangle")
+ggplot() +
+  geom_segment(data = segment(hcdata), 
+               aes(x = x, y = y, xend = xend, yend = yend)
+  ) +
+  geom_text(data = label(hcdata), 
+            aes(x = x, y = y, label = label, hjust = 0), 
+            size = 2
+  ) +
+  coord_flip() +
+  scale_y_reverse(expand = c(0.2, 0)) +
+  ggtitle("Hierarchical classification of USArrests data")
+```
+
+]
+
+
+???
+
+Dendrogram and trees show up in several areas. 
+
+Classification and Regression trees play an important role in Machine Learning. 
+
+`ggdendro` and `dendextend`  may also be used to manipulate regression trees
+
+
+
+
+---
+
+### `r fontawesome::fa("route")`
+
+- Cutting a dendrogram: getting a flat clustering
+
+- Building a dendrogram: inside `hclust`
+
+- Displaying, reporting dendrograms
+
+---
+
+### Cutting a dendrogram: Iris illustration
 
 .panelset[
 
@@ -168,20 +230,22 @@ We will explore _agglomerative_ or _bottom-up_ methods to build hierarchical clu
 .panel[.panel-name[Code]
 ```{r iris-hclust-dendro, echo=TRUE, fig.show="hide"}
 iris_num <- select(iris, where(is.numeric)) 
-rownames(iris_num) <- str_c(iris$Species, 1:150, sep = "_")
+rownames(iris_num) <- str_c(iris$Species, 
+                            1:150, sep = "_")
 
 iris_num %>%   
-  dist() %>% 
+  dist() %>%                #<<
   hclust() ->  iris_hclust  #<< 
 
-iris_dendro <- dendro_data(iris_hclust)
+iris_dendro <- dendro_data(iris_hclust) #<<
 
-ggdendrogram(iris_dendro, 
+ggdendrogram(iris_dendro,               #<<
             leaf_labels = TRUE, 
             rotate = TRUE) +
   ggtitle("Dendrogram for Iris") + 
-  theme_dendro()
-  
+  theme_dendro() +
+#  coord_flip() +
+  scale_y_reverse(expand = c(0.2, 0)) 
 ```
 ]
 
@@ -202,12 +266,37 @@ ggdendrogram(iris_dendro,
 - default distance is Euclidean distance 
 - Using `broom::augment` ??
 - There is no `augment.hclust` method: `No augment method for objects of class hclust`
-- 
+
+
+- Plot comments  
+
+---
+exclude: true 
+
+### Inside ggdendro
+
+
+```{r}
+hc <- hclust(dist(iris[,1:4]), "ave")
+hcdata <- dendro_data(hc, type = "rectangle")
+ggplot() +
+  geom_segment(data = segment(hcdata),   #<<
+               aes(x = x, y = y, xend = xend, yend = yend)
+  ) +
+  geom_text(data = label(hcdata), #<<
+            aes(x = x, y = y, label = label, hjust = 0), 
+            size = 2
+  ) +
+  coord_flip() +
+  scale_y_reverse(expand = c(0.2, 0)) + 
+  theme_dendro()
+```
+
+
 
 ---
 
-
-### Iris illustration (continued)
+### Cutting a dendrogram: `r fontawesome::fa("syringe")` Iris illustration (continued)
 
 .panelset[
 
@@ -222,7 +311,7 @@ p +
   geom_point(aes(shape=Species)) +
   labs(shape= "Species") +
   ggtitle(label= "Iris data", 
-          subtitle = "Species")
+          subtitle = "Species in Petal plane")
 ```
 ]
 
@@ -234,9 +323,17 @@ p +
 ]
 
 ]
+
+
+???
+
+Does the flat clustering obtained by cutting the dendrogram at some height 
+reflect the partition into species
+
+
 ---
 
-### Iris illustration
+### Cutting a dendrogram:  Iris illustration (continued)
 
 .panelset[
 
@@ -246,10 +343,10 @@ p +
 iris_3 <- cutree(iris_hclust, 3)  #<<
 p +
   geom_point(aes(shape=Species,
-                 colour=factor(iris_3))) +
+                 colour=factor(iris_3))) + #<<
   labs(colour= "Clusters") +
   ggtitle("Iris data", 
-          "Hierarchical clustering")
+          "Hierarchical clustering, 3 classes")
 ```
 
 ]
@@ -262,7 +359,7 @@ p +
 ]
 ---
 
-### Iris illustration
+### Cutting a dendrogram:  Iris illustration (continued) 
 
 
 .panelset[
@@ -291,7 +388,7 @@ p +
 
 ---
 
-### Iris illustration
+### Cutting a dendrogram:  Iris illustration (continued)
 
 .panelset[
 
@@ -320,7 +417,7 @@ p +
 
 ---
 
-### Iris illustration
+### Cutting a dendrogram:  Iris illustration (continued) 
 
 .panelset[
 
@@ -360,7 +457,7 @@ sample_iris <-
 
 ---
 
-### Better Iris illustration
+### Cutting a dendrogram:  better Iris illustration (continued)  
 
 
 .panelset[
@@ -387,7 +484,7 @@ Features:
 require(dendextend)
 require(colorspace)
 species_col <- rev(rainbow_hcl(3))[as.numeric(iris$Species)]
-dend <- as.dendrogram(iris_hclust)
+dend <- as.dendrogram(iris_hclust)  #<< 
 
 # order it the closest we can to the order of the observations:
 dend <- rotate(dend, 1:150)
@@ -413,9 +510,9 @@ labels_colors(dend) <-
 
 ```{r hang-iris, fig.show='hide', fig.height=4, echo=TRUE}
 # We hang the dendrogram a bit:
-dend <- hang.dendrogram(dend, hang_height=0.1)
+dend <- hang.dendrogram(dend, hang_height=0.1)  #<< 
 # reduce the size of the labels:
-dend <- assign_values_to_leaves_nodePar(dend, 0.5, "lab.cex")
+dend <- assign_values_to_leaves_nodePar(dend, 0.5, "lab.cex") #<< 
 # dend <- set(dend, "labels_cex", 0.5)
 # And plot:
 par(mar = c(3,3,3,7))
@@ -449,6 +546,9 @@ plot(dend,
 - [dendextend](https://talgalili.github.io/dendextend/articles/dendextend.html)
 
 - [A dendro gallery](https://www.r-graph-gallery.com/340-custom-your-dendrogram-with-dendextend.html)
+
+- class of `dend`
+
 
 ---
 template: inter-slide
@@ -1095,10 +1195,9 @@ PrintBibliography(myBib)
   + [`scikit-learn`](https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering)
   
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
+```{r ,child='./closing_slide.Rmd'}
+
+```
 
 
-# The End

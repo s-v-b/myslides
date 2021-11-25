@@ -48,7 +48,9 @@ BibOptions(check.entries = FALSE,
            style = "markdown",
            hyperlink = FALSE,
            dashed = FALSE)
-myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
+myBib <- ReadBib("./mon_chapeau.bib", check = FALSE)
+
+xaringanExtra::use_webcam()
 ```
 
 
@@ -1131,7 +1133,7 @@ If $p$ is a positive integer, a gamma random variable with parameters
 $a=p/2$ and $b=2$ is said to have chi-square distribution with
 $p$ _degrees of freedom_ ( $\chi^2_p$ )
 
-`r fontawesome::fa("point-hand-right")` If $Y_1,\ldots,Y_p \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$ then $\sum_{i=1}^p Y_i^2  \sim \chi^2_p$
+`r fontawesome::fa("hand-point-right")` If $Y_1,\ldots,Y_p \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$ then $\sum_{i=1}^p Y_i^2  \sim \chi^2_p$
 
 If $X_1,\ldots,X_N$ have chi-square distribution with $p$ degrees of freedom,
 
@@ -1139,9 +1141,15 @@ then
 
 $$\mathbb{E}\left[  \max_{i=1,\ldots,N} X_i - p\right] \leq 2\sqrt{p\log N }+ 2\log N$$
 
+---
+
+```{r child="closing_slide.Rmd"}
+
+```
 
 
 ---
+exclude: true
 template: inter-slide
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')

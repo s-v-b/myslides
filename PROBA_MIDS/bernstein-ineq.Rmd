@@ -31,7 +31,7 @@ where $h(u)=\phi^*(u) = (1+u)\log(1+u) -u$ for $u>0$.
 
 ---
   
-`r fontawesome::fa("triangle-exclamation")`
+`r fontawesome::fa("exclamation-triangle")`
 
 Bennett's inequality provides us with improved tail bounds for  the
 binomial random variable with parameters $n$ and $\mu/n$.
@@ -41,7 +41,7 @@ Bernoulli random variables with parameter $\mu/n$.
 
 This fits in the scope of Bennett's inequality, we can choose $b=1$ and $v=\mu.$
   
-`r fontawesome::fa("triangle-exclamation")` The obtained upper bound on the logarithmic moment generating function coincides with logarithmic moment generating function of a centered Poisson random variable with parameter $\mu$
+`r fontawesome::fa("exclamation-triangle")` The obtained upper bound on the logarithmic moment generating function coincides with logarithmic moment generating function of a centered Poisson random variable with parameter $\mu$
   
   
 ---
