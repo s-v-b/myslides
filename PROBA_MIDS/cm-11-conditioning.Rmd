@@ -41,6 +41,9 @@ class: left, middle
 
 
 ```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+
+xaringanExtra::use_webcam()
+
 require(RefManageR, quietly = TRUE)
 BibOptions(check.entries = FALSE,
            bib.style = "authoryear",
@@ -138,15 +141,15 @@ $X \sim \mathcal{N}(\mu, \Sigma)$ with $\mu \in \mathbb{R}^k$ and covariance $\S
 
 --
 
-Events $\{\Vert X\Vert = y\}$, $\{\langle v, X \rangle = y \}$  (generally) have
+Events like $\{\Vert X\Vert = y\}$, $\{\langle v, X \rangle = y \}$  (generally) have
 probability $0$ for all $y$
 
 ---
 name: defcondexp
 
 
-The general definition of conditional expectation starts from
-what was considered a property when conditioning with respect to atomic
+The general _definition_ of conditional expectation starts from
+what was considered a _property_ when conditioning with respect to atomic
 $\sigma$ -algebras
 
 --
@@ -168,7 +171,7 @@ iff
 
 i. $Y$ is $\mathcal{G}$-measurable.
 
-i. For every event  $B$ in $\mathcal{G}$:
+ii. For every event  $B$ in $\mathcal{G}$:
 
 $$\mathbb{E} \left[\mathbb{I}_B X \right] = \mathbb{E} \left[ \mathbb{I}_B Y \right]$$
 
@@ -188,8 +191,7 @@ if there exist  different versions, they differ only up to a negligible event
 
 ### Proposition
 
-Let $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$   and
-$\mathcal{G}$ a sub- $\sigma$ -algebra of $\mathcal{F}$,
+Let $X \in \mathcal{L}_1 (\Omega, \mathcal{F}, P)$   and  $\mathcal{G}$ be a sub- $\sigma$ -algebra of $\mathcal{F}$,
 
 then
 
@@ -247,8 +249,7 @@ versions of conditional expectation of $X$ (if they exist) should satisfy
 
 then
 
-if  $Y_1$, $Y_2$,  and  $Z$  are respectively
-versions of $\mathbb{E} [X_1\mid \mathcal{G}], \mathbb{E} [X_2\mid \mathcal{G}]$  and  $\mathbb{E} [a_1 X_1 + a_2 X_2\mid \mathcal{G}]$ with respect to  $\mathcal{G}$
+if  $Y_1$, $Y_2$,  and  $Z$  are respectively  versions of $\mathbb{E} [X_1\mid \mathcal{G}], \mathbb{E} [X_2\mid \mathcal{G}]$  and  $\mathbb{E} [a_1 X_1 + a_2 X_2\mid \mathcal{G}]$ with respect to  $\mathcal{G}$
 
 
 $$P\{a_1 Y_1 + a_2 Y_2 = Z\} = 1$$
@@ -392,33 +393,41 @@ $$\forall B \in \mathcal{E}, \quad \mathbb{E} \left[
 
 ### Proposition  (Tower Property)
 
-Let  $(\Omega, \mathcal{F}, P)$ be a probability space, and $\mathcal{G} \subseteq \mathcal{H} \subseteq \mathcal{F}$
+Let  $(\Omega, \mathcal{F}, P)$ be a probability space, and
+$$\mathcal{G} \subseteq \mathcal{H} \subseteq \mathcal{F}$$
 be  two nested sub- $\sigma$ -algebras.
+
 Then for every   $X \in \mathcal{L}_1(\Omega, \mathcal{F}, P)$:
 
-$$\mathbb{E} \Big[ \mathbb{E}\left[ X \mid \mathcal{G} \right] \mid \mathcal{H} \Big]
-= \mathbb{E} \Big[ \mathbb{E} \, \left[ X \mid \mathcal{H} \right] \mid \mathcal{G} \Big]
-= \mathbb{E} \left[ X \mid \mathcal{G} \right]$$
+$$\begin{array}{rl}\mathbb{E} \Big[ \mathbb{E}\left[ X \mid \mathcal{G} \right] \mid \mathcal{H} \Big]
+& = \mathbb{E} \left[ X \mid \mathcal{G} \right] \\
+\mathbb{E} \Big[ \mathbb{E} \, \left[ X \mid \mathcal{H} \right] \mid \mathcal{G} \Big]
+& = \mathbb{E} \left[ X \mid \mathcal{G} \right]\end{array}$$
 
 ]
 
+???
+
+The smallest $\sigma$-algebra takes it all
 
 ---
 
 
 ### Proof
 
-The second equality is trivial: any
-$\mathcal{G}$-measurable random variable is also  $\mathcal{H}$-measurable.
+The second equality is trivial:
+
+> any $\mathcal{G}$-measurable random variable is also  $\mathcal{H}$-measurable.
 
 To check the first equality: for every $B \in \mathcal{G}$,
-$$\begin{array}{rcl}
-\mathbb{E} \left[ \mathbb{I}_B \mathbb{E} \left[ \mathbb{E}
-\left[ X \mid \mathcal{H} \right] \mid \mathcal{G} \right] \right] & = &
-\mathbb{E} \left[ \mathbb{I}_B \mathbb{E} \left[ X \mid
-\mathcal{H} \right] \right]\\
-&  & \text{comme } B \in \mathcal{H}\\
-& = & \mathbb{E} \left[ \mathbb{I}_B X \right] .
+$$\begin{array}{rl}
+\mathbb{E} \left[ \mathbb{I}_B  \mathbb{E} \left[ \mathbb{E}
+\left[ X \mid \mathcal{H} \right] \mid \mathcal{G} \right] \right] & =
+\mathbb{E} \left[\mathbb{E}\left[  \mathbb{I}_B \mathbb{E}
+\left[  X \mid \mathcal{H} \right] \mid \mathcal{G}\right]\right] \quad \text{as } B \in \mathcal{G} \\
+& = \mathbb{E} \left[ \mathbb{I}_B \mathbb{E} \left[ X \mid
+\mathcal{H} \right] \right] \quad \text{averaging out}\\
+& =  \mathbb{E} \left[ \mathbb{I}_B X \right] \quad \text{as } B \in \mathcal{H}
 \end{array}$$
 
 `r fontawesome::fa("square")`
@@ -488,12 +497,19 @@ Checking the first statement amounts to invoke the right arguments from Hilbert 
 
 ### Definition Hilbert space
 
-A real vector space $E$ equipped with a norm $\|\cdot\|$ is a Hilbert space iff $\langle \cdot, \cdot \rangle$
-defined by
+A real vector space $E$ equipped with a norm $\|\cdot\|$ is a Hilbert space
+
+iff
+
+$\langle \cdot, \cdot \rangle$ defined by
 
 $$\forall x, y \in E, \langle x, y \rangle = \frac{1}{4} \Big(\Vert x+y \Vert^2 + \Vert x-y \Vert^2\Big)$$
 
-is an _inner product_ and $E$ is complete for the topology induced by the norm
+is an _inner product_
+
+and
+
+$E$ is _complete_ for the topology induced by the norm
 
 ]
 
@@ -507,8 +523,7 @@ Let $(\Omega, \mathcal{F}, P)$ be a probability space,
 
 then
 
-the set $L_2(\Omega, \mathcal{F}, P)$
-of equivalence classes of square integrable variables,
+the set $L_2(\Omega, \mathcal{F}, P)$ of equivalence classes of square integrable variables,
 equipped with $\Vert X\Vert^2=  (\mathbb{E} X^2)^{1/2}$ is a Hilbert space
 
 ]
@@ -559,10 +574,10 @@ this closest $\mathcal{G}$-measurable random variable are warranted by the Proje
 
 ### Theorem: Hilbert space Projection Theorem
 
-Let $E$ be a Hilbert space and $F$ a closed convex subset of
+Let $E$ be a Hilbert space and $F$ a _closed convex_ subset of
 $F$.
 
-For every $x \in E$, there exists a unique $y \in F$, such that
+For every $x \in E$, there _exists a unique_ $y \in F$, such that
 
 $$\|x - y\|= \inf_{z \in F} \|x - z\|$$
 
@@ -613,7 +628,7 @@ $$\|z_n - z_m \|^2 \leq 4 (2 d + 1) \epsilon$$
 ### Proof (continued)
 
 Hence, the minimizing sequence $(z_n)_n$ has the Cauchy property. As $F$
-is closed, it has a unique limit $y \in F$ and $d  = \|x - y\|$.
+is _closed_, it has a unique limit $y \in F$ and $d  = \|x - y\|$.
 
 To verify uniqueness, suppose there exists $y' \in F$, such as
 $\|x - y' \|= d$. Now,  let us build a new sequence $(z'_n)_{n \in \mathbb{N}}$
@@ -637,7 +652,7 @@ As this quantity is non-negative for $u \in [0,1]$, $\langle x-y, z-y \rangle$ h
 
 ### Proof (continued)
 
-Now suppose that $F$ is a subspace of $E.$
+Now suppose that $F$ is a _closed_ subspace of $E.$
 
 If there is $y \in F$ such as $\langle x - y, z \rangle = 0$ for any $z\in F$,
 then $y$ is the orthogonal projection of $x$ on $F$ since for all $z \in F$:
@@ -1006,7 +1021,7 @@ and  $\mathcal{G} \subseteq \mathcal{F}$ be a sub- $\sigma$ -algebra,
 then
 
 for every  $Y \in\mathcal{L}_1 (\Omega, \mathcal{G}, P)$, such that $\mathbb{E} \left[ |XY| \right] < \infty$
-  |
+
 $$\mathbb{E} \left[ XY \right] = \mathbb{E} \left[ Y \mathbb{E}   \left[ X \mid \mathcal{G} \right] \right]$$
 
 ]
@@ -1393,7 +1408,7 @@ we can take for granted  that there exists  a collection of random variables
 which, almost surely, form a _consistent collection of  versions_
 of the expectation of $(\mathbb{I}_{B_n})_n$ with respect to  $X$.
 
-If $(B_n)_n$ is   non-decreasing tending  towards $B$, by Theorem  \@ref(thm:cmon),
+If $(B_n)_n$ is   non-decreasing tending  towards $B$, by the conditional monotone convergence Theorem,
 we are confident in the fact  that  the following holds
 
 $$\lim_n \uparrow \mathbb{E} \left[ \mathbb{I}_{B_n} \mid X \right]  = \mathbb{E} \left[ \mathbb{I}_B \mid X \right] \qquad \text{a.s.}$$
@@ -1597,11 +1612,11 @@ Is $N(x,y)$  a probability density? If yes, with respect to which $\sigma$-finit
 
 ---
 
-The proof of Theorem consists of milking the Tonelli-Fubini Theorem.
 
 
 ### Proof
 
+.f6[
 Proof of (i). Let us agree on notation:
 
 $$P_x \{B\}= \int_{\mathbb{R}} \mathbb{I}_B(x,y) N (x, y) \mathrm{d} y$$
@@ -1623,6 +1638,11 @@ $$\lim_n \uparrow P_x (B_n) = P_x (B)$$
 This is an immediate consequence of the _monotonous convergence theorem_, for each $(x',y')$
 
 $$\lim_n \uparrow \mathbb{I}_{B_n} (x', y') N (x', y') =  \mathbb{I}_{B} (x', y') N (x', y')$$
+]
+
+???
+
+The proof of Theorem consists of milking the Tonelli-Fubini Theorem
 
 ---
 
@@ -1787,8 +1807,8 @@ iff
 
 i. For any $B \in \mathcal{F}$, $\omega \mapsto N (\omega, B)$
 is a version of the conditional expectation of $\mathbb{I}_B$
-knowing $\mathcal{G}$ ($N (\cdot, B)$ is therefore
-$\mathcal{G}$ -measurable:
+knowing $\mathcal{G}$ ( $N (\cdot, B)$ is therefore
+$\mathcal{G}$ -measurable ):
 
 $$N(\cdot, B) = \mathbb{E}[\mathbb{I}_B \mid \mathcal{G}]\quad P-\text{a.s.}$$
 
@@ -1821,14 +1841,14 @@ to compute conditional expectations.
 
 The following properties are equivalent
 
-1. $N(\cdot,\cdot)$ defines a _regular conditional probability kernel_ w.r.t. $\mathcal{G}$
+a. $N(\cdot,\cdot)$ defines a _regular conditional probability kernel_ w.r.t. $\mathcal{G}$
 for $(\Omega, \mathcal{G}, P)$
 
-2. $P$-almost surely, for any $P$-integrable function $f$  on $(\Omega, \mathcal{F})$:
+b. $P$-almost surely, for any $P$-integrable function $f$  on $(\Omega, \mathcal{F})$:
 
 $$\mathbb{E} \left[ f \mid \mathcal{G} \right](\omega) = \mathbb{E}_{N(\omega,\cdot)}[f]$$
 
-3. For any $P$-integrable random variable  $X$  on $(\Omega, \mathcal{F})$
+c. For any $P$-integrable random variable  $X$  on $(\Omega, \mathcal{F})$
 
 $$\mathbb{E} \left[ X \right] = \mathbb{E}\left[ \mathbb{E}_{N(\omega,\cdot)}[X]\right]$$
 
