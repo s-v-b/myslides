@@ -183,7 +183,7 @@ ggplotly(p)
 
 The standard Gaussian distribution is characterized by the next identity.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Let $X \sim \mathcal{N}(0,1)$,
 
@@ -223,7 +223,7 @@ The last inequality is justified by Tonelli-Fubini's Theorem. Then, we rely on $
 
 The characteristic function is a very efficient tool when handling Gaussian distributions.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 The characteristic function of  $\mathcal{N}(\mu,\sigma^2)$  is
 
@@ -265,7 +265,7 @@ The fact that the characteristic function completely defines the probability dis
 provides us with a converse of Stein's Lemma.
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Stein's Lemma (bis)
 
@@ -294,20 +294,20 @@ $$\widehat{F}'(t) = -t \widehat{F}(t) \quad \text{and} \quad \widehat{G}'(t) = -
 
 with  $\widehat{F}(0)=1$ and  $\widehat{G}(0)=0$
 
-Solving the two differential equations leads to  $\widehat{F}(t) = \mathrm{e}^{-t^2/2}$
-and $\widehat{G}(t)=0$.
+Solving the two differential equations leads to  $\widehat{F}(t) = \mathrm{e}^{-t^2/2}$ and $\widehat{G}(t)=0$
 
-`r fontawesome::fa("glass-cheers")`
-We just checked that the characteristic function of the
-distribution of $X$ is the characteristic function of  $\mathcal{N}(0,1)$
 
 `r fontawesome::fa("square")`
+
+`r fontawesome::fa("glass-cheers")`
+
+We just checked that the characteristic function of the distribution of $X$ is the characteristic function of  $\mathcal{N}(0,1)$
 
 ---
 
 ### The sum of two independent Gaussian random variables is a Gaussian random variable
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -335,7 +335,7 @@ $$s \mapsto \mathbb{E} \left[ \mathrm{e}^{s X} \right] = \text{e}^{\frac{s^2}{2}
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition: Mill's ratios
 
@@ -375,7 +375,7 @@ $$\begin{array}{rcl} \int_x^{\infty}  \frac{1}{ \sqrt{2 \pi}}  \frac{1}{u^2} \ma
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition, Gaussian Moments
 
@@ -392,8 +392,9 @@ $$\mathbb{E} \left[ X^k \right] = \begin{cases} 0 &  \text{ if } k \text{ is odd
 ### Proof
 
 Thanks to distributional symmetry,
-$\mathbb{E} \left[ X^k \right]=0$  for all odd$k$. We handle even powers using
-integration by parts:
+$\mathbb{E} \left[ X^k \right]=0$  for all odd $k$.
+
+We handle even powers using integration by parts:
 
 $$\begin{array}{rcl} \mathbb{E} \left[ X^{k+2} \right] & = & (k+1) \mathbb{E} \left[ X^{k} \right]\end{array}$$
 
@@ -429,7 +430,7 @@ A Gaussian vector is a collection of univariate Gaussian random variables that
 satisfies a very stringent property:
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition, Gaussian vector
 
@@ -461,7 +462,7 @@ Check that $\epsilon X$ is a Gaussian random variable.
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -503,7 +504,7 @@ For every  $\lambda = (\lambda_1, \ldots, \lambda_n)^T \in \mathbb{R}^n$, we hav
 
 $$\operatorname{var}(\langle \lambda, X \rangle) =  \lambda^t K \lambda = \text{trace} (K \lambda \lambda^t)\,$$
 
-`r fontawesome::fa("righthand")` this is does not depend on any Gaussianity assumption
+`r fontawesome::fa("hand-point-right")` this is does not depend on any Gaussianity assumption
 
 ---
 
@@ -520,7 +521,7 @@ $$\mathbb{E} \mathrm{e}^{\imath \langle \lambda, X \rangle } =  \mathrm{e}^{\ima
 
 A linear transform of a Gaussian vector is a Gaussian vector.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -558,7 +559,7 @@ The covariance of $A \times Y$ is determined by this observation.
 To manufacture Gaussian vectors with general covariance matrices, we rely
 on an important notion from matrix analysis.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Semi-definite positive matrices
 
@@ -576,7 +577,7 @@ of Definite Positive (resp. Semi-Definite Positive) matrices.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -605,7 +606,7 @@ soit  $\lambda^T K \lambda =  \operatorname{var}(\langle \lambda, X \rangle)$. T
 The next  observation is the key to the construction to general Gaussian vectors.
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition: Cholesky's factorization
 
@@ -619,16 +620,19 @@ If $A$ is a  Semi-definite  Positive symmetric matrix then there exists
 ---
 
 We do not check this proposition. This is a basic Theorem from  matrix analysis.
+
 It can be established from the _spectral decomposition theorem_ for symmetric matrices.
+
 It can also be established by a simple constructive approach:
-a positive definite  matrix $K$ admits a _Cholesky decomposition_, in other words, there exists
-a triangular matrix lower than $L$ such that $K = L \times L^T$.
+
+A positive definite  matrix $K$ admits a _Cholesky decomposition_, in other words, there exists a triangular matrix lower than $L$ such that
+$$K = L \times L^T$$
 
 ---
 
 The next proposition is a corollary of the general formula for image densities.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -674,7 +678,7 @@ class: inverse, middle, center
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Gaussian space
 
@@ -723,7 +727,7 @@ Gaussian spaces enjoy remarkable properties.
 Independence of random variables belonging to the same Gaussian space may be checked very easily.
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition: independence in Gaussian space
 
@@ -766,6 +770,7 @@ $$\mathbb{E} \left[ \mathrm{e}^{\imath \mu Z} \mathrm{e}^{\imath \mu' Y} \right]
 ### Proof (continued)
 
 .small[
+
 $$\begin{array}{rcl}
 \mathbb{E} \left[ \mathrm{e}^{\imath \mu Z} \mathrm{e}^{\imath \mu' Y} \right] &
 = & \mathbb{E} \left[ \mathrm{e}^{\imath \mu \sum_i \lambda_i    X_i}
@@ -793,7 +798,7 @@ $$\begin{array}{rcl}
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -817,7 +822,7 @@ class: center, middle, inverse
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Lévy continuity theorem `r fontawesome::fa("syringe")`
 
@@ -840,7 +845,7 @@ Continuity at $0$ warrants the _tightness_ of the sequence of probability distri
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -848,7 +853,9 @@ If a sequence of $k$-dimensional Gaussian vectors $(X_n)$ is defined by a $\math
 
 $$\begin{array}{rcl}\lim_n \vec{\mu}_n & = & \mu \in \mathbb{R}^k\\ \lim_n K_n & = & K \in \textsf{SDP}(k)\end{array}$$
 
-then the sequence  $(X_n)_n$  converges in distribution towards $\mathcal{N}\left(\vec{\mu}, K\right)$ (if $K = 0$,
+then
+
+the sequence  $(X_n)_n$  converges in distribution towards $\mathcal{N}\left(\vec{\mu}, K\right)$ (if $K = 0$,
 the limit distribution is $\delta_\mu$).
 
 ]
@@ -887,7 +894,7 @@ If $K \in \textsf{DP}(n)$  then the Schur complement of  $A$ in  $K$ also belong
 In the statement of  the next theorems,  $A^{-1/2}$ denotes the Cholesky factor
 of  $A^{-1}$:   $A^{-1} = A^{-1/2} \times (A^{-1/2})^T$.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -903,7 +910,7 @@ X_{1} \\ \vdots \\ X_k \end{matrix}\right] = \begin{pmatrix} \mu_{k+1} \\ \vdots
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -932,7 +939,7 @@ in order to prove both Theorems
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -954,7 +961,7 @@ is positive definite ...
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition (continued)
 
@@ -1034,7 +1041,12 @@ $L_2 \times L_2^t = W - B A^{-1} B^t$.
 
 `r fontawesome::fa("exclamation")`
 
-If  $(X,Y)^T$  is a  centered Gaussian vector with  $\operatorname{var}(X)=\sigma_x^2$, $\operatorname{var}(Y)=\sigma^2_y$ and  $\operatorname{cov}(X,Y)= \rho \sigma_x \sigma_y$,  the conditional distribution of  $Y$ with respect to $X$ is
+If  $(X,Y)^T$  is a  centered Gaussian vector with
+- $\operatorname{var}(X)=\sigma_x^2$,
+- $\operatorname{var}(Y)=\sigma^2_y$ and
+- $\operatorname{cov}(X,Y)= \rho \sigma_x \sigma_y$,  
+
+the conditional distribution of  $Y$ with respect to $X$ is
 
 $$\mathcal{N}\left( \rho \sigma_y/\sigma_x X, \sigma^2_y (1- \rho^2)  \right)$$
 
@@ -1125,7 +1137,7 @@ Investigating the norm of Gaussian vectors will prompt us
 to introduce  $\chi^2$ distributions, a sub-family of Gamma distributions.
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Gamma Distributions
 
@@ -1158,7 +1170,7 @@ If  $p$ is integer,  $\Gamma (p + 1) = p!$
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1173,7 +1185,7 @@ The sum of two independent Gamma-distributed random variables is Gamma distribut
 if they have the same intensity (or scale) parameter.
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1226,7 +1238,7 @@ satisfies  $B(p,q) = \frac{\Gamma(p)\Gamma(q)}{\Gamma(p+q)}.$
 
 Gamma distributions  with parameters  $(k / 2, 1 / 2)$ for $k \in \mathbb{N}$ deserve to be named
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition: Chi-square distributions
 
@@ -1242,7 +1254,7 @@ $$\mathbb{I}_{x>0} \frac{x^{ \frac{1}{2} (k - 2)}}{2^{k / 2} \Gamma (k /2)} \mat
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 
@@ -1281,7 +1293,7 @@ The distribution of the squared Euclidean norm of
 a centered Gaussian vector only depends on the spectrum of its covariance
 matrix.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1337,7 +1349,7 @@ class: inverse, middle, center
 The distribution of the squared norm of a Gaussian vector with covariance matrix $\sigma^2 \operatorname{Id}$
 depends on the norm of the  expectation but does  not depend on its direction. In addition, this distribution stochastically can be compared with  the distribution of the  squared norm of a centred Gaussian vector with the same covariance.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition: Stochastic Ordering
 
@@ -1358,7 +1370,7 @@ If  $X$  is stochastichally less than $Y$  and if  $F$  and  $G$  denote the cum
 
 Conversely.
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Proposition
 
@@ -1397,7 +1409,7 @@ $$\mathbb{P} \{ X \leq Y\}  = \mathbb{P} \{ F^{\leftarrow}(U) \leq  G^{\leftarro
 ---
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1480,7 +1492,7 @@ class: middle, center, inverse
 
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Cochran)
 
@@ -1538,7 +1550,7 @@ The next result is a cornerstone of statistical inference in Gaussian models.
 It is a corollary of Cochran s Theorem.
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem (Student)
 
@@ -1587,7 +1599,7 @@ The distribution of $V$ is characterized using the Cochran Theorem.
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Definition (Student t-distribution)
 
@@ -1637,7 +1649,7 @@ It is even more remarkable that this bound does not involve the dimension of the
 
 ---
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Theorem
 
@@ -1661,7 +1673,7 @@ $$\mathbb{P} \left\{ f(X) - \mathbb{E} f(X) \geq t \right\} \leq \mathrm{e}^{-\f
 
 The proof relies on
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Covariance identity
 
@@ -1727,7 +1739,7 @@ It is enough to invoke the  Markov exponential inequality and to optimize with r
 
 Concentration inequalities describe (among other things) the behavior of the norm of high-dimensional Gaussian vectors
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 ### Corollary
 

@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["header-...ter.css", "xaringan-themer.css"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -34,12 +34,14 @@ layout: true
 class: left, middle
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
-# require(tidyverse)
+
 ```
 
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 pacman::p_load("factoextra")
+xaringanExtra::use_webcam()
+xaringanExtra::use_scribble()
 ```
 
 
@@ -131,12 +133,12 @@ the total inertia of CA is the chi-square divergence computed from the contingen
 
 When handling more than two variables, several settings are possible
 
-- Some variables may be called explanatory, one variable may be considered as a response variable. Is the response variable
-dependent on the explanatory variables? If yes, we may wonder whether, conditionally on some explanatory variabless, the response variable is independent on the other explanatory variables
+- Some variables may be called _explanatory_, one variable may be considered as a _response_ variable. Is the response variable
+_dependent_ on the explanatory variables? If yes, we may wonder whether, conditionally on some explanatory variabless, the response variable is independent on the other explanatory variables
 
 - All variables share a similar status (explanatory or response),  we may explore the relations between the variables, between categories and try to reduce dimension in some way
 
-In this session, we will adress the different settings
+In this session, we will address the different settings
 
 
 ---
@@ -166,6 +168,18 @@ Questions:
 - Transforming samples of categorical variables into matrices
 - SVD Factorization
 - Relating the factors to the original data
+
+
+---
+
+### Useful packages 
+
+```{r, warning=FALSE, echo=TRUE, eval=FALSE}
+require(tidyverse)
+require(FactoMineR)        #<<
+require(factoextra)        #<<
+require(FactoInvestigate)  #<<
+```
 
 ---
 exclude: true
@@ -553,6 +567,7 @@ from  a dataframe with categorical columns
 
 ```{r}
 Z <- tit %>%
+  drop_na() %>% 
   select(Sex, Age, Embarked, Pclass) %>%
   tab.disjonctif() #<<
 
@@ -660,7 +675,7 @@ name: mca-in-words
 .fl.w-40.pa2[
 
 ```{r, echo=TRUE}
-res.mca <- tit %>%
+res.mca <- tit %>% drop_na() %>% 
   select(Sex,
          Age,
          Embarked,
@@ -852,7 +867,8 @@ $$\frac{\mathbb{I}_{i, \langle j, k\rangle}- f_{\langle j,k\rangle}}{\sqrt{n f_{
 
 ```{r, results='hide'}
 tol <- 1e-10
-X <- select(tit, Pclass, Sex, Embarked, Age)
+X <- select(tit, Pclass, Sex, Embarked, Age) %>% drop_na()
+
 p <- ncol(X)
 Z <- tab.disjonctif(X)  #<< indicator matrix
 
@@ -897,19 +913,19 @@ Matrix `res.mca$svd$U`  is orthogonal with respect to $D_r$:
 
 Matrix `res.mca$svd$U` equals $D_r^{-1/2} \times U$ (up to sign changes and numerical errors)
 
-```{r, results='hide'}
-assert_that(norm(abs(t(svd.SS$u[,1:8]) %*% diag(sqrt(r)) %*%  res.mca$svd$U) - diag(1, 8), "F") <= tol)
+```{r, results='hide', eval=FALSE, echo=FALSE}
+assert_that(norm(abs(t(svd.SS$u[,1:8]) %*% diag(sqrt(r)) %*%  res.mca$svd$U) - diag(1, 7), "F") <= tol)
 ```
 
 Matrix `res.mca$svd$V`  is orthogonal with respect to $D_c$:
 
-```{r, results='hide'}
+```{r, results='hide', eval=FALSE, echo=FALSE}
 assert_that(norm((t(res.mca$svd$V) %*% Dc  %*% res.mca$svd$V) - diag(1, 8), "F") <= tol)
 ```
 
 Matrix `res.mca$svd$V` equals $D_c^{-1/2} \times V$ (up to sign changes and numerical errors)
 
-```{r, results='hide'}
+```{r, results='hide', eval=FALSE, echo=FALSE}
 assert_that(norm(abs(t(svd.SS$v[, 1:8]) %*% diag(sqrt(c)) %*% res.mca$svd$V) - diag(1, 8), "F") <= 1e-10)
 ```
 ]
@@ -1267,6 +1283,7 @@ template: inter-slide
 - `r fontawesome::fa("python")` [prince](https://github.com/MaxHalford/prince)
 
 ---
+exclude: true
 class: middle, center, inverse
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
@@ -1274,3 +1291,10 @@ background-size: cover
 
 
 # The End
+
+---
+
+```{r child='closing_slide.Rmd'}
+
+```
+
