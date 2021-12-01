@@ -87,7 +87,7 @@ template: inter-slide
 
 
 ---
-class: centre, middle, inverse
+template: inter-slide
 
 ## Univariate Gaussian distribution
 
@@ -420,7 +420,7 @@ squared variance) equals $3$:
 $$\mathbb{E}[X^4] =  3 \times  \mathbb{E}[X^2]^2$$
 
 ---
-class: inverse, center, middle
+template: inter-slide
 
 ## Gaussian vectors
 
@@ -671,7 +671,7 @@ with respect to Lebesgue measure?
 
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Gaussian spaces and independence
 
@@ -815,7 +815,7 @@ $$\left(\forall (X, Y) \in E \times E', \quad X \perp Y \right) ⇔ \left(\left(
 ]
 
 ---
-class: center, middle, inverse
+template: inter-slide
 
 ## Convergence of Gaussian vectors
 
@@ -861,7 +861,7 @@ the limit distribution is $\delta_\mu$).
 ]
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Gaussian conditioning
 
@@ -1126,7 +1126,7 @@ The linearity of conditional expectation is a property of Gaussian vectors and l
 If you condition with respect to the norm  $\| X\|_2$, the conditional distribution is not Gaussian anymore.
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Gamma distributions
 
@@ -1283,7 +1283,7 @@ $$2 \frac{1}{2\sqrt{t}} \phi(\sqrt{t}) = \frac{1}{\sqrt{2\pi t}} \mathrm{e}^{-\f
 `r fontawesome::fa("square")`
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Norms of centered Gaussian Vectors
 
@@ -1340,7 +1340,7 @@ Random vector $O {Y}$ is distributed like $\mathcal{N} (0, I_n)$.
 `r fontawesome::fa("square")`
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Norm of Non-Centered Gaussian Vectors
 
@@ -1483,7 +1483,7 @@ This inequality holds in dimension $d\geq 1$ if   $C$ is compact, convex, symmet
 This (subtle) result is called Anderson s Lemma.
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Cochran Theorem and  consequences
 
@@ -1613,7 +1613,7 @@ $p$  degrees of freedom
 ]
 
 ---
-class: center, middle, inverse
+template: inter-slide
 
 ## Gaussian concentration
 
@@ -1819,7 +1819,7 @@ Gaussian concentration plays an important role in non-parametric statistics and 
 
 ---
 
-class: middle, center, inverse
+template: inter-slide
 
 background-image: url('./img/pexels-cottonbro-3171837.jpg')
 background-size: 112%
