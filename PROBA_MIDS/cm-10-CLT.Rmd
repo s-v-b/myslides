@@ -749,6 +749,10 @@ $$\begin{array}{rl}\Big| \mathbb{E} h(X_n) -h(X) \Big| & \leq \Big| \mathbb{E} h
 
 The first and third summand can be handled in the same way.
 
+???
+
+At that point we have just used linearity of expectation and triangle inequality.
+
 ---
 
 ### Proof (continued)
@@ -756,6 +760,19 @@ The first and third summand can be handled in the same way.
 Let $\epsilon >0$,
 
 $$\begin{array}{rl}\Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| & \leq \Big| \mathbb{E} (h(X_n) - h(X_n + \sigma Z)) \mathbb{I}_{\sigma |Z|>\epsilon} \Big| \\ & \qquad + \Big| \mathbb{E} (h(X_n) - h(X_n + \sigma Z)) \mathbb{I}_{\sigma |Z|\leq\epsilon} \Big| \\ & \leq 2 P\{\sigma |Z|>\epsilon\} + \epsilon\end{array}$$
+
+
+???
+
+For $\sigma |Z|>\epsilon$, we use boundedness of $h$
+
+For $\sigma |Z|\leq\epsilon$, we use 1-Lipschitz property of $h$
+
+This works for the first and third summand.
+
+TODO: This proof needs to be boosted and/or completed. Whe shoudl either assume that we have already established clause 3 from Portmanteau Theorem, or just assume that $h$ is bounded and continuous.
+
+
 
 ---
 
@@ -778,6 +795,10 @@ Hence
 $$\limsup_n \Big| \mathbb{E} h(X_n) - h(X_n + \sigma Z) \Big| \leq 2\epsilon$$
 
 `r fontawesome::fa("square")`
+
+
+???
+
 
 ---
 
