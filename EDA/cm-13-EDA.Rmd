@@ -4,6 +4,13 @@ subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2021/04/10 (updated: `r Sys.Date()`)"
+params:
+  title: "Spatial Data"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
@@ -34,7 +41,6 @@ layout: true
 class: left, middle
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
-
 ```
 
 
@@ -66,9 +72,6 @@ BibOptions(check.entries = FALSE,
 myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 ```
 
-
-
-
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 NoCite(myBib, "MR3851754")
 NoCite(myBib, "MR3080408")
@@ -83,21 +86,13 @@ NoCite(myBib, "moitra2018algorithmic")
 ```
 
 ---
-class: middle, left, inverse
 
+```{r child="title_slide.Rmd"}
 
-
-# Exploratory Data Analysis XIII Spatial Data
-
-### `r Sys.Date()`
-
-
-#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
-
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+```
 
 ---
-class: middle, inverse
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -110,11 +105,11 @@ class: middle, inverse
 template: inter-slide
 name: bigpic
 
-## Why spatial data? 
+## Why spatial data?
 
 ---
 
-### 
+###
 
 ```{r, eval=FALSE}
 q = opq(bbox = "Gueret, France")
@@ -167,7 +162,7 @@ template: inter-slide
 
 ###  Definition
 
-> A raster  is  a matrix or an array, representing a rectangular area on the surface of the earth. 
+> A raster  is  a matrix or an array, representing a rectangular area on the surface of the earth.
 
 > To associate the matrix or the array with the particular area it represents, the raster has some additional spatial properties, on top of the non-spatial properties that any ordinary matrix or array has:
 
@@ -193,21 +188,21 @@ template: inter-slide
 
 ### Raster File Formats
 
-Commonly used raster file formats can be divided in two groups. 
+Commonly used raster file formats can be divided in two groups.
 
-- “Simple” raster file formats, such as GeoTIFF, are single-band or multi-band rasters with a geo-referenced extent, as discussed above. 
+- “Simple” raster file formats, such as GeoTIFF, are single-band or multi-band rasters with a geo-referenced extent, as discussed above.
 
 - “Complex” raster file formats, such as HDF, contain additional complexity, such as more than three dimensions, and/or metadata, such as band names, time stamps, units of measurement, and so on.
 
 
 ---
 
-### 
+###
 
 
 - [An example of an HDF file structure](http://matthewrocklin.com/blog/work/2018/02/06/hdf-in-the-cloud)
 
-- 
+-
 
 ---
 
@@ -231,12 +226,12 @@ Usage: `volcano`
 
 Format: A `matrix` with 87 rows and 61 columns, rows corresponding to grid lines running east to west and columns to grid lines running south to north.
 
-Source: Digitized from a topographic map by Ross Ihaka. 
+Source: Digitized from a topographic map by Ross Ihaka.
 .fr[From the documentation `?volcano`]
 
 ---
 
-### Loading rasters 
+### Loading rasters
 
 ```{r}
 s <- stars::read_stars("DATA/geo_data/dem.tif")
@@ -313,10 +308,10 @@ template: inter-slide
 ---
 
 
-### Data structures for vector layers: 
+### Data structures for vector layers:
 
-- points, 
-- lines and 
+- points,
+- lines and
 - polygons
 
 #### Spatial and non-spatial properties of vector layers
@@ -336,9 +331,9 @@ stars
 ### Definition: Vector layers
 
 
-Vector layers are essentially sets of _geometries_ associated with non-spatial attributes 
+Vector layers are essentially sets of _geometries_ associated with non-spatial attributes
 
-The geometries are sequences of one or more _point coordinates_, possibly connected to form _lines_ or _polygons_ 
+The geometries are sequences of one or more _point coordinates_, possibly connected to form _lines_ or _polygons_
 
 The non-spatial attributes come in the form of a table.
 
@@ -349,7 +344,7 @@ The non-spatial attributes come in the form of a table.
 
 - binary formats, such as the ESRI Shapefile (.shp)
 
-- plain text formats, such as 
+- plain text formats, such as
   + .GeoJSON (.json or .geojson)
   + GPS Exchange Format (.gpx)
 
@@ -359,7 +354,7 @@ Vector layers are also frequently kept in a spatial database, such as PostgreSQL
 
 ### `sp` Classes for vector layers  (legacy)
 
-The `sp` package defines 6 main classes for vector layers 
+The `sp` package defines 6 main classes for vector layers
 
 One for each geometry type (points, lines, polygons)
 
@@ -387,7 +382,7 @@ One for geometry only and one for geometry with attributes
 
 ---
 
-### 
+###
 
 a hierarchical class system with three classes (Table 7.3):
 
@@ -416,7 +411,7 @@ a
 ---
 template: inter-slide
 
-## 
+##
 
 ---
 
@@ -429,7 +424,7 @@ template: inter-slide
 
 ---
 
-### `r fontawesome::fa("laptop-code", fill="code")` Packages 
+### `r fontawesome::fa("laptop-code", fill="code")` Packages
 
 - rgeos
 - sp
@@ -443,7 +438,7 @@ template: inter-slide
 
 ---
 
-### `r fontawesome::fa("book", fill="code")` Books 
+### `r fontawesome::fa("book", fill="code")` Books
 
 - [Introduction to Spatial Data Programming with R](http://132.72.155.230:3838/r/)
 - [rspatial.org](https://rspatial.org)
@@ -455,22 +450,16 @@ template: inter-slide
 
 See extended bibliography at [Introduction to Spatial Data Programming with R
  by M. Dorman](http://132.72.155.230:3838/r/)
- 
+
 ---
 
-### Tutorials 
+### Tutorials
 
 See [Tutorials list from M. Dorman](http://132.72.155.230:3838/r/#courses)
 
 
-
- 
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
+```{r child="closing_slide.Rmd"}
 
-
-# The End
-
+```

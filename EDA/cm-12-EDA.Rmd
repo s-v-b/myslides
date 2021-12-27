@@ -4,6 +4,13 @@ subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  title: "Canonical Correlation Analysis"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
@@ -62,7 +69,7 @@ myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
 
 
 
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
 NoCite(myBib, "MR3851754")
 NoCite(myBib, "MR3080408")
 NoCite(myBib, "MR3316191")
@@ -75,7 +82,15 @@ NoCite(myBib, "Mur12")
 NoCite(myBib, "moitra2018algorithmic")
 ```
 
+
 ---
+
+```{r child="title_slide.Rmd"}
+
+```
+
+---
+exclude: true
 class: middle, left, inverse
 
 

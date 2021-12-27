@@ -4,6 +4,13 @@ subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  title: "Vaccine Hesitancy, Correspondence Analysis"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-...ter.css", "xaringan-themer.css"]
@@ -72,20 +79,30 @@ NoCite(myBib, "MR767260")
 NoCite(myBib, "MR2445017")
 ```
 
+---
+
+```{r child="title_slide.Rmd"}
+
+```
 
 ---
-class: middle, left, inverse
+exclude: true
+template: inter-slide
 
-# Exploratory Data Analysis XII: Correspondance Analysis illustrated
+
+# Exploratory Data Analysis : Correspondance Analysis illustrated
 
 ### `r Sys.Date()`
 
-#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
 
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
 
 ---
-class: middle, inverse
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -109,7 +126,7 @@ class: middle, inverse
 template: inter-slide
 
 
-## Context: EpiCov investigation 
+## Context: EpiCov investigation
 
 ---
 
@@ -128,16 +145,29 @@ by Alexis Spire, Nathalie Bajos, Léna Silberzan , for the EPICOV study group
 ]
 
 
+???
+
+Recension dans Le Monde (Juin 2021)
+
+[Surexposition](https://www.lemonde.fr/planete/article/2020/10/09/covid-19-cette-enquete-deconstruit-certains-discours-sur-la-surexposition-des-immigres_6055406_3244.html)
+
+[Hésitants et réfractaires](https://www.lemonde.fr/planete/article/2021/06/25/on-a-eu-tendance-a-interpreter-les-hesitants-comme-des-refractaires_6085663_3244.html)
+
+
 ---
 exclude: true
 
-
-### Vaccine hesitancy and CA
+### Vaccine hesitancy and Vaccine reluctance
 
 Vaccine reluctance:
 
 
 Vaccine hesitancy:
+
+
+???
+
+A take home message 
 
 ---
 
@@ -154,12 +184,20 @@ See [https://doi.org/10.1101/2021.02.24.21252316](https://doi.org/10.1101/2021.0
 
 ---
 
-### Demographic variables 
+### Demographic variables
 
-
+.f6[
 > To describe the sample, six sociodemographic variables were considered: _age_, _gender_, _ethno-racial status_ (based on _migration history_), social class (based on _current or last occupation_), standard of living (based on _decile of household income_ per consumption unit), and _formal education level_. Ethno-racial status was defined by combining the criteria of place of birth, nationality, and status of the individual and both parents.
 
 > The analysis was conducted from an intersectional perspective [10] that simultaneously took into account gender, class, age, and ethno-racial social characteristics, as well as respondents' level of trust in the government.
+]
+
+
+???
+
+Intersectional perspective
+
+Investigate interactions
 
 
 ---
@@ -175,8 +213,9 @@ See [https://doi.org/10.1101/2021.02.24.21252316](https://doi.org/10.1101/2021.0
 - [ ] Attitudes towards vaccination are reported on a Likert/rating scale. Is there any difference between the rating scales for the two questions?
 - [ ] If you find any difference, can you guess the motivation?
 
+---
 
-### Rating scales 
+### Rating scales
 
 [Likert scale/Rating scale](https://en.wikipedia.org/wiki/Likert_scale)
 
@@ -483,11 +522,11 @@ dimnames(comorbidities_covid) <- list(Comorbidities=rownames(comorbidities_covid
 
 
 ```{r, echo=FALSE}
-ls_tables_names  <- ls(pattern="_covid|_vaccine") 
+ls_tables_names  <- ls(pattern="_covid|_vaccine")
 
 mask <- map_lgl(ls_tables_names, ~ is.table(get(.)))
 
-ls_tables <- ls_tables_names[mask] %>% 
+ls_tables <- ls_tables_names[mask] %>%
   map(~ get(.))
 
 names(ls_tables) <- ls_tables_names[mask]
@@ -503,7 +542,7 @@ ca_analyses <- ls_tables %>% map( ~ CA(. , graph = FALSE))
 
 ---
 
-### Age 
+### Age
 
 ```{r age, out.width="50%", fig.show='hold', echo=FALSE}
 fviz_ca(ca_analyses[[3]]) + ggtitle(names(ca_analyses)[[3]])
@@ -523,7 +562,7 @@ mosaicplot(age_covid, shade = TRUE)
 
 ---
 
-### CSP 
+### CSP
 
 ```{r , out.width="50%", fig.show='hold', echo=FALSE}
 fviz_ca(ca_analyses[[8]]) + ggtitle(names(ca_analyses)[[8]])
@@ -614,7 +653,7 @@ mosaicplot(gender_covid, shade = TRUE)
 
 ---
 
-### Family 
+### Family
 
 ```{r, out.width="50%", fig.show='hold', echo=FALSE}
 mosaicplot(child_vaccine, shade = TRUE)
@@ -664,6 +703,9 @@ names(ca_analyses)
 > We then conducted _logistic regressions_ on being “not at all in favor” to vaccination in general, and on being “certainly not” willing to get vaccinated against Covid-19.
 
 > The percentages presented are weighted to account for the _sample design_. The figures in the tables are not weighted. All analyses were performed with the R software (1.3.959). A `P-value <0.05` was considered statistically significant. Given the sample size, the observed differences were consistently statistically significant. Therefore, no tests are presented for univariable analyses.
+
+???
+
 
 ---
 class: middle, center, inverse

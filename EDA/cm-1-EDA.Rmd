@@ -5,11 +5,11 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
@@ -74,11 +74,11 @@ template: inter-slide
 ???
 ---
 
-.f1[`r fontawesome::fa("r-project")`] is a software environment for 
+.f1[`r fontawesome::fa("r-project")`] is a software environment for
 
 - statistical computing and
 
-- graphics 
+- graphics
 
 distributed freely at `CRAN` under a `GPL 2/3 licence`
 
@@ -102,9 +102,9 @@ name: history
 .fl.w-70.pa[
 
 - 1976 _S_ programming language designed at Bell Labs
-by John Chambers et al. 
+by John Chambers et al.
 
-- 1998 _The New S Language_ (Blue Book) 
+- 1998 _The New S Language_ (Blue Book)
 
 - 1988 _S-PLUS_ first produced by a Seattle-based start-up company called Statistical Sciences, Inc.
 
@@ -140,8 +140,8 @@ exclude: true
 DiagrammeR::mermaid("
 graph TB
     A --> B
-    ", 
-  height = '100%', 
+    ",
+  height = '100%',
   width = '100%')
 ```
 
@@ -155,18 +155,18 @@ graph TB
 
 - Functional (inherited from [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)))
 
-- Object Oriented 
+- Object Oriented
 
-- Interpreted 
+- Interpreted
 
 - Written in `C` and `Fortran`
 
 - Interfaced with `C, C++, Java`, `r fontawesome::fa("python")`, ...
 
 - Interfaced with `r fontawesome::fa("database")` SQL
-  
+
 ]
-  
+
 
 
 .fl.w-50[
@@ -179,14 +179,14 @@ graph TB
 
 - `Rstudio` `r fontawesome::fa("glass-cheers")`
 
-- `Jupyter` notebooks 
+- `Jupyter` notebooks
 
 ]
 ---
 
-### Kernel and packages 
+### Kernel and packages
 
-`r fontawesome::fa("r-project")` is made of a relatively stable core part (the kernel) and an ever growing collection of packages 
+`r fontawesome::fa("r-project")` is made of a relatively stable core part (the kernel) and an ever growing collection of packages
 
 Packages enrich the kernels in many ways:
 
@@ -203,7 +203,7 @@ Packages enrich the kernels in many ways:
 
 ### CRAN
 
-- Comprehensive R-project Archive Network 
+- Comprehensive R-project Archive Network
 
 ```{r, echo=FALSE, fig.width=12}
 knitr::include_url("https://pbil.univ-lyon1.fr/CRAN/")
@@ -236,7 +236,7 @@ knitr::include_graphics("./img/rstudio_Opera Snapshot_2021-09-09_115435_www.rstu
 
 ---
 
-### IDE 
+### IDE
 
 - Editor(s)
 
@@ -245,10 +245,10 @@ knitr::include_graphics("./img/rstudio_Opera Snapshot_2021-09-09_115435_www.rstu
 - Viewer(s)
 
 - Misc.
-  + Versioning 
+  + Versioning
   + Environment monitoring
   + ...
-  
+
 ---
 
 ### Use cases
@@ -286,7 +286,7 @@ knitr::include_url("https://rmarkdown.rstudio.com/index.html")
 
 - Data gathering
 
-- Data wrangling 
+- Data wrangling
 
 - Exploratory Data Analyis (and Visualization)
 
@@ -298,9 +298,9 @@ knitr::include_url("https://rmarkdown.rstudio.com/index.html")
 
 .fl.w-50.pa2[
 
-The pipeline may be iterated several times 
+The pipeline may be iterated several times
 
-Gluing the different steps in a manageable way is vital 
+Gluing the different steps in a manageable way is vital
 
 `RMarkdown` does just that `r fontawesome::fa("glass-cheers")`
 
@@ -319,12 +319,12 @@ Gluing the different steps in a manageable way is vital
 DiagrammeR::mermaid("
     graph TD;
     id1[Data gathering] -->  id2[Data wrangling];
-    id2[Data wrangling] -->  id3[Exploratory Data Analyis and Visualization]; 
+    id2[Data wrangling] -->  id3[Exploratory Data Analyis and Visualization];
     id3[Exploratory Data Analyis and Visualization] -.-> id1[Data gathering] ;
     id3[Exploratory Data Analyis and Visualization] -.-> id2[Data wrangling]  ;
     id3[Exploratory Data Analyis and Visualization] --> id4[Modeling Causal/Predictive] ;
-    id4[Modeling Causal/Predictive] --> id5[Reporting paper, html, interactive dashboard, ...] ; 
-    id4[Modeling Causal/Predictive] -.-> id1[Data gathering] ; 
+    id4[Modeling Causal/Predictive] --> id5[Reporting paper, html, interactive dashboard, ...] ;
+    id4[Modeling Causal/Predictive] -.-> id1[Data gathering] ;
     id4[Modeling Causal/Predictive] -.-> id2[Data wrangling] ;
 ", height="800px")
 
@@ -338,11 +338,11 @@ DiagrammeR::mermaid("
 
 ### A pipeline
 
-The pipeline is defined by solid arrows 
+The pipeline is defined by solid arrows
 
 It may be (partially) iterated (several times)
 
-The reports need to be updated every time 
+The reports need to be updated every time
 
 - data are edited/reshaped
 
@@ -375,12 +375,8 @@ knitr::include_url("https://r4ds.had.co.nz")
 knitr::include_url("https://adv-r.hadley.nz")
 ```
 
-
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
+```{r child='closing_slide.Rmd'}
 
-
-# The End
+```

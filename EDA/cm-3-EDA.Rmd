@@ -5,11 +5,12 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  title: "Bivariate statistics"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -43,8 +44,14 @@ class: left, middle
 
 ```
 
+---
+
+```{r child="title_slide.Rmd"}
+
+```
 
 ---
+exclude:true
 template: inter-slide
 
 # Bivariate Statistics
@@ -85,7 +92,7 @@ class: center, middle, inverse
 
 A bivariate sample is a sequence of couples from  $\mathcal{X} \times \mathcal{Y}$
 
-Computationally, a bivariate sample is a two-dimensional array (not a matrix) with $n$ rows and $2$ columns 
+Computationally, a bivariate sample is a two-dimensional array (not a matrix) with $n$ rows and $2$ columns
 
 The two columns may be of the same type (`numeric`, `integer`, `character`, `factor`, `date`) or  not
 
@@ -101,15 +108,15 @@ If we collect an i.i.d sample from $P$, we obtain a _bivariate_ sample
 ### Setting I
 
 For a health survey, we can poll repeatedly a well-defined human population by picking
-uniformly at random elements of the population (individuals) 
+uniformly at random elements of the population (individuals)
 
 For each individual, we measure at wake up
 
-- *blood pressure* 
+- *blood pressure*
 
-- *heart rate* (pulses per minute) 
+- *heart rate* (pulses per minute)
 
-We obtain a bivariate sample 
+We obtain a bivariate sample
 
 Both variables are quantitative (and non-negative)
 
@@ -119,9 +126,9 @@ Both variables are quantitative (and non-negative)
 
 Consider the collection of passengers on board of HMS Titanic on April the 12th, 1912
 
-For each passenger, we record class (`Pclass`) and Fate (`Survived/Deceased`). 
+For each passenger, we record class (`Pclass`) and Fate (`Survived/Deceased`).
 
-This is again a bivariate sample 
+This is again a bivariate sample
 
 Both variables are _qualitative_/categorical
 
@@ -131,26 +138,26 @@ One variable is _qualitative_, the other _quantitative._
 
 ---
 
-### Convention 
+### Convention
 
 When we deal with a generic bivariate sample, we denote
 by $X$ the first coordinate, and $Y$ the second coordinate
 
 If $(x,y) \in \mathcal{X} \times \mathcal{Y}$
 
-then 
+then
 
 $$X(x, y) =x  \qquad \text{and} \qquad Y(x, y)=y$$
 
-In statistical parlance, $X$ and $Y$ are called _variables_ 
+In statistical parlance, $X$ and $Y$ are called _variables_
 
-The ranges of the two coordinates may be finite or not 
+The ranges of the two coordinates may be finite or not
 
 The ranges may be different or not
 
 ---
 
-### Two dimensional arrays: `dataframe`  
+### Two dimensional arrays: `dataframe`
 
 .panelset[
 
@@ -164,17 +171,17 @@ _dataframes_ are _column-oriented_
 
 In `r fontawesome::fa("r-project")`, a _dataframe_ is a `list` of `vectors`
 
-All vectors in the `list` have the same length, they may be of different types (`class`) 
+All vectors in the `list` have the same length, they may be of different types (`class`)
 ]
 
 .panel[.panel-name[Dataframes, Tibble, ...]
 
-We should think of a _bivariate_ sample as dataframe `df` with two _columns_ `X` and `Y` and as many _rows_ as there are _individuals_ in the sample 
+We should think of a _bivariate_ sample as dataframe `df` with two _columns_ `X` and `Y` and as many _rows_ as there are _individuals_ in the sample
 
 If we project on either coordinate, we obtain a _univariate_ sample (`df$X`, `df[["X"]]` or `df$Y`)
 
 ```{r}
-df <-  tibble::tibble(X=letters[seq(1,6,2)], 
+df <-  tibble::tibble(X=letters[seq(1,6,2)],
                       Y=rnorm(3))
 df # a bivariate sample of length 3
 ```
@@ -248,7 +255,7 @@ Counts like $n_{i, \cdot}$ or $n_{\cdot, j}$ are called _marginal counts_
 
 From the Titanic dataset (`Kaggle`), we extract columns `Pclass`  and `Survived`
 
-- `Pclass` has three modalities: `(1, 2, 3)`  
+- `Pclass` has three modalities: `(1, 2, 3)`
 
 - `Survived` has two modalities: (`Deceased`, `Survived`)
 
@@ -308,7 +315,7 @@ tit$Survived <- forcats::fct_recode(tit$Survived,      #<<
 ```{r, results='markup', echo=TRUE}
 tit %>%
   dplyr::select(Pclass, Survived) %>% # Projection on two columns
-  table()     #<<  
+  table()     #<<
 ```
 
 ]
@@ -317,10 +324,10 @@ tit %>%
 
 ```{r, results='markup', echo=TRUE}
 tit %>%
-  dplyr::select(Pclass, Survived) %>% 
-  table() %>%     
+  dplyr::select(Pclass, Survived) %>%
+  table() %>%
   broom::tidy() %>%   # make it a dataframe
-  tidyr::pivot_wider(names_from=Survived, 
+  tidyr::pivot_wider(names_from=Survived,
                      values_from=n) %>%    # with usual look and feel
   knitr::kable(format="markdown")
 ```
@@ -350,9 +357,9 @@ Package `summarytools` provides richer contingency tables.
 ```{r, echo=TRUE, results='asis', eval=FALSE}
 pacman::p_load(summarytools)
 
-ctable(x=tit$Pclass, 
-       y=tit$Survived, 
-       style="rmarkdown" , 
+ctable(x=tit$Pclass,
+       y=tit$Survived,
+       style="rmarkdown" ,
        headings = FALSE)
 ```
 
@@ -425,12 +432,12 @@ The _width_ of each bar is proportional to the Class frequency  (count)
 
 The `stat_...` part consists in computing the $(n_{i,j}/n)_{i\in \mathcal{X}, j \in \mathcal{Y}}$
 
-The `geom_...` part consists in mapping the counts to rectangles: 
+The `geom_...` part consists in mapping the counts to rectangles:
 a `mosaicplot` associates a rectangle to each couple of modalities
 
 The surface area of the rectangle associated with
 $(i,j) \in \mathcal{X}\times \mathcal{Y}$ is proportional
-to 
+to
 
 $$\underbrace{n_{i,j}}_{\propto\text{ surface area}} = \underbrace{n_{i, .}}_{\propto\text{ width}} \times \underbrace{\frac{n_{i, j}}{n_{i,.}}}_{\propto\text{ height}}$$
 
@@ -439,11 +446,11 @@ Rectangles are placed on a 2-dimensional grid
 
 ---
 
-### From counts to probabilities 
+### From counts to probabilities
 
-- Normalized counts 
+- Normalized counts
 
-$$(n_{i,j}/n)_{i\in \mathcal{X}, j \in \mathcal{Y}}$$ 
+$$(n_{i,j}/n)_{i\in \mathcal{X}, j \in \mathcal{Y}}$$
 
 define a probability distribution on $\mathcal{X}\times \mathcal{Y}$, the so-called *empirical distribution* $P_n$:
 
@@ -535,9 +542,9 @@ More work would allow to put the bars closer and to mimick the mosaicplot in a m
 
 In the Grammar of Graphics perspective,
 
-- barplots, 
-- two-way mosaicplots, 
-- higher-dimensional mosaicplots 
+- barplots,
+- two-way mosaicplots,
+- higher-dimensional mosaicplots
 
 are based on column plots and require stat functions involving aggregation operations from extended SQL
 
@@ -552,7 +559,7 @@ tit %>%
   summarise(count=n())  %>%
   ungroup() %>%
   ggplot(aes(x=Pclass, y=count)) +
-  geom_col(aes(fill=Survived, width=)) 
+  geom_col(aes(fill=Survived, width=))
 ```
 
 ---
@@ -574,7 +581,7 @@ The messages conveyed by the `mosaicplot` of the transpose of a contingency tabl
 
 .panel[.panel-name[A tale of two tables]
 
-Rather than telling us the fate of the different passenger classes, 
+Rather than telling us the fate of the different passenger classes,
 this `mosaicplot` tells us about the class composition of survivors and casualties
 
 `r fontawesome::fa("exclamation-triangle")` The two stories are related but  one is harder to comment about
@@ -584,7 +591,7 @@ this `mosaicplot` tells us about the class composition of survivors and casualti
 .panel[.panel-name[Survival explained by Class]
 
 ```{r mosaictitanic1, echo=TRUE, message=FALSE, warning=FALSE, fig.height=5}
-mosaicplot(formula= Pclass ~ Survived, data= tit)  
+mosaicplot(formula= Pclass ~ Survived, data= tit)
 
 ```
 
@@ -593,7 +600,7 @@ mosaicplot(formula= Pclass ~ Survived, data= tit)
 .panel[.panel-name[Class according to Survival]
 
 ```{r mosaictitanic2, echo=TRUE, message=FALSE, warning=FALSE, , fig.height=5}
-mosaicplot(formula= Survived ~ Pclass, data= tit)  
+mosaicplot(formula= Survived ~ Pclass, data= tit)
 
 ```
 
@@ -643,7 +650,7 @@ tit %>%
   ggplot() +
   geom_mosaic(aes(x = product(Pclass, Survived), fill=Pclass)) + #<<
   labs(y= "Passenger class", x="Fate") +
-  scale_fill_viridis_d() + #<< 
+  scale_fill_viridis_d() + #<<
   ggtitle("Titanic mosaic with tidyverse flavor (bis)")
 ```
 
@@ -696,13 +703,13 @@ The empirical covariance matrix is the *covariance matrix of the joint empirical
 
 As a covariance matrix, the empirical covariance matrix is *symmetric*, *semi-definite positive (SDP)*
 
-### `r fontawesome::fa("syringe")` 
+### `r fontawesome::fa("syringe")`
 
-- A square $n \times n$ matrix $A$  is semi-definite positive (SDP) iff 
+- A square $n \times n$ matrix $A$  is semi-definite positive (SDP) iff
 
 $$\forall u \in \mathbb{R}^n, \qquad  u^T \times A u = \langle u, Au \rangle \geq 0$$
 
-- A square $n \times n$ matrix $A$  is definite positive (DP) iff 
+- A square $n \times n$ matrix $A$  is definite positive (DP) iff
 
 $$\forall u \in \mathbb{R}^n \setminus \{0\}, \qquad  u^T \times A u = \langle u, Au \rangle > 0$$
 
@@ -714,7 +721,7 @@ The **linear correlation coefficient** is defined from the covariance matrix as
 
 $$\rho = \frac{\operatorname{cov}_n(X, Y)}{\sqrt{\operatorname{var}_n(X)  \operatorname{var}_n(Y)}}$$
 
-`r fontawesome::fa("hand-point-right")` By the Cauchy-Schwarz inequality, we always have 
+`r fontawesome::fa("hand-point-right")` By the Cauchy-Schwarz inequality, we always have
 
 $$-1 \leq \rho \leq 1$$
 
@@ -731,11 +738,11 @@ data <- read_delim('./DATA/Enfants.txt', delim='\t')
 
 data %>%
   dplyr::select(MASSE, TAILLE) %>%
-  dplyr::summarise(mx= mean(TAILLE), my=mean(MASSE), 
-                   m2x=mean(TAILLE^2), m2y=mean(MASSE^2), 
-                   mxy=mean(TAILLE*MASSE)) %>%  
-  dplyr::mutate(var_taille=m2x-mx^2, 
-                var_masse=m2y-my^2, 
+  dplyr::summarise(mx= mean(TAILLE), my=mean(MASSE),
+                   m2x=mean(TAILLE^2), m2y=mean(MASSE^2),
+                   mxy=mean(TAILLE*MASSE)) %>%
+  dplyr::mutate(var_taille=m2x-mx^2,
+                var_masse=m2y-my^2,
                 cov_masse_taille=mxy -mx*my) %>%
   dplyr::mutate(cor=cov_masse_taille/sqrt(var_taille * var_masse)) %>%
   dplyr::select(- starts_with('m'))
@@ -751,7 +758,7 @@ Suppose now, we want to visualize a quantitative bivariate sample of length $n$.
 
 This bivariate sample (a dataframe) may be handled as a _real matrix_ with $n$ rows and $2$ columns
 
-Geometric concepts come into play 
+Geometric concepts come into play
 
 ---
 
@@ -762,7 +769,7 @@ or the rows, that is $n$ points on the real plane.
 
 `r fontawesome::fa("lightbulb")` If we try to visualize the two columns, we simplify the problem by _projecting on the plane generated by the two columns_
 
-Then what matters is the _angle_ between the two vectors. 
+Then what matters is the _angle_ between the two vectors.
 
 Its _cosine_ is precisely the _linear correlation coefficient_ defined above
 
@@ -803,7 +810,7 @@ p_scatter_gaussian <- ggplot(u, aes(x=X, y=Y)) +
   geom_point(alpha=.5, size=1) +
   geom_point(data=emp_mean, color=2, size=5) +
   coord_fixed() +
-  ggtitle(stringr::str_c("Gaussian cloud, cor = ", 
+  ggtitle(stringr::str_c("Gaussian cloud, cor = ",
                          round(cor(u$X, u$Y), 2), sep=""))
 
 p_scatter_gaussian
@@ -815,7 +822,7 @@ p_scatter_gaussian
 - Mean vector (Empirical mean)
 
 ```{r}
-t(colMeans(u)) %>% 
+t(colMeans(u)) %>%
   knitr::kable(digits = 3, col.names = c("$\\overline{X_n}$", "$\\overline{Y_n}$"))
 ```
 
@@ -823,7 +830,7 @@ t(colMeans(u)) %>%
 
 ```{r}
 cov(u) %>% as.data.frame() %>% knitr::kable(digits = 3)
-  
+
 ```
 
 ]
@@ -832,7 +839,7 @@ cov(u) %>% as.data.frame() %>% knitr::kable(digits = 3)
 .panel[.panel-name[Plot]
 
 ![](`r knitr::fig_chunk("gaussiancloud", "png")`)
-  
+
 ]
 
 ]
@@ -857,16 +864,16 @@ As before, $\overline{Y}_n$ denotes the empirical mean of $Y$ and $\sigma^2_Y$ t
 
 ---
 
-### Conditional summaries 
+### Conditional summaries
 
 
-For each modality $i \in \mathcal{X}$, we define: 
+For each modality $i \in \mathcal{X}$, we define:
 
 - Conditional Mean of $X$ given $\{ X = i \}$
 
 $$\overline{Y}_{n\mid i}  = \frac{1}{n_i} \sum_{k\leq n} \mathbb{I}_{x_k =i} \times  y_k$$
 
-- Conditional Variance $Y$ given $\{ X= i\}$ 
+- Conditional Variance $Y$ given $\{ X= i\}$
 
 $$\sigma^2_{Y\mid i}  = \frac{1}{n_i} \sum_{k \leq n}  \mathbb{I}_{x_k =i} \times \bigg( y_k  - \overline{Y}_{n \mid i}\bigg)^2$$
 
@@ -881,11 +888,11 @@ $$\sigma^2_{Y} =  \underbrace{\sum_{i\in \mathcal{X}} \frac{n_i}{n} \sigma^2_{Y 
 
 ---
 
-### Robust bivariate summaries 
+### Robust bivariate summaries
 
-It is also possible and fruitful to compute 
+It is also possible and fruitful to compute
 
-- conditional quantiles (median, quartiles) and 
+- conditional quantiles (median, quartiles) and
 - conditional interquartile ranges (IQR)
 
 Conditional mean, variance, median, IQR  (`r fontawesome::fa("database")`)
@@ -895,8 +902,8 @@ tit %>%
   dplyr::select(Survived, Fare) %>%
   dplyr::group_by(Survived) %>%
   dplyr::summarise(cmean=mean(Fare, na.rm=TRUE), #<<
-                   csd=sd(Fare,na.rm = TRUE), 
-                   cmedian=median(Fare, na.rm = TRUE), 
+                   csd=sd(Fare,na.rm = TRUE),
+                   cmedian=median(Fare, na.rm = TRUE),
                    cIQR=IQR(Fare,na.rm = TRUE))
 ```
 
@@ -904,9 +911,9 @@ tit %>%
 
 ### Visualization of mixed bivariate samples
 
-Visualization of qualitative/quantitative bivariate samples 
+Visualization of qualitative/quantitative bivariate samples
 
-consists in 
+consists in
 
 displaying visual summaries of conditional distribution of $Y$ given $X=i, i \in \mathcal{X}$
 
@@ -924,12 +931,12 @@ displaying visual summaries of conditional distribution of $Y$ given $X=i, i \in
 ```{r}
 filtered_tit <- tit %>%
   dplyr::select(Pclass, Survived, Fare) %>%
-  dplyr::filter(Fare > 0 ) 
+  dplyr::filter(Fare > 0 )
 
-v <- filtered_tit %>% 
+v <- filtered_tit %>%
   ggplot() +
   aes(y=Fare) +
-  scale_y_log10() 
+  scale_y_log10()
 
 vv <- v + geom_violin()
 
@@ -939,7 +946,7 @@ vv <- v + geom_violin()
 
 .panel[.panel-name[Fare versus Passenger Class]
 ```{r, fig.height=4}
-vv + 
+vv +
   aes(x=Pclass) +
   ggtitle("Titanic: Fare versus Passenger Class")
 ```
@@ -948,7 +955,7 @@ vv +
 .panel[.panel-name[Fare versus Survival]
 
 ```{r, fig.height=4}
-vv + 
+vv +
   aes(x=Survived) +
   ggtitle("Titanic: Fare versus Survival")
 ```
@@ -964,11 +971,11 @@ vv +
 
 .panel[.pane-name[Code]
 
-- Comply with the `DRY` principle 
+- Comply with the `DRY` principle
 - Avoid `WET`
 
 ```{r}
-vw <- v + geom_boxplot() 
+vw <- v + geom_boxplot()
 ```
 
 ]
@@ -984,7 +991,7 @@ vw + aes(x=Pclass) +
 .panel[.panel-name[Fare versus Survival]
 
 ```{r, echo=TRUE, fig.height=4}
-vw + 
+vw +
   aes(x=Survived) +
   ggtitle("Titanic: Fare versus Survival")
 ```
@@ -1066,9 +1073,9 @@ on minimizing the mean quadratic deviation.
 
 <img src="img/Rue_Laplace_(Paris).JPG" align="right" width="200">
 
-> The fourth chapter of Laplace treatise includes an exposition of the _method of least squares_, a remarkable testimony to Laplace's command over the processes of analysis. 
+> The fourth chapter of Laplace treatise includes an exposition of the _method of least squares_, a remarkable testimony to Laplace's command over the processes of analysis.
 
-> In 1805 Legendre had published the _method of least squares_, making no attempt to tie it to the theory of probability. 
+> In 1805 Legendre had published the _method of least squares_, making no attempt to tie it to the theory of probability.
 
 ]
 
@@ -1113,7 +1120,7 @@ $$\begin{array}{rl}\frac{\partial \ell_n}{\partial a} & = - 2  \operatorname{cov
 
 ---
 
-### A closed-form solution 
+### A closed-form solution
 
 Zeroing partial derivatives leads to
 
@@ -1124,7 +1131,7 @@ $$\begin{array}{rl}
 
 --
 
-or 
+or
 
 $$\begin{array}{rl}
   \widehat{a} & = \rho \frac{\sigma_y}{\sigma_x} \\
@@ -1146,7 +1153,7 @@ $$\begin{array}{rl}
 - The _slope_ and _intercept_  can be computed from the
 sample summary (empirical mean and covariance matrix)
 
-- In higher dimension, coefficients are  from `lm(...)` 
+- In higher dimension, coefficients are  from `lm(...)`
 
 ]
 
@@ -1168,7 +1175,7 @@ p_scatter_gaussian +
 
 
 ```{r}
-mod <- lm(formula=Y ~ X, data=u) 
+mod <- lm(formula=Y ~ X, data=u)
 
 mod %>% summary()
 ```
@@ -1190,7 +1197,7 @@ The _residuals_ are the prediction errors $\left(y_i - \widehat{a}x_i - \widehat
 
 Residuals play a central role in _regression diagnostic_
 
-The `Residual Standard Error`, is the square root of the normalized sum of squared residuals: 
+The `Residual Standard Error`, is the square root of the normalized sum of squared residuals:
 
 $$\frac{1}{n-2}\sum_{i=1}^n \left(y_i - \widehat{a}x_i - \widehat{b}\right)^2$$
 
@@ -1207,10 +1214,10 @@ sqrt(sum((mod$residuals)^2)/(mod$df.residual))
 .panel[.panel-name[Code]
 
 ```{r scatplot-residuals, fig.height=3.5, fig.show='hide'}
-p_scatter_gaussian %+% 
-  broom::augment(lm(Y ~ X, u)) +  #<< 
+p_scatter_gaussian %+%
+  broom::augment(lm(Y ~ X, u)) +  #<<
   geom_line(aes(x=X, y=.fitted)) +
-  geom_segment(aes(x=X, xend=X, y=.fitted, yend=Y, 
+  geom_segment(aes(x=X, xend=X, y=.fitted, yend=Y,
                    color=forcats::as_factor(sign(.resid))),
                alpha=.2) +
   theme(legend.position = "None") +
@@ -1229,7 +1236,7 @@ The residuals are the lengths of the segments connecting sample points to  their
 
 .panel[.panel-name[Multiple R-squared]
 
-Technically, the `Multiple R-squared`  or 
+Technically, the `Multiple R-squared`  or
 :  _coefficient of determination_ is the squared empirical correlation coefficient  $\rho^2$ between the explanatory and the response variables (in simple linear regression)
 
 $$1 - \frac{\sum_{i=1}^n \left(y_i - \widehat{a}x_i - \widehat{b}\right)^2}{\sum_{i=1}^n \left(y_i - \overline{Y}_n\right)^2}= 1 - \frac{\sum_{i=1}^n \left(y_i - \widehat{y}_i \right)^2}{\sum_{i=1}^n \left(y_i - \overline{Y}_n\right)^2}$$
@@ -1252,7 +1259,7 @@ The `Adjusted R-squared` is a deflated version of `Multiple R-squared`
 
 $$1 - \frac{\sum_{i=1}^n \left(y_i - \widehat{a}x_i - \widehat{b}\right)^2/(n-p-1)}{\sum_{i=1}^n \left(y_i - \overline{Y}_n\right)^2/(n-1)}$$
 
-It is useful when comparing 
+It is useful when comparing
 the merits of several competing models (this takes us beyond
 the scope of this lesson)
 
@@ -1263,13 +1270,13 @@ the scope of this lesson)
 ---
 
 ```{r flip-scatplot-residuals, include=FALSE}
-p_scatter_gaussian %+% 
-  broom::augment(lm(Y ~ X, u)) +  #<< 
+p_scatter_gaussian %+%
+  broom::augment(lm(Y ~ X, u)) +  #<<
   geom_line(aes(x=X, y=.fitted)) +
-  geom_segment(aes(x=X, 
-                   xend=X, 
-                   y=.fitted, 
-                   yend=Y, 
+  geom_segment(aes(x=X,
+                   xend=X,
+                   y=.fitted,
+                   yend=Y,
                    color=as_factor(sign(.resid))),
                alpha=.2) +
   theme(legend.position = "None") +
@@ -1283,7 +1290,7 @@ p_scatter_gaussian %+%
 class: middle, inverse, center
 
 
-## $y = x^T \beta + \sigma \epsilon$: The biggest lie? 
+## $y = x^T \beta + \sigma \epsilon$: The biggest lie?
 
 
 ---
@@ -1296,16 +1303,16 @@ class: middle, inverse, center
 - It is not wise to rely exclusively on  the `Multiple R-squared` to assess a linear model
 
 - `r fontawesome::fa("hand-point-right")` Different datasets can lead to the same regression line and the same `Multiple R-squared`
-and the same `Adjusted R-squared` 
+and the same `Adjusted R-squared`
 
 
 ---
 
-### Anscombe quartet 
+### Anscombe quartet
 
 .fl.w-50.pa2[
 
-4 simple linear regression problems packaged in dataframe 
+4 simple linear regression problems packaged in dataframe
 `datasets::anscombe`
 
 - `y1 ~ x1`
@@ -1317,7 +1324,7 @@ and the same `Adjusted R-squared`
 
 .fl.w-50.pa2[
 ```{r}
-anscombe <- datasets::anscombe 
+anscombe <- datasets::anscombe
 
 anscombe %>% gt()
 ```
@@ -1334,7 +1341,7 @@ anscombe %>% gt()
 .panel[.panel-name[`y1 ~ x1`]
 
 ```{r}
-lm(y1 ~ x1, anscombe) %>% 
+lm(y1 ~ x1, anscombe) %>%
   summary
 ```
 
@@ -1342,21 +1349,21 @@ lm(y1 ~ x1, anscombe) %>%
 
 .panel[.panel-name[`y2 ~ x2`]
 ```{r}
-lm(y2 ~ x2, anscombe) %>% 
+lm(y2 ~ x2, anscombe) %>%
   summary
 ```
 ]
 
 .panel[.panel-name[`y3 ~ x3`]
 ```{r}
-lm(y3 ~ x3, anscombe) %>% 
+lm(y3 ~ x3, anscombe) %>%
   summary
 ```
 ]
 
 .panel[.panel-name[`y4 ~ x4`]
 ```{r}
-lm(y4 ~ x4, anscombe) %>% 
+lm(y4 ~ x4, anscombe) %>%
   summary
 ```
 ]
@@ -1391,7 +1398,7 @@ The number of degrees of freedom is $n-p=9$
 
 ???
 
-How is RSE computed ? 
+How is RSE computed ?
 
 $$\frac{1}{n-p}\sum_{i=1}^n \left(y_j[i] - \widehat{y}_j[i] \right)^2$$
 
@@ -1425,12 +1432,12 @@ datasets::anscombe %>%
   pivot_longer(everything(),
     names_to = c(".value", "group"),
     names_pattern = "(.)(.)"
-  )  %>% 
-  rename(X=x, Y=y) %>% 
+  )  %>%
+  rename(X=x, Y=y) %>%
   arrange(group)-> anscombe
 ```
 
-From [https://tidyr.tidyverse.org/articles/pivot.html](https://tidyr.tidyverse.org/articles/pivot.html) 
+From [https://tidyr.tidyverse.org/articles/pivot.html](https://tidyr.tidyverse.org/articles/pivot.html)
 
 ]
 
@@ -1438,7 +1445,7 @@ From [https://tidyr.tidyverse.org/articles/pivot.html](https://tidyr.tidyverse.o
 .panel[.panel-name[Before]
 
 ```{r}
-datasets::anscombe  %>% 
+datasets::anscombe  %>%
   head(8) %>%
   knitr::kable()
 ```
@@ -1450,7 +1457,7 @@ datasets::anscombe  %>%
 .panel[.panel-name[After]
 
 ```{r}
-anscombe  %>% 
+anscombe  %>%
   head(8) %>%
   knitr::kable()
 ```
@@ -1465,8 +1472,8 @@ datasets::anscombe %>%
   pivot_longer(everything(),
     names_to = c(".value", "group"),
     names_pattern = "(.)(.)"
-  )  %>% 
-  rename(X=x, Y=y) %>% 
+  )  %>%
+  rename(X=x, Y=y) %>%
   arrange(group)-> anscombe_long
 
 anscombe_long
@@ -1507,7 +1514,7 @@ to be evaluated on each list item
 
 ---
 
-### Inspecting summaries 
+### Inspecting summaries
 
 All four regressions lead to the same intercept and the same slope
 
@@ -1515,7 +1522,7 @@ All four regressions have the same Sum of Squared Residuals
 
 All four regressions have the same Adjusted R-square
 
-We are tempted to conclude that 
+We are tempted to conclude that
 
 > all four linear regressions are equally relevant
 
@@ -1675,10 +1682,7 @@ you should reject the independence hypothesis when the so-called $p$-value is sm
 
 
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: 112%
+```{r child="closing_slide.Rmd"}
 
-
-# The End
+```

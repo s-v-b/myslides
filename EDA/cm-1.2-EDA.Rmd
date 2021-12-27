@@ -3,13 +3,14 @@ title: "EDA I: Introduction to R and Data Analysis"
 subtitle: "Analyse de Données Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
-date: "2020/12/11 (updated: `r Sys.Date()`)"
+date: "2021/12/21 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  institution: "Université de Paris"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
@@ -44,18 +45,6 @@ class: left, middle
 
 ```
 
-
-```{r xaringan-themer, include=FALSE, warning=FALSE, eval=FALSE}
-pacman::p_load("xaringanthemer")
-
-xaringanthemer::style_xaringan()
-
-knitr::opts_chunk$set(echo=FALSE)
-
-options(htmltools.dir.version = FALSE, htmltools.preserve.raw = FALSE)
-```
-
-
 ---
 template: inter-slide
 
@@ -74,12 +63,11 @@ template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [Grammar of Graphics](#gg)
+### [Grammar of Graphics illustrated](#gg)
 
 ### [DIY](#diy)
 
 ### [Books](#books)
-
 
 ---
 template: inter-slide
@@ -87,23 +75,34 @@ template: inter-slide
 ## Grammar of Graphics
 
 ---
+
 ### Grammar of Graphics in Action
 
 ```{r rossling, eval=TRUE}
 knitr::include_url("https://www.youtube.com/embed/jbkSRLYSojo")
 ```
 
+
+???
+
+In the field of visualization, a landmark video.
+
+The late _Hans Rosling_, is famous for a 2006 Ted talk called _The best statistics you’ve ever seen_.  It became one of the most seen TED talks ever, thanks to its unique combination of knowledge-testing, animating bubble charts and storytelling about global development.
+
+
+
+
 ---
 
-### Gapminder 
+### [`r fontawesome::fa("link")` Gapminder](https://www.gapminder.org)
 
 [Gapminder](https://www.gapminder.org) is a Swedish foundation. Its website states
 
 > Gapminder fights devastating misconceptions about global development. Gapminder produces free teaching resources making the world understandable based on reliable statistics. Gapminder promotes a fact-based worldview everyone can understand.
 
-One of its founder, the late Hans Rosling, is famous for a 2006 Ted talk called _The best statistics you’ve ever seen_.  It became one of the most seen TED talks ever, thanks to its unique combination of knowledge-testing, animating bubble charts and storytelling about global development.
+???
 
-[`r fontawesome::fa("link")` Gapminder](https://www.gapminder.org)
+Hans Rosling was a founder of Gapminder
 
 
 
@@ -111,24 +110,21 @@ One of its founder, the late Hans Rosling, is famous for a 2006 Ted talk called 
 template: inter-slide
 name: diy
 
-## Do It Yourself 
+## Do It Yourself
 
 ---
-### Install and load packages
+### `r fontawesome::fa("tools")` Install and load packages
 
-.fl.w-50.pa2[
+.fl.w-50.pa2.f6[
 
-The `gapminder` data can be gathered from pakage `gapminder`
+The `gapminder` data can be loaded from pakage `gapminder`
 
-- packages can be installed from `CRAN` using `install.packages()`
+- `r fontawesome::fa("download")` Packages can be _installed_ from `CRAN` using `install.packages()`
 
-- Once a package is installed on hard drive, it has to be loaded in the current session using `require()` or `library()`  
+- `r fontawesome::fa("hdd")` Once a package is installed on the hard drive, it has to be _loaded_ in the current session using `require()` or `library()`
 
-- Function `p_load` from package `pacman` installs the package if needed and loads it
+- `r fontawesome::fa("hdd")` Function `p_load` from package `pacman` installs the package if needed and loads it
 
-- Loading `tidyverse` loads a collection of packages dedicated to table manipulations and graphics including `ggplot2`. 
-
-- Loading `tidyverse` also loads `magrittr`
 
 ]
 
@@ -138,44 +134,75 @@ The `gapminder` data can be gathered from pakage `gapminder`
 pacman::p_load("tidyverse")
 pacman::p_load("gapminder")
 ```
+
+- `r fontawesome::fa("magic")` Loading `tidyverse` loads a collection of packages dedicated to table manipulations and graphics including `ggplot2`.
+
+- Loading [`tidyverse`]() also loads parts of `magrittr`, notably the _pipe_ `%>%`
+
+- `r fontawesome::fa("hand-point-right")` `r fontawesome::fa("r-project")` `4.xx` offers a new pipe `|>|`
+
 ]
 
 ???
 
+Insist on the difference between _installing_ and _loading_ a package
+
+- How do we get the list of installed packages?
+- How do we get the list of loaded packages?
+- Which objects are made available by a package?
+
+`pacman::p_load()` kills two birds with one stone
+
 ---
 
-### Have a look at gapminder dataset
+### Have a look at `gapminder` dataset
 
 .fl.w-30.pa2[
 
-- `gapminder` is a `data.frame`
+- `gapminder` is a table, like a spreadsheet table, or a relational database table
 
-- It is also a `tibble`
+- In `r fontawesome::fa("r-project")` parlance, `gapminder` is a `data.frame`
 
-- `data.frame` like structures show up in every corner o Data Science
+- It is also a `tibble` in modern `tidyverse` parlance
+
+- `r fontawesome::fa("bullhorn")` `data.frame`-like structures show up in every corner of Data Science
 
 ]
 
 .fl.w-70.pa2[
 
 ```{r bare_gapminder}
-gapminder
+gapminder |>
+  glimpse(width=50)
 ```
 
 ]
+
+???
+
+What's in a data frame? What's in a tibble?
+
+A table has a _schema_: a list of named _columns_, each  with a given type
+
+A table has a _content_: _rows_. Each row is a collection of items, corresponding
+to the columns
+
+`glimpse()` allows to see the schema and the firts rows
+
+`head()` allows to see the first rows
 
 ---
 
 ### Get a feeling of the dataset
 
-.fl.w-30.pa2[
+.fl.w-30.pa2.f6[
 
 ```{r stratified_sampling}
-tmp <- gapminder %>% 
-  group_by(continent) %>%  #<<
+tmp <- gapminder |>
+  group_by(continent) |>  #<<
   slice_sample(n=2)        #<<
-
 ```
+
 ]
 
 .fl.w-70.pa2[
@@ -187,30 +214,43 @@ tmp
 ]
 
 ---
+
+### A tidy table
+
+
+???
+
+What's make a table tidy?
+
+- [ ] No/Few redundancies (what does it mean)
+  - [ ] Is the `gapminder` table redundant?
+  - [ ] ....
+
+
+---
 exclude: true
 
 ### Gapminder tibble  (extract)
 
 ```{r gapminder_td, eval=FALSE}
-gapminder %>% 
-  filter(year==2002)  %>% 
-  mutate(pop = stringr::str_c(round(pop/1e6,1), 'M')) %>% 
-  DT::datatable(options=list(pageLength=8, dom = 't'), rownames = FALSE) %>%  #<<
+tt <- gapminder %>%
+  filter(year==2002)  %>%
+  mutate(pop = stringr::str_c(round(pop/1e6,1), 'M')) %>%
+  DT::datatable(options=list(pageLength=8,
+                dom = 't'),
+                rownames = FALSE) %>%  #<<
   DT::formatCurrency('gdpPercap', digits=0) %>%      #<<
   DT::formatRound('lifeExp', 1) #<<
 ```
+
+
 
 ---
 exclude: true
 
 
 ```{r gapminder_td_bis, echo=FALSE}
-gapminder %>% 
-  filter(year==2002)  %>% 
-  mutate(pop = stringr::str_c(round(pop/1e6,1), 'M')) %>% 
-  DT::datatable(options=list(pageLength=8, dom = 't'), rownames = FALSE) %>%  #<<
-  DT::formatCurrency('gdpPercap', digits=0) %>%      #<<
-  DT::formatRound('lifeExp', 1) #<<
+
 ```
 
 ???
@@ -219,25 +259,25 @@ gapminder %>%
 - [ ] reorder columns
 - [ ] order countries by decreasing population size
 - [ ] right-align `pop` column
-- [ ] make provision for caption 
+- [ ] make provision for caption
 
---- 
-### Picking one year of data 
+---
+###  `r fontawesome::fa("database")` $\sigma$:  Picking one year of data
 
 .fl.w-30.pa2[
 
 ```{r gapminder_filtered, echo=TRUE}
-gapminder_2002 <- 
-  gapminder %>% 
-  filter(year==2002)
+gapminder_2002 <-
+  gapminder %>%
+  filter(year==2002) #<<
 ```
 
 ]
 
-.fl.w-70.pa2[
+.fl.w-70.pa2.f6[
 
 ```{r gapminder_filtered_glimpse, echo=FALSE}
-gapminder_2002 
+gapminder_2002
 ```
 
 ]
@@ -245,6 +285,28 @@ gapminder_2002
 
 ???
 
+In the parlance of Relational Algebra, this is a _selection_
+
+[dplyr docs](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter){target="_blank"}
+
+> find rows/cases where conditions are true
+
+---
+
+```{r flip_filter, include=FALSE}
+gapminder %>%
+  filter(year==2002) %>%  #ROTATE
+  filter(continent == "Europe") %>%  #ROTATE
+  filter(year==2002, continent == "Europe") %>%  #ROTATE
+  filter(year %in% seq(2002,2008), continent %in% c("Africa", "Europe")) #ROTATE
+```
+
+
+```{r, echo=FALSE, eval=FALSE}
+flipbookr:::embed_flipbook(chunk_name = "flip_filter",
+               use_share_again = T,
+               font_size = 120)
+```
 
 ---
 template: inter-slide
@@ -265,10 +327,13 @@ template: inter-slide
 - For each row, draw a point at coordinates defined by the mapping
 
 ```{r bad, eval=FALSE, echo=TRUE}
-gapminder_2002 %>% 
-  ggplot() +    #<< 
-  aes(x=gdpPercap, y=lifeExp) +  #<<
+p <- gapminder_2002 %>%
+  ggplot() +    #<<
+  aes(x=gdpPercap) + #<<
+  aes(y=lifeExp) +  #<<
   geom_point() #<<
+
+p
 ```
 
 ]
@@ -278,7 +343,8 @@ gapminder_2002 %>%
 
 .fl.w-60.pa2[
 
-```{r bad-out, ref.label="bad", echo=FALSE}
+```{r bad-out, ref.label="bad", echo=FALSE, fig.alt=""}
+
 ```
 
 ]
@@ -286,6 +352,15 @@ gapminder_2002 %>%
 
 
 ???
+
+We build a graphical object (a `ggplot` object) around a data frame. We supply aesthetic mappings that can be either global
+or bound to some geometries or statistics. The global aesthetic
+mapping defines which columns are mapped to which axes, possibly mapped to colours, linetypes or shapes. Geometries and Statistics
+describe the building blocks of graphics.
+
+
+
+
 
 What's missing there?
 
@@ -307,13 +382,10 @@ What's missing there?
 - Make point transparent by tuning `alpha` (avoid overplotting)
 
 ```{r better, echo=TRUE, eval=FALSE}
-p <- gapminder_2002 %>% 
-  ggplot() +
-  aes(x=gdpPercap, 
-      y=lifeExp, 
-      size = pop, #<<
+p <- p +
+  aes(size = pop, #<<
       color = continent #<<
-      ) +
+  ) +
   geom_point(alpha=.75)  #<<
 
 p
@@ -334,7 +406,7 @@ p
 
 ---
 
-### Scaling 
+### Scaling
 
 .fl.w-30.pa2[
 
@@ -342,14 +414,18 @@ In order to pay tribute to Hans Rosling, we need to take care of two _scaling_ i
 
 - the gdp per capita axis should be _logarithmic_
 
-- the area of the point should be proportionnal to the population
+- the area of the point should be proportional to the population
 
 ```{r scaling, echo=TRUE, eval=FALSE}
-p <- p + 
+zoom_continent <- 'Europe'
+
+p <- p +
   scale_x_log10(limits=c(100,5e4)) + #<<
   scale_size_area()  #<<
 
 p
+# p + ggforce::facet_zoom(xy= continent==zoom_continent,
+#                         zoom.data = continent==zoom_continent)
 ```
 ]
 
@@ -362,26 +438,34 @@ p
 
 ]
 
+???
 
+- Why is it important to use logarithmic scaling for gdp per capita?
+
+- When is it important to use logarithmic scaling on some axis?
+
+- Why is it important to specify `scale_size_area()` ?
 
 ---
 
-### In perspective 
+### In perspective
 
 
 .fl.w-30.pa2[
 
 - Add a plot title
 
-- Make axes titles 
-  + explicit and 
+- Make axes titles
+  + explicit
   + readable
 
 ```{r title, echo=TRUE, eval=FALSE}
-p +
-  labs(title= "Gapminder bubble plot (2002)", 
-       x = "Income", 
-       y = "Lifespan")
+p <- p +
+  labs(title=glue("Gapminder {min(p$data$year)}-{max(p$data$year)}"),
+       x = "Yearly income per capita (US$)",
+       y = "Life expectancy",
+       caption= "From sick  and poor (bottom left) to healthy and rich (top right)")
+
 ```
 
 ]
@@ -389,36 +473,7 @@ p +
 
 .fl.w-70.pa2[
 
-```{r title-out, ref.label="title"}
-
-```
-
-]
-
----
-
-### Theming
-
-
-.pull-left[
-
-- Theming
-
-```{r theme, echo=TRUE, eval=FALSE}
-p +
-  labs(title= stringr::str_c("Gapminder ", min(p$data$year), "-", max(p$data$year)), 
-       x = "Income", 
-       y = "Lifespan") 
-
-```
-
-]
-
---
-
-.pull-right[
-
-```{r theme-out, ref.label="theme"}
+```{r title-out, ref.label="title", echo=FALSE}
 
 ```
 
@@ -426,7 +481,49 @@ p +
 
 ???
 
-How to choose a theme? 
+Titles and legends
+
+Purpose of
+
+- Title
+- Subtitle
+- Caption
+
+---
+
+### Theming using `ggthemes`
+
+
+.fl.w-40.pa2[
+
+- Theming
+
+```{r theme_economist, echo=TRUE, eval=FALSE}
+pacman::p_load("ggthemes")
+
+p +
+  theme_wsj()
+```
+
+]
+
+--
+
+.fl.w-60.pa2[
+
+```{r theme_economist-out, ref.label="theme_economist", echo=FALSE}
+
+```
+
+]
+
+???
+
+
+- [Getting the theme](https://ggplot2.tidyverse.org/reference/theme_get.html)
+
+-
+
 
 ---
 
@@ -438,20 +535,17 @@ How to choose a theme?
 .fl.w-60.pa2[
 
 ```{r theme_scale, echo=TRUE, eval=FALSE}
-neat_color_scale <- 
-      c("Africa" = "#01d4e5", 
-        "Americas" = "#7dea01" , 
-        "Asia" = "#fc5173", 
-        "Europe" = "#fde803", 
+neat_color_scale <-
+      c("Africa" = "#01d4e5",
+        "Americas" = "#7dea01" ,
+        "Asia" = "#fc5173",
+        "Europe" = "#fde803",
         "Oceania" = "#536227")
 p <- p +
-  scale_size_area(max_size = 15) + 
-  scale_color_manual(values = neat_color_scale) #<< 
+  scale_size_area(max_size = 15) + #<<
+  scale_color_manual(values = neat_color_scale) #<<
 
-p +
-  labs(title= "Gapminder (2002)", 
-       x = "Income", 
-       y = "Lifespan") 
+p
 ```
 
 ]
@@ -463,8 +557,43 @@ p +
 ```{r theme_scale-out, ref.label="theme_scale", warning=FALSE, echo=FALSE, message=FALSE}
 
 ```
+]
+
+---
+
+### Zooming on a continent
+
+.fl.w-40.pa2[
+
+```{r zoom_africa, eval=FALSE, echo=TRUE}
+require(ggforce) #<<
+
+zoom_in <- 'Africa'
+
+p_africa <- p +
+  facet_zoom( #<<
+    xy= continent==zoom_in, #<<
+    zoom.data= continent==zoom_in #<<
+    ) #<<
+```
 
 ]
+
+
+.fl.w-60.pa2[
+
+```{r zoom_africa-out, ref.label="zoom_africa", warning=FALSE, echo=FALSE, message=FALSE}
+
+```
+
+]
+
+???
+
+Look for journal themes/ WSJ themes
+
+Wes Anderson themes
+
 
 ---
 
@@ -474,29 +603,25 @@ p +
 ---
 template: inter-slide
 
-## Facetting 
+## Facetting
 
 ---
 
 ```{r facet, eval=FALSE, echo=TRUE}
-ggplot(data = gapminder) +
-  geom_point(aes(x = gdpPercap, 
-                 y = lifeExp, 
-                 size = pop, 
-                 color = continent),
-             alpha=.5)   +
+p <- p +
   scale_x_log10(limits=c(100, 50000)) +
-  scale_size_area(max_size = 15, 
+  scale_size_area(max_size = 15,
                   labels= scales::label_number(scale=1/1e6, suffix=" M")) +
   scale_color_manual(values = neat_color_scale) +
-  guides(color = guide_legend(title = "Continent", 
-                              override.aes = list(size = 5), 
+  guides(color = guide_legend(title = "Continent",
+                              override.aes = list(size = 5),
                               order = 1),
          size = guide_legend(title = "Population",
                              order = 2)) +
-  labs(title= "Gapminder", x = "Income", y = "Lifespan") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
-  facet_wrap(vars(year), ncol=6)  #<< 
+  facet_wrap(vars(year), ncol=6)  #<<
+
+p
 ```
 
 
@@ -511,14 +636,20 @@ ggplot(data = gapminder) +
 
 ### Don't Repeat Yoursel (DRY)
 
-> Abide to the DRY principle using operator `%+%`: the `ggplot2` object `p` can be fed with another dataframe and all you need is proper facetting. 
+> Abide to the DRY principle using operator `%+%`: the `ggplot2` object `p` can be fed with another dataframe and all you need is proper facetting.
 
 ```{r dryit, message=FALSE, warning=FALSE}
-(p %+% gapminder) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
-  labs(title= "Gapminder (1952-2007)", x = "Income", y = "Lifespan") +
-  facet_wrap(vars(year)) 
+p  <- (p %+% gapminder)
+
+p <- p + labs(title=glue("Gapminder {min(p$data$year)}-{max(p$data$year)}"))
+
+p
 ```
+
+
+???
+
+
 
 ---
 
@@ -536,23 +667,41 @@ template: inter-slide
 ### From `r fontawesome::fa("r-project")` to `D3.js`
 
 ```{r animate, warning=FALSE, eval=FALSE, message=FALSE, out.width="80%"}
-(ggplot(data = gapminder) +
-   aes(x = gdpPercap, 
-      y = lifeExp, 
-      size = pop, 
-      text = country, 
-      color = continent, 
-      frame = year) +   #<< 
-   geom_point() +
+q <- filter(gapminder, FALSE) %>%
+   ggplot() +
+   aes(x = gdpPercap) +
+   aes(y = lifeExp) +
+   aes(size = pop) +
+   aes(text = country) +
+   aes(fill = continent) +
+   aes(frame = year) +   #<<
+  geom_point(alpha=.5, colour='black') +
   scale_x_log10() +
-  scale_size_area(max_size = 15, 
-                  labels= scales::label_number(scale=1/1e6, 
+  scale_size_area(max_size = 15,
+                  labels= scales::label_number(scale=1/1e6,
                                                suffix=" M")) +
-  scale_color_manual(values = neat_color_scale) +
+  scale_fill_manual(values = neat_color_scale) +
   theme(legend.position = "none") +
-  labs(title= "Gapminder", x = "Income", y = "Lifespan")) %>% 
-  plotly::ggplotly(height = 500, width=750)     #<< 
+  labs(title= glue("Gapminder  {min(gapminder$year)}-{max(gapminder$year)}"),
+       x = "Yearly Income per Capita",
+       y = "Life Expectancy",
+       caption="From sick  and poor (bottom left) to healthy and rich (top right)")
+
+
+(q %+% gapminder) %>%
+  plotly::ggplotly(height = 500, width=750)     #<<
 ```
+
+---
+
+```{r}
+(p +
+ facet_null() +
+ aes(frame=year)) %>%
+ plotly::ggplotly(height = 500, width=750)
+```
+
+???
 
 ---
 
@@ -561,11 +710,36 @@ template: inter-slide
 
 ```
 
+
+---
+
+### Zooming on Europe (tweaking code)
+
+```{r animate-europe, warning=FALSE, eval=FALSE, message=FALSE, out.width="80%"}
+target_continent <- 'Europe'
+(
+  q %+%
+  filter(gapminder, continent==target_continent) +
+  ggtitle(glue("Gapminder on {target_continent}"))
+) %>%
+  plotly::ggplotly(height = 500, width=750)
+```
+
+---
+
+### Zooming on Europe
+
+```{r animate-europe-out, ref.label="animate-europe", echo=FALSE, message=FALSE, warning=FALSE}
+
+
+```
+
+
 ---
 
 
 
-```{r}
+```{r include_plotly_com}
 knitr::include_url("https://plotly.com/r/")
 ```
 
@@ -578,22 +752,76 @@ Slides created via the R package [**xaringan**](https://github.com/yihui/xaringa
 
 ---
 
-```{r}
+```{r include_course}
 knitr::include_url("https://www.youtube.com/embed/3n9nASHg9gc")
 ```
 
 
 ---
 
-```{r}
+```{r include_course_2}
 knitr::include_url("https://www.youtube.com/embed/RPFh3y9UAX4")
 ```
 
+
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
+## Animate with `gganimate`
+
+---
+
+```{r  gap_gganimate, warning=FALSE, message=FALSE}
+t_range <- with(gapminder, c(min(year), max(year)))
+p +
+  facet_null() + #<<
+  gganimate::transition_time(year,  #<<
+                             range = t_range) +#<<
+  labs(subtitle="Year {frame_time}")
+
+```
+
+---
+
+### Permanence
 
 
-# The End
+
+---
+
+## Interactivity
+
+---
+
+- `ggplotly`
+
+- `highcharter`
+
+???
+
+[raukr](https://nbisweden.github.io/raukrtemplate/presentation_demo.html#1)
+
+---
+
+### Under the hood
+
+`htmltools`
+
+`htmlwidgets`
+
+---
+
+???
+
+- `facet_zoom()` on a continent (from `ggfortify`)
+
+- Animation is not interaction!
+
+- `shiny/flex_dashboard`
+
+-
+
+---
+
+```{r child='closing_slide.Rmd'}
+
+```

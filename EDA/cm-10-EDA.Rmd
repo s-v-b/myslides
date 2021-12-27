@@ -22,6 +22,13 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+params:
+  title: "Model-based Clustering"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 bibliography: mon_chapeau.bib
 ---
 name: inter-slide
@@ -76,7 +83,15 @@ NoCite(myBib, "Mur12")
 NoCite(myBib, "moitra2018algorithmic")
 ```
 
+
 ---
+
+```{r child="title_slide.Rmd"}
+
+```
+
+---
+exclude: true
 class: middle, left, inverse
 
 
@@ -1106,10 +1121,6 @@ exclude: true
 
 
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
-
-
-# The End
+```{r child="closing_slide.Rmd"}
+```

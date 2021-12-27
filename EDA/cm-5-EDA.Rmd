@@ -5,11 +5,12 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  title: "Multilinear Regression II"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -34,9 +35,8 @@ layout: true
 class: left, middle
 
 ```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
-
-#require(flipbookr)
 ```
+
 
 ---
 name: inter-slide
@@ -46,20 +46,9 @@ class: left, middle, inverse
 
 
 ---
-template: inter-slide
 
-# Multilinear Regression II
+```{r child='title_slide.Rmd'}
 
-
-#### [`r params$curriculum`](`r params$homepage_curriculum`)
-
-
-#### [`r params$coursetitle`](`r params$homepage`)
-
-#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
-
-```{r, echo=FALSE}
-library(flipbookr)
 ```
 
 
@@ -84,6 +73,11 @@ class: inverse, middle
 class: middle, center, inverse
 
 ## Motivations
+
+
+```{r, echo=FALSE}
+library(flipbookr)
+```
 
 ---
 
@@ -1547,8 +1541,7 @@ select(iris, -Species) %>% standardize() %>% glimpse()
 
 ```
 ---
-class: center, middle, inverse
-background-image: url(img/pexels-cottonbro-3171837.jpg)
-background-size: cover
 
-## The End
+```{r child="closing_slide.Rmd"}
+
+```

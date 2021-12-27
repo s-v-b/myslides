@@ -5,11 +5,11 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css", "custom-callout.css"]
@@ -464,7 +464,7 @@ with respect to the Hilbert-Schmidt norm and the operator norm
 Let $u_1, \ldots, u_n$ and $v_1,\ldots,v_p$
 form two orthonormal bases of $\mathbb{R}^n$ and $\mathbb{R}^p$,
 
-then 
+then
 
 $\left(u_i \times v_j^T\right)_{i\leq n, j\leq p}$ forms an orthonormal
 basis of $\mathbb{R}^{n\times p}$
@@ -611,7 +611,7 @@ Computing the SVD is not more costly than computing the spectral decomposition o
 
 
 ---
-exclude: true 
+exclude: true
 
 ### Proof
 
@@ -626,7 +626,7 @@ which defines a spectral decomposition of $A$  `r fontawesome::fa("glass-cheers"
 
 ---
 
-### Proof 
+### Proof
 
 If we have an eigendecomposition algorithm (say `eigen`), we can feed it with
 
@@ -635,7 +635,7 @@ If we have an eigendecomposition algorithm (say `eigen`), we can feed it with
 
 Both spectral decompositions lead to the squared singular values
 
-If we count the number of field operations, both problems are linearly equivalent (matrix multiplication is less expansive 
+If we count the number of field operations, both problems are linearly equivalent (matrix multiplication is less expansive
 than spectral or singular value decomposition).
 
 
@@ -664,9 +664,9 @@ We will walk through Principal Component Analysis using historical datasets
 
 - Life tables for a collection of Western European countries  and the USA
 
-`r fontawesome::fa("exclamation-triangle")` Some datasets have non-numerical columns. 
+`r fontawesome::fa("exclamation-triangle")` Some datasets have non-numerical columns.
 
-Such columns are not used when computing the SVD that underpins PCA 
+Such columns are not used when computing the SVD that underpins PCA
 
 But non-numerical columns may be incorporated into PCA visualization
 
@@ -1615,7 +1615,7 @@ into average speeds. The larger, the better.
 The correlation circle becomes more transparent: columns can be clustered into three subsets:
 - running races and long jump, p
 - puts, javeline and high jump
-- 1500m and pole vault which are poorly correlated with first two principal components 
+- 1500m and pole vault which are poorly correlated with first two principal components
 
 
 
@@ -2061,5 +2061,3 @@ Few of these factorizations are as well understood as SVD.
 ```{r child="closing_slide.Rmd"}
 
 ```
-
-

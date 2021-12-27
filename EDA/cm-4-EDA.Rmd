@@ -5,11 +5,12 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  title: Multilinear Regression I
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -45,6 +46,13 @@ class: left, middle
 
 
 ---
+
+```{r child="title_slide.Rmd"}
+
+```
+
+---
+exclude:true
 template: inter-slide
 
 # Multilinear Regression I
@@ -1127,8 +1135,17 @@ template: inter-slide
 ##
 
 ---
-class: inverse, middle, center
-background-image: url(img/pexels-cottonbro-3171837.jpg)
-background-size: cover
+exclude: true 
 
-## The End
+Diagnostics with `GGally::ggnostic()`
+
+---
+exclude: true
+
+Handling missing values with `naniar`
+
+---
+
+```{r child="closing_slide.Rmd"}
+
+```

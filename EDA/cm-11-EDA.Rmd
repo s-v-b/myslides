@@ -22,6 +22,13 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+params:
+  title: "Multiple Correspondence Analysis"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 ---
 name: inter-slide
 class: left, middle, inverse
@@ -65,6 +72,13 @@ NoCite(myBib, "MR2445017")
 ```
 
 ---
+
+```{r child="title_slide.Rmd"}
+
+```
+
+---
+exclude: true
 class: middle, left, inverse
 
 # Exploratory Data Analysis XI: Multiple Correspondance Analysis
@@ -172,7 +186,7 @@ Questions:
 
 ---
 
-### Useful packages 
+### Useful packages
 
 ```{r, warning=FALSE, echo=TRUE, eval=FALSE}
 require(tidyverse)
@@ -229,7 +243,7 @@ $$\begin{array}{ll}\text{Demographic/Explanatory} & \leftrightarrow \begin{cases
 
 ???
 
-When handling a collection of qualitative variables, we may face several kinds of situations: we may investigate 
+When handling a collection of qualitative variables, we may face several kinds of situations: we may investigate
 
 - response/attitudinal variables with respect to  explanatory/demographic variables
 - collections of  response/attitudinal variables
@@ -351,7 +365,7 @@ template: inter-slide
 
 Before turning back to Titanic dataset, let us revisit the `UCBAdmissions` dataset
 
-Remember that 
+Remember that
 the `UCBAdmissions` dataset was elaborated in the 1970's to assess whether the admission process at the different departments of UC Berkeley   suffered from a gender bias
 
 Such a possibility was suggested by looking at the global admission rate for female and male candidates
@@ -390,7 +404,7 @@ aperm(UCBAdmissions, c(3, 2, 1)) %>% vcd::mosaic(shade=TRUE)
 .f6[
 Both diagrams are mosaicplots
 
-The diagram on the right is easier to interpret: it provides a picture 
+The diagram on the right is easier to interpret: it provides a picture
 of admission rates per department and then gender
 
 ]
@@ -567,7 +581,7 @@ from  a dataframe with categorical columns
 
 ```{r}
 Z <- tit %>%
-  drop_na() %>% 
+  drop_na() %>%
   select(Sex, Age, Embarked, Pclass) %>%
   tab.disjonctif() #<<
 
@@ -651,7 +665,7 @@ name: mca-in-words
 
 .fl.w-40.pa2[
 
-`r fontawesome::fa("book")` Expositions of MCA is taken from 
+`r fontawesome::fa("book")` Expositions of MCA is taken from
 
 ![](./img/greenacre.jpg)
 
@@ -659,7 +673,7 @@ name: mca-in-words
 
 .fr.w-60.pa2[
 
-`r fontawesome::fa("laptop-code")` Our favorite CA and MCA package is 
+`r fontawesome::fa("laptop-code")` Our favorite CA and MCA package is
 
 <iframe src="http://factominer.free.fr/factomethods/multiple-correspondence-analysis.html"  width="750px" height="400px"></iframe>
 
@@ -675,7 +689,7 @@ name: mca-in-words
 .fl.w-40.pa2[
 
 ```{r, echo=TRUE}
-res.mca <- tit %>% drop_na() %>% 
+res.mca <- tit %>% drop_na() %>%
   select(Sex,
          Age,
          Embarked,
@@ -691,11 +705,11 @@ We perform MCA on the data matrix made from four similar qualitative  columns: `
 
 `res.mca` is a list with class attributes `MCA`  and `list`. It contains many related components
 
-`r fontawesome::fa("hand-point-right")` Component `svd` of `res.mca$svd` can righteously be considered 
+`r fontawesome::fa("hand-point-right")` Component `svd` of `res.mca$svd` can righteously be considered
 as the most important part of the result
 
 Other components are either byproducts of the computation of `res.mca$svd`
-or derived from `res.mca$svd` so as to facilitate 
+or derived from `res.mca$svd` so as to facilitate
 reporting either numerical or graphical
 
 ]
@@ -748,12 +762,12 @@ reporting either numerical or graphical
 
 ---
 
-### `r fontawesome::fa("brain")` 
+### `r fontawesome::fa("brain")`
 
-Understanding MCA, the way it works, the ways it can be used amounts to understand the steps 
+Understanding MCA, the way it works, the ways it can be used amounts to understand the steps
 that lead to the computation of `res.mca$svd`
 
-Asserting that, by default, MCA consists of performing Correspondance Analysis (CA)  on the indicator matrix 
+Asserting that, by default, MCA consists of performing Correspondance Analysis (CA)  on the indicator matrix
 deserves some explanation
 
 In order to make the argument self-contained, we first skech what CA is and how it relates to (extensions of) SVD
@@ -947,11 +961,11 @@ template: inter-slide
 ```{r}
 eigv <- res.mca$svd$vs^2
 
-tibble(eigenvalue=eigv, 
-       `% variance`=eigv/sum(eigv), 
-       `cum. % variance`= cumsum(eigv)/sum(eigv)) %>% 
-  rownames_to_column(var="Dimension") %>% 
-  head() %>% 
+tibble(eigenvalue=eigv,
+       `% variance`=eigv/sum(eigv),
+       `cum. % variance`= cumsum(eigv)/sum(eigv)) %>%
+  rownames_to_column(var="Dimension") %>%
+  head() %>%
   knitr::kable(digits=2)
 ```
 ]
@@ -960,8 +974,8 @@ tibble(eigenvalue=eigv,
 
 The table on the left contains the first rows of `res.mca$eig`
 
-Thanks to the Eckhart-Young Theorem  for extended SVD, component `$eig` 
-tells us how well the  matrix 
+Thanks to the Eckhart-Young Theorem  for extended SVD, component `$eig`
+tells us how well the  matrix
 $$D_r^{-1} \times(P -r \times c^T) \times D_c^{-1}$$
 can be approximated by low
 rank matrices according to the Hilbert-Schmidt norm with respect to $D_r$ and $D_c$
@@ -978,26 +992,26 @@ coord <-  res.mca$var$coord
 contrib <- res.mca$var$contrib
 cos2 <- res.mca$var$cos2
 
-assert_that(norm(res.mca$svd$V %*% diag(res.mca$svd$vs[1:8]) 
+assert_that(norm(res.mca$svd$V %*% diag(res.mca$svd$vs[1:8])
                  - coord, "F") <= tol)
 
-tmp <- t(t(coord^2) %*% Dc) %*% diag(1/res.mca$svd$vs[1:8]^2) 
+tmp <- t(t(coord^2) %*% Dc) %*% diag(1/res.mca$svd$vs[1:8]^2)
 assert_that(norm(100 * tmp - contrib, "F") <= tol)
-    
+
 assert_that(norm(cos2 - coord^2/rowSums(coord^2), "F") <= tol)
 ```
 ]
 
 .fl.w-50.pa2[
 
-`res.mca$var` is a list of 3 matrices with the same dimensions $q$ (sum of level numbers)  and $q-p$ 
+`res.mca$var` is a list of 3 matrices with the same dimensions $q$ (sum of level numbers)  and $q-p$
 
 `$coord` is made of the principal coordinates of columns $D_c^{-1/2} \times V \times D$. Each row corresponds to one column of the indicator matrix
 
-`$contrib` ... 
+`$contrib` ...
 
 `$cos2`  is derived from `$coord`. For each row (column of the indicator matrix) $\langle j, k\rangle$, for each
-dimension $i$, the  $\langle j, k\rangle, i$ coefficient of `$cos2` is the squared cosine 
+dimension $i$, the  $\langle j, k\rangle, i$ coefficient of `$cos2` is the squared cosine
 of the angle between the row of $\langle j, k\rangle$ row of `$coord`  and the $i$th right singular vector
 
 ]
@@ -1016,12 +1030,12 @@ coord <-  res.mca$ind$coord
 contrib <- res.mca$ind$contrib
 cos2 <- res.mca$ind$cos2
 
-assert_that(norm(res.mca$svd$U %*% diag(res.mca$svd$vs[1:8]) 
+assert_that(norm(res.mca$svd$U %*% diag(res.mca$svd$vs[1:8])
                  - coord, "F") <= tol)
 
-tmp <- 100 * t(t(coord^2) %*% Dr) %*% diag(1/res.mca$svd$vs[1:8]^2) 
+tmp <- 100 * t(t(coord^2) %*% Dr) %*% diag(1/res.mca$svd$vs[1:8]^2)
 assert_that(norm(tmp - contrib, "F") <= tol)
-    
+
 assert_that(norm(cos2 - coord^2/rowSums(coord^2), "F") <= tol)
 
 ```
@@ -1029,14 +1043,14 @@ assert_that(norm(cos2 - coord^2/rowSums(coord^2), "F") <= tol)
 
 .fl.w-50.pa2[
 
-`res.mca$ind` is a list of 3 matrices with the same dimensions $n$ (sum of level numbers)  and $q-p$ 
+`res.mca$ind` is a list of 3 matrices with the same dimensions $n$ (sum of level numbers)  and $q-p$
 
 `$coord` is made of the principal coordinates of columns: $D_r^{-1/2} \times U \times D$. Each row corresponds to one row of the indicator matrix
 
-`$contrib` ... 
+`$contrib` ...
 
 `$cos2`  is derived from `$coord`. For each row (row of the indicator matrix) $j$, for each
-dimension $i$, the  $j, i$ coefficient of `$cos2` is the squared cosine 
+dimension $i$, the  $j, i$ coefficient of `$cos2` is the squared cosine
 of the angle between the $j$th row of `$coord`  and the $i$th left singular vector
 
 ]
@@ -1049,9 +1063,9 @@ of the angle between the $j$th row of `$coord`  and the $i$th left singular vect
 
 `FactoMineR::MCA` does much more than computing an  SVD on a standardized residuals matrix
 
-In real life MCA is performed on a subset of categorical columns of some data frame (the so-called 
-_active_ columns). The result 
-may help understanding the interplay between the active variables and the other variables 
+In real life MCA is performed on a subset of categorical columns of some data frame (the so-called
+_active_ columns). The result
+may help understanding the interplay between the active variables and the other variables
 
 > MCA performs Multiple Correspondence Analysis (MCA) with supplementary individuals, supplementary quantitative variables and supplementary categorical variables.
 
@@ -1094,9 +1108,9 @@ a list with some statistics
 
 In a [tidy universe](http::tidyverse.org), there would exist  `tidy`, `augment` and `glance` methods for class `MCA` just as there are such methods for class `prcomp` (used to perform PCA)
 
-Many components of `res.mca` could be computed by methods like `tidy`, `augment` and `glance` and 
-`MCA` would just return the extended SVD, matrices $D_r$, $D_c$ and some information from the call, like 
-the names of the active variables, the levels of each active variables, a vector recording the active individuals 
+Many components of `res.mca` could be computed by methods like `tidy`, `augment` and `glance` and
+`MCA` would just return the extended SVD, matrices $D_r$, $D_c$ and some information from the call, like
+the names of the active variables, the levels of each active variables, a vector recording the active individuals
 
 ---
 template: inter-slide
@@ -1132,8 +1146,8 @@ compare with `broom::tidy()` etc  for objects of class  `pca`
 
 .fl.w-40.pa2[
 ```{r tita_var, fig.show='hide', width=8}
-fviz_mca_var(res.mca, 
-             choice = "var", ) + 
+fviz_mca_var(res.mca,
+             choice = "var", ) +
   coord_fixed() +
   ggtitle("MCA Titanic, variables")
 ```
@@ -1149,41 +1163,41 @@ fviz_mca_var(res.mca,
 
 ### Hand-made plots
 
-The `plot` method for class `MCA` and the functions in `factoextra` provide off-the-shelf 
+The `plot` method for class `MCA` and the functions in `factoextra` provide off-the-shelf
 constructions for classical MCA plots
 
-There is nothing special about MCA plots 
+There is nothing special about MCA plots
 
 - the screeplot is a column plot
-- the other plots are (sometimes decorated) scatter plots after some coordinate change 
+- the other plots are (sometimes decorated) scatter plots after some coordinate change
 
-In the sequel, we build plots for categories, individuals and biplots using 
+In the sequel, we build plots for categories, individuals and biplots using
 the constructs from `ggplot2`
 
 ---
 
-### `r fontawesome::fa("ship")` Plotting individuals on first factorial plane 
+### `r fontawesome::fa("ship")` Plotting individuals on first factorial plane
 
 
 .fl.w-40.pa2.f6[
 
 ```{r  tita_ind, fig.show='hide'}
 res.mca.2 <- tit %>%
-  select(Sex, Age, Embarked, Pclass, Survived) %>% 
+  select(Sex, Age, Embarked, Pclass, Survived) %>%
   MCA(quali.sup = c(5), graph = FALSE)
 
 df_ind <- res.mca.2$ind$coord %>%
-  as.data.frame() %>% 
-  bind_cols(Survived =tit$Survived) %>% 
-  drop_na() 
+  as.data.frame() %>%
+  bind_cols(Survived =tit$Survived) %>%
+  drop_na()
 
-df_ind %>% 
+df_ind %>%
   ggplot() +
-  aes(x=`Dim 1`, 
-      y=`Dim 2`, 
+  aes(x=`Dim 1`,
+      y=`Dim 2`,
       colour=Survived) +
-  geom_jitter(alpha=.2, 
-              width=.1, 
+  geom_jitter(alpha=.2,
+              width=.1,
               height = .1) +
   scale_color_viridis_d() +
   coord_fixed() +
@@ -1203,24 +1217,24 @@ df_ind %>%
 
 ---
 
-### `r fontawesome::fa("ship")` Plotting categories on first factorial plane 
+### `r fontawesome::fa("ship")` Plotting categories on first factorial plane
 
 
 .fl.w-40.pa2.f6[
 
 ```{r  tita_cat, fig.show='hide'}
 df_cat <- res.mca.2$var$coord %>%
-  as.data.frame() %>% 
-  rownames_to_column(var="Category") 
+  as.data.frame() %>%
+  rownames_to_column(var="Category")
 
-p <- df_cat %>%  
+p <- df_cat %>%
   ggplot() +
-  aes(x=`Dim 1`, 
+  aes(x=`Dim 1`,
       y=`Dim 2`) +
   geom_point() +
   geom_text_repel(aes(label=Category)) +
-  coord_fixed() 
-  
+  coord_fixed()
+
 p +  ggtitle("Titanic: categories in principal coordinates ")
 ```
 
@@ -1243,12 +1257,12 @@ p +  ggtitle("Titanic: categories in principal coordinates ")
 
 ```{r  tita_biplot, fig.show='hide'}
 p +
-  geom_jitter(data=df_ind, 
-              aes(x=`Dim 1`, 
-                  y=`Dim 2`, 
+  geom_jitter(data=df_ind,
+              aes(x=`Dim 1`,
+                  y=`Dim 2`,
                   colour=Survived),
-              alpha=.2, 
-              width=.1, 
+              alpha=.2,
+              width=.1,
               height = .1
               ) +
   scale_color_viridis_d() +
@@ -1282,19 +1296,9 @@ template: inter-slide
 
 - `r fontawesome::fa("python")` [prince](https://github.com/MaxHalford/prince)
 
----
-exclude: true
-class: middle, center, inverse
-
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
-
-
-# The End
 
 ---
 
 ```{r child='closing_slide.Rmd'}
 
 ```
-

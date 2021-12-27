@@ -5,8 +5,8 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  curriculum: "Master I MIDS & EDA"
+  coursetitle: "Analyse Exploratoire des Données"
   lecturer: "Stéphane Boucheron"
   homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
   curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
@@ -174,16 +174,16 @@ tit <- union(train, test)
 ```{r tit_kable, echo=TRUE, eval=FALSE}
 tit %>%
   dplyr::select(Survived, #<<
-                Pclass, 
-                Sex, 
-                Age) %>%   
+                Pclass,
+                Sex,
+                Age) %>%
   dplyr::sample_n(5) %>%   #<<
   knitr::kable()   #<<
 ```
 
 
 We _project_ the table on four columns, then _sample_ 5 rows at random,
-and then _display_ 
+and then _display_
 
 
 ]
@@ -233,9 +233,9 @@ is either with
 
 We will learn about:
 
-- numerical summaries 
+- numerical summaries
 
-- graphical displays 
+- graphical displays
 
 for univariate samples
 
@@ -267,22 +267,22 @@ $$\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i -\overline{X}_n\big)^4}{s^4} 
 
 ---
 
-### Numerical summaries at work 
+### Numerical summaries at work
 
 
 ```{r}
-s <- rnorm(1000)   # a random sample from the standard normal distribution 
+s <- rnorm(1000)   # a random sample from the standard normal distribution
 
-mean(s) - sum(s)/length(s)   #<< 
+mean(s) - sum(s)/length(s)   #<<
 
-sd(s) - sqrt(sum((s-mean(s))^2)/(length(s)-1))   #<< 
+sd(s) - sqrt(sum((s-mean(s))^2)/(length(s)-1))   #<<
 
-mean((s- mean(s))^4)/sd(s)^4 -3   #<< 
+mean((s- mean(s))^4)/sd(s)^4 -3   #<<
 ```
 
 ---
 
-### What if some data are missing? 
+### What if some data are missing?
 
 ```{r}
 s <- rnorm(10)
@@ -291,9 +291,9 @@ s
 ```
 
 ```{r}
-mean(s)   #<< 
-mean(s, na.rm = TRUE)  #<< 
-mean(s[-c(2, 3, 7)])  
+mean(s)   #<<
+mean(s, na.rm = TRUE)  #<<
+mean(s[-c(2, 3, 7)])
 ```
 
 
@@ -351,10 +351,10 @@ function (x, trim = 0, na.rm = FALSE, ...)
 
 - The first `if (...) {...}` is an example of defensive programming
 
-- `if (na.rm) { ... }` handles missing data when the default behavior is overriden. 
+- `if (na.rm) { ... }` handles missing data when the default behavior is overriden.
 `NA` are filtered out
 
-- When positive, parameter  `trim` allows us to compute _trimmed means_ 
+- When positive, parameter  `trim` allows us to compute _trimmed means_
 
 Depending on optional arguments, fucntion `mean` allows to compute either arithmetic means, or trimmed (arithmetic) means
 
@@ -376,7 +376,7 @@ template: inter-slide
 
 ---
 
-### `summary(...)` 
+### `summary(...)`
 
 ```{r}
 summary(s)
@@ -752,7 +752,7 @@ of occurences of the symbol and the total length of the sequence
 ```{r}
 summary(train$Pclass)
 
-table(train$Pclass) %>%   #<< 
+table(train$Pclass) %>%   #<<
   kable(col.names = c("PClass", "Frequency"))
 ```
 
@@ -769,7 +769,7 @@ For univariate samples, ...
 ```{r}
 summary(train$Embarked)
 
-table(train$Embarked) %>% #<< 
+table(train$Embarked) %>% #<<
   kable(col.names = c("Embarkment", "Frequency"))
 ```
 
@@ -951,14 +951,14 @@ the counts by dividing all counts by sample size.
 dt <- tit %>%
     group_by(Pclass) %>%
   dplyr::summarise(Count=n() ) %>%
-  dplyr::mutate(Prop=Count/sum(Count)) 
+  dplyr::mutate(Prop=Count/sum(Count))
 
-p <- dt %>% 
+p <- dt %>%
   ggplot(mapping=aes(x=Pclass,
                      y=Prop)) +
   ggtitle("Titanic: boarding distributions")
 
-(p + geom_col(width=.3)) 
+(p + geom_col(width=.3))
 ```
 
 ]
@@ -988,7 +988,7 @@ like defining a _pipeline_
 .fl.w-two-thirds.pa2[
 
 ```{r, echo=FALSE}
-(p + geom_col(width=.3)) 
+(p + geom_col(width=.3))
 ```
 
 ]
@@ -1303,7 +1303,7 @@ class: center, middle, inverse
 
 ---
 
-### Milestones 
+### Milestones
 
 - Semmelweis circa 1847 Puerperal fever
 
@@ -1311,7 +1311,7 @@ class: center, middle, inverse
 
 - Hill _Randomized Clinical Trial Streptomyces versus Collapsotherapia against Tuberculosis_ 1948
 
-- ... 
+- ...
 
 ---
 class: center, middle, inverse
@@ -1599,7 +1599,7 @@ The returned function is _parametrized_ by argument
 equantile <- function(sample){
   sample <- sort(sample)
   m <- length(sample)
-  
+
   function(p){     #<<
     ks <- pmax(1, ceiling(m * p)) #<<
     sample[ks]  #<<
@@ -1754,13 +1754,8 @@ exclude: true
 - Decile ratios
 
 
-
-
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: 112%
+```{r child='closing_slide.Rmd'}
 
-
-# The End
+```

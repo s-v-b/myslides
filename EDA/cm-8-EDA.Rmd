@@ -5,11 +5,12 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  title: "Clustering and k-means"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css", "custom-callout.css"]
@@ -55,6 +56,7 @@ pacman::p_load(flipbookr)
 pacman::p_load(FactoMineR)
 pacman::p_load(FactoInvestigate)
 pacman::p_load(ggrepel)
+pacman::p_load(ggforce)
 pacman::p_load(ggfortify)
 pacman::p_load(broom)
 pacman::p_load(vcd)
@@ -99,11 +101,16 @@ NoCite(myBib, "HaTiFr01")
 NoCite(myBib, "Mur12")
 ```
 
+---
 
+```{r child="title_slide.Rmd"}
+
+```
 
 
 
 ---
+exclude: true
 template: inter-slide
 
 
@@ -143,13 +150,13 @@ template: inter-slide
 
 
 Clustering consists in _partitioning_  points collections
-from some metric space  
+from some metric space
 
-in such a way that 
+in such a way that
 
-- points within the same group are close enough 
+- points within the same group are close enough
 
-while 
+while
 
 - points from different groups are distant
 
@@ -168,24 +175,24 @@ Clustering shows up in many Machine Learning applications, for example:
 -   `r fontawesome::fa("ad")` __Marketing__: finding groups of customers with similar
     behavior given a large database of customer data containing their
     properties and past buying records
-    
+
 -   `r fontawesome::fa("hippo")` __Biology__: classification of plants and animals given their
     features
-    
+
 -   `r fontawesome::fa("book")` __Bookshops__: book ordering (recommendation)
 
 -   `r fontawesome::fa("car-crash")` __Insurance__: identifying groups of motor insurance policy
     holders with a high average claim cost; identifying frauds
-    
+
 -  `r fontawesome::fa("city")` __City-planning__: identifying groups of houses according to
     their type, value and geographical location
-    
+
 -   `r fontawesome::fa("network-wired")` __Internet__: document classification; clustering weblog data
     to discover groups of similar access patterns; topic modeling
 
 ???
 
-Many distinct goals: clustering is often just one step in a data analysis pipeline 
+Many distinct goals: clustering is often just one step in a data analysis pipeline
 
 For recommendation systems, marketing, objects that fit into the same group call for the same action
 
@@ -197,13 +204,13 @@ Some clustering should be hierarchical (toxonomy in life sciences) others can ju
 A clustering application relies on  the elaboration of
 a _metric/dissimilarity_ over some input space
 
-This tasks is entangled  with _feature engineering_ 
+This tasks is entangled  with _feature engineering_
 
 Focus on one specific context: _market segmentation_  `r fontawesome::fa("chart-pie")`
 
 -   `r fontawesome::fa("database")` __Data__: Base of customer data containing their properties
     and past buying records
-    
+
 -   `r fontawesome::fa("bullseye")` __Goal__: Use the customers *similarities* to find groups
 
 -   __Possible directions:__
@@ -214,7 +221,7 @@ Focus on one specific context: _market segmentation_  `r fontawesome::fa("chart-
 
 ???
 
-Are the directions complementary? or not? 
+Are the directions complementary? or not?
 
 Clustering may be done before dimension reduction or the other way
 
@@ -227,7 +234,7 @@ Dimension reduction technologies start form:
 -   Training data
     $\mathcal{D}=\{\vec{X}_1,\ldots,\vec{X}_n\} \in \mathcal{X}^n$ (i.i.d.
     $\sim \Pr$)
-    
+
 -   Space $\mathcal{X}$ of possibly high dimension.
 
 and elaborate a  _Dimension Reduction Map_
@@ -322,11 +329,11 @@ Turning this informal statement into a formal definition proves challenging.
 
 ### Definition Clustering function
 
-Define a _clustering function_ $F$ as a function that 
+Define a _clustering function_ $F$ as a function that
 
-- takes as input any finite domain $\mathcal{X}$ with a dissimilarity function $d$ over its pairs 
+- takes as input any finite domain $\mathcal{X}$ with a dissimilarity function $d$ over its pairs
 
-and 
+and
 
 - returns a partition of $\mathcal{X}$
 
@@ -348,14 +355,14 @@ $F(\mathcal{X},d)=C$.
 for all $x, y \in \mathcal{X}$,
     +  if $x,y$ belong to the same cluster in $F(\mathcal{X},d)$ then $d'(x,y) \leq d(x,y)$,
     + if $x,y$ belong to different clusters in $F(\mathcal{X},d)$ then $d'(x,y) \geq d(x,y)$,
-    
+
 then $F(\mathcal{X},d) = F(\mathcal{X},d')$.
 
 ---
 
 `r fontawesome::fa("smile")` Designing clustering functions meeting simultaneously _any two_ of the _three_ properties is doable
 
-but 
+but
 
 `r fontawesome::fa("frown")`  The three reasonable goals are _conflicting_
 
@@ -365,9 +372,9 @@ but
 
 **No** clustering function $F$ satisfies simultaneously all  three properties:
 
-- _Scale Invariance_, 
+- _Scale Invariance_,
 
-- _Richness_, and 
+- _Richness_, and
 
 - _Consistency_
 
@@ -399,11 +406,11 @@ to be sampled from a specific model (usually finite mixtures of Gaussians, the m
 
 .f6[Clustering consists in fitting such a mixture model and then assigning sample points to mixture components]
 
-- _Hierarchical clustering_ is the topic of next lesson 
+- _Hierarchical clustering_ is the topic of next lesson
 
 ---
 
-### Carte du tendre 
+### Carte du tendre
 
 .fl.w-30.f6[In Machine Learning, $k$-means and hierarchical clustering   belong to a range of tasks called _non-supervised learning_
 
@@ -420,7 +427,7 @@ This contrasts with regression which belongs to the realm of _supervised learnin
 template: inter-slide
 name:  kmeans
 
-## _k_-means  
+## _k_-means
 
 ---
 
@@ -432,11 +439,11 @@ A Voronoï diagram draws the nearest neighbor regions around a set of points.
 
 ### Definition: Voronoï partitions
 
-Assume: 
- 
+Assume:
+
 - sample $X_1, \ldots, X_n$ from $\mathbb{R}^p$
 - $\mathbb{R}^p$ is endowed with a metric $d$, usually $\ell_2$, sometimes
-a weighted $\ell_2$ distance or $\ell_1$ 
+a weighted $\ell_2$ distance or $\ell_1$
 
 Each cluster is defined by a _centroid_
 
@@ -453,7 +460,7 @@ $$C_j = \bigg\{ x :  x \in \mathbb{R}^p, d(x, c_j) = \min_{j' \leq k} d(x, c_{j'
 
 ---
 
-### A Voronoï tesselation 
+### A Voronoï tesselation
 
 <!-- .middle.center[![](./img/voronoi.png)] -->
 
@@ -489,17 +496,22 @@ ggplot(points) +
 
 #### Euclidean distance, dimension 2
 
-A voronoi tesselation generated by $100$ 
+A voronoi tesselation generated by $100$
 points picked at random on the gred $\{1,\ldots, 200\}^2$
 
 Note that cell boundaries are line segments
 
 Note that centroids may lie close to boundaries
 
-The position of the centroid of a Voronoi cell depends on the positions 
+The position of the centroid of a Voronoi cell depends on the positions
 of the centroids of the neighboring cells
 
 ]
+
+
+???
+
+See [`ggforce`](https://ggforce.data-imaginist.com/reference/index.html)
 
 ---
 
@@ -511,7 +523,7 @@ The black points marked with a cross define three centroids.
 
 The straight lines delimit the Voronoï cells defined by the three centroids.
 
-The colored points come from the Iris dataset: 
+The colored points come from the Iris dataset:
 each point is colored according to the the cell it belongs to.
 
 ]
@@ -527,10 +539,10 @@ pacman::p_load(ggvoronoi)
 
 kms <- kmeans(iris[,1:2], 3)
 
-df_centers <- as.data.frame(kms$centers) %>% 
+df_centers <- as.data.frame(kms$centers) %>%
   tibble::rownames_to_column(var=".cluster")
 
-broom::augment(kms, iris) %>% 
+broom::augment(kms, iris) %>%
   ggplot() +
   aes(x=Sepal.Length, y=Sepal.Width, colour=.cluster) +
   geom_point(aes()) +
@@ -563,7 +575,7 @@ exclude: true
 geom_sugar <- function(df_centers, species=TRUE){
   list(
     if (species)  geom_point(aes(shape=Species, color=.cluster))
-    else 
+    else
     geom_point(aes(color=.cluster)),
     stat_voronoi(data = df_centers,
                  geom="path",
@@ -578,8 +590,8 @@ geom_sugar <- function(df_centers, species=TRUE){
 )}
 
 
-broom::augment(kms, iris) %>% 
-  ggplot(aes(x=Sepal.Length, y=Sepal.Width)) + 
+broom::augment(kms, iris) %>%
+  ggplot(aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_sugar(df_centers, species=FALSE)
 ```
 
@@ -610,7 +622,7 @@ $k$-means has a lot to do with rate-distortion coding
 
 We may figure out what an optimized Voronoï partition  looks like on the Iris dataset
 
-`kmeans` with $k=3$ on the Iris dataset 
+`kmeans` with $k=3$ on the Iris dataset
 
 Function `kmeans` is run with default arguments
 
@@ -674,7 +686,7 @@ The _quality_ of a clustering can be appreciated according to a wide variety of 
 - Distortion: this is the $k$-means cost
 - Shape of clusters
 - Relevance of clusters
-- Stability: does clustering depend on few points? 
+- Stability: does clustering depend on few points?
 
 ---
 
@@ -682,7 +694,7 @@ The _quality_ of a clustering can be appreciated according to a wide variety of 
 
 When visualizing $k$-means clustering on `Iris` data, we are cheating.  `r fontawesome::fa("theater-masks")`
 
-We have a gold standard classification delivered by botanists 
+We have a gold standard classification delivered by botanists
 
 The botanists classification can be challenged
 
@@ -694,17 +706,17 @@ We can compare classification originating from _phenotypes_ (appearance) and cla
 
 .fl.w-50.pa2[
 
-A clustering can be summarized and illustrated. 
+A clustering can be summarized and illustrated.
 
 In `r fontawesome::fa("r-project")` A meaningful summary is provided
-by the generic function `summary()`, or a `tidy` summary is providede by 
+by the generic function `summary()`, or a `tidy` summary is providede by
 `broom::tidy(...)`
 
 ```{r iris3-tidy, results='hide'}
-select(iris, Sepal.Length, Sepal.Width) %>% 
-  kmeans(centers = 3) %>% 
+select(iris, Sepal.Length, Sepal.Width) %>%
+  kmeans(centers = 3) %>%
   broom::tidy() %>%       #<<
-  knitr::kable(format = "markdown", 
+  knitr::kable(format = "markdown",
                digits = 2) -> t
 ```
 
@@ -719,7 +731,7 @@ select(iris, Sepal.Length, Sepal.Width) %>%
 t
 ```
 
-The concise summary  tells us the number of points that are assigned to each cluster, and the Within Sum of Squares (WNSS). It says something 
+The concise summary  tells us the number of points that are assigned to each cluster, and the Within Sum of Squares (WNSS). It says something
 about inner homogeneity and (apparently) nothing about outer homogeneity
 
 
@@ -729,7 +741,7 @@ about inner homogeneity and (apparently) nothing about outer homogeneity
 
 ---
 
-### $k$-means with $k=2$ 
+### $k$-means with $k=2$
 
 .fl.w-30.pa2[
 We pursue the exploration of `kmeans` by building another clustering for Iris dataset.
@@ -777,11 +789,11 @@ broom::augment(kms, iris) %>%
 .panel[.panel-name[Numerical summary]
 
 ```{r iris2-tidy, echo=FALSE}
-select(iris, Sepal.Length, Sepal.Width) %>% 
+select(iris, Sepal.Length, Sepal.Width) %>%
   kmeans(centers = 2) %>% #<<
   broom::tidy() %>%       #<<
-  knitr::kable(format = "markdown", 
-               digits = 2) 
+  knitr::kable(format = "markdown",
+               digits = 2)
 ```
 
 
@@ -808,8 +820,8 @@ plotting within clusters sum of squares (`WNSS`) against $k$
 
 Within clusters sum of squares (WNSS) decreases sharply between $k=2$ and $k=3$
 
-For larger values of $k$, the decay is much smaller. 
- 
+For larger values of $k$, the decay is much smaller.
+
 The _elbow_ rule of thumb suggests to choose $k=3$.
 ]
 
@@ -824,7 +836,7 @@ require(foreach)
 
 foreach (k=2:10, .combine = rbind) %do% {
   select(iris, Sepal.Length, Sepal.Width) %>%
-  kmeans(centers = k,   nstart=32L) %>% 
+  kmeans(centers = k,   nstart=32L) %>%
   broom::glance() %>%      #<<
   force()
 } %>%
@@ -843,7 +855,7 @@ We have run  `kmeans` over the Iris dataset, for $k$ in range $2, \ldots, 10$. F
 
 ```{r, echo=FALSE}
 tmp %>%
-  knitr::kable(format="markdown", digits=2) 
+  knitr::kable(format="markdown", digits=2)
 ```
 
 
@@ -868,7 +880,7 @@ tmp %>%
 
 ---
 
-### Incentive to choose $k=4$? 
+### Incentive to choose $k=4$?
 
 .fl.w-30.pa2[
 Depending on initialization, taking $k=4$ creates a cluster at the boundary between `versicolor` and `virginica` or it may split the `setosa` cluster
@@ -911,9 +923,9 @@ broom::tidy(kmeans(select(iris, Sepal.Length, Sepal.Width), 4)) %>%
 
 - `k-Mean++`  try to take them as separated as possible.
 
-- No guarantee to converge to a global optimum! 
+- No guarantee to converge to a global optimum!
 
-- Trial and error. 
+- Trial and error.
 
 - Repeat and keep the best result.
 ]
@@ -921,14 +933,14 @@ broom::tidy(kmeans(select(iris, Sepal.Length, Sepal.Width), 4)) %>%
 .fl.w-60.pa2[
 
 ```{r, eval=FALSE, echo=TRUE}
-kmeans(x,       # data 
+kmeans(x,       # data
        centers, # initial centroids or number of clusters
-       iter.max = 10,  
-       nstart = 1,  # number of trials 
-       algorithm = c("Hartigan-Wong", # default 
-                     "Lloyd",         #<< old one 
+       iter.max = 10,
+       nstart = 1,  # number of trials
+       algorithm = c("Hartigan-Wong", # default
+                     "Lloyd",         #<< old one
                      "Forgy",
-                     "MacQueen"), 
+                     "MacQueen"),
        trace=FALSE)
 ```
 
@@ -947,7 +959,7 @@ exclude: true
 kms <- kmeans(select(iris, Sepal.Length, Sepal.Width),
               centers = 3,
               iter.max = 100,
-              nstart= 1, 
+              nstart= 1,
               trace = 10)
 ```
 
@@ -957,13 +969,13 @@ kms <- kmeans(select(iris, Sepal.Length, Sepal.Width),
 ### Lloyd's Algorithm (detailed) for fixed _k_ (naive _k_-means)
 
 1. Initialize
-  Choose $k$ centroids 
-  
+  Choose $k$ centroids
+
 2. Iterations: Two phases
-   1. (Movement) Assign each sample point to the closest _centroid_  
+   1. (Movement) Assign each sample point to the closest _centroid_
    Assign each sample point to a class in the Voronoi partition defined by the centroids
    1. (Update) For each class in the current Voronoi partition, update teh  _centroid_ so as to minimize the Within Cluster Sum of Squared distances.
-   
+
 
 ???
 
@@ -998,16 +1010,16 @@ for (i in 1:20) {
 }
 
 add_voronoi <- function(p, kmscenters, marker){
-  p + 
+  p +
     geom_point(data=data.frame(kmscenters),         #<<
                mapping=aes(x=Sepal.Length, y=Sepal.Width),
-               shape=marker, 
+               shape=marker,
                col="black",
                size=5) +
     stat_voronoi(data = as.data.frame(kmscenters),  #<<
                  aes(x=Sepal.Length,y=Sepal.Width),
                  geom="path",
-                 outline=data.frame(x=c(4, 8, 8, 4), 
+                 outline=data.frame(x=c(4, 8, 8, 4),
                                     y=c(2, 2, 4.5, 4.5)))
 }
 ```
@@ -1020,9 +1032,9 @@ p <- broom::augment(sequence[[i]], iris) %>%
   ggplot() +
   coord_fixed(ratio=1) +
   geom_point(aes(x=Sepal.Length, y=Sepal.Width, shape=Species, col=.cluster)) +
-  ggtitle("Kmeans Lloyd's algorithm", "Iris data") 
+  ggtitle("Kmeans Lloyd's algorithm", "Iris data")
 
-p %>% 
+p %>%
   add_voronoi(sequence[[i]]$centers, marker="o") +   #<<
   labs(colour=paste("Cluster, step ", i- 1))
 ```
@@ -1063,10 +1075,10 @@ i <- 5
 
 ### Analysis
 
-Given 
+Given
 
-- codebook $\mathcal{C} =\big\{c_1, \ldots, c_k\big\}$ and 
-- clusters $C_1, \ldots C_k$, 
+- codebook $\mathcal{C} =\big\{c_1, \ldots, c_k\big\}$ and
+- clusters $C_1, \ldots C_k$,
 
 the  _within-clusters sum of squares_ is defined as
 $$\sum_{j=1}^k  \sum_{i: X_i \in C_j} \bigg\Vert c_j - X_i \bigg\Vert^2$$
@@ -1083,7 +1095,7 @@ At each stage, the _within clusters sums of squares_ does not increase
 
 ???
 
-There is no guarantee that the algorithm will converge in few 
+There is no guarantee that the algorithm will converge in few
 iterations
 
 Iterations are carried out in a brute force manner
@@ -1125,7 +1137,7 @@ $$\sum_{j=1}^k \sum_{X_i \in C^{(t)}_j} \min_{c \in \mathcal{C}^{(t+1)}}\bigg\Ve
 
 ### `r fontawesome::fa("code-branch")` Variants of _k_-means
 
-Implementations of  $k$-means vary with respect to 
+Implementations of  $k$-means vary with respect to
 
 - Initialization
   + `k-means++`
@@ -1145,7 +1157,7 @@ Implementations of  $k$-means vary with respect to
 > Lloyd's algorithm is the standard approach for this problem. However, it spends a lot of processing time computing the distances between each of the k cluster centers and the n data points. Since points usually stay in the same clusters after a few iterations, much of this work is unnecessary, making the naïve implementation very inefficient. Some implementations use caching and the triangle inequality in order to create bounds and accelerate Lloyd's algorithm. .fr.f6[Wikipedia]
 
 
-In base `r fontawesome::fa("r-project")`, `kmeans` is a wrapper for different but related algorithms. 
+In base `r fontawesome::fa("r-project")`, `kmeans` is a wrapper for different but related algorithms.
 
 Lloyd's algorithm is the first and simplest versions of a series of heuristic methods designed to minimize the k-means cost
 
@@ -1154,7 +1166,7 @@ Lloyd's algorithm is the first and simplest versions of a series of heuristic me
 - `Hartigan-Wong` is the _default_ method. It modifies the mean by removing the considered
 sample point, assign it to the nearby center and recompute the new mean after assignment.
 
-- `Forgy` 
+- `Forgy`
 
 
 ---
@@ -1162,7 +1174,7 @@ template: inter-slide
 name: pcaandkmeans
 
 
-## Combining PCA and $k$-means 
+## Combining PCA and $k$-means
 
 ---
 
@@ -1171,9 +1183,9 @@ name: pcaandkmeans
 The result of a clustering procedure like `kmeans` can be visualized by projecting the dataset on a pair of native variables and  using some aesthetics to emphasize the clusters
 
 
-This is not always the best way. 
+This is not always the best way.
 
-First choosing a pair of native variables may not be straightforward. The projected pairwise distances may not faithfully reflect the pairwise distances that serve for clustering. 
+First choosing a pair of native variables may not be straightforward. The projected pairwise distances may not faithfully reflect the pairwise distances that serve for clustering.
 
 It makes sense to project the dataset
 of the $2$-dimensional subspace that maximizes the projected inertia, that is on the space generated
@@ -1186,7 +1198,7 @@ by the first two principal components
 .fl.w-30.pa2.f6[
 The kmeans clustering of the Iris dataset is projected on the first two principal components: `prcomp` is used to perform PCA with neither centering nor scaling
 
-`kmeans` is applied to the rotated data 
+`kmeans` is applied to the rotated data
 
 The straight lines are the not the projections of the boundaries of the (4-dimensional) Voronoï cells defined by the clusters centroids, but the boundaries of the 2-dimensional Voronoï celles defined by the projections of the cluster centroids
 
@@ -1247,7 +1259,7 @@ ggplot(data=iris_a,
 
 ### `r fontawesome::fa("question")` Questions around _k_-means
 
-- Choosing $k$ 
+- Choosing $k$
 
 - Assessing clustering quality
 
@@ -1259,9 +1271,9 @@ ggplot(data=iris_a,
 
 - Movement/assignment update
 
-- Stopping rules 
+- Stopping rules
 
-- 
+-
 
 ---
 template: inter-slide
@@ -1308,7 +1320,7 @@ Mininizing the $k$-means cost (sum of within clusters sum of squares) is $\maths
 Sanjoy Dasgupta proved that if $\mathsf{P} \neq \mathsf{NP}$, minimizing
 the $k$-means cost (sum of within clusters sum of squares) is __computationally intractable__
 
-This is one result in a long series of negative results going back 
+This is one result in a long series of negative results going back
 to the late seventies
 
 ---
@@ -1318,10 +1330,10 @@ to the late seventies
 Even though minimizing the $k$-means cost is hard,
 one may investigate the _statistical_ problem raised by minimizing the $k$-means cost.
 
-$k$-means served as a showcase for empirical process theory during the early 1980's 
+$k$-means served as a showcase for empirical process theory during the early 1980's
 
-Significant progress during recent years 
-The $k$-means cost provides a concrete illustration of a recurrent situation. 
+Significant progress during recent years
+The $k$-means cost provides a concrete illustration of a recurrent situation.
 
 If the sampling distribution is square integrable and has a density with respect to Lebesgue measure, the mapping  $\mathsf{R}(\mathbf{c})$
 is differentiable, its gradient can be explicitly computed
@@ -1340,9 +1352,9 @@ Whereas the local behavior of the $k$-means cost is simple, the global behavior 
 Bounding the number of global minima, local minima, local extrema and saddlepoints   is difficult.
 
 Observation: under fairly general assumptions,
-the $k$-means cost function is twice differentiable in the neighborhood of optimal codebooks 
+the $k$-means cost function is twice differentiable in the neighborhood of optimal codebooks
 
-Even though the $k$-means cost function is not convex, recent advances tell us that if sample size tends to infinity,  an empirical cost functions will also share local minima, local maxima, and local saddlepoints with the  theoretical population cost function 
+Even though the $k$-means cost function is not convex, recent advances tell us that if sample size tends to infinity,  an empirical cost functions will also share local minima, local maxima, and local saddlepoints with the  theoretical population cost function
 
 ???
 
@@ -1362,11 +1374,11 @@ Even though the $k$-means cost function is not convex, recent advances tell us t
 
 Under Pollard's regularity conditions, let $\mathbf{c}^*$ denote the optimal codebook, and $\widehat{\mathbf{c}}_n$ denote the optimal empirical codebook
 
-Large sample  behavior of the empirically optimal codebook: 
+Large sample  behavior of the empirically optimal codebook:
 
 - $\sqrt{n}\|\widehat{\mathbf{c}}_n - \mathbf{c}^*\|$ is asymptotically normal
 
-and 
+and
 
 - $n \left( \mathsf{R}(\widehat{\mathbf{c}}_n) - \mathsf{R}(\mathbf{c}^*)\right)$ is stochastically bounded
 
@@ -1375,9 +1387,9 @@ and
 ### Key observation
 
 
-Pollard's condition entails 
+Pollard's condition entails
 
-that 
+that
 
 for some constant $\kappa_0>0$,
 
@@ -1392,7 +1404,7 @@ $$\mathsf{R}(\mathbf{c}) - \mathsf{R}(\mathbf{c}^*) \geq \kappa_0 \|\mathbf{c}- 
 
 - The number of clusters $k$ is an input parameter
 
-- Convergence to a local minimum may produce counterintuitive ("wrong") results 
+- Convergence to a local minimum may produce counterintuitive ("wrong") results
 
 
 ???
@@ -1407,7 +1419,7 @@ An inappropriate choice of k may yield poor results. That is why, when performin
 ---
 exclude: true
 
-### References 
+### References
 
 .f6[
 
@@ -1423,14 +1435,7 @@ PrintBibliography(myBib)
 
 
 
-
-
-
 ---
-class: middle, center, inverse
 
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
-
-
-# The End
+```{r child="closing_slide.Rmd"}
+```

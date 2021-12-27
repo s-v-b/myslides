@@ -1,0 +1,80 @@
+---
+title: "Univariate statistics: Inequalities"
+subtitle: "EDA Master I, MIDS & MFA"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+template: inter-slide
+
+# Inequalities
+
+### `r Sys.Date()`
+
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
+
+#### [`r params$coursetitle`](`r params$homepage`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
+
+---
+template: inter-slide
+
+## `r fontawesome::fa("map", fill="white")`
+
+### How far are we from equidistribution?
+
+### Lorenz curve
+
+### Gini index
+
+### Schur convex functions
+
+
+---
+
+
+```{r child="closing_slide.Rmd"}
+
+```

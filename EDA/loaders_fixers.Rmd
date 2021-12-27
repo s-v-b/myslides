@@ -48,8 +48,10 @@ pacman::p_load(latex2exp)
 pacman::p_load(kableExtra)
 pacman::p_load(gt)
 pacman::p_load(data.table)
-pacman::p_load("knitr")
-pacman::p_load("flipbookr")
+pacman::p_load(knitr)
+pacman::p_load(flipbookr)
+pacman::p_load(glue)
+pacman::p_load(gganimate)
 
 old_theme <-theme_set(theme_minimal(base_size=12, base_family = "Helvetica"))
 

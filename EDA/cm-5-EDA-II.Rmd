@@ -5,11 +5,11 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I ISIFAR"
-  coursetitle: "Analyse de Données"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
@@ -72,14 +72,14 @@ class: inverse, middle
 
 ### Motivations
 
-### Residuals  
+### Residuals
 
 ### Spotting outliers
 
 ---
 template: inter-slide
 
-## Motivations 
+## Motivations
 
 
 ---
@@ -91,22 +91,22 @@ datasets::anscombe %>%
   pivot_longer(everything(),
     names_to = c(".value", "group"),
     names_pattern = "(.)(.)"
-  )  %>% 
-  rename(X=x, Y=y) %>% 
+  )  %>%
+  rename(X=x, Y=y) %>%
   arrange(group)-> anscombe
 
 lms <- list()
 
 for (s in as.character("1":"4")) {
-  lms[[s]] <-  lm(Y ~ X, 
-                  anscombe, 
-                  subset = group==s) 
-}   
+  lms[[s]] <-  lm(Y ~ X,
+                  anscombe,
+                  subset = group==s)
+}
 ```
 
 ---
 
-### Visualization: scatterplots and lineplots 
+### Visualization: scatterplots and lineplots
 
 .panelset[
 
@@ -150,9 +150,9 @@ The bottom left dataset outlines the impact of *outliers* on Least Squares Minim
 
 ---
 
-Base `r fontawesome::fa("r-project")` has a generic `plot()` function. 
+Base `r fontawesome::fa("r-project")` has a generic `plot()` function.
 
-For objects of class `lm`, function `plot` outputs diagnostic plots that can help figure out 
+For objects of class `lm`, function `plot` outputs diagnostic plots that can help figure out
 whether liner modeling is convenient in the current context
 
 ---
@@ -191,7 +191,7 @@ To understand and possibly use the diagnostic plots, we need to know the meaning
 
 - Standardized residuals
 
-- Cook's distance 
+- Cook's distance
 
 - Leverages
 
@@ -204,7 +204,7 @@ All diagnostic plots can be built using the output of `broom::augment()`
 
 
 ```{r}
-broom::augment(lms[["1"]]) 
+broom::augment(lms[["1"]])
 ```
 
 
@@ -216,18 +216,18 @@ name: residuals-predictions
 
 ---
 
-### Spotting a trend 
+### Spotting a trend
 
 .fl.w-50.pa2[
 Residuals and predictions are supposed to be orthogonal
 
 Orthogonality is weaker than independence
 
-The first diagnostic plot attempts to visualize a possible 
-trend 
+The first diagnostic plot attempts to visualize a possible
+trend
 
 ```{r}
-p <- broom::augment(lms[["2"]])  %>% 
+p <- broom::augment(lms[["2"]])  %>%
   ggplot() +
   aes(x=.fitted) +
   aes(y=.resid) +
@@ -333,7 +333,7 @@ broom::augment(lms[["1"]]) %>%
 `r fontawesome::fa("bullhorn")`
 
 
-When it comes to comparing the empirical distribution defined by one sample, and 
+When it comes to comparing the empirical distribution defined by one sample, and
 another distribution (the so-called theoretical distribution),  _quantile-quantile plots_ ( `qqplot` ) are favored
 
 
@@ -348,10 +348,10 @@ $$G_m^\leftarrow \circ F(z) = Y_{k+1:m}\qquad \text{if} \qquad \frac{k}{m}< F(z)
 
 ---
 
-### Standardizing residuals 
+### Standardizing residuals
 
 If we believe in the Gaussian Linear Model theory $Y =  Z \times \theta + \sigma \epsilon$
-where $(\epsilon_i)_{i\leq n} \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$, 
+where $(\epsilon_i)_{i\leq n} \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$,
 
 - the residuals $\widehat{\epsilon}$ are distributed like $\sigma (\text{Id} - H) \times \epsilon$
 
@@ -359,8 +359,8 @@ where $(\epsilon_i)_{i\leq n} \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$,
 
 - Standardized residuals are $\widehat{\epsilon}_i/(\sigma\sqrt{1- H_{i,i}})$
 
-If Gaussian Linear Model assumption holds, the distribution of standardized residuals should 
-not depart too much from a standard Gaussian distribution 
+If Gaussian Linear Model assumption holds, the distribution of standardized residuals should
+not depart too much from a standard Gaussian distribution
 
 ---
 
@@ -425,7 +425,7 @@ Weisberg p. 170
 
 
 ---
-exclude: true 
+exclude: true
 
 class: middle, center, inverse
 
@@ -529,8 +529,8 @@ $$D_i = \frac{1}{p} \frac{H_{i,i}}{(1 - H_{i,i})^2} \frac{\left(Y_i - \widehat{Y
 ---
 
 ```{r}
-lms[["3"]] %>% 
-  broom::augment() %>% 
+lms[["3"]] %>%
+  broom::augment() %>%
   ggplot() +
   aes(x=.hat) +
   aes(y=.std.resid) +
@@ -687,12 +687,15 @@ $$\mathbf{Z}^T \times \mathbf{Z} = \left({\mathbf{Z}^{(i)}}^T \mathbf{Z}^{(i)}\r
 
 ---
 exclude: true
+
 ### Proof of LOOCV formula (continued)
 
-
-
-$$$$
 
 `r fontawesome::fa("square")`
 
 
+---
+
+```{r child="closing_slide.Rmd"}
+
+```
