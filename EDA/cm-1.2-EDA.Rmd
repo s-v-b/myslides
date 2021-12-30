@@ -5,6 +5,7 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2021/12/21 (updated: `r Sys.Date()`)"
 params:
+  title: "Introduction to visualization"
   curriculum: "Master I MIDS & MFA"
   coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
@@ -45,7 +46,16 @@ class: left, middle
 
 ```
 
+
 ---
+
+
+```{r child='title_slide.Rmd'}
+
+```
+
+---
+include: false
 template: inter-slide
 
 # I :  Introduction to `r fontawesome::fa("r-project")` and Visualization
@@ -139,7 +149,7 @@ pacman::p_load("gapminder")
 
 - Loading [`tidyverse`]() also loads parts of `magrittr`, notably the _pipe_ `%>%`
 
-- `r fontawesome::fa("hand-point-right")` `r fontawesome::fa("r-project")` `4.xx` offers a new pipe `|>|`
+- `r fontawesome::fa("hand-point-right")` `r fontawesome::fa("r-project")` `4.xx` offers a new pipe `|>`
 
 ]
 

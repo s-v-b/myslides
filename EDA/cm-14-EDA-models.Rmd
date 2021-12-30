@@ -1,0 +1,402 @@
+---
+title: "EDA XIV: Tidy models"
+subtitle: "Analyse de Données Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2021/12/21 (updated: `r Sys.Date()`)"
+params:
+  title: "Introduction to tidy modeling"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  institution: "Université de Paris"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+
+
+```{r child="title_slide.Rmd"}
+
+```
+
+
+---
+template: inter-slide
+
+## `r fontawesome::fa("map", fill="white")`
+
+### [Starter](#starter)
+
+### [....](#diy)
+
+### [...](#books)
+
+---
+template: inter-slide
+
+## Starter
+
+
+???
+
+[Starter site](https://www.tidymodels.org/start/)
+
+[A book](https://www.tidymodels.org/books/moderndive/)
+
+---
+
+```{r}
+knitr::include_url("https://www.tidymodels.org/books/moderndive/")
+```
+
+---
+
+- start with data
+
+- specify models
+
+- train models with different engines
+
+use `parsnip` package
+
+---
+
+```{r}
+library(tidymodels)  # for the parsnip package, along with the rest of tidymodels
+
+library(readr)       # for importing data
+library(broom.mixed) # for converting bayesian models to tidy tibbles
+library(dotwhisker)  # for visualizing regression results
+```
+
+---
+
+```{r}
+urchins <-
+  # Data were assembled for a tutorial
+  # at https://www.flutterbys.com.au/stats/tut/tut7.5a.html
+  read_csv("https://tidymodels.org/start/models/urchins.csv") %>%
+  # Change the names to be a little more verbose
+  setNames(c("food_regime", "initial_volume", "width")) %>%
+  # Factors are very helpful for modeling, so we convert one column
+  mutate(food_regime = factor(food_regime, levels = c("Initial", "Low", "High")))
+#>
+#> ── Column specification ──────────────────────────────────────────────
+#> cols(
+#>   TREAT = col_character(),
+#>   IV = col_double(),
+#>   SUTW = col_double()
+#> )
+# glimpse(urchins)
+```
+
+
+---
+
+### `urchins` dataset
+
+
+```{r}
+urchins %>%
+  glimpse
+```
+
+
+---
+
+### Linear modeling
+
+```{r}
+ggplot(urchins,
+       aes(x = initial_volume,
+           y = width,
+           group = food_regime,
+           shape = food_regime,
+           col = food_regime)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE, formula= y ~ x) +
+  scale_color_viridis_d(option = "plasma", end = .7) +
+  ggtitle("Urchins data", subtitle="Linear regression per `food_regime`")
+```
+
+???
+
+ Urchins that were larger in volume at the start of the experiment tended to have wider sutures at the end
+
+ Slopes look different
+
+This effect may depend on the feeding regime condition (treatment)
+
+
+---
+
+### Two-way ANOVA
+
+```{r}
+formula(width ~ initial_volume * food_regime)
+```
+
+???
+
+> With tidymodels, we start by specifying the functional form of the model that we want using the parsnip package.
+
+> There is a numeric outcome and the model should be linear with slopes and intercepts,
+
+> The model type is “linear regression”.
+
+---
+
+### Defining a linear model
+
+```{r}
+lm_mod <-
+  linear_reg() %>%
+  set_engine("lm")
+```
+
+???
+
+What does `linear_reg()` ?
+
+What does `set_engine(lm_mod, "lm")`
+
+In OOL parlance,
+
+- `linear_reg()` is a constructor, or an object factory
+- `set_engine()` is a `setter` for attribute `engine`
+
+```{r}
+attributes(lm_mod)
+```
+---
+
+### Fitting the (linear regression) model
+
+```{r}
+lm_fit <-
+  lm_mod %>%
+  fit(width ~ initial_volume * food_regime, data = urchins)
+
+class(lm_fit)
+```
+
+???
+
+object `lm_fit` is an instance of `model_fit` and `_lm`
+
+
+---
+
+### Inspecting the fitted model
+
+```{r}
+lm_fit
+```
+
+???
+
+The hard work is still performed by `lm()`
+
+
+
+---
+
+### Inspecting the fitted model (in the tidy way)
+
+
+```{r}
+tidy(lm_fit)
+```
+
+???
+
+> Many models have a tidy() method that provides the summary results in a more predictable and useful format (e.g. a data frame with standard column names):
+
+
+---
+
+
+```{r}
+tidy(lm_fit) %>%
+  dwplot(dot_args = list(size = 2, color = "black"),
+         whisker_args = list(color = "black"),
+         vline = geom_vline(xintercept = 0, colour = "grey50", linetype = 2))
+```
+
+---
+
+
+```{r}
+tidy(lm_fit) %>%
+  ggplot() +
+  aes(x=term) +
+  geom_point(aes(y=estimate)) +
+  geom_hline(yintercept=0,  colour = "grey50", linetype = 2) +
+  geom_segment(aes(xend=term, y=estimate-2*std.error, yend=estimate+2*std.error)) +
+  coord_flip() +
+  ggtitle("Home made dotandwhiskerplot")
+
+```
+
+???
+
+Why does the `dtwplot()` hide the `(Intercept)`?
+
+---
+
+### Residuals versus predicted inspection
+
+```{r}
+lm_fit$fit %>%
+  augment(urchins) %>%
+  glimpse
+```
+
+---
+
+```{r}
+lm_fit$fit %>%
+  augment(urchins) %>%
+  ggplot() +
+  aes(x=.fitted, y=(.std.resid)) +
+  geom_jitter()
+```
+
+???
+
+
+
+---
+
+### Diagnostic plots
+
+```{r, out.width="50%", fig.show='hold'}
+plot(lm_fit$fit)
+```
+
+???
+
+
+
+
+---
+
+### Predictions
+
+Generate new points
+
+```{r}
+new_points <- expand.grid(initial_volume = 20,
+                          food_regime = c("Initial", "Low", "High"))
+new_points
+```
+
+---
+
+```{r}
+mean_pred <- predict(lm_fit, new_data = new_points)
+mean_pred
+```
+
+```{r}
+conf_int_pred <- predict(lm_fit,
+                         new_data = new_points,
+                         type = "conf_int")
+conf_int_pred
+```
+
+```{r}
+plot_data <-
+  new_points %>%
+  bind_cols(mean_pred) %>%
+  bind_cols(conf_int_pred)
+
+```
+
+
+---
+
+```{r}
+ggplot(plot_data, aes(x = food_regime)) +
+  geom_point(aes(y = .pred)) +
+  geom_errorbar(aes(ymin = .pred_lower,
+                    ymax = .pred_upper),
+                width = .2) +
+  labs(y = "urchin size",
+       title= "Predictions for initial volume= 20")
+```
+
+
+
+---
+
+```{r}
+lm_fit$fit %>%
+  augment(urchins) %>%
+  ggplot() +
+  aes(x=initial_volume, group=food_regime) +
+  geom_point(aes(y=width, shape=food_regime, color=food_regime)) +
+  geom_line(aes(y=.fitted, color=food_regime)) +
+  geom_ribbon(aes(ymin=.fitted-1*.sigma, ymax=.fitted+1*.sigma, color=food_regime), alpha=.2) +
+  geom_errorbar(data=plot_data, mapping=aes(ymin=.pred_lower, ymax=.pred_upper,color=food_regime))
+```
+
+
+---
+
+### Were treatments allocated at random?
+
+
+---
+
+???
+
+# TODO:
+
+- whiteside data using tidy models
+- using different models
+- interplay
+- update methods
+- model comparison
+- model validation
+
+---
+
+```{r child='closing_slide.Rmd'}
+
+```

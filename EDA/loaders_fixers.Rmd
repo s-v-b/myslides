@@ -35,9 +35,7 @@ xaringanExtra::use_logo(
 )
 
 xaringanExtra::use_panelset()
-
 xaringanExtra::use_editable(expires = 1)
-
 xaringanExtra::use_clipboard()
 
 # xaringanExtra::use_scribble()
@@ -63,5 +61,8 @@ opts_chunk$set(warning = FALSE,
                fig.retina = 4,
                fig.height = 4)
 
+opts <- options()  # save old options
 
+options(ggplot2.discrete.colour="viridis")
+options(ggplot2.continuous.colour="viridis")
 ```
