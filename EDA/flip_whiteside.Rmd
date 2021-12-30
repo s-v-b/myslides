@@ -96,8 +96,8 @@ data(whiteside,package = 'MASS')
 `r chunk_reveal("my_whiteside", break_type="user",title="### Whiteside by steps")`
 
 ```{r my_whiteside, include = FALSE}
-whiteside %>%
-  ggplot() +
+whiteside %>%    #BREAK
+  ggplot() +  #BREAK
   aes(x = Temp) + #BREAK
   aes(y = Gas) + #BREAK
   geom_smooth(
@@ -108,12 +108,65 @@ whiteside %>%
   geom_point(
     alpha = .8, 
     size = 5, 
-    aes(color = Insul,
-        shape = Insul),
     ) +  #BREAK
   ggtitle("Whiteside data: Simple Linear Regression")
 ```
 
+---
+
+### What's wrong ?
+
+--
+
+- Qualitative column `Insul` does not show up!
+
+- What about fitting one regression line per season? 
+
+
+---
+
+`r chunk_reveal("my_whiteside_group", break_type="user",title="### Whiteside by steps")`
+
+```{r my_whiteside_group, include = FALSE}
+whiteside %>%    
+  ggplot() +  
+  aes(x = Temp, y = Gas) + #BREAK
+  aes(group=Insul) + #BREAK 
+  geom_smooth(
+    method="lm", 
+    formula = y ~ x, 
+    se=FALSE
+  ) +  #BREAK
+  geom_point(
+    alpha = .5, 
+    size = 2) +  #BREAK
+  ggtitle("Whiteside data: Simple Linear Regression per group")
+```
+
+
+---
+
+---
+
+`r chunk_reveal("my_whiteside_group_color", break_type="user",title="### Whiteside by steps")`
+
+```{r my_whiteside_group_color, include = FALSE}
+whiteside %>%    #BREAK
+  ggplot() +  #BREAK
+  aes(x = Temp) + #BREAK
+  aes(y = Gas) + #BREAK 
+  aes(group=Insul) + #BREAK 
+  aes(color=Insul, shape=Insul, linetype=Insul) + #BREAK
+  geom_smooth(
+    method="lm", 
+    formula = y ~ x, 
+    se=FALSE
+  ) +  #BREAK
+  geom_point(
+    alpha = .5, 
+    size = 2) +  #BREAK
+  ggtitle("Whiteside data: Simple Linear Regression per group")
+```
 
 ---
 class: inverse, center, middle
@@ -144,8 +197,8 @@ class: inverse, center, middle
 
 <!-- get flipbook that rotates through lines, my_fill -->
 ---
-
 `r chunk_reveal("my_fill", break_type = "rotate", widths = c(1,1), title = "### cycle through lines of code marked #ROTATE")`
+
 
 ```{r my_fill, eval = F, echo = F}
 ggplot(data = cars) +
@@ -156,9 +209,9 @@ ggplot(data = cars) +
              alpha = .9,
              color = "snow") +
   aes(fill = speed) +
-  scale_fill_viridis_c(option = "magma") + #ROTATE
+  scale_fill_viridis_c(option = "magma") +   #ROTATE
   scale_fill_viridis_c(option = "cividis") + #ROTATE
-  scale_fill_viridis_c(option = "plasma") #ROTATE
+  scale_fill_viridis_c(option = "plasma")    #ROTATE
 ```
 
 
