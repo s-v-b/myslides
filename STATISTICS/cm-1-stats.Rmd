@@ -1,12 +1,20 @@
 ---
 title: "Statistiques I"
-subtitle: "⚔<br/>Statistiques Master I, MFA et MIDS"
+subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  title: "Statistiques I"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Statistique Fondamentale"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/statistics-paris/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  institution: "Université de Paris"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "xaringan-themer.css", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,86 +30,35 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
 ---
 name: layout-general
 layout: true
 class: left, middle
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-```{r xaringanExtra, echo=FALSE}
-xaringanExtra::use_xaringan_extra(c("tile_view", "animate_css", "tachyons", "logo"))
 ```
 
-
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons(minified = FALSE)
-```
-
-```{r xaringan-logo, echo=FALSE, warning=FALSE, message=FALSE}
-xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-xaringanExtra::use_broadcast()
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-
-source("./loaders_fixers.R")
-
-require(flipbookr)
-```
 
 ---
-class: middle, center, inverse
+
+
+```{r child="title_slide.Rmd"}
+
+```
 
 
 
-# Statistiques I
-
-### `r Sys.Date()`
-
-#### [Statistiques Master I MIDS](/courses/statistics-paris/index.html)
-
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: middle, inverse
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -121,7 +78,7 @@ class: middle, inverse
 
 
 ---
-class: center, middle, inverse
+template: inter-slide
 
 ## Objectifs
 
@@ -162,7 +119,7 @@ Nous verrons aussi que ces théorèmes limites sont complétés par des résulta
 Nous terminerons ce cours par une première version du résultat fondateur de la thérie des tests, le lemme de Neyman et Pearson.
 
 ---
-class: center, middle, inverse
+template: inter-slide
 
 ## Un problème jouet
 
@@ -259,7 +216,7 @@ Comment décider entre
 C'est le problème des _tests_
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Quelques définitions
 
@@ -314,7 +271,7 @@ $P_ \theta$ l'élément de $\mathcal{P}$ associé à $\theta$
 
 ### Identifiabilité `r fontawesome::fa("fingerprint")`
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Une paramétrisation est dite _identifiable_ si
 
@@ -404,7 +361,7 @@ Le reste est sous-entendu `r fontawesome::fa("smile-wink")`
 
 ### Statistique
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Toute fonction mesurable sur l'espace des observations $\mathcal{X}^n$  définit ce qu'on nomme une _statistique_
 
@@ -413,13 +370,13 @@ Toute fonction mesurable sur l'espace des observations $\mathcal{X}^n$  définit
 
 Exemples
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 - La _moyenne empirique_  $\overline{X}_n:=  \frac{1}{n} \sum_{i=1}^n x_i$
 ]
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 - La  _variance empirique_ $S^2:= \frac{1}{n} \sum_{i=1}^n \left(x_i - \overline{X}_n \right)^2$
 
@@ -433,7 +390,7 @@ Dans le langage des statistiques descriptives, la moyenne empirique décrit la l
 
 ### Estimateur
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 `r fontawesome::fa("frown")` Un _estimateur_ n'est qu'une statistique  censée estimer une caractéristique (inconnue) de la loi inconnue qui sous-tend l'échantillonage
 
@@ -461,7 +418,7 @@ $$X(\text{Face})=1= 1-X(\text{Pile})$$
 ---
 
 
-## Echantillons de Bernoulli
+### Echantillons de Bernoulli
 
 `r fontawesome::fa("r-project")` Pour engendrer une suite de $N=$ `r N <- 100; N` variables de Bernoulli indépendantes de  probabilité  de succès $p=$ `r p <- .4; p`, on utilise le générateur de nombres aléatoires `rbinom`,
 
@@ -517,7 +474,7 @@ est construite à partir des résultats fondamentaux du calcul des probabilités
 
 ### Loi(s) des grands nombres `r fontawesome::fa("syringe")`
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 - $X_1, \ldots, X_n, \ldots \sim_{\text{i.i.d.}} P$
 
@@ -695,7 +652,7 @@ class: center, middle, inverse
 
 La plupart des expériences/modèles statistiques que nous rencontrerons dans ce cours, seront de nature _paramétrique_, autrement dit indexés par des parties de $\mathbb{R}^d$
 
-`r fontawesome::fa("hand-pointing-right")` Dans de nombreux développements des statistiques, par exemple en _estimation de densité_, on travaille sur des modèles plus riches qui n'admettent pas de paramétrisation _naturelle_ par une partie d'un espace euclidien de dimension finie
+`r fontawesome::fa("hand-point-right")` Dans de nombreux développements des statistiques, par exemple en _estimation de densité_, on travaille sur des modèles plus riches qui n'admettent pas de paramétrisation _naturelle_ par une partie d'un espace euclidien de dimension finie
 
 `r fontawesome::fa("exclamation-triangle")` On parle pourtant de paramètre d'une distribution pour désigner ce qui devrait plutôt s'appeler une _fonctionnelle_
 
@@ -712,7 +669,7 @@ Les _quantiles_, l'_asymétrie_, la _kurtosis_ sont d'autres paramètres
 
 ### Definition: biais
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit $\psi(P)$ un paramètre à estimer, et $\widehat{\psi}$  un
 estimateur, on appelle _biais_ (ou biais moyen) sous la loi $P$ de l'estimateur
@@ -757,7 +714,7 @@ $$\mathbb{E}_P\left[ S^2 \right] =  \frac{n-1}{n} \mathbb{E}_P \left[\left(X - \
 
 ### Definition : risque quadratique
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit $\psi(P)$ une paramètre à estimer, et $\widehat{\psi}$  un
 estimateur, on appelle _écart quadratique moyen_  sous la loi $P$ de l'estimateur
@@ -781,7 +738,7 @@ $$\mathbb{E}_{\theta} \left[\left(\overline{X}_n - \theta\right)^2\right] =  \fr
 
 ### Décomposition biais-variance du risque quadratique
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 $$\mathbb{E}_{P} \left[(\hat{\psi}-\psi)^2\right] = \underbrace{\operatorname{Var}_{P} [\hat{\psi}]}_{\text{variance}} + \underbrace{\left(\mathbb{E}_{P}[\hat{\psi}]-\psi \right)^2}_{\text{carré du biais}}$$
@@ -810,7 +767,7 @@ des notions de convergence en probabilité et de convergence presque sûre
 
 ### Definition  `r fontawesome::fa("syringe")`
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Une suite $(X_n)_n$  de variables aléatoires à valeurs dans
 $\mathbb{R}^k$, vivant sur un espace probabilisé
@@ -828,7 +785,7 @@ $$\forall \epsilon>0, \qquad \lim_n \mathbb{P} \{ \Vert X_n -X\Vert > \epsilon \
 
 ### Definition: consistance
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Dans une suite d'expériences statistiques échantillonnées,
 une suite d'estimateurs $(\widehat{\theta}_n)_n$ est
@@ -886,7 +843,7 @@ Conditionnellement à $\overline{X}_n$, la probabilité de l'échantillon  ne d�
 Dans ce modèle jouet, $\overline{X}_n$  est une _statistique suffisante_ ou _exhaustive_ `r fontawesome::fa("glass-cheers")`
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 
 ## Intervalles de confiance
@@ -1003,7 +960,7 @@ souvent la définition suivante
 
 ### Definition Convergence faible/étroite `r fontawesome::fa("syringe")`
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Une suite $(P_n)_{n\in \mathbb{N}}$ de probabilités sur $\mathbb{R}$ (de fonctions de
 répartition $(F_n)_{n\in \mathbb{N}}$)  converge
@@ -1028,7 +985,7 @@ La situation des points où  $F$ est discontinue est la suivante.
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si une suite de fonctions de répartition $(F_n)_{n\in \mathbb{ N}}$
 converge simplement vers une fonction de répartition $F$
@@ -1059,7 +1016,7 @@ $$1-\alpha =  \int_{-\infty}^x \frac{\mathrm{e}^{-u^2/2}}{\sqrt{2\pi}} \mathrm{d
 
 ### Théorème Central Limite (De Moivre-Laplace)
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si les estimateurs $\widehat{\theta}_n$ sont distribués selon $P_\theta^{\otimes n}$,
 
@@ -1100,7 +1057,7 @@ on peut s'appuyer sur le lemme de Slutsky `r fontawesome::fa("glass-cheers")`
 
 ### Lemme de Slutsky
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si  $(X_n)_n$ et $(Y_n)_n$ sont  deux  suites de variables aléatoires
 sur $(\Omega_n, \mathcal{F}_n, P_n)$  telles que
@@ -1123,7 +1080,7 @@ On invoque en général la forme  prête à l'emploi
 
 ### Théorème
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si  $(X_n)_n$ et $(Y_n)_n$ est deux  suites de variables aléatoires
 sur $(\Omega_n, \mathcal{F}_n, P_n)$  telles que
@@ -1189,7 +1146,7 @@ nous indique que le niveau de confiance est
 $1- \alpha+ O(1/\sqrt{n})$.
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Intervalle non-asymptotique construit à partir de l'inégalité de Hoeffding
 
@@ -1200,7 +1157,7 @@ L'inégalité de Hoeffding (1963) est la plus simple des _inégalités exponenti
 
 ### Lemma de hoeffding
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si $X$  est une variable aléatoire qui prend ses valeurs dans $[a,b]$,
 
@@ -1257,7 +1214,7 @@ $$F(\lambda) \leq \frac{\lambda^2 (b-a)^2}{8}$$
 
 ###  Inégalité de hoeffding
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si les $(X_i)_{i \leq n}$ sont des variables aléatoires _indépendantes_ à valeur dans $[a_i, b_i]$ et si $Z=\sum_{i=1}^n X_i$
 
@@ -1365,7 +1322,7 @@ $$\overline{\theta} = \sup \{ \theta': \operatorname{qb}(\alpha/2,n,\theta')\leq
 C'est aussi une région de niveau de confiance $1-\alpha + O(1/\sqrt{n})$.
 
 ---
-class: middle, center, inverse
+template: inter-slide
 
 ## Tests
 
@@ -1373,7 +1330,7 @@ class: middle, center, inverse
 
 ### Definition: Hypothèse
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Une _hypothèse_ est une collection de loi de probabilités.
 
@@ -1401,7 +1358,7 @@ Dans la suite on notera $T$ le (la procédure de) test binaire.
 
 ---
 
-`r fontawesome::fa("")`On peut se demander pourquoi on emploie l'expression _on ne rejette pas l'hypothèse nulle $H_0$_, plutôt que _on accepte l'hypothèse nulle_.
+`r fontawesome::fa("brain")` On peut se demander pourquoi on emploie l'expression _on ne rejette pas l'hypothèse nulle $H_0$_, plutôt que _on accepte l'hypothèse nulle_.
 
 Ce n'est pas par goût des formes négatives.
 
@@ -1439,7 +1396,7 @@ De même que le risque quadratique nous permet de quantifier les performances d'
 
 Notez qu'il nous faut introduire deux quantités pour quantifier les performances d'un test
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 - Une _erreur de première espèce_ consiste à rejeter $H_0$ à tort lorsque les données sont des tirages selon une loi appartenant à l'hypothèse nulle (les données sont tirées sous l'hypothèse nulle).
 
@@ -1451,7 +1408,7 @@ Notez qu'il nous faut introduire deux quantités pour quantifier les performance
 
 ### Niveau et puissance
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 On appelle _niveau_ du test $T$,
 
@@ -1495,7 +1452,7 @@ $$P_ \theta^{\otimes n} \{ x_1 , \ldots, x_n\} =  \left( \frac{\theta}{1- \theta
 
 ### Definition Test de rapport de vraisemblance entre hypothèses simples
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Un _test de rapport de vraisemblance_ de $H_1$  contre $H_0$ consiste à
 
@@ -1536,7 +1493,7 @@ class: middle, center, inverse
 
 ### Version préliminaire du Lemme de Neyman-Pearson
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 S'il existe un test de rapport de
 vraisemblance $T_0$ de niveau $\alpha > 0$ et de fonction
@@ -1653,13 +1610,11 @@ L'inégalité de Hoeffding est la plus simple des inégalités de concentration.
 sur le phénomène de concentration,  \cite{BoLuMa13} pour un exposé tourné vers les applications.
 
 
-
-
 ---
-class: middle, center, inverse
-
-background-image: url('./img/pexels-cottonbro-3171837.jpg')
-background-size: cover
 
 
-# The End
+```{r child="closing_slide.Rmd"}
+
+```
+
+
