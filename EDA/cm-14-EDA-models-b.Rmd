@@ -565,8 +565,7 @@ The `predict()` method
 
 
 ```{r}
-predict(flights_fit, test_data)
-   %>% head()
+predict(flights_fit, test_data) %>% head()
 ```
 
 
