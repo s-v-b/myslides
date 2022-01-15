@@ -1,0 +1,217 @@
+---
+title: "EDA I.4: Introduction to R and Data Analysis"
+subtitle: "Analyse de Données Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2021/12/21 (updated: `r Sys.Date()`)"
+params:
+  title: "Beyond dplyr"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  institution: "Université de Paris"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+
+
+```{r child='title_slide.Rmd'}
+
+```
+
+
+---
+template: inter-slide
+
+## `r fontawesome::fa("map", fill="white")`
+
+### [DBI](#DBI)
+
+### [sqldf](#sqldf)
+
+### [data.table](#data.table)
+
+### [dtplyr](#dtplyr)
+
+---
+template: inter-slide
+name: DBI
+
+
+## `DBI`
+
+
+---
+template: inter-slide
+name: sqldf
+
+## `sqldf`
+
+
+---
+template: inter-slide
+name: datatable
+
+## `datatable`
+
+
+---
+
+### Package `datatable`
+
+
+```r
+pacman::p_load("data.table")
+```
+
+> Data manipulation operations such as `subset`, `group`, `update`, `join` etc., are all inherently related
+
+> Keeping these related operations together allows for:
+
+--
+
+> - concise and consistent syntax ...
+
+--
+
+> - performing analysis without the burden of mapping each operation to a particular function from a huge set
+
+--
+
+> - automatically optimizing operations internally, and very effectively, ..., leading to very fast and memory efficient code.
+
+???
+
+> Briefly, if you are interested in reducing programming and compute time tremendously, then this package is for you.
+
+
+---
+
+
+```{r}
+dtflights <-  data.table(flights)
+
+dtflights |>
+  head(20) |>
+  DT::datatable()
+```
+
+---
+
+
+```{r}
+dtflights[
+  dest %in% c('ATL', 'LAX') & origin == 'JFK', #<< filtering
+  .(dest, carrier, time_hour, retard= arr_delay - dep_delay), #<< projecting
+  ] |>
+  head(20) |>
+  DT::datatable()
+```
+
+???
+
+> Within the frame of a `data.table`, columns can be referred to as if they are variables.
+
+> We  refer to `origin` and `dest` as if they were variables.
+
+> In the `j` expression, we can compute new columns ...
+
+
+---
+
+
+### Aggregation with `datatable`
+
+.fl.w-50.pa2[
+
+```{r}
+dtflights[
+  ,               #&lt;&lt; (no) filtering
+  .(n=.N),        #&lt;&lt; summarize
+  by = .(carrier) #&lt;&lt; aggregation
+  ] |&gt;
+  DT::datatable()
+```
+
+<div id="htmlwidget-6358a46d1399716e8228" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6358a46d1399716e8228">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["UA","AA","B6","DL","EV","MQ","US","WN","VX","FL","AS","9E","F9","HA","YV","OO"],[58665,32729,54635,48110,54173,26397,20536,12275,5162,3260,714,18460,685,342,601,32]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>carrier<\/th>\n      <th>n<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+]
+
+
+.fl.w-50.pa2[
+
+
+```sql
+SELECT carrier, COUNT(*) AS n
+FROM flights
+GROUP BY carrier
+ORDER BY n DESC
+```
+
+]
+
+---
+template: inter-slide
+name: dtplyr
+
+## `dtplyr`
+
+---
+
+`dtplyr`: for large, in-memory datasets.
+
+ Translates your `dplyr` code to high performance `data.table` code
+
+
+
+---
+template: inter-slide
+name: dbplyr
+
+## `dbplyr`
+
+---
+
+`dbplyr`: for data stored in a relational database. Translates your `dplyr` code to `SQL`
+
+
+---
+
+```{r child='closing_slide.Rmd'}
+
+```
