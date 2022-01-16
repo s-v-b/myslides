@@ -1535,7 +1535,7 @@ to make results more readable, possibly to conform to a tradition
 - See slide [How many flights per day of week per departure airport?](#aggregate-pivot-wider)
 ]
 
----
+
 
 
 ---
@@ -1727,7 +1727,7 @@ x |>
 ```
 ]
 
-.fr[[Blog on the new standard pipe](https://www.r-bloggers.com/2021/05/the-new-r-pipe/)]
+.fr[See [Blog on the new standard pipe](https://www.r-bloggers.com/2021/05/the-new-r-pipe/)]
 
 ---
 
@@ -1740,21 +1740,21 @@ x |>
 - Exposition operator `%$%`
 - ...  `
 
-.fr[[pipes for beginners](https://www.r-bloggers.com/2017/12/pipes-in-r-tutorial-for-beginners/)]
+.fr[See [pipes for beginners](https://www.r-bloggers.com/2017/12/pipes-in-r-tutorial-for-beginners/)]
 
 ---
 template: inter-slide
 
-## References
-
-
----
+### `r fontawesome::fa("book-reader")` References
 
 - [R for Data Science](https://r4ds.had.co.nz)
   + [Data transformation](https://r4ds.had.co.nz/transform.html)
-- [Cheat sheets]
+- Rstudio cheat sheets
+  + [dplyr](https://www.rstudio.com/resources/cheatsheets/)
+  + [tidyr](https://www.rstudio.com/resources/cheatsheets/)
+  + [datatable](https://www.rstudio.com/resources/cheatsheets/)
+  + [readr](https://www.rstudio.com/resources/cheatsheets/)
 
--
 
 ---
 exclude: true

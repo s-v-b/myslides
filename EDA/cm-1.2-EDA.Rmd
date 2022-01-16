@@ -224,6 +224,7 @@ tmp
 ]
 
 ---
+exclude: true 
 
 ### A tidy table
 
@@ -302,6 +303,7 @@ In the parlance of Relational Algebra, this is a _selection_
 > find rows/cases where conditions are true
 
 ---
+exclude: true
 
 ```{r flip_filter, include=FALSE}
 gapminder %>%
@@ -509,7 +511,7 @@ Purpose of
 - Theming
 
 ```{r theme_economist, echo=TRUE, eval=FALSE}
-pacman::p_load("ggthemes")
+require("ggthemes")
 
 p +
   theme_wsj()
@@ -746,28 +748,27 @@ target_continent <- 'Europe'
 
 
 ---
-
+template: inter-slide
 
 
 ```{r include_plotly_com}
 knitr::include_url("https://plotly.com/r/")
 ```
 
-
-
 ---
 template: inter-slide
 
-Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
----
 
 ```{r include_course}
 knitr::include_url("https://www.youtube.com/embed/3n9nASHg9gc")
 ```
 
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
 ---
+template: inter-slide
+
 
 ```{r include_course_2}
 knitr::include_url("https://www.youtube.com/embed/RPFh3y9UAX4")
@@ -791,16 +792,19 @@ p +
 ```
 
 ---
+exclude: true 
 
 ### Permanence
 
 
 
 ---
+exclude: true 
 
 ## Interactivity
 
 ---
+exclude: true 
 
 - `ggplotly`
 
@@ -811,6 +815,7 @@ p +
 [raukr](https://nbisweden.github.io/raukrtemplate/presentation_demo.html#1)
 
 ---
+exclude: true 
 
 ### Under the hood
 
@@ -818,7 +823,6 @@ p +
 
 `htmlwidgets`
 
----
 
 ???
 
