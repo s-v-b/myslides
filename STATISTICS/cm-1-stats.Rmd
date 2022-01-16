@@ -5,7 +5,7 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
-  title: "Statistiques I"
+  title: "I : Introduction"
   curriculum: "Master I MIDS & MFA"
   coursetitle: "Statistique Fondamentale"
   lecturer: "Stéphane Boucheron"

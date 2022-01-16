@@ -1,6 +1,6 @@
 class: middle, left, inverse
 
-# Exploratory Data Analysis : `r params$title`
+# `r params$coursetitle` `r params$title`
 
 ### `r Sys.Date()`
 
