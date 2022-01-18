@@ -612,6 +612,61 @@ Wes Anderson themes
 ```{r theme_scale-out-bis, ref.label="theme_scale", warning=FALSE, echo=FALSE, message=FALSE, out.width="90%"}
 ```
 
+
+
+
+---
+name: recap 
+template: inter-slide
+
+
+## Recap 
+
+
+???
+
+
+---
+
+### Building a graphical object layer by layer
+
+```{r plot_gap_minder_2002, eval=FALSE, fig.cap="Gapminder 2002 layer by layer"}
+gapminder %>% 
+  filter(year == 2002) %>%
+   ggplot() +
+   aes(x = gdpPercap) +
+   aes(y = lifeExp) +
+   aes(size = pop) +
+   aes(color = continent) +
+   geom_point(alpha=.5) +
+   scale_x_log10() +
+   scale_size_area(max_size = 15,
+                  labels= scales::label_number(scale=1/1e6,
+                                               suffix=" M")) +
+   scale_color_manual(values = neat_color_scale) +
+   theme_minimal() +
+   theme(legend.position = "none") +
+    labs(title= glue("Gapminder  {min(gapminder$year)}-{max(gapminder$year)}"),
+         x = "Yearly Income per Capita",
+         y = "Life Expectancy",
+       caption="From sick  and poor (bottom left) to healthy and rich (top right)")
+
+```
+
+???
+
+
+---
+
+### In action 
+
+`r chunk_reveal("plot_gap_minder_2002")`
+
+
+???
+
+
+
 ---
 template: inter-slide
 
