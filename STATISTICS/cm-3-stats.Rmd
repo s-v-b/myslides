@@ -1,12 +1,20 @@
 ---
-title: "Statistique III"
-subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+title: "Statistiques III: Estimation dans les modèles gaussiens"
+subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
-date: "2020/11/20 (updated: `r Sys.Date()`)"
+date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  title: "III : Estimation dans les modèles gaussiens"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Statistique Fondamentale"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/statistics-paris/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  institution: "Université de Paris"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "xaringan-themer.css", "hygge"]
+    css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -22,74 +30,37 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
 ---
 name: layout-general
 layout: true
 class: left, middle
 
-```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+```{r, echo=FALSE}
+# xaringanExtra::use_scribble()
+```
 
 
-xaringanExtra::use_animate_css()
+---
 
-xaringanExtra::use_tile_view()
 
-xaringanExtra::use_tachyons(minified = FALSE)
-
-xaringanExtra::use_logo(
-  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
-
-xaringanExtra::use_panelset()
-
-xaringanExtra::use_editable(expires = 1)
-
-xaringanExtra::use_broadcast()
-
-xaringanExtra::use_fit_screen()
-
-source("./loaders_fixers.R")
-
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
-
+```{r child="title_slide.Rmd"}
 
 ```
 
 
-
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-
-
 ---
+exclude:true
 class: middle, center, inverse
 
 # Statistique III : Estimation dans les modèles gaussiens
@@ -101,7 +72,7 @@ class: middle, center, inverse
 #### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: inverse, middle
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -117,7 +88,7 @@ class: inverse, middle
 
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Exemples de modèles gaussiens
 
@@ -187,7 +158,7 @@ C'est un domaine (_Compressed sensing_) qui a explosé au début du millénaire
 `r fontawesome::fa("surprise")` Avec forte probabilité, on peut reconstruire $\theta \in \Theta_s$ à partir de moins de $d$ mesures aléatoires bien distribuées
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Modèles  de translation gaussien
 
@@ -235,7 +206,7 @@ son domaine est $\Theta \times \mathcal{X}^{d \times n}$)
 
 À $\theta = (\mu, \Sigma), x=(x_1, \ldots, x_n) \in \mathbb{R}^{d\times n}$ la fonction de vraisemblance fait correspondre la densité de la loi $\mathcal{N}(\mu, \Sigma)$  en $x$ :
 
-$$\prod_{i=1}^n \frac{1}{(2 \pi)^{d/2} \text{det}(\Sigma)^{1/2}} \exp \left(- \frac{(x_i- \mu)^t \Sigma^{-1} (x_i- \mu)}{2} \right)$$
+$$\prod_{i=1}^n \frac{1}{(2 \pi)^{d/2} \text{det}(\Sigma)^{1/2}} \exp \left(- \frac{(x_i- \mu)^T \Sigma^{-1} (x_i- \mu)}{2} \right)$$
 
 La _log-vraisemblance_ est le logarithme de la vraisemblance
 
@@ -257,7 +228,7 @@ et
 
 - une matrice aléatoire à valeur dans $\text{DP}(d)$, la _matrice de covariance empirique_ $\widehat{\Sigma}$
 
-$$\widehat{\Sigma} =  \sum_{i=1}^n \frac{1}{n} (X_i - \overline{X}_n) (X_i - \overline{X}_n)^t$$
+$$\widehat{\Sigma} =  \sum_{i=1}^n \frac{1}{n} (X_i - \overline{X}_n) (X_i - \overline{X}_n)^T$$
 
 ---
 
@@ -265,7 +236,7 @@ $$\widehat{\Sigma} =  \sum_{i=1}^n \frac{1}{n} (X_i - \overline{X}_n) (X_i - \ov
 ### Définition :  Statistique suffisante
 
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
 Dans un modèle paramétré, une statistique $T$ est dite _suffisante_ si la loi conditionnelle de l'échantillon
 sachant la statistique $T$ est _libre_ du paramètre
@@ -283,10 +254,10 @@ et de la (co)variance empirique.
 
 $$\ell_n(\mu,\sigma^2):=  \ell( \mu, \sigma^2, x_1, \ldots, x_n )  =  -\frac{n}{2} \log (2 \pi \sigma^2) - \frac{n}{2} \frac{(\overline{X}_n- \mu)^2}{\sigma^2} - \frac{\sum_{i=1}^n(x_i - \overline{X}_n)^2}{2 \sigma^2}$$
 
-- Dans cadre multivarié ($d >1$), pour un $n$-échantillon, on obtient pour la log-vraisemblance:
+- Dans cadre multivarié ( $d >1$ ), pour un $n$-échantillon, on obtient pour la log-vraisemblance:
 
-$$\begin{array}{rcl} \ell_n(\mu,\Sigma)  & = & -\frac{n \times d}{2} \log (2 \pi) - \frac{n}{2} \log \text{det}(\Sigma) \\ & &     - \frac{n}{2} (\overline{X}_n- \mu)^t \Sigma^{-1} (\overline{X}_n -\mu) \\
-& &    - \frac{1}{2}\text{trace}\left(\Sigma^{-1}  \sum_{i=1}^n(x_i - \overline{X}_n)(x_i - \overline{X}_n)^t  \right) \\ & = &  -\frac{n \times d}{2} \log (2 \pi) - \frac{n}{2} \log \text{det}(\Sigma) \\ & &  -  \frac{n}{2} \text{trace}\left(\Sigma^{-1} (\overline{X}_n -\mu) (\overline{X}_n -\mu)^t \right) \\ &  & -  \frac{n}{2} \text{trace}\left(\Sigma^{-1}  \widehat{\Sigma} \right)\end{array}$$
+$$\begin{array}{rcl} \ell_n(\mu,\Sigma)  & = & -\frac{n \times d}{2} \log (2 \pi) - \frac{n}{2} \log \text{det}(\Sigma) \\ & &     - \frac{n}{2} (\overline{X}_n- \mu)^T \Sigma^{-1} (\overline{X}_n -\mu) \\
+& &    - \frac{1}{2}\text{trace}\left(\Sigma^{-1}  \sum_{i=1}^n(x_i - \overline{X}_n)(x_i - \overline{X}_n)^T  \right) \\ & = &  -\frac{n \times d}{2} \log (2 \pi) - \frac{n}{2} \log \text{det}(\Sigma) \\ & &  -  \frac{n}{2} \text{trace}\left(\Sigma^{-1} (\overline{X}_n -\mu) (\overline{X}_n -\mu)^T \right) \\ &  & -  \frac{n}{2} \text{trace}\left(\Sigma^{-1}  \widehat{\Sigma} \right)\end{array}$$
 
 ---
 
@@ -298,9 +269,13 @@ Les résumés intéressants sont les _statistiques suffisantes minimales_
 
 ### Définition Statistique suffisante minimale
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
-Une _statistique suffisante_ $T$  est _minimale_ si pour tout autre statistique suffisante $T'$, $T$ est une fonction de $T'$.
+Une _statistique suffisante_ $T$  est _minimale_ 
+
+si 
+
+pour tout autre statistique suffisante $T'$, $T$ est une fonction de $T'$.
 
 ]
 
@@ -323,9 +298,9 @@ Alors que les statistiques suffisantes semblent en  apparence les ingrédients n
 ### Définition : Statistique ancillaire
 
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
-Dans un modèle, une statistique dont la loi est libre d'un paramètre est dite _ancillaire_ par rapport à ce paramètre
+Dans un modèle, une statistique dont la loi est _libre_ d'un paramètre est dite _ancillaire_ par rapport à ce paramètre
 
 ]
 
@@ -333,9 +308,9 @@ Dans un modèle, une statistique dont la loi est libre d'un paramètre est dite 
 
 ### Exemple
 
-Dans le modèle gaussien $\{ \mathcal{N}(\mu, \Sigma): \mu \in \mathbb{R}^d, \Sigma \in  \text{DP}(d) \}$, la covariance empirique est ancillaire par rapport à l'espérance
+`r fontawesome::fa("hand-point-right")` Dans le modèle gaussien $\{ \mathcal{N}(\mu, \Sigma): \mu \in \mathbb{R}^d, \Sigma \in  \text{DP}(d) \}$, la covariance empirique est ancillaire par rapport à l'espérance
 
-L'estimateur de choix ($\overline{X}_n$) suffit pour l'estimation ponctuelle de $\mu$
+L'estimateur de choix ( $\overline{X}_n$ ) suffit pour l'estimation ponctuelle de $\mu$
 
 `r fontawesome::fa("exclamation")` Si on s'intéresse à la construction de _régions de confiance_ pour $\mu$, la statistique ancillaire $\widehat{\Sigma}$ intervient naturellement (via le théorème de Student)
 
@@ -361,7 +336,7 @@ Pour caractériser les cas d'indépendance, on introduit la notion de _complétu
 
 ### Définition (modèle _complet_ pour une statistique)
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
 Un modèle $(P_ \theta, \theta \in \Theta)$  est dit _complet_ pour une statistique $T$ si pour toute fonction mesurable $g$,
 
@@ -377,9 +352,16 @@ Nous admettrons le théorème suivant.
 ### Théorème (Basu)
 
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
-Si $T$ est une _statistique suffisante minimale_ et si le modèle est _complet pour la statistique_ alors $T$ est indépendante de toute _statistique ancillaire_
+Si 
+
+- $T$ est une _statistique suffisante minimale_ et 
+- le modèle est _complet pour la statistique_ 
+
+alors 
+
+$T$ est indépendante de toute _statistique ancillaire_
 
 ]
 
@@ -422,11 +404,11 @@ c'est-à-dire la moyenne empirique et la variance empirique
 
 Dans le cas général, un peu plus de travail conduit à la version multivariée des estimateurs précédents
 
-$$\left( \overline{X}_n , \widehat{\Sigma}\right):= \left( \overline{X}_n, \frac{1}{n} \sum_{i=1}^n (x_i -\overline{X}_n) (x_i - \overline{X}_n)^t\right)$$
+$$\left( \overline{X}_n , \widehat{\Sigma}\right):= \left( \overline{X}_n, \frac{1}{n} \sum_{i=1}^n (x_i -\overline{X}_n) (x_i - \overline{X}_n)^T\right)$$
 
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Régression avec design fixe et bruit gaussien homoschédastique
 
@@ -444,13 +426,15 @@ $Y$ à valeur dans $\mathbb{R}^n$ obtenu par
 
 $$Y =  \mathbf{X} \theta_0 + \sigma \epsilon \qquad  \text{ avec }  \epsilon \sim  \mathcal{N}(0, \text{Id}_n)$$
 
-où le paramètre inconnu est  $\theta_0$ dans $\mathbb{R}^p$. Selon les circonstances, on connait ou on ne connait pas $\sigma$
+où le paramètre inconnu est  $\theta_0$ dans $\mathbb{R}^p$. 
+
+Selon les circonstances, on connait ou on ne connait pas $\sigma$
 
 ---
 
 En statistique classique, on suppose que $\textbf{X}$  est de plein rang (ce qui implique $p \leq n$)
 
-En  _grande dimension_, on suppose au contraire que $n \ll p$  mais on suppose alors que $\theta_0$ vérifie une hypothèse de _parcimonie_ ($\theta_0$ possède peu de coordonnées non-nulles)
+En  _grande dimension_, on suppose au contraire que $n \ll p$  mais on suppose alors que $\theta_0$ vérifie une hypothèse de _parcimonie_ ( $\theta_0$ possède peu de coordonnées non-nulles)
 
 On estime $\theta_0$ en cherchant à minimiser l'erreur quadratique de prédiction (d'où  le nom de _méthode des moindre carrés ordinaires_ (MCO)
 
@@ -468,7 +452,7 @@ où  $\widehat{y}$ est la projection orthogonale de $y$  sur $\mathcal{L}(\mathb
 
 Comme $\mathbf{X}$ est _de plein rang_, la matrice de la projection orthogonale sur le sous-espace $\mathcal{L}(\mathbf{X})$ est
 
-$$\mathbf{H}:=  \mathbf{X}(\mathbf{X}^t\mathbf{X})^{-1}\mathbf{X}^t$$
+$$\mathbf{H}:=  \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$$
 
 `r fontawesome::fa("brain")` Vérifier
 
@@ -487,25 +471,29 @@ et
 
 Dans le monde de la régression (gaussienne ou non) la matrice $\mathbf{H}$ est souvent appelée _hat matrix_, ou _matrice d'influence_.
 
-Ses coefficients diagonaux sont appelés (en anglais) _leverage_ et parfois traduits en français par _influence_ ou _effet levier_
+Les  coefficients diagonaux de $\mathbf{H}$ sont appelés (en anglais) _leverage_ et parfois traduits en français par _influence_ ou _effet levier_
 
 ---
 
-Comme $\mathbf{X}$ est de plein rang, il existe un unique optimum, la solution de $\widehat{y} = \mathbf{X} \theta$
+Comme $\mathbf{X}$ est de plein rang, 
+
+il existe un unique optimum, la solution de 
+
+$$\widehat{y} = \mathbf{X} \theta$$
 
 ---
 
 Comme
 
-$$\widehat{y} = \mathbf{X} (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t y$$
+$$\widehat{y} = \mathbf{X} (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T y$$
 
 cette solution est
 
-$$\widehat{\theta} = (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t \widehat{y}$$
+$$\widehat{\theta} = (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T \widehat{y}$$
 
 On note
 
-$$\mathbf{X}^+:= (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t$$
+$$\mathbf{X}^+:= (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T$$
 
 C'est la _pseudo-inverse_ de Moore-Penrose de $\mathbf{X}$
 
@@ -513,17 +501,17 @@ C'est la _pseudo-inverse_ de Moore-Penrose de $\mathbf{X}$
 
 On a donc
 
-$$\widehat{\theta} = (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t \mathbf{X} (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t y =  (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t y =  \mathbf{X}^+ y$$
+$$\widehat{\theta} = (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T \mathbf{X} (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T y =  (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T y =  \mathbf{X}^+ y$$
 
 et
 
-$$\widehat{\theta} - \theta_0 =  \sigma (\mathbf{X}^t\mathbf{X})^{-1} \mathbf{X}^t   \epsilon = \sigma  \mathbf{X}^+ \epsilon$$
+$$\widehat{\theta} - \theta_0 =  \sigma (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T   \epsilon = \sigma  \mathbf{X}^+ \epsilon$$
 
 Comme
 
 $$\mathbb{E}_{\theta_0}\left[\widehat{\theta}- \theta_0 \right] =  \sigma \mathbf{X}^+ \mathbb{E} [\epsilon] = 0$$
 
-L'estimateur  des moindres carrés $\widehat{\theta}$ est un estimateur _sans biais_ `r fontawesome::fa("glass_cheers")`
+L'estimateur  des moindres carrés $\widehat{\theta}$ est un estimateur _sans biais_ `r fontawesome::fa("glass-cheers")`
 
 ---
 
@@ -547,24 +535,24 @@ Ces résultats reposent sur l'hypothèse de normalité du bruit
 
 ---
 
-Dans le cadre des _modèles linéaires gaussiens avec bruit homoschédastique_, l'estimation de la variance du bruit $\sigma^2$ est grandement facilitée `r fontawesome::fa("glass_cheers")`
+Dans le cadre des _modèles linéaires gaussiens avec bruit homoschédastique_, l'estimation de la variance du bruit $\sigma^2$ est grandement facilitée `r fontawesome::fa("glass-cheers")`
 
-Et la construction de région de confiance pour $\theta_0$ et $\sigma^2$  est immédiate `r fontawesome::fa("glass_cheers")`
+Et la construction de région de confiance pour $\theta_0$ et $\sigma^2$  est immédiate `r fontawesome::fa("glass-cheers")`
 
 ---
 
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
 Dans les modèles linéaires gaussiens avec bruit homoschédastique,
 
-$$\widehat{\theta}- \theta_0 \sim \mathcal{N}\left( 0 , \sigma^2 (\mathbf{X}^t\mathbf{X})^{-1}\right)$$
+$$\widehat{\theta}- \theta_0 \sim \mathcal{N}\left( 0 , \sigma^2 (\mathbf{X}^T\mathbf{X})^{-1}\right)$$
 
 Si l'écart-type du bruit $\sigma$ est connu, on dispose d'une quantité pivotale:
 
-$$\frac{1}{\sigma} (\mathbf{X}^t\mathbf{X})^{1/2} \left(  \widehat{\theta}- \theta_0\right) \sim  \mathcal{N}\left(0, \operatorname{Id}_p \right)$$
+$$\frac{1}{\sigma} (\mathbf{X}^T\mathbf{X})^{1/2} \left(  \widehat{\theta}- \theta_0\right) \sim  \mathcal{N}\left(0, \operatorname{Id}_p \right)$$
 
 ]
 
@@ -576,17 +564,17 @@ On part de l'identité $\widehat{\theta} - \theta_0 =  \sigma \mathbf{X}^+ \epsi
 
 Sous l'hypothèse $\epsilon \sim \mathcal{N}(0, \mathbf{Id}_n)$, on a
 
-$$\widehat{\theta} - \theta_0 \sim  \mathcal{N}\left( 0, \sigma^2 \mathbf{X}^+ (\mathbf{X}^+)^t \right) =  \mathcal{N}\left( 0, \sigma^2 (\mathbf{X}^t \mathbf{X})^{-1} \right)$$
+$$\widehat{\theta} - \theta_0 \sim  \mathcal{N}\left( 0, \sigma^2 \mathbf{X}^+ (\mathbf{X}^+)^T \right) =  \mathcal{N}\left( 0, \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1} \right)$$
 
 La preuve se termine en utilisant la _décomposition spectrale_ de la matrice symétrique définie positive
-$\mathbf{X}^t \mathbf{X}$:
+$\mathbf{X}^T \mathbf{X}$:
 
-$$\mathbf{X}^t \mathbf{X} = \mathbf{O} \times \mathbf{D} \times \mathbf{O}^t$$
+$$\mathbf{X}^T \mathbf{X} = \mathbf{O} \times \mathbf{D} \times \mathbf{O}^T$$
 
 avec $\mathbf{O}$ _orthogonale_ et $\mathbf{D}$ _diagonale_ à coefficients diagonaux positifs
 
 On multiplie $\widehat{\theta} - \theta_0$  par
-$\mathbf{O} \mathbf{D}^{1/2} \mathbf{O}^t =(\mathbf{X}^t \mathbf{X})^{1/2}$
+$\mathbf{O} \mathbf{D}^{1/2} \mathbf{O}^T =(\mathbf{X}^T \mathbf{X})^{1/2}$
 
 
 
@@ -596,7 +584,7 @@ $\mathbf{O} \mathbf{D}^{1/2} \mathbf{O}^t =(\mathbf{X}^t \mathbf{X})^{1/2}$
 
 On en déduit une région de confiance pour $\theta$ lorsque l'intensité (l'écart-type) du bruit $\sigma$ est connue: l'ellipsoïde
 
-$$\left\{  \theta': \left\Vert \frac{1}{\sigma} (\mathbf{X}^t\mathbf{X})^{1/2}\left(  \widehat{\theta}- \theta'\right) \right\Vert^2 \leq q_{p, 1- \alpha} \right\} \qquad \text{où } q_{p,1- \alpha} \text{ est le quantile d'ordre } 1- \alpha \text{ de } \chi^2_p$$
+$$\left\{  \theta': \left\Vert \frac{1}{\sigma} (\mathbf{X}^T\mathbf{X})^{1/2}\left(  \widehat{\theta}- \theta'\right) \right\Vert^2 \leq q_{p, 1- \alpha} \right\} \qquad \text{où } q_{p,1- \alpha} \text{ est le quantile d'ordre } 1- \alpha \text{ de } \chi^2_p$$
 
 `r fontawesome::fa("square")`
 
@@ -605,7 +593,7 @@ $$\left\{  \theta': \left\Vert \frac{1}{\sigma} (\mathbf{X}^t\mathbf{X})^{1/2}\l
 
 Lorsque l'écart-type du bruit $\sigma$ n'est pas connu, la  région aléatoire
 
-$$\left\{  \theta': \left\Vert \frac{1}{\sigma} (\mathbf{X}^t\mathbf{X})^{1/2}\left(  \widehat{\theta}- \theta'\right) \right\Vert^2 \leq q_{p, 1- \alpha} \right\} \qquad \text{où } q_{p,1- \alpha} \text{ est le quantile d'ordre } 1- \alpha \text{ de } \chi^2_p$$
+$$\left\{  \theta': \left\Vert \frac{1}{\sigma} (\mathbf{X}^T\mathbf{X})^{1/2}\left(  \widehat{\theta}- \theta'\right) \right\Vert^2 \leq q_{p, 1- \alpha} \right\} \qquad \text{où } q_{p,1- \alpha} \text{ est le quantile d'ordre } 1- \alpha \text{ de } \chi^2_p$$
 
 n'est plus une région de confiance `r fontawesome::fa("frown")`
 
@@ -640,7 +628,7 @@ exclude: true
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
 Dans le modèle de régression linéaire avec _bruit  gaussien homoschédastique_,
 
@@ -660,9 +648,15 @@ $$\frac{\Vert \mathbf{X}(\widehat{\theta} - \theta_0) \Vert^2}{\sigma^2}  \sim \
 
 On observe
 
-$$\widehat{Y}- Y= \sigma (\mathbf{H}-\textbf{Id}) \epsilon$ et $\mathbf{X}(\widehat{\theta} - \theta_0)=  \sigma \mathbf{H} \epsilon$$
+$$\widehat{Y}- Y= \sigma (\mathbf{H}-\textbf{Id}) \epsilon$$
+et 
+$$\mathbf{X}(\widehat{\theta} - \theta_0)=  \sigma \mathbf{H} \epsilon$$
 
-Au facteur $\sigma$ près, on obtient $\widehat{Y}- Y$ et $\mathbf{X}(\widehat{\theta}-\theta_0)$ en projetant le vecteur gaussien standard $\epsilon$ sur deux sous espaces orthogonaux de $\mathbb{R}^n$
+Au facteur $\sigma$ près, 
+
+on obtient 
+$$\widehat{Y}- Y \qquad \text{et}\qquad \mathbf{X}(\widehat{\theta}-\theta_0)$$ 
+en projetant le vecteur gaussien standard $\epsilon$ sur deux sous espaces orthogonaux de $\mathbb{R}^n$
 
 La proposition est donc une conséquence immédiate du théorème de Cochran
 
@@ -675,18 +669,23 @@ Une nouvelle famille de lois de probabilité
 ### Définition : distribution de Fisher
 
 
-.bg-light-gray.b--dark-gray.ba.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.br3.shadow-5.ph4.mt5[
 
 Si $U \sim \chi^2_j$ est indépendante de $V \sim \chi^2_k$ alors $\frac{U/j}{V/k}$ est distribuée selon une loi de
 Fisher à $j,k$ degrés de liberté. On note cette loi $F_{j,k}$.
 
+]
+
+---
+
 
 La quantité aléatoire $\frac{\| H \epsilon\|^2}{\|(\text{Id}-H) \epsilon\|^2}$ est distribuée selon
-$F_{p,n-p}$. Le fait que cette quantité aléatoire soit pivotale  conduit à une région de confiance pour $\theta_0$.
+$F_{p,n-p}$. 
+
+Le fait que cette quantité aléatoire soit pivotale  conduit à une région de confiance pour $\theta_0$.
 
 On note $f_{p,n-p, 1- \alpha}$ est le quantile d'ordre $1- \alpha$ de $F_{p,n-p}$.
 
-]
 
 
 ---
@@ -696,21 +695,26 @@ On note $f_{p,n-p, 1- \alpha}$ est le quantile d'ordre $1- \alpha$ de $F_{p,n-p}
 
 
 
+
 Dans le modèle linéaire gaussien avec bruit homoschédastique,  l'ellipsoïde
 
 $$\left\{\theta': \frac{\left\Vert \mathbf{X} \left(  \widehat{\theta}- \theta'\right) \right\Vert^2/p}{\|\widehat{\epsilon}\|^2/(n-p)} \leq f_{p,n-p, 1- \alpha}\right\}$$
 
-est  une région de confiance pour $\theta_0$  de taux de couverture $1- \alpha$, $\alpha \in ]0,1[$
+est  une région de confiance pour $\theta_0$  
+de taux de couverture $1- \alpha$, $\alpha \in ]0,1[$
 
-
-
-Le volume de cet ellipsoïde est proportionnel à (une puissance de) l'estimateur de l'écart type du bruit.
-
-La forme de cet ellipsoide est dictée par les valeurs propres de $\mathbf{X}^t \mathbf{X}$, autrement dit par les valeurs singulières non nulles de $\mathbf{X}$.
 
 
 ---
-class: inverse, middle, center
+
+
+Le volume de cet ellipsoïde est proportionnel à (une puissance de) l'estimateur de l'écart type du bruit
+
+La forme de cet ellipsoide est dictée par les valeurs propres de $\mathbf{X}^T \mathbf{X}$, autrement dit,  par les valeurs singulières non nulles de $\mathbf{X}$
+
+
+---
+template: inter-slide
 
 ## Tests d'hypothèses linéaires
 
@@ -772,16 +776,19 @@ $$S:= \frac{\|\widehat{Y} - \widehat{Y}^0\|^2/(p-k)}{\| \widehat{Y} - {Y}\|^2/(n
 ---
 
 Le test qui rejette $\text{Hyp}_0$ lorsque la statistique $S$
-est plus grande que le quantile d'ordre $1- \alpha$ de la loi $F_{p-k,n-p}$ est de niveau $\alpha$
-(la probabilité d'une erreur de première espèce est égale à $\alpha$).
+est plus grande que le quantile d'ordre $1- \alpha$ de la loi $F_{p-k,n-p}$ est de _taille_ $\alpha$ 
 
-L'étude de la puissance de ce test (la probabilité de rejeter $\text{Hyp}_0$  lorsque les données sont tirées sous l'alternative $\text{Hyp}_1$) est plus délicate.
+La probabilité d'une erreur de première espèce est égale à $\alpha$
 
-On peut cependant vérifier que le  test est _sans biais_, c'est à dire que la probabilité de rejeter $\text{Hyp}_0$  dans ce cas est supérieure à $\alpha$.
+L'étude de la puissance du test (probabilité de rejeter $\text{Hyp}_0$  lorsque les données sont tirées sous $\text{Hyp}_1$) est plus délicate
+
+Le  test est _sans biais_: la probabilité de rejeter $\text{Hyp}_0$  sous l'alternative est supérieure à $\alpha$
 
 ---
 
-Choisissons une loi relevant de l'alternative. Cela revient à choisir $\theta^0 \in \mathbb{R}^k$
+Choisissons une loi relevant de l'alternative
+
+Cela revient à choisir $\theta^0 \in \mathbb{R}^k$
 et $\theta^1 \in  \mathbb{R}^{p-k}$, avec $\theta^1\neq 0$.
 
 On note $\mathbf{X}^1$ la matrice formée par les $p-k$ dernières colonnes de $\mathbf{X}$.
@@ -789,20 +796,27 @@ On note $\mathbf{X}^1$ la matrice formée par les $p-k$ dernières colonnes de $
 Sous cette loi relevant de $\text{Hyp}_1$, les observations sont distribuées selon
 $\mathcal{N}\left( \mathbf{X}^0 \theta^0 + \mathbf{X}^1 \theta^1, \sigma^2 \textbf{Id}_n\right)$.
 
-Les vecteurs aléatoires $\widehat{Y} - \widehat{Y}^0$ et $Y - \widehat{Y}$  restent indépendants, mais  la statistique
+$$\widehat{Y} - \widehat{Y}^0 \quad\bot\!\!\!\bot  \quad Y - \widehat{Y}$$  
 
-$${\|\widehat{Y} - \widehat{Y}^0\|^2/\sigma_0^2}$$
+Mais
+$${\|\widehat{Y} - \widehat{Y}^0\|^2/\sigma_0^2} \sim \chi^2_{p-k}\left(
+\|(\textbf{Id}-\mathbf{H}^0) \mathbf{X}^1 \theta^1 \|_2\right)$$
+loi du $\chi^2$ à $p-k$ degrés de liberté décentrée de
+$\|(\textbf{Id}-\mathbf{H}^0) \mathbf{X}^1 \theta^1 \|_2$
 
-est maintenant distribuée selon une loi du $\chi^2$ à $p-k$ degrés de liberté décentrée de
-$\|(\textbf{Id}-\mathbf{H}^0) \mathbf{X}^1 \theta^1 \|_2$.
+et 
+$${\| \widehat{Y} - {Y}\|^2/\sigma_0^2} \sim \chi^2_{n-p}$$ 
 
-La quantité aléatoire   ${\| \widehat{Y} - {Y}\|^2/\sigma_0^2}$ reste distribuée selon $\chi^2_{n-p}$.
+---
 
-Pour établir que la loi de $S$ sous $\text{Hyp}_1$ domine  stochastiquement la loi de $S$ sous $\text{Hyp}_0$, il suffit de se rappeler que à nombres de degrés de liberté égaux, la loi du  $\chi^2$ décentrée domine stochastiquement la loi du $\chi^2$ centrée.
+
+Pour établir que la loi de $S$ sous $\text{Hyp}_1$ _domine  stochastiquement_ la loi de $S$ sous $\text{Hyp}_0$, il suffit de  rappeler: 
+
+> à nombres de degrés de liberté égaux, la loi du  $\chi^2$ décentrée domine stochastiquement la loi du $\chi^2$ centrée.
 
 
 ---
-class: inverse, middle, center
+template: inter-slide
 
 ## Données `whiteside`
 
@@ -900,7 +914,7 @@ On se place dans le cadre de la régression linéaire gaussienne
 
 Le design $\mathbf{X}$ est formé par une colonne de $1$  et par la colonne `Temp` de l'échantillon.
 
-`r fontawesome::fa("")` La fonction `lm` de `r fontawesome::fa("r-project")`
+`r fontawesome::fa("hand-point-right")` La fonction `lm` de `r fontawesome::fa("r-project")`
 
 - construit le design à partir du `dataframe`
 - invoque la méthode des moindres carrés (MCO)
@@ -1148,7 +1162,7 @@ anova(lm(data=whiteside, Gas ~ Temp),
 
 ---
 exclude: true
-class: inverse, middle, center
+template: inter-slide
 
 ## Remarques bibliographiques} % (fold)
 \label{sec:remarques_bibli}
@@ -1191,10 +1205,17 @@ sont analysées dans \cite{MR1337030}.
 
 
 ---
+exclude: true
 class: center, middle, inverse
 background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 
 ## The End
+
+---
+
+```{r child="closing_slide.Rmd"}
+
+```
 
 

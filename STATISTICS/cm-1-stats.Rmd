@@ -46,6 +46,10 @@ class: left, middle
 
 ```
 
+```{r, echo=FALSE}
+# xaringanExtra::use_scribble()
+```
+
 
 ---
 
@@ -1591,6 +1595,7 @@ Cette distance diminue lorsque la taille de l'échantillon augmente.
 
 
 ---
+exclude: true
 class: middle, center, inverse
 
 ## Références
