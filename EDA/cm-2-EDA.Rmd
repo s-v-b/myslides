@@ -820,6 +820,64 @@ name: histograms
 
 ---
 
+### Definition(s)
+
+.fl.w-40.pa2[
+
+`r fontawesome::fa("hand-point-right")` A histogram defines a piecewise constant probability density function
+
+A histogram is defined by the number and position of the breaks (bins)
+
+
+A histogram may be regular or not 
+
+]
+
+.fl.w-60.pa2[
+
+```{r histogram-gauss, echo=FALSE}
+tibble(x=rnorm(1000, mean = 2)) %>% 
+  ggplot() +
+  aes(x=x) +
+  geom_rug(alpha=.1) +
+  geom_histogram(aes(y=..density..), 
+                 alpha=.5, 
+                 fill="white", 
+                 colour="black", 
+                 bins=30) +
+  stat_function(linetype="dashed", 
+                fun=dnorm, 
+                args=list(mean=2, sd=1)) +
+  annotate("text", x=4.5, y=.3, 
+           label="Gaussian density with mean 2") +
+  ggtitle("Histogram for Gaussian sample") +
+  labs(caption="Sample size=1000, 30 bins")
+```
+
+
+
+]
+
+
+---
+
+
+
+`r chunk_reveal("histogram-gauss")`
+
+---
+
+### Construction
+
+- Binning the sample values
+  + Picking the right (?) number of bins
+  + Placing the breaks
+  
+- 
+
+
+---
+
 ### Histograms for (trimmed) delay distributions
 
 .fl.w-40.pa2.f6[
@@ -1118,7 +1176,7 @@ $$F_n^\leftarrow \circ F_n(z) = X_{k+1:n} \text{if} \qquad X_{k:n} < z \leq X_{k
 The quantile-quantile plot lies above line $y=x$ and meets this line at every
 unique order statistics.
 
-`r fontawesome::fa("grin")` The departure of the quantile-quantile funcion from identity reflects
+`r fontawesome::fa("grin")` The departure of the quantile-quantile function from identity reflects
 the  differences between   the two empirical distribution functions.
 
 We can for example compare the first and second half of the `faithfull`
