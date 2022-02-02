@@ -80,6 +80,7 @@ template: inter-slide
 #### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 ---
+exclude: true
 template: inter-slide
 
 ### [Appetizer](#appetizer)  `r fontawesome::fa("map", fill="white")`
@@ -100,6 +101,17 @@ template: inter-slide
 ```{r, echo=FALSE, message=FALSE}
 iris <- datasets::iris
 ```
+
+---
+
+
+
+```{r child='toc-cm-6-EDA.Rmd'}
+
+```
+
+
+
 
 ---
 template: inter-slide

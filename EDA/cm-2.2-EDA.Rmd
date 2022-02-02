@@ -69,20 +69,30 @@ template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [Samples, observations an variables ](samples)
+### Samples, observations and variables
 
-### [Summary statistics](numerical-summaries)
+### Summary statistics for numerical samples
 
-### [Robust summary statistics](robust)
+### Graphical summaries for numerical samples
 
-### [Boxplots](boxplots)
+### Summary statistics for categorical samples
 
-### [Histograms](histograms)
+### Graphical summaries for categorical samples
 
-### [Cumulative distribution function](ecdf)
+### Cummulative distribution functions and quantile functions
 
-### [Quantile function](quantile-function)
+---
+exclude: true
 
+Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.
+
+
+.font50[
+
+Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.
+
+
+]
 
 
 ---
@@ -139,6 +149,117 @@ $ time_hour      <dttm> 2013…
 ]
 
 
+---
+
+
+
+
+
+---
+exclude: true
+
+### Titanic passenger dataset
+
+.fl.w-third.pa2[
+
+`r fontawesome::fa("ship")` The `Titanic` dataset comprises a list of (related) univariate
+ samples: `Survived`, `Pclass`, `Sex`, `Embarked`, ...
+
+`r fontawesome::fa("swimmer")` Each sample element corresponds to a unique passenger on board of HMS Titanic
+during her first transatlantic trip on April 1912.
+
+`r fontawesome::fa("file-csv")`  The dataset obtained from [kaggle]() is built from two `csv` files: `train.csv` and `test.csv`. Column `Survived` is absent from file `test`.
+
+
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+```{r}
+tit_col_types = cols(
+
+  PassengerId = col_integer(),
+
+  Survived = col_factor(levels=c("0", "1"),
+                        include_na = TRUE),
+
+  Pclass = col_factor(levels=c("1", "2", "3"),  #<<
+                      ordered = TRUE,           #<<
+                      include_na = TRUE),       #<<
+
+  Sex = col_factor(levels = c("female", "male")),
+  Age = col_double(),
+  SibSp = col_integer(),
+  Parch = col_integer(),
+
+  Embarked = col_factor(levels = c("S", "C", "Q"),
+                        include_na = TRUE)
+
+)
+
+```
+
+]
+
+---
+exclude: true
+
+### Viewing (part of) the dataset
+
+
+`r fontawesome::fa("database")`  Table loading and wrangling
+
+```{r load-titanic-label, echo=TRUE}
+train <- read_csv("DATA/titanic/train.csv",
+          col_types=tit_col_types)
+test <- read_csv("DATA/titanic/test.csv",
+          col_types=tit_col_types)
+
+test <- mutate(test, #<<
+               Survived=NA)  #<<
+
+tit <- union(train, test)
+```
+
+
+---
+exclude: true
+
+
+
+### `r fontawesome::fa("chalkboard-teacher")`  Reporting
+
+.fl.w-40.pa2[
+
+```{r tit_kable, echo=TRUE, eval=FALSE}
+tit %>%
+  dplyr::select(Survived, #<<
+                Pclass,
+                Sex,
+                Age) %>%
+  dplyr::sample_n(5) %>%   #<<
+  knitr::kable()   #<<
+```
+
+
+We _project_ the table on four columns, then _sample_ 5 rows at random,
+and then _display_
+
+
+]
+
+.fl.w-60.pa2[
+
+```{r, ref.label="tit_kable", echo=FALSE}
+
+```
+
+
+
+
+]
 
 
 ---
@@ -862,6 +983,8 @@ exclude: true
 
 ]
 
+
+---
 ---
 template: inter-slide
 name: ecdf
@@ -952,8 +1075,6 @@ For example,
 
 ---
 
-###  A glimpse at the faithfull data 
-
 ```{r, echo=TRUE}
 data(faithful)
 faithful %>%
@@ -977,8 +1098,7 @@ Under the hood, `ggplot` combines `geom_step`  and `ecdf` statistic
 
 ```{r  geyser-label, echo=TRUE, fig.show='hide'}
 faithful %>%
-  ggplot() +
-  aes(x=eruptions) +
+  ggplot(mapping=aes(x=eruptions)) +
   geom_step(stat="ecdf") +   #<<
   ylab("ECDF") +
   xlab("Eruptions duration in minutes") +
@@ -994,7 +1114,7 @@ faithful %>%
 ]
 
 ---
-exclude: false
+exclude: true
 
 ### Computing the ECDF statistic
 
@@ -1016,8 +1136,7 @@ df <- data_frame(x=x_grid,
                  Fn=Fn(x_grid))
 
 df %>%
-  ggplot() +
-  aes(x=x, y=Fn) +
+  ggplot(mapping=aes(x=x, y=Fn)) +
   geom_step(direction="hv")
 ```
 
@@ -1032,13 +1151,12 @@ df %>%
 
 
 ---
-template: inter-slide
-name: quantile-function
+class: center, middle, inverse
 
 ## Quantile function
 
 ---
-exclude: false
+exclude: true
 
 
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
@@ -1066,11 +1184,9 @@ role of the axes in the ECDF plot.
 
 ```{r  eruptions-label, echo=TRUE, fig.show='hide'}
 faithful[1:10,] %>%
-  ggplot() +
-  aes(x=eruptions) +
-  geom_step(stat="ecdf", 
-            direction='vh') +
-  coord_flip() +   #<< 
+  ggplot(mapping=aes(x=eruptions)) +
+  geom_step(stat="ecdf", direction='vh') +
+  coord_flip() +
   xlab("Quantiles") +
   ylab("Probabilities") +
   ggtitle("Old Faithful Geyser Data")
@@ -1090,7 +1206,7 @@ Why is it safe to set the `direction` argument in the call to `geom_step()`
 
 
 ---
-exclude: false
+exclude: true
 
 ### Comparing sample quantiles with distributional quantiles
 
@@ -1162,8 +1278,6 @@ equantile <- function(sample){
     sample[ks]  #<<
   }
 }
-
-
 ```
 
 See [Advanced R programming](https://adv-r.hadley.nz/function-factories.html)
@@ -1174,51 +1288,39 @@ See [Advanced R programming](https://adv-r.hadley.nz/function-factories.html)
 
 ---
 
-### QQ plot
+.fl.w-third.pa2[
 
-.fl.w-40.pa2.f6[
+```{r, faithful-split-label, echo=TRUE, fig.show='hide'}
+first <- faithful[1:135,]
+second <- faithful[-(1:135),]
 
-```{r qq_delays, eval=FALSE}
-not_cancelled <- flights %>% 
-  filter(!is.na(arr_delay)) %>% 
-  sample_n(100) %>% 
-  arrange(dep_delay) %>% 
-  filter(abs(arr_delay) < 120) 
-  
+Fn <- ecdf(first$eruptions)
 
-nr <- nrow(not_cancelled)
+Qm <- equantile(second$eruptions)
+
+df <- data.frame(x= seq(min(first$eruptions)-1, max(first$eruptions)+1, 0.01)) %>%
+  dplyr::mutate(y = Qm(Fn(x)))
 
 
-not_cancelled %>% 
-  ggplot() +
-  aes(x=dep_delay, 
-      y=quantile(arr_delay, 
-                 seq(1, nr)/nr)
-      ) +
-  geom_point(size=.1) +
-  coord_fixed() +
-  geom_abline(slope=1, 
-              intercept = 0, 
-              alpha=.5) +
-  ggtitle("QQ plot clipped arr_delay versus dep_delay") +
-  ylab("arr_delay") +
-  xlab("dep-delay")
+df %>%
+  ggplot(mapping = aes(x=x, y=y)) +
+  geom_step(direction='vh') +
+  geom_abline(slope=1,
+              intercept = 0,
+              linetype='dashed')
+
 ```
 ]
 
 
-.fl.w-60.pa2[
+.fl.w-two-thirds.pa2[
 
-```{r qq_delays-out, echo=FALSE, ref.label="qq_delays"}
-
-```
-
+![](`r knitr::fig_chunk('faithful-split-label','png')`)
 
 ]
 
 
 ---
-exclude: true
 
 We can repeat this experiment after sample shuffling.
 
@@ -1256,30 +1358,6 @@ df %>%
 ![](`r knitr::fig_chunk('faithful-shuffle-label','png')`)
 
 ]
-
----
-exclude: true 
-
-```{r, faithful-split-label-bis, echo=TRUE, fig.show='hide'}
-first <- faithful[1:135,]
-second <- faithful[-(1:135),]
-
-Fn <- ecdf(first$eruptions)
-Qm <- equantile(second$eruptions)
-
-df <- data.frame(x= seq(min(first$eruptions)-1, max(first$eruptions)+1, 0.01)) %>%
-  dplyr::mutate(y = Qm(Fn(x)))
-
-
-df %>%
-  ggplot() +
-  aes(x=x, y=y) +
-  geom_step(direction='vh') +
-  geom_abline(slope=1,
-              intercept = 0,
-              linetype='dashed')
-
-```
 
 
 ---
