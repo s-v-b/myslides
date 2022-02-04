@@ -907,7 +907,10 @@ On ne change pas les règles du jeu en cours de partie.
 name: contacts-ra
 
 
-### Responsable administratif : [Christian Sénécal](mailto:senecal@math.univ-paris-diderot.fr)
+### Responsable administratif : [Nathalie Naveau](mailto:naveau@math.univ-paris-diderot.fr)
+
+
+
 
 .fl.w-40.pa2[
 
@@ -915,12 +918,12 @@ name: contacts-ra
 
 - Bâtiment Sophie Germain
 
-- Salle 2008
+- Bureau 1011
 ]
 
 .fl.w-60.pa2[
 ```{r, trombi-csenec, out.width="80%", echo=FALSE}
-knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/naveau_large.jpg")
 ```
 ]
 
@@ -937,18 +940,18 @@ knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/tr
 ###  Responsables pédagogiques
 
 .pull-left[
-#### [David Gérard-Varet](https://dgerardv.github.io)
-Analyse `r fontawesome::fa("database", fill = "black")`
+#### [Marie-Claude Arnaud](https://mcarnaudblog.wordpress.com)
+Analyse `r fontawesome::fa("chalkboard-teacher", fill = "black")`
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
-knitr::include_url("https://dgerardv.github.io")
+knitr::include_url("https://mcarnaudblog.wordpress.com")
 ```
 
 ]
 
 .pull-right[
 #### [Stéphane Boucheron](https://stephane-v-boucheron.fr)
-Statistiques, Probabilités
+Statistiques, Probabilités  `r fontawesome::fa("chalkboard-teacher", fill = "black")`
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
 knitr::include_url("https://stephane-v-boucheron.fr")

@@ -69,19 +69,19 @@ template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
-### [Samples, observations an variables ](samples)
+### [Samples, observations an variables ](#samples)
 
-### [Summary statistics](numerical-summaries)
+### [Summary statistics](#numerical-summaries)
 
-### [Robust summary statistics](robust)
+### [Robust summary statistics](#robust)
 
-### [Boxplots](boxplots)
+### [Boxplots](#boxplots)
 
-### [Histograms](histograms)
+### [Histograms](#histograms)
 
-### [Cumulative distribution function](ecdf)
+### [Cumulative distribution function](#ecdf)
 
-### [Quantile function](quantile-function)
+### [Quantile function](#quantile-function)
 
 
 
@@ -198,7 +198,7 @@ for univariate samples
 
 
 ---
-class: middle, center, inverse
+template: inter-slide
 name: numerical-summaries
 
 ## Summary statistics
