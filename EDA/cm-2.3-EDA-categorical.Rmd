@@ -1,10 +1,11 @@
 ---
-title: "Univariate statistics: Inequalities"
+title: "Categorical Univariate Statistics"
 subtitle: "EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
+  title: "Categorical Univariate Statistics"
   curriculum: "Master I MIDS & MFA"
   coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
@@ -45,33 +46,25 @@ class: left, middle
 
 
 ---
-template: inter-slide
 
-# Inequalities
+```{r child='title_slide.Rmd'}
 
-### `r Sys.Date()`
+```
 
-#### [`r params$curriculum`](`r params$homepage_curriculum`)
-
-#### [`r params$coursetitle`](`r params$homepage`)
-
-#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 
 ---
 template: inter-slide
 
-## `r fontawesome::fa("map", fill="white")`
+### `r fontawesome::fa("map", fill="white")`
 
-### How far are we from equidistribution?
+### Numerical summaries for categorical samples
 
-### Lorenz curve
+### Barplots
 
-### Gini index
+### Pieplots
 
-### Schur convex functions
-
----
+### Semmelweis quasi-experiment
 
 
 ---
@@ -87,116 +80,108 @@ name: num-sum-cat-samples
 
 For qualitative samples, summary statistics consists of _counts_: for each modality, we record the _number of occurences_ or _frequency_
 
-`r fontawesome::fa("exclamation-triangle")` In English, the _frequency_ of a symbol in a sequence is the number of  occurences
+`r fontawesome::fa("exclamation-triangle")` In English, the _frequency_ of a symbol in a sequence is the number of  occurences  (a count)
 
-In French, the _frequence_ of that symbol is the ratio between the number
+In French, the _frequence_ of that symbol is the _ratio_ between the number
 of occurences of the symbol and the total length of the sequence
 
 ---
 
-### Summarizing `Pclass`
+### Summarizing `carrier`
 
+.fl.w-30.pa2[
 
-```{r}
-summary(train$Pclass)
+```{r loading, eval=F, echo=T}
+require(tidyverse, quietly = T)
 
-table(train$Pclass) %>%   #<<
-  kable(col.names = c("PClass", "Frequency"))
+require(nycflights13, quietly = T)
+
+flights %>%  
+  glimpse(w=50)
 ```
 
+]
 
-`r fontawesome::fa("r-project")`  : function `table()` uses the cross-classifying factors to build a _contingency table_ of the counts at each combination of factor levels.
+.fl.w-70.pa2[
 
-For univariate samples, ...
+```{r loading-out, ref.label='loading', eval=TRUE, echo=FALSE}
 
----
-
-### Summarizing `Embarked`
-
-
-```{r}
-summary(train$Embarked)
-
-table(train$Embarked) %>% #<<
-  kable(col.names = c("Embarkment", "Frequency"))
 ```
-
-
-
-`r fontawesome::fa("lightbulb")` Base function `summary` tells us everything there is to know: number of passengers for every class and passengers, and number of sample elements  with unknown class
-
-`r fontawesome::fa("exclamation-triangle")` Base function `table` puts dust under the carpet:  number of passengers with unknown class is unreported
-
-
-
----
-exclude: true
-
-.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
-
-'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
 
 ]
 
 
 
 ---
-exclude: true
 
-### Contingency tables
+### Summarizing `carrier`
 
 
-```{r, eval=FALSE}
-# data %>%
-#   table() %>%
-#   kable()
+.fl.w-50.pa2[
+
+`r fontawesome::fa("r-project")` : function `table()` uses the cross-classifying factors to build a _contingency table_ of the counts at each combination of factor levels.
+
+For univariate samples, `table()` returns a 1-way contingency table
+
+
+```{r carrier, echo=T, eval=T}
+table(flights$carrier) %>% #<<
+  knitr::kable(
+    col.names = c("Carrier", 
+                  "Frequency"))
 ```
+
+]
+
+.fl.w-50.pa2[
+
+
+
+```{r carrier-out,  echo=T, eval=T}
+summary(flights$carrier)
+
+summary(factor(flights$carrier))
+```
+
+`r fontawesome::fa("lightbulb")` Base function `summary` tells us everything there is to know, counts, and NAs
+
+`r fontawesome::fa("exclamation-triangle")` Base function `table` puts dust under the carpet: NAs are not reported 
+]
+
+
+
+
+
 ---
 template: inter-slide
+name: graphical-summaries
 
 ## Graphical summaries for categorical samples
-
----
-exclude: true
-
-
-.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
-
-'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
-
-]
-xx
-
----
-template: inter-slide
-
-## Barplots
-
----
-
-For qualitative samples, `barplot` are a simple way of visualizing counts
 
 ---
 
 ### Bar plotting in one step using `geom_bar`
 
-.fl.w-50.pa2[
+.fl.w-40.pa2[
 
-```{r titanic-label-allin1, fig.show='hide'}
-tit %>%
-  ggplot(mapping=aes(x=Pclass)) +
+```{r flights-dest, eval=F, echo=T}
+flights %>%
+  ggplot() +
+  aes(x=origin) +
   geom_bar(width=.3) +      #<<
   ylab("Count") +
-  ggtitle("Titanic: boarding distributions")
+  ggtitle("Flights: destinations distribution")
 
 ```
 
 ]
 
 
-.fl.w-50.pa2[
+.fl.w-60.pa2[
 
-![titanic-label](`r knitr::fig_chunk("titanic-label-allin1", "png")`)
+```{r flights-dest-out, ref.label='flights-dest', eval=T, echo=F}
+
+```
 
 
 ]
@@ -225,17 +210,17 @@ Emphasize
 
 ### Bar plotting in two steps using `group_by()`, `n()` and `geom_col()`
 
-.fl.w-50.pa2.f5[
+.fl.w-40.pa2.f5[
 
 
 
-```{r titanic-label, fig.show='hide'}
-p <- tit %>%
-  group_by(Pclass) %>%
+```{r flights-origin-label, eval=F, echo=T}
+p <- flights %>%
+  group_by(origin) %>%
   summarise(Count=n()) %>%
-  ggplot(mapping=aes(x=Pclass,
+  ggplot(mapping=aes(x=origin,
                      y=Count)) +
-  ggtitle("Titanic: boarding distributions")
+  ggtitle("Flights: origin distribution")
 
 p + geom_col(width=.3)  #<<
 ```
@@ -244,9 +229,11 @@ p + geom_col(width=.3)  #<<
 
 
 
-.fl.w-50.pa2[
+.fl.w-60.pa2[
 
-![titanic-label](`r knitr::fig_chunk("titanic-label", "png")`)
+```{r flights-origin-label-out, ref.label="flights-origin-label", eval=T, echo=F}
+
+```
 
 
 ]
@@ -264,11 +251,11 @@ Once a data source and an (aesthetic) mapping have been fixed (telling which col
 
 ---
 
-.fl.w-50.pa2[
+.fl.w-40.pa2[
 
 We could obtain the same plot using `geom_bar` using the `identity` stat.
 
-```{r tweak-bar-stat-label, fig.show='hide'}
+```{r tweak-bar-stat-label, eval=F, echo=T}
 p +
   geom_bar(stat="identity", #<<
            width=.3) #<<
@@ -277,16 +264,19 @@ p +
 ]
 
 
-.fl.w-50.pa2[
+.fl.w-60.pa2[
 
-![](`r knitr::fig_chunk("tweak-bar-stat-label", "png")`)
+```{r tweak-bar-stat-label-out, ref.label="tweak-bar-stat-label", echo=F, eval=T}
+
+```
 
 
 ]
 
 ---
 
-.fl.w-50.pa2[
+.fl.w-40.pa2.fa6[
+
 Barplots provide us with a great way to compare counts of different categories.
 
 But it is somewhat difficult to figure out the relative frequencies
@@ -295,36 +285,38 @@ of the different categories.
 One way to facilitate this consists of normalizing
 the counts by dividing all counts by sample size.
 
-```{r normalize-col-plot-label, fig.show='hide', message=FALSE}
-dt <- tit %>%
-    group_by(Pclass) %>%
-  dplyr::summarise(Count=n() ) %>%
-  dplyr::mutate(Prop=Count/sum(Count))
+```{r normalize-col-plot-label, eval=F, echo=T}
+dt <- flights %>%
+    group_by(dest) %>%
+    summarise(Count=n()) %>%
+    mutate(Prop=Count/sum(Count))
 
 p <- dt %>%
-  ggplot(mapping=aes(x=Pclass,
-                     y=Prop)) +
-  ggtitle("Titanic: boarding distributions")
+  ggplot() +
+  aes(x=dest, y=Prop) +
+  ggtitle("Flights: dest distribution")
 
 (p + geom_col(width=.3))
 ```
 
 ]
 
-.fl.w-50.pa2[
+.fl.w-60.pa2[
 
-![](`r knitr::fig_chunk('normalize-col-plot-label', 'png')`)
+```{r normalize-col-plot-label-out, eval=T, echo=F, ref.label="normalize-col-plot-label"}
+
+```
 
 ]
 
 ---
 
-.fl.w-third.pa2[
+.fl.w-30.pa2[
 
 It may be a good idea to doctor the tick labels on the Y-axis, indicating
 percentages rather than numbers between $0$ and $1$ (this depends on the readership)
 
-We may focus on passengers without repeating the whole process, just
+We may focus on flights without repeating the whole process, just
 upgrading the data.
 
 Defining a `ggplot` object is very much
@@ -333,40 +325,61 @@ like defining a _pipeline_
 ]
 
 
-.fl.w-two-thirds.pa2[
+.fl.w-70.pa2[
 
 ```{r, echo=FALSE}
-(p + geom_col(width=.3))
+p + 
+  geom_col(width=.3) +
+  theme(axis.text.x=element_text(angle=45, hjust=1, size =4)) # +
+  
 ```
 
 ]
 
 
 ---
-exclude: true
 
-.fl.w-third.pa2[
-A stacked barplot offers another possibility to show the different proportions
-]
+.fl.w-30.pa2.f6[
 
-.fl.w-two-thirds.pa2[
+```{r fct_reorder, echo=T, eval=F}
+dt %>%
+  ggplot() +
+  aes(x=fct_reorder(factor(dest), Prop, .desc = T),   #<<
+      y=Prop) +
+  ggtitle("Flights: dest distribution") +
+  geom_col(width=.3) +
+  theme(axis.text.x=element_text(angle=45, hjust=1, size =4))  +
+  xlab("Destination Airport") +
+  ylab("Prop")
 
-```{r}
-p <- dt %>%
-  ggplot(mapping=aes(x=Cat, y=Prop))
 ```
 
+
+
 ]
 
+
+.fl.w-70.pa2[
+
+```{r  fct_reorder-out, ref.label="fct_reorder", echo=F, eval=T}
+
+```
+
+
+
+]
+
+
 ---
-class: middle, inverse, center
+template: inter-slide
+name: pieplots
 
 ## Pieplots
 
 ---
 
 
-.fl.w-third.pa2[
+.fl.w-40.pa2.f6[
 
 Another possibility is to use a `Pieplot`
 
@@ -376,14 +389,20 @@ to angular values (fractions of $2\pi$).
 It is up to the data scientist to decide whether one plot is more
 relevant than the other.
 
-```{r pieplot-label, fig.show='hide'}
-dt %>%
-   ggplot() +
-   geom_bar(mapping=aes(x=factor(1),
-                        y=Prop,
-                        fill=Pclass),
-            stat='identity') +
-   coord_polar(theta='y') +
+```{r pieplot-label, echo=T, eval=F}
+flights %>%
+  group_by(carrier) %>% 
+  summarize(Count=n()) %>% 
+  mutate(Prop=Count/sum(Count)) %>% 
+  mutate(carrier=fct_reorder(carrier, 
+                             Count, 
+                             .desc = F)) %>% 
+  ggplot() +
+  geom_bar(mapping=aes(x=factor(1),  #<<
+                       y=Prop,  #<<
+                       fill=carrier), #<<
+            stat='identity') + #<<
+   coord_polar(theta='y') +  #<<
    xlab("") +
   ylab("")
 ```
@@ -391,9 +410,11 @@ dt %>%
 ]
 
 
-.fl.w-two-thirds.pa2[
+.fl.w-60.pa2[
 
-![](`r knitr::fig_chunk('pieplot-label', 'png')`)
+```{r pieplot-label-out, ref.label="pieplot-label", echo=F, eval=T}
+```
+
 
 ]
 
