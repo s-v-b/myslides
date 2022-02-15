@@ -39,6 +39,10 @@ class: left, middle
 ```{r setup2, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 ```
 
+```{r, echo=FALSE}
+xaringanExtra::use_scribble()
+```
+
 
 ```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
 require(RefManageR, quietly = TRUE)

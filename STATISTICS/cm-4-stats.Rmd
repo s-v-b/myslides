@@ -97,12 +97,13 @@ class: inverse, middle
 
 ### [Conditions suffisantes de consistance](#tout-va-bien)
 
-### [Entropie relative](#entropie-relative)
-
 ### [Modéles exponentiels](#modeles-exponentiels)
 
 ### [Performances de la méthode des moments](#performance-moments)
 
+???
+
+### [Entropie relative](#entropie-relative)
 
 ---
 class: center, middle, inverse
@@ -188,9 +189,9 @@ et des modèles gaussiens.
 
 - $\psi(\theta)$ le nouveau paramètre correspondant à $\theta$.
 
-La méthode des moments consiste à estimer le paramètre par la  solution (si elle existe) de l'équation en $\vartheta$:
+La méthode des moments consiste à estimer le paramètre par la  solution (si elle existe) de l'équation en $\theta$:
 
-$$\psi(\vartheta) =  \frac{1}{n} \sum_{i=1}^n \begin{pmatrix} T_1(X_i)\\ \vdots \\ T_k(X_i) \end{pmatrix} =: \overline{T}_n$$
+$$\psi(\theta) =  \frac{1}{n} \sum_{i=1}^n \begin{pmatrix} T_1(X_i)\\ \vdots \\ T_k(X_i) \end{pmatrix} =: \overline{T}_n$$
 
 ---
 
@@ -228,7 +229,7 @@ Les moments empiriques sont des estimateurs sans biais des moments
 
 ### Questions
 
-- Existence et unicité des solutions de $\psi(\vartheta)= \overline{T}_n$
+- Existence et unicité des solutions de $\psi(\theta)= \overline{T}_n$
 
 - Consistance des estimateurs $\psi^{-1}(\overline{T}_n)$
 
@@ -247,7 +248,7 @@ Pour le moment, nous allons supposer que nous sommes dans une situation comparab
 class: center, middle, inverse
 name: outils
 
-## Outils probabilistes
+## Outils probabilistes  `r fontawesome::fa("syringe")`
 
 ---
 
@@ -266,9 +267,9 @@ si $Y$ est une variable aléatoire dégénéree presque sûrement égale à une 
 name: slutsky
 
 
-### Lemme de Slutsky
+### Lemme de Slutsky  `r fontawesome::fa("syringe")`
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si
 - $(X_n)_n$  suite de v.a. sur $(\Omega_n, \mathcal{F}_n, P_n)$
@@ -314,7 +315,7 @@ name: slutsky-off-the-shelf
 
 ### Théorème `r fontawesome::fa("plug")`
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit $(X_n)_{n \in \mathbb{N}}$ une suite de v.a. à valeurs dans $\mathbb{R}^k, X$ une autre v.a. à valeur dans $\mathbb{R}^k$, soit $(Y_n)_{n \in \mathbb{N}}$ une suite de   v.a. à valeurs dans $\mathbb{R}^{k'}$
 
@@ -332,9 +333,9 @@ $$g (X_n, Y_n) \rightsquigarrow g (X, y)$$
 name: delta-1
 
 
-### Méthode Delta au premier ordre
+### Méthode Delta au premier ordre `r fontawesome::fa("syringe")`
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
 
 Soient
 - $(a_n)_n$ une suite positive qui tend vers l'infini.
@@ -394,7 +395,7 @@ Meme si elles sont vérifiées, elles ne garantissent pas que la méthode des mo
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5.f6[
 
 Si $\Theta$  est un ouvert de $\mathbb{R}^k$, si la fonction
 $$\begin{array}{rl}\psi: & \Theta \rightarrow  \mathbb{R}^k \\ & \theta \mapsto  \left(\mathbb{E}_{\theta} T_1(X), \ldots, \mathbb{E}_{\theta} T_k(X)\right)^t \end{array}$$
@@ -407,12 +408,10 @@ $$\forall \theta \in \Theta, j\leq k, \qquad \mathbb{E}_{\theta} T_j(X)^2 < \inf
 
 alors
 
-i.) avec probabilité qui tend vers $1$  (sous $P^{\otimes \mathbb{N}}_ \theta$), l'équation en $\vartheta$ $\psi(\vartheta) = \overline{T}_n$ admet une solution:
+1. avec probabilité qui tend vers $1$  (sous $P^{\otimes \mathbb{N}}_ \theta$), l'équation en $\theta$ $\psi(\theta) = \overline{T}_n$ admet une solution:
 $\widehat{\theta}_n = \psi^{-1}(\overline{T}_n)\in \Theta$
-
-ii.) $(\widehat{\theta}_n)_{n \in \mathbb{N}} \stackrel{\text{p.s.}}{\longrightarrow} \theta\qquad \text{sous } P^{\otimes \mathbb{N}}_ \theta$
-
-iii.) $\sqrt{n} \big( \widehat{\theta}_n  - \theta\big) \rightsquigarrow \mathcal{N}\left(0, (D \psi_{\vert \theta})^{-1}\operatorname{cov}_ \theta(T) (D \psi_{\vert \theta}^t)^{-1}\right)$
+2. $(\widehat{\theta}_n)_{n \in \mathbb{N}} \stackrel{\text{p.s.}}{\longrightarrow} \theta\qquad \text{sous } P^{\otimes \mathbb{N}}_ \theta$
+3. $\sqrt{n} \big( \widehat{\theta}_n  - \theta\big) \rightsquigarrow \mathcal{N}\left(0, (D \psi_{\vert \theta})^{-1}\operatorname{cov}_ \theta(T) (D \psi_{\vert \theta}^t)^{-1}\right)$
 
 ]
 
@@ -426,7 +425,7 @@ que la preuve en est trivialisée.
 
 ### Preuve
 
-i) L'image de $\Theta$  par $\psi$ est un ouvert de $\mathbb{R}^k$
+1.) L'image de $\Theta$  par $\psi$ est un ouvert de $\mathbb{R}^k$
 
 Pour tout $\theta \in \Theta$,  sous $P^{\otimes \mathbb{N}}_ \theta$, $\overline{T}_n$ converge presque sûrement vers $\psi(\theta)$.
 
@@ -436,11 +435,11 @@ L'équation $\psi= \overline{T}_n$  a alors une solution
 
 --
 
-Le point ii) est une conséquence de la loi des grands nombres
+Le point 2.) est une conséquence de la loi des grands nombres et de la continuité postulée de $\psi^{-1}$
 
 --
 
-Le point iii) résulte d'une application de la méthode delta
+Le point 3.) résulte d'une application de la méthode delta et de l'hypothèse de différentiabilité sur $\psi^{-1}$
 
 `r fontawesome::fa("square")`
 
@@ -449,89 +448,6 @@ Le point iii) résulte d'une application de la méthode delta
 
 La discussion sur l'approche des moments reste informelle, parce qu'il est difficile de caractériser les situations où  la question i) (voir plus haut) possède une réponse satisfaisante.
 
----
-name: entropie-relative
-class: middle, center,inverse
-
-## Entropie relative
-
----
-exclude: true
-
-TODO:  ménager une transition
-
-
----
-### Quantifier la similitude entre deux lois de probabilités
-
-Une _divergence d'information entre deux lois_ est une quantité _intrinsèque_: elle n'est pas définie relativement à une paramétrisation
-
-Une divergence d'information peut être calculée en choisissant des densités par rapport à une mesure de référence
-
-Mais le résultat du calcul ne doit dépendre que des lois, et pas du choix d'un mesure dominante ou du choix des densités
-
-???
-
-
----
-
-### Exemples
-
-- Distance en variation
-
-- Entropie relative (information de Kullback)
-
-- Distance de Hellinger
-
-- Divergence du $\chi^2$
-
----
-
-### Entropie relative
-
-
-#### Notation
-
-$P   \not\!\unlhd Q  \Leftrightarrow$   $P$  n'est  pas absolument continue par rapport à $Q$: $\exists A$ mesurable tel que $P(A) > 0 = Q(A)$
-
-### Definition
-
-Soit $P$  et $Q$  deux lois de probabilité sur $(\Omega,\mathcal{F})$, l'_entropie relative_ de $P$ par rapport à $Q$, notée $D(P\Vert Q)$ est définie par
-
-$$D(P\Vert Q) = \begin{cases} + \infty & \text{si }  P \not\!\unlhd Q \\
-\mathbb{E}_P\left[ \log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]& \text{sinon.}\end{cases}$$
-
-???
-
-L'entropie relative est particulièrement adaptée à l'étude des modèles exponentiels.
-
-La notion d'entropie relative s'est imposée dans différentes disciplines indépendamment
-
-- statistiques,
-- théorie de l'information,
-- mécanique statistique,
-- théorie des grandes déviations.
-
-On l'appelle aussi
-
-- _information de Kullback-Leibler_
-- _divergence d'information_
-
----
-
-### Propriétés de l'entropie relative
-
-- Si $P \unlhd Q$ ( $P$ est  absolument continue par rapport à $Q$ ),
-
-$$\mathbb{E}_P\left[ \log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]= \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]$$
-est toujours bien défini, même si cette quantité n'est pas finie.
-
-En effet, $x \log x \geq - \mathrm{e}^{-1}$ sur $]0,\infty)$.
-
-- Si $P \unlhd Q$, l'identité du i) et la convexité de $x \mapsto x \log x$ nous indiquent que
-$$D(P \Vert Q) \geq \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\right] \log \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\right]=  0$$
-
-Le seul cas d'égalité possible est $P=Q$ (stricte convexité de $x \mapsto x \log x$)
 
 ---
 class: middle, center,inverse
@@ -657,7 +573,7 @@ La convexité joue un rôle essentiel
 
 ### Théorème
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soient
 - $\nu$   une mesure $\sigma$-finie dominante sur $(\mathcal{X},\mathcal{F})$, et
@@ -727,7 +643,7 @@ pour tout $c \in \mathbb{R}^k$, le vecteur aléatoire $\langle c, T(X)\rangle$  
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Un modèle exponentiel en forme canonique est minimal (ou de plein rang)
 
@@ -779,7 +695,7 @@ Elles  permettent d'en étudier les propriétés
 
 ### Théorème
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 La fonction $\theta \mapsto \log Z(\theta)$
 est $C^\infty$ sur $\Theta =  \widetilde{\Theta}^\circ$
@@ -807,7 +723,7 @@ La proposition suivante, intéressante en soi, jouera un rôle dans la preuve du
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Dans un modèle exponentiel canonique, si $\theta \in \Theta$, $\theta$ appartient à l'_intérieur_ du domaine de la fonction de partition
 
@@ -882,7 +798,7 @@ La combinaison du théorème et de la proposition  nous livre une autre caracté
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Un modèle exponentiel est identifiable
 
@@ -915,7 +831,7 @@ peut etre renversé
 
 ---
 
-### Entropie relative dans un modèle exponentiel
+### Divergences d'information  dans un modèle exponentiel
 
 
 La paramétrisation semble si naturelle dans les modèles exponentiels qu'on est tenté
@@ -934,12 +850,98 @@ Ce n'est pas une distance entre lois
 mais elle possède des propriétés remarquables.
 
 ---
+exclude: true
+name: entropie-relative
+class: middle, center,inverse
+
+## Entropie relative
+
+---
+exclude: true
+
+TODO:  ménager une transition
+
+
+---
+### Quantifier la similitude entre deux lois de probabilités
+
+Une _divergence d'information entre deux lois_ est une quantité _intrinsèque_: elle n'est pas définie relativement à une paramétrisation
+
+Une divergence d'information peut être calculée en choisissant des densités par rapport à une mesure de référence
+
+Mais le résultat du calcul ne doit dépendre que des lois, et pas du choix d'un mesure dominante ou du choix des densités
+
+???
+
+
+---
+
+### Exemples
+
+- Distance en variation
+
+- Entropie relative (information de Kullback)
+
+- Distance de Hellinger
+
+- Divergence du $\chi^2$
+
+---
+
+### Entropie relative
+
+
+#### Notation
+
+$P   \not\!\unlhd Q  \Leftrightarrow$   $P$  n'est  pas absolument continue par rapport à $Q$: $\exists A$ mesurable tel que $P(A) > 0 = Q(A)$
+
+### Definition
+
+Soit $P$  et $Q$  deux lois de probabilité sur $(\Omega,\mathcal{F})$, l'_entropie relative_ de $P$ par rapport à $Q$, notée $D(P\Vert Q)$ est définie par
+
+$$D(P\Vert Q) = \begin{cases} + \infty & \text{si }  P \not\!\unlhd Q \\
+\mathbb{E}_P\left[ \log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]& \text{sinon.}\end{cases}$$
+
+???
+
+L'entropie relative est particulièrement adaptée à l'étude des modèles exponentiels.
+
+La notion d'entropie relative s'est imposée dans différentes disciplines indépendamment
+
+- statistiques,
+- théorie de l'information,
+- mécanique statistique,
+- théorie des grandes déviations.
+
+On l'appelle aussi
+
+- _information de Kullback-Leibler_
+- _divergence d'information_
+
+---
+
+### Propriétés de l'entropie relative
+
+- Si $P \unlhd Q$ ( $P$ est  absolument continue par rapport à $Q$ ),
+
+$$\mathbb{E}_P\left[ \log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]= \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\log \frac{\mathrm{d}P}{\mathrm{d}Q}\right]$$
+est toujours bien défini, même si cette quantité n'est pas finie.
+
+En effet, $x \log x \geq - \mathrm{e}^{-1}$ sur $]0,\infty)$.
+
+- Si $P \unlhd Q$, l'identité du i) et la convexité de $x \mapsto x \log x$ nous indiquent que
+$$D(P \Vert Q) \geq \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\right] \log \mathbb{E}_Q\left[ \frac{\mathrm{d}P}{\mathrm{d}Q}\right]=  0$$
+
+Le seul cas d'égalité possible est $P=Q$ (stricte convexité de $x \mapsto x \log x$)
+
+
+---
 
 L'entropie relative entre deux éléments d'une famille exponentielle se lit directement sur la fonction $\log Z(\cdot)$:
 
 $$D(P_\theta \Vert P_{\theta'}) = \log Z(\theta') -\log Z(\theta) + \langle \nabla \log Z(\theta), \theta -\theta'\rangle$$
 
-`r fontawesome::fa("bulkhorn")` Ce calcul fournit une preuve concise de la relation entre
+`r fontawesome::fa("bullhorn")` Ce calcul fournit une preuve concise de la relation entre
 identifiabilité et injectivite de $\theta \mapsto \nabla \log Z(\theta)$
 
 --
@@ -954,7 +956,7 @@ $$D(P_\theta\Vert P_{\theta'}) \sim  \frac{1}{2} (\theta- \theta')^t \nabla^2 \l
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 Si un modèle exponentiel est _identifiable_,
@@ -1008,7 +1010,7 @@ Nous sommes maintenant outillés pour vérifier que la méthode des moments four
 
 ### Théorème
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit $(\mathbb{R}^p, \mathcal{B}(\mathbb{R}^p), \Theta \subseteq \mathbb{R}^d )$  un modèle exponentiel en forme canonique de mesure dominante $\nu$, défini par les vraisemblances
 
@@ -1050,7 +1052,7 @@ tels que
 - $\Lambda$ soit bijective de $V$ dans $W$, et
 - d'inverse différentiable en $\Lambda(\theta)$.
 
-`r fontawesome::fa("r")`
+`r fontawesome::fa("square")`
 
 On note au passage que $\Lambda(\Theta)$ est ouvert.
 
@@ -1063,7 +1065,7 @@ name: inv-locale
 
 ### Théorème (inversion locale)
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit $E$  un espace euclidien, $U \subseteq E$ ouvert, $f: U \to E$ continument différentiable, et $y_0 \in U$.
 
@@ -1091,7 +1093,7 @@ name: inv-globale
 
 ### Théorème (Théorème d'inversion globale)
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Soit
 
@@ -1113,9 +1115,9 @@ Les théorèmes d'inversion justifient l'emploi de la méthode des moments:
 
 > un modèle exponentiel minimal en forme canonique remplit les conditions suffisantes discutées
 
-`r fontawesome::fa("glass-cheers")` Sur le papier, nous disposons d'une méthode d'estimation: il _suffit_ de résoudre l'équation: en $\vartheta$
+`r fontawesome::fa("glass-cheers")` Sur le papier, nous disposons d'une méthode d'estimation: il _suffit_ de résoudre l'équation: en $\theta$
 
-$$\overline{T}_n=  \nabla \log Z(\vartheta)$$
+$$\overline{T}_n=  \nabla \log Z(\theta)$$
 
 soit de définir l'estimateur comme
 
@@ -1160,7 +1162,7 @@ n'admet pas de solution  explicite `r fontawesome::fa("frown")`
 ---
 
 La résolution de l'équation
-$$\overline{T}_n = \nabla \log Z (\vartheta)$$
+$$\overline{T}_n = \nabla \log Z (\theta)$$
 est  un cas de _maximisation de la vraisemblance_.
 
 Comme la vraisemblance est ici une fonction concave de $\theta$ qui appartient lui-même à un ensemble convexe, cette façon de voir permet d'utiliser les outils de l'_optimisation convexe_.
@@ -1192,24 +1194,24 @@ par rapport à $\theta$,
 
 $$\nabla \ell_n(\theta)$$
 
-`r fontawesome::fa("hand-point-right")`  $\forall \vartheta \in  \Theta$,
-$$\nabla \ell_n(\vartheta) =  n( \overline{T}_n- \nabla \log Z(\vartheta))$$
+`r fontawesome::fa("hand-point-right")`  $\forall \theta \in  \Theta$,
+$$\nabla \ell_n(\theta) =  n( \overline{T}_n- \nabla \log Z(\theta))$$
 
 ---
 
-S'il existe $\vartheta$ tel que $\nabla \ell_n (\vartheta)=0$,
+S'il existe $\theta$ tel que $\nabla \ell_n (\theta)=0$,
 
 alors
 
 par convexité de $-\ell_n(\cdot)$,
 
-ce $\vartheta$ est un maximum global de la vraisemblance.
+ce $\theta$ est un maximum global de la vraisemblance.
 
 Si $\log Z(.)$ est strictement convexe, ce maximum de vraisemblance est unique.
 
 Le maximum de vraisemblance est solution de l'équation
 
-$$\overline{T}_n= \nabla \log Z(\vartheta)$$
+$$\overline{T}_n= \nabla \log Z(\theta)$$
 
 La méthode des moments que nous venons de décrire, dans ces modèles exponentiels minimaux en forme canonique, coïncide avec la méthode du maximum de vraisemblance.
 
@@ -1217,7 +1219,7 @@ La méthode des moments que nous venons de décrire, dans ces modèles exponenti
 
 ### Proposition
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Dans un modèle exponentiel minimal, pour tout $\theta \in \Theta$,
 la fonction score en $\theta$ est centrée:
@@ -1272,7 +1274,7 @@ On peut conclure.
 
 ### Théorème (Normalité asymptotique)
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 
 Si un modèle exponentiel canonique est minimal,

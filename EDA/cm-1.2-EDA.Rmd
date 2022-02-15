@@ -46,6 +46,10 @@ class: left, middle
 
 ```
 
+```{r, echo=FALSE}
+#xaringanExtra::use_scribble()
+xaringanExtra::use_webcam()
+```
 
 ---
 
@@ -54,19 +58,6 @@ class: left, middle
 
 ```
 
----
-include: false
-template: inter-slide
-
-# I :  Introduction to `r fontawesome::fa("r-project")` and Visualization
-
-### `r Sys.Date()`
-
-#### [`r params$curriculum`](`r params$homepage_curriculum`)
-
-#### [`r params$coursetitle`](`r params$homepage`)
-
-#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 ---
 template: inter-slide
@@ -75,7 +66,7 @@ template: inter-slide
 
 ### [Grammar of Graphics illustrated](#gg)
 
-### [DIY](#diy)
+### [Do It Yourself](#diy)
 
 ### [Books](#books)
 
@@ -86,21 +77,26 @@ template: inter-slide
 
 ---
 
+We will use the _Grammar of Graphics_ approach to visualization 
+
+The expression _Grammar of Graphics_ was coined by Leiland Wilkinson to describe a principled approach to visualization in Data Analysis (EDA)
+
+A plot is organized around data (a table with rows (observations) and columns (variables)) 
+
+A plot is a graphical object that can be built layer by layer  
+
+Building a graphical object consists in chaining elementary operations 
+
+The acclaimed TED presentation by Hans Rossling illustrates the Grammar of Graphics approach in a very appealing way
+
+---
 ### Grammar of Graphics in Action
 
 ```{r rossling, eval=TRUE}
 knitr::include_url("https://www.youtube.com/embed/jbkSRLYSojo")
 ```
 
-
 ???
-
-In the field of visualization, a landmark video.
-
-The late _Hans Rosling_, is famous for a 2006 Ted talk called _The best statistics you’ve ever seen_.  It became one of the most seen TED talks ever, thanks to its unique combination of knowledge-testing, animating bubble charts and storytelling about global development.
-
-
-
 
 ---
 
@@ -110,17 +106,24 @@ The late _Hans Rosling_, is famous for a 2006 Ted talk called _The best statisti
 
 > Gapminder fights devastating misconceptions about global development. Gapminder produces free teaching resources making the world understandable based on reliable statistics. Gapminder promotes a fact-based worldview everyone can understand.
 
-???
-
 Hans Rosling was a founder of Gapminder
-
-
 
 ---
 template: inter-slide
 name: diy
 
 ## Do It Yourself
+
+
+---
+
+We will reproduce the animated demonstration using 
+
+- `ggplot2` an implementation of grammar of graphics in `r fontawesome::fa("r-project")`
+
+- `plotly` a bridge between `r fontawesome::fa("r-project")` and the javascript library `D3.js`
+
+
 
 ---
 ### `r fontawesome::fa("tools")` Install and load packages
@@ -182,22 +185,22 @@ Insist on the difference between _installing_ and _loading_ a package
 .fl.w-70.pa2[
 
 ```{r bare_gapminder}
-gapminder |>
+gapminder %>% 
   glimpse(width=50)
 ```
 
 ]
 
-???
+---
 
-What's in a data frame? What's in a tibble?
+### What's in a data frame/tibble?
 
 A table has a _schema_: a list of named _columns_, each  with a given type
 
 A table has a _content_: _rows_. Each row is a collection of items, corresponding
 to the columns
 
-`glimpse()` allows to see the schema and the firts rows
+`glimpse()` allows to see the schema and the first rows
 
 `head()` allows to see the first rows
 
@@ -208,8 +211,8 @@ to the columns
 .fl.w-30.pa2.f6[
 
 ```{r stratified_sampling}
-tmp <- gapminder |>
-  group_by(continent) |>  #<<
+tmp <- gapminder %>% 
+  group_by(continent) %>%  #<<
   slice_sample(n=2)        #<<
 ```
 
@@ -294,9 +297,9 @@ gapminder_2002
 ]
 
 
-???
+---
 
-In the parlance of Relational Algebra, this is a _selection_
+In the parlance of Relational Algebra, `filter` performs  a _selection_ of rows
 
 [dplyr docs](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter){target="_blank"}
 
@@ -363,22 +366,32 @@ p
 
 
 
-???
+---
 
-We build a graphical object (a `ggplot` object) around a data frame. We supply aesthetic mappings that can be either global
-or bound to some geometries or statistics. The global aesthetic
-mapping defines which columns are mapped to which axes, possibly mapped to colours, linetypes or shapes. Geometries and Statistics
-describe the building blocks of graphics.
+Recall that we are building a graphical object (a `ggplot` object) around a data frame. We supply _aesthetic mappings_ that can be either global
+or bound to some _geometries_ or _statistics_ 
 
+The global aesthetic mapping defines which columns are 
 
+- mapped to which axes, 
 
+- possibly mapped to colours, linetypes, shapes ...
 
+Geometries and Statistics describe the building blocks of graphics
 
-What's missing there?
+---
 
--  [ ] colors
--  [ ] bubble sizing
--  [ ] titles and legends
+### What's missing here?
+
+when comparing to the Gapminder demonstration, we can spot  that
+
+-  [ ] colors are missing 
+
+-  [ ] bubble sizes are all the same
+
+-  [ ] titles and legends are missing
+
+We will add layers to the graphical object to complete the plot
 
 ---
 
@@ -426,7 +439,7 @@ In order to pay tribute to Hans Rosling, we need to take care of two _scaling_ i
 
 - the gdp per capita axis should be _logarithmic_
 
-- the area of the point should be proportional to the population
+- the _area_ of the point should be proportional to the population
 
 ```{r scaling, echo=TRUE, eval=FALSE}
 zoom_continent <- 'Europe'
@@ -450,11 +463,13 @@ p
 
 ]
 
-???
+---
+
+### `r fontawesome::fa("brain")`
 
 - Why is it important to use logarithmic scaling for gdp per capita?
 
-- When is it important to use logarithmic scaling on some axis?
+- When is it important to use logarithmic scaling on some axis (in other contexts)?
 
 - Why is it important to specify `scale_size_area()` ?
 
@@ -491,14 +506,16 @@ p <- p +
 
 ]
 
-???
+---
 
-Titles and legends
+### `r fontawesome::fa("brain")`
 
-Purpose of
+What should be the purposes of
 
 - Title
+
 - Subtitle
+
 - Caption
 
 ---
@@ -517,9 +534,15 @@ p +
   theme_wsj()
 ```
 
+A theme defines the _look and feel_ of plots
+
+Within a single document, we should use only one theme
+
+See [Getting the theme](https://ggplot2.tidyverse.org/reference/theme_get.html) for a gallery of available themes
+
+
 ]
 
---
 
 .fl.w-60.pa2[
 
@@ -532,8 +555,7 @@ p +
 ???
 
 
-- [Getting the theme](https://ggplot2.tidyverse.org/reference/theme_get.html)
-
+- 
 -
 
 
@@ -559,6 +581,10 @@ p <- p +
 
 p
 ```
+
+Choosing a color scale is a difficult task
+
+`viridis` is often a good pick
 
 ]
 
@@ -674,6 +700,23 @@ template: inter-slide
 
 ---
 
+So far we have only presented one year of data (2002)
+
+Rossling used an animation to display the flow of time
+
+If we have to deliver a printable report, we cannot rely on animation, 
+but we can rely on _facetting_ 
+
+Facets are collections of small plots constructed in the same way 
+on subsets of the data
+
+We add a layer to the graphical object using `facet_wrap()` 
+
+As all rows in `gapminder_2002` are all related to `year` 2002
+
+
+---
+
 ```{r facet, eval=FALSE, echo=TRUE}
 p <- p +
   scale_x_log10(limits=c(100, 50000)) +
@@ -699,6 +742,13 @@ p
 
 ```
 
+
+---
+
+We need to rebuild the graphical object along the same lines (using the same graphical pipeline) but starting from the whole `gapminder` dataset
+
+Should we do this using _cut and paste_?
+
 ---
 
 ### Don't Repeat Yoursel (DRY)
@@ -708,7 +758,8 @@ p
 ```{r dryit, message=FALSE, warning=FALSE}
 p  <- (p %+% gapminder)
 
-p <- p + labs(title=glue("Gapminder {min(p$data$year)}-{max(p$data$year)}"))
+p <- p + 
+  labs(title=glue("Gapminder {min(p$data$year)}-{max(p$data$year)}"))
 
 p
 ```

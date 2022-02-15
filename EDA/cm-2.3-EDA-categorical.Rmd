@@ -1,0 +1,761 @@
+---
+title: "Categorical Univariate Statistics"
+subtitle: "EDA Master I, MIDS & MFA"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
+params:
+  title: "Categorical Univariate Statistics"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+
+```{r child='title_slide.Rmd'}
+
+```
+
+
+
+---
+template: inter-slide
+
+### `r fontawesome::fa("map", fill="white")`
+
+### Numerical summaries for categorical samples
+
+### Barplots
+
+### Pieplots
+
+### Semmelweis quasi-experiment
+
+
+---
+template: inter-slide
+name: num-sum-cat-samples
+
+## Numerical summaries for categorical samples
+
+
+---
+
+### Counts
+
+For qualitative samples, summary statistics consists of _counts_: for each modality, we record the _number of occurences_ or _frequency_
+
+`r fontawesome::fa("exclamation-triangle")` In English, the _frequency_ of a symbol in a sequence is the number of  occurences  (a count)
+
+In French, the _frequence_ of that symbol is the _ratio_ between the number
+of occurences of the symbol and the total length of the sequence
+
+---
+
+### Summarizing `carrier`
+
+.fl.w-30.pa2[
+
+```{r loading, eval=F, echo=T}
+require(tidyverse, quietly = T)
+
+require(nycflights13, quietly = T)
+
+flights %>%  
+  glimpse(w=50)
+```
+
+]
+
+.fl.w-70.pa2[
+
+```{r loading-out, ref.label='loading', eval=TRUE, echo=FALSE}
+
+```
+
+]
+
+
+
+---
+
+### Summarizing `carrier`
+
+
+.fl.w-50.pa2[
+
+`r fontawesome::fa("r-project")` : function `table()` uses the cross-classifying factors to build a _contingency table_ of the counts at each combination of factor levels.
+
+For univariate samples, `table()` returns a 1-way contingency table
+
+
+```{r carrier, echo=T, eval=T}
+table(flights$carrier) %>% #<<
+  knitr::kable(
+    col.names = c("Carrier", 
+                  "Frequency"))
+```
+
+]
+
+.fl.w-50.pa2[
+
+
+
+```{r carrier-out,  echo=T, eval=T}
+summary(flights$carrier)
+
+summary(factor(flights$carrier))
+```
+
+`r fontawesome::fa("lightbulb")` Base function `summary` tells us everything there is to know, counts, and NAs
+
+`r fontawesome::fa("exclamation-triangle")` Base function `table` puts dust under the carpet: NAs are not reported 
+]
+
+
+
+
+
+---
+template: inter-slide
+name: graphical-summaries
+
+## Graphical summaries for categorical samples
+
+---
+
+### Bar plotting in one step using `geom_bar`
+
+.fl.w-40.pa2[
+
+```{r flights-dest, eval=F, echo=T}
+flights %>%
+  ggplot() +
+  aes(x=origin) +
+  geom_bar(width=.3) +      #<<
+  ylab("Count") +
+  ggtitle("Flights: destinations distribution")
+
+```
+
+]
+
+
+.fl.w-60.pa2[
+
+```{r flights-dest-out, ref.label='flights-dest', eval=T, echo=F}
+
+```
+
+
+]
+
+---
+
+### Barplotting as a two-step process.
+
+1.  Compute _statistics_ from the raw
+data: we _count the number of occurrences of each symbol_. This is a simple yet non-trivial task. In SQL, this consists in `group by` and then `count`.
+How would you proceed if you had to code this counting step?
+
+2. Plot the counting data: for example, map the modalities/categories on the `X-axis` (possibly choosing an ordering), the counts are mapped on the `Y-axis`, they specify the height of each bar
+
+Most of the flexibility lies in the mapping of modalities on the `X-axis` or doing something different
+
+???
+
+Emphasize
+
+- distinction betweem `geom_`  and `stat_`
+
+
+
+---
+
+### Bar plotting in two steps using `group_by()`, `n()` and `geom_col()`
+
+.fl.w-40.pa2.f5[
+
+
+
+```{r flights-origin-label, eval=F, echo=T}
+p <- flights %>%
+  group_by(origin) %>%
+  summarise(Count=n()) %>%
+  ggplot(mapping=aes(x=origin,
+                     y=Count)) +
+  ggtitle("Flights: origin distribution")
+
+p + geom_col(width=.3)  #<<
+```
+
+]
+
+
+
+.fl.w-60.pa2[
+
+```{r flights-origin-label-out, ref.label="flights-origin-label", eval=T, echo=F}
+
+```
+
+
+]
+
+
+---
+
+### Playing with `stat_` and `geom_`
+
+`r fontawesome::fa("hand-point-right")`
+
+In the `ggplot` framework, a `geom_` function is paired with a default `stat_` function
+
+Once a data source and an (aesthetic) mapping have been fixed (telling which columns are fed to which axis), the data are (possibly) transformed using the `stat_`: a sample may be transformed into counts in order to build a contingency table and the result is then fed to the `geom_`
+
+---
+
+.fl.w-40.pa2[
+
+We could obtain the same plot using `geom_bar` using the `identity` stat.
+
+```{r tweak-bar-stat-label, eval=F, echo=T}
+p +
+  geom_bar(stat="identity", #<<
+           width=.3) #<<
+```
+
+]
+
+
+.fl.w-60.pa2[
+
+```{r tweak-bar-stat-label-out, ref.label="tweak-bar-stat-label", echo=F, eval=T}
+
+```
+
+
+]
+
+---
+
+.fl.w-40.pa2.fa6[
+
+Barplots provide us with a great way to compare counts of different categories.
+
+But it is somewhat difficult to figure out the relative frequencies
+of the different categories.
+
+One way to facilitate this consists of normalizing
+the counts by dividing all counts by sample size.
+
+```{r normalize-col-plot-label, eval=F, echo=T}
+dt <- flights %>%
+    group_by(dest) %>%
+    summarise(Count=n()) %>%
+    mutate(Prop=Count/sum(Count))
+
+p <- dt %>%
+  ggplot() +
+  aes(x=dest, y=Prop) +
+  ggtitle("Flights: dest distribution")
+
+(p + geom_col(width=.3))
+```
+
+]
+
+.fl.w-60.pa2[
+
+```{r normalize-col-plot-label-out, eval=T, echo=F, ref.label="normalize-col-plot-label"}
+
+```
+
+]
+
+---
+
+.fl.w-30.pa2[
+
+It may be a good idea to doctor the tick labels on the Y-axis, indicating
+percentages rather than numbers between $0$ and $1$ (this depends on the readership)
+
+We may focus on flights without repeating the whole process, just
+upgrading the data.
+
+Defining a `ggplot` object is very much
+like defining a _pipeline_
+
+]
+
+
+.fl.w-70.pa2[
+
+```{r, echo=FALSE}
+p + 
+  geom_col(width=.3) +
+  theme(axis.text.x=element_text(angle=45, hjust=1, size =4)) # +
+  
+```
+
+]
+
+
+---
+
+.fl.w-30.pa2.f6[
+
+```{r fct_reorder, echo=T, eval=F}
+dt %>%
+  ggplot() +
+  aes(x=fct_reorder(factor(dest), Prop, .desc = T),   #<<
+      y=Prop) +
+  ggtitle("Flights: dest distribution") +
+  geom_col(width=.3) +
+  theme(axis.text.x=element_text(angle=45, hjust=1, size =4))  +
+  xlab("Destination Airport") +
+  ylab("Prop")
+
+```
+
+
+
+]
+
+
+.fl.w-70.pa2[
+
+```{r  fct_reorder-out, ref.label="fct_reorder", echo=F, eval=T}
+
+```
+
+
+
+]
+
+
+---
+template: inter-slide
+name: pieplots
+
+## Pieplots
+
+---
+
+
+.fl.w-40.pa2.f6[
+
+Another possibility is to use a `Pieplot`
+
+Counts are normalized and mapped
+to angular values (fractions of $2\pi$).
+
+It is up to the data scientist to decide whether one plot is more
+relevant than the other.
+
+```{r pieplot-label, echo=T, eval=F}
+flights %>%
+  group_by(carrier) %>% 
+  summarize(Count=n()) %>% 
+  mutate(Prop=Count/sum(Count)) %>% 
+  mutate(carrier=fct_reorder(carrier, 
+                             Count, 
+                             .desc = F)) %>% 
+  ggplot() +
+  geom_bar(mapping=aes(x=factor(1),  #<<
+                       y=Prop,  #<<
+                       fill=carrier), #<<
+            stat='identity') + #<<
+   coord_polar(theta='y') +  #<<
+   xlab("") +
+  ylab("")
+```
+
+]
+
+
+.fl.w-60.pa2[
+
+```{r pieplot-label-out, ref.label="pieplot-label", echo=F, eval=T}
+```
+
+
+]
+
+
+---
+template: inter-slide
+
+
+## Barplots in action
+
+
+---
+
+### Semmelweis inquiry
+
+
+.fl.w-third.pa2[
+.middle[
+
+![](img/355px-Ignaz_Semmelweis_1860.jpg)
+
+[Filip Semmelweis 1818-1865](https://en.wikipedia.org/wiki/Ignaz_Semmelweis)
+]
+]
+
+
+.fl.w-two-thirds.pa2[
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Semmelweis discovered that the incidence of _puerperal_ fever could be cut by the use of hand disinfection in obstetrical clinics.
+
+Puerperal fever was common in mid-19th-century hospitals and often fatal.
+
+Semmelweis proposed the practice of washing hands with chlorinated lime solutions in 1847 while working in Vienna General Hospital's First Obstetrical Clinic, where doctors' wards had three times the mortality of midwives' wards.
+
+.tr[
+[wikipedia](https://en.wikipedia.org/wiki/Ignaz_Semmelweis)
+]
+
+]
+
+]
+
+---
+class: middle, center
+
+### Vienna General Hospital
+
+![](img/AAKH-1784.jpg)
+
+---
+
+### Semmelweis inquiry (continued)
+
+.small[
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+.small[
+Maternity institutions were set up [...] to address problems of infanticide of illegitimate children. They were set up as gratis institutions and offered to care for the infants, which made them attractive to underprivileged women [...]. In return for the free services, the women would be subjects for the training of doctors and midwives.
+
+_Two maternity clinics_ were at the Viennese hospital.
+
+The First Clinic had an average maternal mortality rate of about $10\%$ due to _puerperal fever_.
+
+The Second Clinic's rate was considerably lower, averaging less than $4\%$.
+
+This fact was known outside the hospital. _The two clinics admitted on alternate days_, but women begged to be admitted to the Second Clinic, [...].
+
+
+Some women even preferred to give birth in the streets, pretending to have given sudden birth en route to the hospital (a practice known as street births), which meant they would still qualify for the child care benefits without having been admitted to the clinic.
+]
+
+]
+]
+
+---
+
+### Semmelweis inquiry (continued)
+
+
+.fl.w-two-thirds.pa2[
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+.small[
+Semmelweis was puzzled that puerperal fever was rare among women giving street births.
+
+> "To me, it appeared logical that patients who experienced street births would become ill at least as frequently as those who delivered in the clinic. [...] What protected those who delivered outside the clinic from these destructive unknown endemic influences?"
+
+]]]
+
+.fl.w-third.pa2[
+
+```{r  read_semmelweis, echo=FALSE}
+read_csv("DATA/semmelweis.csv",
+        col_types = cols(BirthsL = col_integer(), #<<
+                         BirthsM = col_integer(),
+                         DeathsL = col_integer(),
+                         DeathsM = col_integer(),
+                         Year = col_integer())
+                       ) -> semmelweis     #<<
+
+semmelweis %>%
+  dplyr::select(Year, RateM, RateL) %>%
+  knitr::kable(format = 'html')
+```
+
+]
+
+---
+
+### Semmelweis inquiry (continued)
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+The result was the mortality rate in the First Clinic declined $90\%$, and was then comparable to that in the Second Clinic.
+
+The mortality rate in April 1847 was $18.3\%$.
+
+After hand washing was instituted in mid-May, the rates in June were $2.2\%$, July $1.2\%$, August $1.9\%$ and, for the first time since the introduction of anatomical orientation, the death rate was zero in two months in the year following this discovery.
+
+]
+
+---
+
+- What is the sample here?
+
+- Is there just one sample?
+
+- Does the Semmelweis dataset contain a sample or a statistic (something computed from a sample)?
+
+
+---
+
+Plot the yearly death rates at both clinics. Choose aesthetics
+so as to emphasize the difference in mortality rates in the
+clinic supervised by doctors and the clinic supervised by midwifes.
+
+
+---
+
+### Pivoting
+
+.fl.w-third.pa2[
+
+`semmelweis` dataframe has _wide format_
+
+It is convenient (but not necessary) to `pivot` columns
+`RateM` and `RateL` to a pair of columns: `Clinic`  and `Death_rate`
+
+Column `Clinic` is retyped as a `factor`
+
+Column `Year` is also retyped as a `factor` (It would be
+more natural to handle "Year" as a `Date` object)
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+
+```{r pivot_semmelweis}
+tmp <- semmelweis %>%
+  select(Year, RateM, RateL) %>%
+  pivot_longer(cols=c(RateM, RateL),  #<<
+               names_to="Clinic",
+               values_to="Death_rate"
+             ) %>%
+  mutate(Clinic = as_factor(Clinic), #<<
+         Year = as_factor(Year)) %>%
+  mutate(Clinic = fct_recode(Clinic,        #<<
+                             Doctors="RateM",
+                             Midwifes="RateL")
+         )
+```
+
+```{r, echo=FALSE}
+head(tmp, 4) %>% knitr::kable(format = 'html')
+```
+
+]
+
+---
+
+### Keywords and buzzwords
+
+- Randomized clinical trials
+
+- A/B testing
+
+- Case Control studies
+
+- Quasi-experiments
+
+- Observational data
+
+- Experimental data
+
+
+???
+
+
+---
+
+### Data wrangling makes ploting easy.
+
+
+.panelset[
+
+```{r semmelweis-label, panelset=c("Code", "Semmelweis barplot"), fig.height=4}
+tmp %>%
+  ggplot() +
+  aes(x=Year,
+      y=Death_rate,
+      group=Clinic,
+      fill=Clinic,
+      linetype=Clinic) +
+  geom_col(position="dodge",   #<<
+           colour="black",
+           width=.2) +
+  theme(legend.position=c(5.5/6, 13/15)) +
+  ggtitle("Semmelweis data") +
+  ylab("Death rate (%)")
+```
+
+]
+
+
+
+
+
+
+---
+exclude: true
+
+
+.fl.w-third.pa2[
+
+]
+
+
+.fl.w-two-thirds.pa2[
+
+![](`r knitr::fig_chunk("semmelweis-label", "png")`)
+
+]
+
+---
+class: center, middle, inverse
+
+## Quasi-experiments and beyond
+
+
+---
+
+### Milestones
+
+- Semmelweis circa 1847 Puerperal fever
+
+- Snow circa 1852 Cholera
+
+- Hill _Randomized Clinical Trial Streptomyces versus Collapsotherapia against Tuberculosis_ 1948
+
+- ...
+
+
+---
+exclude: true
+class: inverse, center, middle
+
+## Inequalities
+
+---
+exclude: true
+
+### Why and what
+
+- Quantifying income inequalities
+
+- Quantifying market share concentration
+
+
+---
+exclude: true
+
+### How
+
+Normalizing income distribution
+
+Non-decreasing rearrangement
+
+---
+exclude: true
+
+### Lorenz curve
+
+```{r, echo=TRUE, eval=FALSE}
+ineq::Lc
+function (x, n = rep(1, length(x)), plot = FALSE)
+{
+    ina <- !is.na(x)
+    n <- n[ina]
+    x <- as.numeric(x)[ina]
+    k <- length(x)
+    o <- order(x)
+    x <- x[o]
+    n <- n[o]
+    x <- n * x
+    p <- cumsum(n)/sum(n)
+    L <- cumsum(x)/sum(x)
+    p <- c(0, p)
+    L <- c(0, L)
+    L2 <- L * mean(x)/mean(n)
+    Lc <- list(p, L, L2)
+    names(Lc) <- c("p", "L", "L.general")
+    class(Lc) <- "Lc"
+    if (plot)
+        plot(Lc)
+    Lc
+}
+```
+
+---
+exclude: true
+
+### Indices and Schur monotonicity
+
+
+- Gini
+
+- Atkinson
+
+- Decile ratios
+
+
+
+---
+
+
+```{r child="closing_slide.Rmd"}
+
+```

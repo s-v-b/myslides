@@ -71,6 +71,8 @@ class: middle, inverse
 
 
 ---
+exclude: true 
+
 class: middle
 
 .left-column[
@@ -106,6 +108,7 @@ m
 
 
 ---
+exclude: true 
 class: top, left, inverse
 background-size: cover
 background-image: url('./img/pano-gds-moulins.jpg')
@@ -118,6 +121,7 @@ background-image: url('./img/pano-gds-moulins.jpg')
 Petit panorama du campus des Grands Moulins
 
 ---
+exclude: true 
 class: top, left
 background-size: cover
 background-image: url('./img/2017-03-17 09.39.09.jpg')
@@ -164,9 +168,10 @@ commun:
 - Mathématiques fondamentales .fr[`r fontawesome::fa("landmark")`]
 - M2MO   .fr[`r fontawesome::fa("hand-holding-usd")`]
 - LMFI .fr[`r fontawesome::fa("university")`]
-- PMA  .fr[`r fontawesome::fa("university")`]
-- Modélisation  .fr[`r fontawesome::fa("industry")`]
 - Mathématiques générales  .fr[`r fontawesome::fa("school")`]
+- _PMA_  .fr[`r fontawesome::fa("university")`]
+- _Modélisation_  .fr[`r fontawesome::fa("industry")`]
+
 
 
 Ces parcours ont trois grands types de débouchés
@@ -312,8 +317,8 @@ class: inverse, middle, center
 | [M2MO](https://masterfinance.math.univ-paris-diderot.fr)            |  Math-Fi/Dat. Sc. |  [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("university")` `r fontawesome::fa("industry")` |
 | [LMFI](http://master.math.univ-paris-diderot.fr/annee/m2-lmfi/)            |  Logique/Inform.  | [IMJ-PRG/IRIF](https://www.imj-prg.fr)       |`r fontawesome::fa("university")` `r fontawesome::fa("industry")` |
 | [Math. Géné.](http://master.math.univ-paris-diderot.fr/annee/m2-agreg/)     |  Prep. Agreg.     |                    | `r fontawesome::fa("school")`|
-| [Modélisation]()  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         | `r fontawesome::fa("university")` `r fontawesome::fa("industry")`|
-| [Probabilités]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("university")` |
+| [_Modélisation_]()  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         | `r fontawesome::fa("university")` `r fontawesome::fa("industry")`|
+| [_Probabilités_]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("university")` |
 
 ---
 
@@ -562,7 +567,7 @@ class: top
 
               <td>
 
-              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/" class="plain">Equations aux dérivées partielles</a>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/" class="plain">Equations aux dérivées partielles et Théorie spectrale</a>
               </td>
               <td>6</td>
         </tr>
@@ -571,7 +576,7 @@ class: top
 
               <td>
 
-              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret</a>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret (Probabilités I)</a>
               </td>
               <td>6</td>
         </tr>
@@ -580,7 +585,7 @@ class: top
 
               <td>
 
-              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistique fondamentale</a>
               </td>
               <td>6</td>
         </tr>
@@ -707,7 +712,7 @@ class: top
 
               <td>
 
-              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/" class="plain">Théorèmes linites en probabilités</a>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/" class="plain">Théorèmes limites en probabilités (Probabilités II)</a>
               </td>
               <td>6</td>
         </tr>
@@ -796,7 +801,7 @@ Il est possible de suivre 4/5 modules parmi les cours listés à droite
 
               <td>
 
-              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Stochastic Processes: Martingales</a>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret (Probabilités I)</a>
               </td>
               <td>6</td>
         </tr>
@@ -805,7 +810,7 @@ Il est possible de suivre 4/5 modules parmi les cours listés à droite
 
               <td>
 
-              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistique fondamentale</a>
               </td>
               <td>6</td>
         </tr>
@@ -907,7 +912,10 @@ On ne change pas les règles du jeu en cours de partie.
 name: contacts-ra
 
 
-### Responsable administratif : [Christian Sénécal](mailto:senecal@math.univ-paris-diderot.fr)
+### Responsable administratif : [Nathalie Naveau](mailto:naveau@math.univ-paris-diderot.fr)
+
+
+
 
 .fl.w-40.pa2[
 
@@ -915,12 +923,12 @@ name: contacts-ra
 
 - Bâtiment Sophie Germain
 
-- Salle 2008
+- Bureau 1012
 ]
 
 .fl.w-60.pa2[
 ```{r, trombi-csenec, out.width="80%", echo=FALSE}
-knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/naveau_large.jpg")
 ```
 ]
 
@@ -937,18 +945,18 @@ knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/tr
 ###  Responsables pédagogiques
 
 .pull-left[
-#### [David Gérard-Varet](https://dgerardv.github.io)
-Analyse `r fontawesome::fa("database", fill = "black")`
+#### [Marie-Claude Arnaud](https://mcarnaudblog.wordpress.com)
+Analyse `r fontawesome::fa("chalkboard-teacher", fill = "black")`
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
-knitr::include_url("https://dgerardv.github.io")
+knitr::include_url("https://mcarnaudblog.wordpress.com")
 ```
 
 ]
 
 .pull-right[
 #### [Stéphane Boucheron](https://stephane-v-boucheron.fr)
-Statistiques, Probabilités
+Statistiques, Probabilités  `r fontawesome::fa("chalkboard-teacher", fill = "black")`
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
 knitr::include_url("https://stephane-v-boucheron.fr")
@@ -971,9 +979,9 @@ background-image: url("./img/entretien.jpg")
 
 .pull-left[
 
-Un entretien court avec un responsable pédagogique
+Un entretien court avec une (ou un) responsable pédagogique
 
-En face à face (ou à distance)
+En face à face 
 
 Prendre rendez-vous via [Moodle](https://moodle.u-paris.fr/course/view.php?id=8568)
 
@@ -983,7 +991,7 @@ Prendre rendez-vous via [Moodle](https://moodle.u-paris.fr/course/view.php?id=85
 
 #### Objectifs `r fontawesome::fa("map")``
 
-- vérifier choix des cours
+- vérifier le choix des cours
 
 - orientation future
 
@@ -1013,7 +1021,7 @@ exclude: true
 ```
 
 ---
-class: middle, inverse
+class: middle
 name: plus
 
 ## Pour en savoir plus
