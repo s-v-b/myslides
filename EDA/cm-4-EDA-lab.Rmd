@@ -1,0 +1,924 @@
+---
+title: "Multilinear Regression"
+subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/11/20 (updated: `r Sys.Date()`)"
+output:
+  html_document
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+require(tidyverse)
+```
+
+
+> Mr Derek Whiteside of the UK Building Research Station recorded the weekly gas consumption and average external temperature at his own house in south-east England for two heating seasons, one of 26 weeks before, and one of 30 weeks after cavity-wall insulation was installed. The object of the exercise was to assess the effect of the insulation on gas consumption.
+
+> `Temp`: Purportedly the average outside temperature in degrees Celsius.
+
+> `Gas`: The weekly gas consumption in 1000s of cubic feet.
+
+> Venables, W. N. and Ripley, B. D. (2002) _Modern Applied Statistics with S._ Fourth edition. Springer.
+
+
+```{r load_whiteside}
+whiteside <- MASS::whiteside
+
+whiteside %>%
+  dplyr::sample_n(5) %>%
+  knitr::kable()
+```
+
+### Back to simple linear regression 
+
+
+We perform again simple linear regression on `Whiteside` data
+
+We look for $\beta_0, \beta_1$  that minimize the quadratic error
+
+$$\sum_{i=1}^n \left( \mathrm{Gas}_i - \beta_0  -\beta_1 \mathrm{Temp}_i\right)^2$$
+
+In the parlance of mathematical statistic, we proceed as if we were
+fitting a _Gaussian Linear Model_ with _homoschedastic_ noise:
+
+$$\begin{bmatrix} \mathrm{Gas}_1 \\
+  \vdots \\  \mathrm{Gas}_{56} \end{bmatrix}  = \begin{bmatrix} 1 & \mathrm{Temp}_1 \\   \vdots & \vdots \\ 1 & \mathrm{Temp}_{56} \end{bmatrix} \times \begin{bmatrix}  \beta_0 \\ \beta_1
+\end{bmatrix} + \sigma \begin{bmatrix} \epsilon_1 \\ \vdots \\ \epsilon_{56} \end{bmatrix}$$
+
+where $\epsilon_i \sim_{i.i.d.} \mathcal{N}(0,1)$.
+
+We aim at optimizing $\beta_0, \beta_1, \sigma>0$
+
+### Invoking `lm()`
+
+Evaluating
+
+```{r lm0, eval=FALSE}
+lm0 <- lm(Gas ~ Temp,
+          data=whiteside)
+```
+returns an object `lm0` of class `lm` (for linear models)
+
+An object of class `lm` is a _list_ of named objects
+
+Among those objects,  `coefficients`, which can be retrieved either as
+
+- `lm0$coefficients` or
+- `coefficients(lm0)`
+
+contains what we call the _Ordinary Least Square_ estimator of
+the linear regression of `Gas`  versus `Temp`
+
+
+The _Intercept_  $\widehat{\beta}_0$  and the _slope_  $\widehat{\beta}_1$ define the simple regression line
+
+```{r}
+lm00 <- lm(Gas ~ Temp, data=whiteside)
+
+attributes(lm00)$names %>%
+  knitr::kable()
+```
+
+
+Do it from scratch 
+
+```{r}
+Y <- whiteside %>% 
+  pull(Gas)
+
+X <- whiteside %>% 
+  add_column(I=1, .before =  "Temp") %>% 
+  select(I, Temp) %>% 
+  as.matrix()
+
+A <- t(X) %*% X
+
+B <- solve(A, diag(c(1,1))) 
+
+pinvX <- B  %*% t(X)  
+
+H <- X %*% pinvX 
+```
+
+Check that $H$ is the projection onto the linear space spanned by the two columns of $X$. 
+
+```{r}
+# H leaves X invariant 
+norm(H %*% X - X)
+# H is idempotent 
+norm(H %*% H - H)
+# any vector orthogonal to the columns of X is in the kernel of H
+
+```
+
+```{r}
+pinvX %*% Y
+```
+
+```{r}
+coefficients(lm00)
+```
+
+
+### Simple linear regression of `Gas ~ Temp`
+
+```{r whitesidesimple, echo=TRUE, message=FALSE, warning=FALSE}
+p <- whiteside %>%
+  ggplot() +
+  aes(y=Gas, x=Temp) +
+  geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
+  geom_point(aes(shape=Insul))  # +
+
+p + 
+  ggtitle("Whiteside data", subtitle = "simple linear regression") 
+```
+
+The sign of residuals is determined by `Insul`
+
+This is not what we would expect if the connection between `Gas` consumption  and average outside temperature `Temp` were independent of insulation.
+
+This modeling deserves to be challenged
+
+
+
+
+
+
+
+### Multiple goals
+
+- simple linear regression of `Gas` (weekly consumption) with respect to `Temp` (average external temperature) leaves us with mixed feelings 
+
+- there is a need to incorporate the influence of `Insul` into our model
+
+- there are few a priori reasons to believe that the relationship between gas consumption and external temperature  should be linear
+
+- there is a need for methods to compare different models and ideally to select
+one in a principled way `
+
+
+
+
+### Simple linear regression per group
+
+SLR per group is equivalent to fitting
+a _multiple linear regression model_, (at least from a statistical viewpoint)
+
+It is equivalent to fitting the next model
+
+$$\begin{bmatrix}\mathrm{Gas}_1 \\ \vdots \\
+  \mathrm{Gas}_{56} \end{bmatrix}  = \begin{bmatrix} 1 & 0 & \mathrm{Temp}_1 &  0\\
+  \vdots & \vdots & \vdots & \vdots \\   1 & 0 & \mathrm{Temp}_{26} &  0\\ 0 & 1 & 0 & \mathrm{Temp}_{27} \\  \vdots & \vdots & \vdots & \vdots \\   0 & 1 & 0 & \mathrm{Temp}_{56}
+\end{bmatrix} \times \begin{bmatrix}  \beta_{0,b} \\ \beta_{0,a} \\ \beta_{1, b} \\ \beta_{1, a}
+\end{bmatrix} + \sigma_b \begin{bmatrix} \epsilon_1 \\ \vdots \\ \epsilon_{26}\\ 0 \\ \vdots \\ 0 \end{bmatrix} + \sigma_a \begin{bmatrix} 0 \\ \vdots \\ 0 \\ \epsilon_{27}\\ \vdots \\ \epsilon_{56} \end{bmatrix}$$
+
+
+Like multiple linear regression with mildly _heteroschedastic_ noise
+
+Noise standard deviation is assumed to be constant within each group
+
+The residuals are now centered within each group
+
+Visually, more appealing than simple linear regression
+
+
+```{r whitesidesimplebygroup, echo=TRUE, warning=FALSE}
+p + 
+  aes(color=Insul, linetype=Insul) +
+  geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
+  ggtitle("Whiteside data",
+          subtitle = "simple linear regressions by groups") +
+  theme(legend.position = c(0.1, .15))
+```
+
+
+### Subsetting with `lm()`
+
+To perform linear regression of the subset of rows defined by `Insul == After`,
+the next expression works:
+
+```{r, echo=TRUE, eval=FALSE}
+whiteside %>%
+  lm(formula = Gas ~ Temp,
+     data= .,
+     subset= Insul=='After')
+```
+
+We use the pronoun `.` to connect the `data` argument of `lm` with the left-hand-side of the pipe `%>%`
+
+This is necessary since `lm` belongs to base `R` and does not comply with `tidyverse` conventions
+
+
+### One-hot encoding of `Insul`
+
+We could also use the _design_ defined by formula `Gas ~ Temp * Insul`.
+
+This amounts to use the `treatment` _contrast_ for encoding the two-valued factor `Insul` with `Before` as _control_ and `After` as _treatment_.
+
+In modern machine learning language, this is called _one-hot encoding_ of qualitative variable `Insul`
+
+In this modeling attempt, we envision interaction between `Insul` and `Intercept` and `Insul`  and `Temp`
+
+```{r}
+one_hot <- whiteside %>% 
+  mutate(OneHot = as.integer(Insul=='After')) %>% 
+  pull(OneHot) 
+  
+X_extended <- cbind(X, Insul=one_hot, `Insul:Temp`=one_hot* X[,"Temp"])
+
+A_extended <-  t(X_extended) %*% X_extended
+
+B_extended <- solve(A_extended, diag(rep(1,4)))
+
+pInvX_extended <- B_extended %*% t(X_extended)
+
+H_extended <- X_extended %*% pInvX_extended 
+
+pInvX_extended %*% Y
+
+coefficients(lm( Gas ~ Temp * Insul, whiteside))
+```
+
+
+
+### One-hot encoding of `Insul` (continued)
+
+We investigate whether insulation is
+ influencing the amount of gas used to make the house comfortable at temperature $0$ and influencing the sensitivity of weekly gas consumption to external temperature
+
+This is at least physically plausible
+
+$$\begin{bmatrix} \mathrm{Gas}_1 \\  \vdots \\  \mathrm{Gas}_{56}\end{bmatrix}  = \begin{bmatrix}  1 & 0 & \mathrm{Temp}_1 &  0\\  \vdots & \vdots & \vdots & \vdots \\  1 & 0 & \mathrm{Temp}_{26} &  0\\  1 & 1 & \mathrm{Temp}_{27} & \mathrm{Temp}_{27} \\  \vdots & \vdots & \vdots & \vdots \\ 1 & 1 & \mathrm{Temp}_{56} & \mathrm{Temp}_{56}\end{bmatrix} \times \begin{bmatrix}  \beta_{0,b} \\  \beta_{0,a} \\  \beta_{1, b} \\  \beta_{1, a} \end{bmatrix} + \sigma \begin{bmatrix} \epsilon_1 \\ \vdots \\  \epsilon_{56} \end{bmatrix}$$
+
+
+```{r, eval=FALSE, echo=TRUE}
+whiteside %>%
+  lm(formula = Gas ~ Temp * Insul, data = .)  #<<
+```
+
+### Linear regression after one-hot encoding of `Temp`
+
+```{r whitesideonehot,  warning=FALSE}
+whiteside %>%
+  ggplot(mapping=aes(y=Gas,
+                     x=Temp,
+                     color=Insul,
+                     linetype=Insul)) +
+  geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
+  geom_point(aes(shape=Insul)) +
+  ggtitle("Whiteside data",
+          subtitle = "One-hot encoding of Insul") +
+  theme(legend.position = c(0.1, .15))
+```
+
+
+
+
+### Formulae with arithmetic expressions
+
+
+
+By taking into account interactions between `Temp` and `Insul`, we have improved
+the appeal of our model. Now we face two questions:
+
+1. can we go further and improve data fitting?
+
+1. can we formally assess the apparent improvement delivered by a richer model?
+
+One question concerns the possibility of describing richer models
+
+The second question is about model assessment/validation/selection
+
+The first question  is about programming, the second takes us in inferential statistics territory
+
+
+
+### Building an enriched design
+
+
+Rather than searching a _linear connection_
+between `Gas` and `Temp` we might
+as well look for a _polynomial connection_
+
+In the next chunk, we add powers of `Temp` to dataframe `whiteside`
+
+```{r, echo=TRUE}
+poly(whiteside$Temp,
+     degree=10,
+     raw=TRUE) %>%
+ as_tibble() -> whiteside_matrix
+
+names(whiteside_matrix) <- paste("Temp",
+                                 1:10,
+                                 sep="^")
+
+whiteside_10  <- cbind(whiteside,
+                       whiteside_matrix)
+```
+
+
+
+We fit a degree $10$ polynomial to the data
+
+```{r, echo=TRUE}
+lm_10 <-
+  whiteside_10 %>%
+  lm(formula =
+     Gas ~ . - Temp - Insul)
+```
+
+We are looking for a predictor of `Gas` based on powers of `Temp`
+
+
+### A paradox
+
+
+Attempting to fit a degree $10$ polynomial to the `Whiteside` data leads to:
+
+- Goodness of fit is improved
+
+- Plausibility, and thus explanatory power is degraded:
+It is hard to envision a non-monotonous relationship between gas consumption and average external temperature
+
+
+```{r whitesideten-label, echo=TRUE, warning=FALSE}
+whiteside %>%
+  ggplot(mapping=aes(y=Gas, x=Temp)) +
+  geom_point(aes(shape=Insul)) +
+  geom_point(mapping = aes(y=lm_10$fitted.values), shape="+", size=5) +
+  geom_smooth(formula= y ~ 1+ poly(x,10, raw=TRUE), method="lm", se=FALSE) +
+  ggtitle('Whiteside data: fitting a degree 10 polynomial',
+          'Predictions of gas consumption are not monotonous with respect to average external temperature') +
+  theme(legend.position = c(0.1, .15))
+```
+
+
+### High order modeling with interaction
+
+We can play that game further by fitting
+a high-degree polynomial of `Temperature` with interaction with `Insulation`
+
+Fitting a degree $10$ polynomial with interaction with `Insul` to the `whitesidedata`.
+
+We attempt to fit a model with $22$ coefficients (degrees of freedom) to the `whiteside` data ( $56$ observations)
+
+Goodness of fit is visually improved  but physical plausibility and explanatory power remain bad.
+
+
+.fl.w-two-thirds.pa2[
+
+```{r whiteside10insul, echo=FALSE, warning=FALSE}
+whiteside_10 %>%
+  lm(formula = Gas ~ (. - Temp) * Insul) -> lm_10_insul
+
+whiteside %>%
+  ggplot(mapping=aes(y=Gas, x=Temp, group=Insul)) +
+  geom_point(aes(shape=Insul)) +
+  geom_point(mapping = aes(y=lm_10_insul$fitted.values),
+             shape="+", size=5) +
+  geom_smooth(formula= y ~ 1+ poly(x,10, raw=TRUE),
+              method="lm",
+              se=FALSE,
+              aes(linetype=Insul)) +
+  ggtitle("Whiteside data",
+          subtitle = "Fitting a degree 10 polynomial with interaction with Insul") +
+  theme(legend.position = c(0.1, .15))
+```
+]
+
+---
+
+### The best of both worlds
+
+
+.fl.w-third.pa2[
+
+Fit a degree $2$ polynomial with interaction w.r.t. `Insul`
+
+When fitting a degree $2$ polynomial, we face new questions:
+
+- should we prefer quadratic modelling to linear modelling?
+- shoud we retain interaction with `Insul` for both subgroups?
+
+Visual inspection does not provides us with clear cut guidelines
+
+]
+
+.fl.w-two-thirds.pa2[
+
+```{r  whiteside2Insul, echo=FALSE, warning=FALSE}
+lm_2 <- lm(Gas ~ Insul/(Temp + I(Temp^2))-1, whiteside)
+
+whiteside %>%
+  ggplot(mapping=aes(y=Gas, x=Temp, group=Insul)) +
+  geom_point(aes(shape=Insul, color=Insul)) +
+  geom_point(mapping = aes(y=lm_2$fitted.values), shape="+", size=5) +
+  geom_line(mapping = aes(y=lm_2$fitted.values, linetype=Insul)) +
+  geom_smooth(formula= y ~ poly(x,2, raw=TRUE),
+              method="lm",
+              se=FALSE,
+              aes(linetype=Insul)) +
+  ggtitle("Whiteside data",
+          subtitle = "Fitting a degree 2 polynomial per group") +
+  theme(legend.position = c(0.1, .15))
+```
+
+]
+
+---
+
+### GLM interpretation
+
+Figure  corresponds to least-square fitting of the following model
+
+$$\begin{bmatrix}\mathrm{Gas}_1 \\  \vdots \\  \mathrm{Gas}_{56} \end{bmatrix}  = \begin{bmatrix}  1 & 0 & \mathrm{Temp}_1 &  0 & \mathrm{Temp}^2_1 &  0\\  \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\  1 & 0 & \mathrm{Temp}_{26} &  0 & \mathrm{Temp}^2_{26} &  0\\  1 & 1 & \mathrm{Temp}_{27} & \mathrm{Temp}_{27} & \mathrm{Temp}^2_{27} & \mathrm{Temp}^2_{27}  \\  \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\   1 & 1 & \mathrm{Temp}_{56} & \mathrm{Temp}_{56} & \mathrm{Temp}^2_{56} & \mathrm{Temp}^2_{56} \end{bmatrix} \times \begin{bmatrix}  \beta_{0,b} \\  \beta_{0,a} \\  \beta_{1, b} \\  \beta_{1, a} \\  \beta_{2, b} \\  \beta_{2, a}\end{bmatrix} + \sigma \begin{bmatrix}  \epsilon_1 \\  \vdots \\  \epsilon_{56}\end{bmatrix}$$
+
+We still assume _homoschedastic_ noise
+
+---
+exclude: true
+
+```{r}
+require("parsnip")
+require(Formula)
+require(flipbookr)
+```
+
+
+```{r}
+formule <- Formula(Gas ~ Temp * Insul)
+
+lm_mod <-
+  linear_reg() %>%
+  set_engine("lm")
+
+lm_fit <-
+    lm_mod %>%
+    fit(formule,
+        data = whiteside)
+```
+
+```{r}
+# model.matrix(lm_2) %>% View()
+```
+
+---
+exclude:true
+
+```{r }
+pacman::p_load(ggfortify)
+```
+
+```{r}
+autoplot(lm_2, which = 6)
+```
+
+
+---
+template: inter-slide
+name: anova
+
+
+## ANOVA
+
+
+---
+
+[ANOVA](https://en.wikipedia.org/wiki/Analysis_of_variance) stands for ANalysis
+Of VAriance.
+
+Its provides us with a method for choosing and assessing a model at
+least if we adhere to the _Gaussian Linear Modeling_ credo.
+
+
+ANOVA is just the tip of a large iceberg.
+
+It has been extended to more general models and
+has inspired _model selection methods_ in many areas of statistics and machine learning.
+
+
+---
+template: inter-slide
+
+## Variable selection in Gaussian Linear Models
+
+---
+
+
+
+In the sequel of this section, we use simulated data to introduce and motivate
+the ANOVA method.
+
+We generate
+
+- a design matrix $Z \in \mathcal{M}_{n,p}$
+with $n=1000$ and $p=100$,
+- a sparse random vector $\beta \in \mathbb{R}^p$
+- a vector of observation $Y = Z \times \beta + \sigma \epsilon$ where
+$\sigma=1$ and $\epsilon$ is a standard Gaussian vector of dimension $p$.
+
+---
+
+`r flipbookr::chunk_reveal("my_simul_anova", break_type="auto", display_type="code", title="### Preparing ANOVA")`
+
+```{r my_simul_anova, include = FALSE}
+set.seed(1515)   # for reproducibility
+
+p <- 100    # dimension of sample points
+n <- 1000   # sample size
+
+sigma <- 1  # noise standard deviation
+
+betas <- matrix(rbinom(p, 1, 0.1) * rnorm(p, mean=1),
+                nrow=p, ncol=1)  # true coefficient vector
+
+important_coeffs <- which(abs(betas) >.01) # sparse support
+
+Z <- matrix(rnorm(n*p, 5), ncol = p, nrow=n)  #  design
+
+Y <- Z %*% betas  + matrix(rnorm(n, 0, sd=sigma), nrow=n)
+
+df <- as.data.frame(cbind(Z, Y), )
+
+names(df)  <- c(paste("x", 1:p, sep="_"), "y")
+```
+
+---
+
+### True model versus full model
+
+Dataframe `df` fits Gaussian linear modeling assumptions
+
+We may feed it to `lm()`
+
+This leads to what we call the _full model_
+
+We may also take advantage of the fact that we know which columns of $Z$ matters when we want to predict $Y$.
+
+Hence, we can compare the linear model obtained by brute force `lm(y ~ . -1, df)` ( $-1$ because we need no intercept) with the linear model obtained by using columns of `df` corresponding
+to non-null coefficients of `betas`
+
+We call the former the _true model_
+
+---
+
+### Building formulae
+
+```{r}
+formula_full <- formula("y ~ . - 1")
+
+formula_true <- formula(str_c("y",
+                              paste(str_c("x",
+                                          important_coeffs,
+                                          sep = "_"),
+                                     collapse =" + "),
+                              sep=" ~ "))
+
+formulae <-  c(formula_full, formula_true)
+
+lm_df <- map(formulae,
+             lm,
+             data=df)
+
+names(lm_df) <- c("full", "true")
+```
+
+---
+
+### The true model
+
+```{r}
+formula_true
+```
+
+```{r, echo=FALSE}
+rsss <- map_dbl(lm_df,
+                ~ round(sum(residuals(.)^2), 1))
+```
+
+---
+
+### Comparing reconstruction errors
+
+We can compare the true and full models using the quadratic error criterion.
+
+The residuals can be gathered from both models using function `residuals()`.
+
+The Residual Sum of Squares (RSS)  are respectively `r rsss['full']` for the full model and `r rsss['true']`.
+
+At first glance, the full model achieves a better fit to the data than the true model
+
+---
+
+### Comparing estimation errors
+
+`r fontawesome::fa("exclamation-triangle")` This comparison is not fair
+
+The full model is obtained by optimizing the quadratic error over a set which is much larger  than the set used
+for the true model
+
+As we are handling simulated data, we can compare the coefficient
+estimates in the two models and see whether one comes closer to
+the coefficients used to generate the data
+
+The squared $\ell_2$ distances to $\beta$ are substantially different:
+
+$$\| \beta - \widehat{\beta}^{\text{true}}\|^2  = 1.31 \times 10^{-2}$$
+
+while
+
+$$\| \beta - \widehat{\beta}^{\text{full}}\|^2  = 9.75 \times 10^{-2}$$
+
+---
+
+### Overfitting
+
+The fact that the full model outperforms the small model with
+respect to the Residual Sum of Squares criterion is righteously called _overfitting_.
+
+```{r, echo=FALSE, include=FALSE}
+full_distance = norm(coefficients(lm_df[['full']]) - betas, type = "2")^2
+
+small_distance = norm(coefficients(lm_df[['true']]) - betas[important_coeffs], type = "2")^2
+```
+
+---
+
+### Diagnosing the full model
+
+.panelset[
+
+.panel[.panel-name[Code]
+
+```{r qplot-residuals-label, fig.show='hide', fig.height=3.5}
+xx <- residuals(lm_df[['full']])
+yy <- fitted.values(lm_df[['full']])
+qplot(y=yy,
+      x=xx,
+      alpha=I(.25)) +
+  xlab("fitted values") +
+  ylab("residuals") +
+  ggtitle("Gaussian linear model",
+  subtitle = "n=1000, p=100, full model")
+```
+
+]
+
+.panel[.panel-name[Residuals versus Fitted plot]
+
+![](`r knitr::fig_chunk("qplot-residuals-label","png")`)
+
+]
+
+]
+
+---
+
+###
+
+
+```{r}
+head((anova(lm_df[['full']]))  %>%
+       broom::tidy(.n), 10)
+```
+
+---
+
+```{r, echo=FALSE}
+tib <-
+  tibble(residuals= residuals(lm_df[['full']]))
+m <- mean(tib$residuals)
+s <- sd(tib$residuals)
+tit <- "Kernel density estimate of residuals distribution (full model)"
+```
+
+`r flipbookr::chunk_reveal("kde_residuals", break_type="auto", title="### Residual distribution (full model)")`
+
+
+
+```{r kde_residuals, include=FALSE, fig.width=6, cache=F, comment = ""}
+tib %>%
+  ggplot(aes(x=residuals)) +
+  geom_histogram(aes(y=..density..),
+                 alpha=.3) +
+  stat_density(kernel = "epanechnikov",
+               bw = .15,
+               alpha=.0,
+               col=1) +
+  stat_function(fun = dnorm,
+                args=list(mean=m,
+                          sd=s),
+                linetype=2) +
+  ggtitle(tit,
+          "Dashed curve: Gaussian fit")
+```
+
+---
+
+### Assessing residuals
+
+```{r}
+shapiro.test(residuals(lm_df[['full']]))
+```
+
+
+```{r}
+# (coefficients(lm.1)[1])^2 + norm(betas - coefficients(lm.1)[-1])^2
+
+# norm(betas - lm.0$coefficients)^2
+```
+
+---
+template: inter-slide
+
+## Using Fisher $F$ statistic
+
+---
+
+### Computing the Fisher $F$ statistic for comparing model 0 and model 1
+
+As we are dealing with simulated data, we can behave as if a benevolent _oracle_
+had whispered that all but `97` coefficients are null, and even told us the index
+of the non-null coefficients.
+
+We fit this exact and minimal model to the data.
+
+Under the Gaussian linear model assumption, the empirical distribution of residuals is the empirical distribution of the projection of a standard Gaussian vector onto the linear subspace orthogonal to the subspace generated by the design columns.
+
+As such the distribution of residuals is not the empirical distribution of an i.i.d Gaussian sample. Nevertheless, if the linear subspace is not too correlated with the canonical basis, the residuals empirical distribution is not too far from a Gaussian distribution.
+
+---
+exclude: true
+
+```{r residdistrib, echo=FALSE, warning=FALSE, fig.cap='(ref:residdistrib)'}
+residuals(lm_df[['true']]) %>%
+  tibble(residuals= .) %>%
+  ggplot(aes(x=residuals)) +
+  stat_density(kernel = "epanechnikov", bw = .15, alpha=.0, col=1) +
+  stat_function(fun = dnorm,
+                mean=mean(residuals(lm_df[['true']])),
+                sd=sd(residuals(lm_df[['true']])),
+                linetype=2) +
+  ggtitle("True model: Kernel density estimate of residuals distribution (true model)",
+          "Dashed curve: Gaussian fit")
+```
+
+---
+
+### Comparing true model and full model
+
+We are facing a _binary hypotheses problem_.
+
+- Null hypothesis: all coefficients but `x_2 , x_9 , x_22 , x_27 , x_41 , x_49 , x_52 , x_53 , x_59, x_60 , x_77 , x_88 , x_93` are null
+
+- Alternative hypothesis: the vector of coefficients doesnot satisfy the $13$ linear equations defining the null hypothesis
+
+Note that both the null and alternative hypotheses are composite.
+
+---
+
+The null hypothesis asserts that the true vector of coefficients belong to a linear subspace of dimension `13` of $\mathbb{R}^{100}$.
+
+If we stick to Gaussian linear modelling
+we may test this null hypothesis by performing a _Fisher test_.
+
+Under the null hypothesis,
+
+$$\frac{\|\widehat{Y} - \widehat{Y}^\circ\|^2/(p-p^\circ)}{\|{Y} - \widehat{Y}\|^2/(n-p)} \sim F_{p-p^\circ, n-p}$$
+
+where $F_{p-p^\circ, n-p}$ stands for the Fisher distribution with
+$p-p^\circ$ and $n-p$ degrees of freedom.
+
+Function `anova`  does this.
+
+---
+exclude: true
+
+```{r, tidy.opts=''}
+anova(lm_df[['true']], lm_df[['full']]) %>%
+  broom::tidy() %>%
+  dplyr::mutate_if(is.numeric, round, 2)
+```
+
+On the second row, column `statistic` contains the Fisher statistic. The `p.value` tells us the probability that a random variable distributed according to Fisher distribution with $87$ and $900$ degrees of freedom ($F_{87,900}$) exceeds the statistic's value $0.89$. The fact that `p.value` (`pf(.89, 87, 900, lower.tail = FALSE)`) is $0.75$ does not prompt us to reject the null hypothesis.
+
+---
+
+### Handling $p$-values
+
+The rule of thumb when using the `p.value` reported by a test function is the following:
+
+> If, _under the null hypothesis_, you  accept to be wrong  with probability $\alpha$,
+
+> then
+
+> you should reject when the `p.value` is less than $\alpha$
+
+In words: if you are looking for a _level_ (probability of an error of the first kind) equal to $\alpha$, you should reject the null hypothesis when the $p$-value is less than $\alpha$
+
+We can decompose the computations performed by ANOVA
+
+---
+exclude: true
+
+```{r, eval=FALSE}
+setdiff(important_coeffs, # 2  9 22 27 41 49 52 53 59 60 77 88 93
+        which(
+(df %>%
+  select(starts_with("x")) %>%
+  purrr::map_dbl(.f = ~ cor(., df$y)) %>%
+  abs() ) > .05)
+)
+```
+
+```{r, eval=FALSE}
+lm.0 %>% summary()
+(svd(t(Z) %*% (Z))$d)^(-1)
+   # Inverse of covariance matrix of coefficients in lm.0
+```
+
+---
+exclude: true
+class: middle, center, inverse
+
+## Iterative methods for OLS
+
+---
+exclude: true
+class: middle, center, inverse
+
+## ...
+
+---
+exclude: true
+template: inter-slide
+
+## Ridge regression
+
+
+---
+exclude: true
+### Regularized least squares criterion
+
+For each $\lambda>0$, the penalized least square costs is defined by
+
+$$\Big\Vert Y - Z \beta  \Big\Vert^2 + λ \big\|\beta\big\|^2$$
+
+Gradient with respect to $\beta$
+
+$$2\times\big(λ β + Z^T Z β - Z^T Y\big)$$
+
+Unique optimum
+
+$$\big(\lambda \operatorname{Id} + Z^TZ\big)^{-1} Z^T Y$$
+
+---
+exclude: true
+### Solution
+
+
+
+---
+exclude: true
+template: inter-slide
+
+## Split/Apply/Combine and (Ridge) regression
+
+---
+exclude: true
+
+
+---
+exclude: true
+template: inter-slide
+
+## Feature engineering
+
+---
+exclude: true
+template: inter-slide
+
+##
+
+---
+exclude: true
+template: inter-slide
+
+##
+
+---
+exclude: true 
+
+Diagnostics with `GGally::ggnostic()`
+
+---
+exclude: true
+
+Handling missing values with `naniar`
+
+---
+
+```{r child="closing_slide.Rmd"}
+
+```
