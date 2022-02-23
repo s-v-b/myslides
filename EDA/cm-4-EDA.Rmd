@@ -347,21 +347,24 @@ whiteside %>%
 
 ### Linear regression after one-hot encoding of `Temp`
 
-.fl.w-third.pa2[
+.fl.w-third.pa2.f6[
 
-TODO: `ggPredict`
-
-```{r whitesideonehot, echo=FALSE, warning=FALSE, fig.show='hide', fig.height = 5}
-whiteside %>%
-  ggplot(mapping=aes(y=Gas,
-                     x=Temp,
-                     color=Insul,
-                     linetype=Insul)) +
-  geom_smooth(method="lm", formula = y ~ x, se=FALSE) +
+```{r whitesideonehot, echo=TRUE, warning=FALSE, fig.show='hide', fig.height = 5}
+p  <- whiteside %>%
+  ggplot() +
+  aes(y=Gas,
+      x=Temp,
+      color=Insul,
+      linetype=Insul) +
+  geom_smooth(method="lm", 
+              formula = y ~ x, 
+              se=FALSE) +
   geom_point(aes(shape=Insul)) +
   ggtitle("Whiteside data",
-          subtitle = "One-hot encoding of Insul") +
+   subtitle = "One-hot encoding of Insul") +
   theme(legend.position = c(0.1, .15))
+
+p
 ```
 
 ]
@@ -371,6 +374,18 @@ whiteside %>%
 ![](`r knitr::fig_chunk("whitesideonehot", "png")`)
 
 ]
+
+---
+exclude: true
+
+[ggPredict](https://cran.r-project.org/web/packages/ggiraphExtra/vignettes/ggPredict.html)
+
+
+---
+
+```{r, echo=FALSE}
+plotly::ggplotly(p)
+```
 
 
 ---

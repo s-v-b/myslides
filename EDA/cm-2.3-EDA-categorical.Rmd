@@ -89,20 +89,39 @@ of occurences of the symbol and the total length of the sequence
 
 ### Summarizing `carrier`
 
-.fl.w-30.pa2[
+.fl.w-40.pa2.f6[
 
-```{r loading, eval=F, echo=T}
-require(tidyverse, quietly = T)
+Load `nycflights`  and inspect 
+`flights` dataset
 
-require(nycflights13, quietly = T)
+
+```{r loading, eval=F, echo=T, warning=F}
+tmp <- purrr::map(
+  c("tidyverse", 
+  "broom", 
+  "knitr",
+  "nycflights13"),  
+  ~ require(., 
+            character.only=T,
+            quietly=T))
 
 flights %>%  
-  glimpse(w=50)
+  glimpse(w=40)
 ```
+
+We  focus on variable `carrier`
+
+```{r, echo=T, eval=T}
+v_carrier <- flights$carrier
+
+v_carrier <- flights %>% #<<
+  pull(carrier)  #<<
+```
+
 
 ]
 
-.fl.w-70.pa2[
+.fl.w-60.pa2.f6[
 
 ```{r loading-out, ref.label='loading', eval=TRUE, echo=FALSE}
 
@@ -114,41 +133,58 @@ flights %>%
 
 ---
 
-### Summarizing `carrier`
+### Function `table()`  
 
 
-.fl.w-50.pa2[
+.fl.w-50.pa2.f6[
 
-`r fontawesome::fa("r-project")` : function `table()` uses the cross-classifying factors to build a _contingency table_ of the counts at each combination of factor levels.
+Function `table()` builds a _contingency table_ of the counts 
 
 For univariate samples, `table()` returns a 1-way contingency table
 
+```{r carrier-table, echo=T, eval=F, warning=F}
+table(v_carrier) %>% #<<
+  tidy() %>% 
+  head() %>% 
+  kable(col.names = c("Carrier", 
+                      "Frequency"))
+```
+`r fontawesome::fa("exclamation-triangle")` Function `table` puts dust under the carpet: NAs are not reported 
+]
 
-```{r carrier, echo=T, eval=T}
-table(flights$carrier) %>% #<<
-  knitr::kable(
-    col.names = c("Carrier", 
-                  "Frequency"))
+.fl.w-50.pa2.f6[
+
+```{r carrier-table-out, ref.label="carrier-table",  echo=F, eval=T, warning=F}
+
+```
+]
+---
+
+### Function  `summary()` 
+
+.fl.w-50.pa2.f6[
+
+```{r carrier-summary,  echo=T, eval=F, warning=FALSE}
+summary(v_carrier)
+
+summary(factor(v_carrier)) %>%   #<<
+  as_tibble(rownames="Carrier") %>% 
+  head() %>% 
+  kable()
+```
+
+`r fontawesome::fa("lightbulb")` Function `summary()` tells us everything there is to know, counts, and NAs
+
+`r fontawesome::fa("hand-point-right")` Function `summary()` is generic: it calls a method that depends on the class of the argument
+]
+
+.fl.w-50.pa2.f6[
+
+```{r carrier-summary-out, ref.label='carrier-summary',  echo=F, eval=T, warning=FALSE}
+
 ```
 
 ]
-
-.fl.w-50.pa2[
-
-
-
-```{r carrier-out,  echo=T, eval=T}
-summary(flights$carrier)
-
-summary(factor(flights$carrier))
-```
-
-`r fontawesome::fa("lightbulb")` Base function `summary` tells us everything there is to know, counts, and NAs
-
-`r fontawesome::fa("exclamation-triangle")` Base function `table` puts dust under the carpet: NAs are not reported 
-]
-
-
 
 
 
@@ -339,16 +375,22 @@ p +
 
 ---
 
-.fl.w-30.pa2.f6[
+### Reordering
+
+.fl.w-40.pa2.f6[
 
 ```{r fct_reorder, echo=T, eval=F}
 dt %>%
+  mutate(dest=fct_reorder(factor(dest), #<<
+                    Prop,         #<<
+                    .desc = T)) %>% 
   ggplot() +
-  aes(x=fct_reorder(factor(dest), Prop, .desc = T),   #<<
-      y=Prop) +
+  aes(x=dest,  y=Prop) +
   ggtitle("Flights: dest distribution") +
   geom_col(width=.3) +
-  theme(axis.text.x=element_text(angle=45, hjust=1, size =4))  +
+  theme(axis.text.x=element_text(angle=45, 
+                                 hjust=1, 
+                                 size =4))  +
   xlab("Destination Airport") +
   ylab("Prop")
 
@@ -359,7 +401,7 @@ dt %>%
 ]
 
 
-.fl.w-70.pa2[
+.fl.w-60.pa2[
 
 ```{r  fct_reorder-out, ref.label="fct_reorder", echo=F, eval=T}
 
@@ -369,6 +411,9 @@ dt %>%
 
 ]
 
+---
+
+`r chunk_reveal("fct_reorder")`
 
 ---
 template: inter-slide

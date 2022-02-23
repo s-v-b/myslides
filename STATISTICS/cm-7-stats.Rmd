@@ -4,9 +4,17 @@ subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/01/29 (updated: `r Sys.Date()`)"
+params:
+  title: "VII : Tests de type Chi-deux"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Statistique Fondamentale"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/statistics-paris/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  institution: "Université de Paris"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
+    css: ["header-footer.css",  "xaringan-themer.css"]
     lib_dir: libs
     seal: false
     includes:
@@ -23,78 +31,36 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+name: inter-slide
+class: left, middle
+
+{{ content }}
+
+---
 name: layout-general
 layout: true
 class: left, middle
 
-```{r loaders-fixers, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-xaringanExtra::use_animate_css()
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-xaringanExtra::use_tile_view()
+```
 
-xaringanExtra::use_tachyons(minified = FALSE)
+```{r, echo=FALSE}
+# xaringanExtra::use_scribble()
+```
 
-xaringanExtra::use_logo(
-  image_url = "./img/UniversiteParis_logo_horizontal_couleur_RVB.jpg",
-  position = xaringanExtra::css_position(top = "1em", right = "1em"),
-  width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
-  exclude_class = c("hide_logo")
-)
 
-xaringanExtra::use_panelset()
+---
 
-xaringanExtra::use_editable(expires = 1)
 
-source("./loaders_fixers.R")
+```{r child="title_slide.Rmd"}
 
-knitr::opts_chunk$set(fig.width = 6,
-                      message = FALSE,
-                      warning = FALSE,
-                      comment = "",
-                      cache = F)
-library(flipbookr)
 ```
 
 
 
-<style>
-.remark-slide-number {
-  position: inherit;
-}
-
-.remark-slide-number .progress-bar-container {
-  position: absolute;
-  bottom: 0;
-  height: 4px;
-  display: block;
-  left: 0;
-  right: 0;
-}
-
-.remark-slide-number .progress-bar {
-  height: 100%;
-  background-color: red;
-}
-</style>
-
-
-
-
 ---
-class: middle, center, inverse
-
-# Statistique VII: Tests de type $\chi^2$
-
-### `r Sys.Date()`
-
-
-#### [Statistique Fondamentale Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/statistics-paris/)
-
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
-
----
-class: inverse, middle
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -120,7 +86,7 @@ est garanti. Leur construction passe par la construction d'une suite de vecteurs
 
 
 ---
-class: center, middle, inverse
+template: inter-slide
 name: notations
 
 ## Notations
@@ -247,7 +213,7 @@ $$I(\theta)^{-1} =  \frac{1}{n}\operatorname{cov}\left( \left(N^n(\alpha)\right)
 
 
 ---
-class: center, middle, inverse
+template: inter-slide
 name: problemes
 
 
@@ -347,7 +313,7 @@ indépendants selon une même loi (inconnue)?
 
 ---
 
-### Exemple  `r fontawesome::fa("boat")`
+### Exemple  `r fontawesome::fa("ship")`
 
 La table  `Titanic`  est une table de contingence, c'est-à-dire
 un tableau à entrées multiples (4 ici: `Age, Sex, Class, Survived`) compilé
@@ -397,13 +363,13 @@ selon une loi produit  $P \otimes P'$ sur $\Omega \times \Omega'$?
 Soit $((x_1, y_1), \ldots, (x_n, y_n))$ un
 échantillon de $n$ points de $\Omega \times \Omega$.
 
-`r fontawesome::fa("boat")` L'échantillon a-t-il été engendré par $n$ tirages indépendants
+`r fontawesome::fa("ship")` L'échantillon a-t-il été engendré par $n$ tirages indépendants
 selon une loi    $P$ sur $\Omega \times \Omega$,
 telle que $P\{A \times B\}= P\{B \times A\}$ pour tous $A, B \subseteq \Omega$ ?
 
 ---
 name: adequation
-class: center, middle, inverse
+template: inter-slide
 
 ## Test du $\chi^2$ d'adéquation
 
@@ -610,7 +576,7 @@ _fonction de répartition de la loi de la statistique_ $S$ _sous l'hypothèse nu
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Sous une hypothèse nulle simple,  si la loi de la statistique $S$ est diffuse,
 
@@ -637,7 +603,7 @@ Si $X \sim F$ avec $F$ continue, alors $F(X)$ est uniformément distribuée sur 
 
 ---
 
-### Remarquue
+### Remarque
 
 Lorsqu'on utilise une fonction de test dans un environment de calcul statistique,
 le niveau n'est en général pas décidé d'avance.
@@ -653,7 +619,7 @@ Cela garantit un test de niveau $\eta$.
 
 
 ---
-class: center, middle, inverse
+template: inter-slide
 
 ## Puissance du test du $\chi^2$
 
@@ -728,18 +694,176 @@ $$\lim_{n \to \infty} n  H(P_ {\theta_n}, P_\theta)^2  = \frac{1}{4} \lim_n n \c
 La limite des lois  images de $P_{\theta_n}^{\otimes n}$ par les statistiques de Pearson
 $n \chi^2(P_{\theta_n} \mid P_ \theta)$ se détermine.
 
----
 
+---
+exclude: true
+
+La distribution du carré de la norme d'un vecteur gaussien dont la matrice de covariance est $\sigma^2 \operatorname{Id}$.
+dépend de la norme de l'espérance mais ne dépend pas de sa direction
+
+Cette distribution peut être comparée _stochastiquement_ à la distribution du carré de la norme d'un vecteur gaussien centré de  même covariance
+
+---
+exclude: true
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Definition: Ordre stochastique
+
+Dans un espace probabilisé de loi $\mathbb{P}$, une variable aléatoire réelle   $X$  est _stochastiquement inférieure_ à une  variable aléatoire  $Y$, si
+
+$$\mathbb{P} \{ X \leq Y \} =  1$$
+
+On dit que la distribution de $Y$  domine stochastiquement la  distribution de  $X$
+
+]
+
+---
+exclude: true
+
+Si  $X$  est  stochastiquement  inférieure à  $Y$  et si   $F$  et  $G$  désignent les fonctions de répartitions de $X$ et $Y$, alors pour tout  $x \in  \mathbb{R}$, $F(x)\geq G(x)$. 
+
+Les fonctions quantile  $F^\leftarrow, G^\leftarrow$  satisfont $F^\leftarrow(p) \leq G^\leftarrow(p)$ for $p \in (0,1)$
+
+---
+exclude: true
+Réciproquement
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Proposition
+
+Si  $F$ et $G$  sont  deux fonctions de répartition qui satisfont  $\forall x \in \mathbb{R}$ $F(x)\geq G(x)$
+
+alors
+
+il  existe une espace probabilisé équipé d'une loi  $\mathbb{P}$ et 
+deux  variables aléatoires  $X$ et $Y$  avec des fonctions de répartition $F, G$  qui satisfont:
+
+$$\mathbb{P}\{ X \leq Y\} = 1$$
+
+]
+
+---
+exclude: true
+La preuve repose sur un argument de  _couplage quantile_ 
+
+
+
+### Preuve
+
+On équipe  $([0,1], \mathcal{B}([0,1])$  avec la loi uniforme
+
+Soient $X (\omega)=  F^{\leftarrow}(\omega)$,  $Y(\omega) = G^\leftarrow(\omega)$.
+
+La loi de $X$  (resp. $Y$) a pour fonction de répartition $F$ (resp. $G$) et on a:
+
+$$\mathbb{P} \{ X \leq Y\}  = \mathbb{P} \{ F^{\leftarrow}(U) \leq  G^{\leftarrow}(U)\} = 1$$
+
+
+`r fontawesome::fa("square")`
+
+
+---
+exclude: true
+
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
+### Théorème
+
+Si $X \sim \mathcal{N}\left( 0, \sigma^2 \operatorname{Id}\right)$ et
+$Y \sim \mathcal{N}\left( \theta, \sigma^2 \operatorname{Id}\right)$ with $\theta \in \mathbb{R}^d$
+alors
+
+$$\left\Vert Y \right\Vert^2 \sim  \left( (Z_1 + \|\theta\|_2)^2 + \sum_{i=1}^d Z_i^2 \right)$$
+
+
+où  $Z_i$  sont  i.i.d. selon $\mathcal{N}(0,\sigma^2)$.
+
+Pour tout $x \geq 0$,
+
+$$\mathbb{P} \left\{ \| Y \|\leq x\right\} \leq \mathbb{P} \left\{ \| X \| \leq x \right\}$$
+
+
+La loi de $\| Y\|^2/\sigma^2$ ($\chi^2$ décentrée de  paramètre $\| \theta\|_2/\sigma$)
+_domine stochastiquement_ la loi $\| X\|^2/\sigma^2$ ( $\chi^2$ centrée de avec le même nombre de degrés de liberté)
+
+]
+
+---
+exclude: true
+### Preuve
+
+Le vecteur gaussien $Y$ est  distribué comme  $\theta + X$.   Il existe une transformation orthogonale
+$O$ telle que 
+
+$$O \theta = \begin{pmatrix} \| \theta\|_2 \\ 0 \\ \vdots \\ 0\end{pmatrix}$$
+
+Les vecteurs  $OY$ et  $OX$  ont respectivement les mêmes normes que  $X$ et $Y$.
+
+Le carré de la norme de  $Y$
+est distribué comme  le carré de la norme de $OY$, soit comme $(Z_1 + \|\theta\|_2)^2 +\sum_{i=2}^d Z_i^2$.
+Ceci établit la première partie du théorème
+
+---
+exclude: true
+### Preuve (suite)
+
+Pour  établir la seconde partie du théorème, il suffit de vérifier que pour tout  $x\geq 0$,
+
+$$\mathbb{P} \left\{ (Z_1+ \|\theta\|_2)^2  \leq x \right\} \leq \mathbb{P} \left\{ X_1^2 \leq x \right\}$$
+
+
+soit
+
+$$\mathbb{P} \left\{ |Z_1+ \|\theta\|_2|  \leq \sqrt{x} \right\} \leq \mathbb{P} \left\{ |X_1| \leq \sqrt{x} \right\}$$
+
+
+ou
+
+$$\Phi(\sqrt{x}- \|\theta\|_2) - \Phi(-\sqrt{x}-\|\theta\|_2)  \leq \Phi(\sqrt{x}) -  \Phi(-\sqrt{x})$$
+
+---
+exclude: true
+### Preuve (suite)
+
+Pour  $y>0$, la fonction de $[0,\infty)$ vers $\mathbb{R}$, définie par 
+
+$$a \mapsto \Phi(y-a) - \Phi(-y-a)$$
+
+est décroissante par rapport à $a$
+
+Sa  dérivée par rapport à $a$ vaut  $$-\phi(y-a)+\phi(-y-a)=\phi(y+a)-\phi(y-a)\leq 0$$
+
+La conclusion suit
+
+`r fontawesome::fa("square")`
+
+---
+exclude: true
+
+La dernière étape de la preuve se lit comme suit
+
+$$\mathbb{P} \left\{ X \in \theta + C \right\} \leq \mathbb{P} \left\{ X \in C\right\}$$
+
+où  $X \sim \mathcal{N}(0,\operatorname{Id}_1)$, $\theta \in \mathbb{R}$ and $C = [-\sqrt{x},\sqrt{x}]$
+
+Cette inégalité  vaut en dimension $d\geq 1$ si   $C$ est compact, convexe, symétrique
+
+Ce résultat (subtil) s'appelle le Lemme d'Anderson
+
+---
+exclude: true
 ### Loi du $\chi^2$ décentrée
 
 
 
 ---
-
+exclude: true
 ### Proposition
 
 ---
-
+exclude: true
 ### Domination stochastique
 
 
@@ -748,7 +872,7 @@ $n \chi^2(P_{\theta_n} \mid P_ \theta)$ se détermine.
 ### Proposition
 
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Sous $(P^{\otimes n}_{\theta_n})_n$,  la limite des lois de la statistique de Pearson $C_n(\theta)$
 est la loi du $\chi^2$ à $p$ degrés de liberté décentrée,  de paramètre de décentrage
@@ -790,17 +914,23 @@ On définit
 
 $$S_n:=  \left\langle \lambda , \frac{N^n -n \mathbf{p}_{\theta_n}}{\sqrt{n \mathbf{p}_ {\theta_n}}}  \right\rangle$$
 
-Pour chaque $n$, $S_n$  est une somme de variables aléatoires indépendantes identiquement distribuées, centrées. La variance de $S_n$  est $\sigma^2_n$. La distribution des variables aléatoires
-dont la somme centrée et normalisée donne $S_n$  dépend de $n.$ On dit qu'on a affaire à un __tableau triangulaire__
+Pour chaque $n$, $S_n$  est une somme de variables aléatoires indépendantes identiquement distribuées, centrées. 
 
-Le théorème Central Limite de Lindeberg-Feller est justement valable pour les tableaux triangulaires.
+La variance de $S_n$  est $\sigma^2_n$. 
+
+La distribution des variables aléatoires
+dont la somme centrée et normalisée donne $S_n$  dépend de $n.$ 
+
+On dit qu'on a affaire à un __tableau triangulaire__
+
+Le théorème Central Limite de Lindeberg-Feller est justement valable pour les tableaux triangulaires
 
 ---
 
 ### Preuve (suite)
 
 
-On  vérifie facilement que les conditions sont remplies dans le cas des vecteurs multinomiaux
+On  vérifie que les conditions sont remplies dans le cas des vecteurs multinomiaux
 
 
 Par le théorème de Berry-Esseen:
@@ -820,16 +950,24 @@ soit la convergence en loi désirée.
 
 ---
 
-Lors de l'étude du test de Fisher en régression linéaire gaussienne, nous avons vu que la loi du $\chi^2$  décentrée domine stochastiquement la loi du $\chi^2$ centrée. Nous pouvons donc conclure que sous la suite $P_{\theta_n}$
-le test du $\chi^2$ de niveau $\alpha$  est sous la suite d'alternatives contigue $(\theta_n)_n$,  de puissance asymptotique supérieure ou égale à $\alpha$ (on dit que le test est _sans biais_).
+La loi du $\chi^2$  décentrée domine stochastiquement la loi du $\chi^2$ centrée
 
-On peut regarder cette étude de la puissance asymptotique du test du $\chi^2$ sur une suite l'alternatives contigue dans la perspective du théorème.
+Sous la suite $P_{\theta_n}$
+le test du $\chi^2$ de niveau $\alpha$  est de puissance asymptotique supérieure ou égale à $\alpha$ 
+
+On dit que le test est (asymptotiquement) _sans biais_
+
+---
+exclude: true
+
+On peut regarder cette étude de la puissance asymptotique du test du $\chi^2$ sur une suite l'alternatives contigue dans la perspective du théorème
 
 Ce théorème nous indique que pour tout seuil $\tau>0$
 
 $$\max\left(P_ \theta^{\otimes n}\{ C(n,\mathbf{p}_ \theta) \geq \tau\}, P_ {\theta_n}^{\otimes n}\{ C(n,\mathbf{p}_ \theta) < \tau\} \right) \geq \frac{1}{4} - \frac{1}{2} n H(P_ \theta, P_{\theta_n})^2$$
 
 ---
+exclude: true
 
 Si $F_p$ (resp. $F_{p,\delta}$) désigne la fonction de répartition de la loi $\chi^2_p$ (resp. $\chi^2_p(\delta)$), en choisissant
 
@@ -857,7 +995,7 @@ de niveau asymptotique supérieur à $F_{p,\delta}(F_p^{\leftarrow}(1- \eta)))$ 
 % Pour essayer de prouver que au moins asymptotiquement, le test du $\chi^2$ est optimal lorsqu'on considère une suite d'alternatives contigue, il faudrait  prouver que les tests du $\chi^2$ de niveau $\alpha$ se comportent asymptotiquement comme les tests de rapport de vraisemblance de même niveau.
 
 ---
-class: center, middle, inverse
+template: inter-slide
 name: h0composite
 
 ## Hypothèse nulle composite
@@ -1152,7 +1290,7 @@ de Pearson (étendue) est donné par
 
 ### Théorème
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Si $\Theta_0 \subset \mathbb{R}^r$ définit un
 modèle multinomial régulier et si $\hat{\theta}$ est un estimateur
@@ -1177,7 +1315,7 @@ vraisemblance dans le modèle $\Theta_0$.
 
 ### Lemme
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Sous les conditions du théorème \ref{the:lim:chi2},
 pour tout $\theta \in \Theta_0$, sous $\mathbf {p}_{\theta}$,
@@ -1202,7 +1340,7 @@ $$I (\theta) \sqrt{n} ( \widehat{\theta}_n - \theta) - \frac{1}{\sqrt{n}} \nabla
 
 ### Lemme (intermédiaire)
 
-.bg-light-gray.b--dark-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
 
 Sous les conditions du théorème ...
 pour tout $\theta \in \Theta_0$, sous $\mathbf {p}_{\theta}$,
@@ -1419,7 +1557,7 @@ Les valeurs propres de $\Gamma(\theta) - D (\theta)$ sont $1$ (multiplicité $p 
 
 
 ---
-class: center, middle, inverse
+template: inter-slide
 name: independance
 
 ## Le test d'indépendance
@@ -1479,9 +1617,17 @@ converge en distribution vers une loi du $\chi^2$  à $((k'+1) (k''+1) -1 )- (k'
 de liberté.
 
 
+---
+
+
+```{r child="closing_slide.Rmd"}
+
+```
+
 
 ---
-class: center, middle, inverse
+exclude: true
+template: inter-slide
 background-image: url(img/pexels-cottonbro-3171837.jpg)
 background-size: cover
 

@@ -27,7 +27,7 @@ output:
           <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
           </div>
         </div>
-      highlightStyle: github
+      highlightStyle: zenburn
       highlightLines: true
       countIncrementalSlides: false
 bibliography: mon_chapeau.bib
@@ -141,26 +141,30 @@ urchins %>%
 
 ### Linear modeling
 
+.f6[
 ```{r}
-ggplot(urchins,
+(ggplot(urchins,
        aes(x = initial_volume,
            y = width,
            group = food_regime,
            shape = food_regime,
+           linetype = food_regime, 
            col = food_regime)) +
   geom_point() +
   geom_smooth(method = lm, se = FALSE, formula= y ~ x) +
   scale_color_viridis_d(option = "plasma", end = .7) +
   ggtitle("Urchins data", subtitle="Linear regression per `food_regime`")
+ ) %>%  plotly::ggplotly()
 ```
+]
 
 ???
 
  Urchins that were larger in volume at the start of the experiment tended to have wider sutures at the end
 
- Slopes look different
+Slopes look different
 
-This effect may depend on the feeding regime condition (treatment)
+Conjecture: this effect may depend on the feeding regime condition (treatment)
 
 
 ---
@@ -173,9 +177,9 @@ formula(width ~ initial_volume * food_regime)
 
 ???
 
-> With tidymodels, we start by specifying the functional form of the model that we want using the parsnip package.
+> With tidymodels, we start by specifying the functional form of the model that we want using the `parsnip` package.
 
-> There is a numeric outcome and the model should be linear with slopes and intercepts,
+> There is a numeric outcome and the model should be linear with slopes and intercepts
 
 > The model type is “linear regression”.
 
@@ -185,39 +189,73 @@ formula(width ~ initial_volume * food_regime)
 
 ```{r}
 lm_mod <-
-  linear_reg() %>%
-  set_engine("lm")
+  linear_reg() %>%  #<< 
+  set_engine("lm")   #<<
+
+lm_mod %>% 
+  translate()
 ```
+
+> `linear_reg` function only defines what type of model is being fit
+
+> Once an engine is specified, the method to fit the model is also defined
+
+> The model is not trained or fit until the `fit.model_spec()` function is used with the data
+
 
 ???
 
-What does `linear_reg()` ?
+What does `linear_reg()`?
 
-What does `set_engine(lm_mod, "lm")`
+What does `set_engine(lm_mod, "lm")`? 
 
 In OOL parlance,
 
-- `linear_reg()` is a constructor, or an object factory
+- `linear_reg()` is a `constructor`, or an object factory
 - `set_engine()` is a `setter` for attribute `engine`
 
 ```{r}
 attributes(lm_mod)
+class(lm_mod)
 ```
+
+---
+
+### Class `model_spec` and subclass `linear_reg`
+
+Object `lm_mod` belongs to subclass `linear_reg` of class `model_spec`
+
+Objects of these classes are lists with 5 named items 
+
+???
+
+- `mode`:
+- `method`:
+- `engine`:
+- `args`:
+- `eng_args`:
+
 ---
 
 ### Fitting the (linear regression) model
 
 ```{r}
+form <- formula(width ~ initial_volume * food_regime)
+
 lm_fit <-
   lm_mod %>%
-  fit(width ~ initial_volume * food_regime, data = urchins)
+  fit(form, #<<
+      data = urchins)  #<<
 
-class(lm_fit)
+lm_fit %>% 
+  tidy() %>% 
+  knitr::kable(digits = 2)
 ```
 
 ???
 
 object `lm_fit` is an instance of `model_fit` and `_lm`
+
 
 
 ---
@@ -250,28 +288,48 @@ tidy(lm_fit)
 
 ---
 
+### Discussion
+
+- `std.error`
+
+- `statistics`
+
+- `p.value`
+
+???
+
+
+---
+
+### Visualization of a tidy fitted model
 
 ```{r}
 tidy(lm_fit) %>%
-  dwplot(dot_args = list(size = 2, color = "black"),
-         whisker_args = list(color = "black"),
-         vline = geom_vline(xintercept = 0, colour = "grey50", linetype = 2))
+  dwplot(dot_args = list(size = 2, color = "black"),   #<<
+         whisker_args = list(color = "black"),         #<<
+         vline = geom_vline(xintercept = 0, colour = "grey50", linetype = 2)) + #<<
+  ggtitle("Urchins data, fitted linear model (lm/OLS)")
 ```
 
 ---
 
+### Visualizing a collection of Student tests
 
+.f6[
 ```{r}
-tidy(lm_fit) %>%
-  ggplot() +
-  aes(x=term) +
-  geom_point(aes(y=estimate)) +
-  geom_hline(yintercept=0,  colour = "grey50", linetype = 2) +
-  geom_segment(aes(xend=term, y=estimate-2*std.error, yend=estimate+2*std.error)) +
-  coord_flip() +
-  ggtitle("Home made dotandwhiskerplot")
+wh_len <- qt(.975, df=lm_fit$fit$df.residual)
 
+tidy(lm_fit) %>% ggplot() +
+  aes(x=term, y=estimate) +
+  geom_point() +
+  geom_hline(yintercept=0, colour="grey50", linetype=2) +
+  geom_segment(aes(xend=term, 
+                   y=estimate-wh_len*std.error, 
+                   yend=estimate+wh_len*std.error)) +
+  coord_flip() +
+  ggtitle("Home made dot-and-whiskerplot")
 ```
+]
 
 ???
 
@@ -282,22 +340,35 @@ Why does the `dtwplot()` hide the `(Intercept)`?
 ### Residuals versus predicted inspection
 
 ```{r}
-lm_fit$fit %>%
-  augment(urchins) %>%
-  glimpse
+augmented_urchins <- lm_fit$fit %>%   #<< 
+  augment(urchins) # << 
+
+augmented_urchins %>% 
+  mutate(across(.cols=starts_with("."), 
+                .fns= ~ format(., digits=1))) %>% 
+  head() %>%  
+  knitr::kable()
 ```
 
 ---
 
+### Residuals versus fitted values 
+
 ```{r}
-lm_fit$fit %>%
-  augment(urchins) %>%
+augmented_urchins %>% 
   ggplot() +
-  aes(x=.fitted, y=(.std.resid)) +
-  geom_jitter()
+  aes(x=.fitted, y=.resid) +  #<< 
+  geom_point(alpha=.5) +
+  ylab("Residuals") +
+  xlab("Fitted values") +
+  ggtitle("Urchins data, linear regression")
 ```
 
 ???
+
+A pattern emerges 
+
+What should we expect? 
 
 
 
@@ -312,13 +383,80 @@ plot(lm_fit$fit)
 ???
 
 
+```{r, eval=FALSE}
 
+```
+
+---
+
+### Home made diagnostic plots (II)
+
+```{r}
+augmented_urchins %>% 
+  ggplot() +
+  aes(sample=.std.resid) +
+  geom_qq(alpha=.5) +
+  geom_qq_line() +
+  coord_fixed() +
+  ggtitle("Urchins data, standardized residuals qqplot")
+```
+???
+
+- What's in a standardized residual? 
+
+```{r, eval=FALSE}
+augmented_urchins %>% 
+  mutate(foo= .std.resid/(.resid/.sigma)) %>% 
+  select(.resid, .std.resid, foo)
+```
+
+
+---
+
+### Home made diagnostic plots (III)
+
+```{r}
+augmented_urchins %>% 
+  ggplot() +
+  aes(x=.fitted, y=sqrt(abs(.std.resid))) +
+  geom_point(alpha=.5) +
+  geom_smooth(method="loess", formula = y ~ x, se=FALSE) +
+  ylab("Sqrt(standardized residuals)") +
+  xlab("Fitted values") +
+  ggtitle("Urchins data, linear regression")
+  
+```
+
+
+---
+
+### Home made diagnostic plots (IV)
+
+
+```{r}
+augmented_urchins %>% 
+  ggplot() +
+  aes(x=.hat, y=.std.resid) +
+  geom_point() +
+  xlim(c(0, .4)) +
+  geom_vline(xintercept = 6/72, linetype=2) +
+  xlab("Leverage") +
+  ylab("Standardized residual")  +
+  ggtitle("Urchins data")
+``` 
+
+??? 
+
+What do we expect ?
+
+---
+template: inter-slide
 
 ---
 
 ### Predictions
 
-Generate new points
+Generate covariates for new points
 
 ```{r}
 new_points <- expand.grid(initial_volume = 20,
@@ -327,6 +465,8 @@ new_points
 ```
 
 ---
+
+### Use fitted model to predict response variable at new points
 
 ```{r}
 mean_pred <- predict(lm_fit, new_data = new_points)
@@ -348,15 +488,18 @@ plot_data <-
 
 ```
 
-
 ---
 
+### Plotting prediction
+
 ```{r}
-ggplot(plot_data, aes(x = food_regime)) +
-  geom_point(aes(y = .pred)) +
-  geom_errorbar(aes(ymin = .pred_lower,
-                    ymax = .pred_upper),
-                width = .2) +
+plot_data %>% 
+ggplot() +
+  aes(x=food_regime) +
+  geom_point(aes(y=.pred)) +
+  geom_errorbar(aes(ymin=.pred_lower,  #<<
+                    ymax=.pred_upper),  #<<
+                width=.2) +   #<<
   labs(y = "urchin size",
        title= "Predictions for initial volume= 20")
 ```
@@ -364,6 +507,8 @@ ggplot(plot_data, aes(x = food_regime)) +
 
 
 ---
+
+###
 
 ```{r}
 lm_fit$fit %>%

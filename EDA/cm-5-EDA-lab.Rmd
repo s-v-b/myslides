@@ -1,0 +1,429 @@
+---
+title: "Multilinear Regression LAB 2"
+output:
+  html_document
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+require(tidyverse)
+
+old_theme <-theme_set(theme_minimal(base_size=12, base_family = "Helvetica"))
+
+knitr::opts_chunk$set(warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               autodep = TRUE,
+               tidy = FALSE,
+               fig.retina = 4,
+               fig.height = 4,
+               out.width="50%")
+```
+
+## Anscombe quartet
+
+4 simple linear regression problems packaged in dataframe
+`datasets::anscombe`
+
+- `y1 ~ x1`
+- `y2 ~ x2`
+- `y3 ~ x3`
+- `y4 ~ x4`
+
+
+```{r}
+anscombe <- datasets::anscombe
+
+anscombe %>% 
+  knitr::kable()
+```
+
+
+
+Anscombe quartet: 4 datasets, 1 linear fit with almost identical goodness of fits
+
+
+
+```{r}
+lm(y1 ~ x1, anscombe) %>%
+  summary
+```
+
+```{r}
+lm(y2 ~ x2, anscombe) %>%
+  summary
+```
+
+
+
+```{r}
+lm(y3 ~ x3, anscombe) %>%
+  summary
+```
+
+
+
+```{r}
+lm(y4 ~ x4, anscombe) %>%
+  summary
+```
+
+
+All four numerical summaries look similar:
+
+- `Intercept` $\approx 3.0017$
+
+- `slope` $\approx 0.5$
+
+- Residual standard error $\approx 1.236$
+
+- Multiple R-squared $\approx .67$
+
+- F-statistic $\approx 18$
+
+$n$ is equal to 11
+
+The number of adjusted parameters $p$ is 2
+
+The number of degrees of freedom is $n-p=9$
+
+
+- [ ] How is RSE computed ?
+
+- [ ] How is R-squared computed ?
+
+- [ ] How is adjusted R-squared ?
+
+### Beyond numbers
+
+Visual inspection of the data
+reveals that some linear models are more relevant than others
+
+This is the message of the Anscombe quartet.
+
+It is made of four bivariate samples with $n=11$ individuals.
+
+
+### Tidying the Anscombe quartet
+
+```{r}
+datasets::anscombe %>%
+  pivot_longer(everything(),
+    names_to = c(".value", "group"),
+    names_pattern = "(.)(.)"
+  )  %>%
+  rename(X=x, Y=y) %>%
+  arrange(group)-> anscombe_long
+```
+
+From [https://tidyr.tidyverse.org/articles/pivot.html](https://tidyr.tidyverse.org/articles/pivot.html)
+
+```{r}
+datasets::anscombe  %>%
+  head(8) %>%
+  knitr::kable()
+```
+
+```{r}
+anscombe_long  %>%
+  head(8) %>%
+  knitr::kable()
+```
+
+
+
+### Perform regression per group
+
+For each value of `group` we perform a linear regression of `Y`  versus `X`
+
+```{r}
+list_lm <- purrr::map(anscombe_long$group ,
+                      .f = function(g) 
+                        lm(Y ~ X, anscombe_long,
+                           subset = anscombe_long$group==g))
+```
+
+
+We use _functional programming_: `purrr::map(.l, .f)` where
+
+- `.l` is a list
+
+- `.f` is a function to be applied to each item of list `.l` or a `formula`
+to be evaluated on each list item
+
+[`purrr` package](https://purrr.tidyverse.org/reference/map.html)
+
+
+### Inspecting summaries
+
+All four regressions lead to the same intercept and the same slope
+
+All four regressions have the same Sum of Squared Residuals
+
+All four regressions have the same Adjusted R-square
+
+We are tempted to conclude that
+
+> all four linear regressions are equally relevant
+
+Plotting points and lines helps dispel this illusion
+
+### Unveiling points
+
+
+```{r, warning=FALSE}
+p <- anscombe_long %>%
+  ggplot(aes(x=X, y=Y)) +
+  geom_smooth(method="lm", formula=  y ~ x, se=FALSE) +  #<<
+  facet_wrap(~ group) +                 #<<
+  ggtitle("Anscombe quartet: linear regression Y ~ X")
+
+p
+```
+
+
+Least squares minimization leads to the same optimum
+on the four datasets, that is to the same intercept and slope
+
+The distribution of residuals differ substantially from one dataset to the next
+
+
+### Lines and points
+
+
+```{r}
+p + geom_point()
+```
+
+
+
+Among the four datasets, only the two left ones are righteously handled
+using simple linear regression
+
+The bottom left dataset outlines the impact of *outliers* on Least Squares Minimization
+
+What happens if we fit a line by minimizing Least Absolute Deviation? (adopt an $\ell_1$ criterion
+rather than an $\ell_2$)
+
+# Need for model assessment 
+
+```{r}
+lm_1 <- anscombe_long %>% 
+  filter(group==1) %>% 
+  lm(Y ~ X, data=.)
+```
+
+```{r}
+lms <- list()
+
+for (s in as.character("1":"4")) {
+  lms[[s]] <-  lm(Y ~ X,
+                  anscombe_long,
+                  subset = group==s)
+}
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+require(tidyr)
+require(broom)
+require(glue)
+
+grp <- "1"
+
+tidy(lms[[glue("{grp}")]]) %>% 
+  knitr::kable(digits=3, caption = glue("Anscombe Group {grp}"))
+```
+
+
+### Base R diagnostic plots
+
+```{r diag_plots, out.width="50%"}
+plot(lms[[glue("{grp}")]])
+```
+
+### Building diagnostic plots
+
+```{r}
+augment(lms[[grp]]) %>%
+  ggplot() +
+  aes(sample=.std.resid) +
+  geom_qq() +
+  geom_qq_line(linetype="dotted") +
+  xlab("Normal Quantiles") +
+  ylab("Standardized residuals") +
+  ggtitle(glue("Anscombe {grp}: Standardized residuals qqplot"))
+```
+
+If we believe in the Gaussian Linear Model theory $Y =  Z \times \theta + \sigma \epsilon$
+where $(\epsilon_i)_{i\leq n} \sim_{\text{i.i.d.}} \mathcal{N}(0,1)$.
+
+$$H = Z \times (Z^T \times Z)^{-1} \times Z^T$$
+
+- [ ] What are standardized residuals?
+
+The residuals $\widehat{\epsilon}$ are distributed like $\sigma (\text{Id} - H) \times \epsilon$
+
+- [ ] $\widehat{\epsilon}_i \sim \mathcal{N}(0, \sigma^2 (1 - H_{i,i}))$
+
+Standardized residuals are $\widehat{\epsilon}_i/(\sigma\sqrt{1- H_{i,i}})$
+
+If Gaussian Linear Model assumption holds, the distribution of standardized residuals should not depart too much from a standard Gaussian distribution
+
+- [ ] What are leverages ?
+
+The Hat matrix satisfies
+
+$$\sum_{i=1}^n H_{i,i} =  \text{rank}(Z)$$
+
+$$0 \leq H_{i,i } \leq 1 \qquad \forall i \leq n$$
+
+
+$$\widehat{Y}_i =  H_{i,i}Y_i + \sum_{j\neq i} H_{i, j} Y_j  \qquad \forall i \leq n$$
+
+$H_{i,i}$ is called the _leverage_ of the $i^{\text{th}}$ case (row)
+
+```{r}
+augment(lms[[grp]]) %>%
+  ggplot() +
+  aes(x=.fitted, y= sqrt(abs(.std.resid))) +
+  geom_point() + 
+  geom_smooth(formula= y ~ x, 
+              method="loess", 
+              se=FALSE, 
+              linetype="dotted") +
+  ylim(c(0, 1.55 )) +
+  xlab("Fitted values") +
+  ylab("sqrt(standardized residuals)") +
+  ggtitle(glue("Anscombe {grp}: Standardized residuals versus fitted"))
+
+```
+
+- [ ] If the design is orthogonal (with unit normed columns) $H = Z \times Z^T$, what are the leverages ? 
+
+- [ ] What does large or small leverages mean ?
+
+- [ ] What is a _typical_ leverage ?
+
+
+Assume that the columns of $\mathbf{Z}$ are centered (have zero mean)
+
+Assuming that the columns of $\mathbf{Z}$ are centered means that $1$ is in the kernel (nullspace) of the Hat matrix
+
+Denote by $Z_i$ the $i^{th}$ column of $\mathbf{Z}^T$  ( $i^{\text{th}}$ observation )
+
+$$H_{i,i} =  Z_i^T \times (\mathbf{Z}^T\mathbf{Z})^{-1} \times Z_i$$
+
+Lines $r^2 =  z^T \times (\mathbf{Z}^T\mathbf{Z})^{-1} \times z$ are centered ellipses
+with axes defined by the eigenvectors of $\mathbf{Z}^T\mathbf{Z}$
+
+
+> In some problems, high-leverage points with values close to $1$ can occur, and
+> identifying these cases is very useful in understanding a regression problem
+
+
+
+**Notation**
+
+- $Y^{(i)}$: $Y$ deprived from $i^{\text{th}}$ coordinate
+
+- $\mathbf{Z}^{(i)}$: designed deprived from $i^{\text{th}}$ row
+
+- $\epsilon^{(i)}$: $ϵ$ deprived from $i^{\text{th}}$ coordinate
+
+- $\widehat{\theta}^{(i)}$: minimizer of $\big\|Y^{(i)} -\mathbf{Z}^{(i)}\theta \big\|^2_2$
+
+$$\widehat{\theta}^{(i)} = \left({\mathbf{Z}^{(i)}}^T\mathbf{Z}^{(i)}\right)^{-1}{\mathbf{Z}^{(i)}}^T$$
+
+- $\widehat{Y}^{(i)} = \mathbf{Z} \widehat{\theta}^{(i)}$
+
+These objects obtained by removing the $i^{\text{th}}$ observation from the data.
+
+Comparing $\widehat{\theta}$ and $\widehat{\theta}^{(i)}$ tells us about the _influence_
+of the $i^{\text{th}}$ sample point
+
+
+
+**A weighted $\ell_2$ distance from $\widehat{\theta}$**
+
+
+$$D(\theta, \widehat{\theta})= \frac{1}{p \widehat{\sigma}^2}  (\theta -\widehat{\theta})^T × \big(\mathbf{Z}^T\mathbf{Z}\big)× (\theta -\widehat{\theta})$$
+
+
+
+
+- [ ] Cook's distance
+
+
+$$D_i = D(\widehat{\theta}^{(i)}, \widehat{\theta})= \frac{1}{p \widehat{\sigma}^2}  (\widehat{\theta}^{(i)} -\widehat{\theta})^T × \big(\mathbf{Z}^T\mathbf{Z}\big) × (\widehat{\theta}^{(i)} -\widehat{\theta})$$
+
+This is a weighted $\ell_2$ distance between $\widehat{\theta}$ and $\widehat{\theta}^{(i)}$, the OLS solution obtained by removing the $i^{\text{th}}$ observation.
+
+Deleting observations with large values of $D_i$ results in substantial changes in the analysis
+
+Observations with the largest few $D_i$ are of special interest
+
+
+- [ ] Computing Cook's distances
+
+$$D_i = \frac{1}{p} \frac{H_{i,i}}{(1 - H_{i,i})^2} \frac{\left(Y_i - \widehat{Y}_i\right)^2}{\widehat{\sigma}^2}$$
+
+
+
+
+```{r}
+lms[[grp]] %>%
+  broom::augment() %>%
+  ggplot() +
+  aes(x=.hat) +
+  aes(y=.std.resid) +
+  geom_point() +
+  xlab("Leverage") +
+  ylab("Standardized residual") +
+  ggtitle(glue("Anscombe {grp}"))
+```
+
+
+
+
+### Spotting an outlier (group 3)
+
+```{r}
+grp <- "3"
+```
+
+```{r diag_plots_3, ref.label="diag_plots", out.width="50%"}
+
+```
+
+
+
+### Spotting a mis-specified model (group 2)
+
+```{r}
+grp <- "2"
+```
+
+```{r diag_plots_2, ref.label="diag_plots", out.width="50%"}
+
+```
+
+
+
+# Need for model selection 
+
+Fitting Anscombe group 2 with a richer model
+
+
+```{r}
+grp <- "2"
+anscombe_long %>%
+  filter(group==2) %>% 
+  ggplot() +
+  aes(y=Y, x=X) +
+  geom_point()  +
+  geom_smooth(formula= y ~ 1+ poly(x,2, raw=TRUE), method="lm", se=FALSE) +
+  geom_smooth(formula= y ~ 1+ poly(x,1, raw=TRUE), method="lm", se=FALSE, linetype="dotted") +
+  ggtitle(glue('Anscombe {grp} : fitting a degree 2 polynomial')) +
+  theme(legend.position = c(0.1, .15))
+```
+
