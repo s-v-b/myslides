@@ -1,0 +1,227 @@
+---
+title: "CM-2.3-EDA-lab.Rmd"
+author: "18 juin 2021"
+date: "2/9/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r loading, eval=T, echo=T, warning=F}
+tmp <- purrr::map(
+  c("tidyverse", 
+  "broom", 
+  "knitr",
+  "nycflights13"),  
+  ~ require(., 
+            character.only=T,
+            quietly=T))
+
+flights %>%  
+  glimpse(w=40)
+```
+
+We  focus on variable `carrier`
+
+```{r, echo=T, eval=T}
+v_carrier <- flights$carrier
+
+v_carrier <- flights %>% #<<
+  pull(carrier)  #<<
+```
+
+
+
+```{r carrier-table, echo=T, eval=T, warning=F}
+table(v_carrier) %>% #<<
+  tidy() %>% 
+  head() %>% 
+  kable(col.names = c("Carrier", 
+                      "Frequency"))
+```
+
+
+
+```{r carrier-summary,  echo=T, eval=T, warning=FALSE}
+summary(v_carrier)
+
+summary(factor(v_carrier)) %>%   #<<
+  as_tibble(rownames="Carrier") %>% 
+  head() %>% 
+  kable()
+```
+
+
+
+```{r flights-dest, eval=F, echo=T}
+flights %>%
+  ggplot() +
+  aes(x=origin) +
+  geom_bar(width=.3) +      #<<
+  ylab("Count") +
+  ggtitle("Flights: destinations distribution")
+
+```
+
+
+
+
+```{r flights-origin-label, eval=F, echo=T}
+p <- flights %>%
+  group_by(origin) %>%
+  summarise(Count=n()) %>%
+  ggplot(mapping=aes(x=origin,
+                     y=Count)) +
+  ggtitle("Flights: origin distribution")
+
+p + geom_col(width=.3)  #<<
+```
+
+
+
+
+```{r tweak-bar-stat-label, eval=F, echo=T}
+p +
+  geom_bar(stat="identity", #<<
+           width=.3) #<<
+```
+
+
+```{r normalize-col-plot-label, eval=F, echo=T}
+dt <- flights %>%
+    group_by(dest) %>%
+    summarise(Count=n()) %>%
+    mutate(Prop=Count/sum(Count))
+
+p <- dt %>%
+  ggplot() +
+  aes(x=dest, y=Prop) +
+  ggtitle("Flights: dest distribution")
+
+(p + geom_col(width=.3))
+```
+
+
+
+
+
+
+
+```{r, echo=FALSE}
+p + 
+  geom_col(width=.3) +
+  theme(axis.text.x=element_text(angle=45, hjust=1, size =4)) # +
+  
+```
+
+
+
+
+```{r fct_reorder, echo=T, eval=F}
+dt %>%
+  mutate(dest=fct_reorder(factor(dest), #<<
+                    Prop,         #<<
+                    .desc = T)) %>% 
+  ggplot() +
+  aes(x=dest,  y=Prop) +
+  ggtitle("Flights: dest distribution") +
+  geom_col(width=.3) +
+  theme(axis.text.x=element_text(angle=45, 
+                                 hjust=1, 
+                                 size =4))  +
+  xlab("Destination Airport") +
+  ylab("Prop")
+
+```
+
+
+
+
+```{r pieplot-label, echo=T, eval=F}
+flights %>%
+  group_by(carrier) %>% 
+  summarize(Count=n()) %>% 
+  mutate(Prop=Count/sum(Count)) %>% 
+  mutate(carrier=fct_reorder(carrier, 
+                             Count, 
+                             .desc = F)) %>% 
+  ggplot() +
+  geom_bar(mapping=aes(x=factor(1),  #<<
+                       y=Prop,  #<<
+                       fill=carrier), #<<
+            stat='identity') + #<<
+   coord_polar(theta='y') +  #<<
+   xlab("") +
+  ylab("")
+```
+
+
+
+
+
+```{r  read_semmelweis, echo=FALSE}
+read_csv("DATA/semmelweis.csv",
+        col_types = cols(BirthsL = col_integer(), #<<
+                         BirthsM = col_integer(),
+                         DeathsL = col_integer(),
+                         DeathsM = col_integer(),
+                         Year = col_integer())
+                       ) -> semmelweis     #<<
+
+semmelweis %>%
+  dplyr::select(Year, RateM, RateL) %>%
+  knitr::kable(format = 'html')
+```
+
+
+
+```{r pivot_semmelweis}
+tmp <- semmelweis %>%
+  select(Year, RateM, RateL) %>%
+  pivot_longer(cols=c(RateM, RateL),  #<<
+               names_to="Clinic",
+               values_to="Death_rate"
+             ) %>%
+  mutate(Clinic = as_factor(Clinic), #<<
+         Year = as_factor(Year)) %>%
+  mutate(Clinic = fct_recode(Clinic,        #<<
+                             Doctors="RateM",
+                             Midwifes="RateL")
+         )
+```
+
+
+```{r, echo=FALSE}
+head(tmp, 4) %>% 
+  knitr::kable(format = 'html')
+```
+
+
+
+```{r semmelweis-label, panelset=c("Code", "Semmelweis barplot"), fig.height=4}
+tmp %>%
+  ggplot() +
+  aes(x=Year,
+      y=Death_rate,
+      group=Clinic,
+      fill=Clinic,
+      linetype=Clinic) +
+  geom_col(position="dodge",   #<<
+           colour="black",
+           width=.2) +
+  theme(legend.position=c(5.5/6, 13/15)) +
+  ggtitle("Semmelweis data") +
+  ylab("Death rate (%)")
+```
+
+
+
+
+
+
+
+

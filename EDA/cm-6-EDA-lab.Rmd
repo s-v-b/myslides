@@ -1,0 +1,827 @@
+---
+title: "PCA LAB "
+output:
+  html_document
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+
+pacman::p_load(flipbookr)
+pacman::p_load(FactoMineR)
+pacman::p_load(FactoInvestigate)
+pacman::p_load(ggrepel)
+pacman::p_load(ggfortify)
+pacman::p_load(broom)
+pacman::p_load(tidyverse)
+opts <- options()  # save old options
+
+options(ggplot2.discrete.colour="viridis")
+options(ggplot2.discrete.fill="viridis")
+options(ggplot2.continuous.fill="viridis")
+options(ggplot2.continuous.colour="viridis")
+
+# xaringanExtra::use_scribble()
+```
+
+We will walk through Principal Component Analysis using historical datasets
+
+- `USArrests`: crime data across states (individuals) in USA
+
+- `iris`: morphological data of 150 flowers (individuals) from genus _iris_
+
+- `decathlon`: scores of athletes at the ten events making a decathlon
+
+- Life tables for a collection of Western European countries  and the USA
+
+Some datasets have non-numerical columns!
+
+Such columns are not used when computing the SVD that underpins PCA
+
+But non-numerical columns may be incorporated into PCA visualization
+
+
+
+### Iris flower dataset
+
+```{r, echo=TRUE, message=FALSE}
+iris <- datasets::iris
+```
+
+
+![](img/iris-fleur-histoire.jpeg)
+
+
+### `USArrests`
+
+
+```{r, echo=TRUE}
+data(USArrests)
+
+USArrests %>%
+  sample_n(10) %>%
+  knitr::kable()
+```
+
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+USArrests %>%
+  rownames_to_column() %>%
+  ggplot() +
+  aes(x = Assault, y = Murder) +
+  aes(colour = UrbanPop, label=rowname) +
+  geom_point(size = 5) +
+  geom_text_repel(box.padding = unit(0.75, "lines"))
+```
+
+### Decathlon
+
+
+
+```{r, echo=TRUE}
+data(decathlon)
+
+decathlon %>%
+  rownames_to_column() %>%
+  dplyr::select(-c(`400m`, `110m.hurdle`, `Shot.put`,`Javeline`, `1500m`, `Rank`, `Competition`, `Points`)) %>%
+  sample_n(10) %>%
+  knitr::kable()
+```
+
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+decathlon %>%
+  rownames_to_column() %>%
+  ggplot() +
+  aes(x = `100m`, y = Long.jump) +
+  aes(colour = Points, label=rowname) +
+  geom_point(size = 5) +
+  geom_smooth(se = FALSE) +
+  geom_smooth(method="lm", se=FALSE) +
+  geom_text_repel(box.padding = unit(0.75, "lines"))
+```
+
+### Using `prcomp` 
+
+> The calculation is done by a singular value decomposition of the (centered and possibly scaled) data matrix, not by using `eigen` on the covariance matrix.
+
+> This is generally the preferred method for numerical accuracy.
+
+> The `print` method for these objects prints the results in a nice format and the plot method produces a _scree plot_
+
+At first glance, performing Principal Component Analysis
+consists in applying SVD to the $n  \times p$ data matrix.
+
+
+### Raw PCA on `iris` dataset
+
+
+```{r pca_iris_1, echo=TRUE, eval=TRUE}
+pca_iris <- iris %>%
+  select(- Species) %>%
+  prcomp(x = .,          #<<
+         center = FALSE, #<<
+         scale. = FALSE) #<<
+
+class(pca_iris) ; is.list(pca_iris)
+
+names(pca_iris)
+```
+
+Result has 5 components:
+
+- `sdev`: singular values
+
+- `rotation`: orthogonal matrix $V$ in SVD
+
+- `center`: `FALSE` or centering row  vector
+
+- `scale`: FALSE of scaling row vector
+
+- `x`: matrix $U \times D$ from SVD
+
+
+### From data to PCA and back
+
+Let
+
+- $Z$ be the $n \times p$ matrix fed to `prcomp`
+- $X$ be the $n \times p$ matrix forming component `x` of the result
+- $V$ be the $p \times p$ matrix forming component `rotation` of the result
+- $\mu$ be the centering vector, $\mathbf{0}$ if `center=FALSE`
+- $\sigma$ be the scaling vector, $\mathbf{1}$ is `scale.=FALSE`
+
+then
+
+$$\text{diag}(\sigma) \times (Z - \mathbf{1} \times \mu^T) =  X \times V^T$$
+
+or
+
+$$Z  =  \text{diag}(\sigma)^{-1} \times  X \times V^T +  \mathbf{1} \times \mu^T$$
+
+
+### Modus operandi
+
+1. Read the data.
+
+2. Choose the active individuals and variables (cherrypick amongs numeric variables)
+
+3. Choose if the variables need to be standardised
+
+4. Choose the number of dimensions you want to keep (the _rank_)
+
+5. Analyse the results
+
+6. Automatically describe the dimensions of variability
+
+7. Back to raw data.
+
+
+### Impact of standardization and centering
+
+When performing PCA, once the _active variables_ have been chosen,
+we wonder whether we should centre and/or standardize the columns
+
+- PCA investigates the spread of the data not their location
+
+- To standardize or not to standardize?
+
+There is no universal answer
+
+Centering is performed by default when using `prcomp`
+
+### Centering/Scaling: iris dataset
+
+On iris dataset Centering and standardizing the columns slightly spreads out the eigenvalues
+
+
+```{r}
+iris <- datasets::iris
+iris_num <- dplyr::select(iris, -Species)
+
+list_pca_iris <-
+  map2(.x=rep(c(FALSE, TRUE), 2),
+       .y=rep(c(FALSE, TRUE), c(2,2)),
+       ~ prcomp(iris_num, center= .x, scale.=.y)
+)
+
+names(list_pca_iris) <- stringr::str_c("pca_iris",
+    c("", "c", "s", "c_s"),
+    sep="_")
+```
+
+
+```{r, echo=FALSE}
+config_param <- as.vector(outer(c("_", "center"),
+                          c("_", "scale"), FUN=paste)) %>%
+                rep( c(4,4,4,4))
+
+list_pca_iris %>%
+  purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
+  mutate(Parameter=config_param) -> df_pca_iris_c_s
+
+p_pca_c_s <- df_pca_iris_c_s %>%
+  ggplot() +
+  aes(x=PC, y=percent, fill=Parameter) +
+  geom_col(position="dodge")
+
+p_pca_c_s +
+  labs(title="Iris : share of inertia per PC",
+       subtitle = "Centering, scaling or not")
+```
+
+### More on the centering/scaling dilemma
+
+```{r , echo=TRUE}
+
+usarrests_num <- USArrests
+data(decathlon)
+
+list_pca_usarrests <-
+  map2(.x=rep(c(FALSE, TRUE), 2),
+       .y=rep(c(FALSE, TRUE), c(2,2)),
+       ~ prcomp(USArrests, center= .x, scale.=.y)
+)
+
+list_pca_decathlon <-
+  map2(.x=rep(c(FALSE, TRUE), 2),
+       .y=rep(c(FALSE, TRUE), c(2,2)),
+       ~ prcomp(decathlon[, 1:10], center= .x, scale.=.y)
+)
+
+names(list_pca_usarrests) <- c("pca_usarrests", "pca_usarrests_c", "pca_usarrests_s", "pca_usarrests_c_s")
+
+names(list_pca_decathlon) <- c("pca_decathlon", "pca_decathlon_c", "pca_decathlon_s", "pca_decathlon_c_s")
+
+```
+
+
+For `USArrests`, scaling is mandatory
+
+
+```{r, echo=TRUE}
+list_pca_usarrests %>%
+  purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
+  mutate(Parameter=config_param) -> df_pca_usarrests_c_s
+
+p_pca_c_s %+%
+  df_pca_usarrests_c_s  +
+  labs(title="USArrests : share of inertia per PC",
+       subtitle = "Centering, scaling or not")
+```
+
+
+For `decathlon`, centering is mandatory, scaling
+is recommended
+
+
+```{r, echo=TRUE}
+
+config_param_deca <- as.vector(outer(c("_", "center"),
+                          c("_", "scale"), FUN=paste)) %>%
+                rep(rep(10,4))
+
+list_pca_decathlon %>%
+  purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
+  mutate(Parameter=config_param_deca) -> df_pca_decathlon_c_s
+
+p_pca_c_s %+%
+  df_pca_decathlon_c_s  +
+  labs(title="Decathlon : share of inertia per PC",
+       subtitle = "Centering, scaling or not")
+```
+
+
+In order to investigate the columns means, there is no need to use PCA.
+Centering is almost always relevant
+
+The goal of PCA is to understand the fluctuations of the data and, when
+possible, to show that most  fluctuations can be found in a few privileged
+directions
+
+Scaling is often convenient: it does not alter correlations. Second,
+high variance columns artificially capture an excessive amount of inertia,
+without telling us much about the correlations between variables
+
+
+## Visualizing PCA
+
+
+- Visualize the correlation plot
+
+- Visualize the share of inertia per principal component (screeplot)
+
+- Visualize the individuals in the factorial planes generated by the leading principal axes
+
+- Visualize the (scaled) orginal variables in the basis defined by the factorial axes
+(correlation circle)
+
+- Visualize simultaneously individuals and variables (biplot)
+
+
+### Inspecting the correlation matrix
+
+
+```{r}
+iris %>%
+  dplyr::select(where(is.numeric)) %>%
+  corrr::correlate() -> tb #<<
+
+tb %>%
+  corrr::shave() %>%       #<<
+  corrr::fashion() %>%     #<<
+  knitr::kable(format="markdown")
+```
+
+
+
+[Package `corrr`](https://cran.r-project.org/web/packages/corrr/vignettes/using-corrr.html)
+
+- `correlate` explores pairwise correlations just as `cor`
+
+- It outputs a dataframe (a `tibble`)
+
+- The `corrr` API is designed with data pipelines in mind
+
+- `corrr` offers functions for manipulating correlation matrices
+
+
+
+```{r}
+tb %>%
+  corrr::rearrange(absolute = FALSE) %>%
+  corrr::shave(upper = FALSE) %>%
+  corrr::rplot()  #<<
+```
+
+
+### Correlation plot for `decathlon`
+
+
+```{r DecathlonR_Cor, echo=FALSE, message=FALSE, warning=FALSE}
+decathlon  %>%
+  rownames_to_column("Name") %>%     #<< tidyverse does not like rownames
+  mutate(across(-c(Name, Rank, Points, Competition),
+                ~ (.x -mean(.x))/sd(.x))) -> decathlonR2
+
+decathlonR2 %>%
+  dplyr::select(-c(Name, Rank, Points, Competition)) %>%
+  corrr::correlate(quiet = TRUE, method="pearson") %>%
+  mutate(across(where(is_numeric), abs)) %>%
+  corrr::rearrange() %>%
+  corrr::shave() -> df_corr_decathlon
+
+
+df_corr_decathlon %>%
+  corrr::rplot() +
+  coord_fixed() +
+  ggtitle("Absolute correlation plot for Decathlon data") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+```
+
+
+
+If our goal is to partitition the set of columns into tightly connected groups, this
+correlation plot already tells us a story:
+
+- short running races  `100m`, ..., `400m` along `long jump` form a cluster,
+
+- `shot.put`, `discus`, and to a lesser extent `high jump`  form another cluster
+
+- `pole.vault`, `1500m` and `javeline` look pretty isolated
+
+
+
+### PCA Visualization : first goals
+
+
+- Look at the data in PC coordinates (Factorial plane)
+
+- Look at the rotation matrix (Factorial axes)
+
+- Look at the variance explained by each PC (Screeplot)
+
+
+### Inspect eigenvalues
+
+
+```{r, results='asis'}
+iris_pca <- list_pca_iris[[4]]
+
+iris_pca %>%
+  broom::tidy(matrix="pcs") %>%
+  knitr::kable(format="markdown", digits=2)
+
+iris_plus_pca <- broom::augment(iris_pca, iris)
+```
+
+
+### Scatterplots
+
+
+
+
+
+```{r, out.width="50%"}
+share_variance <- broom::tidy(iris_pca, "pcs")[["percent"]]
+
+iris_plus_pca %>%
+  ggplot() +
+  aes(x=.fittedPC1, y=.fittedPC2) +
+  aes(colour=Species) +
+  geom_point() +
+  ggtitle("Iris data projected on first two principal axes") +
+  xlab(paste("PC1 (", share_variance[1], "%)", sep="")) +
+  ylab(paste("PC2 (", share_variance[2], "%)", sep="")) -> p
+
+iris_plus_pca %>%
+  ggplot() +
+  aes(y=Sepal.Width, x=Petal.Length) +
+  aes(colour=Species) +
+  geom_point() +
+  ggtitle("Iris data projected on Petal length and Sepal width") -> q
+```
+
+
+```{r, out.width="50%", fig.show='hold', echo='FALSE', fig.height=3.5}
+p ; q
+```
+
+
+### Biplot : overplotting the original variables in the factorial plane
+
+
+
+
+
+
+```{r  autopca-iris-plot, eval=TRUE, message=FALSE, warning=FALSE}
+total_inertia <- sum(share_variance)
+
+p +
+  aes(label=.rownames) +
+  geom_text_repel(verbose = FALSE) +
+  coord_fixed()
+
+```
+]
+
+See [`plot_pca`](https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html)
+
+This is a scatterplot on the plane spanned
+by the two leading principal components
+
+
+
+
+
+```{r autopca-iris-biplot, eval=TRUE}
+iris %>%
+  select(where(is.numeric)) %>%
+  prcomp(.scale=TRUE) %>%
+  autoplot(                 #<<
+   data = iris,
+   colour = 'Species',
+   label = TRUE,            #<<
+   loadings = TRUE,         #<<
+   loadings.colour = 'blue',
+   loadings.label = TRUE
+  ) +
+  ggtitle("Iris dataset biplot")
+```
+
+Scatterplot of the factorial plane is overplotted
+with _loadings_ corresponding to native variables
+
+
+### Official plots for PCA on iris dataset
+
+
+```{r, out.width="50%", fig.show='hold'}
+plot(list_pca_iris[[4]])
+
+biplot(list_pca_iris[[4]])
+```
+
+
+
+### Plotting PCA on decathlon data
+
+
+
+
+```{r decathlon_pcs_plots, warning=FALSE}
+decathlon_pca <- list_pca_decathlon[[4]]
+inertias <- decathlon_pca$sdev^2
+share_variance <- round((100*(inertias)/
+                         sum(inertias)), 2)
+
+p %+% broom::augment(decathlon_pca, decathlon) +
+  aes(colour=Points) +
+  ggtitle("Decathlon data") +
+  xlab(paste("PC1 (", share_variance[1], "%)", sep="")) +
+  ylab(paste("PC2 (", share_variance[2], "%)", sep="")) +
+  aes(label=.rownames) +
+  geom_text_repel(verbose = FALSE) +
+  coord_fixed()
+```
+
+### Decathlon correlation circle
+
+
+
+```{r decathlon_cor}
+
+decathlon_pca$rotation %>%
+  as_tibble(rownames="Name") %>%
+  ggplot() +
+  aes(x=PC1, y=PC2, label=Name) +
+  geom_segment(xend=0, yend=0, arrow = grid::arrow(ends = "first")) +
+  geom_text_repel() +
+  coord_fixed() +
+  xlim(-.7, .7) +
+  ylim(-.7, .7) +
+  stat_function(fun = ~  sqrt(.7^2 - .^2), alpha=.5, color="grey") +
+  stat_function(fun = ~ - sqrt(.7^2 - .^2), alpha=.5, color="grey") +
+  geom_segment(x = 0, y = -1, xend = 0, yend = 1, linetype = "dashed", color = "grey") +
+  geom_segment(x = -1, y = 0, xend = 1, yend = 0, linetype = "dashed", color = "grey") +
+  ggtitle("Decathlon correlation circle")
+
+```
+
+
+
+### Variations on screeplot
+
+
+```{r, out.width="50%", fig.show='hold'}
+zetitle <-  "PCA on Iris: Projected variance on the first PCs"
+
+p <-list_pca_iris[[4]] %>%
+  broom::tidy() %>%
+  ggplot() +
+  aes(x= as_factor(PC), y= value) +
+  labs(xlab="PC", ylab="Coord") +
+  ggtitle(zetitle)
+```
+
+We center and standardize columns, and then perform a change of basis
+
+
+```{r, out.width="50%", fig.show='hold'}
+p + geom_boxplot()  ; p + geom_violin()
+```
+
+
+### Two packages
+
+Several packages handle the field of factorial analysis
+
+#### `ADE4`
+
++ 2002-...
++ Duality diagrams: `dudi.pca`
++ Ecology oriented
++ [ADE4 Homepage](http://pbil.univ-lyon1.fr)
+
+#### `FactoMineR`
+
++ 2003-...
++ `Factoshiny`
++ `FactoExtra`
++ `FactoInvestigate`
++ A nice book
++ A MOOC
+
+
+
+### FactoMineR : scatterplot and correlation circle
+
+```{r facto-plot, out.width="50%", fig.show='hold'}
+iris %>%
+  dplyr::select(where(is.numeric)) %>%
+  FactoMineR::PCA() %>%
+  plot(graph.type="ggplot",
+       title="Iris data with FactoMineR")
+```
+
+
+
+### Revisiting Decathlon data
+
+
+Ad hoc transformation of running scores: average speed matters
+
+```{r, out.width="50%", fig.show='hold'}
+decathlonTime <- mutate(decathlon,
+                        `100m` = 100/`100m`,
+                        `400m` = 400/`400m`,
+                        `110m.hurdle` = 110/`110m.hurdle`,
+                        `1500m` = 1500/`1500m`)
+
+PCAdecathlontime <- PCA(decathlonTime[,1:10],  graph = FALSE)
+
+factoextra::fviz_pca_ind(PCAdecathlontime, repel = TRUE)
+factoextra::fviz_pca_var(PCAdecathlontime, repel = TRUE)
+```
+
+When inspecting `decathlon` some columns are positively correlated with column `Points`,
+others are not. The negatively correlated columns contain running races times. In order
+to handle all scores in an homogenous  way, running races scores are converted
+into average speeds. The larger, the better.
+
+The correlation circle becomes more transparent: columns can be clustered into three subsets:
+- running races and long jump, p
+- puts, javeline and high jump
+- 1500m and pole vault which are poorly correlated with first two principal components
+
+
+
+
+We can do it with `tidyverse`
+
+```{r, out.width="50%", fig.show='hold', fig.height=4}
+decathlonTime[, 1:10] %>%
+  prcomp(scale.=TRUE) -> pc_decathlonTime
+
+share_variance <-  round(broom::tidy(pc_decathlonTime, matrix="pcs")[["percent"]], 2)
+
+pc_decathlonTime  %>%
+  broom::augment(data=decathlonTime) %>%
+  ggplot() +
+  aes(x=.fittedPC1, y=.fittedPC2) +
+  aes(color=Points, label=.rownames) +
+  geom_point() +
+  geom_text_repel() +
+  xlab(paste("Dim1 (", share_variance[1]  ,"%)", sep="")) +
+  ylab(paste("Dim2 (", share_variance[2]  ,"%)", sep=""))
+
+radius <-  sqrt(broom::tidy(pc_decathlonTime, matrix="pcs")[["cumulative"]][2])
+
+pc_decathlonTime[["rotation"]] %>%
+  as_tibble(rownames="Name") %>%
+  ggplot() +
+  aes(x=PC1, y=PC2, label=Name) +
+  geom_segment(xend=0, yend=0, arrow = grid::arrow(ends = "first") ) +
+  geom_text_repel() +
+  coord_fixed() +
+  xlim(-radius, radius) +
+  ylim(-radius, radius) +
+  stat_function(fun = ~  sqrt(radius^2 - .^2), alpha=.5, color="grey") +
+  stat_function(fun = ~ - sqrt(radius^2 - .^2), alpha=.5, color="grey") +
+  geom_segment(x = 0, y = -1, xend = 0, yend = 1, linetype = "dashed", color = "grey") +
+  geom_segment(x = -1, y = 0, xend = 1, yend = 0, linetype = "dashed", color = "grey") +
+  ggtitle("Decathlon correlation circle (bis)") +
+  xlab(paste("Dim1 (", share_variance[1]  ,"%)", sep="")) +
+  ylab(paste("Dim2 (", share_variance[2]  ,"%)", sep=""))
+```
+
+
+### PCA and the tidy approach
+
+
+The output of `prcomp` (or of any contender) is complex object represented by a
+list with five named elements: `x`, `sdev`, `rotation`, `center` `scale`
+
+In `R`, the list is assigned a dedicated `S3` class: `prcomp`
+
+The `prcomp` class is not `ggplot2` friendly
+
+
+In the `tidyverse` framework, visualization abides to the _grammar of graphics_ framework:
+plots are built on dataframes (usually a single dataframe)
+
+The different plots that serve to understand the output of PCA (screeplot, correlation circle, biplot, ...)
+have to be built on  dataframes  that themselves have to be built from the output of PCA and
+possibly also from the original dataframe
+
+
+
+Package `broom` (`r fontawesome::fa("broom")`) offers off-the-shelf components for building PCA graphical pipelines (and many other things)
+
+
+
+> `broom` is an attempt to bridge the gap from untidy outputs of predictions and estimations to the tidy data we want to work with. It centers around three `S3` methods, each of which take common objects produced by `r fontawesome::fa("r-project")` statistical functions (`lm`, `t.test`, `nls`, `prcomp`, etc) and convert them into a `tibble`
+
+
+### Broom:  three (generic) functions
+
+
+`tidy`:
+constructs a tibble that summarizes the model’s statistical findings. This includes coefficients and p-values for each term in a regression, per-cluster information in clustering applications, or per-test information for multtest functions
+
+`augment`:
+add columns to the original data that was modeled. This includes predictions, residuals, and cluster assignments
+
+`glance`:
+construct a concise one-row summary of the model. There is no such method
+for class `prcomp`
+
+
+
+### `brrom::tidy`  for class `prcomp`
+
+
+```{r}
+pc <- prcomp(USArrests, scale = TRUE)
+
+# information about samples  (U x D matrix)
+# Default behaviour
+
+broom::tidy(pc, matrix="samples") %>%
+  head(5) %>%
+  knitr::kable()
+
+```
+
+
+The output of `tidy.prcomp` is always a `tibble`
+
+Depending on argument `matrix`, the output gathers
+information on different components of the SVD factorization
+
+`tidy(pc, "samples")` provide a long format tibble version of $U \times D$
+
+The tibble has three columns
+
+- `row`: rownames in the  dataframe that served as input to `prcomp`
+- `PC`: index of principal components
+- `value`: score of individual indexed by `row` on principal components `PC`, $(U \times D)[\text{row}, \text{PC}]$
+
+The `x` component of `pc` is a _wide format_ version of the output of `tidy(pc, "samples")`
+
+[Documentation](https://www.rdocumentation.org/packages/broom/versions/0.7.4/topics/tidy.prcomp)
+
+```{r}
+as_tibble(pc$x) %>%
+  add_column(row=rownames(pc$x)) %>%
+  pivot_longer(starts_with("PC"),
+               names_to="PC",
+               names_prefix="PC") %>%
+  head(5)
+```
+
+```{r}
+pc <- prcomp(USArrests, scale = TRUE)
+
+# information about rotation (V matrix)
+broom::tidy(pc, matrix="rotation") %>%
+  head(5)
+
+```
+
+
+With `matrix="rotation"`, the result is again a long format
+tibble version of the orthogonal matrix $V$ from the SVD
+factorization
+
+This tibble is convenient when plotting the correlation circles
+associated with different sets of components
+
+
+
+```{r tidyscreeplot, fig.height=4, fig.show='hold'}
+# information about singular values
+broom::tidy(pc, "pcs") %>%
+  knitr::kable()
+
+broom::tidy(pc, matrix="pcs") %>%
+  ggplot() +
+  aes(x=as.integer(PC), y=percent) +
+  geom_col() +
+  xlab("PC") +ylab("Percentage of inertia") +
+  ggtitle("USArrests: screeplot")
+```
+
+
+With `matrix="pcs"` or `matrix="eigen"`,
+we obtain a tibble that is convenient for generating a `screeplot`
+
+It contains the information returned by `summary(pc)`
+
+Indeed, column `percent` is obtained by squaring column
+`std.dev` and normalizing the column
+
+or
+
+```{r, eval=FALSE}
+as_tibble(pc$sdev) %>%
+  rename(std.dev=value) %>%
+  rownames_to_column("PC") %>%
+  mutate(PC=as.integer(PC),
+         percent=(std.dev^2/sum(std.dev^2)),
+         cumulative=cumsum(percent))
+
+# or
+t(summary(pc)$importance) %>%
+  data.frame() %>%
+  rownames_to_column()
+```
+
+
+
+
