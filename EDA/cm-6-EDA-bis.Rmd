@@ -94,20 +94,52 @@ head(img_df_long)
 ```
 ---
 
+### Make it black and white
+
+.fl.w-50.pa2.f6[
+
+```{r }
+chan <- 2 
+
+img_df_long_channel <- img_df_long %>% 
+  filter(cc==chan) %>% 
+  select(-cc)
+
+p_bw <- img_df_long_channel %>% 
+  ggplot() +
+  aes(x = x, y = y, fill = value) %>% 
+  geom_raster() + 
+  scale_y_reverse() + 
+  scale_fill_gradient(low = "black", high = "white") +
+  guides(fill = "none") +
+  coord_fixed() +
+  theme_minimal()
+```
+]
+
+
+.fl.w-50.pa2.f6[
+
+```{r, echo=FALSE}
+p_bw
+```
+
+]
+---
+
 ### Make it wide (and forget about two channels)
 
 .fl.w-50.pa2.f6[
 
 ```{r make_it_long, eval=FALSE}
-img_df <- img_df_long %>% 
-  filter(cc==1) %>% 
-  select(-cc) %>% 
+img_df <- img_df_long_channel %>% 
   tidyr::pivot_wider(names_from = y, 
                      values_from = value)
 
 img_df %>%  
   head()
 ```
+
 ]
 
 .fl.w-50.pa2.f6[
@@ -189,7 +221,7 @@ reverse_pca <- function(n_comp = 20, pca_object = img_pca){
 ### Building a sequence of approximations
 
 ```{r}
-n_pcs <- c(2, 5, 10,  seq(20, 100, 20))
+n_pcs <- c(2, 5, 10, seq(20, 100, 20), seq(150, 300, 50))
 names(n_pcs) <- n_pcs
 
 ## map reverse_pca() 
@@ -198,6 +230,27 @@ recovered_imgs <- map_dfr(n_pcs,
                           .id = "pcs") %>%
   mutate(pcs = as.integer(pcs))
 ```
+
+---
+
+### Quality of reconstruction with respect to rank 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+proto_screeplot <- img_pca %>% 
+  broom::tidy(matrix="d") 
+
+proto_screeplot %>% 
+  ggplot() +
+  aes(x=PC, y=1-cumulative) +
+  scale_y_log10() +
+  geom_col(width=.3) +
+  ylab("Relative reconstruction error") +
+  xlab("Rank of truncated SVD") +
+  xlim(c(1, 100))+
+  theme_minimal()
+```
+
+
 
 ---
 
@@ -228,6 +281,8 @@ q_out <- q +
 q_out %+% filter(recovered_imgs, pcs==rk)
 ```
 
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
+
 ---
 
 ### Reconstructing from `r rk=n_pcs[2]; rk` components
@@ -236,6 +291,7 @@ q_out %+% filter(recovered_imgs, pcs==rk)
 
 ```
 
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
 
 ---
 
@@ -245,6 +301,7 @@ q_out %+% filter(recovered_imgs, pcs==rk)
 
 ```
 
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
 ---
 
 ### Reconstructing from  `r rk=n_pcs[4]; rk` components
@@ -253,6 +310,7 @@ q_out %+% filter(recovered_imgs, pcs==rk)
 
 ```
 
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
 ---
 
 ### Reconstructing from  `r rk=n_pcs[5]; rk` components
@@ -261,6 +319,7 @@ q_out %+% filter(recovered_imgs, pcs==rk)
 
 ```
 
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
 ---
 
 ### Reconstructing from  `r rk=n_pcs[6]; rk` components
@@ -269,6 +328,7 @@ q_out %+% filter(recovered_imgs, pcs==rk)
 
 ```
 
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
 ---
 
 ### Reconstructing from  `r rk=n_pcs[7]; rk` components
@@ -277,6 +337,7 @@ q_out %+% filter(recovered_imgs, pcs==rk)
 
 ```
 
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
 ---
 
 ### Reconstructing from  `r rk=n_pcs[8]; rk` components
@@ -284,3 +345,41 @@ q_out %+% filter(recovered_imgs, pcs==rk)
 ```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
 
 ```
+
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
+---
+
+### Reconstructing from  `r rk=n_pcs[9]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
+---
+
+### Reconstructing from  `r rk=n_pcs[10]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
+---
+
+### Reconstructing from  `r rk=n_pcs[11]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
+---
+
+### Reconstructing from  `r rk=n_pcs[12]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
