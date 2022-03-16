@@ -136,7 +136,7 @@ anscombe_long  %>%
 For each value of `group` we perform a linear regression of `Y`  versus `X`
 
 ```{r}
-list_lm <- purrr::map(anscombe_long$group ,
+list_lm <- purrr::map(unique(anscombe_long$group) ,
                       .f = function(g) 
                         lm(Y ~ X, anscombe_long,
                            subset = anscombe_long$group==g))

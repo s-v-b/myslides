@@ -27,7 +27,7 @@ xaringanExtra::use_tile_view()
 xaringanExtra::use_tachyons(minified = FALSE)
 
 xaringanExtra::use_logo(
-  image_url = "./img/Universite_Paris_logo_horizontal.jpg",
+  image_url = "./img/UniversiteParisCite_logo_horizontal_couleur_RVB.jpeg",
   position = xaringanExtra::css_position(top = "1em", right = "1em"),
   width = "110px",
   link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",

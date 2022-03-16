@@ -2,7 +2,7 @@
 title: "EDA VI : PCA"
 subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
-institute: "Université de Paris"
+institute: "Université Paris Cité"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
   curriculum: "Master I MIDS & MFA"
@@ -423,7 +423,7 @@ This is the content of the _Eckart-Young Theorem_
 template: inter-slide
 name: eckart-young
 
-## Eckart-Young Theorem
+## Eckart-Young Theorem(s)
 
 ---
 
@@ -504,6 +504,7 @@ The left and right singular vectors in the full SVD of an $n\times p$ matrix for
 ]
 
 ---
+exclude: true
 
 ### Proof
 
@@ -517,6 +518,7 @@ $$\mathbf{Z} =  \sum_{i=1}^p \sigma_i u_i v_i^T\qquad \text{where } \sigma_1\geq
 
 
 ---
+exclude: true
 
 ### Proof (continued)
 
@@ -537,9 +539,7 @@ for $i\leq k$ and $\mu_{i,i}=0$  for $k+1 \leq i \leq p$
 ---
 
 
-### Proof (continued)
-
-**Best approximation in operator norm**
+### Proof (Best approximation in operator norm)
 
 The SVD of $\mathbf{Z}-\mathbf{Z}_k$ is
 
@@ -1159,7 +1159,7 @@ tb %>%
 
 
 .fl.w-60[
-```{r DecathlonR_Cor, echo=FALSE}
+```{r DecathlonR_Cor, echo=FALSE, message=FALSE, warning=FALSE}
 decathlon  %>%
   rownames_to_column("Name") %>%     #<< tidyverse does not like rownames
   mutate(across(-c(Name, Rank, Points, Competition),

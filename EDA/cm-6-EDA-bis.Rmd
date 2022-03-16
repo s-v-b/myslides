@@ -1,0 +1,260 @@
+---
+title: "EDA VI : PCA-b"
+subtitle: "Statistiques Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université Paris Cité"
+date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css", "custom-callout.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: pygments
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: layout-general
+layout: true
+class: left, middle
+
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+```
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(fig.width = 6,
+                      message = FALSE,
+                      warning = FALSE,
+                      comment = "",
+                      cache = F)
+
+pacman::p_load(flipbookr)
+pacman::p_load(FactoMineR)
+pacman::p_load(FactoInvestigate)
+pacman::p_load(ggrepel)
+pacman::p_load(ggfortify)
+pacman::p_load(broom)
+pacman::p_load(glue)
+opts <- options()  # save old options
+
+options(ggplot2.discrete.colour="viridis")
+options(ggplot2.discrete.fill="viridis")
+options(ggplot2.continuous.fill="viridis")
+options(ggplot2.continuous.colour="viridis")
+
+# xaringanExtra::use_scribble()
+```
+
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{content}}
+
+---
+
+
+```{r child='title_slide.Rmd'}
+
+```
+
+
+---
+
+
+```{r}
+pacman::p_load(imager)
+pacman::p_load(here)
+pacman::p_load(dplyr)
+pacman::p_load(purrr)
+pacman::p_load(broom)
+pacman::p_load(ggplot2)
+```
+
+
+---
+
+![](img/iris-fleur-histoire.jpeg)
+
+
+---
+
+
+```{r}
+img <- load.image(here("img", "physed-fat-cat-superJumbo.jpg"))
+
+img_iris <- load.image(here("img", "iris-fleur-histoire.jpeg"))
+```
+
+---
+
+```{r}
+str(img)
+
+dim(img_iris)
+```
+
+---
+
+![](img/physed-fat-cat-superJumbo.jpg)
+
+
+---
+
+```{r}
+img_df_long <- as.data.frame(img_iris)
+```
+
+```{r}
+head(img_df_long)
+
+unique(img_df_long$cc)
+```
+
+```{r}
+img_df <- img_df_long %>% 
+  filter(cc==1) %>% 
+  select(-cc) %>% 
+  tidyr::pivot_wider(names_from = y, 
+                     values_from = value)
+
+img_df %>%  
+  head()
+```
+
+
+```{r}
+img_pca <- img_df %>%
+  dplyr::select(-x) %>%
+  prcomp(scale = TRUE, center = TRUE)
+```
+
+
+```{r}
+img_pca %>% 
+  broom::tidy(matrix="d") %>% 
+  head(50)
+```
+
+```{r}
+reverse_pca <- function(n_comp = 20, pca_object = img_pca){
+  ## The pca_object is an object created by base R's prcomp() function.
+  
+  ## Multiply the matrix of rotated data by the transpose of the matrix 
+  ## of eigenvalues (i.e. the component loadings) to get back to a 
+  ## matrix of original data values
+
+  recon <- pca_object$x[, 1:n_comp] %*% t(pca_object$rotation[, 1:n_comp])
+  
+  ## Reverse any scaling and centering that was done by prcomp()
+  
+  if(all(pca_object$scale != FALSE)){
+    ## Rescale by the reciprocal of the scaling factor, i.e. back to
+    ## original range.
+    recon <- scale(recon, center = FALSE, scale = 1/pca_object$scale)
+  }
+  if(all(pca_object$center != FALSE)){
+    ## Remove any mean centering by adding the subtracted mean back in
+    recon <- scale(recon, scale = FALSE, center = -1 * pca_object$center)
+  }
+  
+  ## Make it a data frame that we can easily pivot to long format
+  ## (because that's the format that the excellent imager library wants
+  ## when drawing image plots with ggplot)
+  recon_df <- data.frame(cbind(1:nrow(recon), recon))
+  colnames(recon_df) <- c("x", 1:(ncol(recon_df)-1))
+
+  ## Return the data to long form 
+  recon_df_long <- recon_df %>%
+    tidyr::pivot_longer(cols = -x, 
+                        names_to = "y", 
+                        values_to = "value") %>%
+    mutate(y = as.numeric(y)) %>%
+    arrange(y) %>%
+    as.data.frame()
+  
+  recon_df_long
+}
+```
+
+```{r}
+recovered_img <- reverse_pca(n_comp = 50, pca_object = img_pca)
+```
+
+```{r}
+n_pcs <- c(2:5, 10, 20, 50, 100)
+names(n_pcs) <- paste("First", n_pcs, "Components", sep = "_")
+
+## map reverse_pca() 
+recovered_imgs <- map_dfr(n_pcs, 
+                          reverse_pca, 
+                          .id = "pcs") %>%
+  mutate(pcs = stringr::str_replace_all(pcs, "_", " "), 
+         pcs = factor(pcs, levels = unique(pcs), ordered = TRUE))
+```
+
+---
+
+```{r}
+p <- recovered_imgs %>% 
+  ggplot() +
+  aes(x = x, y = y, fill = value)
+
+p_out <- p + 
+  geom_raster() + 
+  scale_y_reverse() + 
+  scale_fill_gradient(low = "black", high = "white") +
+  facet_wrap(~ pcs, ncol = 2) + 
+  guides(fill = FALSE) + 
+  labs(title = glue("Recovering the content of an {nrow(img_df)}x{ncol(img_df)} pixel image\nfrom a Principal Components Analysis of its pixels")) + 
+  theme(strip.text = element_text(face = "bold", size = rel(1.2)),
+        plot.title = element_text(size = rel(1.5)))
+
+p_out
+```
+
+```{r}
+pacman::p_load(plotly)
+```
+
+```{r}
+q <- recovered_imgs %>% 
+#  filter(pcs=="First 100 Components") %>% 
+  ggplot() +
+  aes(x = x, y = y, fill = value, frame=pcs)
+
+
+q_out <- q + 
+  geom_raster() + 
+  scale_y_reverse() + 
+  scale_fill_gradient(low = "black", high = "white") +
+#  facet_wrap(~ pcs, ncol = 2) + 
+  guides(fill = "none") +
+  labs(title = glue("Recovering the content of an {nrow(img_df)}x{ncol(img_df)} pixel image\nfrom a Principal Components Analysis of its pixels")) + 
+  theme(strip.text = element_text(face = "bold", size = rel(1.2)),
+        plot.title = element_text(size = rel(1.5)))
+
+(q_out + theme_minimal()) %>% ggplotly()
+```
+
+
+```{r}
+
+```
+
