@@ -1,10 +1,11 @@
 ---
-title: "EDA VI : PCA-b"
+title: "EDA VI : PCA, images and dimension reduction"
 subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université Paris Cité"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
+  title: "PCA illustrated"
   curriculum: "Master I MIDS & MFA"
   coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
@@ -43,22 +44,6 @@ knitr::opts_chunk$set(fig.width = 6,
                       warning = FALSE,
                       comment = "",
                       cache = F)
-
-pacman::p_load(flipbookr)
-pacman::p_load(FactoMineR)
-pacman::p_load(FactoInvestigate)
-pacman::p_load(ggrepel)
-pacman::p_load(ggfortify)
-pacman::p_load(broom)
-pacman::p_load(glue)
-opts <- options()  # save old options
-
-options(ggplot2.discrete.colour="viridis")
-options(ggplot2.discrete.fill="viridis")
-options(ggplot2.continuous.fill="viridis")
-options(ggplot2.continuous.colour="viridis")
-
-# xaringanExtra::use_scribble()
 ```
 
 ---
@@ -77,57 +62,43 @@ class: left, middle, inverse
 
 ---
 
+### Warm up
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
+pacman::p_load(tidyverse)
+pacman::p_load(glue)
+pacman::p_load(tidyr)
 pacman::p_load(imager)
 pacman::p_load(here)
-pacman::p_load(dplyr)
-pacman::p_load(purrr)
-pacman::p_load(broom)
-pacman::p_load(ggplot2)
-```
+pacman::p_load(plotly)
 
+img <- load.image(here("img", "iris-fleur-histoire.jpeg"))
+
+str(img)
+
+dim(img)
+```
 
 ---
 
 ![](img/iris-fleur-histoire.jpeg)
 
-
 ---
 
+### Make it a dataframe 
 
 ```{r}
-img <- load.image(here("img", "physed-fat-cat-superJumbo.jpg"))
+img_df_long <- as.data.frame(img)
 
-img_iris <- load.image(here("img", "iris-fleur-histoire.jpeg"))
-```
-
----
-
-```{r}
-str(img)
-
-dim(img_iris)
-```
-
----
-
-![](img/physed-fat-cat-superJumbo.jpg)
-
-
----
-
-```{r}
-img_df_long <- as.data.frame(img_iris)
-```
-
-```{r}
 head(img_df_long)
-
-unique(img_df_long$cc)
 ```
+---
 
-```{r}
+### Make it wide (and forget about two channels)
+
+.fl.w-50.pa2.f6[
+
+```{r make_it_long, eval=FALSE}
 img_df <- img_df_long %>% 
   filter(cc==1) %>% 
   select(-cc) %>% 
@@ -137,50 +108,68 @@ img_df <- img_df_long %>%
 img_df %>%  
   head()
 ```
+]
+
+.fl.w-50.pa2.f6[
+
+```{r make_it_long-out, ref.label="make_it_long", echo=FALSE}
+
+```
 
 
-```{r}
+]
+
+---
+
+### Perform PCA
+
+
+.fl.w-50.pa2.f6[
+
+```{r perform_pca, eval=FALSE}
 img_pca <- img_df %>%
   dplyr::select(-x) %>%
   prcomp(scale = TRUE, center = TRUE)
-```
 
-
-```{r}
 img_pca %>% 
   broom::tidy(matrix="d") %>% 
-  head(50)
+  head()
 ```
+]
+
+.fl.w-50.pa2.f6[
+
+```{r perform_pca-out, ref.label="perform_pca", echo=FALSE}
+
+```
+
+
+]
+
+---
+
+### Make it an image again
 
 ```{r}
 reverse_pca <- function(n_comp = 20, pca_object = img_pca){
-  ## The pca_object is an object created by base R's prcomp() function.
-  
-  ## Multiply the matrix of rotated data by the transpose of the matrix 
-  ## of eigenvalues (i.e. the component loadings) to get back to a 
-  ## matrix of original data values
-
+  # [From Kieran Healy]
   recon <- pca_object$x[, 1:n_comp] %*% t(pca_object$rotation[, 1:n_comp])
   
-  ## Reverse any scaling and centering that was done by prcomp()
-  
   if(all(pca_object$scale != FALSE)){
-    ## Rescale by the reciprocal of the scaling factor, i.e. back to
-    ## original range.
-    recon <- scale(recon, center = FALSE, scale = 1/pca_object$scale)
-  }
-  if(all(pca_object$center != FALSE)){
-    ## Remove any mean centering by adding the subtracted mean back in
-    recon <- scale(recon, scale = FALSE, center = -1 * pca_object$center)
+    recon <- scale(recon, 
+                   center = FALSE, 
+                   scale = 1/pca_object$scale)
   }
   
-  ## Make it a data frame that we can easily pivot to long format
-  ## (because that's the format that the excellent imager library wants
-  ## when drawing image plots with ggplot)
+  if(all(pca_object$center != FALSE)){
+    recon <- scale(recon, 
+                   scale = FALSE, 
+                   center = -1 * pca_object$center)
+  }
+  
   recon_df <- data.frame(cbind(1:nrow(recon), recon))
   colnames(recon_df) <- c("x", 1:(ncol(recon_df)-1))
 
-  ## Return the data to long form 
   recon_df_long <- recon_df %>%
     tidyr::pivot_longer(cols = -x, 
                         names_to = "y", 
@@ -193,68 +182,105 @@ reverse_pca <- function(n_comp = 20, pca_object = img_pca){
 }
 ```
 
-```{r}
-recovered_img <- reverse_pca(n_comp = 50, pca_object = img_pca)
-```
+[From Kieran Healy](https://kieranhealy.org/blog/archives/2019/10/27/reconstructing-images-using-pca/)
+
+---
+
+### Building a sequence of approximations
 
 ```{r}
-n_pcs <- c(2:5, 10, 20, 50, 100)
-names(n_pcs) <- paste("First", n_pcs, "Components", sep = "_")
+n_pcs <- c(2, 5, 10,  seq(20, 100, 20))
+names(n_pcs) <- n_pcs
 
 ## map reverse_pca() 
 recovered_imgs <- map_dfr(n_pcs, 
                           reverse_pca, 
                           .id = "pcs") %>%
-  mutate(pcs = stringr::str_replace_all(pcs, "_", " "), 
-         pcs = factor(pcs, levels = unique(pcs), ordered = TRUE))
+  mutate(pcs = as.integer(pcs))
 ```
 
 ---
 
-```{r}
-p <- recovered_imgs %>% 
-  ggplot() +
-  aes(x = x, y = y, fill = value)
-
-p_out <- p + 
-  geom_raster() + 
-  scale_y_reverse() + 
-  scale_fill_gradient(low = "black", high = "white") +
-  facet_wrap(~ pcs, ncol = 2) + 
-  guides(fill = FALSE) + 
-  labs(title = glue("Recovering the content of an {nrow(img_df)}x{ncol(img_df)} pixel image\nfrom a Principal Components Analysis of its pixels")) + 
-  theme(strip.text = element_text(face = "bold", size = rel(1.2)),
-        plot.title = element_text(size = rel(1.5)))
-
-p_out
-```
-
-```{r}
-pacman::p_load(plotly)
-```
+### Paving the way for reconstructions
 
 ```{r}
 q <- recovered_imgs %>% 
-#  filter(pcs=="First 100 Components") %>% 
+  filter(pcs==2) %>% 
   ggplot() +
   aes(x = x, y = y, fill = value, frame=pcs)
-
 
 q_out <- q + 
   geom_raster() + 
   scale_y_reverse() + 
   scale_fill_gradient(low = "black", high = "white") +
-#  facet_wrap(~ pcs, ncol = 2) + 
   guides(fill = "none") +
-  labs(title = glue("Recovering the content of an {nrow(img_df)}x{ncol(img_df)} pixel image\nfrom a Principal Components Analysis of its pixels")) + 
-  theme(strip.text = element_text(face = "bold", size = rel(1.2)),
-        plot.title = element_text(size = rel(1.5)))
-
-(q_out + theme_minimal()) %>% ggplotly()
+  coord_fixed() +
+  labs(title = glue("Recovering the content of an {nrow(img_df)}x{ncol(img_df)} pixel image\nfrom a PCA of its pixels")) + 
+  theme_minimal()
 ```
 
 
-```{r}
+---
+
+### Reconstructing from `r rk=n_pcs[1]; as.integer(rk)` components
+
+```{r approx_reconstruction, echo=FALSE, out.width="90%"}
+q_out %+% filter(recovered_imgs, pcs==rk)
+```
+
+---
+
+### Reconstructing from `r rk=n_pcs[2]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
 
 ```
 
+
+---
+
+### Reconstructing from  `r rk=n_pcs[3]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+---
+
+### Reconstructing from  `r rk=n_pcs[4]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+---
+
+### Reconstructing from  `r rk=n_pcs[5]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+---
+
+### Reconstructing from  `r rk=n_pcs[6]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+---
+
+### Reconstructing from  `r rk=n_pcs[7]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
+
+---
+
+### Reconstructing from  `r rk=n_pcs[8]; rk` components
+
+```{r, ref.label="approx_reconstruction", echo=FALSE, out.width="90%"}
+
+```
