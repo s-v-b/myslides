@@ -88,10 +88,13 @@ dim(img)
 ### Make it a dataframe 
 
 ```{r}
-img_df_long <- as.data.frame(img)
+img_df_long <- img %>%  
+  grayscale(method = "Luma", drop = TRUE) %>% 
+  as.data.frame()
 
 head(img_df_long)
 ```
+
 ---
 
 ### Make it black and white
@@ -99,13 +102,7 @@ head(img_df_long)
 .fl.w-50.pa2.f6[
 
 ```{r }
-chan <- 2 
-
-img_df_long_channel <- img_df_long %>% 
-  filter(cc==chan) %>% 
-  select(-cc)
-
-p_bw <- img_df_long_channel %>% 
+p_bw <- img_df_long %>% 
   ggplot() +
   aes(x = x, y = y, fill = value) %>% 
   geom_raster() + 
@@ -115,6 +112,9 @@ p_bw <- img_df_long_channel %>%
   coord_fixed() +
   theme_minimal()
 ```
+
+
+
 ]
 
 
@@ -132,7 +132,7 @@ p_bw
 .fl.w-50.pa2.f6[
 
 ```{r make_it_long, eval=FALSE}
-img_df <- img_df_long_channel %>% 
+img_df <- img_df_long %>% 
   tidyr::pivot_wider(names_from = y, 
                      values_from = value)
 
@@ -383,3 +383,81 @@ Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulati
 ```
 
 Relative reconstruction error : `r round(100 * (1- proto_screeplot[rk, "cumulative" ]), digits = 2) ` $\%$
+
+---
+exclude: true
+
+### Working with colors
+
+```{r pca-by-channel, eval=FALSE}
+list_img_pca <- img_df_long %>% 
+  group_by(cc) %>% 
+  group_map(.f = ~ {pivot_wider(.x, 
+                                names_from = `y`, 
+                                values_from = `value`)},
+            .keep = FALSE) %>% 
+  map(.f = ~ (select(.x, -x) %>% prcomp(center=TRUE, scale.=TRUE)))
+```
+
+
+```{r,}
+reverse_pca_color <- function(n_comp = 20, list_pca_objects = list_img_pca){
+  # [From Kieran Healy]
+  # recon <- pca_object$x[, 1:n_comp] %*% t(pca_object$rotation[, 1:n_comp])
+  
+  list_recons <- list_pca_objects %>% 
+    map(.f = ~ .x$x[, 1:n_comp] %*% t(.x$rotation[, 1:n_comp]))
+  
+  # rescale_recons <- function(pca_object, recon)  {
+  # 
+  #   if(all(pca_object$scale != FALSE)){
+  #   recon <- scale(recon, 
+  #                  center = FALSE, 
+  #                  scale = 1/pca_object$scale)
+  #   }
+  #   
+  # }
+  
+  list_recons <- map2(.x =list_pca_objects, 
+       .y =list_recons, 
+       .f = ~ if(all(.x$scale != FALSE)){
+        scale(.y, 
+                   center = FALSE, 
+                   scale = 1/.x$scale)
+    } else {.y}
+    )
+  
+  list_recons <- map2(.x =list_pca_objects, 
+       .y =list_recons, 
+       .f = ~ if(all(.x$center != FALSE)) {
+        scale(.y, 
+                   scale = FALSE, 
+                   center = -1 * .x$center)
+       } else {
+         .y
+       }
+    )
+  
+  # if(all(pca_object$center != FALSE)){
+  #   recon <- scale(recon, 
+  #                  scale = FALSE, 
+  #                  center = -1 * pca_object$center)
+  # }
+  
+  #TODO
+  
+  recon_df <- data.frame(cbind(1:nrow(recon), recon))
+  colnames(recon_df) <- c("x", 1:(ncol(recon_df)-1))
+
+  recon_df_long <- recon_df %>%
+    tidyr::pivot_longer(cols = -x, 
+                        names_to = "y", 
+                        values_to = "value") %>%
+    mutate(y = as.numeric(y)) %>%
+    arrange(y) %>%
+    as.data.frame()
+  
+  recon_df_long
+}
+```
+
