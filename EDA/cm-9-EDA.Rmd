@@ -145,9 +145,9 @@ said to be _nested_
 
 --
 
-A hierarchical clustering of $\mathcal{X}$ is a sequence of  $|\mathcal{X}| -1$ nested partitions  of $\mathcal{X}$, starting from the trivial partition into  $|\mathcal{X}|$ singletons and ending  into the trivial partition in $1$ subset ( $\mathcal{X}$ itself)
+A hierarchical clustering of $\mathcal{X}$ is a sequence of  $|\mathcal{X}|$ nested partitions  of $\mathcal{X}$, starting from the trivial partition into  $|\mathcal{X}|$ singletons and ending  into the trivial partition in $1$ subset ( $\mathcal{X}$ itself)
 
-A hierarchical clustering consists of $|\mathcal{X}|-1$ nested flat clusterings
+A hierarchical clustering consists of $|\mathcal{X}|$ nested flat clusterings
 
 We will explore _agglomerative_ or _bottom-up_ methods to build hierarchical clusterings
 
@@ -158,7 +158,7 @@ We will explore _agglomerative_ or _bottom-up_ methods to build hierarchical clu
 
 .fl.w-40.f6.pa2[
 
-The result of hierarchical clustering is a tree where leafs are labelled by sample points and
+The result of hierarchical clustering is a _tree_ where _leafs_ are labelled by sample points and
 internal nodes correspond to merging operations
 
 The tree conveys more information: if the tree is properly decorated, it is possible to reconstruct the different merging steps and to know which rule was applied when some merging operation was performed
@@ -252,7 +252,6 @@ ggdendrogram(iris_dendro,               #<<
             rotate = TRUE) +
   ggtitle("Dendrogram for Iris") +
   theme_dendro() +
-#  coord_flip() +
   scale_y_reverse(expand = c(0.2, 0))
 ```
 ]
@@ -316,8 +315,8 @@ p <- iris %>%
   aes(x=Petal.Length, y=Petal.Width)
 
 p +
-  geom_point(aes(shape=Species)) +
-  labs(shape= "Species") +
+  geom_point(aes(shape=Species, colour=Species)) +
+#  labs(shape= "Species") +
   ggtitle(label= "Iris data",
           subtitle = "Species in Petal plane")
 ```
