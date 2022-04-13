@@ -48,7 +48,7 @@ data("iris")
 ```
 
 
-```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
 require(RefManageR, quietly = TRUE)
 BibOptions(check.entries = FALSE,
            bib.style = "authoryear",
@@ -66,7 +66,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
 NoCite(myBib, "Har75")
 NoCite(myBib, "HaTiFr01")
 NoCite(myBib, "Mur12")
@@ -300,6 +300,32 @@ ggplot() +
   theme_dendro()
 ```
 
+---
+exclude: true
+
+```{r}
+# from [ggdendro vignette](http://andrie.github.io/ggdendro/)
+# with the exposing pipe %$% from magrittr
+library(ggplot2)
+library(ggdendro)
+library(magrittr)
+
+hc <- hclust(dist(USArrests), "ave")
+hcdata <- dendro_data(hc, type = "rectangle")
+
+hcdata %$% { #<< 
+    ggplot() +
+    geom_segment(data = segment(.),  #<< 
+                 aes(x = x, y = y, xend = xend, yend = yend)
+    ) +
+    geom_text(data = label(.),  #<< 
+              aes(x = x, y = y, label = label, hjust = 0), 
+              size = 3
+    ) +
+    coord_flip() +
+    scale_y_reverse(expand = c(0.2, 0))
+  } #<< 
+```
 
 
 ---
@@ -794,24 +820,35 @@ $$\Delta(\mathcal{C}_i, \mathcal{C}_j) = \frac{ |\mathcal{C}_i||\mathcal{C}_j|}{
 
 Suppose that clusters $C_{i}$ and $C_{j}$ were next to be merged
 
-At this point, all of the current pairwise cluster distances are known
+At this point, all of the current pairwise cluster _distances_ are known
 
-The recursive formula gives the updated cluster distances following the pending merge of clusters $C_{i}$ and $C_{j}$.
+The recursive update formula gives the updated cluster _distances_ following the pending merge of clusters $C_{i}$ and $C_{j}$
 
 Let
 
-- $d_{ij}, d_{ik}$, and $d_{jk}$ be shortands for the pairwise "distances" between clusters $C_{i}, C_{j}$, and $C_{k}$
-- $d_{{(ij)k}}$ be shortand  for the "distance" between the new cluster $C_{i}\cup C_{j}$ and $C_{k}$ ( $k\not\in \{i,j\}$ )
+- $d_{ij}, d_{ik}$, and $d_{jk}$ be shortands for the pairwise _distances_ between clusters $C_{i}, C_{j}$ and $C_{k}$
 
-An algorithm belongs to the Lance-Williams family if the updated cluster "distance" $d_{{(ij)k}}$ can be computed recursively by
+- $d_{{(ij)k}}$ be shortand  for the _distance_ between the new cluster $C_{i}\cup C_{j}$ and $C_{k}$ ( $k\not\in \{i,j\}$ )
 
-$$d_{(ij)k}=\alpha _{i}d_{ik}+\alpha _{j}d_{jk}+\beta d_{ij}+\gamma |d_{ik}-d_{jk}|$$
+---
 
-where $\alpha _{i},\alpha _{j},\beta$ , and $\gamma$  are parameters, which may depend on cluster sizes, that together with the cluster "distance" function $d_{ij}$ determine the clustering algorithm.
+### Lance-Williams update formulae (continued)
+
+An algorithm belongs to the _Lance-Williams family_ if the updated cluster _distance_ $d_{{(ij)k}}$ can be computed recursively by
+
+$$d_{(ij)k} = \alpha _{i}d_{ik}+ \alpha _{j}d_{jk}+ \beta d_{ij}+ \gamma |d_{ik}-d_{jk}|$$
+
+where $\alpha_{i},\alpha _{j},\beta$ , and $\gamma$  are parameters, which may depend on cluster sizes, that together with the cluster _distance_ function $d_{ij}$ determine the clustering algorithm.
 
 ???
 
-Clustering algorithms such as single linkage, complete linkage, and group average method have a recursive formula of the above type
+Clustering algorithms such as 
+
+- single linkage, 
+- complete linkage, and 
+- group average 
+
+method have a recursive formula of the above type
 
 
 ---
@@ -1031,6 +1068,51 @@ as_tibble_row(cor_coph ) %>% knitr::kable(digits = 2)
 ```
 
 ---
+exclude: true 
+
+
+```{r}
+# data("iris")
+d_iris <- select(iris, where(is.numeric)) %>%  dist() # method="man" # is a bit better
+hc_iris <- hclust(d_iris, method = "complete")
+iris_species <- rev(levels(iris[,5]))
+
+library(dendextend)
+library(colorspace)
+dend <- as.dendrogram(hc_iris)
+# order it the closest we can to the order of the observations:
+dend <- rotate(dend, 1:150)
+
+# Color the branches based on the clusters:
+dend <- color_branches(dend, k=3) #, groupLabels=iris_species)
+
+# Manually match the labels, as much as possible, to the real classification of the flowers:
+labels_colors(dend) <-
+   rainbow_hcl(3)[sort_levels_values(
+      as.numeric(iris[,5])[order.dendrogram(dend)]
+   )]
+
+# We shall add the flower type to the labels:
+labels(dend) <- paste(as.character(iris[,5])[order.dendrogram(dend)],
+                           "(",labels(dend),")", 
+                           sep = "")
+# We hang the dendrogram a bit:
+dend <- hang.dendrogram(dend,hang_height=0.1)
+# reduce the size of the labels:
+# dend <- assign_values_to_leaves_nodePar(dend, 0.5, "lab.cex")
+dend <- set(dend, "labels_cex", 0.5)
+# And plot:
+par(mar = c(3,3,3,7))
+plot(dend, 
+     main = "Clustered Iris data set
+     (the labels give the true flower species)", 
+     horiz =  TRUE,  nodePar = list(cex = .007))
+legend("topleft", legend = iris_species, fill = rainbow_hcl(3))
+```
+
+
+
+---
 exclude: true
 
 ### How to apply general algorithm?
@@ -1183,7 +1265,7 @@ exclude: true
 
 .f6[
 
-```{r, 'references', results='asis', echo=FALSE, message=FALSE, warning=FALSE}
+```{r, eval=FALSE, 'references', results='asis', echo=FALSE, message=FALSE, warning=FALSE}
 PrintBibliography(myBib)
 ```
 

@@ -832,17 +832,17 @@ The _elbow_ rule of thumb suggests to choose $k=3$.
 .panel[.panel-name[Code]
 
 ```{r, echo=TRUE}
-require(foreach)
+df <- select(iris, 
+             starts_with("Sepal"))
 
-foreach (k=2:10, .combine = rbind) %do% {
-  select(iris, Sepal.Length, Sepal.Width) %>%
-  kmeans(centers = k,   nstart=32L) %>%
-  broom::glance() %>%      #<<
-  force()
-} %>%
-  rownames_to_column(var = "k") %>%
-  mutate(k=as.integer(k)+1) -> tmp
+tmp <-map_dfr(2:10, ~ glance(kmeans(df, 
+                                   centers=.,
+                                   nstart = 32L))) %>% 
+  rowid_to_column(var="k") %>% 
+  mutate(k=k+1) 
 ```
+
+
 
 .f6[
 We have run  `kmeans` over the Iris dataset, for $k$ in range $2, \ldots, 10$. For each value of $k$,  we performed $32$ randomized initializations, and chose the partition that minimizes within clusters sum of squares
@@ -877,6 +877,14 @@ tmp %>%
 ]]
 
 
+???
+
+```{r}
+
+
+
+
+```
 
 ---
 
@@ -1423,7 +1431,7 @@ exclude: true
 
 .f6[
 
-```{r, 'references', results='asis', echo=FALSE, message=FALSE, warning=FALSE}
+```{r, 'references', results='asis', echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
 PrintBibliography(myBib)
 ```
 

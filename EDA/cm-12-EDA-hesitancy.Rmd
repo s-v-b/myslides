@@ -102,6 +102,7 @@ template: inter-slide
 
 
 ---
+exclude: true
 template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
@@ -173,13 +174,15 @@ A take home message
 
 ### The EPICOV investigation
 
+.f6[
+
 > The EpiCoV (Epidémiologie et Conditions de Vie) cohort was set-up in April 2020, with the general aim of understanding the main epidemiological, social and behavioural issues related to the Covid-19 epidemic in France. The survey was approved by the CNIL (French independent administrative authority responsible for data protection) on April 25th 2020 (ref: MLD/MFI/AR205138) and by the “Comité de protection des personnes” (French equivalent of the Research Ethics Committee) on April 24th. The survey also obtained an agreement from the _Comité du Label de la statistique publique_, proving its adequacy to statistical quality standards.
 
 See [https://doi.org/10.1101/2021.02.24.21252316](https://doi.org/10.1101/2021.02.24.21252316) for more the EpiCov _cohort_
 
-
 > This study was based on a large-scale random survey of 107,808 people conducted between October 26 and December 9, 2020, a pivotal time, as Pfizer announced on November 9, 2020, that it would be able to produce a $90\%$ effective vaccine on a large scale.
 
+]
 
 
 ---
@@ -187,6 +190,7 @@ See [https://doi.org/10.1101/2021.02.24.21252316](https://doi.org/10.1101/2021.0
 ### Demographic variables
 
 .f6[
+
 > To describe the sample, six sociodemographic variables were considered: _age_, _gender_, _ethno-racial status_ (based on _migration history_), social class (based on _current or last occupation_), standard of living (based on _decile of household income_ per consumption unit), and _formal education level_. Ethno-racial status was defined by combining the criteria of place of birth, nationality, and status of the individual and both parents.
 
 > The analysis was conducted from an intersectional perspective [10] that simultaneously took into account gender, class, age, and ethno-racial social characteristics, as well as respondents' level of trust in the government.
@@ -204,6 +208,7 @@ Investigate interactions
 
 ### Attitudinal variables: general versus specific vaccination hesitancy
 
+.f6[
 > To study attitudes toward vaccination in the EpiCoV survey in November 2020, two questions were available.
 
 > - About vaccination in general: Are you strongly; somewhat; somewhat not; or not at all in favor of vaccinations in general?
@@ -213,6 +218,7 @@ Investigate interactions
 - [ ] Attitudes towards vaccination are reported on a Likert/rating scale. Is there any difference between the rating scales for the two questions?
 - [ ] If you find any difference, can you guess the motivation?
 
+]
 ---
 
 ### Rating scales
@@ -240,17 +246,18 @@ xtab_general_covid <- matrix(
 
 ### Mosaiplot vaccination against covid vaccination
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width="90%"}
 mosaicplot(xtab_general_covid, shade = TRUE)
 ```
 
 
 ---
+exclude: true
 
 ### Mosaic plot (bis)
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width="90%"}
 mosaic(xtab_general_covid, shade = TRUE)
 ```
 

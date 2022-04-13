@@ -184,7 +184,7 @@ Karl Pearson introduced
 ```{r histo_crab, message=FALSE, warning=FALSE, out.width="100%", fig.show='hide'}
 data("pearson")
 
-p <- pearson %>%
+p <- pearson %>% glimpse
   mutate(dens=250*freq/sum(freq)) %>%
   ggplot() +
   aes(x=c(.58, ratio[1:28]),
@@ -638,7 +638,7 @@ may be easy to compute and even to optimize (for example for Gaussian mixtures)
 
 For each $i\leq n$,  let $q_i$ be any positive probability mass function over $\mathcal{Z}$
 
-$$\begin{array}{rl}\ell(\pi, \theta) & = \sum_{i=1}^n \log \left(\sum_{z_i \in \mathcal{Z}} p(x_i, z_i \mid \pi, \theta)\right)\\ & = \sum_{i=1}^n \log \left(\sum_{z_i \in \mathcal{Z}} q_i(z_i) \frac{p(x_i, z_i \mid \pi, \theta)}{q_i(z_i)}\right)\\ & \geq \sum_{i=1}^n \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( \frac{p(x_i, z_i \mid pi, \theta)}{q_i(z_i)}\right)\end{array}$$
+$$\begin{array}{rl}\ell(\pi, \theta) & = \sum_{i=1}^n \log \left(\sum_{z_i \in \mathcal{Z}} p(x_i, z_i \mid \pi, \theta)\right)\\ & = \sum_{i=1}^n \log \left(\sum_{z_i \in \mathcal{Z}} q_i(z_i) \frac{p(x_i, z_i \mid \pi, \theta)}{q_i(z_i)}\right)\\ & \geq \sum_{i=1}^n \sum_{z_i \in \mathcal{Z}} q_i(z_i) \log \left( \frac{p(x_i, z_i \mid \pi, \theta)}{q_i(z_i)}\right)\end{array}$$
 
 Let us denote the right-hand-side of the inequality by $Q(\pi, \theta, q)$
 where $q$ stands for the sequence $q_1, \ldots q_n$
