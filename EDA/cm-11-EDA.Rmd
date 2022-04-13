@@ -4,6 +4,13 @@ subtitle: "Statistiques Master I, MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  title: "Multiple Correspondance Analysis"
+  curriculum: "Master I MIDS & MFA"
+  coursetitle: "Analyse Exploratoire de Données"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
@@ -22,13 +29,6 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-params:
-  title: "Multiple Correspondence Analysis"
-  curriculum: "Master I MIDS & MFA"
-  coursetitle: "Analyse Exploratoire de Données"
-  lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
 ---
 name: inter-slide
 class: left, middle, inverse
@@ -47,50 +47,25 @@ class: left, middle
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 pacman::p_load("factoextra")
-xaringanExtra::use_webcam()
-xaringanExtra::use_scribble()
+pacman::p_load(tidyverse)
+pacman::p_load(FactoMineR)
+pacman::p_load(FactoInvestigate)
+pacman::p_load(ggmosaic)
+pacman::p_load(ggrepel)
+pacman::p_load(assertthat)
+pacman::p_load(xtable)
+# xaringanExtra::use_webcam()
+# xaringanExtra::use_scribble()
 ```
-
-
-```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
-pacman::p_load(RefManageR, quietly = TRUE)
-BibOptions(check.entries = FALSE,
-           bib.style = "authoryear",
-           cite.style = 'authoryear',
-           style = "markdown",
-           hyperlink = FALSE,
-           dashed = FALSE)
-myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
-```
-
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
-NoCite(myBib, "HaTiFr01")
-NoCite(myBib, "Mur12")
-NoCite(myBib, "moitra2018algorithmic")
-NoCite(myBib, "MR767260")
-NoCite(myBib, "MR2445017")
-```
-
 ---
 
 ```{r child="title_slide.Rmd"}
 
 ```
 
----
-exclude: true
-class: middle, left, inverse
-
-# Exploratory Data Analysis XI: Multiple Correspondance Analysis
-
-### `r Sys.Date()`
-
-#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
-
-#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
 
 ---
-class: middle, inverse
+template: inter-slide
 
 ## `r fontawesome::fa("map", fill="white")`
 
@@ -114,17 +89,6 @@ name: bigpic
 template: inter-slide
 
 ## Motivation: analyzing more than 2 categorical variables
-
-
-```{r, warning=FALSE, echo=FALSE, message=FALSE}
-require(tidyverse)
-require(FactoMineR)
-require(factoextra)
-require(FactoInvestigate)
-require(ggmosaic)
-require(ggrepel)
-require(assertthat)
-```
 
 ---
 
@@ -152,7 +116,7 @@ _dependent_ on the explanatory variables? If yes, we may wonder whether, conditi
 
 - All variables share a similar status (explanatory or response),  we may explore the relations between the variables, between categories and try to reduce dimension in some way
 
-In this session, we will address the different settings
+In this session, we will address the second setting
 
 
 ---
@@ -183,52 +147,6 @@ Questions:
 - SVD Factorization
 - Relating the factors to the original data
 
-
----
-
-### Useful packages
-
-```{r, warning=FALSE, echo=TRUE, eval=FALSE}
-require(tidyverse)
-require(FactoMineR)        #<<
-require(factoextra)        #<<
-require(FactoInvestigate)  #<<
-```
-
----
-exclude: true
-
-
-### Questionnaires
-
-
-
-[](https://en.wikipedia.org/wiki/Questionnaire)
-
-
-???
-
-Questionnaires:
-
-- Definition
-- Usage
-- Example
-- Interpretation
-
----
-exclude: true
-
-### Example: Questionnaire based on fictitious case reports
-
-
-[Case report on Wikipedia](https://en.wikipedia.org/wiki/Case_report)
-
-
-???
-
-- Definition of  case report
-- Usage of fictitious case report
--
 
 
 ---
@@ -418,12 +336,15 @@ of admission rates per department and then gender
 aperm(UCBAdmissions, c(3, 2, 1)) %>%
   vcd::doubledecker()
 ```
+
 .f6[
+
 Double decker plots are special kinds of mosaicplots
 
 - Per department admissions exhibit no clear bias against
 women
 - Men tend to fill more applications to less selective departments
+
 ]
 ]
 
@@ -455,35 +376,49 @@ of successful/failing applicants for given  Department and Gender
 ### `r fontawesome::fa("ship")` Flattening the Titanic table
 
 
+.fl.w-50.pa2.f6[
+
 ```{r, eval=FALSE}
-pacman::p_load(xtable)
-vcd::structable(~ Class + Age + Sex, aperm(Titanic, c(1,3,2, 4))) %>%
-  xtable::xtableFtable()
+f <- formula(Survived ~ Class + 
+                           Sex + 
+                           Age)
+Titanic %>% 
+  vcd::structable(f, .) #<< 
 ```
-
-
-.fl.w-50.pa2.f6[
-
-|  Class | Sex    |       Child|  Adult|
-|:------:|:-------|------:|------:|
-|1st     | Male   |          5 |   175 |
-|        | Female |         1 |   144 |
-|  2nd   | Male   |         11 |   168 |
-|        | Female |         13 |    93 |
-|  3rd   | Male   |         48 |   462 |
-|        | Female |         31 |   165 |
-|  Crew  | Male   |          0 |   862 |
-|        | Female |          0 |    23 |
-]
-
-
-.fl.w-50.pa2.f6[
 
 Flattenig allows to organize information
 
 Double decker plots allow to do this graphically
 
 ]
+
+
+.fl.w-50.pa2.f6[
+
+
+|Class | Sex    |Age     | Survived(No) | Survived(Yes) |
+|:----:|:-------|:-------|-------------:|--------------:|
+|1st   |Male    | Child  |        0     |  5            |
+|      |        | Adult  |        118   |  57           |
+|      |Female  | Child  |           0  |  1            |
+|      |        | Adult  |          4   |  140          |
+|2nd   |Male    | Child  |           0  | 11            |
+|      |        | Adult  |        154   | 14            |
+|      |Female  | Child  |           0  | 13            |
+|      |        | Adult  |         13   | 80            |
+|3rd   |Male    | Child  |        35    | 13            |
+|      |        | Adult  |        387   | 75            |
+|      |Female  | Child  |        17    | 14            |
+|      |        | Adult  |        89    |76             |
+|Crew  |Male    | Child  |          0   | 0             |
+|      |        | Adult  |       670    | 192           |
+|      |Female  | Child  |          0   | 0             |
+|      |        | Adult  |           3  | 20            |
+
+]
+
+
+
 ---
 
 ### `r fontawesome::fa("ship")` Double-decker plots for the Titanic data
@@ -506,12 +441,6 @@ tit %>%
 
 `Titanic` is a base `r fontawesome::fa("r-project")` contingency table where `Pclass, Sex, Age, Survived` were cross-tabulated
 
----
-exclude: true
-
-```{r}
-# knitr::include_url("https://rdrr.io/cran/vcd/")
-```
 
 ---
 exclude: true
@@ -552,7 +481,7 @@ objects) arranging collections of plots of the strucplot framework into more com
 name: indic-matrix
 template: inter-slide
 
-##  `r fontawesome::fa("fingerprint")` Indicator and Burt matrices
+##  `r fontawesome::fa("fingerprint")` MCA basement: Indicator matrices
 
 ---
 
@@ -617,6 +546,8 @@ $$k \mapsto \underbrace{0,\ldots, 0}_{k-1}, 1, \underbrace{0, \ldots, 0}_{q-k}$$
 
 
 ---
+exclude: true
+
 
 ### The Burt matrix
 
@@ -1253,7 +1184,6 @@ p +  ggtitle("Titanic: categories in principal coordinates ")
 
 ### `r fontawesome::fa("ship")` MCA biplot
 
-.fl.w-40.pa2.f6[
 
 ```{r  tita_biplot, fig.show='hide'}
 p +
@@ -1268,21 +1198,25 @@ p +
   scale_color_viridis_d() +
   ggtitle("Titanic: biplot")
 ```
-]
 
 
-.fl.w-60.pa2[
+---
+
+
+
 
 ![](`r knitr::fig_chunk("tita_biplot", "png")`)
 
-]
+
 
 ---
+exclude: true
 template: inter-slide
 
 ## References
 
 ---
+exclude: true
 
 
 
