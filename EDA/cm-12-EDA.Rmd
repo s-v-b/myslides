@@ -50,37 +50,20 @@ pacman::p_load("ggdendro")
 pacman::p_load("fastcluster")
 pacman::p_load("mixdist")
 pacman::p_load("factoextra")
+pacman::p_load("skimr")
+pacman::p_load("glue")
+pacman::p_load("GGally")
+pacman::p_load("corrr")
+pacman::p_load("magrittr")
 data("iris")
 data("pearson")
 ```
 
 
-```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
-require(RefManageR, quietly = TRUE)
-BibOptions(check.entries = FALSE,
-           bib.style = "authoryear",
-           cite.style = 'authoryear',
-           style = "markdown",
-           hyperlink = FALSE,
-           dashed = FALSE)
-myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
-```
 
 
 
 
-```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
-NoCite(myBib, "MR3851754")
-NoCite(myBib, "MR3080408")
-NoCite(myBib, "MR3316191")
-NoCite(myBib, "MR3316191")
-NoCite(myBib, "zbMATH06322139")
-NoCite(myBib, "Har75")
-NoCite(myBib, "MR2677125")
-NoCite(myBib, "HaTiFr01")
-NoCite(myBib, "Mur12")
-NoCite(myBib, "moitra2018algorithmic")
-```
 
 
 ---
@@ -117,9 +100,11 @@ exclude: true
 
 ---
 
+### `r fontawesome::fa("binoculars")`
+
 [Canonical Correlation Analysis](https://en.wikipedia.org/wiki/Canonical_correlation) goes back to Hotteling  (1936)
 
-Consider a setting where we have to views/perspectives on the same data
+Consider a setting where we have two views/perspectives on the same data
 
 For example, suppose we record meteorological data from a range of locations
 
@@ -132,23 +117,59 @@ How can we decribe relationships between the two perspectives?
 
 This is the question tackled by CCA
 
+
+---
+exclude: true
+
+## Building canonical variate pairs
+
+---
+exclude: true
+
+### Beyond `corrplot::corrplot()`
+
+> It is possible to create pairwise scatter plots with variables in the first set, and variables in the second set (using `ggpairs()` for example)
+
+> If the dimension of the first set is `p` and that of the second set is `q`, there will be `pq` such scatter plots, it may be difficult to inspect all of these graphs together
+
+> You could compute all correlations between variables from the first set and variables in the second set, however interpretation is difficult when `pq` is large
+
+> CCA allows us to summarize the many (linear) relationships into a smaller number of statistics 
+
+> The motivation for CCA is very similar to PCA
+
+
+
+
+
 ---
 
 ### Definition (CCA)
 
-Given a real matrix $Z$ with $n$ rows and $J_1 + J_2$ columns.
+Given a real data matrix $Z$ with $n$ rows and $J_1 + J_2$ columns.
 $$Z = \left[ \quad {\underbrace{\Huge Z_1 }_{J_1 \text{ col. }}}\quad  {\Large\vdots}\quad { \underbrace{\Huge Z_2 }_{J_2 \text{ col. }} } \quad\right]$$
 
+- rows of $Z$ match individuals
+- columns of $Z$ match variables
 
+--
 
 Canonical Correlation Analyis (CCA) consists of finding vectors $a \in \mathbb{R}^{J_1}$
- and $b \in \mathbb{R}^{J_2}$ that maximize correlation between
- $Z_1 a$  and  $Z_2 b$
+and $b \in \mathbb{R}^{J_2}$ that maximize correlation between $Z_1 a$  and  $Z_2 b$
+
+???
+
+
+Unit vector $a$ and $b$ that maximize correlation define the so-called _first canonical pair_
+
+
+
 
 
 
 ---
 
+### `r fontawesome::fa("tools")`
 
 Let $S_{1,1}, S_{2,2}, S_{1,2}$ denote the covariance matrices defined by $Z_1, Z_2$
 
@@ -158,30 +179,53 @@ $$S_{1,2} = \frac{1}{n} \left( Z_1^T \times Z_2 - Z_1^T \times 1\times 1^T \time
 
 $$S_{2,2} = \frac{1}{n} \left( Z_2^T \times Z_2 - Z_2^T \times 1\times 1^T \times Z_2\right)$$
 
+--
+
 We look for $a$ and $b$ that maximize
 
 $$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$$
 
 
+---
+
+Note that  
+$$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$$
+does not change if we rescale $a$ or $b$ 
+
+The maximization problem is equivalent to 
+$$\begin{array}{ll}
+\text{maximize } & a^T S_{1,2} b \\
+\text{under constraints} & a^T S_{1,1} a=1 \quad\wedge\quad  b^T S_{2,2} b=1\end{array}$$
+
+
+--
 
 
 ---
 
 ### Proposition
 
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
 The vectors $a \in \mathbb{R}^{J_1}$ and $b \in \mathbb{R}^{J_2}$ that maximize
-$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$
-are the first left and right extended singular vectors of
+
+$$\frac{a^T S_{1,2} b}{\big((a^TS_{1,1}a)(b^TS_{2,2}b)\big)^{1/2}}$$
+
+are the first left and right _extended_ singular vectors of
 $$S_{1,2}$$
 with respect to matrices $S_{1,1}$ and $S_{2,2}$
 
+]
 
 ---
+
+### `r fontawesome::fa("syringe")`
 
 The extended singular value decomposition of $S_{1,2}$
 with respect to matrices $S_{1,1}$ and $S_{2,2}$ is a triple  $U \in \mathcal{M}_{J_1, k}$,
 $D \in \mathcal{M}_{k,k}$,
 $V \in \mathcal{M}_{J_2, k}$ such that
+
 $$S_{1,2} = U \times D \times V^T$$
 
 - $D$ is non-negative, diagonal, with non-increasing diagonal entries
@@ -194,9 +238,9 @@ $$S_{1,2} = U \times D \times V^T$$
 
 ### Proof
 
-We first assume $S_{1,1}$ and $S_{2,2}$ to be Positive Definite.
+We first assume $S_{1,1}$ and $S_{2,2}$ to be Positive Definite
 
-- $S_{1,1}$ and $S_{2,2}$ have invertible square roots  $S_{1,1}^{-1/2}$ and $S_{2,2}^{-1/2}$
+- $S_{1,1}$ and $S_{2,2}$ have invertible square roots with inverses:  $S_{1,1}^{-1/2}$ and $S_{2,2}^{-1/2}$
 
 - For $a \in \mathbb{R}^{J_1}$ and $b \in \mathbb{R}^{J_2}$,  let  $u, v$
 be defined as $u = S_{1,1}^{1/2}a$  and $v = S_{2,2}^{1/2}b$
@@ -234,22 +278,34 @@ $$S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$$
 
 ---
 
+### `r fontawesome::fa("map-marked-alt")`
 
 The leading left and right singular vectors of $S_{1,2}$ with respect to the metrics defined by $S_{1,1}$ and $S_{2,2}$ define the first stage of _canonical correlation analysis_
 
-The full canonical correlation analysis of $Z = [ Z_1 \; \vdots\; Z_2]$ is made of the whole sequence of extended left and right singular vectors corresponding to positive singular values.
+The full canonical correlation analysis of $Z = [ Z_1 \; \vdots\; Z_2]$ is made of the _whole_ sequence of extended left and right singular vectors corresponding to positive singular values.
+
+
+---
+
+
+
+---
+exclude: true 
 
 The $j^{\text{th}}$ step
 
 
 ---
 
-Canonical Correlation Analysis builds on Singular Value Decomposition just
-as 
+### `r fontawesome::fa("map-pin")`
+
+Canonical Correlation Analysis builds on Singular Value Decomposition just as 
 
 - Principal Component Analyis, 
 
-- Correspondence Analyis,  
+- Correspondence Analysis,  
+
+- Multiple Correspondance Analysis, 
 
 - Multiple Linear Regression (at least implicitly)
 
@@ -266,6 +322,8 @@ Analysis
 
 
 ---
+
+###  `r fontawesome::fa("piggy-bank")`
 
 We shall work on a qualitative data frame : `credit`
 
@@ -296,6 +354,13 @@ We use functions from `forcats` to tidy the data
 
 We focus on CCA and CA for variables `Marche` and `Logement`
 
+---
+
+```{r skim_credit, skimr_include_summary = FALSE}
+credit %>% 
+  skim() %>% 
+  select( -n_missing, - factor.ordered) 
+```
 
 ---
 
@@ -323,26 +388,36 @@ credit$Logement <- fct_collapse(credit$Logement,  #<<
 
 ---
 
+```{r, ref.label="skim_credit", skimr_include_summary = FALSE}
+
+```
+
+
+---
 
 ### Description of `credit` dataset
 
 Columns `Marche` and `Logement`
 
 
+
+---
+
 ### Bivariate indicator matrix
 
 - A 2-way contingency table $T$ with $J_1$ rows and $J_2$ columns. $T[a,b]$
-denotes the number of number of co-occurrences  of modalities $a \in \{1, J_1\}$
+denotes the number of co-occurrences  of categories $a \in \{1, J_1\}$
 and $b \in \{1, \ldots J_2\}$.
 
 - The 2-way contingency table is _usually_ collected from a data frame `DT` with two
 qualitative columns and $n$ rows.
 
+---
 
 - We can also proceed by _pivoting_ the bivariate table, making it a dataframe $Z$
 with $n$ rows and $J_1 + J_2$ columns.
 If $j_1 \leq J_1$, $Z[i, j_1] =1$ if for
-observation/row $i$, the modality of first variable is $j_1$, $0$ otherwise.
+observation/row $i$, the category of first variable is $j_1$, $0$ otherwise.
 
 - Table $Z$ is called the _complete disjunctive table_ derived from DT
 
@@ -370,8 +445,8 @@ dplyr::select(credit, Marche, Impaye) %>%
                      names_from = Impaye,
                      values_from = Impaye) %>%
   dplyr::select(-id) %>%
-  dplyr::mutate_all(~ ! is.na(.)) %>%
-  dplyr::mutate_all(as.integer)  -> Z
+  dplyr::mutate(across(everything(),
+                       ~ as.integer(!is.na(.)))) -> Z
 ```
 
 ```{r, eval=FALSE, echo=FALSE}
@@ -438,6 +513,154 @@ in these two directions)
 [*] In case $Z^T \times Z$ is not invertible,
 $(Z^T\times Z)^{-1}$ denotes the Moore-Penrose pseudo-inverse
 
+---
+template: inter-slide
+
+## `cancor`  function
+
+
+---
+
+### `LifeCycleSavings`
+
+> A data frame with 50 observations on 5 variables.
+
+```
+[,1]	sr	numeric	aggregate personal savings
+[,2]	pop15	numeric	% of population under 15
+[,3]	pop75	numeric	% of population over 75
+[,4]	dpi	numeric	real per-capita disposable income
+[,5]	ddpi	numeric	% growth rate of dpi
+```
+
+.f6[
+
+> Under the life-cycle savings hypothesis as developed by Franco Modigliani, the savings ratio (aggregate personal saving divided by disposable income) is explained by per-capita disposable income, the percentage rate of change in per-capita disposable income, and two demographic variables: the percentage of population less than 15 years old and the percentage of the population over 75 years old. The data are averaged over the decade 1960–1970 to remove the business cycle or other short-term fluctuations.
+
+]
+
+---
+
+```{r, echo=FALSE}
+ggpairs(LifeCycleSavings)
+```
+
+---
+
+### Using `cancor`
+
+```{r}
+pop <- LifeCycleSavings %>% select(starts_with('pop'))
+oec <- LifeCycleSavings %>% select(- starts_with('pop'))
+
+res.cca.LifeCycleSavings <- cancor(pop, oec, 
+                                   xcenter = T, 
+                                   ycenter = T)
+
+res.cca.LifeCycleSavings$cor
+```
+
+---
+```{r}
+ZtZ <- cov(LifeCycleSavings)
+
+dimnames(ZtZ)
+S12 <- ZtZ[2:3, -(2:3)]
+S11 <- ZtZ[2:3, 2:3]
+S22 <- ZtZ[-(2:3), -(2:3)]
+
+
+```
+
+---
+### Computing the inverse square root of DP matrix 
+
+.fl.w-50.pa2.f6[
+```{r invsqrt}
+invsqrt <- . %>%  #<< 
+  svd() %$%       #<<
+  (.$u %*% diag(1/sqrt(.$d)) %*% t(.$v))
+```
+]
+
+.fl.w-50.pa2.f6[
+Check `magrittr` documentation to see how
+
+- to use the pronoun `.`
+
+- you can turn a pipeline into a univariate function
+
+- the exposing pipe `%$%` works 
+
+
+]
+
+```{r}
+invsqrt
+```
+
+---
+
+### Hand-made CCA 
+
+```{r}
+mycca <- svd(invsqrt(S11) %*% S12 %*% invsqrt(S22))
+
+mycca$d
+
+A <- invsqrt(S11) %*% mycca$u
+B <- invsqrt(S22) %*% mycca$v
+
+t(A) %*% S12 %*% B
+```
+
+---
+
+### `R` `cancor`  function
+
+```
+{
+    x <- as.matrix(x); y <- as.matrix(y)
+    nr <- nrow(x); ncx <- ncol(x); ncy <- ncol(y)
+    ...
+    qx <- qr(x)
+    qy <- qr(y)
+    dx <- qx$rank;  dy <- qy$rank
+    ...
+    z <- svd(qr.qty(qx, qr.qy(qy, diag(1, nr, dy)))[1L:dx, , 
+        drop = FALSE], dx, dy)
+    xcoef <- backsolve((qx$qr)[1L:dx, 1L:dx, drop = FALSE], z$u)
+    rownames(xcoef) <- colnames(x)[qx$pivot][1L:dx]
+    ycoef <- backsolve((qy$qr)[1L:dy, 1L:dy, drop = FALSE], z$v)
+    rownames(ycoef) <- colnames(y)[qy$pivot][1L:dy]
+    list(cor = z$d, 
+         xcoef = xcoef, ycoef = ycoef, 
+         xcenter = xcenter, ycenter = ycenter)
+}
+```
+???
+
+`qr.qty(qx, qr.qy(qy, diag(1, nr, dy)))`  is an effficient way to compute $S_{1,1}^{-1/2} \times S_{1,2} \times S_{2,2}^{-1/2}$ (up to normalization constants) 
+
+Note that this matrix is the product of the projection matrix on the span of $X$ columns by the projection matrix on the span of $Y$ columns 
+
+Projection matrices are readily obtained from the QR decompositions
+
+`backsolve` solves upper or lower triangular systems
+
+---
+exclude: true
+
+```{r}
+x <- matrix(rnorm(150), 50, 3)
+y <- matrix(rnorm(250), 50, 5)
+(cxy <- cancor(x, y))
+all(abs(cor(x %*% cxy$xcoef,
+            y %*% cxy$ycoef)[,1:3] - diag(cxy $ cor)) < 1e-15)
+all(abs(cor(x %*% cxy$xcoef) - diag(3)) < 1e-15)
+all(abs(cor(y %*% cxy$ycoef) - diag(5)) < 1e-15)
+
+```
 
 ---
 exclude: true
@@ -458,11 +681,27 @@ ggplot(iris) +
 
 ![](`r knitr::fig_chunk("plot-label-fc", "png")`)
 
-
-
-
-
 ???
+
+---
+
+### Using Package `CCA`
+
+```{r, message=FALSE, warning=FALSE, error=FALSE}
+require(CCA)
+
+res.cca <- CCA::cc(pop,oec)
+
+plt.cc(res.cca)
+```
+
+---
+
+```{r, out.width="50%"}
+plt.var(res.cca, d1 = 1, d2 = 2, var.label = T)
+plt.indiv(res.cca,  d1 = 1, d2 = 2, ind.names = rownames(LifeCycleSavings))
+```
+
 
 ---
 class: middle, center, inverse

@@ -757,6 +757,7 @@ $$D_r^{-1} \times P \times D_c^{-1} - \mathbf{I}\mathbf{I}^T$$
 with respect to $D_r$ and $D_c$
 
 ---
+exclude: true 
 
 ### CA and reconstructions formulae
 
@@ -776,15 +777,24 @@ For $j \in \{1, \ldots, p\}$, let $J_j$ denote the number of levels(categories) 
 
 Let $q = \sum_{j\leq p} J_j$ be the sum of the number of levels throughout the variables
 
+---
+
+
 Let $Z$ be the incidence matrix with $n$ rows and $q$ columns
 
 For $j\leq p$ and $k \leq J_j$, let $\langle j, k\rangle = \sum_{j'<j} J_{j'}+k$
 
-Let $N = n \times p = \sum_{i\leq n} \sum_{j \leq p} X_{i,j}$ and $P = \frac{1}{N} Z$ (the _correspondence matrix_ for MCA)
+Let $N = n \times p = \sum_{i\leq n} \sum_{j \leq p} X_{i,j}$ and 
+$$P = \frac{1}{N} Z$$
+(the _correspondence matrix_ for MCA)
+
+---
 
 `r fontawesome::fa("hand-point-right")` The row wise  sums of correspondence matrix $P$ are all equal to $1/n=p/N$
 
-The column wise sum of the correspondence matrix $P$ for the $k$th level of the $j$th variable of $X$ ( $j \leq p$ ) is $N_{\langle j,k\rangle}/N = f_{\langle j,k\rangle}/p$ where $f_{\langle j,k\rangle}$ stands for the relative frequency of level $k$ of the $j$th variable
+The column wise sum of the correspondence matrix $P$ for the $k$th level of the $j$th variable of $X$ ( $j \leq p$ ) is 
+$$N_{\langle j,k\rangle}/N = f_{\langle j,k\rangle}/p$$
+where $f_{\langle j,k\rangle}$ stands for the relative frequency of level $k$ of the $j$th variable
 
 $$D_r = \frac{1}{n}\text{Id}_n\qquad D_c =\text{diag}\left(\frac{f_{\langle j,k\rangle}}{p}\right)_{j \leq p, k\leq J_j}$$
 
@@ -922,11 +932,15 @@ rank matrices according to the Hilbert-Schmidt norm with respect to $D_r$ and $D
 coord <-  res.mca$var$coord
 contrib <- res.mca$var$contrib
 cos2 <- res.mca$var$cos2
+singv <- res.mca$svd$vs
 
-assert_that(norm(res.mca$svd$V %*% diag(res.mca$svd$vs[1:8])
+assert_that(norm(res.mca$svd$V %*% 
+                 diag(singv[1:8])
                  - coord, "F") <= tol)
 
-tmp <- t(t(coord^2) %*% Dc) %*% diag(1/res.mca$svd$vs[1:8]^2)
+tmp <- t(t(coord^2) %*% Dc) %*% 
+            diag(1/singv[1:8]^2)
+
 assert_that(norm(100 * tmp - contrib, "F") <= tol)
 
 assert_that(norm(cos2 - coord^2/rowSums(coord^2), "F") <= tol)
@@ -938,8 +952,6 @@ assert_that(norm(cos2 - coord^2/rowSums(coord^2), "F") <= tol)
 `res.mca$var` is a list of 3 matrices with the same dimensions $q$ (sum of level numbers)  and $q-p$
 
 `$coord` is made of the principal coordinates of columns $D_c^{-1/2} \times V \times D$. Each row corresponds to one column of the indicator matrix
-
-`$contrib` ...
 
 `$cos2`  is derived from `$coord`. For each row (column of the indicator matrix) $\langle j, k\rangle$, for each
 dimension $i$, the  $\langle j, k\rangle, i$ coefficient of `$cos2` is the squared cosine
@@ -1075,20 +1087,18 @@ compare with `broom::tidy()` etc  for objects of class  `pca`
 
 ### `r fontawesome::fa("ship")` Plotting colums from data matrix
 
-.fl.w-40.pa2[
+
 ```{r tita_var, fig.show='hide', width=8}
 fviz_mca_var(res.mca,
              choice = "var", ) +
   coord_fixed() +
   ggtitle("MCA Titanic, variables")
 ```
-]
 
-.fl.w-60.pa2[
+---
 
 ![](`r knitr::fig_chunk("tita_var", "png")`)
 
-]
 
 ---
 
@@ -1110,7 +1120,7 @@ the constructs from `ggplot2`
 ### `r fontawesome::fa("ship")` Plotting individuals on first factorial plane
 
 
-.fl.w-40.pa2.f6[
+
 
 ```{r  tita_ind, fig.show='hide'}
 res.mca.2 <- tit %>%
@@ -1135,15 +1145,11 @@ df_ind %>%
   ggtitle("Titanic: indivudals in principal coordinates ")
 ```
 
-
-]
-
-
-.fl.w-60.pa2[
+---
 
 ![](`r knitr::fig_chunk("tita_ind", "png")`)
 
-]
+
 
 
 ---
@@ -1151,7 +1157,6 @@ df_ind %>%
 ### `r fontawesome::fa("ship")` Plotting categories on first factorial plane
 
 
-.fl.w-40.pa2.f6[
 
 ```{r  tita_cat, fig.show='hide'}
 df_cat <- res.mca.2$var$coord %>%
@@ -1169,14 +1174,11 @@ p <- df_cat %>%
 p +  ggtitle("Titanic: categories in principal coordinates ")
 ```
 
-]
+---
 
-
-.fl.w-60.pa2[
 
 ![](`r knitr::fig_chunk("tita_cat", "png")`)
 
-]
 
 
 ---
