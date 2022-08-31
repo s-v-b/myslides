@@ -1,0 +1,85 @@
+
+
+
+### Responsable administratif : [Christian Sénécal ](mailto:senecal@math.univ-paris-diderot.fr)
+
+.fl.w-40.pa2[
+
+- Secrétariat de l'UFR de Mathématiques
+
+- Bâtiment Sophie Germain 
+
+]
+
+.fl.w-60.pa2[
+```{r, trombi-csenec, out.width="80%", echo=FALSE}
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+```
+]
+
+- Inscriptions pédagogiques  .fr[`r fontawesome::fa("circle-check")`]
+
+- Modalités de contrôle continu .fr[`r fontawesome::fa("toggle-on")`]
+
+
+
+
+
+---
+
+###  Responsables pédagogiques
+
+.pull-left[
+#### [Marie-Claude Arnaud](https://en.wikipedia.org/wiki/Marie-Claude_Arnaud?oldid=872935590)
+Systèmes dynamiques `r fontawesome::fa("database", fill = "black")`
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://mcarnaudblog.wordpress.com")
+```
+
+]
+
+.pull-right[
+#### [Stéphane Boucheron](https://stephane-v-boucheron.fr)
+Statistiques, Probabilités `r fontawesome::fa("dice", fill = "black")`
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://stephane-v-boucheron.fr")
+```
+]
+
+
+---
+template: inter-slide
+background-size: cover
+background-image: url("./img/entretien.jpg")
+
+## Entretiens
+
+
+---
+
+### Au début de chaque semestre
+
+.pull-left[
+
+Un entretien court avec un responsable pédagogique
+
+En face à face (ou à distance)
+
+Prendre rendez-vous via [Moodle](https://moodle.u-paris.fr/course/view.php?id=8568)
+
+]
+
+.pull-right[
+
+#### Objectifs `r fontawesome::fa("map")``
+
+- vérifier choix des cours
+
+- orientation future
+
+- signaler difficultés 
+
+]
+

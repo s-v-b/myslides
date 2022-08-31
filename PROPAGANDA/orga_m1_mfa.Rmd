@@ -1,0 +1,622 @@
+---
+
+```{r, echo=FALSE, out.extra='style="border: none;"', out.width='100%'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
+```
+
+---
+
+
+
+| Semaine(s) | Date(s) | Activité  |
+|:----------:|:--------|:----------|
+| `r lubridate::isoweek(lubridate::as_date("2022-09-05"))` | `r lubridate::as_date("2022-09-05")`/`r   lubridate::as_date("2022-09-09")`| Semaine de Rentrée |
+| `r lubridate::isoweek(lubridate::as_date("2022-09-12"))`-`r lubridate::isoweek(lubridate::as_date("2022-10-28"))` | `r lubridate::as_date("2022-09-12")`/`r lubridate::as_date("2022-10-28")`| Semestre I/Partie I |
+| `r lubridate::isoweek(lubridate::as_date("2022-11-01"))`| `r lubridate::as_date("2022-10-29")`/`r lubridate::as_date("2022-11-06")` | _Vacances Toussaint_ |
+| `r lubridate::isoweek(lubridate::as_date("2022-11-07"))`-`r lubridate::isoweek(lubridate::as_date("2022-12-12"))` | `r lubridate::as_date("2022-11-07")`/`r lubridate::as_date("2022-12-12")`| Semestre I/Partie II |
+| `r lubridate::isoweek(lubridate::as_date("2022-12-12"))` | `r lubridate::as_date("2022-12-12")`/`r lubridate::as_date("2022-12-16")`| **Soutenances Algorithmique** |
+| `r lubridate::isoweek(lubridate::as_date("2022-12-19"))`-`r lubridate::isoweek(lubridate::as_date("2023-01-01"))` | `r lubridate::as_date("2022-12-17")`/`r lubridate::as_date("2023-01-01")`| _Vacances de Noël_ |
+| `r lubridate::isoweek(lubridate::as_date("2023-01-02"))`-`r lubridate::isoweek(lubridate::as_date("2023-01-09"))` | `r lubridate::as_date("2023-01-03")`/`r lubridate::as_date("2023-01-13")`| **Examens Semestre I** |
+| `r lubridate::isoweek(lubridate::as_date("2023-01-16"))`-`r lubridate::isoweek(lubridate::as_date("2023-02-24"))` | `r lubridate::as_date("2023-01-16")`/`r lubridate::as_date("2023-02-24")`| Semestre II/Période I |
+| `r lubridate::isoweek(lubridate::as_date("2023-02-27"))`| `r lubridate::as_date("2023-02-25")`/`r lubridate::as_date("2023-03-05")` | _Vacances Hiver_ |
+| `r lubridate::isoweek(lubridate::as_date("2023-03-06"))` | `r lubridate::as_date("2023-03-06")`/`r lubridate::as_date("2023-03-10")`| **Examens Semestre II Pér. I** |
+| `r lubridate::isoweek(lubridate::as_date("2023-03-13"))`-`r lubridate::isoweek(lubridate::as_date("2023-04-21"))` | `r lubridate::as_date("2023-03-13")`/`r lubridate::as_date("2023-04-24")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2023-04-24"))`-`r lubridate::isoweek(lubridate::as_date("2023-05-01"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2023-05-07")`| _Vacances de Printemps_ |
+| `r lubridate::isoweek(lubridate::as_date("2023-05-09"))`-`r lubridate::isoweek(lubridate::as_date("2023-05-23"))` | `r lubridate::as_date("2023-05-09")`/`r lubridate::as_date("2023-05-27")`| **Examens Semestre II Pér. II** |
+| `r lubridate::isoweek(lubridate::as_date("2023-06-07"))` | | _Jury Session I_ |
+| `r lubridate::isoweek(lubridate::as_date("2023-06-19"))`-`r lubridate::isoweek(lubridate::as_date("2023-06-30"))` | `r lubridate::as_date("2023-06-19")`/`r lubridate::as_date("2023-06-30")`| **Examens Session II** |
+| `r lubridate::isoweek(lubridate::as_date("2023-07-07"))` | | _Jury Session II_ |
+
+---
+
+### Semestre I
+
+.fl.w-50.pa2[
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+        </tr>
+    </thead>
+<tr>
+  <td>
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algebre/" class="plain">Algèbre</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-proba/" class="plain">Probabilités</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-logique/" class="plain">Logique</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s1-anglais-3/" class="plain">Anglais</a>
+  </td>
+  <td>3</td>
+</tr>
+
+</table>
+
+]
+
+
+.fl.w-50.pa2[
+
+### `r fontawesome::fa("compass")`
+
+Ce premier semestre est un semestre d'orientation
+
+En fonction des parcours de M2 visés, vous devrez choisir trois UEs de Mathématiques parmi les cinq proposées
+
+`r fontawesome::fa("triangle-exclamation")` Les emplois du temps de Logique et de Probabilités se chevauchent 
+]
+
+---
+
+### Exemple I (semestre I)
+
+.pull-left[
+vous visez le parcours [M2MO: Modélisation Aléatoire, Finance et Data Science](https://masterfinance.math.univ-paris-diderot.fr)
+]
+
+.pull-right[
+
+Il est raisonnable de suivre:
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+
+        </tr>
+    </thead>
+
+
+<tr>
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-proba/" class="plain">Probabilités</a>
+  </td>
+  <td>9</td>
+</tr>
+
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s1-anglais-3/" class="plain">Anglais</a>
+  </td>
+  <td>3</td>
+</tr>
+</table>
+]
+
+---
+
+### Exemple II (semestre I) 
+
+.pull-left[
+vous visez le parcours [Mathématiques Générales/Prépa. Agreg.](https://master.math.univ-paris-diderot.fr/annee/m2-agreg/)
+]
+
+.pull-right[
+
+Il est raisonnable (mais pas obligatoire) de suivre:
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+
+        </tr>
+    </thead>
+
+
+<tr>
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algebre/" class="plain">Algèbre</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-proba/" class="plain">Probabilités</a>
+  </td>
+  <td>9</td>
+</tr>
+
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s1-anglais-3/" class="plain">Anglais</a>
+  </td>
+  <td>3</td>
+</tr>
+</table>
+]
+
+---
+class: top
+
+### Semestre II
+
+.small[
+
+.pull-left[
+.small[
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Période I</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-galois/" class="plain">Théorie de Galois</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/" class="plain">Equations aux dérivées partielles</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-topo-alg/" class="plain">Topologie algébrique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-theorie-ensembles/" class="plain">Théorie des ensembles</a>
+              </td>
+              <td>6</td>
+        </tr>
+        </table>
+
+
+<br>
+
+.fullwidth[
+<table>
+                <thead>
+                    <tr>
+                        <th>Sur l'ensemble du semestre</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-recherche/" class="plain">Initiation à la recherche</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-projet/" class="plain">Projet</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ue-ouverture/" class="plain">UE d'ouverture</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+             <td>
+
+             <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/" class="plain">Analyse de données</a>
+             </td>
+             <td>6</td>
+        </tr>
+        </table>
+]
+]
+]
+]
+
+
+.small[
+.pull-right[
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Période II</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-arith/" class="plain">Arithmétique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-alg/" class="plain">Introduction à la géométrie algébrique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-incompletude/" class="plain">Incomplétude et indécidabilité</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-diff/" class="plain">Géométrie différentielle</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/" class="plain">Théorèmes linites en probabilités</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/" class="plain">Statistique bayésienne et tests</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-anal-num/" class="plain">Méthodes numériques pour les EDOs et les EDPs</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/" class="plain">Mathématiques financières</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        </table>
+
+
+<br>
+
+.f6[Deux ou trois cours durant chaque période de six semaines et éventuellement un cours s'étalant sur le semestre]
+
+]
+]
+
+
+---
+
+### Exemple (Semestre II)
+
+.pull-left[
+Vous visez le parcours
+
+[M2MO](https://masterfinance.math.univ-paris-diderot.fr):
++ Modélisation Aléatoire,
++ Finance et
++ Data Science
+
+Il est possible de suivre 4/5 modules parmi les cours listés à droite
+
+`r fontawesome::fa("triangle-exclamation")` Équilibrer la charge entre les deux périodes
+
+`r fontawesome::fa("pencil")` Les projets/mémoires se déroulent sur l'ensemble du semestre
+]
+
+.pull-right[
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+
+        </tr>
+    </thead>
+
+<tbody>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistique fondamentale</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-anal-num/" class="plain">Méthodes numériques pour les EDOs et les EDPs</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/" class="plain">Mathématiques financières</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/" class="plain">Statistique bayésienne et tests</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/" class="plain">Théorèmes linites en probabilités</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+</tbody>
+</table>
+
+.f6[Ce n'est pas le seul choix possible et raisonnable] `r fontawesome::fa("face-smile")`
+]
+
+---
+exclude: false
+
+
+```{r, echo=FALSE, eval=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/#infospratiques")
+```
+
+
+<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&bgcolor=%23ffffff&ctz=Europe%2FParis&mode=WEEK&src=ZnVjdmw3aXRiN2g5YjBlOWcxcW9nZDg3NjBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%234285F4" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+
+
+---
+class: middle,center
+
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+m <- leaflet::leaflet(width=900, height=600) |>
+  leaflet::setView(lat=48.82928,
+                   lng=2.38174, zoom=16) |>
+  leaflet::addTiles() |>  # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(lat=48.82928,
+                      lng=2.38174,
+                      popup="Halle aux Farines") |>
+  leaflet::addMarkers(lat=48.82717410837418,
+                      lng=2.380986213684082,
+                      popup="Bâtiment Sophie Germain") |>
+  leaflet::addMarkers(lat=48.82671,
+                      lng=2.38268,
+                      popup="Batiment Olympes de Gouges")  |>
+  leaflet::addMarkers(lng=2.38004207611084,
+                      lat=48.8326901185081,
+                      popup="Barge du Crous")
+
+m
+```
+
+
+
+
+---
+class: top, left, inverse
+background-size: cover
+background-image: url('./img/pano-gds-moulins.jpg')
+
+### Grands moulins et Halle aux farines
+
+
+???
+
+Petit panorama du campus des Grands Moulins
+
+---
+class: top, left
+background-size: cover
+background-image: url('./img/2017-03-17 09.39.09.jpg')
+
+### Bâtiment Sophie Germain
+
+
+
+???
+
+C'est là que les choses sérieuses se passent

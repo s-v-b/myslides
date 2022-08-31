@@ -1,0 +1,164 @@
+---
+title: "Master 1 Mathématiques Fondamentales et Appliquées"
+subtitle: "Master Mathématiques et Applications"
+author: "Marie-Claude Arnaud et Stéphane Boucheron"
+institute: "Université Paris Cité"
+date: "2021/12/21 (updated: `r Sys.Date()`)"
+params:
+  title: "Rentrée Septembre 2022"
+  curriculum: "Master Mathématiques et Applications"
+  coursetitle: "Accueil"
+  lecturer: "Marie-Claude Arnaud et Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/m1mfa/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-math/"
+  institution: "Université Paris Cité"
+  campus: "Grands Moulins"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+
+
+```{r child='title_slide.Rmd'}
+
+```
+
+
+---
+template: inter-slide
+
+## `r fontawesome::fa("map", fill="white")`
+
+### [Organisation du Master 1 MFA](#organisation)
+
+### [Validation](#validation)
+
+### [Les parcours de Master II](#parcoursm2)
+
+### [Inscriptions](#inscriptions)
+
+### [Anglais](#anglais)
+
+### [Délégués](#delegues)
+
+### [Tutorat](#tutorat)
+
+
+---
+
+template: inter-slide
+name: organisation
+
+## Organisation  Master I MFA 
+
+---
+
+```{r child='orga_m1_mfa.Rmd'}
+
+```
+
+---
+
+template: inter-slide
+name: parcoursm2
+
+## Parcours Master II
+
+---
+
+```{r child='parcours_debouches_m2.Rmd'}
+
+```
+
+---
+template: inter-slide
+name: anglais
+background-image: url('./img/wallace.jpg')
+background-size: cover
+
+
+### Anglais (de spécialité)
+
+---
+
+```{r child='anglais-specialite.Rmd'}
+
+```
+
+
+---
+template: inter-slide
+name: delegues
+
+## Délégués
+
+---
+
+```{r child='delegues.Rmd'}
+
+```
+
+---
+
+template: inter-slide
+name: tutorat
+
+## Tutorat
+
+---
+
+```{r child='tutorat.Rmd'}
+
+```
+
+
+---
+template: inter-slide
+
+## Contacts
+
+---
+
+```{r child="contacts_m1_mfa.Rmd"}
+
+```
+
+---
+
+```{r child='closing_slide.Rmd'}
+
+```
+
+
+

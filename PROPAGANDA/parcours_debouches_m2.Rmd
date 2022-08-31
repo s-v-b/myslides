@@ -1,0 +1,65 @@
+
+
+
+
+### Parcours issus du Master I  MFA
+
+
+|  **Titre**      | **Thèmes**        | **Laboratoire(s)** |
+|:----------------|:------------------|:------------------:|
+| [Maths Fondamentales](http://master-math-fonda.imj-prg.fr)    |                   |   [IMJ-PRG](https://www.imj-prg.fr)            |
+| [M2MO](https://masterfinance.math.univ-paris-diderot.fr)            |  Math-Fi/Dat. Sc. |  [LPSM](http://www.lpsm.paris)               |
+| [LMFI](http://master.math.univ-paris-diderot.fr/annee/m2-lmfi/)            |  Logique/Inform.  | [IMJ-PRG/IRIF](https://www.imj-prg.fr)       |
+| [Math. Géné.](http://master.math.univ-paris-diderot.fr/annee/m2-agreg/)     |  Prep. Agreg.     |                    |
+
+---
+
+### Parcours Pro Université Paris Cité Campus Grands Moulins
+
+|  **Titre**      | **Thèmes**        | **Apprentissage**     | **Laboratoire(s)** |
+|:----------------|:------------------|:---------------------:|:------------------:|
+| [ISIFAR](http://master.math.univ-paris-diderot.fr/parcours/isifar/)          |  Math-Fi/Risque   | Oui                   | [LPSM](http://www.lpsm.paris)               |
+| Math-Info  (1)  |  Sécurité/Dat. Sc.| Oui                   | [LPSM](http://www.lpsm.paris) / [IRIF](https://www.irif.fr)          |
+
+---
+
+### Parcours Université Paris Cité/Campus St-Germain des Prés
+
+|  **Titre**      | **Thèmes**        | **Laboratoire(s)** |
+|:----------------|:------------------|:------------------:|
+| IMB | Santé/Bio/Statistique | [MAP5]() |
+| MMA | Maths-Modélisation-Apprentissage | [MAP5]() |
+| MVA | Maths-Vision-Apprentissage | [MAP5]()  |
+
+
+---
+
+### Campus Saint-Germain des Prés
+
+```{r, echo=FALSE, message=FALSE, fig.align='center', fig.width=8}
+require(magrittr)
+m <- leaflet::leaflet() %>%
+  leaflet::setView(lat=48.85552,
+                      lng=2.33152, zoom=12) %>%
+  leaflet::addTiles() %>%  # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(lat=48.85552,
+                      lng=2.33152,
+                      popup="Bâtiment Saint-Pères")
+
+m
+```
+
+
+---
+
+### Parcours autres universités
+
+
+|  **Titre**      | **Thèmes**        | **Laboratoire(s)** | **Établissement** |
+|:----------------|:------------------|:------------------:|:------------------:|
+| [Modélisation]()  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         |  SU |
+| [Probabilités]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris) | SU |
+| Statistique | Statistique | [LPSM](http://www.lpsm.paris) | SU |
+| MASH  | Statistique | [LAMSADE]() | PSL |
+| ISEFAR | Statistique | [Modal'X]() | Paris-Ouest |
+| ...   |   |   |   |

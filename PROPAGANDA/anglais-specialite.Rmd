@@ -1,37 +1,34 @@
+-   Coordinateur : M. Vincent Régis
 
----
-class: inverse, top, center
-name: anglais
-background-image: url('./img/wallace.jpg')
-background-size: cover
+-   Agenda
 
-## Anglais de spécialité
+    -   Ouverture des tests : début septembre `r lubridate::year(lubridate::today())`
 
+    -   Inscription en ligne dans un TD : début septembre `r lubridate::year(lubridate::today())`
 
----
+    -   Début des TD : mi septembre `r lubridate::year(lubridate::today())`
 
-- Coordinatrice : TBA
+    -   Semaine de pause : du 29 octobre au 06 novembre `r lubridate::year(lubridate::today())` inclus
 
-- Agenda
-  + Ouverture des tests : début septembre 2021
+    -   Fin des TD : vendredi 9 décembre `r lubridate::year(lubridate::today())`
 
-  + Inscription en ligne dans un TD : début septembre 2021
-
-  + Début des TD :mi septembre 2021
-
-  + Semaine de pause : du 30 octobre au 07 novembre 2021 inclus
-
-  + Fin des TD : vendredi 10 décembre 2021
-
-  + Inscription pour les personnes souhaitant une dispense de contrôle continu  
-  Contacter en premier lieu la coordinatrice qui accompagnera votre demande à la direction du LANSAD
+    -   Inscription pour les personnes souhaitant une dispense de contrôle continu\
+        Contacter en premier lieu la coordinatrice qui accompagnera votre demande à la direction du LANSAD
 
 ---
 
-Tout étudiant souhaitant une dispense mais qui n'aura pas fait son inscription dans le groupe "salarié ou dispensé" (inscription en ligne ou à la scolarité LANSAD) avant la date limites _ne pourra être admis à composer_
+### `r fontawesome::fa("triangle-exclamation")`
 
-Il devra alors passer la session de rattrapage.
+Tout étudiant souhaitant une dispense mais qui n'aura pas fait son inscription dans le groupe "salarié ou dispensé" (inscription en ligne ou à la scolarité LANSAD) avant la date limites *ne sera pas admis à composer*
+
+--
+
+Elle/il devra alors passer la session de rattrapage. `r fontawesome::fa("face-frown")`
+
+---
+
+### `r fontawesome::fa("triangle-exclamation")`
 
 > Toute inscription dans le régime salarié ou dispensé de TD devra être justifiée avant la clôture des inscriptions : photocopie de votre contrat de travail ou tout justificatif prouvant votre indisponibilité à suivre un TD (ex : emplois du temps signé de votre scolarité...).
 
-Consultez régulièrement le site : [http://www.lansad.eila.univ-paris-diderot.fr](http://www.lansad.eila.univ-paris-diderot.fr)
+Consultez régulièrement le site : <http://www.lansad.eila.univ-paris-diderot.fr>

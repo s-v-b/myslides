@@ -1,0 +1,11 @@
+class: middle, left, inverse
+
+# Master I MFA : `r params$title`
+
+### `r Sys.Date()`
+
+#### [`r params$curriculum`](`r params$homepage_curriculum`)
+
+#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
+
+#### Campus: `r params$campus`
