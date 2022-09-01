@@ -5,9 +5,9 @@
 
 .fl.w-40.pa2[
 
-- Secrétariat de l'UFR de Mathématiques
+- Secrétariat de l'UFR de Mathématiques 
 
-- Bâtiment Sophie Germain 
+- Bâtiment Sophie Germain Bureau 1012
 
 ]
 

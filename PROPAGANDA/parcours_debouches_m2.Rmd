@@ -21,15 +21,24 @@
 | [ISIFAR](http://master.math.univ-paris-diderot.fr/parcours/isifar/)          |  Math-Fi/Risque   | Oui                   | [LPSM](http://www.lpsm.paris)               |
 | Math-Info  (1)  |  Sécurité/Dat. Sc.| Oui                   | [LPSM](http://www.lpsm.paris) / [IRIF](https://www.irif.fr)          |
 
+
+---
+
+```{r, echo=FALSE, out.width="90%"}
+knitr::include_url("https://odf.u-paris.fr/fr/catalogue-des-diplomes-nationaux.html#nav", height = "500")
+```
+
 ---
 
 ### Parcours Université Paris Cité/Campus St-Germain des Prés
 
+
+
 |  **Titre**      | **Thèmes**        | **Laboratoire(s)** |
 |:----------------|:------------------|:------------------:|
-| IMB | Santé/Bio/Statistique | [MAP5]() |
-| MMA | Maths-Modélisation-Apprentissage | [MAP5]() |
-| MVA | Maths-Vision-Apprentissage | [MAP5]()  |
+| IMB | [Ingénierie/Bio-Statistique](https://math-info.u-paris.fr/master-mathematiques-et-applications/specialite-ingenierie-mathematique-et-biostatistique/#:~:text=Le%20Master%20d%27Ingénierie%20Mathématique,la%20santé%2C%20les%20sciences%20sociales.) | [MAP5](https://map5.mi.parisdescartes.fr) |
+| MMA | [Maths-Modélisation-Apprentissage](https://math-info.u-paris.fr/master-mathematiques-et-applications/specialite-mathematiques-modelisation-apprentissage) | [MAP5](https://map5.mi.parisdescartes.fr) |
+| MVA | [Maths-Vision-Apprentissage](https://math-info.u-paris.fr/en/master-in-mathematics-and-applications/2d-year-mathematics-computer-vision-and-machine-learning) | [MAP5](https://map5.mi.parisdescartes.fr)  |
 
 
 ---
@@ -57,9 +66,9 @@ m
 
 |  **Titre**      | **Thèmes**        | **Laboratoire(s)** | **Établissement** |
 |:----------------|:------------------|:------------------:|:------------------:|
-| [Modélisation]()  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         |  SU |
-| [Probabilités]()  |  Probabilités     |  [LPSM](http://www.lpsm.paris) | SU |
-| Statistique | Statistique | [LPSM](http://www.lpsm.paris) | SU |
-| MASH  | Statistique | [LAMSADE]() | PSL |
-| ISEFAR | Statistique | [Modal'X]() | Paris-Ouest |
+| [Modélisation](https://www.ljll.math.upmc.fr/MathModel/)  |  Ana. Num.        |  [J.L. Lions](https://www.ljll.math.upmc.fr/?lang=fr)         |  SU |
+| [Probabilités](https://sciences.sorbonne-universite.fr/formation-sciences/masters/master-mathematiques-et-applications/m2-parcours-probabilites-et-modeles)  |  Probabilités     |  [LPSM](http://www.lpsm.paris) | SU |
+| [Statistique](https://m2stat.sorbonne-universite.fr) | Statistique | [LPSM](http://www.lpsm.paris) | SU |
+| [MASH](https://dauphine.psl.eu/formations/masters/mathematiques-et-applications/m2-mathematiques-apprentissage-sciences-humanites)  | Statistique | [CEREMADE]() | PSL |
+| [ISEFAR](https://isifar.parisnanterre.fr) | Statistique | [Modal'X](https://modalx.parisnanterre.fr) | Paris-Ouest |
 | ...   |   |   |   |

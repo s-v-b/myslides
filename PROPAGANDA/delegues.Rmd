@@ -1,9 +1,32 @@
 
 
-### Fonctions
+### Fonctions  `r fontawesome::fa("award")`
 
-- Relayer les doléances estudiantines auprès des enseignants et responsables
-- Participer au conseil de perfectionnement
-- Aider à l'élaboration des questionnaires
+- Participer au _conseil de perfectionnement_
+
+- Relayer les pistes d'amélioration
+
+- Discuter  
+  + de l'organisation générale du parcours (par exemple, l'organisation du second semestre)
+  + de l'articulation cours/TD
+  + de l'organisation du contrôle continu
+  + du fonctionnement des sites WEB (site vitrine, Moodle, autre)
+  + des usages de zoom
+
+- Aider à l'élaboration des questionnaires :
   - Formulation des questions
   - Proposition de questions
+  - ...
+
+
+???
+
+Les objectifs de conseil de perfectionnement sont multiples:
+
+    discuter de l'organisation générale du parcours (par exemple, l'organisation du second semestre)
+    discuter de l'articulation cours/TD
+    discuter de l'organisation du contrôle continu
+    discuter du fonctionnement des sites WEB (site vitrine, Moodle, autre)
+    usage(s) de zoom
+    
+    .... (vous avez sans doute pensé à des questions originales)
