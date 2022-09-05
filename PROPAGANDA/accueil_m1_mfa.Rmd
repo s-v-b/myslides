@@ -155,6 +155,17 @@ template: inter-slide
 ```
 
 ---
+template: inter-slide
+
+## Portails
+
+---
+
+```{r child="portails_m1_mfa.Rmd"}
+
+```
+
+---
 
 ```{r child='closing_slide.Rmd'}
 

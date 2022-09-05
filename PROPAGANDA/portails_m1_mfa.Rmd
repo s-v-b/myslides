@@ -1,0 +1,68 @@
+
+### Portail Moodle 
+
+[https://moodle.u-paris.fr](https://moodle.u-paris.fr)
+.
+Moodle est un LMS (Système de Gestion d'Enseignemnet(s))
+
+[https://moodle.u-paris.fr](https://moodle.u-paris.fr) est l'adresse (l'URL) du serveur de l'Université Paris Cité. 
+
+Chaque cours est associé à un portail Moodle
+
+Le Master I possède son propre portail
+
+[https://moodle.u-paris.fr/course/view.php?id=8568](https://moodle.u-paris.fr/course/view.php?id=8568)
+
+---
+
+### Moodle M1 MFA 
+
+[https://moodle.u-paris.fr/course/view.php?id=8568](https://moodle.u-paris.fr/course/view.php?id=8568)
+
+
+![Entree portail M1 MFA](img/img_moodle_m1_mfa_1.png)
+
+
+---
+
+Le portail du M1 MFA sert à 
+
+- poster des nouvelles, annnonces, etc
+
+- prise de rendez-vous pour les entretiens 
+
+- poster les questionnaires et autres documents 
+
+---
+
+`r fontawesome::fa("list-check")`
+
+S'abonner aux portails Moodle 
+
+- du M1 MFA 
+
+- de chacun des cours suivis 
+ 
+ 
+---
+
+### Mon dossier WEB 
+
+[https://mondossierweb.app.u-paris.fr](https://moodle.u-paris.fr/course/view.php?id=8568)
+
+```{r}
+knitr::include_graphics("img/img_mon_dossier_web.png")
+```
+
+
+---
+
+### Master 
+
+[https://master.math.univ-paris-diderot.fr/annee/m1-math/](https://master.math.univ-paris-diderot.fr/annee/m1-math/)
+
+
+```{r, echo=FALSE}
+knitr::include_url("https://master.math.univ-paris-diderot.fr/annee/m1-math")
+```
+
