@@ -45,10 +45,7 @@ class: left, middle
 
 ```
 
-```{r, echo=FALSE}
-#xaringanExtra::use_scribble()
-#xaringanExtra::use_webcam()
-```
+
 
 ---
 
@@ -862,6 +859,7 @@ template: inter-slide
 
 ---
 
+
 ### From `r fontawesome::fa("r-project")` to `D3.js`
 
 ```{r animate, warning=FALSE, eval=FALSE, message=FALSE, out.width="80%"}
@@ -891,7 +889,7 @@ q <- filter(gapminder, FALSE) %>%
 ```
 
 ---
-exclude: true
+
 
 ```{r}
 (p +
@@ -904,6 +902,7 @@ exclude: true
 
 ---
 
+
 ```{r animate-out, ref.label="animate", echo=FALSE, message=FALSE, warning=FALSE}
 
 
@@ -911,6 +910,7 @@ exclude: true
 
 
 ---
+
 
 ### Zooming on Europe (tweaking code)
 
@@ -927,6 +927,7 @@ target_continent <- 'Europe'
 ```
 
 ---
+
 
 ### Zooming on Europe
 
