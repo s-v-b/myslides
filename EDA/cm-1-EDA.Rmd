@@ -5,11 +5,12 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I MIDS & MFA"
-  coursetitle: "Analyse Exploratoire de Données"
+  title: "Introduction to R and Data Analysis"
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
@@ -44,19 +45,12 @@ class: left, middle
 
 ```
 
-
 ---
-template: inter-slide
 
-# I :  Introduction to `r fontawesome::fa("r-project")`
+```{r , child="title_slide.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
 
-### `r Sys.Date()`
+```
 
-#### [`r params$curriculum`](`r params$homepage_curriculum`)
-
-#### [`r params$coursetitle`](`r params$homepage`)
-
-#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 ---
 template: inter-slide
@@ -108,7 +102,8 @@ by John Chambers et al.
 
 - 1988 _S-PLUS_ first produced by a Seattle-based start-up company called Statistical Sciences, Inc.
 
-- 1991-93 `r fontawesome::fa("r-project")` initated by [R. Ihaka](https://en.wikipedia.org/wiki/Ross_Ihaka) and [R. Gentleman](https://en.wikipedia.org/wiki/Robert_Gentleman_(statistician))
+- 1991-93 `r fontawesome::fa("r-project")` initated by [R. Ihaka](https://en.wikipedia.org/wiki/Ross_Ihaka) and 
+<a href="https://en.wikipedia.org/wiki/Robert_Gentleman_(statistician)"> R. Gentleman</a>
 
 - 1997 Formation of `r fontawesome::fa("r-project")` Core Team
 
@@ -148,40 +143,49 @@ graph TB
 
 ---
 
+### Aspects of `r fontawesome::fa("r-project")`
 
 .fl.w-50[
 
-###  Programming Language
+###  `r fontawesome::fa("r-project")` as a Programming Language
 
-- Functional (inherited from [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)))
+- Functional (inherited from <a href="https://en.wikipedia.org/wiki/Scheme_(programming_language)"> Scheme</a>
 
 - Object Oriented
 
-- Interpreted
+- Interpreted 
 
 - Written in `C` and `Fortran`
 
 - Interfaced with `C, C++, Java`, `r fontawesome::fa("python")`, ...
 
-- Interfaced with `r fontawesome::fa("database")` SQL
+- Interfaced with  SQL  `r fontawesome::fa("database")`
 
 ]
 
-
+--
 
 .fl.w-50[
 
 ### Environment REPL
 
+- REPL: Read-Eval-Print-Loop 
+
 - `r fontawesome::fa("r-project")` Application
 
 - `ESS` Emacs Speaks Statistics
 
-- `Rstudio` `r fontawesome::fa("glass-cheers")`
+- `Rstudio` IDE `r fontawesome::fa("glass-cheers")`
 
 - `Jupyter` notebooks
 
+- VS Code 
+
+...
+
 ]
+
+
 ---
 
 ### Kernel and packages
@@ -194,7 +198,7 @@ Packages enrich the kernels in many ways:
 
 - visualization (`ggplot2`, `plotly`, ...)
 
-- cleaner data structures (`tibble`, `data.table`, ...)
+- cleaner, more efficient data structures (`tibble`, `data.table`, ...)
 
 - cleaner APIs (`lubridate`, `stringr`, ...)
 
@@ -214,6 +218,8 @@ Packages can also be installed from GitHub `r fontawesome::fa("github")` and oth
 ---
 
 ### R-bloggers
+
+
 
 ```{r, echo=FALSE, fig.width=12}
 knitr::include_url("https://www.r-bloggers.com")
@@ -274,11 +280,65 @@ knitr::include_url("https://rmarkdown.rstudio.com/index.html")
 > Literate programming is a programming paradigm introduced by Donald Knuth in which a computer program is given an explanation of its logic in a natural language, such as English, interspersed with snippets of macros and traditional source code, from which compilable source code can be generated. The approach is used in scientific computing and in data science routinely for reproducible research and open access purposes. Literate programming tools are used by millions of programmers today.
 
 
+---
+
+### Reproducible (statistical) research
+
+.fl.w-60.pa2[
+
+![](img/pipeline.svg)
+
+]
+
+
+.fl.w-40.pa2[
+
+**A pipeline**
+
+- Data gathering
+
+- Data wrangling
+
+- Exploratory Data Analyis (and Visualization)
+
+- Modeling prediction
+
+- Reporting (paper, html, interactive dashboard, ...)
+
+
+]
 
 
 ---
 
-### Reproducible (statistical) research
+
+### Reproducible (statistical) research (cont'd)
+
+
+.fl.w-60.pa2[
+
+![](img/pipeline.svg)
+
+]
+
+.fl.w-40.pa2[
+
+### A pipeline
+
+The pipeline is defined by solid arrows
+
+It may be (partially) iterated (several times)
+
+The reports need to be updated every time
+
+- data are edited/reshaped
+
+- models are modified
+
+]
+---
+
+### Reproducible (statistical) research (cont'd)
 
 .fl.w-50.pa2[
 
@@ -298,21 +358,17 @@ knitr::include_url("https://rmarkdown.rstudio.com/index.html")
 
 .fl.w-50.pa2[
 
-The pipeline may be iterated several times
+- The pipeline may be iterated several times
 
-Gluing the different steps in a manageable way is vital
+- Gluing the different steps in a manageable way is vital
 
-`RMarkdown` does just that `r fontawesome::fa("glass-cheers")`
+- `RMarkdown` does just that `r fontawesome::fa("glass-cheers")`
+
+- [`Quarto`](https://quarto.org) is an improvement/extension of `RMarkdown`
 
 ]
 
 
----
-
-.fl.w-60.pa2[
-
-
-![](img/pipeline.svg)
 
 
 ```{r pipeline-mmd, echo=FALSE, eval=FALSE}
@@ -332,32 +388,30 @@ DiagrammeR::mermaid("
 
 ```
 
-]
-
-.fl.w-40.pa2[
-
-### A pipeline
-
-The pipeline is defined by solid arrows
-
-It may be (partially) iterated (several times)
-
-The reports need to be updated every time
-
-- data are edited/reshaped
-
-- models are modified
-
-]
 
 ---
 template: inter-slide
 name: books
 
-## Books
+## Books  and references
 
 ---
 
+The Web offers many valuable resources for learning  `r fontawesome::fa("r-project")` either as a beginner or as seasoned statistician 
+
+- [Online books](https://bookdown.org)
+
+- [Cheatsheets](https://www.rstudio.com/resources/cheatsheets/)
+
+- [Datacamp](https://www.datacamp.com/)
+
+- [Udacity](https://www.udacity.com)
+
+- [Stackoverflow](https://stackoverflow.com/questions/tagged/r)
+
+- ...
+
+---
 
 ```{r, echo=FALSE, fig.width=12}
 knitr::include_url("https://rstudio-education.github.io/hopr/")

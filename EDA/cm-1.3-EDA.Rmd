@@ -81,7 +81,7 @@ name: dt
 
 ---
 
-### Tables
+### Tables (examples)
 
 - Speadsheets (Excel)
 
@@ -95,7 +95,9 @@ name: dt
   - `Dask`: `dataframe`
   - and many others
 
-???
+---
+
+### Tables (Why ?)
 
 In Data Science, each framework comes with its own flavor(s) of table
 
@@ -105,12 +107,12 @@ In `r fontawesome::fa("r-project")` legacy dataframes shape the life of statisti
 
 The purpose of this session is
 
-- describing dataframes from an end-user viewpoint (we leave aside implemenations)
-- learning tools for
-  - accessing information within dataframes (querying)
-  - summarizing information
-  - cleaning dataframes
-  - tidying dataframes
+- describe dataframes from an end-user viewpoint (we leave aside implemenations)
+- presenting tools for
+  - accessing information within dataframes (*querying*)
+  - summarizing information (*aggregation queries*)
+  - cleaning/cleaning dataframes  (*tidying*)
+
 
 ---
 
@@ -119,24 +121,31 @@ The purpose of this session is
 
 ```{r}
 pacman::p_load("tidyverse")      # All we need is there
+
 # Almost all. Helper packages
 pacman::p_load("nycflights13")    # for flight data
+
+# for manipulating dates and times
 pacman::p_load("lubridate")
+
+# nice table output for web presentations
 pacman::p_load("DT")
 pacman::p_load("gt")
 pacman::p_load("kableExtra")
+
+# 
 data(flights)
 ```
 
-???
+---
 
-[`tidyverse`]() provides tools to create, query, tidy dataframes as well as tools
-to load data from various sources and save them in persistent storage
+### About loaded packages 
 
-[`nycflights13`]() provides the dataframes we paly with
+- Metapackage [`tidyverse`](https://www.tidyverse.org) provides tools to create, query, tidy dataframes as well as tools to load data from various sources and save them in persistent storage
 
-[`DT`]() is a gateway to a Javascript library that enables gracious display of dataframes
-on the www
+- [`nycflights13`](https://github.com/tidyverse/nycflights13) provides the dataframes we paly with
+
+- [`DT`](https://rstudio.github.io/DT/) is a gateway to a `Javascript` library that enables gracious display of dataframes on the WWW
 
 
 
@@ -144,10 +153,14 @@ on the www
 
 ### The `flights` table
 
+.f6[
+
 ```{r}
-head(flights, 10)  #<<
-# head(flights)
+head(flights) %>%
+  glimpse(width = 50) 
 ```
+
+]
 
 ???
 
@@ -286,16 +299,17 @@ name: sql
 
 ???
 
+---
 
-SQL stands for structured/simple query language
+- SQL stands for structured/simple query language
 
-A query language elaborated during the 1970's at IBM by Codd
+- A query language elaborated during the 1970's at IBM by E. Codd
 
-Geared towards exploitation of collections of relational tables
+- Geared towards exploitation of collections of relational tables
 
-Less powerful but simpler to use than a programming language
+- Less powerful but simpler to use than a programming language
 
-`dplyr` is a principled `r fontawesome::fa("r-project")`-friendly
+- `dplyr` is a principled `r fontawesome::fa("r-project")`-friendly
 implementation of SQL ideas (and other things)
 
 At the core of SQL lies the idea of a table calculus called relational algebra
@@ -391,12 +405,11 @@ knitr::include_url("https://dplyr.tidyverse.org")
 
 ???
 
-Base `r fontawesome::fa("r-project")` provides tools to perform relational algebra
-operations
+Base `r fontawesome::fa("r-project")` provides tools to perform relational algebra operations
 
 But:
 
-- Base `r fontawesome::fa("r-project")` does  not provide a consistent API
+- Base `r fontawesome::fa("r-project")` does not provide a consistent API
 
 - The lack of a consistent API makes operation chaining tricky
 
@@ -486,7 +499,7 @@ Function `select` allows to pick column by names (and much more)
 
 Note that in the current environment, there are no objects called `A1`, `A3`
 
-The conistent API allows to use the pipe operator
+The consistent API allows to use the pipe operator
 
 ---
 
@@ -788,7 +801,6 @@ This can be done in a (verbose) `dplyr` way using `slice()` and `select()`
 
 .fl.w-50.pa2[
 ```{r}
-
 flights %>%
   slice(5001:5005) %>%  #<<
   select(seq(1, 19, by=5))
@@ -905,17 +917,22 @@ with matching values in `year`, `month`, `day`, `hour`  and `origin`
 
 ### `inner_join`: natural join
 
-.fl.w-30.pa2[
+.fl.w-40.pa2[
 
 ```{r flights-weather, eval=FALSE}
 f_w <- flights %>%
   inner_join(weather) #<<
 
-head(f_w)
+
+f_w %>% 
+  select(seq(1, 
+             ncol(f_w),
+             by=2)) %>% 
+  glimpse(width=50)
 ```
 ]
 
-.fl.w-70.pa2.f6[
+.fl.w-60.pa2.f6[
 
 ```{r flights-weather-out, echo=FALSE, ref.label="flights-weather"}
 
@@ -1736,11 +1753,12 @@ x |>
 `Magrittr` offers several variants of `%>%`
 
 - Tee operator `%T>%`
-- Assignement pipe `%<>%
+- Assignement pipe `%<>%`
 - Exposition operator `%$%`
-- ...  `
+- ...  
 
 .fr[See [pipes for beginners](https://www.r-bloggers.com/2017/12/pipes-in-r-tutorial-for-beginners/)]
+
 
 ---
 template: inter-slide

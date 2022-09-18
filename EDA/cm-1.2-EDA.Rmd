@@ -45,10 +45,7 @@ class: left, middle
 
 ```
 
-```{r, echo=FALSE}
-#xaringanExtra::use_scribble()
-#xaringanExtra::use_webcam()
-```
+
 
 ---
 
@@ -82,14 +79,14 @@ The expression _Grammar of Graphics_ was coined by Leiland Wilkinson to describe
 
 A plot is organized around data (a table with rows (observations) and columns (variables)) 
 
-A plot is a graphical object that can be built layer by layer  
+A *plot* is a *graphical object* that can be built layer by layer  
 
 Building a graphical object consists in chaining elementary operations 
 
-The acclaimed TED presentation by Hans Rossling illustrates the Grammar of Graphics approach in a very appealing way
+The acclaimed TED presentation by [Hans Rosling](https://en.wikipedia.org/wiki/Hans_Rosling) illustrates the Grammar of Graphics approach
 
 ---
-### Grammar of Graphics in Action
+### Grammar of Graphics in Action  `r fontawesome::fa("video")`
 
 ```{r rossling, eval=TRUE}
 knitr::include_url("https://www.youtube.com/embed/jbkSRLYSojo")
@@ -101,24 +98,41 @@ knitr::include_url("https://www.youtube.com/embed/jbkSRLYSojo")
 
 ### [`r fontawesome::fa("link")` Gapminder](https://www.gapminder.org)
 
-[Gapminder](https://www.gapminder.org) is a Swedish foundation. Its website states
+[Gapminder](https://www.gapminder.org) is a Swedish foundation. 
 
 > Gapminder fights devastating misconceptions about global development. Gapminder produces free teaching resources making the world understandable based on reliable statistics. Gapminder promotes a fact-based worldview everyone can understand.
 
 Hans Rosling was a founder of Gapminder
 
+
+---
+
+The TED presentation is an example of attractive data visualization
+
+- Where do the data come from?
+
+- How can we gather data? 
+
+- How can we tidy data? 
+
+- How can we analyze/explore data?
+
+- How can we present data (to a diverse audience)? 
+
+
+
 ---
 template: inter-slide
 name: diy
 
-## Do It Yourself
+## Do It Yourself with `r fontawesome::fa("r-project")`
 
 
 ---
 
 We will reproduce the animated demonstration using 
 
-- `ggplot2` an implementation of grammar of graphics in `r fontawesome::fa("r-project")`
+- `ggplot2` an implementation of *grammar of graphics* in `r fontawesome::fa("r-project")`
 
 - `plotly` a bridge between `r fontawesome::fa("r-project")` and the javascript library `D3.js`
 
@@ -129,11 +143,11 @@ We will reproduce the animated demonstration using
 
 .fl.w-50.pa2.f6[
 
-The `gapminder` data can be loaded from pakage `gapminder`
+In `r fontawesome::fa("r-project")` The `gapminder` data can be loaded from *package* `gapminder`
 
-- `r fontawesome::fa("download")` Packages can be _installed_ from `CRAN` using `install.packages()`
+- `r fontawesome::fa("download")` Packages can be *installed* from `CRAN` using `install.packages()`
 
-- `r fontawesome::fa("hdd")` Once a package is installed on the hard drive, it has to be _loaded_ in the current session using `require()` or `library()`
+- `r fontawesome::fa("hdd")` Once a package is *installed* on the hard drive, it has to be *loaded* in the current session using `require()` or `library()`
 
 - `r fontawesome::fa("hdd")` Function `p_load` from package `pacman` installs the package if needed and loads it
 
@@ -194,30 +208,45 @@ gapminder %>%
 
 ### What's in a data frame/tibble?
 
-A table has a _schema_: a list of named _columns_, each  with a given type
+.fl.w-30.pa2[
+- A table has a _schema_: a list of named _columns_, each  with a given type
 
-A table has a _content_: _rows_. Each row is a collection of items, corresponding
+- A table has a _content_: _rows_. Each row is a collection of items, corresponding
 to the columns
 
-`glimpse()` allows to see the schema and the first rows
+- `glimpse()` allows to see the schema and the first rows
 
-`head()` allows to see the first rows
+- `head()` allows to see the first rows
 
+]
+
+.fl.w-70.pa2.f6[
+
+```{r head_gapminder}
+gapminder %>% 
+  head() %>% 
+  knitr::kable(digits = 3)
+```
+
+]
 ---
 
 ### Get a feeling of the dataset
 
 .fl.w-30.pa2.f6[
 
+We pick two random rows for each continent
+
 ```{r stratified_sampling}
 tmp <- gapminder %>% 
   group_by(continent) %>%  #<<
-  slice_sample(n=2)        #<<
+  slice_sample(n=2)  %>%       #<<
+  knitr::kable(digits = 3)
 ```
 
 ]
 
-.fl.w-70.pa2[
+.fl.w-70.pa2.f6[
 
 ```{r stratified_sampling_bis, echo=FALSE}
 tmp
@@ -290,7 +319,9 @@ gapminder_2002 <-
 .fl.w-70.pa2.f6[
 
 ```{r gapminder_filtered_glimpse, echo=FALSE}
-gapminder_2002
+gapminder_2002 %>% 
+  head(10) %>% 
+  knitr::kable(digits = 3) 
 ```
 
 ]
@@ -300,7 +331,7 @@ gapminder_2002
 
 In the parlance of Relational Algebra, `filter` performs  a _selection_ of rows
 
-[dplyr docs](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter){target="_blank"}
+[Package `dplyr` docs](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter)
 
 > find rows/cases where conditions are true
 
@@ -367,14 +398,16 @@ p
 
 ---
 
-Recall that we are building a graphical object (a `ggplot` object) around a data frame. We supply _aesthetic mappings_ that can be either global
-or bound to some _geometries_ or _statistics_ 
+We are building a graphical object (a `ggplot` object) around a data frame (`gapminder`)
+
+We supply _aesthetic mappings_ (`aes()`) that can be either global
+or bound to some _geometries_ (`geom_point()`)or _statistics_ 
 
 The global aesthetic mapping defines which columns are 
 
 - mapped to which axes, 
 
-- possibly mapped to colours, linetypes, shapes ...
+- possibly mapped to colours, linetypes, shapes, ...
 
 Geometries and Statistics describe the building blocks of graphics
 
@@ -384,11 +417,11 @@ Geometries and Statistics describe the building blocks of graphics
 
 when comparing to the Gapminder demonstration, we can spot  that
 
--  [ ] colors are missing 
+-  colors are missing 
 
--  [ ] bubble sizes are all the same
+-  bubble sizes are all the same
 
--  [ ] titles and legends are missing
+-  titles and legends are missing
 
 We will add layers to the graphical object to complete the plot
 
@@ -403,13 +436,13 @@ We will add layers to the graphical object to complete the plot
 
 - Map `pop` to bubble size
 
-- Make point transparent by tuning `alpha` (avoid overplotting)
+- Make point transparent by tuning `alpha` (avoid *overplotting*)
 
 ```{r better, echo=TRUE, eval=FALSE}
 p <- p +
   aes(size = pop, #<<
       color = continent #<<
-  ) +
+  ) + #<<
   geom_point(alpha=.75)  #<<
 
 p
@@ -432,7 +465,6 @@ p
 
 ### Scaling
 
-.fl.w-30.pa2[
 
 In order to pay tribute to Hans Rosling, we need to take care of two _scaling_ issues:
 
@@ -440,20 +472,27 @@ In order to pay tribute to Hans Rosling, we need to take care of two _scaling_ i
 
 - the _area_ of the point should be proportional to the population
 
-```{r scaling, echo=TRUE, eval=FALSE}
-zoom_continent <- 'Europe'
 
+
+---
+
+### Fixing scales
+
+.fl.w-40.pa2.f6[
+
+
+```{r scaling, echo=TRUE, eval=FALSE}
 p <- p +
-  scale_x_log10(limits=c(100,5e4)) + #<<
-  scale_size_area()  #<<
+ scale_x_log10(   #<<
+   limits=c(1e2,5e4) #<<
+   ) + #<<
+ scale_size_area()  #<<
 
 p
-# p + ggforce::facet_zoom(xy= continent==zoom_continent,
-#                         zoom.data = continent==zoom_continent)
 ```
 ]
 
-.fl.w-70.pa2[
+.fl.w-60.pa2[
 
 
 ```{r scaling-out, ref.label="scaling", echo=FALSE}
@@ -461,6 +500,13 @@ p
 ```
 
 ]
+
+
+???
+
+```{r}
+zoom_continent <- 'Europe'
+```
 
 ---
 
@@ -485,17 +531,42 @@ p
   + explicit
   + readable
 
-```{r title, echo=TRUE, eval=FALSE}
-p <- p +
-  labs(title=glue("Gapminder {min(p$data$year)}-{max(p$data$year)}"),
-       x = "Yearly income per capita (US$)",
-       y = "Life expectancy",
-       caption= "From sick  and poor (bottom left) to healthy and rich (top right)")
 
+]
+
+.fl.w-70.pa2.f6[
+
+```{r title, echo=TRUE, eval=FALSE}
+p_titre <- glue("Gapminder {min(p$data$year)}-{max(p$data$year)}")
+
+p_caption <- "From sick  and poor (bottom left) to healthy and rich (top right)"
+
+
+p <- p +
+  labs(title=p_titre,  #<<
+       x = "Yearly income per capita (US$)", #<<
+       y = "Life expectancy", #<<
+       caption=p_caption ) #<<
+
+p
 ```
 
 ]
 
+---
+
+### In perspective (cont'd)
+
+.fl.w-30.pa2[
+
+- Add a plot title
+
+- Make axes titles
+  + explicit
+  + readable
+
+
+]
 
 .fl.w-70.pa2[
 
@@ -605,13 +676,15 @@ Choosing a color scale is a difficult task
 ```{r zoom_africa, eval=FALSE, echo=TRUE}
 require(ggforce) #<<
 
-zoom_in <- 'Africa'
+z_in <- 'Africa'
 
 p_africa <- p +
   facet_zoom( #<<
-    xy= continent==zoom_in, #<<
-    zoom.data= continent==zoom_in #<<
+    xy= continent==z_in, #<<
+    zoom.data=continent==z_in #<<
     ) #<<
+
+p_africa
 ```
 
 ]
@@ -634,7 +707,10 @@ Wes Anderson themes
 
 ---
 
-```{r theme_scale-out-bis, ref.label="theme_scale", warning=FALSE, echo=FALSE, message=FALSE, out.width="90%"}
+### A static plot for Gapminder (2002)
+
+```{r theme_scale-out-bis, warning=FALSE, echo=FALSE, message=FALSE, out.width="90%"}
+p
 ```
 
 
@@ -701,10 +777,10 @@ template: inter-slide
 
 So far we have only presented one year of data (2002)
 
-Rossling used an animation to display the flow of time
+Rosling used an *animation* to display the flow of time
 
 If we have to deliver a printable report, we cannot rely on animation, 
-but we can rely on _facetting_ 
+but we can rely on *facetting* 
 
 Facets are collections of small plots constructed in the same way 
 on subsets of the data
@@ -752,10 +828,12 @@ Should we do this using _cut and paste_?
 
 ### Don't Repeat Yoursel (DRY)
 
+.f6[
 > Abide to the DRY principle using operator `%+%`: the `ggplot2` object `p` can be fed with another dataframe and all you need is proper facetting.
+]
 
 ```{r dryit, message=FALSE, warning=FALSE}
-p  <- (p %+% gapminder)
+p  <- (p %+% gapminder)  #<<
 
 p <- p + 
   labs(title=glue("Gapminder {min(p$data$year)}-{max(p$data$year)}"))
@@ -777,9 +855,10 @@ p
 ---
 template: inter-slide
 
-## Animate for free with `plotly`
+## Animate for free with plotly
 
 ---
+
 
 ### From `r fontawesome::fa("r-project")` to `D3.js`
 
@@ -789,7 +868,7 @@ q <- filter(gapminder, FALSE) %>%
    aes(x = gdpPercap) +
    aes(y = lifeExp) +
    aes(size = pop) +
-   aes(text = country) +
+   aes(text = country) +  #<<
    aes(fill = continent) +
    aes(frame = year) +   #<<
   geom_point(alpha=.5, colour='black') +
@@ -811,6 +890,7 @@ q <- filter(gapminder, FALSE) %>%
 
 ---
 
+
 ```{r}
 (p +
  facet_null() +
@@ -822,6 +902,7 @@ q <- filter(gapminder, FALSE) %>%
 
 ---
 
+
 ```{r animate-out, ref.label="animate", echo=FALSE, message=FALSE, warning=FALSE}
 
 
@@ -830,19 +911,23 @@ q <- filter(gapminder, FALSE) %>%
 
 ---
 
+
 ### Zooming on Europe (tweaking code)
 
 ```{r animate-europe, warning=FALSE, eval=FALSE, message=FALSE, out.width="80%"}
 target_continent <- 'Europe'
+
+
 (
   q %+%
-  filter(gapminder, continent==target_continent) +
-  ggtitle(glue("Gapminder on {target_continent}"))
+  filter(gapminder, continent==target_continent) +  #<<
+  ggtitle(glue("Gapminder on {target_continent}"))  #<<
 ) %>%
   plotly::ggplotly(height = 500, width=750)
 ```
 
 ---
+
 
 ### Zooming on Europe
 
@@ -881,12 +966,14 @@ knitr::include_url("https://www.youtube.com/embed/RPFh3y9UAX4")
 
 
 ---
+exclude: true
 
 ## Animate with `gganimate`
 
 ---
+exclude: true
 
-```{r  gap_gganimate, warning=FALSE, message=FALSE}
+```{r  gap_gganimate, warning=FALSE, message=FALSE, eval=FALSE}
 t_range <- with(gapminder, c(min(year), max(year)))
 p +
   facet_null() + #<<
@@ -931,7 +1018,7 @@ exclude: true
 
 ???
 
-- `facet_zoom()` on a continent (from `ggfortify`)
+- `facet_zoom()` on a continent (from `ggforce`)
 
 - Animation is not interaction!
 
