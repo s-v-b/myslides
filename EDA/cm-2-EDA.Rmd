@@ -5,8 +5,8 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
-  curriculum: "Master I MIDS & EDA"
-  coursetitle: "Analyse Exploratoire des Données"
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse des Données"
   lecturer: "Stéphane Boucheron"
   homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
   curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
@@ -91,14 +91,22 @@ name: samples
 
 ## Samples, observations an variables 
 
+???
+
+- Start with lexicon 
+
+- We use a dataset to illustrate definitions 
+
 
 ---
 
-### `r fontawesome::fa("plane-departure")` `flights`dataset from `nycflights` package
+### `r fontawesome::fa("plane-departure")` `flights`dataset from `nycflights13` package
 
 .fl.w-50.pa2[
 ```{r }
-pacman::p_load("nycflights13")
+pacman::p_load("nycflights13")  #<<
+# install.packages("nycflights13")
+# require("nycflights13")
 ```
 
 > On-time data for all flights that departed NYC (i.e. JFK, LGA or EWR) in 2013.
@@ -138,8 +146,12 @@ $ time_hour      <dttm> 2013…
 
 ]
 
+???
 
+In `r fontawesome::fa("r-project")` education and training, dataset `nycflights` is used to teach 
+table wrangling 
 
+We use `flights` as a collection of univariate samples
 
 ---
 ### Definition(s)
@@ -172,17 +184,22 @@ is either with
 
 ### `flights` dataset
 
+- Each column from the dataset `flights` may be considered as a univariate sample
+
+- By considering the columns as univariate samples we disregard possible relations between the columns 
+
 - Columns `carrier`, `dest`, `origin` are considered categorical
 
 ```{r}
 levels(factor(flights$origin))
 ```
 
-
-
 - Columns `arr_delay`, `dep_delay`, distance are numerical
 
-- Column `time_hour`, ... contains timestamps 
+- Column `time_hour`, ... contains `timestamps` 
+
+- Some columns are irrelevant 
+
 
 
 ---
@@ -192,9 +209,17 @@ We will learn about:
 
 - numerical summaries
 
-- graphical displays
+- graphical displays for numerical summaries
 
 for univariate samples
+
+--
+
+The we move to:
+
+- sufficient/exhaustive descriptions of numerical samples (CDF, Quantiles, histogrames, density estimators)
+
+- graphical representation of sufficient/exhaustive descriptions 
 
 
 ---
@@ -202,6 +227,10 @@ template: inter-slide
 name: numerical-summaries
 
 ## Summary statistics
+
+
+???
+
 
 ---
 
@@ -215,6 +244,21 @@ $$\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i \qquad  \textbf{(location)}$$
 
 $$s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2 \quad \text{or}\quad s^2 = \frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2\qquad\textbf{(dispersion)}$$
 
+???
+
+---
+
+### Properties of mean and standard deviation
+
+`r fontawesome::fa("hand-point-right")` If we translate a sample by some fixed value $t$, we translate the mean by $t$. The mean is *location* estimator  
+
+`r fontawesome::fa("hand-point-right")`  If we translate a sample by some fixed value $t$, we leave the standard deviation invariant. If we multiply 
+a sample by a fixed quantitiy $\sigma$, we multiply the sample standard by $\sigma$. The standard deviation is a *scale* estimator
+
+
+The mean  is not the only location estimator 
+
+The standard deviation is not the only scale estimator
 
 ---
 
@@ -227,6 +271,11 @@ $$\frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^3}{s^3}$$
 - **Kurtosis**
 
 $$\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i -\overline{X}_n\big)^4}{s^4} - 2$$
+
+
+---
+
+`r fontawesome::fa("hand-point-right")`  Skewness and kurtosis are _both_ translation and scale invariant
 
 ---
 
@@ -245,11 +294,8 @@ mean((s- mean(s))^4)/sd(s)^4 -3   #<<
 
 ---
 
-### Summarizing `arr_delay`
+### Summarizing `arr_delay` (step by step)
 
-.fl.w-40.pa2.f6[
-
-### One at a time
 
 ```{r}
 mean(flights$arr_delay)
@@ -257,21 +303,20 @@ mean(flights$arr_delay, na.rm=T) #<<
 sd(flights$arr_delay)
 sd(flights$arr_delay, na.rm=T) #<<      
 ```
-]
 
 
-.fl.w-60.pa2.f6[
+---
 
-### All inclusive
+### Summarizing `arr_delay` (all inclusive)
+
 
 ```{r, warning=FALSE}
-summary(flights$arr_delay) %>%   #<<
-  broom::tidy() %>% 
+flights$arr_delay %>%   
+  skimr::skim() %>% 
   knitr::kable(digits = 2,
   caption = "Summary statistics for nycflights13 arrival delay")
 
-sum_funs <- list(mean, 
-  sd, median, IQR)
+sum_funs <- list(mean,  sd, median, IQR)
 
 purrr::map_dbl(sum_funs, #<<
   ~ .x( flights$arr_delay, na.rm=T)) #<<
@@ -279,7 +324,7 @@ purrr::map_dbl(sum_funs, #<<
 
 `r fontawesome::fa("hand-point-right")` NAs matter!
 
-]
+
 ---
 
 ### With `dplyr::summarise`
@@ -295,6 +340,10 @@ flights %>%
   knitr::kable(digits=2)
 ```
 
+
+---
+
+### With `dplyr::summarise` (result)
 
 ---
 exclude: true
@@ -682,23 +731,23 @@ exclude: true
 
 .fl.w-60.pa2[
 
-```{r titanic-fares-boxplot-label, echo=FALSE}
-title <- stringr::str_c("Titanic Fare prices")
+```{r titanic-fares-boxplot-label, echo=FALSE, eval=TRUE}
+# title <- stringr::str_c("Titanic Fare prices")
 
-p <- ggplot(tit,
-       aes(y=Fare, x=1L)) +
-  geom_boxplot(outlier.shape=2, outlier.colour = 'red', outlier.alpha=.5, coef=1.5) + #<<
-  ylab("") +
-  scale_y_continuous(
-  labels = scales::number_format(scale = 1,
-                                 suffix = " £"))+
-  ggtitle(title) +
-  ggplot2::theme(
-  axis.text.x = element_blank(),
-  axis.ticks.x = element_blank()
-  )
+# p <- ggplot(tit,
+#        aes(y=Fare, x=1L)) +
+#   geom_boxplot(outlier.shape=2, outlier.colour = 'red', outlier.alpha=.5, coef=1.5) + #<<
+#   ylab("") +
+#   scale_y_continuous(
+#   labels = scales::number_format(scale = 1,
+#                                  suffix = " £"))+
+#   ggtitle(title) +
+#   ggplot2::theme(
+#   axis.text.x = element_blank(),
+#   axis.ticks.x = element_blank()
+#   )
 
-p
+# p
 # summary(tit$Fare)
 ```
 ]
@@ -767,24 +816,24 @@ exclude: true
 
 .fl.w-60.pa2[
 
-```{r titanic-fares-violinplot-label, echo=FALSE}
-title <- stringr::str_c("Titanic Fare prices")
+```{r titanic-fares-violinplot-label, echo=FALSE, eval=FALSE}
+# title <- stringr::str_c("Titanic Fare prices")
 
-p <- ggplot(tit,
-       aes(y=Fare, x=1L)) +
-  geom_violin(aes(x=Pclass)) + #<<
-  ylab("") +
-  scale_y_continuous(
-  labels = scales::number_format(scale = 1,
-                                 suffix = " £"))+
-  ggtitle(title) +
-  xlab("Passenger class") +
-  ggplot2::theme(
-  #axis.text.x = element_blank(),
-  # axis.ticks.x = element_blank()
-  )
+# p <- ggplot(tit,
+#        aes(y=Fare, x=1L)) +
+#   geom_violin(aes(x=Pclass)) + #<<
+#   ylab("") +
+#   scale_y_continuous(
+#   labels = scales::number_format(scale = 1,
+#                                  suffix = " £"))+
+#   ggtitle(title) +
+#   xlab("Passenger class") +
+#   ggplot2::theme(
+#   #axis.text.x = element_blank(),
+#   # axis.ticks.x = element_blank()
+#   )
 
-p
+# p
 # summary(tit$Fare)
 ```
 ]
