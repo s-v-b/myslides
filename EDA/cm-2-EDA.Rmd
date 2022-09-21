@@ -5,6 +5,7 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
+  title: "Univariate statistics"
   curriculum: "Master I ISIFAR"
   coursetitle: "Analyse des Données"
   lecturer: "Stéphane Boucheron"
@@ -84,6 +85,8 @@ template: inter-slide
 ### [Quantile function](#quantile-function)
 
 
+---
+
 
 ---
 template: inter-slide
@@ -95,7 +98,7 @@ name: samples
 
 - Start with lexicon 
 
-- We use a dataset to illustrate definitions 
+- We use a dataset (`flights` from `nycflights13`) to illustrate definitions 
 
 
 ---
@@ -103,23 +106,27 @@ name: samples
 ### `r fontawesome::fa("plane-departure")` `flights`dataset from `nycflights13` package
 
 .fl.w-50.pa2[
+### A dataframe
+
 ```{r }
 pacman::p_load("nycflights13")  #<<
-# install.packages("nycflights13")
+# install.packages("nycflights13")  
 # require("nycflights13")
 ```
 
 > On-time data for all flights that departed NYC (i.e. JFK, LGA or EWR) in 2013.
 
-`flights` is a multivariate _sample_ 
+- `flights` is a multivariate _sample_ 
 
-Each `row` corresponds to an _observation_
+- Each `row` corresponds to an _observation/individual_
 
-Each column corresponds to a _measurement_ 
+- Each column/variable corresponds to a _measurement_ 
 
 ]
 
 .fl.w-50.pa2.f6[
+
+### A glimpse 
 
 ```
 Columns: 19
@@ -151,7 +158,9 @@ $ time_hour      <dttm> 2013…
 In `r fontawesome::fa("r-project")` education and training, dataset `nycflights` is used to teach 
 table wrangling 
 
-We use `flights` as a collection of univariate samples
+We use table `flights` from  package `nycflights`  as a collection of univariate samples
+
+
 
 ---
 ### Definition(s)
@@ -161,7 +170,7 @@ A _sample_ is a sequence of items of the same type
 In `r fontawesome::fa("r-project")`, if the type matches a basetype, a sample is typically represented using a `vector`
 
 A _numerical_ (quantitative) sample is just a sequence of numbers (either integers
-or floats), it is represented by a `numeric` vector.
+or floats), it is represented by a `numeric` vector
 
 A _categorical_ (qualitative)  sample is a sequence of values  from  some predefined finite set
 
@@ -169,8 +178,7 @@ In `r fontawesome::fa("r-project")`, categorical samples are handled using a spe
 
 ---
 
-In this lesson, we are concerned with _univariate statistics_, that
-is either with
+In this lesson, we are concerned with _univariate statistics_, that  is either with
 
 - _numerical samples_,
 
@@ -182,13 +190,52 @@ is either with
 
 ---
 
-### `flights` dataset
+### Table `flights`  from package `nycflights`
 
-- Each column from the dataset `flights` may be considered as a univariate sample
+- Each column from the dataset `flights` may be considered as a univariate sample 
 
-- By considering the columns as univariate samples we disregard possible relations between the columns 
+- There are `336776` rows in the table: we (potentially) have `19` univariate samples of length $n=336776$ 
+
+-  `r fontawesome::fa("exclamation-triangle")` By considering the columns as univariate samples we _disregard_ possible relations between the columns 
+
+- Some columns are irrelevant: columns `year, month, day`   and others can be recovered from other columns like `time_hour`
+
+
+???
+
+Examples of functional dependance:
+
+```{r}
+sum((flights$sched_dep_time  %/% 100) != (flights$hour))
+sum((flights$sched_dep_time  %% 100) != (flights$minute))
+```
+
+---
+
+### Focusing on (more) interesting columns
+
+```{r}
+flights %>% 
+  select(origin, dest, distance, flight, tailnum, carrier, 
+         air_time, time_hour, dep_delay, arr_delay, sched_dep_time, sched_arr_time) %>% 
+  glimpse(width=80)
+```
+
+
+???
+
+Table is not tidy, it is messy 
+
+
+
+
+---
+
+
 
 - Columns `carrier`, `dest`, `origin` are considered categorical
+
+- Possible values for `origin` correspond to the three airports in the NY city area:
 
 ```{r}
 levels(factor(flights$origin))
@@ -198,7 +245,28 @@ levels(factor(flights$origin))
 
 - Column `time_hour`, ... contains `timestamps` 
 
-- Some columns are irrelevant 
+
+
+---
+
+
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+m <- leaflet::leaflet(width=900, height=600) |>
+  leaflet::setView(lat=40.6397,
+                   lng=-74.0118, zoom=10) |>
+  leaflet::addTiles() |>  # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(lat=40.6446,
+                      lng=-73.7823,  
+                      popup="JFK") |>
+  leaflet::addMarkers(lat=40.7747, 
+                      lng=-73.8729,
+                      popup="LGA") |>
+  leaflet::addMarkers(lat=40.6905, 
+                      lng=-74.177,
+                      popup="EWR")  
+
+m
+```
 
 
 
@@ -207,7 +275,7 @@ levels(factor(flights$origin))
 
 We will learn about:
 
-- numerical summaries
+- numerical summaries (mean, standard deviation and so on)
 
 - graphical displays for numerical summaries
 
@@ -215,7 +283,7 @@ for univariate samples
 
 --
 
-The we move to:
+Then we move to:
 
 - sufficient/exhaustive descriptions of numerical samples (CDF, Quantiles, histogrames, density estimators)
 
@@ -231,6 +299,9 @@ name: numerical-summaries
 
 ???
 
+We start with a review of the most basic summary statistics that mean and standard deviation.
+I should say the empirical mean and the empirical standard deviation. Both statistics are easily defined 
+and computed. 
 
 ---
 
@@ -242,23 +313,53 @@ $$\overline{X}_n = \frac{1}{n}\sum_{i=1}^n x_i \qquad  \textbf{(location)}$$
 
 - **Standard deviation**:
 
-$$s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2 \quad \text{or}\quad s^2 = \frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2\qquad\textbf{(dispersion)}$$
+$$s^2 = \frac{1}{n-1} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2 \quad \text{or}\quad s^2 = \underbrace{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^2}_{\text{Empirical variance}}\qquad\textbf{(dispersion)}$$
 
 ???
+
+Computing the mean and standard deviation just involves something over the whole sample. 
+This requires a linear time with respect to the size of the sample. We cannot expect to do better.
+
+The mean tells us where the sample points lie on the realign on average. 
+The standard deviation tells us how widely spread the sample points are. 
+
+We give two slightly different definitions of the squared standard deviation, that is of the variance.
+The first one is what `r fontawesome::fa("r-project")` will deliver.  The second one is 
+what Mathematicians called the variance of the empirical distributions or the empirical variance. 
+
+The rational for choosing the first definition comes from mathematical statistics:
+it delivers an unbiased estimate of the so-called population variance if the sample has been obtained by i.i.d.
+ sampling from some population distribution. 
+
+We review some important properties of the mean and standard deviation
 
 ---
 
 ### Properties of mean and standard deviation
 
-`r fontawesome::fa("hand-point-right")` If we translate a sample by some fixed value $t$, we translate the mean by $t$. The mean is *location* estimator  
+`r fontawesome::fa("hand-point-right")` If we translate a sample by some fixed value $t$, we translate the mean by $t$. 
+The mean is *location* estimator  
 
-`r fontawesome::fa("hand-point-right")`  If we translate a sample by some fixed value $t$, we leave the standard deviation invariant. If we multiply 
-a sample by a fixed quantitiy $\sigma$, we multiply the sample standard by $\sigma$. The standard deviation is a *scale* estimator
+If $y_i = x_i + t$ for some $t \in \mathbb{R}$ and all $i \leq n$, 
+$$\overline{Y}_n =  \sum_{i=1}^n \frac{1}{n} y_i = \overline{X}_n + t$$
 
+
+`r fontawesome::fa("hand-point-right")`  If we translate a sample by some fixed value $t$, *we leave the standard deviation invariant*. 
+
+`r fontawesome::fa("hand-point-right")` If we multiply  a sample by a fixed quantitiy $\sigma$, we multiply the sample standard by $\sigma$. The standard deviation is a *scale* estimator
+
+$$\frac{1}{n}\sum_{i=1}^n (y_i - \overline{Y}_n)^2 = \frac{1}{n} \sum_{i=1}^n (x_i  +t - \overline{X}_n -t)^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \overline{X}_n)^2$$
 
 The mean  is not the only location estimator 
 
 The standard deviation is not the only scale estimator
+
+???
+
+Now, we turn to 2 other indices that are useful in descriptive statistics for summarising numerical samples.
+
+These indices are called the skewness and the kurtosis. 
+
 
 ---
 
@@ -272,25 +373,46 @@ $$\frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^3}{s^3}$$
 
 $$\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i -\overline{X}_n\big)^4}{s^4} - 2$$
 
+??? 
+
+Note that the two indices are dimension-free. If we scale the sample, we leave them both invariant.  
+If we translate or rescale the sample, we leave them both invariant. The two indices tell us something about the shape of the empirical distribution.
+We'll see more about this topic later. 
 
 ---
 
+### Properties of skewness and kurtosis
+
+
 `r fontawesome::fa("hand-point-right")`  Skewness and kurtosis are _both_ translation and scale invariant
+
+???
+
+Now, let's see how we can compute the mean, the standard deviation and the other indices using the `R` project.
 
 ---
 
 ### Numerical summaries at work
 
+Base `R` provides us with two functions: `mean()` and `sd()`
+
+We illustrate the two functions on simulated data.
 
 ```{r}
-s <- rnorm(1000)   # a random sample from the standard normal distribution
+s <- rnorm(1000)   # a random sample from the standard normal distribution of size 1000
 
-mean(s) - sum(s)/length(s)   #<<
+n <-  length(s)
 
-sd(s) - sqrt(sum((s-mean(s))^2)/(length(s)-1))   #<<
+mean(s) - sum(s)/n  #<<
 
-mean((s- mean(s))^4)/sd(s)^4 -3   #<<
+sd(s) - sqrt(sum((s-mean(s))^2)/(n-1))   #<<
 ```
+
+The two functions have optional arguments that are useful when handling real data
+
+???
+
+Let's try now to summarise the arrival delay column of the `flights` dataframe
 
 ---
 
@@ -299,33 +421,117 @@ mean((s- mean(s))^4)/sd(s)^4 -3   #<<
 
 ```{r}
 mean(flights$arr_delay)
+
 mean(flights$arr_delay, na.rm=T) #<<
+
 sd(flights$arr_delay)
+
 sd(flights$arr_delay, na.rm=T) #<<      
 ```
+
+???
+
+If we do not use the optional argument,  the result of the `mean()` function is not very useful. 
+This is due to the fact that the arrival delay column contains `NA` (not available) entries
+This  happens with real data. The result is consistent with the principles that underlie the design of the `R` project. 
+If some entries are not available, we have no idea about the way to sum them up. 
+We have no idea about the way to compute the mean and the  standard deviation. Some action is required. 
+
+The most obvious action consist in discarding the non-available entries this is what we do 
+when we use the optional argument `na.rm` and and set it to `TRUE`. 
+Using the optional argument allows us to obtain a meaningful result,  even if we have to take it with a grain of salt. 
+
 
 
 ---
 
 ### Summarizing `arr_delay` (all inclusive)
 
+If we want to obtain a useful summary of some numerical sample, the `R` project offers a generic function called `summary`:
 
-```{r, warning=FALSE}
-flights$arr_delay %>%   
-  skimr::skim() %>% 
-  knitr::kable(digits = 2,
-  caption = "Summary statistics for nycflights13 arrival delay")
-
-sum_funs <- list(mean,  sd, median, IQR)
-
-purrr::map_dbl(sum_funs, #<<
-  ~ .x( flights$arr_delay, na.rm=T)) #<<
+```{r}
+summary(flights$arr_delay)
 ```
 
-`r fontawesome::fa("hand-point-right")` NAs matter!
+--
+
+`summary` delivers the empirical mean (`Men`) and the number of `NA's`  in the sample. It also 
+returns the maximum and the minimum value in the sample, as well as three other quantities (The median and the 
+two other quartiles)
 
 
 ---
+
+### Summarizing `arr_delay` (all inclusive, continued)
+
+It is often useful to obtain the result as a one-row table (for inclusion in a report for example)
+
+`skim()` from package `skimr` does it  `r fontawesome::fa("glass-cheers")`
+
+
+```{r, warning=FALSE}
+flights$arr_delay %>%   
+  skimr::skim() %>%    #<<
+  select(1:6, -starts_with('skim')) %>% 
+  knitr::kable(digits = 2,
+  caption = "Summary statistics for nycflights13 arrival delay")
+```
+
+`r fontawesome::fa("hand-point-right")` `NA's` matter!
+
+
+`r fontawesome::fa("hand-point-right")` We use the pipe `%>%` to *chain* a sequence of 
+simple processing steps: `skim(), select(), kable()`
+
+???
+
+- We could call `skim` on a dataframe. It would generate a summary for every column
+
+- In database parlance, `select`  from package `dplyr` (not from base `R`) performs a *projection* on a subset 
+of columns (a selection of columns). Here we first project on the first six columns, then discard columns 
+whose name starts with pattern `skim`.   This is an instance of *tidy selection*
+
+- `kable()` from package `knitr` provides a kind of pretty print for tables and dataframes
+
+
+---
+
+### A first glimpse at the pipe `%>%` from package `magrittr`
+
+`r fontawesome::fa("hand-point-right")` The pipe `%>%` allows us to chain (many) processing steps in a readable way
+
+Assume we have some object $x$ and we want to compute  $h \circ g \circ f(x)$
+
+Expression  `y <- h(g(f(x)))` is cluttered with parentheses. It is not readable `r fontawesome::fa("frown")`
+
+```
+tmp <- f(x)
+tmp <- g(tmp)
+y <- h(tmp)
+```
+
+is slightly more readable, but using _temporary_ objects makes things more complicated than they should be
+
+`r fontawesome::fa("smile")` The pipe `%>%` or the standard pipe `|>` (for `R 4.x`) alleviate our lives :
+
+```{r, eval=FALSE}
+y <- x %>%   #<< feed x in the pipe 
+  f() %>%    #<< feed f(x)  in the pipe
+  g() %>%    #<< feeed g(f(x))  in the pipe
+  h()    #<<  return h(g(f(x))) and assign the result to y
+```
+
+???
+
+This is our first contact with the pipe operator
+
+The pipe operator was introduced with package `magrittr`  around 2010. 
+Since then it became it has become an indispensable tool for all `R` practitioners
+
+The pipe operator can do much more than what we presented here
+
+---
+exclude: true 
 
 ### With `dplyr::summarise`
 
@@ -342,6 +548,8 @@ flights %>%
 
 
 ---
+exclude: true
+
 
 ### With `dplyr::summarise` (result)
 
@@ -362,23 +570,35 @@ mean(s, na.rm = TRUE)  #<<
 mean(s[-c(2, 3, 7)])
 ```
 
+---
+template: inter-slide
 
+## More on missing values ([`NA's`]())
+
+---
+
+Real datasets are plagued missing values 
+
+Missing values are a great annoyance to anyone who wants to compute statistics
+
+Through the ages, statisticians have developped techniques to cope with missing values
+
+The crudest technique consists in throwing away all observations with missing values (`dropna()`)
+
+This is not always the smartest thing to do 
 
 ---
 
 ### Missing values and trimming
 
-The code for `mean.default` goes beyond computing the weighted mean
+The code for `mean.default` goes (far) beyond computing the weighted mean
 
 .f6[
 
 ```{r, eval=FALSE}
 function (x, trim = 0, na.rm = FALSE, ...)
 {
-    if (!is.numeric(x) && !is.complex(x) && !is.logical(x)) {
-        warning("argument is not numeric or logical: returning NA")
-        return(NA_real_)
-    }
+    # ...
     if (na.rm)    #<<
         x <- x[!is.na(x)]    #<<
     if (!is.numeric(trim) || length(trim) != 1L)
@@ -401,16 +621,27 @@ function (x, trim = 0, na.rm = FALSE, ...)
 ```
 ]
 
+???
+
+There are several optional arguments 
+
+- `trim`
+- `na.rm`
+- The ellipsis `...`
+
+If `na.rm` is not `FALSE`,  `x <- x[!is.na(x)]` masks out the `NA` entries in argument `x`
+
+Argument `trim` has a *default* value (0)
 
 ---
 
-### `r fontawesome::fa("brain")`
+### `r fontawesome::fa("brain")` The code raises questions
 
 - What happens when `na.rm` is `TRUE`?
 
 - What are the possible values of argument `trim`?
 
-- If `trim` belongs to $(0, 1/2)$ what happens?
+- If `trim` belongs to $(0, 1/2)$,  what happens?
 
 - Which lines actually compute the (uniformly) weighted mean?
 
@@ -424,18 +655,28 @@ function (x, trim = 0, na.rm = FALSE, ...)
 
 - When positive, parameter  `trim` allows us to compute _trimmed means_
 
-Depending on optional arguments, fucntion `mean` allows to compute either arithmetic means, or trimmed (arithmetic) means
+- If `0 < trim < 0.5`, the function removes the `trim * n` smallest  and `trim * n` largest values in 
+the sample, and return the mean of the remaining values 
+
+- Depending on optional arguments, fucntion `mean` allows to compute either arithmetic means, or trimmed (arithmetic) means
+
+- The hard work is performed by  `.Internal(mean(x))`  which calls code written in `Fortran` or `C`
+
 
 ---
 
 ### `r fontawesome::fa("hand-point-right")`
 
-- In a _tidy_ sample, _missing values_ are explicitely pointed as missing information using special objects `NA`, `NA_integer_`, `NA_real_`, ...
+- In a _tidy_ sample, _missing values_ are explicitely pointed as 
+missing information using special objects `NA`, `NA_integer_`, `NA_real_`, ...
 
-- To compute summary statistics when facing missing values,  `na.rm` has to be `TRUE`.
+- To compute summary statistics when facing missing values,  argument `na.rm` has to be `TRUE`
 
 - What is the class of `NA`, `NA_integer_`, `NA_real_`?
 
+
+- In messy tables, missing values are not spotted as `NA's`. Part of **data wrangling** consists in turning missing values 
+(possibly indicated as `0`  or negative numbers) into explicit `NA's`
 
 ---
 
@@ -448,27 +689,144 @@ $$\sum_{i=1}^n \frac{1}{n-1} (x_i - \overline{X}_n)^2$$
 when $\texttt{sample}=x_1, \ldots, x_n$?
 
 ---
+
+### Sensitivity
+
+Computing the mean and the standard deviation is less trivial than it looks like
+
+Handling missing values is not the only issue
+
+Another important issue is the high **sensitivity** of the mean (and of the standard deviation)
+to the perturbation (modification) of a single sample point
+
+If $x_i$ is replaced by $x_i + t$ (all other sample points remaining what they were), the empirical mean 
+is shifted by $t/n$
+
+If we take $t$ to infinity, we move the empirical mean to infinity
+
+`r fontawesome::fa("skull")` Corruption of a single sample point may 
+have a dramatic impact on the sample mean (and on the sample standard deviation)
+
+
+
+---
 template: inter-slide
 name: robust
 
 ## Robust summary statistics
 
 ---
-exclude: true
-### `summary(...)`
 
-```{r}
-summary(s)
-```
+During the 1960s, [Peter Huber]() and colleagues developed alternatives to the  mean and  the standard deviation 
+for assessing the location and the dospersion of a sample. These alternatives are collectively known as 
+**robust estimators** for location and scale. 
+
+Robust estimators of location retain nice properties of the mean,
+however they are less sensitive to corruption of a couple of observations
+
+Robust estimators of dispersion retain the shift invariance of the standard deviation, 
+but prove less sensitive to data corruption
+
 
 ---
 
-- **Order statistics**: $x_{1:n} \leq x_{2:n} \leq \ldots \leq x_{n:n}$
+### Building robust (univariate) statistics
 
-- **Median**  $x_{\lfloor n/2\rfloor+1:n}$ if $n$ is odd,
-$(x_{n/2:n}+ x_{n/2+1:n})/2$ if $n$ is even
+Constructions rely on **sample sorting**
 
-- **Quartiles** $x_{\lfloor n/4\rfloor:n}$ and $x_{\lfloor 3 n/4\rfloor:n}$
+**Order statistics** are obtained by  sorting the sample:
+
+$$x_{1:n} \leq x_{2:n} \leq \ldots \leq x_{n:n}$$
+
+Using an efficient comparison sorting method  (mergesort, quicksort, ...), sorting a collection of $n$ items require 
+$O(n \log n)$ operations. This is slightly superlinear with respect to sample size $n$
+
+???
+
+$x_{i:n}$ reads as the $i^{\text{th}}$ item (in increasing order) in sample $x_1, x_2, \ldots, x_n$
+
+---
+
+### A robust location estimator : the **median**
+
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+$$\text{Empirical median} = \begin{cases} x_{\lfloor n/2\rfloor+1:n} & \text{if } n\text{ is odd,}\\ 
+(x_{n/2:n}+ x_{n/2+1:n})/2 & \text{if } n \text{ is even}\end{cases}$$
+
+]
+
+---
+
+### A robust dispersion estimator : the Inter-Quartile Range (IQR)
+
+
+- **Quartiles** 
+
+  - First quartile $x_{\lfloor n/4\rfloor:n}$ 
+  - Second quartile: the median! 
+  - Third quartile: $x_{\lfloor 3 n/4\rfloor:n}$
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+- **IQR** : 
+
+$$x_{\lfloor 3 n/4\rfloor:n} - x_{\lfloor n/4\rfloor:n}$$
+
+]
+
+???
+
+The IQR is a robust dispersion index (why?)
+
+Assuming that the median can be computing using a linear number of operations, check that it is possible to compute 
+the three quartiles in linear time
+
+---
+
+### Property 
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+The median minimizes the average absolute deviation
+
+]
+
+
+Let $M$ be a median of some numerical sample $x_1, \ldots, x_n$ then 
+
+$$\forall a \in \mathbb{R}, \qquad \frac{1}{n}\sum_{i=1}^n |x_i -M| \leq \frac{1}{n} \sum_{i=1}^n |x_i -a|$$
+
+`r fontawesome::fa("brain")` check that!
+
+???
+
+Recall that the mean minimizes the average quadratic error 
+
+---
+
+### Connections between robust and ordinary statistics 
+
+
+**Lévy's inequality**
+
+Let $M$ denote the empirical median, $\overline{X}_n$ the empirical mean and $s_n$ the empirical standard deviation  
+
+Then
+
+.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+
+$$|M - \overline{X}_n| \leq s_n$$
+
+]
+
+`r fontawesome::fa("brain")` check that!
+
+
+---
+
+### Other distinguished quantiles 
 
 - **Quintiles** $x_{\lfloor k n/5\rfloor:n}$ pour $k \in 1, \ldots, 4$
 
@@ -477,6 +835,8 @@ $(x_{n/2:n}+ x_{n/2+1:n})/2$ if $n$ is even
 - **Percentiles**
 
 - ...
+
+
 
 
 ---
@@ -491,21 +851,19 @@ Compute the derivative of
 
 - the trimmed mean 
 
-with respect to $x_{(n)}$
+with respect to $x_{n:n}$
 
 
+???
 
+`r fontawesome::fa("lightbulb")`
 
----
-exclude: true
+- the mean: $1/n$ with respect to $x_{n:n}$. Recall that $\overline{X}_n = \frac{1}{n} \sum_{i=1}^n x_{i:n}$
 
-Why _robustness_?
+- the median: $0$ with respect to $x_{n:n}$. 
 
-.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+- the trimmed mean: $0$ with respect to $x_{n:n}$
 
-'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
-
-]
 
 ---
 exclude: true
@@ -517,7 +875,35 @@ Let $x_1, \ldots,  x_n$ be a numerical sample.
 rapportools::kurtosis
 ```
 
-Check that the kurtosis and the skewness are translation invariant.
+`r fontawesome::fa("hand-point-right")` Check that the kurtosis and the skewness are translation invariant
+
+---
+
+### Robust numerical summaries in `R`
+
+Function `summary()` delivers robust statistics 
+
+So does `skim()`
+
+.f6[
+```{r, warning=FALSE}
+flights$arr_delay %>%   
+  skimr::skim() %>% 
+  select(1:10, -starts_with('skim')) %>% 
+  knitr::kable(digits = 2,
+  caption = "Summary statistics for nycflights13 arrival delay")
+```
+]
+
+
+???
+
+`numeric.p0, p25, ... ` denote the sample quartiles 
+
+Notice that the median (`numeric.p50`) differs from the mean
+
+
+
 
 ---
 template: inter-slide
@@ -527,6 +913,12 @@ name: boxplots
 
 ---
 
+Robust numerical summaries are complemented by plots
+
+[Tukey](https://en.wikipedia.org/wiki/John_Tukey) introduced **boxplots** in the 1960's
+
+
+---
 
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
@@ -557,7 +949,7 @@ Assume that we _boxplot_ the $\mathcal{N}(\mu, \sigma^2) \sim \mu + \sigma \math
 
 Then:
 
-- The median is equal to $\mu$ because of the symmetry of $\mathcal{N}(0,1)$,
+- The median is equal to $\mu$ (because of the symmetry of $\mathcal{N}(0,1)$)
 
 - The quartiles are $\mu - \sigma \Phi^{\leftarrow}(3/4)$ and $\mu + \sigma \Phi^{\leftarrow}(3/4)$.
 
@@ -591,8 +983,7 @@ fake_data %>%
   ylab("") +
   ggplot2::theme(
   axis.text.x = element_blank(),
-  axis.ticks.x = element_blank()
-  )
+  axis.ticks.x = element_blank()) 
 
 summary(fake_data$normal)
 ```
@@ -601,6 +992,13 @@ summary(fake_data$normal)
 .plot-callout[
 ![gauss-boxplot-label](`r knitr::fig_chunk("normal-boxplot-label", "png")`)
 ]
+
+
+???
+
+In order to  understand what boxplots do and how they are tied to Gaussian modelling, let us figure out what boxplot looks like 
+when build first on an i.i.d. Gaussian sample and second, on an i.i.d. sample fron a heavy tailed distribution (the `t` distribution with 
+3 degrees of freedom)
 
 ---
 
@@ -618,7 +1016,37 @@ Playing with boxplots
 
 - Tune whiskers lengths using `coef`
 
-- Jitter to spot the whole
+- Jitter to spot the whole sample 
+
+
+
+---
+
+```{r, echo=FALSE, eval=FALSE}
+fake_data %>%
+  ggplot(mapping = aes(x = 1L, y = normal)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 2, coef = 1.5) + #<<
+  geom_jitter(width=.05, height=0, alpha=.25) +
+  ggtitle(title) +
+  ylab("") + 
+  annotate("text", 
+            xmin=1.5, 
+            y=median(fake_data$normal) ,
+            label="median") +
+  annotate("text", 
+            xmin=1.5, 
+            y=quantile(fake_data$normal, .75) ,
+            label="third quartile") +
+  annotate("text", 
+            xmin=1.5, 
+            y=quantile(fake_data$normal, .25) ,
+            label="first quartile") +
+  ggplot2::theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+```
 
 ---
 
@@ -628,7 +1056,7 @@ Deciding which points should be considered as extremes is partly a matter of tas
 
 Boxplots provide a visual assessment of the departure of a sample from normality/Gaussianity
 
-[`geom_boxplot` documentation](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
+See [`geom_boxplot` documentation](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
 
 ???
 
@@ -683,10 +1111,10 @@ summary(fake_data$t)
 
 ### Plotting two boxplots side by side
 
-.fl.w-50.pa2[
 
-```{r two-boxplots, echo=TRUE, eval=FALSE}
-n <- 1000
+
+```{r two-boxplots, out.width=.7, fig.show='hide'}
+n <- 1000   #<<
 
 tibble(normal=rnorm(n), 
        t=rt(n, df=3)) %>%
@@ -695,19 +1123,32 @@ tibble(normal=rnorm(n),
   ggplot() + #<<
   aes(x=Distribution, y=value) +   #<<
   geom_boxplot(outlier.alpha = .5,   #<<
-               outlier.colour = 'red',
+               outlier.colour = 'red', # nolint 
                outlier.shape = 2) +
   ggtitle("Gaussian versus heavy-tailed samples")
 ```
+
+
+
+
+.plot-callout[
+
+![two boxplots](`r knitr::fig_chunk("two-boxplots", "png")`)
+
+
 ]
 
-.fl.w-50.pa2[
+???
 
-```{r two-boxplots-out, echo=FALSE,  ref.label="two-boxplots"}
+Elaborate on `pivot_longer()` from `tidyr` package 
 
-```
+---
 
-]
+### Plotting two boxplots side by side (cont'd)
+
+
+![two boxplots](`r knitr::fig_chunk("two-boxplots", "png")`)
+
 
 ---
 
@@ -720,146 +1161,115 @@ With usual whiskers length
   + extremes lie close to the whiskers endpoints
 
 - In heavy-tailed distributions: 
-  + many sample points outside the whiskers, and 
+  + many sample points lie outside the whiskers,  
   + some extremes may lie far far away
 
-
----
-exclude: true
-
-### Boxplotting Titanic Fare prices
-
-.fl.w-60.pa2[
-
-```{r titanic-fares-boxplot-label, echo=FALSE, eval=TRUE}
-# title <- stringr::str_c("Titanic Fare prices")
-
-# p <- ggplot(tit,
-#        aes(y=Fare, x=1L)) +
-#   geom_boxplot(outlier.shape=2, outlier.colour = 'red', outlier.alpha=.5, coef=1.5) + #<<
-#   ylab("") +
-#   scale_y_continuous(
-#   labels = scales::number_format(scale = 1,
-#                                  suffix = " £"))+
-#   ggtitle(title) +
-#   ggplot2::theme(
-#   axis.text.x = element_blank(),
-#   axis.ticks.x = element_blank()
-#   )
-
-# p
-# summary(tit$Fare)
-```
-]
-
-
-.fl.w-40.pa2[
-
-Titanic fare prices distribution exhibits a non-Gaussian behavior
-`r fontawesome::fa("smile-wink")`
-
-The median looks much closer to the first quartile than to the third quartile (asymmetry)
-
-There are many extreme points
-
-Extreme lie far away above the whiskers
-
-]
-
 ---
 
-### Boxplots for delays 
+### Boxplots for delays from `nycflights13`
 
-.fl.w-40.pa2.f6[
 
-```{r boxplots-delays, echo=TRUE, eval=FALSE}
+
+
+```{r boxplots-delays, out.width=.7, fig.show='hide'}
 flights %>% 
-  select(
-    ends_with("_delay")
-    ) %>% 
+  select(ends_with("_delay")) %>% 
   pivot_longer(
     cols=ends_with("_delay"),
     names_pattern = "(.*)_delay", 
     values_to = "delay"
     ) %>% 
-  filter(
-    abs(delay) < 120
-    ) %>% 
+  filter(abs(delay) < 120) %>% 
   ggplot() +
-  aes(x=name, y=delay) +
-  geom_boxplot()
-```
-
-]
-
-.fl.w-60.pa2[
-
-```{r boxplots-delays-out, ref.label="boxplots-delays", echo=FALSE, eval=TRUE}
-
+  aes(x=name, y=delay) +   #<<
+  geom_boxplot() +    #<<
+  ggtitle("Nycflights13: delays")
 ```
 
 
 
+
+
+
+.plot-callout[
+
+![](`r knitr::fig_chunk('boxplots-delays', 'png')`)
+
 ]
 
+???
+
+Play with `pivot_longer()` 
+
+What is the result of ?
+
+```
+flights %>%
+  select(ends_with("_delay"))
+```
+
+What is the result of ? 
+
+```
+flights %>%
+  select(ends_with("_delay")) %>%
+  pivot_longer(
+    cols = ends_with("_delay"),
+    names_pattern = "(.*)_delay",
+    values_to = "delay"
+  )
+```
+
+See [https://tidyr.tidyverse.org/reference/pivot_longer.html](https://tidyr.tidyverse.org/reference/pivot_longer.html)
+
+See [https://r4ds.had.co.nz/tidy-data.html?q=pivot_longer#pivoting](https://r4ds.had.co.nz/tidy-data.html?q=pivot_longer#pivoting)
+
 
 
 ---
-exclude: true
-template: inter-slide
-name: violinplots
 
-## Violinplots
-
----
-exclude: true
 
 .fl.w-60.pa2[
-
-```{r titanic-fares-violinplot-label, echo=FALSE, eval=FALSE}
-# title <- stringr::str_c("Titanic Fare prices")
-
-# p <- ggplot(tit,
-#        aes(y=Fare, x=1L)) +
-#   geom_violin(aes(x=Pclass)) + #<<
-#   ylab("") +
-#   scale_y_continuous(
-#   labels = scales::number_format(scale = 1,
-#                                  suffix = " £"))+
-#   ggtitle(title) +
-#   xlab("Passenger class") +
-#   ggplot2::theme(
-#   #axis.text.x = element_blank(),
-#   # axis.ticks.x = element_blank()
-#   )
-
-# p
-# summary(tit$Fare)
+```{r flip-pivot, eval=FALSE}
+flights %>%
+  select(ends_with("_delay")) %>%
+  pivot_longer(
+    cols = ends_with("_delay"),
+    names_pattern = "(.*)_delay",
+    values_to = "delay"
+  ) %>%
+  filter(abs(delay) < 120) %>% 
+  glimpse(width=50)
 ```
 ]
 
 
 .fl.w-40.pa2[
 
-Titanic fare prices distribution exhibits a non-Gaussian behavior
-`r fontawesome::fa("smile-wink")`
+```{r flip-pivot-out, ref.label="flip-pivot"}
 
-They are a mix of three populations that also exhibit non-Gaussian behavior
+```
 ]
-
-
 
 
 ---
-exclude: true
 
-.bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
+### Pivot at work
 
-'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
+`r chunk_reveal("flip-pivot")`
 
-]
+---
+
+### `r fontawesome::fa("plane-departure")` Boxplots for delays from `nycflights13` (cont'd)
+
+![](`r knitr::fig_chunk('boxplots-delays', 'png')`)
 
 
+???
+
+What if we want the boxplot of departure delays to be on the left side of the plot?
+
+Do you believe that arrival delays are affine transformations of departure delays? 
 
 ---
 template: inter-slide
@@ -869,23 +1279,71 @@ name: histograms
 
 ---
 
+In many circumstances, the sample is not faithfully described by the sequence of quartiles
+
+Boxplots are not always enough
+
+If the data have been obtained by i.i.d. sampling from some distribution, the *empirical probability 
+distribution* defined by the sample provides with a summary of the sample
+
+Describing the empirical distribution as a _summary_ may seem to be far-fetched. Nevertheless, there is less 
+information in the empirical distribution than in the sample: we have lost the order in which sample items
+were collected 
+
+A (possibly empirical) probability distribution is a complex mathematical object.
+Fortunately, probability  distributions on the real line can be characterized by *functions* on the real line: the *cumulative distribution function* (CDF), its (generalized) inverse, the *quantile function*, and, in special circumstances, a *density function*  
+
+
+---
+
+### `r fontawesome::fa("syringe")` CDFs, densities, empirical distributions
+
+Let $P$ be a probability distribution on the real line
+
+The associated **CDF** is defined by $F(z) = P(-\infty,z]$ for $z \in \mathbb{R}$
+
+The CDF $F$ is *absolutely continuous* iff there exists an (integrable) function $f$ such that 
+
+$$F(z) = \int_{(-\infty, z]} f(x) \mathrm{d}x$$
+
+If the CDF (and the probability $P$) is absolutely continuous, $f$ is said to be a *density* for distribution 
+$P$ (a density with respect to Lebesgue measure)
+
+`r fontawesome::fa("exclamation-triangle")` Empirical distributions are not absolutely continuous 
+
+Nevertheless, we start with *histograms*, piecewise constant density functions that are used to portray 
+empirical distributions! 
+
+
+
+
+
+
+
+---
+
 ### Definition(s)
 
 .fl.w-40.pa2[
 
-`r fontawesome::fa("hand-point-right")` A histogram defines a piecewise constant probability density function
 
-A histogram is defined by the number and position of the breaks (bins)
+`r fontawesome::fa("hand-point-right")` A **histogram** defines a piecewise constant probability density function
+
+A histogram is defined by the number and position of the **breaks** (bins)
 
 
-A histogram may be regular or not 
+A histogram may be **regular** or not 
 
 ]
 
 .fl.w-60.pa2[
 
+```{r, echo=FALSE}
+spl <- rnorm(1000, mean = 2)
+```
+
 ```{r histogram-gauss, echo=FALSE}
-tibble(x=rnorm(1000, mean = 2)) %>% 
+tibble(x=spl) %>% 
   ggplot() +
   aes(x=x) +
   geom_rug(alpha=.1) +
@@ -897,7 +1355,7 @@ tibble(x=rnorm(1000, mean = 2)) %>%
   stat_function(linetype="dashed", 
                 fun=dnorm, 
                 args=list(mean=2, sd=1)) +
-  annotate("text", x=4.5, y=.3, 
+  annotate("text", x=4, y=.3, 
            label="Gaussian density with mean 2") +
   ggtitle("Histogram for Gaussian sample") +
   labs(caption="Sample size=1000, 30 bins")
@@ -907,6 +1365,15 @@ tibble(x=rnorm(1000, mean = 2)) %>%
 
 ]
 
+???
+
+The plot on the right is made of three `geom_` 
+
+- the histogram (to be defined)
+- the dashed line, that is the density of the Gaussian distribution the sample is drawn from
+- the rug, the collection of thin vertical segments below the `x` axis, that sketches the empirical distribution 
+
+Here, we have a regular histogram, with 30 bins (31 breaks)
 
 ---
 
@@ -914,15 +1381,42 @@ tibble(x=rnorm(1000, mean = 2)) %>%
 
 `r chunk_reveal("histogram-gauss")`
 
+
+???
+
+TODO 
+
 ---
 
-### Construction
+A histogram is defined by 
 
-- Binning the sample values
+- a sample $x_1, \ldots, x_n$, 
+
+- a collection of *breaks*
+$b_0 < b_1 < \ldots < b_k$ with $b_0 \leq \min (x_1, \ldots, x_n)$ and $b_k> \max(x_1, \ldots x_n)$
+
+- a convention about continuity at breaks. Here we assume right continuity
+
+
+The histogram is a piecewise constant function $h$ that is zero outside $[b_0, b_k)$
+and satisfies 
+
+$$h(z) = \sum_{i=1}^k \left(\frac{\sum_{j=1}^n \mathbb{I}_{[b_{i-1},b_i)}(x_j)}{n(b_{i} -b_{i-1})}\right) \mathbb{I}_{[b_{i-1},b_i)}(z)$$
+
+
+---
+
+### Construction of histograms
+
+Building the histogram amounts to binning the sample values. 
+
+Building a *useful* histogram  requires a number of decisions:
+
   + Picking the right (?) number of bins
-  + Placing the breaks
+
+  + Placing the breaks (regularly or not)
   
-- 
+
 
 
 ---
