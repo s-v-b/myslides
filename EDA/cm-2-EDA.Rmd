@@ -1395,13 +1395,23 @@ A histogram is defined by
 - a collection of *breaks*
 $b_0 < b_1 < \ldots < b_k$ with $b_0 \leq \min (x_1, \ldots, x_n)$ and $b_k> \max(x_1, \ldots x_n)$
 
-- a convention about continuity at breaks. Here we assume right continuity
+- a convention about continuity at breaks. Here, we assume right continuity
 
 
 The histogram is a piecewise constant function $h$ that is zero outside $[b_0, b_k)$
 and satisfies 
 
 $$h(z) = \sum_{i=1}^k \left(\frac{\sum_{j=1}^n \mathbb{I}_{[b_{i-1},b_i)}(x_j)}{n(b_{i} -b_{i-1})}\right) \mathbb{I}_{[b_{i-1},b_i)}(z)$$
+
+
+
+---
+
+A histogram is said to be *regular* if the breaks are equally spaced ($b_i - b_{i-1}$  does not depend on $i$)
+
+If the histogram is regular, then for every $i \in 1, \ldots, k$, $h(z)$ is proportional 
+to $P_n [b_{i-1}, b_i)$ for $b_{i-1} \leq z < b_i$
+
 
 
 ---
@@ -1454,14 +1464,66 @@ flights %>%
 
 ]
 
+???
+
+Overlayed histograms show how the distributions of departure and arrival delays differ
+
 ---
-exclude: true
+
+### Impact of binwidth on histogram
+
+```{r}
+smpl <- runif(1000)
+tbl <-  tibble(x=smpl)
+```
+
+```{r histos_bins, eval=FALSE}
+tbl %>% 
+  ggplot() +
+  aes(x=x) +
+  geom_rug() +
+  geom_histogram(aes(y=..density..), 
+                 bins=10, alpha=.2) +
+  geom_histogram(aes(y=..density..), 
+                 bins=30, alpha=.2, linetype=2, color="blue") +
+  geom_histogram(aes(y=..density..), 
+                 bins=100, alpha=.2, linetype=3, color="red") +
+  labs(title="Sample from the uniform distribution",
+       caption="1000 points, 10, 30, 100 bins")
+  
+```
+
+???
+
+The density of the population distribution is constant and equal to $1$ on $[0,1]$
+
+The empirical distribution is sketched by the rug plot below the $x$-axis
+
+Regular histograms with different binwidths are overlayed on the picture. 
+
+When using $100$ bins, the histogram displays suprious peaks. 
+
+
+---
+
+### Impact of binwidth on histogram (step by step)
+
+
+`r chunk_reveal("histos_bins")`
+
+
+???
+
+
+---
 
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
-'Est etincidunt non adipisci quaerat sed. Ipsum adipisci numquam neque ipsum modi neque modi. Amet velit tempora aliquam etincidunt. Quaerat neque labore velit dolorem dolore eius ipsum. Modi sed dolorem aliquam dolorem non neque. Dolor velit porro etincidunt magnam aliquam labore. Sed quisquam dolore tempora dolor ipsum sit est. Porro numquam adipisci aliquam. Amet labore etincidunt dolore porro.'
 
 ]
+
+
+
 
 ---
 template: inter-slide
@@ -1471,6 +1533,7 @@ name: ecdf
 
 ---
 
+### `r fontawesome::fa("syringe")` CDF
 
 .bg-light-gray.b--light-gray.ba.bw2.br3.shadow-5.ph4.mt5[
 
@@ -1502,6 +1565,8 @@ $$\begin{array}{rl}  P_n(A) & = \frac{1}{n} \sum_{i=1}^n \mathbb{I}_{x_i \in A} 
 
 ---
 
+### Computing the ECDF 
+
 Let $x_{1:n} \leq x_{2:n} \leq \ldots \leq x_{n:n}$ denote the _order statistics_
 of the sample (that is the non-decreasing rearrangement of sample, with possible
 repetitions).
@@ -1511,6 +1576,10 @@ The ECDF is easily computed from the order statistics:
 
 
 $$F_n(z) = \begin{cases} 0           & \text{if } z < x_{1:n}               \\ \frac{k}{n} & \text{if } x_{k:n} \leq z < x_{k+1:n}\\ 1           & \text{if } x_{n:n} \leq z \end{cases}$$
+
+
+Once the sample is sorted, computing the ECDF boils down to binary search `r fontawesome::fa("glass-cheers")`
+
 
 ---
 
@@ -1532,6 +1601,12 @@ The empirical cumulative distribution function $F_n$ is
 - is constant between consecutive order statistics
 
 ]
+
+
+
+---
+
+![Geyser](./img/pexels-adeline-man-11877707.jpg)
 
 ---
 

@@ -16,6 +16,20 @@
   height: 100%;
   background-color: red;
 }
+
+/* custom.css */
+.plot-callout {
+  width: 300px;
+  bottom: 5%;
+  right: 5%;
+  position: absolute;
+  padding: 0px;
+  z-index: 100;
+}
+.plot-callout img {
+  width: 100%;
+  border: 1px solid #23373B;
+}
 </style>
 
 
@@ -30,7 +44,7 @@ xaringanExtra::use_logo(
   image_url = "./img/UniversiteParisCite_logo_horizontal_couleur_RVB.jpeg",
   position = xaringanExtra::css_position(top = "1em", right = "1em"),
   width = "110px",
-  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-mi/",
+  link_url = "http://master.math.univ-paris-diderot.fr/annee/m1-isifar/",
   exclude_class = c("hide_logo")
 )
 

@@ -6,8 +6,8 @@ institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
   title: "Bivariate statistics"
-  curriculum: "Master I MIDS & MFA"
-  coursetitle: "Analyse Exploratoire de Données"
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
   lecturer: "Stéphane Boucheron"
   homepage: "http://stephane-v-boucheron.fr/courses/eda/"
   curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
@@ -314,7 +314,7 @@ tit$Survived <- forcats::fct_recode(tit$Survived,      #<<
 
 ```{r, results='markup', echo=TRUE}
 tit %>%
-  dplyr::select(Pclass, Survived) %>% # Projection on two columns
+  select(Pclass, Survived) %>% # Projection on two columns
   table()     #<<
 ```
 
@@ -324,11 +324,11 @@ tit %>%
 
 ```{r, results='markup', echo=TRUE}
 tit %>%
-  dplyr::select(Pclass, Survived) %>%
+  select(Pclass, Survived) %>%
   table() %>%
-  broom::tidy() %>%   # make it a dataframe
-  tidyr::pivot_wider(names_from=Survived,
-                     values_from=n) %>%    # with usual look and feel
+  as_tibble() %>%   # make it a dataframe
+  pivot_wider(names_from=Survived,  #<<
+              values_from=n) %>%    #<<
   knitr::kable(format="markdown")
 ```
 
@@ -346,18 +346,16 @@ tit %>%
 ```{r, include=FALSE, echo=FALSE}
 # another way of polishing the output
 tit %>%
-  dplyr::select(Pclass, Survived) %>%   #
+  select(Pclass, Survived) %>%   #
   table() %>%
   knitr::kable(format="markdown", row.names = TRUE)
 ```
 
-
 Package `summarytools` provides richer contingency tables.
 
-```{r, echo=TRUE, results='asis', eval=FALSE}
-pacman::p_load(summarytools)
 
-ctable(x=tit$Pclass,
+```{r, echo=TRUE, results='asis', eval=FALSE, include=FALSE}
+summarytools::ctable(x=tit$Pclass,
        y=tit$Survived,
        style="rmarkdown" ,
        headings = FALSE)
@@ -794,7 +792,7 @@ and mapping rows to points using `geom_point` and `stat_identity`
 
 We build an artificial bivariate sample, by first building a covariance matrix `COV` (it is randomly generated). Then we build a bivariate normal sample `s` of length `n` and turn it into a dataframe `u`. The dataframe is then fed  to `ggplot`.
 
-```{r gaussiancloud, echo=TRUE, fig.show='hide', fig.height=4}
+```{r gaussiancloud-sim, echo=TRUE, fig.show='hide', fig.height=4}
 set.seed(1515) # for the sake of reproducibility
 
 n <- 100
@@ -802,18 +800,9 @@ V <- matrix(rnorm(4, 1, 1), nrow = 2)
 COV <- V %*% t(V)         # a random covariance matrix, COV is symmetric and SDP
 
 s <- t(V %*% matrix(rnorm(2 * 10 * n), ncol=10*n))
-u <- tibble(X=s[,1], Y=s[, 2])                       # a bivariate normal sample
+u <- as_tibble(list(X=s[,1], Y=s[, 2]))                      # a bivariate normal sample
 
-emp_mean <- as_data_frame(t(colMeans(u)))
-
-p_scatter_gaussian <- ggplot(u, aes(x=X, y=Y)) +
-  geom_point(alpha=.5, size=1) +
-  geom_point(data=emp_mean, color=2, size=5) +
-  coord_fixed() +
-  ggtitle(stringr::str_c("Gaussian cloud, cor = ",
-                         round(cor(u$X, u$Y), 2), sep=""))
-
-p_scatter_gaussian
+emp_mean <- as_tibble(t(colMeans(u)))
 ```
 ]
 
@@ -835,7 +824,30 @@ cov(u) %>% as.data.frame() %>% knitr::kable(digits = 3)
 
 ]
 
+.panel[.panel-name[Code ]
 
+```{r gaussiancloud, echo=TRUE, fig.show='hide', fig.height=4}
+p_scatter_gaussian <- u %>%
+  ggplot() +
+  aes(x = X, y = Y) +
+  geom_point(alpha = .25, size = 1) +
+  geom_point(data = emp_mean, color = 2, size = 5) +
+  stat_ellipse(type = "norm", level = .9) +
+  stat_ellipse(type = "norm", level = .5) +
+  stat_ellipse(type = "norm", level = .95) +
+  annotate(geom="text", x=emp_mean$X+1.5, y= emp_mean$Y+1, label="Empirical mean")+
+  geom_segment(aes(x=emp_mean$X, y=emp_mean$Y, xend=emp_mean$X+1.5, yend=emp_mean$Y+1)) +
+  coord_fixed() +
+  ggtitle(stringr::str_c("Gaussian cloud, cor = ",
+    round(cor(u$X, u$Y), 2),
+    sep = ""
+  ))
+
+p_scatter_gaussian
+```
+
+
+]
 .panel[.panel-name[Plot]
 
 ![](`r knitr::fig_chunk("gaussiancloud", "png")`)
@@ -1339,33 +1351,35 @@ anscombe %>% gt()
 .panelset[
 
 .panel[.panel-name[`y1 ~ x1`]
-
+.f6[
 ```{r}
-lm(y1 ~ x1, anscombe) %>%
-  summary
+lm(y1 ~ x1, anscombe) %>% summary
 ```
-
+]
 ]
 
-.panel[.panel-name[`y2 ~ x2`]
+.panel.f6[.panel-name[`y2 ~ x2`]
+.f6[
 ```{r}
-lm(y2 ~ x2, anscombe) %>%
-  summary
+lm(y2 ~ x2, anscombe) %>% summary
 ```
+]
 ]
 
 .panel[.panel-name[`y3 ~ x3`]
+.f6[
 ```{r}
-lm(y3 ~ x3, anscombe) %>%
-  summary
+lm(y3 ~ x3, anscombe) %>% summary
 ```
+]
 ]
 
 .panel[.panel-name[`y4 ~ x4`]
+.f6[
 ```{r}
-lm(y4 ~ x4, anscombe) %>%
-  summary
+lm(y4 ~ x4, anscombe) %>% summary
 ```
+]
 ]
 
 ]
@@ -1429,9 +1443,9 @@ It is made of four bivariate samples with $n=11$ individuals.
 
 ```{r}
 datasets::anscombe %>%
-  pivot_longer(everything(),
-    names_to = c(".value", "group"),
-    names_pattern = "(.)(.)"
+  pivot_longer(everything(),  #<<
+    names_to = c(".value", "group"), #<<
+    names_pattern = "(.)(.)" #<<
   )  %>%
   rename(X=x, Y=y) %>%
   arrange(group)-> anscombe

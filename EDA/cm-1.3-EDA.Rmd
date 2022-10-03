@@ -5,12 +5,12 @@ author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2021/12/21 (updated: `r Sys.Date()`)"
 params:
-  title: "Introduction to table manipulations"
-  curriculum: "Master I MIDS & MFA"
-  coursetitle: "Analyse Exploratoire de Données"
+  title: "Introduction to table manipulation(s)"
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
   lecturer: "Stéphane Boucheron"
-  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
+  homepage_curriculum: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
   institution: "Université de Paris"
 output:
   xaringan::moon_reader:
@@ -99,19 +99,22 @@ name: dt
 
 ### Tables (Why ?)
 
-In Data Science, each framework comes with its own flavor(s) of table
+In Data Science, each framework comes with its own flavor(s) of table(s)
 
-Tables from relational databases serve as inspiration
+`r fontawesome::fa("database")` Tables from relational databases serve as inspiration
 
 In `r fontawesome::fa("r-project")` legacy dataframes shape the life of statisticians and data scientists
 
 The purpose of this session is
 
-- describe dataframes from an end-user viewpoint (we leave aside implemenations)
+- describe dataframes from an end-user viewpoint (we leave aside implementations)
+
 - presenting tools for
   - accessing information within dataframes (*querying*)
   - summarizing information (*aggregation queries*)
   - cleaning/cleaning dataframes  (*tidying*)
+
+???
 
 
 ---
@@ -124,10 +127,9 @@ pacman::p_load("tidyverse")      # All we need is there
 
 # Almost all. Helper packages
 pacman::p_load("nycflights13")    # for flight data
-
 # for manipulating dates and times
 pacman::p_load("lubridate")
-
+pacman::p_load("stringr")
 # nice table output for web presentations
 pacman::p_load("DT")
 pacman::p_load("gt")
@@ -143,10 +145,9 @@ data(flights)
 
 - Metapackage [`tidyverse`](https://www.tidyverse.org) provides tools to create, query, tidy dataframes as well as tools to load data from various sources and save them in persistent storage
 
-- [`nycflights13`](https://github.com/tidyverse/nycflights13) provides the dataframes we paly with
+- [`nycflights13`](https://github.com/tidyverse/nycflights13) provides the dataframes we play with
 
 - [`DT`](https://rstudio.github.io/DT/) is a gateway to a `Javascript` library that enables gracious display of dataframes on the WWW
-
 
 
 ---
@@ -164,12 +165,13 @@ head(flights) %>%
 
 ???
 
-A dataframe is a two-ways table
+A dataframe is a two-ways (two-dimensional) table
 
 `head(df)` displays the first 6 rows of its first argument
 
-The cells of a dataframe may have different types/classes
+The vectors making a dataframe may have different types/classes (a dataframe is not a matrix)
 
+Compare `str()`, `glimpse()`, `head()`
 
 ---
 
@@ -210,8 +212,8 @@ glimpse(flights,   #<<
 - Each column is  a sequence (`vector`) of items with the same type/class
 - All columns have the same length
 - `flights` has `r nrow(flights)` rows
-- In `r fontawesome::fa("database")` parlance a row is (often) called a _tuple_
-- In `r fontawesome::fa("database")` parlance a column is (often) called a _variable_
+- In `r fontawesome::fa("database")` parlance, a row is (often) called a _tuple_
+- In `r fontawesome::fa("database")` parlance, a column is (often) called a _variable_
 
 ---
 
@@ -241,6 +243,15 @@ Columns `dest`, `origin` `carrier` could be coerced as factors
 Should columns `dest`  and `origin` be coerced to the same factor?
 
 ]
+
+
+
+---
+
+### `nycflights13`
+
+
+![](./img/bd_2023-nycflights13.png)
 
 
 ---
@@ -282,7 +293,7 @@ cols(
 
 ???
 
-Table schema in relational databases
+$\approx$ table schema in relational databases
 
 Column specifications are useful when loading dataframes from structured text files
 like `.csv` files
@@ -301,7 +312,7 @@ name: sql
 
 ---
 
-- SQL stands for structured/simple query language
+- SQL stands for structured/simple Query Language
 
 - A query language elaborated during the 1970's at IBM by E. Codd
 
@@ -312,7 +323,7 @@ name: sql
 - `dplyr` is a principled `r fontawesome::fa("r-project")`-friendly
 implementation of SQL ideas (and other things)
 
-At the core of SQL lies the idea of a table calculus called relational algebra
+At the core of SQL lies the idea of a table calculus called **relational algebra**
 
 ---
 
@@ -323,7 +334,7 @@ Convention: $R$  is a table with columns $A_1, \ldots, A_k$
 
 - Projection (picking columns)
 
-.f3[
+.f4[
 
 $\pi(R, A_1, A_3)$
 
@@ -331,7 +342,7 @@ $\pi(R, A_1, A_3)$
 
 - Selection/Filtering (picking rows)
 
-.f3[
+.f4[
 
 $\sigma(R, {\text{condition}})$
 
@@ -339,13 +350,13 @@ $\sigma(R, {\text{condition}})$
 
 - Join (mulitple tables operation)
 
-.f3[
+.f4[
 
 $\bowtie(R,S, {\text{condition}})$
 
 ]
 
-`r fontawesome::fa("hand-point-right")` Any operation produces a table.
+`r fontawesome::fa("hand-point-right")` Any operation produces a table
 
 `r fontawesome::fa("hand-point-right")` The schema of the derived table depends on the operation (but does not depend on the content/value of the operands)
 
@@ -354,9 +365,9 @@ $\bowtie(R,S, {\text{condition}})$
 
 Relational calculus relies on a small set of basic operations $\pi, \sigma, \bowtie$
 
-Each operation has one or two table operands and produce a table
+Each operation has one or two table **operands** and produce a table
 
-There is more to SQL than relational algebra
+`r fontawesome::fa("exclamation-triangle")` There is more to SQL than relational algebra
 
 ---
 
@@ -388,8 +399,9 @@ A projection is parametrized by a list of column names
 
 - [_Tranformation_ chapter in R4DS](https://r4ds.had.co.nz/transform.html)
 
-- [Cheat sheet](https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf)
+- [Cheat sheet I](https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf)
 
+- [Cheat sheet II](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 ]
 
 .fl.w-70.pa2[
@@ -433,7 +445,7 @@ Five basic verbs:
 
 And
 
-- `group_by()`  changes the scope of each function from operating on the entire dataset to operating on it group-by-group.
+- `group_by()`  changes the scope of each function from operating on the entire dataset to operating on it group-by-group
 
 ???
 
@@ -450,7 +462,7 @@ And
 
 > The subsequent arguments describe what to do with the data frame, using the variable/column names (without quotes)
 
-> The result is a new data frame (table).
+> The result is a new data frame (table)
 
 ]
 
@@ -848,6 +860,14 @@ The `nycflights13` package  offers five related tables:
   - `airlines`  (full names)
 
 This is an instance of a [Star Schema](https://en.wikipedia.org/wiki/Star_schema)
+
+.plot-callout[
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/bd_2023-nycflights13.png")
+```
+]
+
 
 ???
 
@@ -1603,26 +1623,23 @@ name: aggregate-pivot-wider
 
 ### How many flights per day of week per departure airport?
 
-.fl.w-40.pa2.f6[
+.f6[
 
-```{r flights-dow, eval=FALSE}
+```{r flights-dow, eval=FALSE, warning=F, message=F}
 flights %>%
-  group_by(origin,  #<<
-           wday(time_hour)) %>%  #<<
-  summarise(count=n()) %>%       #<<
-  rename(day_of_week=`wday(time_hour)`) %>%
+  group_by(origin,  wday(time_hour, abbr=T, label=T)) %>%  #<<
+  summarise(count=n(), .groups="drop") %>%       #<<
+  rename(day_of_week=`wday(time_hour, abbr = T, label = T)`) %>%
   pivot_wider(  #<<
-    id_cols="origin",
-    names_from="day_of_week",
-    names_prefix="day_",
-    names_sep="_",
-    values_from="count") %>%
+    id_cols="origin",   #<<
+    names_from="day_of_week", #<<
+    values_from="count") %>%  #<<
   kable(caption="Departures per day")
 ```
 
 ]
 
-.fl.w-60.pa2.f6[
+.plot-callout.f6[
 
 ```{r flights-dow-out, echo=FALSE, ref.label="flights-dow"}
 
@@ -1759,6 +1776,9 @@ x |>
 
 .fr[See [pipes for beginners](https://www.r-bloggers.com/2017/12/pipes-in-r-tutorial-for-beginners/)]
 
+
+`r fontawesome::fa("exclamation-triangle")` Base `r fontawesome::fa("r-project")`  has a `pipe()` function 
+ to manipulate connections (Files, URLs, ...)
 
 ---
 template: inter-slide
