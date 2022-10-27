@@ -1,0 +1,24 @@
+
+
+
+
+#### `r fontawesome::fa("calendar")`  Période I    Semaines  `r lubridate::isoweek(lubridate::as_date("2023-01-16"))`-`r lubridate::isoweek(lubridate::as_date("2023-02-24"))`
+
+Du  `r lubridate::as_date("2023-01-16")`  au `r lubridate::as_date("2023-02-24")`
+
+
+| Titre du cours                                                   |     ECTS    |   Thèmes               |
+|:-----------------------------------------------------------------|:-----------:|:--------------------------:|
+| [Théorie des ensembles ](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-theorie-ensembles/) | 6 | `r fontawesome::fa("building-columns")`| 
+|  | `r fontawesome::fa("grip-lines")` | |
+| [Théorie de Galois](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-galois/)               | 6 |  `r fontawesome::fa("building-columns")` |
+| [Topologie algébrique](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-topo-alg/)          | 6 |  `r fontawesome::fa("building-columns")`|
+| | `r fontawesome::fa("grip-lines")`  |  |
+| [Éq. aux dérivées partielles](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/)        | 6 |  `r fontawesome::fa("file-waveform")`  `r fontawesome::fa("building-columns")` | 
+| | `r fontawesome::fa("grip-lines")` | | 
+| [Processus à temps discret ](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/) | 6 | `r fontawesome::fa("dice")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("building-columns")` |
+| [Statistique fondamentale](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/)| 6 | `r fontawesome::fa("chart-area")` `r fontawesome::fa("dice")`|
+
+
+`r rep(fontawesome::fa("mug-hot"), 2)`  Examens : Semaine `r lubridate::isoweek(lubridate::as_date("2023-03-06"))` Du  `r lubridate::as_date("2023-03-06")` au `r lubridate::as_date("2023-03-10")`
+

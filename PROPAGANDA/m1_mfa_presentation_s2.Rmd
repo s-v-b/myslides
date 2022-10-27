@@ -1,0 +1,246 @@
+---
+title: "Master 1 Mathématiques Fondamentales et Appliquées"
+subtitle: "Présentation des Cours du Second Semestre"
+author: "Marie-Claude Arnaud et Stéphane Boucheron"
+institute: "Université Paris Cité"
+params:
+  date: "2023/01/03 à 13h30"
+  title: "Présentation des Cours du Second Semestre"
+  curriculum: "Master Mathématiques et Applications"
+  coursetitle: "Accueil"
+  lecturer: "Marie-Claude Arnaud et Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/m1mfa/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-math/"
+  institution: "Université Paris Cité"
+  campus: "Grands Moulins Bât Sophie Germain Salle 1009"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+
+
+```{r child='title_slide.Rmd'}
+
+```
+
+
+---
+template: inter-slide
+
+### `r fontawesome::fa("map", fill="white")`
+
+- [Calendrier du second semestre](#calendrier-du-second-semestre)
+
+- [Période I](#periode-i)
+
+- [Période II](#periode-ii)
+
+- [Organisation des présentations](#organisation-des-presentations)
+
+- [UE semestrielles](#ue-semestrielles)
+ 
+---
+
+template: inter-slide
+name: calendrier-du-second-semestre
+
+## Calendrier du second semestre
+
+---
+
+```{r, child="cal-s2.Rmd"}
+
+```
+
+---
+
+template: inter-slide
+name: periode-i
+
+## Période I
+
+---
+
+```{r, child="periode1.Rmd"}
+
+```
+
+
+
+---
+template: inter-slide
+name: periode-ii
+
+## Période II
+
+---
+
+```{r, child="periode2.Rmd"}
+```
+
+
+---
+template: inter-slide
+name: organisation-des-presentations
+
+## Organisation des présentations
+
+---
+
+```{r, child="orga-pres-UE-s2.Rmd"}
+```
+
+---
+
+template: inter-slide
+name: ue-semestrielles
+
+## UE semestrielles
+
+---
+
+
+### UE Initiation à la recherche 
+
+- `r fontawesome::fa("user-graduate")` Intéressant pour qui vise une carrière académique 
+
+- `r fontawesome::fa("book-open-reader")` Étudier une question/un texte sous la responsabilité d'une chercheuse
+
+- `r fontawesome::fa("feather")` Rédiger un mémoire 
+
+-  `r fontawesome::fa("signs-post")`  Pour trouver une chercheuse/un chercheur référent, interrogez les enseignants du Ier semestre   
+
+---
+
+### UE Analyse Exploratoire de Données (AED-EDA) (semestrielle)
+
+[Page du cours](http://stephane-v-boucheron.fr/courses/eda/)
+
+- `r fontawesome::fa("laptop-code")` 3 Heures de Cours-TP par semaine  (avec votre machine)
+- Environnement `r fontawesome::fa("r-project")`
+- Validation sur devoirs `r fontawesome::fa("r-project")` + soutenances `r fontawesome::fa("slideshare")`
+  + `r fontawesome::fa("image")` `r fontawesome::fa("database")` visualisation, manipulation de tables
+  + régression 
+  + analyse factorielle
+
+- `r fontawesome::fa("triangle-exclamation")` Prérequis 
+  + Analyse Matricielle  (factorisations matricielles)
+  + Probabilités  (vecteurs gaussiens, TCL)
+  + Statistiques (IC, tests)
+
+Cours recommandé : [Statistique fondamentale](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/)
+
+[Synopsis](https://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/)
+
+---
+
+### UE ouverture 
+
+.fl.w-40.pa2[
+
+- Informatique (Master Informatique)
+
+  + [Portail Masters Informatique](http://www.informatique.univ-paris-diderot.fr/formations/masters/accueil)
+  + [Parcours Langages et Programmation](http://www.informatique.univ-paris-diderot.fr/formations/masters/langages_et_programmation/accueil)
+  + [Parcours IMPAIRS](http://www.informatique.univ-paris-diderot.fr/formations/masters/impairs/accueil)
+
+- Mathématique des parcours du Campus Saint-Germain des Prés 
+
+  + [Parcours Mathématiques Donnés Apprentissage](https://odf.u-paris.fr/fr/offre-de-formation/master-XB/sciences-technologies-sante-STS/mathematiques-donnees-et-apprentissage-K2NDJEIF/master-mathematiques-donnees-et-apprentissage-parcours-mathematiques-modelisation-apprentissage-JT5OADOQ.html)
+  + [Parcours Ingénierie mathématiques et biostatistique](https://odf.u-paris.fr/fr/offre-de-formation/master-XB/sciences-technologies-sante-STS/mathematiques-donnees-et-apprentissage-K2NDJEIF/master-mathematiques-donnees-et-apprentissage-parcours-ingenierie-mathematiques-et-biostatistique-JT5O7QE9.html#:~:text=Présentation,sur%20le%20traitement%20des%20données.)
+
+]
+
+.fl.w-60.pa2[
+
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+m <- leaflet::leaflet(width=450, height=400) |>
+  leaflet::setView(lat=48.840,
+                   lng=2.351, zoom=13) |>
+  leaflet::addTiles() |>  # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(lat=48.82928,
+                      lng=2.38174,
+                      popup="Halle aux Farines") |>
+  leaflet::addMarkers(lat=48.82717410837418,
+                      lng=2.380986213684082,
+                      popup="Bâtiment Sophie Germain") |>
+  leaflet::addMarkers(lat=48.82671,
+                      lng=2.38268,
+                      popup="Bâtiment Olympes de Gouges")  |>
+  leaflet::addMarkers(lat=48.82851,
+                      lng=2.38247,
+                      popup="Bâtiment Condorcet")  |>   
+  leaflet::addMarkers(lng=2.38004207611084,
+                      lat=48.8326901185081,
+                      popup="Barge du Crous") |>
+  leaflet::addMarkers(lat=48.85534,
+                      lng=2.33185,
+                      popup="Campus Saint-Germain") 
+
+m
+
+```
+
+
+
+
+
+]
+
+---
+
+
+### UE Projet
+
+- Thèmes
+  -  `r fontawesome::fa("chart-area")`Statistique 
+  - `r fontawesome::fa("dice")` Analyse Numérique  
+  - `r fontawesome::fa("dice")` Probabilités  
+  - `...`
+
+- Déroulement `r fontawesome::fa("chart-gantt")`
+  - `r fontawesome::fa("file-waveform")` Étude d'un problème (par exemple la déconvolution) 
+  - `r fontawesome::fa("laptop-code")` Programmation d'une méthode de résolution 
+  - `r fontawesome::fa("book")` Rédaction d'un mémoire 
+  - `r fontawesome::fa("image")` Soutenance (fin mai) 
+
+[Synopsis](https://master.math.univ-paris-diderot.fr/modules/m1math-s2-projet/)
+
+---
+
+```{r child='closing_slide.Rmd'}
+
+```
+
+

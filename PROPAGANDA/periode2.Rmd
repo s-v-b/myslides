@@ -1,0 +1,30 @@
+
+
+####  `r fontawesome::fa("calendar")`  Période II  Semaines `r lubridate::isoweek(lubridate::as_date("2023-03-13"))`-`r lubridate::isoweek(lubridate::as_date("2023-04-21"))`
+
+.f6[
+Du `r lubridate::as_date("2023-03-13")` au `r lubridate::as_date("2023-04-24")`
+]
+
+.f6[
+
+| Titre du cours                                                   |     ECTS    |   Thèmes               |
+|:-----------------------------------------------------------------|:-----------:|:--------------------------:|
+|[Incomplétude et indécidabilité](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-incompletude/)|6|`r fontawesome::fa("building-columns")`|
+||`r fontawesome::fa("grip-lines")`||
+|[Arithmétique]("http://master.math.univ-paris-diderot.fr/modules/m1math-s2-arith/")| 6 | `r fontawesome::fa("building-columns")`|
+|[Géométrie algébrique](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-alg/)| 6 |  `r fontawesome::fa("building-columns")`|
+|[Géométrie différentielle](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-diff/)| 6 | `r fontawesome::fa("building-columns")`|
+||`r fontawesome::fa("grip-lines")`||
+|[Optimisation]()| 6 |`r fontawesome::fa("file-waveform")`|
+|[Méthodes numériques EDO & EDP]()| 6 |`r fontawesome::fa("file-waveform")`|         
+||`r fontawesome::fa("grip-lines")`||
+|[Théorèmes linites en Probabilités](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/)| 6 | `r fontawesome::fa("building-columns")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("dice")`|
+|[Statistiques bayésiennes et tests](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/)| 6 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")`|
+|[Mathématiques financières](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/)| 6 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")` `r fontawesome::fa("sack-dollar")`|
+    
+]
+
+.f6[
+`r rep(fontawesome::fa("mug-hot"), 2)` Examens semaines `r lubridate::isoweek(lubridate::as_date("2023-05-09"))`-`r lubridate::isoweek(lubridate::as_date("2023-05-23"))`  du  `r lubridate::as_date("2023-05-09")` au `r lubridate::as_date("2023-05-27")` 
+]
