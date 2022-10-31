@@ -1,35 +1,44 @@
+```{r, echo=F, message=F, warnings=F}
+require(lubridate)
+require(hms)
+
+debut <-  as_datetime("2023-01-03  14:00:00", tz="CET")
+quart_d_heure <- minutes(15)
+```
+
+### Présentation des UE   .fr.red[`r hms::as_hms(debut)`-`r hms::as_hms(debut + 16 * quart_d_heure)`]
 
 
-### Présentation des UE 
 
 .fl.w-50.pa2.f6[
 
-| Titre du cours                                                   |     Période    |   Thèmes               |
-|:-----------------------------------------------------------------|:-----------:|:--------------------------:|
-|[Théorie des ensembles ](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-theorie-ensembles/) | 1 | `r fontawesome::fa("building-columns")`| 
-|[Incomplétude et indécidabilité](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-incompletude/)|2|`r fontawesome::fa("building-columns")`|
-||`r fontawesome::fa("grip-lines")`||
-|[Théorie de Galois](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-galois/)               | 1 |  `r fontawesome::fa("building-columns")` |
-|[Topologie algébrique](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-topo-alg/)          | 1 |  `r fontawesome::fa("building-columns")`|
-|[Arithmétique]("http://master.math.univ-paris-diderot.fr/modules/m1math-s2-arith/")| 2 | `r fontawesome::fa("building-columns")`|
-|[Géométrie algébrique](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-alg/)| 2 |  `r fontawesome::fa("building-columns")`|
-|[Géométrie différentielle](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-diff/)| 2 | `r fontawesome::fa("building-columns")`|
+| Titre du cours                                                   |     Période    |   Thèmes               |  Horaire |
+|:-----------------------------------------------------------------|:-----------:|:--------------------------:|----------:|
+|[Théorie des ensembles ](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-theorie-ensembles/) | 1 | `r fontawesome::fa("building-columns")`| `r hms::as_hms(debut)`|
+|[Incomplétude et indécidabilité](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-incompletude/)|2|`r fontawesome::fa("building-columns")`| |
+||`r fontawesome::fa("grip-lines")`|| |
+|[Théorie de Galois](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-galois/)               | 1 |  `r fontawesome::fa("building-columns")` | `r hms::as_hms(debut + 2 *quart_d_heure)`|
+|[Topologie algébrique](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-topo-alg/)          | 1 |  `r fontawesome::fa("building-columns")`| |
+|[Arithmétique]("http://master.math.univ-paris-diderot.fr/modules/m1math-s2-arith/")| 2 | `r fontawesome::fa("building-columns")`| `r hms::as_hms(debut + 4 *quart_d_heure)`|
+|[Géométrie algébrique](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-alg/)| 2 |  `r fontawesome::fa("building-columns")`| |
+|[Géométrie différentielle](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-diff/)| 2 | `r fontawesome::fa("building-columns")`| `r hms::as_hms(debut + 6 *quart_d_heure)`|
+|[Initiation à la recherche]()| - | `r fontawesome::fa("building-columns")` | |
 
 ]
 
 .fl.w-50.pa2.f6[
 
-| Titre du cours                                                   |     Période    |   Thèmes               |
-|:-----------------------------------------------------------------|:-----------:|:--------------------------:|   
-|[Éq. aux dérivées partielles](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/)        | 1 |  `r fontawesome::fa("file-waveform")`  `r fontawesome::fa("building-columns")` | 
-|[Optimisation]()| 2 |`r fontawesome::fa("file-waveform")`|
-|[Méthodes numériques EDO & EDP]()| 2 |`r fontawesome::fa("file-waveform")`|         
-||`r fontawesome::fa("grip-lines")`||
-|[Processus à temps discret ](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/) | 1 | `r fontawesome::fa("dice")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("building-columns")` |
-|[Théorèmes linites en Probabilités](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/)| 2 | `r fontawesome::fa("building-columns")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("dice")`|
-|[Statistique fondamentale](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/)| 1 | `r fontawesome::fa("chart-area")` `r fontawesome::fa("dice")`|
-|[Statistiques bayésiennes et tests](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/)| 2 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")`|
-|[Mathématiques financières](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/)| 2 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")` `r fontawesome::fa("sack-dollar")`|
+| Titre du cours                                                   |     Période    |   Thèmes               |   Horaire |
+|:-----------------------------------------------------------------|:-----------:|:--------------------------:|----------:|
+|[Éq. aux dérivées partielles](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/)        | 1 |  `r fontawesome::fa("file-waveform")`  `r fontawesome::fa("building-columns")` | `r hms::as_hms(debut + 8 *quart_d_heure)` |
+|[Méthodes numériques EDO & EDP]()| 2 |`r fontawesome::fa("file-waveform")`|         |
+|[Optimisation]()| 2 |`r fontawesome::fa("file-waveform")`|  `r hms::as_hms(debut + 10 *quart_d_heure)`  |
+||`r fontawesome::fa("grip-lines")`|| |
+|[Processus à temps discret ](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/) | 1 | `r fontawesome::fa("dice")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("building-columns")` |  `r hms::as_hms(debut + 11 *quart_d_heure)`|
+|[Théorèmes limites en Probabilités](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/)| 2 | `r fontawesome::fa("building-columns")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("dice")`| |
+|[Statistique fondamentale](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/)| 1 | `r fontawesome::fa("chart-area")` `r fontawesome::fa("dice")`|  `r hms::as_hms(debut + 13 *quart_d_heure)` |
+|[Statistiques bayésiennes et tests](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/)| 2 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")`| |
+|[Mathématiques financières](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/)| 2 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")` `r fontawesome::fa("sack-dollar")`|  `r hms::as_hms(debut + 15 *quart_d_heure)` |
 
 ]  
 

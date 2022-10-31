@@ -128,10 +128,13 @@ name: ue-semestrielles
 
 ## UE semestrielles
 
+Horaire : `r hms::as_hms(debut + 15 * quart_d_heure)`
+
 ---
 
 
-### UE Initiation à la recherche 
+### UE Semestrielle I : .red[Initiation à la recherche]
+
 
 - `r fontawesome::fa("user-graduate")` Intéressant pour qui vise une carrière académique 
 
@@ -141,9 +144,31 @@ name: ue-semestrielles
 
 -  `r fontawesome::fa("signs-post")`  Pour trouver une chercheuse/un chercheur référent, interrogez les enseignants du Ier semestre   
 
+
 ---
 
-### UE Analyse Exploratoire de Données (AED-EDA) (semestrielle)
+### UE Semestrielle II : .red[Projet]
+
+- Thèmes
+  -  `r fontawesome::fa("chart-area")`Statistique 
+  - `r fontawesome::fa("dice")` Analyse Numérique  
+  - `r fontawesome::fa("dice")` Probabilités  
+  - `...`
+
+- Déroulement `r fontawesome::fa("chart-gantt")`
+  - `r fontawesome::fa("file-waveform")` Étude d'un problème (par exemple la déconvolution) 
+  - `r fontawesome::fa("laptop-code")` Programmation d'une méthode de résolution 
+  - `r fontawesome::fa("book")` Rédaction d'un mémoire 
+  - `r fontawesome::fa("image")` Soutenance (fin mai) 
+
+[Synopsis](https://master.math.univ-paris-diderot.fr/modules/m1math-s2-projet/)
+
+
+---
+
+### UE Semestrielle III : .red[Analyse Exploratoire de Données]
+
+.fl.w-50.pa2.f6[
 
 [Page du cours](http://stephane-v-boucheron.fr/courses/eda/)
 
@@ -162,10 +187,20 @@ name: ue-semestrielles
 Cours recommandé : [Statistique fondamentale](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/)
 
 [Synopsis](https://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/)
+]
 
+.fr.w-50.pa2.f6[
+
+```{r, echo=F}
+knitr::include_url("https://stephane-v-boucheron.fr/courses/eda/", height="400px")
+```
+
+
+]
 ---
 
-### UE ouverture 
+### UE Semestrielle IV : .red[Ouverture]
+
 
 .fl.w-40.pa2[
 
@@ -218,24 +253,6 @@ m
 
 ]
 
----
-
-
-### UE Projet
-
-- Thèmes
-  -  `r fontawesome::fa("chart-area")`Statistique 
-  - `r fontawesome::fa("dice")` Analyse Numérique  
-  - `r fontawesome::fa("dice")` Probabilités  
-  - `...`
-
-- Déroulement `r fontawesome::fa("chart-gantt")`
-  - `r fontawesome::fa("file-waveform")` Étude d'un problème (par exemple la déconvolution) 
-  - `r fontawesome::fa("laptop-code")` Programmation d'une méthode de résolution 
-  - `r fontawesome::fa("book")` Rédaction d'un mémoire 
-  - `r fontawesome::fa("image")` Soutenance (fin mai) 
-
-[Synopsis](https://master.math.univ-paris-diderot.fr/modules/m1math-s2-projet/)
 
 ---
 

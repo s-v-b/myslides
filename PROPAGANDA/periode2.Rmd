@@ -19,7 +19,7 @@ Du `r lubridate::as_date("2023-03-13")` au `r lubridate::as_date("2023-04-24")`
 |[Optimisation]()| 6 |`r fontawesome::fa("file-waveform")`|
 |[Méthodes numériques EDO & EDP]()| 6 |`r fontawesome::fa("file-waveform")`|         
 ||`r fontawesome::fa("grip-lines")`||
-|[Théorèmes linites en Probabilités](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/)| 6 | `r fontawesome::fa("building-columns")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("dice")`|
+|[Théorèmes limites en Probabilités](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/)| 6 | `r fontawesome::fa("building-columns")` `r fontawesome::fa("file-waveform")` `r fontawesome::fa("dice")`|
 |[Statistiques bayésiennes et tests](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/)| 6 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")`|
 |[Mathématiques financières](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/)| 6 |`r fontawesome::fa("dice")` `r fontawesome::fa("chart-area")` `r fontawesome::fa("sack-dollar")`|
     
