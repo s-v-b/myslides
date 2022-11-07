@@ -11,13 +11,14 @@ knitr::opts_chunk$set(fig.width = 6,
                       comment = "",
                       cache = F)
 
-pacman::p_load(flipbookr)
-pacman::p_load(FactoMineR)
-pacman::p_load(FactoInvestigate)
+#pacman::p_load(FactoMineR)
+#pacman::p_load(FactoInvestigate)
 pacman::p_load(ggrepel)
 pacman::p_load(ggfortify)
 pacman::p_load(broom)
 pacman::p_load(tidyverse)
+pacman::p_load(patchwork)
+pacman::p_load(glue)
 opts <- options()  # save old options
 
 options(ggplot2.discrete.colour="viridis")
@@ -83,7 +84,13 @@ USArrests %>%
 
 
 ```{r, echo=TRUE}
-data(decathlon)
+decathlon <- read_csv("DATA/decathlon.csv",  # adjust as needed
+  col_types = cols(Competition = col_factor(levels =c("Decastar",
+                                                      "OlympicG"))))
+
+decathlon <- decathlon %>% 
+  column_to_rownames(var = "...1")
+
 
 decathlon %>%
   rownames_to_column() %>%
@@ -196,16 +203,40 @@ Centering is performed by default when using `prcomp`
 
 ### Centering/Scaling: iris dataset
 
-On iris dataset Centering and standardizing the columns slightly spreads out the eigenvalues
+On `iris` dataset centering and standardizing the columns slightly spreads out the eigenvalues
 
 
 ```{r}
 iris <- datasets::iris
 iris_num <- dplyr::select(iris, -Species)
+```
+
+```{r}
+iris_pca <- iris_num %>% 
+  prcomp(center=T, scale.=F) 
+```
+
+```{r}
+p_pca <- iris_pca %>% 
+  broom::tidy(matrix="pcs") %>% 
+  ggplot() +
+  aes(x=PC, y=percent, label=percent) +
+  geom_col(width=.4) +
+  geom_text(nudge_y = .02) 
+
+p_pca +
+  ggtitle("Iris PCA with centering and no scaling",
+          subtitle="Screeplot")
+```
+
+Assessing all possible configurations of optional parameters (in a dry way)
+
+```{r}
+opt_params <-  expand.grid(c(FALSE, TRUE), c(FALSE, TRUE))
 
 list_pca_iris <-
-  map2(.x=rep(c(FALSE, TRUE), 2),
-       .y=rep(c(FALSE, TRUE), c(2,2)),
+  map2(.x=opt_params[,1],
+       .y=opt_params[,2],
        ~ prcomp(iris_num, center= .x, scale.=.y)
 )
 
@@ -220,37 +251,54 @@ config_param <- as.vector(outer(c("_", "center"),
                           c("_", "scale"), FUN=paste)) %>%
                 rep( c(4,4,4,4))
 
-list_pca_iris %>%
+df_pca_iris_c_s <- list_pca_iris %>%
   purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
-  mutate(Parameter=config_param) -> df_pca_iris_c_s
+  mutate(Parameter=config_param) 
 
-p_pca_c_s <- df_pca_iris_c_s %>%
-  ggplot() +
-  aes(x=PC, y=percent, fill=Parameter) +
-  geom_col(position="dodge")
+p_pca_c_s <- (p_pca %+% df_pca_iris_c_s) +
+  aes(fill=Parameter) +
+  facet_wrap(~ Parameter) +
+  labs(title="Iris screeplots: share of inertia per PC",
+       subtitle = "Centering, scaling or not")
 
 p_pca_c_s +
-  labs(title="Iris : share of inertia per PC",
+  aes(label=percent) +
+  geom_text(nudge_y = .02) +
+  labs(title="Iris screeplots: share of inertia per PC",
        subtitle = "Centering, scaling or not")
+```
+
+
+```{r}
+df_pca_iris_c_s %>% 
+  ggplot() +
+  aes(x=PC, y=percent, fill=Parameter) +
+  aes(label=percent) +
+  geom_text(position=position_dodge(width=.9), angle=45, vjust=0.1, hjust=-0.1) + 
+  geom_col(position="dodge", alpha=.5) +
+  ylim(c(0, 1.2)) +
+  labs(title="Iris screeplots: share of inertia per PC",
+       subtitle = "Centering, scaling or not")
+  
+
 ```
 
 ### More on the centering/scaling dilemma
 
 ```{r , echo=TRUE}
-
 usarrests_num <- USArrests
-data(decathlon)
 
-list_pca_usarrests <-
-  map2(.x=rep(c(FALSE, TRUE), 2),
+list_pca_usarrests <- map2(.x=rep(c(FALSE, TRUE), 2),
        .y=rep(c(FALSE, TRUE), c(2,2)),
-       ~ prcomp(USArrests, center= .x, scale.=.y)
+       ~ prcomp(as.matrix(USArrests), center= .x, scale.=.y)
 )
 
-list_pca_decathlon <-
-  map2(.x=rep(c(FALSE, TRUE), 2),
+
+
+
+list_pca_decathlon <- map2(.x=rep(c(FALSE, TRUE), 2),
        .y=rep(c(FALSE, TRUE), c(2,2)),
-       ~ prcomp(decathlon[, 1:10], center= .x, scale.=.y)
+       ~ prcomp(as.matrix(decathlon[, 1:10]), center= .x, scale.=.y)
 )
 
 names(list_pca_usarrests) <- c("pca_usarrests", "pca_usarrests_c", "pca_usarrests_s", "pca_usarrests_c_s")
@@ -271,7 +319,8 @@ list_pca_usarrests %>%
 p_pca_c_s %+%
   df_pca_usarrests_c_s  +
   labs(title="USArrests : share of inertia per PC",
-       subtitle = "Centering, scaling or not")
+       subtitle = "Centering, scaling or not") +
+  geom_text(position=position_dodge(width=.9), angle=45, vjust=0.1, hjust=-0.1)
 ```
 
 
@@ -285,9 +334,9 @@ config_param_deca <- as.vector(outer(c("_", "center"),
                           c("_", "scale"), FUN=paste)) %>%
                 rep(rep(10,4))
 
-list_pca_decathlon %>%
+df_pca_decathlon_c_s <- list_pca_decathlon %>%
   purrr::map_dfr(~ broom::tidy(., matrix="pcs")) %>%
-  mutate(Parameter=config_param_deca) -> df_pca_decathlon_c_s
+  mutate(Parameter=config_param_deca) 
 
 p_pca_c_s %+%
   df_pca_decathlon_c_s  +
@@ -429,21 +478,21 @@ iris_plus_pca <- broom::augment(iris_pca, iris)
 ```{r, out.width="50%"}
 share_variance <- broom::tidy(iris_pca, "pcs")[["percent"]]
 
-iris_plus_pca %>%
+p <-  iris_plus_pca %>%
   ggplot() +
   aes(x=.fittedPC1, y=.fittedPC2) +
   aes(colour=Species) +
   geom_point() +
   ggtitle("Iris data projected on first two principal axes") +
   xlab(paste("PC1 (", share_variance[1], "%)", sep="")) +
-  ylab(paste("PC2 (", share_variance[2], "%)", sep="")) -> p
+  ylab(paste("PC2 (", share_variance[2], "%)", sep="")) 
 
-iris_plus_pca %>%
+q <- iris_plus_pca %>%
   ggplot() +
   aes(y=Sepal.Width, x=Petal.Length) +
   aes(colour=Species) +
   geom_point() +
-  ggtitle("Iris data projected on Petal length and Sepal width") -> q
+  ggtitle("Iris data projected on Petal length and Sepal width") 
 ```
 
 
@@ -623,10 +672,7 @@ decathlonTime <- mutate(decathlon,
                         `110m.hurdle` = 110/`110m.hurdle`,
                         `1500m` = 1500/`1500m`)
 
-PCAdecathlontime <- PCA(decathlonTime[,1:10],  graph = FALSE)
-
-factoextra::fviz_pca_ind(PCAdecathlontime, repel = TRUE)
-factoextra::fviz_pca_var(PCAdecathlontime, repel = TRUE)
+# play it again 
 ```
 
 When inspecting `decathlon` some columns are positively correlated with column `Points`,
@@ -783,6 +829,27 @@ This tibble is convenient when plotting the correlation circles
 associated with different sets of components
 
 
+```{r tidycorcirc}
+broom::tidy(pc, matrix="rotation") %>%
+  pivot_wider(id_cols = column,
+              names_from = PC, 
+              names_prefix = "PC",
+              values_from = value) %>% 
+  ggplot() +
+    aes(x=PC1, y=PC2, group=column, label=column) +
+    geom_segment(aes(xend=0, yend=0), arrow=arrow(ends = "first")) +
+    geom_text() +
+  coord_fixed() +
+  xlim(-1,1) +
+  ylim(-1,1) +
+  annotate("path",
+   x=0+1*cos(seq(0,2*pi,length.out=100)),
+   y=0+1*sin(seq(0,2*pi,length.out=100)), linetype="dashed") +
+  ggtitle("USArrests, correlation circle")
+  
+```
+
+
 
 ```{r tidyscreeplot, fig.height=4, fig.show='hold'}
 # information about singular values
@@ -793,7 +860,7 @@ broom::tidy(pc, matrix="pcs") %>%
   ggplot() +
   aes(x=as.integer(PC), y=percent) +
   geom_col() +
-  xlab("PC") +ylab("Percentage of inertia") +
+  xlab("PC") + ylab("Percentage of inertia") +
   ggtitle("USArrests: screeplot")
 ```
 

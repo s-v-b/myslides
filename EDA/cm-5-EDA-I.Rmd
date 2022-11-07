@@ -52,6 +52,8 @@ template: inter-slide
 
 # Multilinear Regression II: Formulae and Algorithm(s)
 
+$$\begin{array}{rl}\mathbb{E} XY & = \|X\| \|Y\| \mathbb{E}\left[\frac{X}{\|X\|} \frac{Y}{\|Y\|}\right] \\
+& \leq \|X\| \|Y\| \frac{1}{2} \mathbb{E}\left[\left(\frac{X}{\|X\|}\right)^2 \left(\frac{Y}{\|Y\|}\right)^2\right]\\ & = \|X\| \|Y\|  \end{array}$$
 
 #### [`r params$curriculum`](`r params$homepage_curriculum`)
 

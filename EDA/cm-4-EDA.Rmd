@@ -1,12 +1,12 @@
 ---
 title: "Multilinear Regression"
-subtitle: "⚔<br/>EDA Master I, MIDS & MFA"
+subtitle: "EDA Master I, ISIFAR, MIDS & MFA"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2020/11/20 (updated: `r Sys.Date()`)"
 params:
   title: Multilinear Regression I
-  curriculum: "Master I MIDS & MFA"
+  curriculum: "Master I ISIFAR"
   coursetitle: "Analyse Exploratoire de Données"
   lecturer: "Stéphane Boucheron"
   homepage: "http://stephane-v-boucheron.fr/courses/eda/"
@@ -51,19 +51,6 @@ class: left, middle
 
 ```
 
----
-exclude:true
-template: inter-slide
-
-# Multilinear Regression I
-
-
-#### [`r params$curriculum`](`r params$homepage_curriculum`)
-
-
-#### [`r params$coursetitle`](`r params$homepage`)
-
-#### [`r params$lecturer`](http://stephane-v-boucheron.fr)
 
 ---
 template: inter-slide
@@ -105,7 +92,7 @@ whiteside %>%
 ]
 
 
-.fl.w-two-thirds.pa2[
+.fl.w-two-thirds.pa2.f6[
 
 Mr Derek Whiteside of the UK Building Research Station recorded the weekly gas consumption and average external temperature at his own house in south-east England for two heating seasons, one of 26 weeks before, and one of 30 weeks after cavity-wall insulation was installed. The object of the exercise was to assess the effect of the insulation on gas consumption.
 
@@ -143,7 +130,7 @@ In the parlance of mathematical statistic, we proceed as if we were
 fitting a _Gaussian Linear Model_ with _homoschedastic_ noise:
 
 $$\begin{bmatrix} \mathrm{Gas}_1 \\
-  \vdots \\  \mathrm{Gas}_{56} \end{bmatrix}  = \begin{bmatrix} 1 & \mathrm{Temp}_1 \\   \vdots & \vdots \\ 1 & \mathrm{Temp}_{56} \end{bmatrix} \times \begin{bmatrix}  \beta_0 \\ \beta_1
+\vdots \\  \mathrm{Gas}_{56} \end{bmatrix}  = \begin{bmatrix} 1 & \mathrm{Temp}_1 \\   \vdots & \vdots \\ 1 & \mathrm{Temp}_{56} \end{bmatrix} \times \begin{bmatrix}  \beta_0 \\ \beta_1
 \end{bmatrix} + \sigma \begin{bmatrix} \epsilon_1 \\ \vdots \\ \epsilon_{56} \end{bmatrix}$$
 
 where $\epsilon_i \sim_{i.i.d.} \mathcal{N}(0,1)$.

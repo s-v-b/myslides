@@ -182,6 +182,7 @@ img_pca %>%
 
 ### Make it an image again
 
+.f6[
 ```{r}
 reverse_pca <- function(n_comp = 20, pca_object = img_pca){
   # [From Kieran Healy]
@@ -213,8 +214,11 @@ reverse_pca <- function(n_comp = 20, pca_object = img_pca){
   recon_df_long
 }
 ```
+]
 
+.plot-callout[
 [From Kieran Healy](https://kieranhealy.org/blog/archives/2019/10/27/reconstructing-images-using-pca/)
+]
 
 ---
 
