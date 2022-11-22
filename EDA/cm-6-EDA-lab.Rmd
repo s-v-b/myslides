@@ -589,8 +589,7 @@ decathlon_pca$rotation %>%
   as_tibble(rownames="Name") %>%
   ggplot() +
   aes(x=PC1, y=PC2, label=Name) +
-  geom_segment(xend=0, yend=0, arrow = grid::arrow(ends = "first")) +
-  geom_text_repel() +
+  geom_segment(aes(xend=0, yend=0), arrow=grid::arrow(ends = "first")) +  
   coord_fixed() +
   xlim(-.7, .7) +
   ylim(-.7, .7) +

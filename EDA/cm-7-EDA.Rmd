@@ -120,6 +120,7 @@ template: inter-slide
 
 
 ---
+exclude: true
 template: inter-slide
 name: chi-deux-section
 

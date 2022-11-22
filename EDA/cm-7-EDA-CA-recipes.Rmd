@@ -82,7 +82,12 @@ are called _row profiles_
 
 Each _row profile_ defines a conditional probability of $Y$ given $X$
 
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 In Correspondence Analysis, row profile analysis consists of factorizing the centered row profile matrix $R$
+
+]
+
 
 The recipe consists in choosing the couple of symmetric positive definitive matrices that define the extended SVD
 
@@ -188,6 +193,8 @@ $$(x -y)^T \times D_c^{-1} \times (x-y)$$
 
 ### Applying the extendend SVD
 
+.bg-light-gray.b--light-gray.ba.bw1.br3.shadow-5.ph4.mt5[
+
 The extended SVD factorization is actually applied to
 
 $$D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$$
@@ -196,6 +203,9 @@ where $1 \times 1^T$ denotes the matrix from $\mathcal{M}_{p, q}$ with all entri
 
 Matrices $\Omega$ and $\Phi$ are chosen as $D_r$ and $D_c$.
 
+]
+
+
 The entry of $D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$ at indices $a,b$ are
 
 $$\frac{n N_{a,b}}{N_{a, .}N_{.,b}} - 1$$
@@ -203,9 +213,7 @@ $$\frac{n N_{a,b}}{N_{a, .}N_{.,b}} - 1$$
 
 ???
 
-Entries of $D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$ show up in the
-definition of the chi-square divergence between the joint empirical distributions
-and the product of marginal empirical distributions
+Entries of $D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T$ show up in the definition of the chi-square divergence between the joint empirical distributions and the product of marginal empirical distributions
 
 ---
 
@@ -232,7 +240,7 @@ $$D_r^{1/2} \times
 \big(D_r^{-1} \times P \times D_c^{-1} - 1 \times 1^T \big) \times D_c^{1/2}
   =  D_r^{1/2}  \times \big(R - 1 \times  1^T \times P \big) \times  D_c^{-1/2}$$
 
-we can also portray correspondence analysis as
+we can also portray Correspondence Analysis (CA) as
 
 > computing the extended SVD of the centered row profiles matrix
 $$\big(R - 1\times  1^T \times P \big)$$
