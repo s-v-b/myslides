@@ -1,0 +1,129 @@
+---
+title: "EDA I: Introduction to R and Data Analysis"
+subtitle: "Analyse de Données Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/12/11 (updated: `r Sys.Date()`)"
+params:
+  title: ""
+  curriculum: "Master I MIDS et MFA"
+  coursetitle: "Présentation"
+  lecturer: "Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/eda/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: mon_chapeau.bib
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+---
+
+```{r , child="title_slide.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+
+
+
+.fl.w-50[
+
+### Objectifs
+
+- maîtriser les techniques d'analyse de données (régression/analyses factorielles)
+
+- maîtriser les techniques de visualisation 
+
+- utiliser `r fontawesome::fa("r-project")`
+
+- construire des pipelines de traitement de données
+
+]
+
+.fl.w-50[
+
+### Prérequis
+
+- Lien avec le cours de Statistique Fondamentale 
+
+- Analyse matricielle
+  
+  + Factorisation QR
+  
+  + Factorisation Cholesky
+  
+  + Factorisation SVD 
+
+]
+
+.fr[[`r fontawesome::fa("home")` Page du cours](http://stephane-v-boucheron.fr/courses/eda/)]
+
+---
+
+### Environnement  et organisation
+
+
+.fl.w-50[
+
+- `r fontawesome::fa("r-project")` : un langage/un environnement de calcul
+
+- `r fontawesome::fa("hand-point-right")` installer `r fontawesome::fa("r-project")` (>= 4.1)
+
+- `r fontawesome::fa("hand-point-right")` installer l'IDE `rstudio` depuis [posit.co](https://posit.co)
+
+- `r fontawesome::fa("cubes")` installer une collection de *packages*  (en cours)
+
+] 
+
+
+
+.fl.w-50[
+
+`r fontawesome::fa("chalkboard-teacher")` lundi et mercredi deux séances de 1 heure 30
+
+`r fontawesome::fa("laptop-code")` apporter votre ordinateur en classe (ce sont des cours-TP)
+
+]
+
+
+.fr[[`r fontawesome::fa("home")` Page du cours](http://stephane-v-boucheron.fr/courses/eda/)]
+
+
+---
+
+### Validation
+
+.
+- 2 mini-projets dont un avec soutenance 
+
+- 4 rendus de TP 
+
+- Format `rmarkdown` ou `quarto`
+
+
+.fr[[`r fontawesome::fa("home")` Page du cours](http://stephane-v-boucheron.fr/courses/eda/)]
+

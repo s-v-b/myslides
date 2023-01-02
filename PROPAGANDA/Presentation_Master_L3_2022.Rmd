@@ -1,0 +1,935 @@
+---
+title: "Master mention Mathématiques et applications"
+subtitle: "Présentation aux étudiants de Licence"
+author: "Université Paris Cité"
+date: "`r Sys.Date()`"
+params:
+  date: "2023/01/03 à 13h30"
+  title: "Master mention Mathématiques et Applications"
+  curriculum: "Master Mathématiques et Applications"
+  coursetitle: "Présentation aux étudiants de Licence"
+  lecturer: "Marie-Claude Arnaud et Stéphane Boucheron"
+  homepage: "http://stephane-v-boucheron.fr/courses/m1mfa/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-math/"
+  institution: "Université Paris Cité"
+  campus: "Grands Moulins Bât Sophie Germain Salle 1015"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    includes:
+      in_header:
+        - 'toc.html'
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: inter-slide
+class: left, middle, inverse
+
+{{ content }}
+
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+
+
+```{r child='title_slide.Rmd'}
+
+```
+
+
+
+
+???
+
+---
+name: student_friendly
+
+###  Master de mathématiques
+
+Un diplôme en deux ans
+
+Trois types de débouchés :
+
+> Concours d'enseignement du second degré (Capes, Agrégation)
+
+> Métiers d'ingénieurie, industrie, services
+
+> Recherche, fondamentale ou appliquée, et enseignement supérieur
+
+Tous ces débouchés sauf un font l'objet de différents parcours du master «Mathématiques et applications»
+
+
+???
+
+Merci d'être venus. Nous sommes là pour parler de votre avenir.
+
+Vous entrez dans le dernier semestre de Licence de Mathématiques.
+Nous espérons que poursuivrez dans cette voie. Poursuivre en Mathématiques,
+c'est généralement, suivre les enseignements d'un master.
+
+Un master, c'est deux ans d'études qui débouchent en général
+sur trois grands types d'activité et une multitude de métiers.
+
+---
+name:2mentions11parcours
+
+### Masters de Mathématiques : deux mentions
+
+- Master **Mathématiques et applications**
+
+- Master **Métiers de l’Enseignement, de l’Éducation et de la Formation (MEEF)**
+
+> Préparation au CAPES de Mathématiques
+
+> [Parcours Mathématiques]({{meef}}). Partenariat avec l'ESPE
+
+???
+
+Aux Grands Moulins  deux mentions de Master intéressent les mathématiciens et les mathématiciens-informaticiens.
+
+- Mention Maths et applications (plusieurs parcours)
+- [Mention MEEF]({{meef}}), nous ne sommes concernés que par le parcours Mathématiques
+
+Ces deux mentions se distinguent par les débouchés et les métiers auxquels elles préparent.
+
+La mention MEEF conduit à l'enseignement dans les collèges et les lycées. Elle prépare au concours de recrutement du CAPES.
+
+La mention Mathématiques et applications conduit elle aussi à l'enseignement dans les Lycées (préparation à l'agrégation) mais aussi à une foule d'autres métiers
+
+---
+
+### Master I : tronc commun MFA
+
+En Master I, six parcours sont regroupés dans un *tronc commun* appelé **Mathématiques fondamentales et appliquées**.
+
+Le *tronc commun* conduit aux parcours de Master II suivants
+
+---
+name: tubulaires
+
+### Les parcours MIC-MIDS-ISIFAR
+
+Les parcours
+
+> Mathématiques Informatique Cryptologie (MIC)
+
+> Mathématiques Informatique Données (MIDS)
+
+> ISIFAR
+
+sont *tubulaires* organisés sur deux années
+
+???
+
+---
+layout: false
+class: inverse, center, middle
+
+## Orientation
+
+---
+name: orientation
+
+###  S'orienter
+
+> Réfléchir aux *domaines d'activité* qui vous attirent
++ Analyse
++ Logique
++ Mathématiques financières
++ Sécurité
++ Science des données
++ Enseignement
++ ...
+
+
+> Réfléchir aux *métiers* associés à ces *domaines*
++ Analyse
+  - Universitaire/R et D industrielle
++ Mathématiques financières
+  - Quant/Broker/Analyste/Algorithmic trading
++ Science des données
+  - Data scientist/engineer/architect
+
+???
+
+S'interroger sur ses talents
+
+### Exemple:
+
+- Débouché : Recherche en logique mathématique
+  + Question :  $\mathrm{P} \stackrel{?}{=} \mathrm{NP}$
+  + Prix : $1$M.US$ ([Clay Foundation](http://www.claymath.org/))
+- Parcours
+Logique Mathématique et
+Fondement de l'Informatique
+- Master I : Tronc commun, UEs bien choisies
+
+
+
+Domaines d'activité/métier
+
+- Logique mathématique
+- Finance :
+  + plusieurs métiers : quant, broker, analyste
+  + plusieurs parcours : m2mo, isifar
+- Données :
+  + métiers : ds, de, da
+  + parcours : m2mo, mids, isifar
+- Enseignement
+  + métiers : collèges, lycées, prépas
+  + mentions : Maths MG, MEEF Mathématiques
+
+
+SOIP
+
+---
+name: aide-orientation
+class: middle
+
+### Aide à l'orientation
+
+- [Service d'Orientation et d'Insertion (SOI)](https://etudes-formations.univ-paris-diderot.fr/orientation-et-insertion-professionnelle)
+- [Recherche de stage](http://reseaupro.univ-paris-diderot.fr/index.php/orientation)
+- Les brochures [Zoom Métiers](https://librairie.onisep.fr/Collections/Grand-public/Zoom-sur-les-metiers/Les-metiers-des-mathematiques-et-de-l-informatique) éditées par l’ONISEP
+- Le [Maths Club](https://irem.univ-paris-diderot.fr/tags/maths-club)
+
+---
+name: orientation-concrete
+class: middle
+
+### Orientation : choix des parcours
+
+> Identifier les parcours de Master qui correspondent à vos
+domaines de prédilection et aux métiers qui vous attirent
+
+> Postuler aux Masters I qui correspondent à ces parcours
+
+
+
+
+???
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Candidatures
+
+
+---
+
+### Admission en Master I
+
+- Procédure : [Trouver Mon Master]()
+  + CV
+  + Lettre de motivation
+- Calendrier
+  - Ouverture : [mettre un lien]()
+  - Date limite de dépot des dossiers :
+  - Session 2
+  - *Il est possible de déposer un dossier avant l'obtention officielle du diplôme de Licence*
+- Peut-on postuler à plusieurs parcours au sein de Paris Diderot ?
+  - oui
+  - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG/PMA/Modélisation
+
+
+???
+
+Conseils à donner oralement
+
+- délais
+- candidature après session II (envoyer un dossier avant)
+- capacités d'accueil
+- pour les parcours MF/PMA/Modélisation/MG/LMFI/M2MO
+
+---
+template: inter-slide
+
+## Validation
+
+
+???
+---
+name: proc-validation
+
+### Procédures de validation
+
+Aucune compensation automatique n'est prévue
+
+Si des compensations prévues, les règles varient suivant les parcours
+
+Elles ne dépasseront jamais le cadre d'un bloc d'UE d'un même semestre
+
+Plus de compensations inter-semestrielles
+
+---
+template: inter-slide
+class: inverse, middle, center
+
+## Financements
+
+---
+name: financement
+
+### Sources
+
+.left-column[
+
+### Bourses
+
+]
+
+.right-column[
+
+### Sources
+
+Au delà des bourses distribuées selon des critères sociaux, il existe des bourses décernées *au mérite* après un examen compétitif des dossiers de candidatures.
+
+- Programme PGSM de la [Fondation des Sciences Mathématiques de Paris](https://www.sciencesmaths-paris.fr/en/masters-250.htm)
+- Bourses des ambassades
+
+]
+
+???
+
+Un guichet commun ?
+
+---
+name: alternance
+
+### Financements
+
+.left-column[
+### Bourses
+### Alternance
+]
+
+.right-column[
+
+> Il est possible de faire
+certains M2 en *alternance* avec un contrat de
+- *apprentissage* :
+  Master MIC mathématiques (simple)
+- *professionnalisation* :
+  Master ISIFAR
+
+> Les lauréats du CAPES suivent le Master II MEEF en tant que fonctionnaire-stagiaire. Ils sont rémunérés.
+
+]
+
+???
+
+Distinguer *contrat de professionalisation*  et *contrat d'apprentissage*
+
+Les étudiants s'inquiètent des limites d'age imposées éventuellement par les contrats.
+
+
+
+---
+name: Professionnalisation
+
+### Financements
+
+.left-column[
+## Bourses
+## Alternance
+### [Contrats](https://www.letudiant.fr/alternance/le-contrat-de-professionnalisation-1.html)
+]
+
+.right-column[
+
+> Le contrat d'alternance est  un contrat de travail particuliers. Il est signé soit pour une durée précise sous forme de CDD (renouvelable une fois), soit en CDI avec une période de professionnalisation de six à douze mois.
+
+> Toutes les entreprises privées, y compris les sociétés d'intérim, sont éligibles
+
+]
+
+???
+
+Chercher les contrats d'alternance durant le second semestre de Master I
+
+---
+template: inter-slide
+class: center, middle, inverse
+
+## M1 MFA et parcours associés
+
+---
+name: mf
+
+### Parcours Mathématiques fondamentales
+
+> Formation de haut niveau en mathématiques à des étudiants qui se destinent aux métiers de l'enseignement et de la recherche.
+
+> Il débouche donc naturellement (mais pas exclusivement) sur une thèse de mathématiques.
+
+- [Laboratoire IMJ-PRG](https://www.imj-prg.fr) (CNRS-Paris-Diderot-SU)
+- Convention avec Sorbonne-Université (ex UPMC-Paris 6)
+- [Brochure 2017-18](http://www.math.univ-paris-diderot.fr/_media/formations/masters/math/brochure_maths_fond_2018-2019.pdf)
+
+Responsable : [Olivier Debarre](https://webusers.imj-prg.fr/~marc.rosso/)
+
+???
+
+- Un parcours élitiste
+- Un débouché : Doctorat
+- Un Doctorat, c'est une allocation, un encadrement
+- Un doctorat. c'est éventuellement un passeport pour l'enseignement en classes préparatoires
+
+Peut-on préparer l'agrégation en préparant une thèse ?
+
+---
+name: lmfi
+
+### Parcours: Logique Mathématiques et Fondements de l'Informatique
+
+> Ce master offre une formation de haut niveau en Logique. Il a pour objectif
+de former des chercheurs ou ingénieurs de recherche possédant la maîtrise
+des outils logiques fondamentaux utilisés en Mathématiques et en
+Informatique.
+
+> Seul M2 en France consacré la logique mathématique et à ses applications en informatique
+
+
+Responsables :
+- Informatique [Christine Tasson](http://www.irif.fr/~tasson/)
+- Mathématiques [Boban Velickovic](http://www.logique.jussieu.fr/~boban/)
+
+
+???
+
+Revoir l'attaque.
+
+- Comment se situe la Logique Mathématique dans l'univers des Mathématiques (fondamentales) ?
+- Quel langage tenir aux étudiants de Licence à ce sujet
+- Trouver des mots pour expliquer le rôle de P7 dans la recherche en Logique en France et en Europe
+- Suggérer le rôle de la logique dans la relation Mathématique/Informatique. Hommage à Turing.
+- Évoquer métiers et débouchés
+
+
+---
+name: m2mo
+
+### Parcours M2MO (Modélisation Aléatoire, ex-Laure Élie)
+
+.pull-left[
+Mathématiques financières
+
+Science des données
+
+Responsables:
+
+[Jean-François Chassagneux](https://www.lpsm.paris//pageperso/chassagneux/index.html)
+[Huyen Pham](https://sites.google.com/site/phamxuanhuyen/)
+
+[Association Alumni](https://masterfinance.math.univ-paris-diderot.fr/index.php/anciens/association)
+]
+
+.pull-right[
+
+
+
+
+]
+
+???
+
+- Prévoir une attaque
+- Présence sur les réseaux sociaux LinkedIn Twitter Instagram Facebook
+- Les Mathématiques financières
+- Les statistiques
+- Le *Machine Learning*
+
+---
+name: mg
+
+### Parcours Mathématiques Générales
+
+> Le M2 Mathématiques générales permet d'acquérir une formation solide et généraliste en mathématiques, à la fois théorique et pratique, en lien avec l'enseignement des mathématiques
+
+> Le parcours Mathématiques générales-Agrégation est centré sur la préparation à l'[agrégation externe](http://www.devenirenseignant.gouv.fr)
+
+> Le jury de délivrance du M2 se réunit avant les résultats d'admissibilité
+
+Responsable:
+[Antoine Chambert-Loir](https://webusers.imj-prg.fr/~antoine.chambert-loir/index.xhtml)
+
+???
+
+- Attaque
+- Métiers. Qu'est-ce-qu'un agrégé ?
+- L'agrégation dans une vie de mathématicien
+- Les options
+- Les choix de cours à suivre en Master I
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Mathématique-Informatique-Cryptologie
+
+---
+name: mic
+
+### Double Master MIC
+
+.pull-left[
+### Admission
+
+- Double Licence Mathématiques-Informatique ou
+
+- Licence de Mathématiques + Test Informatique ou
+
+- Licence d'Informatique + Test de Mathématiques
+
+]
+
+.pull-right[
+
+### Débouchés
+
+Professionnels de la cryptologie et de la sécurité informatique.
+
+- Expert sécurité (grands groupes, banques, cabinets de consultants, startups)
+
+- Ingénieur bureau d'étude (applications et services en ligne, objets connectés, blockchain)
+
+- Agences gouvernementales (ANSSI, ministère de la défense)
+
+
+]
+
+
+---
+class: middle
+
+### Master MIC :  Compétences visées
+
+- Sécurité de protocoles de communication (GSM, Internet, ...)
+
+- Informatique embarquée
+
+- Programmation sur carte à puce
+
+- Sécurisation d'un réseau informatique
+
+- Architecture sécurité d'un réseau
+
+---
+name: m2-mic
+
+### Formation en M2 Double Master MIC
+
+
+
+---
+name: m2-mic-apprentissage
+
+### Master MIC simple en Alternance
+
+.pull-left[
+- M1 MIC Maths 30 ECTS par semestre (enlever un cours d'informatique par semestre)
+- Rechercher un contrat d'apprentissage à partir du mois de février en Master I
+
+> Rythme d'alternance (en Master II)
+- un jour par semaine en entreprise sur dix semaines
+- deux jours par semaine sur dix semaines
+- puis stage entièrement dans l'entreprise
+]
+
+.pull-right[
+> Possibilité de faire précéder l'alternance par un stage d'été entre le Master I et le Master II pour découvrir l'entreprise
+
+Exemples :
+- Thalès
+- CEA
+- Orange
+- BNP
+]
+
+---
+name: mids
+
+### Double Master MIDS
+
+.pull-left[
+
+### Admission
+
+- Double Licence Mathématiques-Informatique ou
+- Licence de Mathématiques + Test Informatique ou
+- Licence d'Informatique + Test de Mathématiques
+
+### Responsables
+
+- Mathématiques : [A. Fischer](https://www.lpsm.paris/users/fischer/index)
+- Informatique : [C. Delporte](https://www.irif.fr/~delporte/)
+
+]
+
+.pull-right[
+
+### Organisation
+
+- Master I
+  - 36 ECTS Semestre I
+  - 36 ECTS Semestre II
+- Master II
+  - 18 ECTS en Semestre I partie I (Septembre-Novembre)
+  - 18 ECTS en Semestre I partie II (Janvier-Mars)
+  - 27 ECTS stage Avril-Septembre
+
+
+]
+
+???
+
+Etoffer la présentation des débouchés et l a
+
+---
+name: mids-debouches1
+
+## Double Master MIDS : débouchés
+
+.left-column[
+
+### Data engineer
+
+]
+
+.right-column[
+
+> Data engineers are software engineers who design, build, integrate data from various resources, and manage big data.
+
+
+]
+
+---
+name: mids-debouches2
+
+## Double Master MIDS : débouchés 2
+
+.left-column[
+
+### Data engineer
+### Data architect
+
+]
+
+.right-column[
+
+
+> A data architect is a practitioner of data architecture, an information technology discipline concerned with designing, creating, deploying and managing an organization's data architecture.
+
+]
+
+---
+name: mids-debouches3
+
+## Double Master MIDS : débouchés 3
+
+.left-column[
+### Data engineer
+### Data architect
+### Data scientist
+]
+
+.right-column[
+
+
+> Data science is a "concept to unify statistics, data analysis, machine learning and their related methods" in order to "understand and analyze actual phenomena" with data.
+
+> It employs techniques and theories drawn from many fields within the context of mathematics, statistics, information science, and computer science.
+
+
+]
+---
+name: mids-m1-ue
+
+### Double Master MIDS : première année
+
+
+
+
+.pull-left[
+
+
+
+36 ECTS
+]
+
+
+.pull-right[
+
+
+
+36 ECTS
+]
+
+
+???
+
+---
+name: mids-annee2
+
+### Double Master MIDS : seconde année
+
+.pull-left[
+
+
+]
+
+
+.pull-right[
+
+
+
+
+- 2 cours de mathématiques
+- 3 cours d'informatique
+
+]
+
+
+---
+template: inter-slide
+class: inverse, middle, center
+
+## ISIFAR
+
+---
+name: isifar
+
+## Master  ISIFAR
+
+
+.pull-left[
+
+###Débouchés
+
+Cadres à profil d'ingénieur statisticien/informaticien, spécialisés dans les applications  aux problèmes actuariels, financiers ou de gestion des risques.
+
+### Responsables
+
+- M1 : [Sandrine Péché](https://fr.wikipedia.org/wiki/Sandrine_Péché)
+- M2 : [Zorana grbac] et [Stéphane Crepey](https://perso.lpsm.paris/~crepey/)
+-
+
+
+]
+
+
+
+.pull-right[
+
+### Compétences visées
+
+- méthodes mathématiques
+  + statistiques
+  + numériques
+- outils informatiques pour
+  + banque,
+  + finance
+  + assurance
+  + marketing.
+
+Profil recherché par les banques (gestions des risques), les sociétés d'assurance (actuariat), les organismes économiques, les sociétés financières et les sociétés de services informatiques (SSII).
+
+]
+
+
+???
+
+Pourquoi le Master ISIFAR constitue une alternative au Master MO ? À quel public
+s'adresse-t-il ? Qu'est ce que la gestion quantitative du risque ?
+Comment devenir Actuaire ? Y-a-t-il parmi les anciens étudiants des
+personnes qui sont devenues Actuaires ? (il y en a parmi les anciens du M2MO)
+
+---
+name: ue-isifar-m1
+
+### Master I ISIFAR
+
+
+
+.pull-left[
+
+
+]
+
+
+
+.pull-right[
+
+
+
+]
+
+---
+name: ue-isifar-m2
+
+### Master II ISIFAR
+
+
+.pull-left[
+De septembre à décembre
+
+
+
+]
+
+
+.pull-right[
+De janvier à mars
+
+
+]
+
+<br>
+
+.center[
+
+### Stage d'avril à septembre  18 ECTS
+
+]
+
+---
+name: ue-isifar-m2-alternance
+
+### Master II ISIFAR en alternance
+
+.pull-left[
+- Rechercher un contrat d'apprentissage à partir du mois de février en Master I
+- Possibilité de faire précéder l'alternance par un stage d'été entre le Master I et le Master II pour découvrir l'entreprise
+- En 2019-19, 14 étudiants sur 50 suivent le Master II ISIFAR en alternance
+
+]
+
+.pull-right[
+
+Rythme d'alternance
+
+- un jour par semaine en entreprise sur dix semaines
+- deux jours par semaine sur dix semaines
+- puis stage entièrement dans l'entreprise
+
+]
+
+
+
+---
+layout: false
+class: inverse, middle, center
+
+## Master mention Métiers de l'Enseignement, l'Éducation et de la Formation
+
+### parcours Mathématiques
+
+
+---
+name: meef
+
+### Master Métiers de l’Enseignement, de l’Éducation et de la Formation (MEEF)
+
+- Préparation aux CAPES externe et CAFEP de Mathématiques
+- Partenariat avec l'[École Supérieure du Professorat et de l'Éducation (ESPE) de Paris](https://candidature.espe-paris.fr/).
+- Master I : Préparation CAPES externe/CAFEP
+- Master II : fonctionnaire stagiaire en en alternance : trois jours par semaine
+devant une classe de collège ou lycée et deux jours par semaine en formation à l'ESPE.
+
+> Futurs professeurs de mathématiques en collège et lycée
+
+> Formation progressive et intégrée, vise à décloisonner les aspects disciplinaire, didactique, professionnel et numérique.
+
+
+---
+name: meef-Contenu
+
+### Master I MEEF parcours Mathématiques
+
+60 crédits entre septembre et mai
+
+.pull-left[
+
+]
+
+.pull-right[
+
+]
+
+
+---
+name: meef-candidatures
+class: middle
+
+### Master MEEF informations pratiques
+
+> Candidatures au Master I MEEF au mois de mai-juin sur le [site de l'ESPE](https://candidature.espe-paris.fr/)
+
+> Attention : il est question d'une réforme dont la teneur n'est pas connue.
+Pour rester informé, consulter la [page publique du Master MEEF](https://www.math.univ-paris-diderot.fr/formations/masters/meef/index)
+
+> Contact: [David Mauger](https://webusers.imj-prg.fr/~david.mauger/), bureau 609A
+
+
+???
+
+Le Master MEEF se déroule sur deux ans, soit quatre semestres. Ce master (niveau bac+5) est validé par l'obtention de 120 crédits ECTS. La formation est conçue comme une formation progressive et intégrée, dont les enseignements visent à décloisonner les aspects disciplinaire, didactique, professionnel et numérique.
+
+
+"Master Mention Métiers de l’Enseignement, de l’Éducation et de la Formation
+	parcours Mathématique"
+
+Diapo 49/51 : "fonctionnaire stagiaire en alternance (2 jours par semaine en formation à l'ESPE, 3 jours par semaine en établissement scolaire)" plutôt que "en immersion"
+Ajouter
+"Candidatures au M1 MEEF au mois de mai-juin sur le site de l'ESPE : https://candidature.espe-paris.fr/
+Attention : il est en ce moment question d'une réforme dont nous ne connaissons pas encore la teneur...
+Pour rester informer, la page publique du Master MEEF : https://www.math.univ-paris-diderot.fr/formations/masters/meef/index "
+
+Sur une autre diapo probablement :
+"Contenu du M1 MEEF parcours Mathématiques <actuel>
+
+Première période (sept - mars) :
+Probas-stats 6 ECTS
+Arithmétique 6 ECTS
+Analyse 6 ECTS
+Algèbre linéaire 6 ECTS
+Géométrie 6 ECTS
+Préparation à l'écrit 5 ECTS
+Tronc commun 6 ECTS
+
+Deuxième période (avril-mai) :
+Histoire des mathématiques 3 ECTS
+
+Toute l'année (sept-mai) :
+Préparation à l'oral 10 ECTS
+Numérique 3 ECTS
+Stage 3 ECTS"
+
+
+
+
+Master I MEEF. La première année comporte une préparation intensive aux épreuves du concours de recrutement (CAPES externe, CAFEP et 3e concours) et une formation professionnelle initiale, notamment au travers de stages (5 semaines). Le calendrier, rythmé par les enseignements, les stages et le concours, impose une organisation non semestrielle. Les épreuves des concours ont lieu pendant l'année de M1 (écrits d'admissibilité au début du mois d'avril, oraux d'admission en juin-juillet). → M1 MEEF
+
+Master II MEEF. Les candidats admis au Capes deviennent fonctionnaires stagiaires en début de seconde année. Cette année débute par un module de prise de fonctions, puis se déroule en alternance : trois jours par semaine
+devant une classe de collège ou lycée et deux jours par semaine en formation à l'ESPE.

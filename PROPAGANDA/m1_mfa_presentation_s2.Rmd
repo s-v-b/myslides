@@ -128,7 +128,7 @@ name: ue-semestrielles
 
 ## UE semestrielles
 
-Horaire : `r hms::as_hms(debut + 15 * quart_d_heure)`
+Horaire : `r hms::as_hms(debut + 17 * quart_d_heure)`
 
 ---
 
@@ -195,6 +195,8 @@ Cours recommandé : [Statistique fondamentale](http://master.math.univ-paris-did
 knitr::include_url("https://stephane-v-boucheron.fr/courses/eda/", height="400px")
 ```
 
+
+[`r fontawesome::fa("video")`](https://u-paris.zoom.us/rec/share/16AVP8Drr5rYCGcrhZfHsPV5zUp6j1cPSiV0XO98rjWvX3PdOoLC2_-XSUA1c-BM.FeyjLT5dox0WnVcZ)
 
 ]
 ---
