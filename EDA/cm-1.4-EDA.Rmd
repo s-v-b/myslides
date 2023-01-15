@@ -124,6 +124,7 @@ pacman::p_load("data.table")
 
 
 ```{r}
+require(nycflights13)
 dtflights <-  data.table(flights)
 
 dtflights |>
@@ -164,7 +165,7 @@ dtflights[
   ,               #&lt;&lt; (no) filtering
   .(n=.N),        #&lt;&lt; summarize
   by = .(carrier) #&lt;&lt; aggregation
-  ] |&gt;
+  ] %>% 
   DT::datatable()
 ```
 

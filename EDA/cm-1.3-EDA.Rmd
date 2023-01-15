@@ -1,12 +1,12 @@
 ---
 title: "EDA I.3: Introduction to R and Data Analysis"
-subtitle: "Analyse de Données Master I, MFA et MIDS"
+subtitle: "Analyse de Données Master I MFA et MIDS"
 author: "Stéphane Boucheron"
 institute: "Université de Paris"
 date: "2021/12/21 (updated: `r Sys.Date()`)"
 params:
   title: "Introduction to table manipulation(s)"
-  curriculum: "Master I ISIFAR"
+  curriculum: "Master I MFA et MIDS"
   coursetitle: "Analyse de Données"
   lecturer: "Stéphane Boucheron"
   homepage: "http://stephane-v-boucheron.fr/courses/isidata/"

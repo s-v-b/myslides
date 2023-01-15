@@ -6,7 +6,7 @@ institute: "Université de Paris"
 date: "2020/12/11 (updated: `r Sys.Date()`)"
 params:
   title: "Introduction to R and Data Analysis"
-  curriculum: "Master I ISIFAR"
+  curriculum: "Master I MFA & MIDS"
   coursetitle: "Analyse de Données"
   lecturer: "Stéphane Boucheron"
   homepage: "http://stephane-v-boucheron.fr/courses/isidata/"
@@ -408,6 +408,8 @@ The Web offers many valuable resources for learning  `r fontawesome::fa("r-proje
 - [Udacity](https://www.udacity.com)
 
 - [Stackoverflow](https://stackoverflow.com/questions/tagged/r)
+
+- [R job interviews](https://www.edureka.co/blog/interview-questions/r-interview-questions/)
 
 - ...
 

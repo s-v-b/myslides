@@ -9,14 +9,15 @@ output:
     lib_dir: libs
     seal: false
     nature:
+        </div>
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          </div>
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      slideNumberFormat: |
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
-          </div>
-        </div>
 ---
 name: layout-general
 layout: true
@@ -138,7 +139,7 @@ class: middle
 .right-colum[
 
 
-```{r, echo=FALSE, message=FALSE, fig.align='right', fig.width=8}
+```{r, echo=FALSE, message=FALSE,  fig.width=8}
 require(magrittr)
 m <- leaflet::leaflet() %>%
   leaflet::setView(lat=48.853646831055556,
@@ -216,7 +217,7 @@ exclude: false
 
 .pull-left[
 
-- Probabilités `r fontawesome::fa("random")`
+- Probabilités `r fontawesome::fa("dice")`
 
 - Théorie de l'Information  `r fontawesome::fa("wave-square")`
 
@@ -224,9 +225,9 @@ exclude: false
 
 - Statistiques  `r fontawesome::fa("code")`
 
-- Optimisation `r fontawesome::fa("drafting-compass")`
+- Optimisation `r fontawesome::fa("compass")`
 
-- Machine Learning `r fontawesome::fa("tools")`
+- Machine Learning `r fontawesome::fa("screwdriver-wrench")`
 
 - IA (Deep Learning) `r fontawesome::fa("brain")`
 
@@ -501,7 +502,7 @@ __Semestre I (Septembre-Mars)__
 
 - [Programmation répartie]()
 
-- [Réseaux d'interactions]()  `r fontawesome::fa("share-alt")`
+- [Réseaux d'interactions]()  `r fontawesome::fa("share")`
 
 - [Accès information MAIN]()
 

@@ -64,7 +64,8 @@ pacman::p_load(knitr)
 pacman::p_load(flipbookr)
 pacman::p_load(glue)
 pacman::p_load(gganimate)
-
+pacman::p_load(viridis)
+pacman::p_load(viridisLite)
 old_theme <-theme_set(theme_minimal(base_size=12, base_family = "Helvetica"))
 
 opts_chunk$set(warning = FALSE,
@@ -77,6 +78,6 @@ opts_chunk$set(warning = FALSE,
 
 opts <- options()  # save old options
 
-options(ggplot2.discrete.colour="viridis")
-options(ggplot2.continuous.colour="viridis")
+#options(ggplot2.discrete.colour="viridis")
+#options(ggplot2.continuous.colour="viridis")
 ```

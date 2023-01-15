@@ -94,8 +94,6 @@ knitr::include_url("https://www.youtube.com/embed/jbkSRLYSojo")
 
 ???
 
----
-
 ### [`r fontawesome::fa("link")` Gapminder](https://www.gapminder.org)
 
 [Gapminder](https://www.gapminder.org) is a Swedish foundation. 
@@ -109,17 +107,21 @@ Hans Rosling was a founder of Gapminder
 
 The TED presentation is an example of attractive data visualization
 
+It raises a number of questions
+
+--
+
 - Where do the data come from?
 
-- How can we gather data? 
+- Are the data reliable?
 
-- How can we tidy data? 
+- How can we *gather* data? 
+
+- How can we *tidy* data? 
 
 - How can we analyze/explore data?
 
 - How can we present data (to a diverse audience)? 
-
-
 
 ---
 template: inter-slide
@@ -132,9 +134,13 @@ name: diy
 
 We will reproduce the animated demonstration using 
 
-- `ggplot2` an implementation of *grammar of graphics* in `r fontawesome::fa("r-project")`
+- `ggplot2`: an implementation of *grammar of graphics* in `r fontawesome::fa("r-project")`
 
-- `plotly` a bridge between `r fontawesome::fa("r-project")` and the javascript library `D3.js`
+- `plotly`: a bridge between `r fontawesome::fa("r-project")` and the javascript library `D3.js`
+
+--
+
+- Using `plotly`, opting for `html` ouput, brings the possibility of interactivity and animation 
 
 
 
@@ -159,6 +165,8 @@ In `r fontawesome::fa("r-project")` The `gapminder` data can be loaded from *pac
 ```{r load_gapminder_again, echo=TRUE}
 pacman::p_load("tidyverse")
 pacman::p_load("gapminder")
+pacman::p_load("glue")
+pacman::p_load("DT")
 ```
 
 - `r fontawesome::fa("magic")` Loading `tidyverse` loads a collection of packages dedicated to table manipulations and graphics including `ggplot2`.
@@ -264,9 +272,10 @@ exclude: true
 
 What's make a table tidy?
 
-- [ ] No/Few redundancies (what does it mean)
-  - [ ] Is the `gapminder` table redundant?
-  - [ ] ....
+-  No/Few redundancies (what does it mean)
+  -  Is the `gapminder` table redundant?
+  -  ....
+-  Compare with Codd's principles from database theory
 
 
 ---
@@ -285,23 +294,13 @@ tt <- gapminder %>%
   DT::formatRound('lifeExp', 1) #<<
 ```
 
-
-
----
-exclude: true
-
-
-```{r gapminder_td_bis, echo=FALSE}
-
-```
-
 ???
 
-- [ ] Formatting instruction should not be wired in the table fed to `DT`
-- [ ] reorder columns
-- [ ] order countries by decreasing population size
-- [ ] right-align `pop` column
-- [ ] make provision for caption
+-  Formatting instruction should not be wired in the table fed to `DT`
+-  Reorder columns
+-  Order countries by decreasing population size
+-  Right-align `pop` column
+-  Make provision for caption
 
 ---
 ###  `r fontawesome::fa("database")` $\sigma$:  Picking one year of data
@@ -400,8 +399,7 @@ p
 
 We are building a graphical object (a `ggplot` object) around a data frame (`gapminder`)
 
-We supply _aesthetic mappings_ (`aes()`) that can be either global
-or bound to some _geometries_ (`geom_point()`)or _statistics_ 
+We supply _aesthetic mappings_ (`aes()`) that can be either global or bound to some _geometries_ (`geom_point()`) or _statistics_ 
 
 The global aesthetic mapping defines which columns are 
 
@@ -410,6 +408,8 @@ The global aesthetic mapping defines which columns are
 - possibly mapped to colours, linetypes, shapes, ...
 
 Geometries and Statistics describe the building blocks of graphics
+
+Aesthetic mappings are usually complemented by, possibly implicit, *scales* 
 
 ---
 
@@ -423,7 +423,7 @@ when comparing to the Gapminder demonstration, we can spot  that
 
 -  titles and legends are missing
 
-We will add layers to the graphical object to complete the plot
+We will add *layers* to the graphical object to complete the plot
 
 ---
 
@@ -766,6 +766,43 @@ gapminder %>%
 
 ???
 
+---
+
+### Adding labels 
+
+```{r plot_gap_minder_2002_labelled, eval=FALSE, fig.cap="Gapminder 2002 layer by layer"}
+require(ggrepel) #<<
+ 
+gapminder %>% 
+  filter(year == 2002) %>%
+   ggplot() +
+   aes(x = gdpPercap) +
+   aes(y = lifeExp) +
+   aes(size = pop) +
+   aes(color = continent) +
+   aes(label = country) +  #<<
+   geom_point(alpha=.5) +
+   ggrepel::geom_label_repel(max.overlaps = 15) + #<<
+   scale_x_log10() +
+   scale_size_area(max_size = 15,
+                  labels= scales::label_number(scale=1/1e6,
+                                               suffix=" M")) +
+   scale_color_manual(values = neat_color_scale) +
+   theme_minimal() +
+   theme(legend.position = "none") +
+    labs(title= glue("Gapminder  {min(gapminder$year)}-{max(gapminder$year)}"),
+         x = "Yearly Income per Capita",
+         y = "Life Expectancy",
+       caption="From sick  and poor (bottom left) to healthy and rich (top right)")
+
+```
+
+---
+
+
+```{r plot_gap_minder_2002_labelled-out, ref.label="plot_gap_minder_2002_labelled", warning=FALSE, echo=FALSE, message=FALSE}
+
+```
 
 
 ---
@@ -965,35 +1002,6 @@ knitr::include_url("https://www.youtube.com/embed/RPFh3y9UAX4")
 ```
 
 
----
-exclude: true
-
-## Animate with `gganimate`
-
----
-exclude: true
-
-```{r  gap_gganimate, warning=FALSE, message=FALSE, eval=FALSE}
-t_range <- with(gapminder, c(min(year), max(year)))
-p +
-  facet_null() + #<<
-  gganimate::transition_time(year,  #<<
-                             range = t_range) +#<<
-  labs(subtitle="Year {frame_time}")
-
-```
-
----
-exclude: true 
-
-### Permanence
-
-
-
----
-exclude: true 
-
-## Interactivity
 
 ---
 exclude: true 

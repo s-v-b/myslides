@@ -25,11 +25,11 @@ output:
 bibliography: mon_chapeau.bib
 params:
   title: "Hierarchical Clustering"
-  curriculum: "Master I MIDS & MFA"
-  coursetitle: "Analyse Exploratoire de Données"
+  curriculum: "Master I ISIFAR"
+  coursetitle: "Analyse de Données"
   lecturer: "Stéphane Boucheron"
   homepage: "http://stephane-v-boucheron.fr/courses/eda/"
-  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-mi/"
+  curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-isifar/"
 ---
 name: layout-general
 layout: true
@@ -44,20 +44,14 @@ class: left, middle
 pacman::p_load("ggdendro")
 pacman::p_load("fastcluster")
 pacman::p_load("dendextend")
+pacman::p_load("magrittr")
 data("iris")
+data("USArrests")
+
 ```
 
 
-```{r, load_refs, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
-require(RefManageR, quietly = TRUE)
-BibOptions(check.entries = FALSE,
-           bib.style = "authoryear",
-           cite.style = 'authoryear',
-           style = "markdown",
-           hyperlink = FALSE,
-           dashed = FALSE)
-myBib <- ReadBib("./mon_chapeau.bib", check = FALSE, )
-```
+
 
 
 ```{r, echo=FALSE}
@@ -66,11 +60,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
-NoCite(myBib, "Har75")
-NoCite(myBib, "HaTiFr01")
-NoCite(myBib, "Mur12")
-```
+
 
 ---
 name: inter-slide
@@ -170,22 +160,21 @@ The tree is called a _dendrogram_
 .fl.w-60.pa2[
 
 ```{r, echo=FALSE}
-data("USArrests")
-library(ggplot2)
-library(ggdendro)
-hc <- hclust(dist(USArrests), "ave")
-hcdata <- dendro_data(hc, type = "rectangle")
-ggplot() +
-  geom_segment(data = segment(hcdata),
+hclust(dist(USArrests), "ave") %>% 
+  dendro_data(type = "rectangle") %$% {
+  ggplot() +
+  geom_segment(data = segments,
                aes(x = x, y = y, xend = xend, yend = yend)
   ) +
-  geom_text(data = label(hcdata),
-            aes(x = x, y = y, label = label, hjust = 0),
+  geom_text(data = labels,
+            aes(x = x, y = y, 
+                label = label, hjust = 0),
             size = 2
   ) +
   coord_flip() +
   scale_y_reverse(expand = c(0.2, 0)) +
   ggtitle("Hierarchical classification of USArrests data")
+}
 ```
 
 ]
@@ -199,6 +188,9 @@ Classification and Regression trees play an important role in Machine Learning.
 
 `ggdendro` and `dendextend`  may also be used to manipulate regression trees
 
+```{r, echo=FALSE}
+?USArrests
+```
 
 
 
@@ -237,21 +229,18 @@ Classification and Regression trees play an important role in Machine Learning.
 
 .panel[.panel-name[Code]
 ```{r iris-hclust-dendro, echo=TRUE, fig.show="hide"}
-iris_num <- select(iris, where(is.numeric))
+iris_num <- dplyr::select(iris, where(is.numeric))
 rownames(iris_num) <- str_c(iris$Species,
                             1:150, sep = "_")
 
 iris_num %>%
   dist() %>%                #<<
-  hclust() ->  iris_hclust  #<<
-
-iris_dendro <- dendro_data(iris_hclust) #<<
-
-ggdendrogram(iris_dendro,               #<<
-            leaf_labels = TRUE,
-            rotate = TRUE) +
+  hclust() %>%   #<<
+  dendro_data() %>%   #<<
+  ggdendrogram(leaf_labels = TRUE,
+               rotate = TRUE) +
   ggtitle("Dendrogram for Iris") +
-  theme_dendro() +
+  theme_dendro() # +
   scale_y_reverse(expand = c(0.2, 0))
 ```
 ]
@@ -277,6 +266,84 @@ ggdendrogram(iris_dendro,               #<<
 
 - Plot comments
 
+```{r hclust-pipeline}
+rownames(iris) <- str_c(iris$Species, rownames(iris), sep="_")
+```
+
+
+---
+
+### `hclust` pipeline
+
+```{r data-preparation, echo=T}
+dendro_iris <-iris %>% 
+  select(where(is.numeric)) %>%  
+  dist() %>% 
+  hclust() %>% 
+  dendro_data() 
+```
+
+```{r dendroplot, echo=TRUE}
+mydendro <- . %$% {  #<<
+  ggplot() + 
+    geom_segment(data = segments,   #<<
+               aes(x = x, y = y, xend = xend, yend = yend)
+  ) +
+  geom_text(data = labels, #<<
+            aes(x = x, y = y, label = label, hjust = 0),
+            size = 2
+  ) +
+  coord_flip() +
+  scale_y_reverse(expand = c(0.2, 0)) +
+  theme_dendro()  
+}
+```
+
+???
+
+Outline the exposition pipe `%$%`
+
+---
+
+```{r, echo=T}
+mydendro(dendro_iris)
+```
+
+---
+
+```{r}
+mydendro_iris <- . %$% {  #<<
+  ggplot() + 
+    geom_segment(data = segments,   #<<
+               aes(x = x, y = y, xend = xend, yend = yend)
+  ) +
+  geom_text(data = labels, #<<
+            aes(x = x, y = y, 
+                label = label, 
+                color = couleur,
+                hjust = 0),
+            size = 2
+  ) +
+  coord_flip() +
+  scale_y_reverse(expand = c(0.2, 0)) +
+  theme_dendro()  
+}
+```
+
+```{r}
+# require(viridisLite)
+tmp <- dendro_iris %$% {
+  list("segments"= segments,
+       "labels"= labels %>% 
+         mutate(couleur=map_chr(label, ~ str_match(., '^([\\w]+)_[0-9]+')[1,2]),
+                label= map_chr(label, ~str_match(., '^[\\w]+_([0-9]+)')[1,2])))
+} 
+
+
+tmp %>% 
+  mydendro_iris()
+```
+
 ---
 exclude: true
 
@@ -284,20 +351,35 @@ exclude: true
 
 
 ```{r}
-hc <- hclust(dist(iris[,1:4]), "ave")
-hcdata <- dendro_data(hc, type = "rectangle")
-ggplot() +
-  geom_segment(data = segment(hcdata),   #<<
-               aes(x = x, y = y, xend = xend, yend = yend)
-  ) +
-  geom_text(data = label(hcdata), #<<
-            aes(x = x, y = y, label = label, hjust = 0),
-            size = 2
-  ) +
-  coord_flip() +
-  scale_y_reverse(expand = c(0.2, 0)) +
-  theme_dendro()
+iris %>% 
+  select(where(is.numeric)) %>% 
+  dist() %>% 
+  hclust("ave") %>% 
+  dendro_data(type = "rectangle") %$% {
+  list("segments"= segments,
+       "labels"= labels %>% 
+         mutate(couleur=map_chr(label, ~ str_match(., '^([\\w]+)_[0-9]+')[1,2]),
+                label= map_chr(label, ~str_match(., '^[\\w]+_([0-9]+)')[1,2])))
+} %>% 
+  mydendro_iris()
 ```
+
+???
+
+What is an object of class `dendro` made of?
+
+It a list of four elements:
+
+- `segments`
+- `labels`
+- `leaf_labels`
+- `class`
+
+Element `segments` is a data frame with four columns. Each row represent a segment that is part of a graphical representation of the hierarchy. There are horizontal and vertical segments 
+
+Element `labels` is used to label the tree leafs. 
+
+
 
 ---
 exclude: true
@@ -305,25 +387,11 @@ exclude: true
 ```{r}
 # from [ggdendro vignette](http://andrie.github.io/ggdendro/)
 # with the exposing pipe %$% from magrittr
-library(ggplot2)
-library(ggdendro)
-library(magrittr)
-
-hc <- hclust(dist(USArrests), "ave")
-hcdata <- dendro_data(hc, type = "rectangle")
-
-hcdata %$% { #<< 
-    ggplot() +
-    geom_segment(data = segment(.),  #<< 
-                 aes(x = x, y = y, xend = xend, yend = yend)
-    ) +
-    geom_text(data = label(.),  #<< 
-              aes(x = x, y = y, label = label, hjust = 0), 
-              size = 3
-    ) +
-    coord_flip() +
-    scale_y_reverse(expand = c(0.2, 0))
-  } #<< 
+USArrests %>% 
+  dist() %>% 
+  hclust("ave") %>% 
+  dendro_data(type = "rectangle") %>% 
+  mydendro()
 ```
 
 
@@ -342,7 +410,7 @@ p <- iris %>%
 
 p +
   geom_point(aes(shape=Species, colour=Species)) +
-#  labs(shape= "Species") +
+# labs(shape= "Species") +
   ggtitle(label= "Iris data",
           subtitle = "Species in Petal plane")
 ```
@@ -373,6 +441,7 @@ reflect the partition into species
 .panel[.panel-name[Code]
 
 ```{r iris-hclust-2, fig.show="hide"}
+iris_hclust <- iris_num %>%  dist() %>%  hclust()
 iris_3 <- cutree(iris_hclust, 3)  #<<
 p +
   geom_point(aes(shape=Species,
@@ -504,7 +573,7 @@ The [`dendextend`](https://talgalili.github.io/dendextend/articles/dendextend.ht
 
 Features:
 
-- Adjust a tree’s graphical parameters - the color, size, type, etc of its branches, nodes and labels
+- Adjust a tree’s graphical parameters - the color, size, type, etc, of its branches, nodes and labels
 - Visually and statistically compare different dendrograms to one another
 
 
@@ -631,21 +700,13 @@ USArrests %>% glimpse()
 .panel[.panel-name[Code]
 
 ```{r dendro-USArrests, fig.show='hide', fig.height=4}
-hc <- hclust(dist(scale(USArrests[,-3])), "ave")
-hcdata <- dendro_data(hc, type = "rectangle") #<<
-
-ggplot() +
-  geom_segment(data = segment(hcdata),
-               aes(x = x, y = y,
-                   xend = xend, yend = yend)
-  ) +
-  geom_text(data = label(hcdata),
-            aes(x = x, y = y,
-                label = label, hjust = 0),
-            size = 3
-  ) +
-  coord_flip() +
-  scale_y_reverse(expand = c(0.2, 0))
+USArrests %>% 
+  select(where(is.numeric)) %>% 
+  scale() %>% 
+  dist() %>% 
+  hclust("ave") %>% 
+  dendro_data(type = "rectangle") %>% 
+  mydendro()
 ```
 ]
 
@@ -659,11 +720,10 @@ ggplot() +
 
 ---
 
-### About dendrograms
-
-`iris_dendro` is an object of class `r class(iris_dendro)`
+### About dendrograms (output `dendro_data()`)
 
 An object of class `dendro` is a list of 4 objects:
+
   - `segments`
   - `labels`
   - `leaf_labels`
