@@ -1,0 +1,43 @@
+
+---
+class: inverse, top, center
+name: e-candidat
+background-image: url('./img/wallace.jpg')
+background-size: cover
+
+## Postuler
+
+
+---
+
+### Admission en Master I (Printemps 2023)
+
+- Procédure : [Portail Mon Master](https::monmaster.gouv.fr)
+  + CV  `r fontawesome::fa("file-upload")`
+  + Lettre de motivation `r fontawesome::fa("file-alt")`
+  + Relevé des notes 
+
+- Calendrier `r fontawesome::fa("calendar")`
+  - Consultation Offre de formation sur [https://monmaster.gouv.fr](https://monmaster.gouv.fr) à partir du 1er février 2023
+  - Ouverture/Dépots candidatures : 22 mars 2023
+  - `r fontawesome::fa("exclamation-triangle")`Date limite de dépot des dossiers : 18 avril 2023
+  - Examen des candidatures :  24 avril-16 juin 2023
+  - Admission des candidats :  23 juin-21 juillet 2023
+  - Inscriptions : à partir du 23 juin 2023
+  
+- Peut-on postuler à plusieurs parcours au sein la mention Mathématiques et Applications de Paris Cité ?
+  - oui `r fontawesome::fa("glass-cheers")`
+  - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG/LOgos
+
+
+???
+
+Conseils à donner oralement
+
+- délais
+- candidature après session II (envoyer un dossier avant)
+- capacités d'accueil
+- pour les parcours MF/PMA/Modélisation/MG/LMFI/M2MO
+
+
+> Aux vertus qu'on exige dans un candidat, Votre Excellence connaît-elle beaucoup de professeurs qui fussent dignes d'être étudiants ?
