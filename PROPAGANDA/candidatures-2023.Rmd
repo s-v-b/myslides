@@ -12,7 +12,9 @@ background-size: cover
 
 ### Admission en Master I (Printemps 2023)
 
-- Procédure : [Portail Mon Master](https::monmaster.gouv.fr)
+[`r fontawesome::fa("road")` Trouver mon master](https://www.trouvermonmaster.gouv.fr/master/universite-paris-cite/mathematiques-et-applications-38?q=Master%20Mathématiques%20et%20Applications&layout=1&position=0)
+
+- `r fontawesome::fa("snowplow")` Procédure : [Portail Mon Master](https:://monmaster.gouv.fr) 
   + CV  `r fontawesome::fa("file-upload")`
   + Lettre de motivation `r fontawesome::fa("file-alt")`
   + Relevé des notes 
@@ -27,7 +29,7 @@ background-size: cover
   
 - Peut-on postuler à plusieurs parcours au sein la mention Mathématiques et Applications de Paris Cité ?
   - oui `r fontawesome::fa("glass-cheers")`
-  - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG/LOgos
+  - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG
 
 
 ???
@@ -40,4 +42,4 @@ Conseils à donner oralement
 - pour les parcours MF/PMA/Modélisation/MG/LMFI/M2MO
 
 
-> Aux vertus qu'on exige dans un candidat, Votre Excellence connaît-elle beaucoup de professeurs qui fussent dignes d'être étudiants ?
+> Aux vertus qu'on exige d'un e-candidat, Votre Excellence connaît-elle beaucoup de professeurs qui fussent dignes d'être étudiants ?

@@ -40,7 +40,7 @@ xaringanExtra::use_clipboard()
 
 # xaringanExtra::use_scribble()
 
-pacman::p_load(tidyverse)
+#pacman::p_load(tidyverse)
 pacman::p_load(readr)
 pacman::p_load(latex2exp)
 pacman::p_load(kableExtra)
