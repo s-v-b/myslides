@@ -1,7 +1,7 @@
 ---
 title: "Double Master Math-Informatique<br> Sciences des Données"
-subtitle: "Université de Paris (Paris-Diderot)"
-author: "Stéphane Gaïffas"
+subtitle: "Université Paris Cité (Paris-Diderot)"
+author: "Stéphane Boucheron"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -9,15 +9,14 @@ output:
     lib_dir: libs
     seal: false
     nature:
-        </div>
-      nature:
-      slideNumberFormat: |
-        <div class="progress-bar-container">
-          </div>
-          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
+    slideNumberFormat: |
+      <div class="progress-bar-container">
+            <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+            </div>
+      </div>
+    highlightStyle: github
+    highlightLines: true
+    countIncrementalSlides: false
 ---
 name: layout-general
 layout: true
@@ -130,7 +129,7 @@ class: middle
 
 ### Un Master dans Paris
 
-### [Université de Paris](https://www.u-paris.fr)
+### [Université  Paris Cité](https://www.u-paris.fr)
 
 ### Campus des Grands Moulins
 
@@ -515,14 +514,14 @@ __Semestre I (Septembre-Mars)__
 ---
 class: center, middle, inverse
 
-## [Master II]([Master II](https://m2mids.github.io/m2mids/)
+## [Master II]([Master II](https://master.math.univ-paris-diderot.fr/annee/m2-mids/)
 
 ---
 class: center, middle
 
 
 ```{r, echo=FALSE, out.width="800px", out.height="600px"}
-knitr::include_url("https://m2mids.github.io/m2mids/")
+knitr::include_url("https://master.math.univ-paris-diderot.fr/annee/m2-mids/")
 ```
 
 ---
@@ -826,19 +825,14 @@ exclude: true
 <img src="https://git-scm.com/images/logo@2x.png" align="right" width="150" vspace="50">
 ]
 
----
-class: middle, center, inverse
 
-# Postuler
 
----
-class: middle, center
+```{r, child="./candidatures-2023.Rmd"}
 
-```{r, echo=FALSE, out.width="80%"}
-knitr::include_url("https://ecandidat.app.u-paris.fr/m20/m20/#!accueilView")
 ```
 
-https://candidaturesca19mprod.app.univ-paris-diderot.fr/m20/
+
+
 
 ---
 class: inverse, middle, center
@@ -860,11 +854,11 @@ knitr::include_url("https://www.irif.fr/~cristina/")
 ]
 
 .pull-right[
-### [Stéphane Gaïffas](https://stephanegaiffas.github.io)
+### [Aurélie Fischer](https://www.lpsm.paris/users/fischer/index)
 Mathématiques, Machine Learning
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
-knitr::include_url("https://stephanegaiffas.github.io")
+knitr::include_graphics('./img/snapshot_af.png')
 ```
 ]
 
