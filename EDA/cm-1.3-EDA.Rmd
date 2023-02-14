@@ -552,6 +552,33 @@ knitr::kable(S, caption="S")
 ???
 
 
+---
+
+### Projecting toy tables 
+
+.fl.w-50.pa2[
+
+```{r, echo=TRUE}
+R %>% 
+  dplyr::select(A2,D) %>% 
+  knitr::kable(caption="Projecting R")
+```
+
+]
+
+.fl.w-50.pa2[
+
+```{r, echo=TRUE}
+R %>% 
+  dplyr::select(- where(is.character)) %>% 
+  knitr::kable(caption="Projecting R, all but character columns")
+```
+
+
+
+]
+
+
 
 
 ---
@@ -627,8 +654,8 @@ start <- date("2021-10-27")
 end <- start + 21
 
 R %>%
-  filter(A2 > "n" , #<<
-         between(A3, start, end)) %>%
+#  filter(A2 > "n") %>%  #<<
+  filter(between(A3, start, end)) %>%
   select(A1, A3) #<<
 ```
 
@@ -639,6 +666,10 @@ R %>%
 ```{r toy-filter-project-out, echo=FALSE, ref.label="toy-filter-project"}
 
 ```
+
+Filtering dropped one row
+
+Projecting dropped two columns
 
 ]
 ---
@@ -818,6 +849,11 @@ flights %>%
   select(seq(1, 19, by=5))
 ```
 ]
+
+`r fontawesome::fa("hand-point-right")` combined with aggregation (`group_by()`) variants of `slice_` may be used 
+to perform *windowing* operations
+
+
 
 ???
 
@@ -1119,9 +1155,11 @@ inner_join(
 
 ### Join flavors
 
-Different flavors of `join` cab be used to join one table to columns from another, matching values with the rows that they correspond to
+Different flavors of `join` can be used to join one table to columns from another, matching values with the rows that they correspond to
 
 Each join retains a different combination of values from the tables
+
+--
 
 - `left_join(x, y, by = NULL, suffix = c(".x", ".y"), ...)` Join matching values from `y` to `x`.
 Retain all rows of `x` padding missing values from `y` by `NA`
@@ -1150,7 +1188,8 @@ S %>% kable(caption="S")
 
 ```{r, echo=FALSE}
 kable <- knitr::kable
-inner_join(S, R, by=c("E"="A1")) %>% kable(caption='inner_join(S, R, by=c("E"="A1"))')
+inner_join(S, R, by=c("E"="A1")) %>% 
+  kable(caption='inner_join(S, R, by=c("E"="A1"))')
 
 ```
 
@@ -1444,6 +1483,12 @@ Tidying tables is part of data cleaning
 
 .fr[[`r fontawesome::fa("book")` The tidy data paper](https://vita.had.co.nz/papers/tidy-data.html)]
 
+---
+
+```{r, child="codds-principles.Rmd"}
+
+```
+
 
 ---
 
@@ -1488,6 +1533,8 @@ what are the observations/individuals, which measures are performed on each indi
 ???
 
 Source of untidyness
+
+Anyway we have to cope with untidy data 
 
 ---
 
