@@ -1,0 +1,103 @@
+---
+title: "Presentation EDA"
+subtitle: "Statistiques Master I, MFA et MIDS"
+author: "Stéphane Boucheron"
+institute: "Université de Paris"
+date: "2020/12/11 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: layout-general
+layout: true
+class: left, middle
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+---
+class: middle, left, inverse
+
+# Analyse Exploratoire des Données  (EDA)
+
+### `r Sys.Date()`
+
+#### [EDA Master I MIDS et MFA](http://stephane-v-boucheron.fr/courses/eda)
+
+#### [Stéphane Boucheron](http://stephane-v-boucheron.fr)
+
+
+---
+
+### `r fontawesome::fa("map-marked-alt")` 
+
+1. `r fontawesome::fa("r-project")`  
+
+1. Dessins et rapports 
+
+1. Régression(s) 
+
+1. Analyse(s) en Composantes Principales 
+
+---
+
+### `r fontawesome::fa("r-project")` 
+
+- Un langage et un environnement pour les données 
+
+- Entre LISP (1958) et les outils pour les données massives 
+
+---
+
+### Dessins et rapports
+
+- La grammaire des dessins statistiques
+
+- Numéracie et rapports
+
+- Rapport papier au tableau interactif
+
+---
+
+### Régresssion(s) 
+
+- Modélisation de dépendance(s)
+
+- Modèles prédictifs et modèles génératifs
+
+- Régression linéaire
+  - Méthode des moindres carrés, factorisation QR
+  - Sélection de variables
+  - Pénalisations
+
+- Régression logistique
+  - Itérations des moindre carrés (re)pondérés
+  
+---
+
+### Analyse en Composantes Principales
+
+- Réduction de dimension
+
+- Décompositions en Valeurs Singulières
+
+---
+
+### Analyses factorielles
+
+
+

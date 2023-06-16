@@ -1,0 +1,356 @@
+---
+title: "Double Master Math-Informatique  Sciences des Données"
+subtitle: "Université Paris Cité (Grands Moulins)"
+author: "A Nonymous"
+date: "`r Sys.Date()`"
+format: pptx
+editor: visual
+always_allow_html: true
+---
+
+# Double Master [Science des Données](http://master.math.univ-paris-diderot.fr/parcours/data/)
+
+Mentions Mathématique *et* Informatique
+
+`r Sys.Date()`
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE}
+```
+
+
+
+# Débouchés
+
+
+#  `r fontawesome::fa("chart-area")` Data scientist
+
+> Data science is a "concept to unify statistics, data analysis, machine learning and their related methods" in order to "understand and analyze actual phenomena" with data. It employs techniques and theories drawn from many fields within the context of mathematics, statistics, information science, and computer science.
+
+# `r fontawesome::fa("server")` Data engineer
+
+> Data engineers are software engineers who design, build, integrate data from various resources, and manage big data.
+
+# `r fontawesome::fa("database")` Data architect
+
+> A data architect is a practitioner of data architecture, an information technology discipline concerned with designing, creating, deploying and managing an organization's data architecture.
+
+
+
+# Extrait `LinkedIn` le 6 novembre 2018
+
+> You are
+
+> Scientific Engineer in computer science or statistics (Python, R, C++, SQL) with good background in algorithmic approach (Tensorflow, Caffe, Blockchain…)
+
+> Experimented on the architecture of digital platform (Hadoop / Apache Spark/ Hive /Elastic Search), in particular the communication aspects (MQTT, JSON, Time series)
+
+
+
+
+
+
+
+# Et vous dans tout ça ?
+
+> Ce double master est conçu pour vous
+
+[L3 Math-Info](http://www.math.univ-paris-diderot.fr/formations/licences/mathinfo2/l3)
+
+- Programmation fonctionnelle, `r fontawesome::fa("r-project", fill = "steelblue")`, `Scala`
+
+- Algorithmique, `Machine Learning, Données massives`, ...
+
+- Analyse, `Statistique, Machine Learning, Optimisation`, ... `r fontawesome::fa("r-project", fill = "steelblue")` `r fontawesome::fa("python")`, ...
+
+- Programmation réseaux, `IOT`, ...
+
+- Méthodes numériques, `Optimisation`, `Deep learning`, ...
+
+- ...
+
+
+
+
+# Un Master dans Paris
+
+[Université de Paris](https://www.u-paris.fr)
+
+Campus des Grands Moulins
+
+
+
+
+# Double Master: [Master I](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+
+# Semestre I
+
+- Mathématiques 18 ECTS
+  + [Probabilités](http://stephane-v-boucheron.fr/courses/probability/)
+  + [Thérie de l'information et Analyse](https://webusers.imj-prg.fr/~antoine.chambert-loir/enseignement/2019-20/shannon/index.xhtml)
+  + [Complexité](http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/)
+
+- Informatique  18 ECTS
+  + [Langages à objets]()
+  + [Algorithmes]()
+  + [Intelligence Artificielle et jeux ]()
+]
+
+
+
+
+# Semestre II
+
+- Mathématiques 18 ECTS
+  + [Analyse de donneées exploratoires]()
+  + [Statistiques]()
+  + [Optimisation]()
+
+- Informatique  15 ECTS
+  + [Bases de données avancées]()
+  + [Algorithmique avancée]()
+  + [Technologies Big data](https://stephanegaiffas.github.io/big_data_course/)
+
+- Anglais 3 ECTS
+
+# [Master I](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+
+# La formation
+
+
+
+# Des mathématiques
+
+
+
+- Probabilités `r fontawesome::fa("dice")`
+
+- Théorie de l'Information  `r fontawesome::fa("wave-square")`
+
+- Complexité/Algorithmes `r fontawesome::fa("code")`
+
+- Statistiques  `r fontawesome::fa("code")`
+
+- Optimisation `r fontawesome::fa("compass")`
+
+- Machine Learning `r fontawesome::fa("screwdriver-wrench")`
+
+- IA (Deep Learning) `r fontawesome::fa("brain")`
+
+
+
+# De l'informatique
+
+
+- Bases de données, SQL, ..., n(ot) o(nly) SQL
+
+![](https://spark.apache.org/images/spark-logo-trademark.png)
+
+- Architectures *Big Data*
+
+![](https://kafka.apache.org/images/kafka_diagram.png)
+
+- Réseaux complexes
+
+- ...
+
+
+# [Master I Semestre I](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+| Module | Data |  Crypto |
+|:-------|:----:|:-------------:|
+| [Théorie de l'information](http://master.math.univ-paris-diderot.fr/modules/m1mi-theorie-information/) |  `r fontawesome::fa('check')` | `r fontawesome::fa('check')` |
+| [Algorithmique et complexité](http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/) |  `r fontawesome::fa('check')` | `r fontawesome::fa('check')` |
+| [Algèbre effective](http://master.math.univ-paris-diderot.fr/modules/m1mi-algebre/) |  `r fontawesome::fa('check')` |
+| [Probabilités](http://master.math.univ-paris-diderot.fr/modules/m1mi-probabilites/) |  `r fontawesome::fa('check')` | |
+| [LOO](http://master.math.univ-paris-diderot.fr/modules/m1info-prog-obj/) | `r fontawesome::fa('check')` | `r fontawesome::fa('check')` |
+| [Intelligence artificielle et théorie des jeux](http://master.math.univ-paris-diderot.fr/modules/m1info-theorie-jeux/) | `r fontawesome::fa('check')` | `r fontawesome::fa('check')` |
+| [Protocoles réseaux](http://master.math.univ-paris-diderot.fr/modules/m1info-protocoles-reseaux/)|  | `r fontawesome::fa('check')` |
+| [Algorithmique](http://master.math.univ-paris-diderot.fr/modules/m1info-algo/)  | `r fontawesome::fa('check')` |  |
+
+
+
+# [Master I Semestre II](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+| Module | Data |  Crypto |
+|:-------|:----:|:-------------:|
+|[Statistique Fondamentale](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/)| `r fontawesome::fa('check')` ||
+|[Analyse des Données](href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/)| `r fontawesome::fa('check')` ||
+|[Optimisation](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/)| `r fontawesome::fa('check')`||
+|[Bases de données avancées](http://master.math.univ-paris-diderot.fr/modules/m1info-bases-donnees/)|`r fontawesome::fa('check')`||
+|[Algorithmique avancée](href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo-avancee/)|`r fontawesome::fa('check')`||
+|[Technologies Big data](http://master.math.univ-paris-diderot.fr/modules/m1mi-big-data/)|`r fontawesome::fa('check')`||
+|[Anglais](http://master.math.univ-paris-diderot.fr/modules/m1-s2-anglais-3/)|`r fontawesome::fa('check')`|`r fontawesome::fa('check')`|
+
+
+      
+
+
+       
+
+         
+         
+
+         
+         
+       
+
+
+
+
+
+#  [Double Master: Master II](https://m2mids.github.io/m2mids/)
+
+# [Master II Période I]([Master II](https://m2mids.github.io/m2mids/)
+
+
+| Module | Data |  Crypto |
+|:-------|:----:|:-------------:|
+| [Machine Learning](https://stephanegaiffas.github.io/teaching/m2mo)|`r fontawesome::fa('check')`||
+| [Optimisation pour l'apprentissage](http://master.math.univ-paris-diderot.fr/modules/m2mo-optim-ml/)|`r fontawesome::fa('check')`||
+| [NLP](http://master.math.univ-paris-diderot.fr/modules/m2-linguist-tal/) | `r fontawesome::fa('check')` | |
+| [Programmation Objet, Concepts Avancés](http://master.math.univ-paris-diderot.fr/modules/m2-info-poca/)| `r fontawesome::fa('check')` | |
+| [Bases de données Avancées](http://master.math.univ-paris-diderot.fr/modules/m2-info-archi-bd/) | `r fontawesome::fa('check')` ||
+|[Bases de données spécialisées](https://m2mids.github.io/m2mids/courses/bdd-spe) | `r fontawesome::fa('check')`| |
+| [Deep learning](http://master.math.univ-paris-diderot.fr/modules/m2mo-deepl/) | `r fontawesome::fa('check')` ||
+| [Renforcement]() | `r fontawesome::fa('check')` ||
+| [Algo réparties]() | `r fontawesome::fa('check')` ||
+| [Programmation répartie]() |`r fontawesome::fa('check')` ||
+| [Réseaux d'interactions]() |  `r fontawesome::fa("share")` ||
+| [Accès information MAIN]() |  `r fontawesome::fa("share")` ||
+
+
+
+
+
+
+# Période II : Janvier-Mars 10 semaines
+
+
+| Module | Data |  Crypto |
+|:-------|:----:|:-------------:|
+|[Grands réseaux d’interaction](http://master.math.univ-paris-diderot.fr/modules/m2info-grands-graphes/)|||
+|[Méthodes algorithmiques pour l'accès à l'information numérique](http://master.math.univ-paris-diderot.fr/modules/m2info-maai/)|||
+|[Programmation répartie](http://master.math.univ-paris-diderot.fr/modules/m2info-prog-repart/)|||
+|[Algorithmique repartie](href="http://master.math.univ-paris-diderot.fr/modules/m2info-algo-repart/)|||
+|[Deep learning](http://master.math.univ-paris-diderot.fr/modules/m2mo-deepl/)|||
+|[Renforcement](http://master.math.univ-paris-diderot.fr/modules/m2mo-renforcement/)|||
+|[Anglais](href="http://master.math.univ-paris-diderot.fr/modules/m2-anglais/)|||
+              
+
+             
+
+
+
+              
+
+  
+
+
+
+# Semestre II
+
+__Stage (Avril-Septembre)__
+
+
+
+
+
+
+#  Attendus
+
+
+
+
+
+
+Le [Double Master Mathématiques-Informatique](http://master.math.univ-paris-diderot.fr/parcours/data/) est un débouché naturel de la [Double Licence Mathématiques-Informatique](http://licence.math.univ-paris-diderot.fr/mathinfo/)
+
+
+
+
+`r fontawesome::fa("user-graduate", fill = "black")` __Sous conditions__, les titulaires d'une [Licence de Mathématiques](http://licence.math.univ-paris-diderot.fr/maths/) peuvent accéder à ce [Double Master Mathématiques-Informatique](http://master.math.univ-paris-diderot.fr/parcours/data/)
+
+
+# Résumé des attendus 
+
+Pour suivre le double Master, il faut disposer d'un bagage informatique substantiel :
+
+- Algorithmique  `r fontawesome::fa("database", fill = "black")`
+
+- Langages de programmation `C`, `r fontawesome::fa("java")`, `r fontawesome::fa("python")`, ...
+
+- Environnement de programmation `r fontawesome::fa("code-branch", fill = "black")`
+
+
+
+
+# Mathématiques
+
+
+- [Analyse](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s6-Integration/)
+
+- [Probabilités](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s5-probas/)
+
+- [Algèbre linéaire](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s5-an_num_mat/)
+
+- [Analyse numérique](http://licence.math.univ-paris-diderot.fr/modules/l3-maths-mfa-maths-s6-optim/)
+
+
+
+
+
+
+
+# Informatique 
+
+- [Python](https://www.python.org)
+
+- [Algorithmique](http://licence.math.univ-paris-diderot.fr/modules/l2math-s3-algo_prog/)
+
+- [Programmation](http://licence.math.univ-paris-diderot.fr/modules/l2math-s3-algo_prog/)
+  + [Python](https://www.python.org)
+  + C
+
+
+
+# Postuler
+
+
+
+# Liens
+
+
+#  Responsables pédagogiques
+
+
+- [Cristina Sirangelo](https://www.irif.fr/~cristina/)
+
+Informatique, Bases de données `r fontawesome::fa("database", fill = "black")`
+
+
+
+- [Aurélie Fischer](https://stephanegaiffas.github.io)
+
+Mathématiques, Statistiques,  Machine Learning
+
+
+
+
+
+
+
+# Pour en savoir plus
+
+
+
+[http://master.math.univ-paris-diderot.fr/annee/m1-mi/](http://master.math.univ-paris-diderot.fr/annee/m1-mi/)
+
+
+
+
+

@@ -1,0 +1,474 @@
+---
+title: "Unsupervised Learning"
+author: "DSSP Team"
+date: "Spring 2020"
+output:
+  html_document:
+    css: hideOutput.css
+    includes:
+      in_header: hideOutput.script
+---
+
+```{r Knitr_Global_Options, include=FALSE}
+library(knitr)
+
+opts_chunk$set(warning = FALSE,
+               message = FALSE,
+               cache = TRUE,
+               autodep = TRUE,
+               tidy = FALSE)
+```
+
+# Principal Component Analysis
+
+We will consider a _classical_ dataset __decathlon__. It contains the performance of several athletes during two decathlons in 2004 the Decastar and the Olympic Game. Each observation consists of
+
+- the 10 raw performance in the 10 events,
+- the ranking in the event,
+- the total number of points,
+- the name of the event.
+
+We will mainly focus on the 10 first columns corresponding to the raw athletic performance but will also use the total number of points in some plots.
+
+```{r Decathlon}
+library("tidyverse")
+library("FactoMineR")
+
+data(decathlon)
+colnames(decathlon)
+glimpse(decathlon)
+summary(decathlon)
+
+old_theme <- theme_set(theme_light())
+opts <- options()  # save old options
+
+options(ggplot2.discrete.colour="viridis")
+options(ggplot2.continuous.colour = "viridis")
+```
+
+
+## Pairwise analysis
+
+1. Use `ggplot2` to plot the two first coordinates (__100m__ and __Long.jump__) adding the __Points__ information as a color as well as a regression line.
+
+__Hint:__ You can use `ggrepel` to have a better text placement.
+
+:::hiddensolution
+```{r Decathlon_2D}
+library("ggrepel")
+decathlon2 <- decathlon %>%
+  rownames_to_column()
+
+decathlon2 %>%
+  ggplot() +
+  aes(x = `100m`, y = Long.jump) +
+  aes(colour = Points, label=rowname) +
+  geom_point(size = 5) +
+  geom_smooth(se = FALSE) +
+  geom_smooth(method="lm", se=FALSE) +
+  geom_text_repel(box.padding = unit(0.75, "lines"))
+```
+:::
+
+
+2. Do you think those values are correlated?
+
+3. Compute the correlation matrix between the 10 first variables and display it use a heatmap.
+
+:::hiddensolution
+```{r Decathlon_Cor}
+cor(decathlon[,1:10])
+heatmap(abs(cor(decathlon[,1:10])),symm=T)
+```
+:::
+
+4. Can you guess which are the most correlated variables and the least ones?
+
+5. Confirm those findings by looking at the pairwise scatterplot.
+
+:::hiddensolution
+```{r Pairwise}
+library(GGally)
+ggpairs(decathlon2[,2:11])
+
+ggpairs(decathlon2, columns = c(2,3,7,11))
+```
+:::
+
+## 3D plot
+
+We are now ready to use __plotly__ to visualize the dataset in 3d.
+
+A 3d scatter plot can be obtained with the following code:
+
+```{r Plot3D}
+library(plotly)
+p <- plot_ly() %>%
+  add_markers(data = decathlon[, c(1:3, 12)],
+              x = ~`100m`, y = ~Long.jump, z = ~Shot.put,
+              color = ~Points,
+              size=2,
+              legendgroup='points',
+              showscale=TRUE) %>%
+  layout(scene = list(camera = list(projection = list(type = 'orthographic')),
+                      xaxis = list(showspikes=FALSE),
+                      yaxis = list(showspikes=FALSE),
+                      zaxis = list(showspikes=FALSE)))
+suppressWarnings(p)
+```
+
+
+6. Play with this interactive graphic to find he projection that appears to lose the less information?
+
+7. This task is similar to the PCA where we look a the subspace that minimizes the error between the data and its projection. Draw the ellipse corresponding to the eigenvectors and the eigenvalues of the covariance matrix to verify this.
+
+__Hint:__ Use the `mesh` layer of `plotly` with the `alphahull = 0` option and the following ellipse generating code:
+
+```{r Plot3DEllipse}
+sphere3d <- function() {
+  theta <- seq(-pi/2, pi/2, by=0.1)
+  ntheta <- length(theta)
+  phi <- seq(0, 2*pi, by=0.1)
+  nphi <- length(phi)
+  theta_ <- as.vector(array(theta, dim = c(ntheta, nphi)))
+  phi_ <- as.vector(aperm(array(phi, dim = c(nphi, ntheta)), c(2,1)))
+
+  x <- cos(theta_) * cos(phi_)
+  y <- cos(theta_) * sin(phi_)
+  z <- sin(theta_)
+
+  cbind(x=x, y=y, z=z)
+}
+
+ellipse3d <- function(mean, cov){
+  cov_eig <- eigen(cov)
+  cov_sqrt <- cov_eig$vectors %*% diag(sqrt(cov_eig$values)) %*% t(cov_eig$vectors)
+  sphere <- sphere3d()
+  setNames(
+    as.data.frame(qnorm(.975) * sphere %*% cov_sqrt + aperm(array(mean, dim = rev(dim(sphere))), c(2, 1))),
+    c('x', 'y', 'z'))
+}
+```
+
+:::hiddensolution
+
+```{r Plot3DEllipse2}
+p <- plot_ly() %>%
+  add_mesh(data = ellipse3d(colMeans(decathlon[,1:3]), cov(decathlon[,1:3])),
+           x=~x, y=~y, z=~z,
+           color = 8000,
+           alphahull = 0, opacity=.1,
+           showlegend=FALSE) %>%
+  add_markers(data = decathlon[, c(1:3, 12)],
+              x = ~`100m`, y = ~Long.jump, z = ~Shot.put,
+              color = ~Points,
+              size=2,
+              legendgroup='points',
+              showscale=TRUE) %>%
+  layout(scene = list(camera = list(projection = list(type = 'orthographic')),
+                      xaxis = list(showspikes=FALSE),
+                      yaxis = list(showspikes=FALSE),
+                      zaxis = list(showspikes=FALSE)))
+suppressWarnings(p)
+```
+:::
+
+8. Can you verify that the best subspace is defined by the direction of the eigenvectors with the largest eigenvalues?
+
+## Scaling?
+
+So far, we have use the raw performance. That is we compare duration with length as well as 100m time with 1500m time. Obviously, this is not a good idea. All those values should be measured in a common scale. The most classical technique is to _normalize_ by substracting its mean and dividing by the standard deviation. After doing thiw, we may repeat all the previous experiments with those rescaled data.
+
+9. Make a copy of the decathlon dataframe and normalize the 10 first columns of this new data frame.
+
+__Hint:__ Use `scale`
+
+:::hiddensolution
+```{r DecathlonR_2D}
+decathlon  %>%
+  rownames_to_column("Name") %>%     #<< tidyverse does not like rownames
+  mutate(across(-c(Name, Rank, Points, Competition),
+                ~ (.x -mean(.x))/sd(.x))) -> decathlonR2
+```
+
+:::
+
+10. Plot the corresponding scatter plot and compare it with the one obtained with the raw data.
+
+:::hiddensolution
+```{r DecathlonR_Scat, out.width="100%", fig.show='hold'}
+decathlonR2 %>%
+  ggplot() +
+  aes(x = `100m`, y = Long.jump) +
+  aes(color = Points) +
+  geom_text_repel(aes(label = Name),
+                  box.padding = unit(0.75, "lines")) +
+  geom_point(size = 5) +
+  guides(color = FALSE) -> ggp_pair_comp
+
+ggp_pair_comp
+```
+
+:::
+
+11. What if one imposes _equal_ axis?
+
+__Hint:__ Use `coord_fixed`.
+
+:::hiddensolution
+
+```{r Decathlon_Fixed}
+ggp_pair_comp +
+  coord_fixed() -> ggp_pair_comp
+
+ggp_pair_comp
+```
+
+:::
+
+12. Repeat the same experiment replacing the `100m` by the `1500m`.
+
+:::hiddensolution
+
+```{r Decathlon_1500m}
+ggp_pair_comp +
+  aes(x = `1500m`)
+```
+:::
+
+13. What about the correlation matrix, the pairwise scatterplots and the 3d plot?
+
+:::hiddensolution
+
+```{r DecathlonR_Cor}
+decathlonR2 %>%
+  dplyr::select(-c(Name, Rank, Points, Competition)) %>%
+  corrr::correlate(quiet = TRUE, method="pearson") %>%
+  mutate(across(where(is_numeric), abs)) %>%
+  corrr::rearrange() -> df_corr_decathlon
+
+
+df_corr_decathlon %>%
+  corrr::rplot() +
+  coord_fixed() +
+  ggtitle("Correlation plot for scaled Decathlon data") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+```
+
+```{r RPairwise}
+ggpairs(decathlonR2[,2:11])
+
+ggpairs(decathlonR2, columns = c(2,3,7,11))
+```
+
+```{r RPlot3DEllipse}
+p <- plot_ly() %>%
+  add_mesh(data = ellipse3d(colMeans(decathlonR2[,2:4]), cov(decathlonR2[,2:4])),
+           x=~x, y=~y, z=~z,
+           color = 8000,
+           alphahull = 0, opacity=.1, hoverinfo='none',
+           showlegend=FALSE) %>%
+  add_markers(data = decathlonR2[, 1 + c(1:3, 12)],
+              x = ~`100m`, y = ~Long.jump, z = ~Shot.put,
+              color = ~Points,
+              size=2,
+              legendgroup='points',
+              showscale=TRUE) %>%
+  layout(scene = list(camera = list(projection = list(type = 'orthographic')),
+                      xaxis = list(showspikes=FALSE),
+                      yaxis = list(showspikes=FALSE),
+                      zaxis = list(showspikes=FALSE)))
+suppressWarnings(p)
+```
+:::
+
+
+## Principal Component Analysis
+
+The package __FactoMineR__ contains a PCA function that we are going to use.
+
+```{r PCA}
+pacman::p_load("FactoMineR")
+
+PCADecathlonR <- decathlonR2 %>%
+  dplyr::select(-c(Name, Rank, Points, Competition)) %>%
+  PCA(graph = FALSE,
+      scale.unit = FALSE,
+      ncp = 10)
+
+decathlon_prcomp <- decathlonR2 %>%
+  dplyr::select(-c(Name, Rank, Points, Competition)) %>%
+  prcomp(x = ., center=FALSE, scale.=FALSE)
+
+# decathlon_prcomp %>% summary()
+# PCADecathlonR %>% summary()
+```
+
+See also [Tidy PCA through `prcomp`](https://rdrr.io/github/tidyverse/broom/man/tidy.prcomp.html)
+
+
+`PCADecathlonR` contains all the information computed by the PCA (for instance the eigenvalues in the field `eig`, the SVD decomposition in `svd`). It also contains the coordinates of `DecathlonR` in the PCA basis.
+
+14. Verify the the coordinates in the PCA basis can be obtained by a product between the coordinates in the old basis and the change of basis matrix $V$.
+
+:::hiddensolution
+```{r PCA_}
+max(abs(PCADecathlonR$ind$coord -
+        as.matrix(decathlonR2[2:11]) %*% PCADecathlonR$svd$V)
+    )
+```
+:::
+
+14. bis Verify the the coordinates in the PCA basis (attribute `x` in the output of `prcomp`) can be obtained by a product between the coordinates in the old basis and the change of basis matrix (attribute `rotation` in the output of `prcomp`).
+:::hiddensolution
+```{r PCA_2}
+max(abs(decathlon_prcomp$x -
+        as.matrix(decathlonR2[2:11]) %*% decathlon_prcomp$rotation)
+    )
+```
+:::
+
+
+15. Plot the points in the new coordinates
+
+:::hiddensolution
+```{r PCA_Plot}
+PCADecathlonR$eig
+
+ggplot(data= data.frame(X1 = PCADecathlonR$ind$coord[,1],
+                        X2 = PCADecathlonR$ind$coord[,2],
+                        Col = decathlon$Points),
+       aes(x = X1, y = X2, color = Col)) +
+  geom_point(size = 5) +
+  geom_text_repel(label = row.names(decathlon)) +
+  scale_x_continuous(expand = c(.15,0)) +
+  scale_y_continuous(expand = c(.1,0)) +
+  guides(color = FALSE) +
+  coord_fixed() +
+  labs(title= "Decathlon on factorial plane",
+       x ="PC1 ")
+```
+:::
+
+
+:::hiddensolution
+```{r}
+decathlon_prcomp %>%
+  broom::augment() %>%
+  tibble::add_column(Name = decathlonR2$Name,
+                     Points= decathlonR2$Points) %>%
+  ggplot() +
+  aes(x= .fittedPC1, y=.fittedPC2) +
+  aes(col=Points, label=Name) +
+  geom_point(size = 5) +
+  geom_text_repel() +     #<<
+  scale_x_continuous(expand = c(.15,0)) +
+  scale_y_continuous(expand = c(.1,0)) +
+  guides(color = FALSE) +
+  coord_fixed() +
+  scale_color_viridis_c() +
+  ggtitle("Decathlon on first two principal components")
+
+```
+:::
+
+10. In statistics, one often looks at the correlation between the new axis and the old ones. This is already computed in __R__ by
+
+```{r CoordsVar}
+t(PCADecathlonR$var$coord)
+```
+
+Note that by construction the norm of the correlation vector for a given original axis is 1.
+
+```{r CircleSum}
+colSums(t(PCADecathlonR$var$coord)^2)
+```
+
+Plot the correlation of the original axes with the two first new components
+
+:::hiddensolution
+```{r CirclePlot}
+ggplot(data.frame(X1 = PCADecathlonR$var$coord[,1],
+                  X2 = PCADecathlonR$var$coord[,2]))+
+  ggforce::geom_circle(aes(x0 = 0, y0 = 0, r = 1), color="grey") +
+  geom_segment(aes(xend = X1, yend = X2),
+               x = 0 , y = 0, arrow = grid::arrow()) +
+  geom_text(aes(x = X1, y = X2),
+            label = names(decathlonR2[2:11]),
+            vjust = "outward", hjust = "outward") +
+  coord_fixed() +
+  geom_segment(x = 0, y = -1, xend = 0, yend = 1, linetype = "dashed", color = "grey") +
+  geom_segment(x = -1, y = 0, xend = 1, yend = 0, linetype = "dashed", color = "grey")
+```
+:::
+
+
+:::hiddenssolution
+```{r}
+decathlon_prcomp$rotation %>%
+  as_tibble(rownames="Name") %>%
+  ggplot() +
+  aes(x=PC1, y=PC2, label=Name) +
+  geom_segment(xend=0, yend=0, arrow = grid::arrow(ends = "first") ) +
+  geom_text_repel() +
+  coord_fixed() +
+  xlim(-.7, .7) +
+  ylim(-.7, .7) +
+  stat_function(fun = ~  sqrt(.7^2 - .^2), alpha=.5, color="grey") +
+  stat_function(fun = ~ - sqrt(.7^2 - .^2), alpha=.5, color="grey") +
+  geom_segment(x = 0, y = -1, xend = 0, yend = 1, linetype = "dashed", color = "grey") +
+  geom_segment(x = -1, y = 0, xend = 1, yend = 0, linetype = "dashed", color = "grey") +
+  ggtitle("Decathlon correlation circle")
+
+
+```
+:::
+
+
+
+:::hiddensolution
+```{r}
+biplot(decathlon_prcomp)
+```
+:::
+
+
+17. Which variables are well captured? Can you interpret the new axes (the horizontal and the vertical ones)?
+Can you explain why the long jump appears to be the opposite of the 100m?
+
+__Hint:__ You may use the graph from `PCA` or from `factoextra`.
+
+:::hiddensolution
+```{r, out.width="50%", fig.show='hold'}
+library(dplyr)
+decathlonTime = decathlon[,1:10]
+
+decathlonTime <- mutate(decathlonTime,
+                        `100m` = 100/`100m`,
+                        `400m` = 400/`400m`,
+                        `110m.hurdle` = 110/`110m.hurdle`,
+                        `1500m` = 1500/`1500m`)
+rownames(decathlonTime)  <- rownames(decathlon)
+
+PCAdecathlontime <- PCA(decathlonTime, graph = FALSE)
+
+factoextra::fviz_pca_ind(PCAdecathlontime, repel = TRUE)
+factoextra::fviz_pca_var(PCAdecathlontime, repel = TRUE)
+
+# patchwork::wrap_plots(factoextra::fviz_pca_ind(PCAdecathlontime, repel = TRUE),
+#                factoextra::fviz_pca_var(PCAdecathlontime, repel = TRUE),
+#                ncol = 2)
+```
+
+:::
+
+18. Plot the cumulative percentage of inertia. Do you think using 2 dimensions is enough here?
+
+:::hiddensolution
+```{r CumVariance}
+ggplot(data = data.frame(dim = factor(1:length(PCADecathlonR$eig[,'cumulative percentage of variance'])),
+                         cum = PCADecathlonR$eig[,'cumulative percentage of variance']),
+       aes(x = dim, y = cum)) +
+  geom_bar(stat = 'identity')
+```
+:::

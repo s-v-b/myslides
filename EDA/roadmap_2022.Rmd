@@ -1,0 +1,173 @@
+
+
+# Week I
+
+## Monday (SB)
+
+1. Gapminder show
+2. Introduction to `R`
+   1. `rstudio`
+   2. `vector`
+   3. `matrix`
+   4. `list`
+   5. `dataframe`
+   6. `small functions`
+   7. `purrr::map()`
+   8. `magrittr`
+
+## Wednesday (SH)
+
+1. `dplyr`
+   1. `select`
+   2. `filter`
+   3. `mutate`
+   4. `join`
+   5. `group_by`
+   6. `summarise`
+
+# Week II
+
+## Monday (SH)
+
+1. `ggplot2`
+   1. `aes()`
+   2. `geom_`
+   3. `labs`
+   4. `scale_...`
+2. gapminder in detail
+
+## Wednesday (SB)
+
+1. `purrr::...`
+1. `tidyr::...`
+2. Univariate statistics
+
+# Week III
+
+## Monday (SH)
+
+1. ...
+2. ...
+
+## Wednesday (SB)
+
+1. Bivariate statistics
+2. Contingency tables
+3. chi-square tests and mosaicplots
+4. Simple linear regression
+
+# Week IV
+
+## Monday (SH)
+
+1. TP noté
+2. ...
+
+## Wednesday (SB)
+
+1. Multiple Linear Regression
+2. QR factorization
+3. Pseudo-inverse
+4. `broom::`
+5. Diagnostic plots
+
+# Week V
+
+## Monday (SH)
+
+1. Linear regression in action, residual analysis
+2. Variable selection
+
+## Wednesday (SB)
+
+1. SVD
+2. PCA
+3. with `broom::augment/glance/tidy`
+
+# Week VI
+
+## Monday (SH)
+
+1. PCA
+2. ...
+
+## Wednesday (SB)
+
+1. CA
+2. chis.quare test
+3. Non standard evaluation `R`
+
+------------------------
+
+Half-semester
+=============
+
+---------------------------
+
+# Week VII
+
+## Monday (SH)
+
+1. TP on CA
+1. Programming with `dplyr` and `ggplot`
+
+## Wednesday (SB)
+
+1. Clustering I: $k$-means
+2. $k$-means and PCA
+
+# Week VIII
+
+## Monday (SH)
+
+1. TP Clustering  _Noté_
+2. Playing with initialization
+3. Visualization of iterations
+
+## Wednesday (SB)
+
+1. Clustering II: Hierarchical clustering
+2. Clustering III: Model-based clustering
+
+# Week IX
+
+## Monday (SH)
+
+1. TP Clustering again
+2. Hclust
+3. EM
+
+## Wednesday (SB)
+
+1. MCA
+
+# Week X
+
+## Monday (SH)
+
+1. TP MCA
+
+## Wednesday (SB)
+
+1. Logistic regression
+
+# Week XI
+
+## Monday (SH)
+
+1. TP Logistic regression
+
+
+## Wednesday (SB)
+
+1. CCA
+
+# Week XII
+
+## Monday (SH)
+
+1. TP CCA
+
+## Wednesday (SB)
+
+1. TP ????
