@@ -10,22 +10,23 @@ knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
 
 | Semaine(s) | Date(s) | Activité  |
 |:----------:|:--------|:----------|
-| `r lubridate::isoweek(lubridate::as_date("2022-09-05"))` | `r lubridate::as_date("2022-09-05")`/`r   lubridate::as_date("2022-09-09")`| Semaine de Rentrée |
-| `r lubridate::isoweek(lubridate::as_date("2022-09-12"))`-`r lubridate::isoweek(lubridate::as_date("2022-10-28"))` | `r lubridate::as_date("2022-09-12")`/`r lubridate::as_date("2022-10-28")`| Semestre I/Partie I |
-| `r lubridate::isoweek(lubridate::as_date("2022-11-01"))`| `r lubridate::as_date("2022-10-29")`/`r lubridate::as_date("2022-11-06")` | _Vacances Toussaint_ |
-| `r lubridate::isoweek(lubridate::as_date("2022-11-07"))`-`r lubridate::isoweek(lubridate::as_date("2022-12-12"))` | `r lubridate::as_date("2022-11-07")`/`r lubridate::as_date("2022-12-12")`| Semestre I/Partie II |
-| `r lubridate::isoweek(lubridate::as_date("2022-12-12"))` | `r lubridate::as_date("2022-12-12")`/`r lubridate::as_date("2022-12-16")`| **Soutenances Algorithmique** |
-| `r lubridate::isoweek(lubridate::as_date("2022-12-19"))`-`r lubridate::isoweek(lubridate::as_date("2023-01-01"))` | `r lubridate::as_date("2022-12-17")`/`r lubridate::as_date("2023-01-01")`| _Vacances de Noël_ |
-| `r lubridate::isoweek(lubridate::as_date("2023-01-02"))`-`r lubridate::isoweek(lubridate::as_date("2023-01-09"))` | `r lubridate::as_date("2023-01-03")`/`r lubridate::as_date("2023-01-13")`| **Examens Semestre I** |
-| `r lubridate::isoweek(lubridate::as_date("2023-01-16"))`-`r lubridate::isoweek(lubridate::as_date("2023-02-24"))` | `r lubridate::as_date("2023-01-16")`/`r lubridate::as_date("2023-02-24")`| Semestre II/Période I |
-| `r lubridate::isoweek(lubridate::as_date("2023-02-27"))`| `r lubridate::as_date("2023-02-25")`/`r lubridate::as_date("2023-03-05")` | _Vacances Hiver_ |
-| `r lubridate::isoweek(lubridate::as_date("2023-03-06"))` | `r lubridate::as_date("2023-03-06")`/`r lubridate::as_date("2023-03-10")`| **Examens Semestre II Pér. I** |
-| `r lubridate::isoweek(lubridate::as_date("2023-03-13"))`-`r lubridate::isoweek(lubridate::as_date("2023-04-21"))` | `r lubridate::as_date("2023-03-13")`/`r lubridate::as_date("2023-04-24")`| Semestre II/Période II |
-| `r lubridate::isoweek(lubridate::as_date("2023-04-24"))`-`r lubridate::isoweek(lubridate::as_date("2023-05-01"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2023-05-07")`| _Vacances de Printemps_ |
-| `r lubridate::isoweek(lubridate::as_date("2023-05-09"))`-`r lubridate::isoweek(lubridate::as_date("2023-05-23"))` | `r lubridate::as_date("2023-05-09")`/`r lubridate::as_date("2023-05-27")`| **Examens Semestre II Pér. II** |
-| `r lubridate::isoweek(lubridate::as_date("2023-06-07"))` | | _Jury Session I_ |
-| `r lubridate::isoweek(lubridate::as_date("2023-06-19"))`-`r lubridate::isoweek(lubridate::as_date("2023-06-30"))` | `r lubridate::as_date("2023-06-19")`/`r lubridate::as_date("2023-06-30")`| **Examens Session II** |
-| `r lubridate::isoweek(lubridate::as_date("2023-07-07"))` | | _Jury Session II_ |
+| `r lubridate::isoweek(lubridate::as_date("2023-09-04"))` | `r lubridate::as_date("2023-09-04")`/`r   lubridate::as_date("2023-09-08")`| Semaine de Rentrée |
+| `r lubridate::isoweek(lubridate::as_date("2023-09-11"))`-`r lubridate::isoweek(lubridate::as_date("2023-10-27"))` | `r lubridate::as_date("2023-09-11")`/`r lubridate::as_date("2023-10-27")`| Semestre I/Partie I |
+| `r lubridate::isoweek(lubridate::as_date("2023-11-01"))`| `r lubridate::as_date("2023-10-28")`/`r lubridate::as_date("2023-11-05")` | _Vacances Toussaint_ |
+| `r lubridate::isoweek(lubridate::as_date("2023-11-07"))`-`r lubridate::isoweek(lubridate::as_date("2023-12-08"))` | `r lubridate::as_date("2023-11-07")`/`r lubridate::as_date("2023-12-08")`| Semestre I/Partie II |
+| `r lubridate::isoweek(lubridate::as_date("2023-12-11"))` | `r lubridate::as_date("2023-12-11")`/`r lubridate::as_date("2023-12-15")`| **Soutenances Algorithmique** |
+|`r lubridate::isoweek(lubridate::as_date("2023-12-18"))` | `r lubridate::as_date("2023-12-18")`/`r lubridate::as_date("2023-12-22")`| **Examens Semestre I** |
+| `r lubridate::isoweek(lubridate::as_date("2023-12-25"))`-`r lubridate::isoweek(lubridate::as_date("2024-01-04"))` | `r lubridate::as_date("2023-12-23")`/`r lubridate::as_date("2024-01-06")`| _Vacances de Noël_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-01-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-02-16"))` | `r lubridate::as_date("2024-01-08")`/`r lubridate::as_date("2024-02-16")`| Semestre II/Période I |
+| `r lubridate::isoweek(lubridate::as_date("2024-02-19"))`| `r lubridate::as_date("2024-02-17")`/`r lubridate::as_date("2024-03-25")` | _Vacances Hiver_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-02-26"))` | `r lubridate::as_date("2024-02-26")`/`r lubridate::as_date("2024-03-01")`| **Examens Semestre II Pér. I** |
+| `r lubridate::isoweek(lubridate::as_date("2024-03-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-05"))` | `r lubridate::as_date("2024-03-03")`/`r lubridate::as_date("2024-04-05")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-20"))` | `r lubridate::as_date("2024-04-06")`/`r lubridate::as_date("2024-05-21")`| _Vacances de Printemps_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-22"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2024-04-26")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2024-05-13"))`-`r lubridate::isoweek(lubridate::as_date("2024-05-24"))` | `r lubridate::as_date("2024-05-13")`/`r lubridate::as_date("2024-05-24")`| **Examens Semestre II Pér. II** |
+| `r lubridate::isoweek(lubridate::as_date("2024-06-07"))` | | _Jury Session I_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-06-17"))`-`r lubridate::isoweek(lubridate::as_date("2024-06-28"))` | `r lubridate::as_date("2024-06-17")`/`r lubridate::as_date("2024-06-28")`| **Examens Session II** |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-07"))` | | _Jury Session II_ |
 
 ---
 
@@ -205,13 +206,16 @@ Il est raisonnable (mais pas obligatoire) de suivre:
 
 | Semaine(s) | Date(s) | Activité  |
 |:----------:|:--------|:----------|
-| `r lubridate::isoweek(lubridate::as_date("2023-01-16"))`-`r lubridate::isoweek(lubridate::as_date("2023-02-24"))` | `r lubridate::as_date("2023-01-16")`/`r lubridate::as_date("2023-02-24")`| Semestre II/Période I |
-| `r lubridate::isoweek(lubridate::as_date("2023-02-27"))`| `r lubridate::as_date("2023-02-25")`/`r lubridate::as_date("2023-03-05")` | _Vacances Hiver_ |
-| `r lubridate::isoweek(lubridate::as_date("2023-03-06"))` | `r lubridate::as_date("2023-03-06")`/`r lubridate::as_date("2023-03-10")`| **Examens Semestre II Pér. I** |
-| `r lubridate::isoweek(lubridate::as_date("2023-03-13"))`-`r lubridate::isoweek(lubridate::as_date("2023-04-21"))` | `r lubridate::as_date("2023-03-13")`/`r lubridate::as_date("2023-04-24")`| Semestre II/Période II |
-| `r lubridate::isoweek(lubridate::as_date("2023-04-24"))`-`r lubridate::isoweek(lubridate::as_date("2023-05-01"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2023-05-07")`| _Vacances de Printemps_ |
-| `r lubridate::isoweek(lubridate::as_date("2023-05-09"))`-`r lubridate::isoweek(lubridate::as_date("2023-05-23"))` | `r lubridate::as_date("2023-05-09")`/`r lubridate::as_date("2023-05-27")`| **Examens Semestre II Pér. II** |
-| `r lubridate::isoweek(lubridate::as_date("2023-06-07"))` | | _Jury Session I_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-01-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-02-16"))` | `r lubridate::as_date("2024-01-08")`/`r lubridate::as_date("2024-02-16")`| Semestre II/Période I |
+| `r lubridate::isoweek(lubridate::as_date("2024-02-19"))`| `r lubridate::as_date("2024-02-17")`/`r lubridate::as_date("2024-03-25")` | _Vacances Hiver_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-02-26"))` | `r lubridate::as_date("2024-02-26")`/`r lubridate::as_date("2024-03-01")`| **Examens Semestre II Pér. I** |
+| `r lubridate::isoweek(lubridate::as_date("2024-03-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-05"))` | `r lubridate::as_date("2024-03-03")`/`r lubridate::as_date("2024-04-05")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-20"))` | `r lubridate::as_date("2024-04-06")`/`r lubridate::as_date("2024-05-21")`| _Vacances de Printemps_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-22"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2024-04-26")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2024-05-13"))`-`r lubridate::isoweek(lubridate::as_date("2024-05-24"))` | `r lubridate::as_date("2024-05-13")`/`r lubridate::as_date("2024-05-24")`| **Examens Semestre II Pér. II** |
+| `r lubridate::isoweek(lubridate::as_date("2024-06-07"))` | | _Jury Session I_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-06-17"))`-`r lubridate::isoweek(lubridate::as_date("2024-06-28"))` | `r lubridate::as_date("2024-06-17")`/`r lubridate::as_date("2024-06-28")`| **Examens Session II** |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-07"))` | | _Jury Session II_ |
 
 --
 
@@ -616,14 +620,14 @@ Il est possible de suivre 4/5 modules parmi les cours listés à droite
 ---
 
 
-```{r, echo=FALSE, eval=FALSE, out.extra='style="border: none;"'}
-knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/#infospratiques")
+```{r, echo=FALSE, eval=F, include=F, out.extra='style="border: none;"'}
+knitr::include_url("https://edt.math.univ-paris-diderot.fr/#/parcours/math/m1/4636+maths_m1mfa")
 ```
 
 
 
 
-<iframe src="https://calendar.google.com/calendar/embed?src=m1mathsdiderot%40gmail.com&ctz=Europe%2FParis" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+<iframe src="https://edt.math.univ-paris-diderot.fr/#/parcours/math/m1/4636+maths_m1mfa" style="border: 0" width="800" height="600" frameborder="0" scrolling="yes"></iframe> 
 
 ---
 class: middle,center
@@ -659,6 +663,7 @@ m
 class: top, left, inverse
 background-size: cover
 background-image: url('./img/pano-gds-moulins.jpg')
+exclude: true
 
 ### Grands moulins et Halle aux farines
 
@@ -671,6 +676,8 @@ Petit panorama du campus des Grands Moulins
 class: top, left
 background-size: cover
 background-image: url('./img/2017-03-17 09.39.09.jpg')
+exclude: true
+
 
 ### Bâtiment Sophie Germain
 

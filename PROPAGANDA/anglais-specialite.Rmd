@@ -8,9 +8,9 @@
 
     -   Début des TD : mi septembre `r lubridate::year(lubridate::today())`
 
-    -   Semaine de pause : du 29 octobre au 06 novembre `r lubridate::year(lubridate::today())` inclus
+    -   Semaine de pause : du 28 octobre au 05 novembre `r lubridate::year(lubridate::today())` inclus
 
-    -   Fin des TD : vendredi 9 décembre `r lubridate::year(lubridate::today())`
+    -   Fin des TD : vendredi 8 décembre `r lubridate::year(lubridate::today())`
 
     -   Inscription pour les personnes souhaitant une dispense de contrôle continu\
         Contacter en premier lieu la coordinatrice qui accompagnera votre demande à la direction du LANSAD

@@ -5,7 +5,7 @@ author: "Marie-Claude Arnaud et Stéphane Boucheron"
 institute: "Université Paris Cité"
 date: "2021/12/21 (updated: `r Sys.Date()`)"
 params:
-  title: "Rentrée Septembre 2022"
+  title: "Rentrée Septembre 2023"
   curriculum: "Master Mathématiques et Applications"
   coursetitle: "Accueil"
   lecturer: "Marie-Claude Arnaud et Stéphane Boucheron"
@@ -108,7 +108,7 @@ background-image: url('./img/wallace.jpg')
 background-size: cover
 
 
-### Anglais (de spécialité)
+### Anglais (de spécialité)  `r fontawesome::fa("language")`
 
 ---
 
