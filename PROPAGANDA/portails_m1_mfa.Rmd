@@ -54,6 +54,7 @@ S'abonner aux portails Moodle
 [https://mondossierweb.app.u-paris.fr](https://moodle.u-paris.fr/course/view.php?id=8568)
 
 ```{r}
+#| echo: false
 knitr::include_graphics("img/img_mon_dossier_web.png")
 ```
 
