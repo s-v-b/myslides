@@ -18,9 +18,6 @@ output:
     css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
-    includes:
-      in_header:
-        - 'toc.html'
     nature:
       nature:
       slideNumberFormat: |

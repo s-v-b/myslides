@@ -20,7 +20,7 @@
 ### Si vous êtes intéressé, contacter : 
 
 ```{r, echo=FALSE, out.extra='style="border: none;"'}
-knitr::include_url("https://paullaurain.weebly.com")
+knitr::include_url("https://webusers.imj-prg.fr/~matteo.ruggiero/index-fr.html")
 ```
 
 ]
