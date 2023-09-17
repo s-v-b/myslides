@@ -17,9 +17,8 @@ output:
     css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
-    includes:
-      in_header:
-        - 'toc.html'
+    dev: cairo-png
+    type: cairo
     nature:
       slideNumberFormat: |
         <div class="progress-bar-container">
@@ -598,7 +597,7 @@ What should be the purposes of
 - Theming
 
 ```{r theme_economist, echo=TRUE, eval=FALSE}
-require("ggthemes")
+pacman::p_load("ggthemes")
 
 p +
   theme_wsj()
@@ -674,7 +673,7 @@ Choosing a color scale is a difficult task
 .fl.w-40.pa2[
 
 ```{r zoom_africa, eval=FALSE, echo=TRUE}
-require(ggforce) #<<
+pacman::p_load(ggforce) #<<
 
 z_in <- 'Africa'
 
@@ -771,7 +770,7 @@ gapminder %>%
 ### Adding labels 
 
 ```{r plot_gap_minder_2002_labelled, eval=FALSE, fig.cap="Gapminder 2002 layer by layer"}
-require(ggrepel) #<<
+pacman::p_load(ggrepel) #<<
  
 gapminder %>% 
   filter(year == 2002) %>%

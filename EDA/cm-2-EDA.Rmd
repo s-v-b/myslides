@@ -16,9 +16,6 @@ output:
     css: ["header-footer.css",  "xaringan-themer.css", "custom-callout.css"]
     lib_dir: libs
     seal: false
-    includes:
-      in_header:
-        - 'toc.html'
     nature:
       nature:
       slideNumberFormat: |
@@ -373,7 +370,7 @@ $$\frac{\frac{1}{n} \sum_{i=1}^n \big(x_i - \overline{X}_n\big)^3}{s^3}$$
 
 $$\kappa = \frac{\frac{1}{n} \sum_{i=1}^n \big(x_i -\overline{X}_n\big)^4}{s^4} - 2$$
 
-??? 
+???
 
 Note that the two indices are dimension-free. If we scale the sample, we leave them both invariant.  
 If we translate or rescale the sample, we leave them both invariant. The two indices tell us something about the shape of the empirical distribution.

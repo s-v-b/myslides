@@ -17,9 +17,8 @@ output:
     css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
-    includes:
-      in_header:
-        - 'toc.html'
+    dev: png
+    type: cairo
     nature:
       nature:
       slideNumberFormat: |
@@ -251,7 +250,7 @@ Should columns `dest`  and `origin` be coerced to the same factor?
 ### `nycflights13`
 
 
-![](./img/bd_2023-nycflights13.png)
+"![](./img/bd_2023-nycflights13.png)"
 
 
 ---
@@ -900,7 +899,7 @@ This is an instance of a [Star Schema](https://en.wikipedia.org/wiki/Star_schema
 .plot-callout[
 
 ```{r, echo=FALSE}
-knitr::include_graphics("./img/bd_2023-nycflights13.png")
+#knitr::include_graphics("./img/bd_2023-nycflights13.png")
 ```
 ]
 
@@ -1060,7 +1059,7 @@ dtv <- inner_join(flights,
            weather,
            by=c("origin", "time_hour"))
 
-setequal(dtu, dtv)
+# setequal(dtu, dtv)
 ```
 
 Recall that columns `year`, `month` `day` `hour` can be computed from  `time_hour`
@@ -1688,7 +1687,7 @@ flights %>%
 
 .plot-callout.f6[
 
-```{r flights-dow-out, echo=FALSE, ref.label="flights-dow"}
+```{r flights-dow-out, eval=FALSE, echo=FALSE, ref.label="flights-dow"}
 
 ```
 
