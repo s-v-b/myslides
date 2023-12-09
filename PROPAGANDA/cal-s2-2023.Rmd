@@ -1,0 +1,27 @@
+
+
+
+
+### Agenda Semestre II  2023-24
+
+
+| Semaine(s) | Date(s) | Activité  |
+|:----------:|:--------|:----------|
+| .red[`r lubridate::isoweek(lubridate::as_date("2024-01-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-02-16"))`] | `r lubridate::as_date("2024-01-08")`/`r lubridate::as_date("2024-02-16")`| Semestre II/Période I |
+| `r lubridate::isoweek(lubridate::as_date("2024-02-23"))`| `r lubridate::as_date("2024-02-17")`/`r lubridate::as_date("2024-02-24")` | _Vacances Hiver_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-02-26"))` | `r lubridate::as_date("2024-02-26")`/`r lubridate::as_date("2024-03-01")`| **Examens Semestre II Pér. I** |
+| `r lubridate::isoweek(lubridate::as_date("2024-03-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-05"))` | `r lubridate::as_date("2024-03-04")`/`r lubridate::as_date("2024-04-05")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-06"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-21"))` | `r lubridate::as_date("2024-04-06")`/`r lubridate::as_date("2024-04-21")`| _Vacances de Printemps_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-04-22"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-29"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2024-04-29")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2024-05-06"))`-`r lubridate::isoweek(lubridate::as_date("2024-05-24"))` | `r lubridate::as_date("2024-05-06")`/`r lubridate::as_date("2024-05-24")`| **Examens Semestre II Pér. II** |
+| `r lubridate::isoweek(lubridate::as_date("2024-06-06"))` | `r lubridate::as_date("2024-06-06")`| _Jury Session I_ |
+
+--
+
+`r fontawesome::fa("triangle-exclamation")` Presque tous les cours/UE sont organisés sur une période de 6 semaines 
+
+
+Durant chaque *période*, vous suivez deux UE (6 ECTS)
+
+Pour valider les 30 ECTS semestriels, vous choisissez (en général) une UE semestrielle 
+

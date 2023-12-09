@@ -4,7 +4,7 @@ subtitle: "Présentation des Cours du Second Semestre"
 author: "Marie-Claude Arnaud et Stéphane Boucheron"
 institute: "Université Paris Cité"
 params:
-  date: "2023/01/03 à 13h30"
+  date: "2023/12/11 à 9h00"
   title: "Présentation des Cours du Second Semestre"
   curriculum: "Master Mathématiques et Applications"
   coursetitle: "Accueil"
@@ -12,15 +12,12 @@ params:
   homepage: "http://stephane-v-boucheron.fr/courses/m1mfa/"
   curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-math/"
   institution: "Université Paris Cité"
-  campus: "Grands Moulins Bât Sophie Germain Salle 1009"
+  campus: "Grands Moulins Bât Sophie Germain Salle 2011"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
-    includes:
-      in_header:
-        - 'toc.html'
     nature:
       nature:
       slideNumberFormat: |
@@ -79,7 +76,7 @@ name: calendrier-du-second-semestre
 
 ---
 
-```{r, child="cal-s2.Rmd"}
+```{r, child="cal-s2-2023.Rmd"}
 
 ```
 
@@ -92,7 +89,7 @@ name: periode-i
 
 ---
 
-```{r, child="periode1.Rmd"}
+```{r, child="periode1-2023.Rmd"}
 
 ```
 
@@ -106,7 +103,7 @@ name: periode-ii
 
 ---
 
-```{r, child="periode2.Rmd"}
+```{r, child="periode2-2023.Rmd"}
 ```
 
 
