@@ -1,0 +1,1679 @@
+---
+title: "Master Mathématiques et Applications"
+subtitle: "JPO Université  Paris Cité"
+author: "MCA et SB (UFR de Mathématiques-Grands Moulins)"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["header-footer.css", "xaringan-themer.css"]
+    lib_dir: libs
+    seal: false
+    nature:
+      nature:
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+name: layout-general
+layout: true
+class: left, top
+
+```{r setup, child="loaders_fixers.Rmd", echo=FALSE}
+```
+
+
+---
+class: middle, center, inverse
+
+
+# [Master Mathématiques et Applications](http://master.math.univ-paris-diderot.fr)
+
+<!-- ## [Master I  Mathématiques Fondamentales et Appliquées](http://master.math.univ-paris-diderot.fr/annee/m1-math/) -->
+
+<br>
+<br>
+
+### Campus Grands Moulins (ex Paris-Diderot)
+
+### `r Sys.Date()`
+
+
+---
+
+### Organisation générale 
+
+<!-- Master Mathématiques et Applications (GM) -->
+
+
+```{r, echo=FALSE}
+knitr::include_graphics("./img/formation_master.svg")
+```
+
+
+---
+class: middle
+
+### Campus des Grands Moulins
+
+
+```{r, echo=FALSE, message=FALSE,  out.width="90%"}
+require(magrittr)
+m <- leaflet::leaflet() %>%
+  leaflet::setView(
+    lat = 48.853646831055556,
+    lng = 2.3488426208496094, zoom = 12
+  ) %>%
+  leaflet::addTiles() %>% # Add default OpenStreetMap map tiles
+  leaflet::addMarkers(
+    lat = 48.82717410837418,
+    lng = 2.380986213684082,
+    popup = "Bâtiment Sophie Germain"
+  ) %>%
+  leaflet::addMarkers(
+    lng = 2.38004207611084,
+    lat = 48.8326901185081,
+    popup = "Barge du Crous"
+  )
+
+m
+```
+
+---
+
+### À propos de l'Organisation
+
+- Des parcours *tubulaires*
+
+  + ISIFAR  (40 étudiants par an)
+  + Science des données (double ou simple master) (20 étudiants par an)
+  + Cryptologie Sécurité (double ou simple master) (20 étudiants par an)
+  
+- Portail Mathématiques Fondamentales et Appliquées en M1 (60 étudiants/an)
+
+  + Mathématiques générales (Agrégation)
+  + Mathématiques fondamentales
+  + M2MO Modélisation Aléatoire (ex DEA Laure Élie)
+  + Logique Mathématique et Fondements de l'Informatique 
+
+???
+
+
+---
+
+### Parcours issus du Master I  MFA
+
+
+|  **Titre**      | **Thèmes**        | **Laboratoire(s)** | |
+|:----------------|:------------------|:------------------:|:---:|
+| [Maths Fondamentales](http://master-math-fonda.imj-prg.fr)    |                   |   [IMJ-PRG](https://www.imj-prg.fr)            | `r fontawesome::fa("university")`|
+| [M2MO](https://masterfinance.math.univ-paris-diderot.fr)            |  Math-Fi/Dat. Sc. |  [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("university")` `r fontawesome::fa("industry")` |
+| [LMFI](http://master.math.univ-paris-diderot.fr/annee/m2-lmfi/)            |  Logique/Inform.  | [IMJ-PRG/IRIF](https://www.imj-prg.fr)       |`r fontawesome::fa("university")` `r fontawesome::fa("industry")` |
+| [Math. Géné.](http://master.math.univ-paris-diderot.fr/annee/m2-agreg/)     |  Prep. Agreg.     |                    | `r fontawesome::fa("school")`|
+
+### Parcours Professionnels
+
+|  **Titre**      | **Thèmes**        | **Apprentissage**     | **Laboratoire(s)** | |
+|:----------------|:------------------|:---------------------:|:------------------:|:--:|
+| [ISIFAR](http://master.math.univ-paris-diderot.fr/parcours/isifar/)          |  Math-Fi/Risque   | Oui                   | [LPSM](http://www.lpsm.paris)               | `r fontawesome::fa("industry")` |
+| Math-Info  (1)  |  [Sécurité](http://master.math.univ-paris-diderot.fr/parcours/mic/)/[Dat. Sc.](http://master.math.univ-paris-diderot.fr/parcours/data/)| Oui                   | [LPSM](http://www.lpsm.paris) / [IRIF](https://www.irif.fr)          | `r fontawesome::fa("industry")` |
+
+### LOGOS
+
+-  [LOGOS](https://master.math.univ-paris-diderot.fr/annee/m2-logos/) .fr[ `r fontawesome::fa("university")`] 
+
+---
+exclude: true
+name: deroulement
+class: middle, left
+
+### Organisation de l'année académique (Master 1)
+
+
+```{r, echo=FALSE, out.width='80%'}
+knitr::include_graphics("./img/annee20_21.svg")
+```
+
+
+???
+
+![déroulement](annee19_20.svg)
+
+
+```{r, echo=FALSE, out.extra='style="border: none;"', out.width='100%'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
+```
+
+---
+
+
+### Semestre I. (M1 MFA)
+
+.fl.w-50.pa2[
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+        </tr>
+    </thead>
+<tr>
+  <td>
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algebre/" class="plain">Algèbre</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-proba/" class="plain">Probabilités</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-logique/" class="plain">Logique</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s1-anglais-3/" class="plain">Anglais</a>
+  </td>
+  <td>3</td>
+</tr>
+
+</table>
+
+]
+
+
+.fl.w-50.pa2[
+
+### `r fontawesome::fa("compass")`
+
+Ce premier semestre est un semestre d'*orientation*
+
+En fonction des parcours de M2 visés, vous devrez choisir trois UEs de Mathématiques parmi les cinq proposées
+
+Chaque UE de Mathématiques est organisée en 3 heures de cours et 4 heures de TD hebdomadaires (12 semaines)
+
+### `r fontawesome::fa("hand-point-right")` Une semaine de pré-rentrée
+
+Révisions en Algèbre/Analyse/Probabilités
+
+]
+
+---
+
+### Exemple (semestre I)
+
+.pull-left[
+vous visez le parcours [M2MO](https://masterfinance.math.univ-paris-diderot.fr)
+
++ Modélisation Aléatoire `r fontawesome::fa("chart-line")`
++ Finance `r fontawesome::fa("piggy-bank")`
++ Data Science `r fontawesome::fa("chart-area")`
+
+]
+
+.pull-right[
+
+Il est raisonnable de suivre:
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+
+        </tr>
+    </thead>
+
+
+<tr>
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+  </td>
+  <td>9</td>
+</tr>
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-proba/" class="plain">Probabilités</a>
+  </td>
+  <td>9</td>
+</tr>
+
+
+<tr>
+
+  <td>
+
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s1-anglais-3/" class="plain">Anglais</a>
+  </td>
+  <td>3</td>
+</tr>
+</table>
+
+.f6[
+
+Les trois cours de mathématiques comportent chacun
+
+- 3 heures de cours magistral hebdomadaires
+
+- 4 heures TDs/TPs hebdomadaires
+
+
+]
+]
+
+---
+class: top
+
+### Semestre II
+
+.small[
+
+.pull-left[
+.small[
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Période I</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-galois/" class="plain">Théorie de Galois</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-edp/" class="plain">Equations aux dérivées partielles et Théorie spectrale</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret (Probabilités I)</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistique fondamentale</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-topo-alg/" class="plain">Topologie algébrique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-theorie-ensembles/" class="plain">Théorie des ensembles</a>
+              </td>
+              <td>6</td>
+        </tr>
+        </table>
+
+
+<br>
+
+.fullwidth[
+<table>
+                <thead>
+                    <tr>
+                        <th>Sur l'ensemble du semestre</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-recherche/" class="plain">Initiation à la recherche</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-projet/" class="plain">Projet</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ue-ouverture/" class="plain">UE d'ouverture</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+             <td>
+
+             <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/" class="plain">Analyse de données</a>
+             </td>
+             <td>6</td>
+        </tr>
+        </table>
+]
+]
+]
+]
+
+
+.small[
+.pull-right[
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Période II</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-arith/" class="plain">Arithmétique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-alg/" class="plain">Introduction à la géométrie algébrique</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-incompletude/" class="plain">Incomplétude et indécidabilité</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-geom-diff/" class="plain">Géométrie différentielle</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-markov/" class="plain">Théorèmes limites en probabilités (Probabilités II)</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-bayes/" class="plain">Statistique bayésienne et tests</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-anal-num/" class="plain">Méthodes numériques pour les EDOs et les EDPs</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/" class="plain">Mathématiques financières</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        </table>
+
+
+<br>
+
+.f6[Deux ou trois cours durant chaque période de six semaines et éventuellement un cours s'étalant sur le semestre]
+
+]
+]
+
+
+---
+
+### Exemple (Semestre II)
+
+.pull-left[
+Vous visez le parcours
+
+[M2MO](https://masterfinance.math.univ-paris-diderot.fr):
+
++ Modélisation Aléatoire,
++ Finance et
++ Data Science
+
+Il est possible de suivre 4/5 modules parmi les cours listés à droite
+
+`r fontawesome::fa("exclamation-triangle")` Équilibrer la charge entre les deux périodes
+
+`r fontawesome::fa("pencil-alt")` Les projets/mémoires se déroulent sur l'ensemble du semestre
+]
+
+.pull-right[
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>ECTS</th>
+
+        </tr>
+    </thead>
+
+<tbody>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-martingales/" class="plain">Processus à temps discret (Probabilités I)</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistique fondamentale</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-anal-num/" class="plain">Méthodes numériques pour les EDOs et les EDPs</a>
+              </td>
+              <td>6</td>
+        </tr>
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+        <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-math-fi/" class="plain">Mathématiques financières</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+</tbody>
+</table>
+
+.f6[Ce n'est pas le seul choix possible et raisonnable] `r fontawesome::fa("smile")`
+
+]
+
+---
+exclude: true
+
+### Emploi du temps
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/#infospratiques")
+```
+
+---
+exclude: true
+class: middle, center, inverse
+name: validation
+background-image: url('./img/graduation.jpg')
+background-size: cover
+
+## Validation
+
+
+---
+exclude: true
+
+### `r fontawesome::fa("user-graduate")` MCC (Modalités de contrôle des connaissances)
+
+La validation  de l'année de M1 nécessite la validation de chaque semestre (30 ECTS par semestre)  
+
+
+Le semestre est acquis aux conditions suivantes:
+
+- L'étudiant a une moyenne génerale au semestre supérieure à 10
+
+- L'étudiant n'a aucune note inférieure à 7/20
+
+`r fontawesome::fa("hand-point-right")` Dans le cas où le semestre n'est pas validé au cours de la première session, toute note inférieure à 10 est perdue pour la seconde session  `r fontawesome::fa("frown")`
+
+---
+exclude: true
+name: distance
+
+### Modalités de contrôle continu/Master à distance
+
+Il est possible de renoncer *sous conditions* au contrôle continu,
+et d'opter pour le Master I *à distance*.
+
+Suivre le *Master I à distance* revient à :
+
+- choisir le *contrôle terminal*  .fr[`r fontawesome::fa("toggle-on")`]
+
+
+- renoncer au *contrôle continu*   .fr[`r fontawesome::fa("toggle-off")`]
+
+Cette possibilité est offerte sous condition et sur justificatifs
+
+C'est un choix à faire lors des inscriptions pédagogiques _au début chaque semestre_
+
+
+???
+
+Que dire de plus ?
+
+On ne change pas les règles du jeu en cours de partie.
+
+---
+exclude: true
+class: top,  center
+name: entretiens
+background-size: cover
+background-image: url("./img/entretien.jpg")
+
+## Contacts
+
+
+---
+exclude: true
+name: contacts-ra
+
+
+### Responsable administratif : [Christian Sénécal](mailto:senecal@math.univ-paris-diderot.fr)
+
+
+.fl.w-40.pa2[
+
+- Secrétariat de l'UFR de Mathématiques
+
+- Bâtiment Sophie Germain
+
+- Bureau 1012
+]
+
+
+.fl.w-60.pa2[
+```{r, trombi-csenec, out.width="80%", echo=FALSE}
+knitr::include_graphics("https://www.math.univ-paris-diderot.fr/_media/ufr/db/trombi/senecal_large.jpg")
+```
+]
+
+- Inscriptions pédagogiques  .fr[`r fontawesome::fa("check-circle")`]
+
+- Modalités de contrôle continu .fr[`r fontawesome::fa("toggle-on")`]
+
+
+
+
+
+---
+
+###  Responsables pédagogiques
+
+.pull-left[
+#### [Marie-Claude Arnaud](https://mcarnaudblog.wordpress.com)
+Analyse `r fontawesome::fa("chalkboard-teacher", fill = "black")`
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://mcarnaudblog.wordpress.com")
+```
+
+]
+
+.pull-right[
+#### [Stéphane Boucheron](https://stephane-v-boucheron.fr)
+Statistiques, Probabilités  `r fontawesome::fa("chalkboard-teacher", fill = "black")`
+
+```{r, echo=FALSE, out.extra='style="border: none;"'}
+knitr::include_url("https://stephane-v-boucheron.fr")
+```
+]
+
+
+
+
+---
+exclude: true
+
+### Au début de chaque semestre
+
+.pull-left[
+
+Un entretien court avec une (ou un) responsable pédagogique
+
+En face à face 
+
+Prendre rendez-vous via [Moodle](https://moodle.u-paris.fr/course/view.php?id=8568)
+
+]
+
+.pull-right[
+
+#### Objectifs `r fontawesome::fa("map")``
+
+- vérifier le choix des cours
+
+- orientation future
+
+- signaler difficultés
+
+]
+
+
+---
+class: middle, center, inverse
+
+## Parcours M2 (issus du M1 MFA)
+
+---
+name: mf
+
+### Parcours Mathématiques fondamentales
+
+&gt; Formation de haut niveau en mathématiques à des étudiants qui se destinent aux métiers de l'enseignement et de la recherche.
+
+&gt; Il débouche donc naturellement (mais pas exclusivement) sur une thèse de mathématiques.
+
+- [Laboratoire IMJ-PRG](https://www.imj-prg.fr) (CNRS-Paris-Diderot-SU)
+- Convention avec Sorbonne-Université (ex UPMC-Paris 6)
+- [Brochure 2017-18](http://www.math.univ-paris-diderot.fr/_media/formations/masters/math/brochure_maths_fond_2018-2019.pdf)
+
+Responsable : [Olivier Debarre](https://webusers.imj-prg.fr/~marc.rosso/)
+
+???
+
+- Un parcours élitiste
+- Un débouché : Doctorat
+- Un Doctorat, c'est une allocation, un encadrement
+- Un doctorat. c'est éventuellement un passeport pour l'enseignement en classes préparatoires
+
+Peut-on préparer l'agrégation en préparant une thèse ?
+
+---
+name: lmfi
+
+### Parcours: Logique Mathématiques et Fondements de l'Informatique
+
+&gt; Ce master offre une formation de haut niveau en Logique. Il a pour objectif
+de former des chercheurs ou ingénieurs de recherche possédant la maîtrise
+des outils logiques fondamentaux utilisés en Mathématiques et en
+Informatique.
+
+&gt; Seul M2 en France consacré la logique mathématique et à ses applications en informatique
+
+
+Responsables :
+- Informatique [Christine Tasson](http://www.irif.fr/~tasson/)
+- Mathématiques [Boban Velickovic](http://www.logique.jussieu.fr/~boban/)
+
+
+???
+
+Revoir l'attaque.
+
+- Comment se situe la Logique Mathématique dans l'univers des Mathématiques (fondamentales) ?
+- Quel langage tenir aux étudiants de Licence à ce sujet
+- Trouver des mots pour expliquer le rôle de P7 dans la recherche en Logique en France et en Europe
+- Suggérer le rôle de la logique dans la relation Mathématique/Informatique. Hommage à Turing.
+- Évoquer métiers et débouchés
+
+
+---
+name: m2mo
+
+### Parcours M2MO (Modélisation Aléatoire, ex-Laure Élie)
+
+.pull-left[
+Mathématiques financières
+
+Science des données-Statistiques
+
+Responsables:
+
+- [Jean-François Chassagneux](https://www.lpsm.paris//pageperso/chassagneux/index.html)
+- [Huyen Pham](https://sites.google.com/site/phamxuanhuyen/)
+
+[Association Alumni](https://masterfinance.math.univ-paris-diderot.fr/index.php/anciens/association)
+
+]
+
+.pull-right[
+
+[![M2M0](./img/m2mo-affiche.png)](https://masterfinance.math.univ-paris-diderot.fr)
+
+
+
+]
+
+
+[https://masterfinance.math.univ-paris-diderot.fr](https://masterfinance.math.univ-paris-diderot.fr)
+
+[Présentation M2MO](https://masterfinance.math.univ-paris-diderot.fr/attachments/article/165/Pres-eng-M2M0-june2023.pdf)
+
+
+???
+
+- Prévoir une attaque
+- Présence sur les réseaux sociaux LinkedIn Twitter Instagram Facebook
+- Les Mathématiques financières
+- Les statistiques
+- Le *Machine Learning*
+
+---
+name: mg
+
+### Parcours Mathématiques Générales
+
+&gt; Le M2 Mathématiques générales permet d'acquérir une formation solide et généraliste en mathématiques, à la fois théorique et pratique, en lien avec l'enseignement des mathématiques
+
+&gt; Le parcours Mathématiques générales-Agrégation est centré sur la préparation à l'[agrégation externe](http://www.devenirenseignant.gouv.fr)
+
+&gt; Le jury de délivrance du M2 se réunit avant les résultats d'admissibilité
+
+Responsable:
+[Antoine Chambert-Loir](https://webusers.imj-prg.fr/~antoine.chambert-loir/index.xhtml)
+
+???
+
+- Attaque
+- Métiers. Qu'est-ce-qu'un agrégé ?
+- L'agrégation dans une vie de mathématicien
+- Les options
+- Les choix de cours à suivre en Master I
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Mathématique-Informatique-Cryptologie
+
+---
+name: mic
+
+###  Parcours MIC
+
+.pull-left[
+### Admission
+
+- Double Licence Mathématiques-Informatique ou
+
+- Licence de Mathématiques + Test Informatique ou
+
+- Licence d'Informatique + Test de Mathématiques
+
+]
+
+.pull-right[
+
+### Débouchés
+
+Professionnels de la cryptologie et de la sécurité informatique.
+
+- Expert sécurité (grands groupes, banques, cabinets de consultants, startups)
+
+- Ingénieur bureau d'étude (applications et services en ligne, objets connectés, blockchain)
+
+- Agences gouvernementales (ANSSI, ministère de la défense)
+
+
+]
+
+
+---
+class: middle
+
+### Master MIC :  Compétences visées
+
+- Sécurité de protocoles de communication (GSM, Internet, ...)
+
+- Informatique embarquée
+
+- Programmation sur carte à puce
+
+- Sécurisation d'un réseau informatique
+
+- Architecture sécurité d'un réseau
+
+
+---
+
+### MIC Semestre I 
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+
+                        <th>Cryptologie</th>
+
+                        <th>Données</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-theorie-information/" class="plain">Théorie de l&#39;information</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-algebre/" class="plain">Algèbre effective</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td></td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-prog-obj/" class="plain">Programmation objet avancée</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-theorie-jeux/" class="plain">Intelligence artificielle et théorie des jeux</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-protocoles-reseaux/" class="plain">Protocoles réseaux</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo/" class="plain">Algorithmique</a>
+              </td>
+              <td>6</td><td></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+</table>
+
+
+---
+
+### MIC Semestre II
+
+## Semestre II  Parcours Cryptologie et Sécurité (MIC)
+
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-codes-crypto/" class="plain">Codes et cryptographie</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-cartes-puces/" class="plain">Programmation sur cartes à puces</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-prog-crypto/" class="plain">Programmation pour la cryptographie</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mic-projet/" class="plain">Projet de cryptographie</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo-avancee/" class="plain">Algorithmique avancée</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-systeme/" class="plain">Programmation système</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-bases-donnees/" class="plain">Bases de données avancées</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s2-anglais-3/" class="plain">Anglais</a>
+              </td>
+              <td>3</td>
+        </tr>
+
+        </table>
+
+
+---
+name: m2-mic-apprentissage
+
+### Master MIC simple en Alternance
+
+.pull-left[
+- M1 MIC Maths 30 ECTS par semestre (enlever un cours d'informatique par semestre)
+- Rechercher un contrat d'apprentissage à partir du mois de février en Master I
+
+&gt; Rythme d'alternance (en Master II)
+- un jour par semaine en entreprise sur dix semaines
+- deux jours par semaine sur dix semaines
+- puis stage entièrement dans l'entreprise
+]
+
+.pull-right[
+&gt; Possibilité de faire précéder l'alternance par un stage d'été entre le Master I et le Master II pour découvrir l'entreprise
+
+Exemples :
+- Thalès
+- CEA
+- Orange
+- BNP
+]
+
+---
+name: mids
+
+### Parcours MI Science des Données
+
+.pull-left[
+
+### Admission
+
+- Licence Mathématiques-Informatique ou
+- Licence de Mathématiques + Test Informatique ou
+- Licence d'Informatique + Test de Mathématiques
+
+### Responsables
+
+- Mathématiques : [A. Fischer](https://www.lpsm.paris/users/fischer/index)
+- Informatique : [C. Delporte](https://www.irif.fr/~delporte/)
+
+]
+
+.pull-right[
+
+### Organisation
+
+- Master I
+  - 36/30 ECTS Semestre I
+  - 36/30 ECTS Semestre II
+- Master II
+  - 18 ECTS en Semestre I partie I (Septembre-Novembre)
+  - 18 ECTS en Semestre I partie II (Janvier-Mars)
+  - 27 ECTS stage Avril-Septembre
+
+
+]
+
+???
+
+Etoffer la présentation des débouchés
+
+Existe aussi en Simple Master
+
+---
+
+---
+name: mids-debouches1
+
+## Double Master MIDS : débouchés
+
+.left-column[
+
+### Data engineer
+
+]
+
+.right-column[
+
+&gt; Data engineers are software engineers who design, build, integrate data from various resources, and manage big data.
+
+
+]
+
+---
+name: mids-debouches2
+
+## Double Master MIDS : débouchés 2
+
+.left-column[
+
+### Data engineer
+### Data architect
+
+]
+
+.right-column[
+
+
+&gt; A data architect is a practitioner of data architecture, an information technology discipline concerned with designing, creating, deploying and managing an organization's data architecture.
+
+]
+
+---
+name: mids-debouches3
+
+## Double Master MIDS : débouchés 3
+
+.left-column[
+### Data engineer
+### Data architect
+### Data scientist
+]
+
+.right-column[
+
+
+&gt; Data science is a "concept to unify statistics, data analysis, machine learning and their related methods" in order to "understand and analyze actual phenomena" with data.
+
+&gt; It employs techniques and theories drawn from many fields within the context of mathematics, statistics, information science, and computer science.
+
+
+]
+
+
+---
+
+### Semestre I Parcours MIDS 
+
+Parcours : trois modules de mathématiques et trois modules d'informatique.
+
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+
+                        <th>Cryptologie</th>
+
+                        <th>Données</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-theorie-information/" class="plain">Théorie de l&#39;information</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algo/" class="plain">Algorithmique et complexité</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-probabilites/" class="plain">Probabilités</a>
+              </td>
+              <td>6</td><td></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-prog-obj/" class="plain">Programmation objet avancée</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-theorie-jeux/" class="plain">Intelligence artificielle et théorie des jeux</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-protocoles-reseaux/" class="plain">Protocoles réseaux</a>
+              </td>
+              <td>6</td><td><i title="obligatoire" class="fa fa-circle"></i></td><td></td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo/" class="plain">Algorithmique</a>
+              </td>
+              <td>6</td><td></td><td><i title="obligatoire" class="fa fa-circle"></i></td>
+        </tr>
+
+</table>
+
+
+
+???
+
+Au premier semestre, 3 UE de mathématique
+
+- MF Analyse/Algèbre
+- PMA Analyse/Probabilités
+- M2MO Analyse/Probabilités/Complexité
+- Modélisation
+- LMFI Logique/
+- MG Analyse
+
+Expliciter les choix possibles. Ajouter à la carte des UEs
+des indications sur les parcours où ces UEs sont
+recommandées, voire obligatoires.
+
+
+- Organisation semestre I (5mn)
+    - Césure
+    - Examens
+    - Cas du cours __Complexité___
+    - S’abonner au calendrier
+    - Entretiens (objectifs, quand, comment)
+- Grille de choix pour semestre I (5mn)
+
+---
+class: top
+
+### Semestre II  Parcours MIDS
+
+<table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>ECTS</th>
+
+                    </tr>
+                </thead>
+
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/" class="plain">Statistiques fondamentales</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/" class="plain">Analyse des données</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s2-optimisation/" class="plain">Optimisation</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+
+              <td>
+
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-bases-donnees/" class="plain">Bases de données avancées</a>
+              </td>
+              <td>6</td>
+        </tr>
+
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1info-algo-avancee/" class="plain">Algorithmique avancée</a>
+              </td>
+              <td>6</td>
+        </tr>
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1mi-big-data/" class="plain">Technologies Big Data</a>
+              </td>
+              <td>3</td>
+        </tr>
+         <tr>
+              <td>
+              <a href="http://master.math.univ-paris-diderot.fr/modules/m1-s2-anglais-3/" class="plain">Anglais</a>
+              </td>
+              <td>3</td>
+        </tr>
+        </table>
+
+???
+
+
+Au second semestre
+
+- M2MO
+  + Probability Martingales/Markov
+  + Statistique fondamentale/Approfondie
+  + Analyse App I/II
+  +
+
+
+
+---
+name: mids-m1-ue
+exclude: true
+
+### Parcours MIDS : première année
+
+
+
+
+.pull-left[
+
+
+
+36/30 ECTS
+]
+
+
+.pull-right[
+
+
+
+36 ECTS
+]
+
+
+???
+
+---
+exclude: true
+name: mids-annee2
+
+### Parcours MIDS : seconde année
+
+.pull-left[
+
+
+]
+
+
+.pull-right[
+
+
+
+
+- 2 cours de mathématiques
+- 3 cours d'informatique
+
+]
+
+
+---
+template: inter-slide
+class: inverse, middle, center
+
+## ISIFAR
+
+---
+name: isifar
+
+## Parcours  ISIFAR
+
+
+.pull-left[
+
+### Débouchés
+
+Cadres à profil d'ingénieur statisticien/informaticien, spécialisés dans les applications  aux problèmes actuariels, financiers ou de gestion des risques.
+
+### Responsables
+
+- M1 : [Yves Achdou](https://www.ljll.math.upmc.fr/achdou/)
+- M2 : [Zorana Grbac](https://sites.google.com/view/zoranagrbac/) et [Stéphane Crepey](https://perso.lpsm.paris/~crepey/)
+-
+
+
+]
+
+
+
+.pull-right[
+
+### Compétences visées
+
+- méthodes mathématiques
+  + statistiques
+  + numériques
+- outils informatiques pour
+  + banque,
+  + finance
+  + assurance
+  + marketing.
+
+Profil recherché par les banques (gestions des risques), les sociétés d'assurance (actuariat), les organismes économiques, les sociétés financières et les sociétés de services informatiques (SSII).
+
+]
+
+
+???
+
+Pourquoi le Master ISIFAR constitue une alternative au Master MO ? À quel public
+s'adresse-t-il ? Qu'est ce que la gestion quantitative du risque ?
+Comment devenir Actuaire ? Y-a-t-il parmi les anciens étudiants des
+personnes qui sont devenues Actuaires ? (il y en a parmi les anciens du M2MO)
+
+---
+class: inverse, middle, center
+
+### Le parcours ISIFAR en deux minutes
+
+```{r, echo=FALSE, eval=TRUE}
+knitr::include_url("https://master.math.univ-paris-diderot.fr/parcours/isifar/video-isifar.mp4")
+```
+
+---
+exclude: true
+name: ue-isifar-m1
+
+### Master I ISIFAR
+
+
+
+.pull-left[
+
+
+]
+
+
+
+.pull-right[
+
+
+
+]
+
+---
+name: ue-isifar-m2
+
+### Master II ISIFAR
+
+
+.pull-left[
+De septembre à décembre
+
+
+
+]
+
+
+.pull-right[
+De janvier à mars
+
+
+]
+
+&lt;br&gt;
+
+.center[
+
+### Stage d'avril à septembre  18 ECTS
+
+]
+
+---
+name: ue-isifar-m2-alternance
+
+### Master II ISIFAR en alternance
+
+.pull-left[
+- Rechercher un contrat d'apprentissage à partir du mois de février en Master I
+- Possibilité de faire précéder l'alternance par un stage d'été entre le Master I et le Master II pour découvrir l'entreprise
+- En 2019-19, 14 étudiants sur 50 suivent le Master II ISIFAR en alternance
+
+]
+
+.pull-right[
+
+Rythme d'alternance
+
+- un jour par semaine en entreprise sur dix semaines
+- deux jours par semaine sur dix semaines
+- puis stage entièrement dans l'entreprise
+
+]
+
+
+
+
+
+
+
+```{r postuler, child='candidatures-2023.Rmd'}
+
+```
+
+
+---
+class: middle
+name: plus
+
+## Pour en savoir plus
+
+```{r, echo=FALSE, eval=FALSE, out.extra='style="border: none;"', out.width='100%'}
+knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
+```
+
+![ttp://master.math.univ-paris-diderot.fr/annee/m1-math/](./img/vue-grands-moulins.png)
+
+[http://master.math.univ-paris-diderot.fr/annee/m1-math/](http://master.math.univ-paris-diderot.fr/annee/m1-math/)
+
+
+---
+class: middle, center, inverse
+
+background-image: url('./img/pexels-cottonbro-3171837.jpg')
+background-size: cover
+
+
+# Merci

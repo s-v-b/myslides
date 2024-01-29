@@ -9,24 +9,22 @@ background-size: cover
 
 
 ---
+exclude: true
 
-### Admission en Master I (Printemps 2023)
+### Admission en Master I (Printemps 2024)
 
-[`r fontawesome::fa("road")` Trouver mon master](https://www.trouvermonmaster.gouv.fr/master/universite-paris-cite/mathematiques-et-applications-38?q=Master%20Mathématiques%20et%20Applications&layout=1&position=0)
 
-- `r fontawesome::fa("snowplow")` Procédure : [Portail Mon Master](https:://monmaster.gouv.fr) 
-  + CV  `r fontawesome::fa("file-upload")`
-  + Lettre de motivation `r fontawesome::fa("file-alt")`
-  + Relevé des notes 
 
 - Calendrier `r fontawesome::fa("calendar")`
-  - Consultation Offre de formation sur [https://monmaster.gouv.fr](https://monmaster.gouv.fr) à partir du 1er février 2023
-  - Ouverture/Dépots candidatures : 22 mars 2023
-  - `r fontawesome::fa("exclamation-triangle")`Date limite de dépot des dossiers : 18 avril 2023
-  - Examen des candidatures :  24 avril-16 juin 2023
-  - Admission des candidats :  23 juin-21 juillet 2023
-  - Inscriptions : à partir du 23 juin 2023
-  
+  - [Offre de formation](https://monmaster.gouv.fr) à partir du 29 janvier 2024
+  - `r fontawesome::fa("upload")` Dépots candidatures : 26 février-24 mars 2024
+  - `r fontawesome::fa("folder-open")` Examen des candidatures : 2 avril-28 mai 2024
+  - Phase I Admission : 4 juin-24 juin 2024
+  - Inscriptions : à partir du 23 juin 2024
+  - Phase Complémentaire : du 25 juin au 31 juillet 2024
+    -  `r fontawesome::fa("upload")` Canditures II du 25 au 30 juin
+    -  `r fontawesome::fa("folder-open")` Examen Candidatures II du 1 au 12 juillet
+    -  Phase II Admission : 15 au 31 juillet
 - Peut-on postuler à plusieurs parcours au sein la mention Mathématiques et Applications de Paris Cité ?
   - oui `r fontawesome::fa("glass-cheers")`
   - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG
@@ -43,3 +41,50 @@ Conseils à donner oralement
 
 
 > Aux vertus qu'on exige d'un e-candidat, Votre Excellence connaît-elle beaucoup de professeurs qui fussent dignes d'être étudiants ?
+
+
+---
+
+
+
+
+
+.fl.w-40.pa2[
+
+```{r, echo=FALSE, out.width="100%", fig.retina=1}
+knitr::include_graphics("./img/calendrier-mon-master-2023-2024-1.png")
+```
+
+]
+
+
+.fl.w-10.pa2[
+
+]
+
+.fl.w-50.pa2[
+
+[`r fontawesome::fa("calendar-alt")` **Calendrier officiel**](https://www.enseignementsup-recherche.gouv.fr/sites/default/files/2023-12/calendrier-mon-master-2023---2024-30735.pdf)
+
+[`r fontawesome::fa("road")` **Portail mon master**](https://www.monmaster.gouv.fr/master/universite-paris-cite/mathematiques-et-applications-38?q=Master%20Mathématiques%20et%20Applications&layout=1&position=0)
+
+[`r fontawesome::fa("snowplow")` **Procédure : Portail Mon Master**](https://www.monmaster.gouv.fr)
+  
+  
+- CV  `r fontawesome::fa("file-upload")`
+
+- Lettre de motivation `r fontawesome::fa("file-alt")`
+
+- Relevé des notes 
+
+
+
+]
+
+
+---
+
+### Master I MFA sur le portail d'Offre de Formation 
+
+
+![](./img/mathapppariscite_www.monmaster.gouv.fr.png)

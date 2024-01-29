@@ -4,7 +4,7 @@ subtitle: "Présentation aux étudiants de Licence"
 author: "Université Paris Cité"
 date: "`r Sys.Date()`"
 params:
-  date: "2023/01/03 à 13h30"
+  date: "2024/01/16 à 15h30"
   title: "Master mention Mathématiques et Applications"
   curriculum: "Master Mathématiques et Applications"
   coursetitle: "Présentation aux étudiants de Licence"
@@ -12,15 +12,12 @@ params:
   homepage: "http://stephane-v-boucheron.fr/courses/m1mfa/"
   curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-math/"
   institution: "Université Paris Cité"
-  campus: "Grands Moulins Bât Sophie Germain Salle 1015"
+  campus: "Grands Moulins Bât Sophie Germain Amphi 8C"
 output:
   xaringan::moon_reader:
     css: ["header-footer.css", "xaringan-themer.css"]
     lib_dir: libs
     seal: false
-    includes:
-      in_header:
-        - 'toc.html'
     nature:
       nature:
       slideNumberFormat: |
@@ -139,6 +136,8 @@ sont *tubulaires* organisés sur deux années
 
 ???
 
+Les parcours MIDS/MIC existent aussi en version Master Mathématiques
+
 ---
 layout: false
 class: inverse, center, middle
@@ -232,7 +231,7 @@ domaines de prédilection et aux métiers qui vous attirent
 layout: false
 class: inverse, middle, center
 
-# Candidatures
+## Candidatures
 
 
 ---
@@ -604,7 +603,9 @@ name: mids
 
 ???
 
-Etoffer la présentation des débouchés et l a
+Etoffer la présentation des débouchés
+
+Existe aussi en Simple Master
 
 ---
 name: mids-debouches1
@@ -725,14 +726,14 @@ name: isifar
 
 .pull-left[
 
-###Débouchés
+### Débouchés
 
 Cadres à profil d'ingénieur statisticien/informaticien, spécialisés dans les applications  aux problèmes actuariels, financiers ou de gestion des risques.
 
 ### Responsables
 
-- M1 : [Sandrine Péché](https://fr.wikipedia.org/wiki/Sandrine_Péché)
-- M2 : [Zorana grbac] et [Stéphane Crepey](https://perso.lpsm.paris/~crepey/)
+- M1 : [Yves Achdou](https://www.ljll.math.upmc.fr/achdou/)
+- M2 : [Zorana Grbac](https://sites.google.com/view/zoranagrbac/) et [Stéphane Crepey](https://perso.lpsm.paris/~crepey/)
 -
 
 
