@@ -10,23 +10,23 @@ knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
 
 | Semaine(s) | Date(s) | Activité  |
 |:----------:|:--------|:----------|
-| `r lubridate::isoweek(lubridate::as_date("2023-09-04"))` | `r lubridate::as_date("2023-09-04")`/`r   lubridate::as_date("2023-09-08")`| Semaine de Rentrée |
-| `r lubridate::isoweek(lubridate::as_date("2023-09-11"))`-`r lubridate::isoweek(lubridate::as_date("2023-10-27"))` | `r lubridate::as_date("2023-09-11")`/`r lubridate::as_date("2023-10-27")`| Semestre I/Partie I |
-| `r lubridate::isoweek(lubridate::as_date("2023-11-01"))`| `r lubridate::as_date("2023-10-28")`/`r lubridate::as_date("2023-11-05")` | _Vacances Toussaint_ |
-| `r lubridate::isoweek(lubridate::as_date("2023-11-07"))`-`r lubridate::isoweek(lubridate::as_date("2023-12-08"))` | `r lubridate::as_date("2023-11-07")`/`r lubridate::as_date("2023-12-08")`| Semestre I/Partie II |
-| `r lubridate::isoweek(lubridate::as_date("2023-12-11"))` | `r lubridate::as_date("2023-12-11")`/`r lubridate::as_date("2023-12-15")`| **Soutenances Algorithmique** |
-|`r lubridate::isoweek(lubridate::as_date("2023-12-18"))` | `r lubridate::as_date("2023-12-18")`/`r lubridate::as_date("2023-12-22")`| **Examens Semestre I** |
-| `r lubridate::isoweek(lubridate::as_date("2023-12-25"))`-`r lubridate::isoweek(lubridate::as_date("2024-01-04"))` | `r lubridate::as_date("2023-12-23")`/`r lubridate::as_date("2024-01-06")`| _Vacances de Noël_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-01-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-02-16"))` | `r lubridate::as_date("2024-01-08")`/`r lubridate::as_date("2024-02-16")`| Semestre II/Période I |
-| `r lubridate::isoweek(lubridate::as_date("2024-02-19"))`| `r lubridate::as_date("2024-02-17")`/`r lubridate::as_date("2024-02-25")` | _Vacances Hiver_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-02-26"))` | `r lubridate::as_date("2024-02-26")`/`r lubridate::as_date("2024-03-01")`| **Examens Semestre II Pér. I** |
-| `r lubridate::isoweek(lubridate::as_date("2024-03-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-05"))` | `r lubridate::as_date("2024-03-03")`/`r lubridate::as_date("2024-04-05")`| Semestre II/Période II |
-| `r lubridate::isoweek(lubridate::as_date("2024-04-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-20"))` | `r lubridate::as_date("2024-04-06")`/`r lubridate::as_date("2024-04-21")`| _Vacances de Printemps_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-04-22"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2024-04-26")`| Semestre II/Période II |
-| `r lubridate::isoweek(lubridate::as_date("2024-05-13"))`-`r lubridate::isoweek(lubridate::as_date("2024-05-24"))` | `r lubridate::as_date("2024-05-13")`/`r lubridate::as_date("2024-05-24")`| **Examens Semestre II Pér. II** |
-| `r lubridate::isoweek(lubridate::as_date("2024-06-07"))` | | _Jury Session I_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-06-17"))`-`r lubridate::isoweek(lubridate::as_date("2024-06-28"))` | `r lubridate::as_date("2024-06-17")`/`r lubridate::as_date("2024-06-28")`| **Examens Session II** |
-| `r lubridate::isoweek(lubridate::as_date("2024-07-07"))` | | _Jury Session II_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-09-02"))` | `r lubridate::as_date("2024-09-02")`/`r   lubridate::as_date("2024-09-06")`| Semaine de Rentrée |
+| `r lubridate::isoweek(lubridate::as_date("2024-09-09"))`-`r lubridate::isoweek(lubridate::as_date("2024-10-25"))` | `r lubridate::as_date("2024-09-09")`/`r lubridate::as_date("2024-10-25")`| Semestre I/Partie I |
+| `r lubridate::isoweek(lubridate::as_date("2024-10-28"))`| `r lubridate::as_date("2024-10-26")`/`r lubridate::as_date("2023-11-03")` | _Vacances Toussaint_ |
+| `r lubridate::isoweek(lubridate::as_date("2024-11-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-12-09"))` | `r lubridate::as_date("2023-11-07")`/`r lubridate::as_date("2023-12-09")`| Semestre I/Partie II |
+| `r lubridate::isoweek(lubridate::as_date("2024-12-16"))` | `r lubridate::as_date("2024-12-16")`/`r lubridate::as_date("2024-12-20")`| **Soutenances Algorithmique** |
+| `r lubridate::isoweek(lubridate::as_date("2024-12-21"))`-`r lubridate::isoweek(lubridate::as_date("2025-01-04"))` | `r lubridate::as_date("2024-12-21")`/`r lubridate::as_date("2024-01-05")`| _Vacances de Noël_ |
+|`r lubridate::isoweek(lubridate::as_date("2025-01-06"))` | `r lubridate::as_date("2025-01-06")`/`r lubridate::as_date("2025-01-10")`| **Examens Semestre I** |
+| `r lubridate::isoweek(lubridate::as_date("2025-01-13"))`-`r lubridate::isoweek(lubridate::as_date("2025-02-21"))` | `r lubridate::as_date("2025-01-13")`/`r lubridate::as_date("2025-02-21")`| Semestre II/Période I |
+| `r lubridate::isoweek(lubridate::as_date("2025-02-25"))`| `r lubridate::as_date("2025-02-22")`/`r lubridate::as_date("2025-03-02")` | _Vacances Hiver_ |
+| `r lubridate::isoweek(lubridate::as_date("2025-03-03"))` | `r lubridate::as_date("2025-03-03")`/`r lubridate::as_date("2025-03-07")`| **Examens Semestre II Pér. I** |
+| `r lubridate::isoweek(lubridate::as_date("2025-03-10"))`-`r lubridate::isoweek(lubridate::as_date("2025-04-11"))` | `r lubridate::as_date("2025-03-10")`/`r lubridate::as_date("2025-04-11")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2025-04-14"))`-`r lubridate::isoweek(lubridate::as_date("2025-04-26"))` | `r lubridate::as_date("2025-04-12")`/`r lubridate::as_date("2025-04-27")`| _Vacances de Printemps_ |
+| `r lubridate::isoweek(lubridate::as_date("2025-04-28"))`-`r lubridate::isoweek(lubridate::as_date("2025-05-05"))` | `r lubridate::as_date("2025-04-28")`/`r lubridate::as_date("2025-05-05")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2025-05-12"))`-`r lubridate::isoweek(lubridate::as_date("2025-05-23"))` | `r lubridate::as_date("2025-05-12")`/`r lubridate::as_date("2025-05-23")`| **Examens Semestre II Pér. II** |
+| `r lubridate::isoweek(lubridate::as_date("2025-06-04"))` | | _Jury Session I_ |
+| `r lubridate::isoweek(lubridate::as_date("2025-06-16"))`-`r lubridate::isoweek(lubridate::as_date("2025-06-28"))` | `r lubridate::as_date("2025-06-16")`/`r lubridate::as_date("2025-06-28")`| **Examens Session II** |
+| `r lubridate::isoweek(lubridate::as_date("2025-06-30"))` | | _Jury Session II_ |
 
 ---
 
@@ -206,17 +206,16 @@ Il est raisonnable (mais pas obligatoire) de suivre:
 
 | Semaine(s) | Date(s) | Activité  |
 |:----------:|:--------|:----------|
-| `r lubridate::isoweek(lubridate::as_date("2024-01-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-02-16"))` | `r lubridate::as_date("2024-01-08")`/`r lubridate::as_date("2024-02-16")`| Semestre II/Période I |
-| `r lubridate::isoweek(lubridate::as_date("2024-02-19"))`| `r lubridate::as_date("2024-02-17")`/`r lubridate::as_date("2024-03-25")` | _Vacances Hiver_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-02-26"))` | `r lubridate::as_date("2024-02-26")`/`r lubridate::as_date("2024-03-01")`| **Examens Semestre II Pér. I** |
-| `r lubridate::isoweek(lubridate::as_date("2024-03-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-05"))` | `r lubridate::as_date("2024-03-03")`/`r lubridate::as_date("2024-04-05")`| Semestre II/Période II |
-| `r lubridate::isoweek(lubridate::as_date("2024-04-08"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-20"))` | `r lubridate::as_date("2024-04-06")`/`r lubridate::as_date("2024-05-21")`| _Vacances de Printemps_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-04-22"))` | `r lubridate::as_date("2024-04-22")`/`r lubridate::as_date("2024-04-26")`| Semestre II/Période II |
-| `r lubridate::isoweek(lubridate::as_date("2024-05-13"))`-`r lubridate::isoweek(lubridate::as_date("2024-05-24"))` | `r lubridate::as_date("2024-05-13")`/`r lubridate::as_date("2024-05-24")`| **Examens Semestre II Pér. II** |
-| `r lubridate::isoweek(lubridate::as_date("2024-06-07"))` | | _Jury Session I_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-06-17"))`-`r lubridate::isoweek(lubridate::as_date("2024-06-28"))` | `r lubridate::as_date("2024-06-17")`/`r lubridate::as_date("2024-06-28")`| **Examens Session II** |
-| `r lubridate::isoweek(lubridate::as_date("2024-04-07"))` | | _Jury Session II_ |
-
+| `r lubridate::isoweek(lubridate::as_date("2025-01-13"))`-`r lubridate::isoweek(lubridate::as_date("2025-02-21"))` | `r lubridate::as_date("2025-01-13")`/`r lubridate::as_date("2025-02-21")`| Semestre II/Période I |
+| `r lubridate::isoweek(lubridate::as_date("2025-02-25"))`| `r lubridate::as_date("2025-02-22")`/`r lubridate::as_date("2025-03-02")` | _Vacances Hiver_ |
+| `r lubridate::isoweek(lubridate::as_date("2025-03-03"))` | `r lubridate::as_date("2025-03-03")`/`r lubridate::as_date("2025-03-07")`| **Examens Semestre II Pér. I** |
+| `r lubridate::isoweek(lubridate::as_date("2025-03-10"))`-`r lubridate::isoweek(lubridate::as_date("2025-04-11"))` | `r lubridate::as_date("2025-03-10")`/`r lubridate::as_date("2025-04-11")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2025-04-14"))`-`r lubridate::isoweek(lubridate::as_date("2025-04-26"))` | `r lubridate::as_date("2025-04-12")`/`r lubridate::as_date("2025-04-27")`| _Vacances de Printemps_ |
+| `r lubridate::isoweek(lubridate::as_date("2025-04-28"))`-`r lubridate::isoweek(lubridate::as_date("2025-05-05"))` | `r lubridate::as_date("2025-04-28")`/`r lubridate::as_date("2025-05-05")`| Semestre II/Période II |
+| `r lubridate::isoweek(lubridate::as_date("2025-05-12"))`-`r lubridate::isoweek(lubridate::as_date("2025-05-23"))` | `r lubridate::as_date("2025-05-12")`/`r lubridate::as_date("2025-05-23")`| **Examens Semestre II Pér. II** |
+| `r lubridate::isoweek(lubridate::as_date("2025-06-04"))` | | _Jury Session I_ |
+| `r lubridate::isoweek(lubridate::as_date("2025-06-16"))`-`r lubridate::isoweek(lubridate::as_date("2025-06-28"))` | `r lubridate::as_date("2025-06-16")`/`r lubridate::as_date("2025-06-28")`| **Examens Session II** |
+| `r lubridate::isoweek(lubridate::as_date("2025-06-30"))` | | _Jury Session II_ |
 --
 
 `r fontawesome::fa("triangle-exclamation")` Presque tous les cours/UE sont organisés sur une période de 6 semaines 
@@ -588,20 +587,20 @@ Il est possible de suivre 4/5 modules parmi les cours listés à droite
 
 - Prévoir conventionnement du stage 
 
-- Le thème du stage doit être en rapport avec les Master 
+- Le thème du stage doit être en rapport avec le Master 
 
 ---
 
 ### UE Analyse Exploratoire de Données (AED-EDA) (semestrielle)
 
-[Page du cours](http://stephane-v-boucheron.fr/courses/eda/)
+[Page du cours](http://s-v-b.github.io/MA7BY020/)
 
 - 3 Heures de Cours-TP par semaine 
 - Environnement `r fontawesome::fa("r-project")`
 - Validation sur devoirs `r fontawesome::fa("r-project")` + soutenances
   + visualisation, manipulation de tables
   + régression 
-  + analyse factorielle
+  + analyse par décomposition en valeurs singulières
 
 - Prérequis 
   + Analyse Matricielle

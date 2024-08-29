@@ -20,7 +20,7 @@ Le Master I possède son propre portail
 [https://moodle.u-paris.fr/course/view.php?id=8568](https://moodle.u-paris.fr/course/view.php?id=8568)
 
 
-![Entree portail M1 MFA](img/img_moodle_m1_mfa_1.png)
+<!-- ![Entree portail M1 MFA](img/img_moodle_m1_mfa_1.png) -->
 
 
 
@@ -55,7 +55,7 @@ S'abonner aux portails Moodle
 
 ```{r}
 #| echo: false
-knitr::include_graphics("img/img_mon_dossier_web.png")
+# knitr::include_graphics("img/img_mon_dossier_web.png")
 ```
 
 

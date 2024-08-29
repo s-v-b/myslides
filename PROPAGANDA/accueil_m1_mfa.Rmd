@@ -5,7 +5,7 @@ author: "Marie-Claude Arnaud et Stéphane Boucheron"
 institute: "Université Paris Cité"
 date: "2021/12/21 (updated: `r Sys.Date()`)"
 params:
-  title: "Rentrée Septembre 2023"
+  title: "Rentrée Septembre 2024"
   curriculum: "Master Mathématiques et Applications"
   coursetitle: "Accueil"
   lecturer: "Marie-Claude Arnaud et Stéphane Boucheron"

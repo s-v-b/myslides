@@ -1,4 +1,4 @@
--   Coordinateur : M. Vincent Régis
+-   Coordinateur : M. Patryk Bazinski
 
 -   Agenda
 
@@ -8,9 +8,9 @@
 
     -   Début des TD : mi septembre `r lubridate::year(lubridate::today())`
 
-    -   Semaine de pause : du 28 octobre au 05 novembre `r lubridate::year(lubridate::today())` inclus
+    -   Semaine de pause : du 26 octobre au 03 novembre `r lubridate::year(lubridate::today())` inclus
 
-    -   Fin des TD : vendredi 8 décembre `r lubridate::year(lubridate::today())`
+    -   Fin des TD : vendredi 6 décembre `r lubridate::year(lubridate::today())`
 
     -   Inscription pour les personnes souhaitant une dispense de contrôle continu\
         Contacter en premier lieu la coordinatrice qui accompagnera votre demande à la direction du LANSAD

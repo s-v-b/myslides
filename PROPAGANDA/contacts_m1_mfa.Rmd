@@ -6,9 +6,7 @@
 .fl.w-40.pa2[
 
 - Secrétariat de l'UFR de Mathématiques 
-
-- Bâtiment Condorcet 3ème étape jusqu'à ???
-- Bâtiment Sophie Germain Bureau 1012 à partir de ???
+- Bâtiment Sophie Germain Bureau 1012
 
 ]
 
