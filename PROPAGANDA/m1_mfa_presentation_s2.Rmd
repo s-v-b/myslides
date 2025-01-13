@@ -4,7 +4,7 @@ subtitle: "Présentation des Cours du Second Semestre"
 author: "Marie-Claude Arnaud et Stéphane Boucheron"
 institute: "Université Paris Cité"
 params:
-  date: "2023/12/11 à 9h00"
+  date: "2024/12/12 à 14h15"
   title: "Présentation des Cours du Second Semestre"
   curriculum: "Master Mathématiques et Applications"
   coursetitle: "Accueil"
@@ -12,10 +12,10 @@ params:
   homepage: "http://stephane-v-boucheron.fr/courses/m1mfa/"
   curriculum_homepage: "https://master.math.univ-paris-diderot.fr/annee/m1-math/"
   institution: "Université Paris Cité"
-  campus: "Grands Moulins Bât Sophie Germain Salle 2011"
+  campus: "Grands Moulins Halle aux Farines Amphi 4C"
 output:
   xaringan::moon_reader:
-    css: ["header-footer.css", "xaringan-themer.css"]
+    css: ["header-footer.css", "xaringan-themer.css", timetable.css]
     lib_dir: libs
     seal: false
     nature:
@@ -51,6 +51,7 @@ class: left, middle
 
 ```
 
+[Lien Zoom](https://u-paris.zoom.us/j/86095880979?pwd=J9fHGoEjcrB5GHRAJCkHBUQPOqAoc4.1)
 
 ---
 template: inter-slide
@@ -76,7 +77,7 @@ name: calendrier-du-second-semestre
 
 ---
 
-```{r, child="cal-s2-2023.Rmd"}
+```{r, child="cal-s2-2024.Rmd"}
 
 ```
 
@@ -125,7 +126,7 @@ name: ue-semestrielles
 
 ## UE semestrielles
 
-Horaire : `r hms::as_hms(debut + 17 * quart_d_heure)`
+Horaire : `r hms::as_hms(debut + 5 * quart_d_heure)`
 
 ---
 
@@ -167,7 +168,7 @@ Horaire : `r hms::as_hms(debut + 17 * quart_d_heure)`
 
 .fl.w-50.pa2.f6[
 
-[Page du cours](http://stephane-v-boucheron.fr/courses/eda/)
+[Page du cours](http://s-v-b.github.io/MA7BY020)
 
 - `r fontawesome::fa("laptop-code")` 3 Heures de Cours-TP par semaine  (avec votre machine)
 - Environnement `r fontawesome::fa("r-project")`
@@ -183,17 +184,16 @@ Horaire : `r hms::as_hms(debut + 17 * quart_d_heure)`
 
 Cours recommandé : [Statistique fondamentale](http://master.math.univ-paris-diderot.fr/modules/m1math-s2-stat-fonda/)
 
-[Synopsis](https://master.math.univ-paris-diderot.fr/modules/m1math-s2-ana-donnees/)
+[Synopsis](http://s-v-b.github.io/MA7BY020)
 ]
 
 .fr.w-50.pa2.f6[
 
 ```{r, echo=F}
-knitr::include_url("https://stephane-v-boucheron.fr/courses/eda/", height="400px")
+knitr::include_url("http://s-v-b.github.io/MA7BY020", height="400px")
 ```
 
 
-[`r fontawesome::fa("video")`](https://u-paris.zoom.us/rec/share/16AVP8Drr5rYCGcrhZfHsPV5zUp6j1cPSiV0XO98rjWvX3PdOoLC2_-XSUA1c-BM.FeyjLT5dox0WnVcZ)
 
 ]
 ---

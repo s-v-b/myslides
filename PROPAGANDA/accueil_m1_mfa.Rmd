@@ -154,6 +154,19 @@ template: inter-slide
 ---
 template: inter-slide
 
+## Bibliothèques
+
+
+---
+
+
+```{r child="biblios.Rmd"}
+
+```
+
+---
+template: inter-slide
+
 ## Portails
 
 ---

@@ -10,10 +10,10 @@ knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
 
 | Semaine(s) | Date(s) | Activité  |
 |:----------:|:--------|:----------|
-| `r lubridate::isoweek(lubridate::as_date("2024-09-02"))` | `r lubridate::as_date("2024-09-02")`/`r   lubridate::as_date("2024-09-06")`| Semaine de Rentrée |
+| `r lubridate::isoweek(lubridate::as_date("2024-09-02"))` | `r lubridate::as_date("2024-09-02")`/`r   lubridate::as_date("2024-09-06")`| [Semaine de Rentrée](https://edt.math.univ-paris-diderot.fr/#/parcours/math/m1) |
 | `r lubridate::isoweek(lubridate::as_date("2024-09-09"))`-`r lubridate::isoweek(lubridate::as_date("2024-10-25"))` | `r lubridate::as_date("2024-09-09")`/`r lubridate::as_date("2024-10-25")`| Semestre I/Partie I |
 | `r lubridate::isoweek(lubridate::as_date("2024-10-28"))`| `r lubridate::as_date("2024-10-26")`/`r lubridate::as_date("2023-11-03")` | _Vacances Toussaint_ |
-| `r lubridate::isoweek(lubridate::as_date("2024-11-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-12-09"))` | `r lubridate::as_date("2023-11-07")`/`r lubridate::as_date("2023-12-09")`| Semestre I/Partie II |
+| `r lubridate::isoweek(lubridate::as_date("2024-11-04"))`-`r lubridate::isoweek(lubridate::as_date("2024-12-09"))` | `r lubridate::as_date("2024-11-04")`/`r lubridate::as_date("2024-12-09")`| Semestre I/Partie II |
 | `r lubridate::isoweek(lubridate::as_date("2024-12-16"))` | `r lubridate::as_date("2024-12-16")`/`r lubridate::as_date("2024-12-20")`| **Soutenances Algorithmique** |
 | `r lubridate::isoweek(lubridate::as_date("2024-12-21"))`-`r lubridate::isoweek(lubridate::as_date("2025-01-04"))` | `r lubridate::as_date("2024-12-21")`/`r lubridate::as_date("2024-01-05")`| _Vacances de Noël_ |
 |`r lubridate::isoweek(lubridate::as_date("2025-01-06"))` | `r lubridate::as_date("2025-01-06")`/`r lubridate::as_date("2025-01-10")`| **Examens Semestre I** |

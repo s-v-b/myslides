@@ -1,21 +1,37 @@
 -   Coordinateur : M. Patryk Bazinski
 
--   Agenda
+-  `r fontawesome::fa("calendar")` Agenda
 
-    -   Ouverture des tests : début septembre `r lubridate::year(lubridate::today())`
+         
+- Inscription en ligne dans un TD suivre la procédure décrite sur le 
+[Portail LANSAD](https://u-paris.fr/eila/lansad/)
 
-    -   Inscription en ligne dans un TD : début septembre `r lubridate::year(lubridate::today())`
+  + `r fontawesome::fa("hand-point-right")` onglet MENU 2  
+  + `r fontawesome::fa("hand-point-right")` diplôme dans lequel vous êtes inscrit.e 
+  + `r fontawesome::fa("hand-point-right")` choix du TD 
 
-    -   Début des TD : mi septembre `r lubridate::year(lubridate::today())`
+- [Lien Moodle](https://moodle.u-paris.fr/enrol/index.php?id=11466)
 
-    -   Semaine de pause : du 26 octobre au 03 novembre `r lubridate::year(lubridate::today())` inclus
+- Début des TD : 20 septembre `r lubridate::year(lubridate::today())`
 
-    -   Fin des TD : vendredi 6 décembre `r lubridate::year(lubridate::today())`
+- Semaine de pause : du 26 octobre au 03 novembre `r lubridate::year(lubridate::today())` inclus
 
-    -   Inscription pour les personnes souhaitant une dispense de contrôle continu\
-        Contacter en premier lieu la coordinatrice qui accompagnera votre demande à la direction du LANSAD
+- Fin des TD : vendredi 13 décembre `r lubridate::year(lubridate::today())`
+
+- Inscription pour les personnes souhaitant une dispense de contrôle continu\
+  Contacter en premier lieu la coordinatrice/le coordinateur qui accompagnera votre demande à la direction du LANSAD
+
 
 ---
+
+### `r fontawesome::fa("triangle-exclamation")`
+
+> les étudiants sont évalués en contrôle continu
+
+> les modalités et dates des évaluations seront annoncées par les enseignants en début de semestre, en général il s'agit de deux devoirs écrits, mi et fin de semestre + des travaux divers réalisés au cours du semestre
+
+> par souci de cohérence pédagogique et d'équité, les formats des devoirs seront harmonisés entre les enseignants
+
 
 ### `r fontawesome::fa("triangle-exclamation")`
 
@@ -27,8 +43,11 @@ Elle/il devra alors passer la session de rattrapage. `r fontawesome::fa("face-fr
 
 ---
 
+
 ### `r fontawesome::fa("triangle-exclamation")`
 
 > Toute inscription dans le régime salarié ou dispensé de TD devra être justifiée avant la clôture des inscriptions : photocopie de votre contrat de travail ou tout justificatif prouvant votre indisponibilité à suivre un TD (ex : emplois du temps signé de votre scolarité...).
 
 Consultez régulièrement le site : <http://www.lansad.eila.univ-paris-diderot.fr>
+
+[Portail LANSAD](https://u-paris.fr/eila/lansad/)

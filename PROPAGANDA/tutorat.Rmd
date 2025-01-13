@@ -23,4 +23,6 @@
 knitr::include_url("https://webusers.imj-prg.fr/~matteo.ruggiero/index-fr.html")
 ```
 
+[Page Maison de Matteo Ruggiero](https://webusers.imj-prg.fr/~matteo.ruggiero/index-en.html)
+
 ]

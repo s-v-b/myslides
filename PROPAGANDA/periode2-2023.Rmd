@@ -3,8 +3,8 @@
 ####  `r fontawesome::fa("calendar")`  Période II  Semaines `r lubridate::isoweek(lubridate::as_date("2024-03-13"))`-`r lubridate::isoweek(lubridate::as_date("2024-04-21"))`
 
 .f6[
-Du `r lubridate::as_date("2024-03-04")` au `r lubridate::as_date("2024-04-05")` et 
-du `r lubridate::as_date("2024-04-22")` au `r lubridate::as_date("2024-04-29")`
+Du `r lubridate::as_date("2025-03-10")` au `r lubridate::as_date("2025-04-11")` et 
+du `r lubridate::as_date("2025-04-28")` au `r lubridate::as_date("2025-05-05")`****
 ]
 
 .f6[
@@ -27,5 +27,5 @@ du `r lubridate::as_date("2024-04-22")` au `r lubridate::as_date("2024-04-29")`
 ]
 
 .f6[
-`r rep(fontawesome::fa("mug-hot"), 2)` Examens semaines `r lubridate::isoweek(lubridate::as_date("2024-05-06"))`-`r lubridate::isoweek(lubridate::as_date("2024-05-24"))`  du  `r lubridate::as_date("2024-05-09")` au `r lubridate::as_date("2024-05-27")` 
+`r rep(fontawesome::fa("mug-hot"), 2)` Examens semaines `r lubridate::isoweek(lubridate::as_date("2025-05-12"))`-`r lubridate::isoweek(lubridate::as_date("2025-05-23"))`  du  `r lubridate::as_date("2025-05-12")` au `r lubridate::as_date("2025-05-23")` 
 ]
