@@ -9,26 +9,28 @@ background-size: cover
 
 
 ---
-exclude: true
 
-### Admission en Master I (Printemps 2024)
+### Admission en Master I (Printemps 2025)
 
 
 
 - Calendrier `r fontawesome::fa("calendar")`
-  - [Offre de formation](https://monmaster.gouv.fr) à partir du 29 janvier 2024
-  - `r fontawesome::fa("upload")` Dépots candidatures : 26 février-24 mars 2024
-  - `r fontawesome::fa("folder-open")` Examen des candidatures : 2 avril-28 mai 2024
-  - Phase I Admission : 4 juin-24 juin 2024
-  - Inscriptions : à partir du 23 juin 2024
-  - Phase Complémentaire : du 25 juin au 31 juillet 2024
-    -  `r fontawesome::fa("upload")` Canditures II du 25 au 30 juin
-    -  `r fontawesome::fa("folder-open")` Examen Candidatures II du 1 au 12 juillet
-    -  Phase II Admission : 15 au 31 juillet
+  - [Offre de formation](https://monmaster.gouv.fr) du 3 au 24 février  2025
+  - **Phase I : 25 février-16 juin 2025**
+      - `r fontawesome::fa("upload")` Dépots candidatures : 25 février-24 mars 2025
+      - `r fontawesome::fa("folder-open")` Examen des candidatures : 31 mars-1er juin 2025
+      - Phase I Admission : 2 juin-16 juin 2025
+  - Phase II (Complémentaire) :  17 juin-17 juillet 2025
+      + Du 17 au 23 juin : Dépôt de nouvelles candidatures et classement de toutes les candidatures par ordre de préférence
+      + Du 24 juin au 7 juillet : Examen des nouvelles candidatures
+      + Du 8 au 17 juillet : Phase II Admission
+
 - Peut-on postuler à plusieurs parcours au sein la mention Mathématiques et Applications de Paris Cité ?
   - oui `r fontawesome::fa("glass-cheers")`
   - une candidature par parcours mais dossier commun en Master I pour les parcours : MF/LMFI/M2MO/MG
 
+
+[Calendrier officiel](https://www.monmaster.gouv.fr/calendrier)
 
 ???
 
@@ -42,44 +44,6 @@ Conseils à donner oralement
 
 > Aux vertus qu'on exige d'un e-candidat, Votre Excellence connaît-elle beaucoup de professeurs qui fussent dignes d'être étudiants ?
 
-
----
-
-
-
-
-
-.fl.w-40.pa2[
-
-```{r, echo=FALSE, out.width="100%", fig.retina=1}
-knitr::include_graphics("./img/calendrier-mon-master-2023-2024-1.png")
-```
-
-]
-
-
-.fl.w-10.pa2[
-
-]
-
-.fl.w-50.pa2[
-
-[`r fontawesome::fa("calendar-alt")` **Calendrier officiel**](https://www.enseignementsup-recherche.gouv.fr/sites/default/files/2023-12/calendrier-mon-master-2023---2024-30735.pdf)
-
-[`r fontawesome::fa("road")` **Portail mon master**](https://www.monmaster.gouv.fr/master/universite-paris-cite/mathematiques-et-applications-38?q=Master%20Mathématiques%20et%20Applications&layout=1&position=0)
-
-[`r fontawesome::fa("snowplow")` **Procédure : Portail Mon Master**](https://www.monmaster.gouv.fr)
-  
-  
-- CV  `r fontawesome::fa("file-upload")`
-
-- Lettre de motivation `r fontawesome::fa("file-alt")`
-
-- Relevé des notes 
-
-
-
-]
 
 
 ---

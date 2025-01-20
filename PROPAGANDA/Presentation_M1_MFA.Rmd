@@ -45,11 +45,11 @@ class: middle, center, inverse
 
 ---
 
-### Master Mathématiques et Applications (GM)
+### Master Mathématiques et Applications (GM et SGdP) 
 
 
 ```{r, echo=FALSE}
-knitr::include_graphics("./img/formation_master.svg")
+knitr::include_graphics("./img/formation_master_2025_bis.svg")
 ```
 
 
@@ -139,7 +139,7 @@ knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
     </thead>
 <tr>
   <td>
-  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algebre/" class="plain">Algèbre</a>
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-algebre/" class="plain">Théorie des Corps, Théorie de Galois</a>
   </td>
   <td>9</td>
 </tr>
@@ -148,7 +148,7 @@ knitr::include_url("http://master.math.univ-paris-diderot.fr/annee/m1-math/")
 
   <td>
 
-  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse et Topologie</a>
   </td>
   <td>9</td>
 </tr>
@@ -240,7 +240,7 @@ Il est raisonnable de suivre:
 <tr>
   <td>
 
-  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse</a>
+  <a href="http://master.math.univ-paris-diderot.fr/modules/m1math-s1-analyse/" class="plain">Analyse et Topologie</a>
   </td>
   <td>9</td>
 </tr>
@@ -289,8 +289,9 @@ Les trois cours de mathématiques comportent chacun
 
 ---
 
-###  Semestre II 
+###  Semestre II  
 
+.f6[
 
 | Intitulé   du cours                                     |       ECTS | Horaire    |
 |:--------------------------------------------------------|:----------:|:----------:|
@@ -299,16 +300,19 @@ Les trois cours de mathématiques comportent chacun
 | [Géométrie différentielle]()                                |     9      | .f6[3hCM + 4hTD]|
 | [Processus et Théorèmes Limites]()                          |     9      | .f6[3hCM + 4hTD]|
 | [Statistique]()                                             |     9      | .f6[3hCM + 4hTD]|
-| Arithmétique                                            |     6      | .f6[2hCM + 2hTD]|
-| Théorie des ensembles                                   |     6      | .f6[2hCM + 2hTD]|
-| Incomplétude et indécidabilité                          |     6      | .f6[2hCM + 2hTD]|
-| Topologie algébrique                                    |     6      | .f6[2hCM + 2hTD]| 
-| Optimisation                                            |     6      | .f6[2hCM + 2hTD]| 
-| Mathématiques financières                               |     6      | .f6[2hCM + 2hTD]|
-| Méthodes numériques pour les EDO et les EDP             |     6      | .f6[2hCM + 2hTD]|
-| Analyse exploratoire de données                         |     3      | .f6[3hCTD]      |
-| Projet                                                  |     3      | .f6[3hCTD]      |
+| Arithmétique                                            |     6      | .f6[2hCM + 2h30TD]|
+| Théorie des ensembles                                   |     6      | .f6[2hCM + 2h30TD]|
+| Incomplétude et indécidabilité                          |     6      | .f6[2hCM + 2h30TD]|
+| Topologie algébrique                                    |     6      | .f6[2hCM + 2h30TD]| 
+| Optimisation                                            |     6      | .f6[2hCM + 2h30TD]| 
+| Mathématiques financières                               |     6      | .f6[2hCM + 2h30TD]|
+| Méthodes numériques pour les EDO et les EDP             |     6      | .f6[2hCM + 2h30TD]|
+| Ouverture                                              |     6      | .f6[2hCM + 2h30TD]|
+| Analyse exploratoire de données                         |     3      | .f6[3hCTD]        |
+| Projet ou Initiation à la Recherche                     |     3      |                   |
+| Sport ou Engagement étudiant                            |     3      |                   |
 
+]
 
 
 
